@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "Craft.UI.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel", "Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{B14443B9-40B7-4C77-951A-6D1308705E1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.ImageEditor.UI.WPF", "Craft.ImageEditor.UI.WPF\Craft.ImageEditor.UI.WPF.csproj", "{350A366C-3D27-4857-ABA5-11DE5D0E5425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.UI.WPF", "Craft.ImageEditor.UI.WPF\Craft.ImageEditor.UI.WPF.csproj", "{350A366C-3D27-4857-ABA5-11DE5D0E5425}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
