@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Domain", "DD.Domain\DD.Domain.csproj", "{A6945361-01E0-473D-AAE8-9CB525D4D24C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Domain", "DD.Domain\DD.Domain.csproj", "{A6945361-01E0-473D-AAE8-9CB525D4D24C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence", "DD.Persistence\DD.Persistence.csproj", "{B0B3B574-30E4-4C56-905C-AB455A5BC50F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence", "DD.Persistence\DD.Persistence.csproj", "{B0B3B574-30E4-4C56-905C-AB455A5BC50F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{D4BADF21-AB23-4E86-9F7F-7C13D944C535}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\Craft.Logging\Craft.Logging.csproj", "{6946DEEB-8265-4A7E-92FB-0C293EA0F1FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Memory", "DD.Persistence.Memory\DD.Persistence.Memory.csproj", "{9B271CB1-6BF2-49B6-A42A-253E712F99B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Memory", "DD.Persistence.Memory\DD.Persistence.Memory.csproj", "{9B271CB1-6BF2-49B6-A42A-253E712F99B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Memory.UI.Console", "DD.Persistence.Memory.UI.Console\DD.Persistence.Memory.UI.Console.csproj", "{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Memory.UI.Console", "DD.Persistence.Memory.UI.Console\DD.Persistence.Memory.UI.Console.csproj", "{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Npgsql", "DD.Persistence.Npgsql\DD.Persistence.Npgsql.csproj", "{5CAB245B-39C9-4F68-9244-216287F61B63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Npgsql.UI.Console", "DD.Persistence.Npgsql.UI.Console\DD.Persistence.Npgsql.UI.Console.csproj", "{2707BFE6-230C-4EFA-9871-FAFE24691C53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Npgsql.UI.Console", "DD.Persistence.Npgsql.UI.Console\DD.Persistence.Npgsql.UI.Console.csproj", "{2707BFE6-230C-4EFA-9871-FAFE24691C53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Npgsql", "DD.Persistence.Npgsql\DD.Persistence.Npgsql.csproj", "{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,14 +49,14 @@ Global
 		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5CAB245B-39C9-4F68-9244-216287F61B63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5CAB245B-39C9-4F68-9244-216287F61B63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5CAB245B-39C9-4F68-9244-216287F61B63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5CAB245B-39C9-4F68-9244-216287F61B63}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2707BFE6-230C-4EFA-9871-FAFE24691C53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2707BFE6-230C-4EFA-9871-FAFE24691C53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2707BFE6-230C-4EFA-9871-FAFE24691C53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2707BFE6-230C-4EFA-9871-FAFE24691C53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
