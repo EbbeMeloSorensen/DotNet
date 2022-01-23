@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31702.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Math", "Craft.Math\Craft.Math.csproj", "{6DEF0B5E-09E5-4440-861E-D12A02BCC7D5}"
 EndProject
@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "Craft.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "Craft.Utils\Craft.Utils.csproj", "{DCB287DD-E248-40FC-B17F-F24E65688320}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UI.Utils", "Craft.UI.Utils\Craft.UI.Utils.csproj", "{25E09694-CB38-4A89-98A3-F960A47D1977}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "Craft.UI.Utils\Craft.UI.Utils.csproj", "{25E09694-CB38-4A89-98A3-F960A47D1977}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.ImageEditor.ViewModel", "Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{B14443B9-40B7-4C77-951A-6D1308705E1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{25E09694-CB38-4A89-98A3-F960A47D1977}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25E09694-CB38-4A89-98A3-F960A47D1977}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25E09694-CB38-4A89-98A3-F960A47D1977}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
