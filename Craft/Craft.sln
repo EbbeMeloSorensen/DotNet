@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.UI.WPF", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.ViewModels", "Craft.ViewModels\Craft.ViewModels.csproj", "{F3725C09-31A4-46DA-8834-339A2821BE88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UIElements.GuiTest", "Craft.UIElements.GuiTest\Craft.UIElements.GuiTest.csproj", "{43982567-EDA2-4F0E-AC3F-B4263B5B8C38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UIElements", "Craft.UIElements\Craft.UIElements.csproj", "{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{F3725C09-31A4-46DA-8834-339A2821BE88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3725C09-31A4-46DA-8834-339A2821BE88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3725C09-31A4-46DA-8834-339A2821BE88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43982567-EDA2-4F0E-AC3F-B4263B5B8C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43982567-EDA2-4F0E-AC3F-B4263B5B8C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43982567-EDA2-4F0E-AC3F-B4263B5B8C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43982567-EDA2-4F0E-AC3F-B4263B5B8C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
