@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Craft.ImageEditor.UI.WPF"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
     </Application.Resources>
 </Application>
