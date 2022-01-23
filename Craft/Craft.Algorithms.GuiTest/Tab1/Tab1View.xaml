@@ -4,9 +4,59 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Craft.Algorithms.GuiTest.Tab1"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:valueConverters="clr-namespace:Craft.UI.Utils.ValueConverters;assembly=Craft.UI.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <valueConverters:PixelToBrushConverter x:Key="PixelToBrushConverter"/>
+        <valueConverters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter"/>
+    </UserControl.Resources>
+
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Canvas Grid.Column="0">
+            <ItemsControl Width="576" Height="360" ItemsSource="{Binding PixelViewModels}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="{Binding Rows}" Columns="{Binding Cols}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray"
+                                BorderThickness="0.1"
+                                Background="{Binding Path=Pixel, Converter={StaticResource PixelToBrushConverter}}">
+                            <TextBlock HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center" 
+                                       FontSize="10" 
+                                       TextAlignment="Right" 
+                                       Foreground="DarkOliveGreen"
+                                       Text="{Binding Path=Pixel.TextOverlay}">
+                            </TextBlock>
+                            <!--<i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding LeftClickedCommand}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding RightClickedCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>-->
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Canvas>
+
+        <StackPanel Grid.Column="1">
+            <RadioButton Content="Source"  
+                         IsChecked="{Binding Path=CurrentMode, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Source}"/>
+            <RadioButton Content="Forbidden" 
+                         IsChecked="{Binding Path=CurrentMode, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Forbidden}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
