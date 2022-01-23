@@ -24,7 +24,7 @@ namespace DD.Persistence.Memory.Repositories
 
         public int CountAll()
         {
-            throw new NotImplementedException();
+            return _creatureTypes.Count();
         }
 
         public int Count(Expression<Func<CreatureType, bool>> predicate)

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Memory", "DD.Persistence.Memory\DD.Persistence.Memory.csproj", "{9B271CB1-6BF2-49B6-A42A-253E712F99B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Memory.UI.Console", "DD.Persistence.Memory.UI.Console\DD.Persistence.Memory.UI.Console.csproj", "{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9B271CB1-6BF2-49B6-A42A-253E712F99B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B271CB1-6BF2-49B6-A42A-253E712F99B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B271CB1-6BF2-49B6-A42A-253E712F99B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
