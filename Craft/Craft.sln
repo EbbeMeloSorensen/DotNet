@@ -27,6 +27,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UIElements.GuiTest", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UIElements", "Craft.UIElements\Craft.UIElements.csproj", "{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{190E1E26-5517-4116-A477-9240802EE9F8}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.txt = Readme.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Algorithms.GuiTest", "Craft.Algorithms.GuiTest\Craft.Algorithms.GuiTest.csproj", "{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +88,10 @@ Global
 		{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
