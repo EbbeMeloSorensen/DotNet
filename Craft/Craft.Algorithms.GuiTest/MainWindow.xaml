@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Craft.Algorithms.GuiTest"
         xmlns:tab1="clr-namespace:Craft.Algorithms.GuiTest.Tab1"
+        xmlns:tab2="clr-namespace:Craft.Algorithms.GuiTest.Tab2"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
@@ -20,11 +21,11 @@
         </TabItem>
         <TabItem Header="Dilation">
             <tab7:Tab7View DataContext="{Binding Tab7ViewModel}"/>
-        </TabItem>
+        </TabItem>-->
         <TabItem Header="General Geometry Manipulation">
             <tab2:Tab2View DataContext="{Binding Tab2ViewModel}"/>
         </TabItem>
-        <TabItem Header="Line of Sight">
+        <!--<TabItem Header="Line of Sight">
             <tab3:Tab3View DataContext="{Binding Tab3ViewModel}"/>
         </TabItem>
         <TabItem Header="Triangle Rasterization">
