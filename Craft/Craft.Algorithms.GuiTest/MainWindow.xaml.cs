@@ -23,6 +23,8 @@ namespace Craft.Algorithms.GuiTest
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new MainWindowViewModel();
         }
     }
 }

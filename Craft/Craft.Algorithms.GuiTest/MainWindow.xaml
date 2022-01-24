@@ -4,9 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Craft.Algorithms.GuiTest"
+        xmlns:tab1="clr-namespace:Craft.Algorithms.GuiTest.Tab1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="MainWindow" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
+    <TabControl SelectedIndex="0">
+        <!--<TabItem Header="General Pixel Image Manipulation">
+            <tab5:Tab5View DataContext="{Binding Tab5ViewModel}"/>
+        </TabItem>-->
+        <TabItem Header="Dijkstra Shortest Path">
+            <tab1:Tab1View DataContext="{Binding Tab1ViewModel}"/>
+        </TabItem>
+        <!--<TabItem Header="Euclidean Distance Transform">
+            <tab6:Tab6View DataContext="{Binding Tab6ViewModel}"/>
+        </TabItem>
+        <TabItem Header="Dilation">
+            <tab7:Tab7View DataContext="{Binding Tab7ViewModel}"/>
+        </TabItem>
+        <TabItem Header="General Geometry Manipulation">
+            <tab2:Tab2View DataContext="{Binding Tab2ViewModel}"/>
+        </TabItem>
+        <TabItem Header="Line of Sight">
+            <tab3:Tab3View DataContext="{Binding Tab3ViewModel}"/>
+        </TabItem>
+        <TabItem Header="Triangle Rasterization">
+            <tab4:Tab4View DataContext="{Binding Tab4ViewModel}"/>
+        </TabItem>-->
+    </TabControl>
 </Window>
