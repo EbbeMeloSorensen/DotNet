@@ -21,18 +21,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.UI.WPF", "Craft.ImageEditor.UI.WPF\Craft.ImageEditor.UI.WPF.csproj", "{350A366C-3D27-4857-ABA5-11DE5D0E5425}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.ViewModels", "Craft.ViewModels\Craft.ViewModels.csproj", "{F3725C09-31A4-46DA-8834-339A2821BE88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "Craft.ViewModels\Craft.ViewModels.csproj", "{F3725C09-31A4-46DA-8834-339A2821BE88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UIElements.GuiTest", "Craft.UIElements.GuiTest\Craft.UIElements.GuiTest.csproj", "{43982567-EDA2-4F0E-AC3F-B4263B5B8C38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements.GuiTest", "Craft.UIElements.GuiTest\Craft.UIElements.GuiTest.csproj", "{43982567-EDA2-4F0E-AC3F-B4263B5B8C38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UIElements", "Craft.UIElements\Craft.UIElements.csproj", "{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "Craft.UIElements\Craft.UIElements.csproj", "{CC4C81FD-070C-4C06-8DE1-C6CBDB45586A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{190E1E26-5517-4116-A477-9240802EE9F8}"
 	ProjectSection(SolutionItems) = preProject
 		Readme.txt = Readme.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Algorithms.GuiTest", "Craft.Algorithms.GuiTest\Craft.Algorithms.GuiTest.csproj", "{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Algorithms.GuiTest", "Craft.Algorithms.GuiTest\Craft.Algorithms.GuiTest.csproj", "{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.GeometryEditor3D.ViewModel", "Craft.GeometryEditor3D.ViewModel\Craft.GeometryEditor3D.ViewModel.csproj", "{2EA82FAF-E845-4166-9900-96CA6DC4A482}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +94,10 @@ Global
 		{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E146EF7-9B59-4C5D-B43F-FEAF24E25DA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EA82FAF-E845-4166-9900-96CA6DC4A482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EA82FAF-E845-4166-9900-96CA6DC4A482}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EA82FAF-E845-4166-9900-96CA6DC4A482}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EA82FAF-E845-4166-9900-96CA6DC4A482}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
