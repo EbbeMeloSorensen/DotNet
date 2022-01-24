@@ -6,30 +6,35 @@
         xmlns:local="clr-namespace:Craft.Algorithms.GuiTest"
         xmlns:tab1="clr-namespace:Craft.Algorithms.GuiTest.Tab1"
         xmlns:tab2="clr-namespace:Craft.Algorithms.GuiTest.Tab2"
+        xmlns:tab3="clr-namespace:Craft.Algorithms.GuiTest.Tab3"
+        xmlns:tab4="clr-namespace:Craft.Algorithms.GuiTest.Tab4"
+        xmlns:tab5="clr-namespace:Craft.Algorithms.GuiTest.Tab5"
+        xmlns:tab6="clr-namespace:Craft.Algorithms.GuiTest.Tab6"
+        xmlns:tab7="clr-namespace:Craft.Algorithms.GuiTest.Tab7"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
     <TabControl SelectedIndex="0">
-        <!--<TabItem Header="General Pixel Image Manipulation">
+        <TabItem Header="General Pixel Image Manipulation">
             <tab5:Tab5View DataContext="{Binding Tab5ViewModel}"/>
-        </TabItem>-->
+        </TabItem>
         <TabItem Header="Dijkstra Shortest Path">
             <tab1:Tab1View DataContext="{Binding Tab1ViewModel}"/>
         </TabItem>
-        <!--<TabItem Header="Euclidean Distance Transform">
+        <TabItem Header="Euclidean Distance Transform">
             <tab6:Tab6View DataContext="{Binding Tab6ViewModel}"/>
         </TabItem>
         <TabItem Header="Dilation">
             <tab7:Tab7View DataContext="{Binding Tab7ViewModel}"/>
-        </TabItem>-->
+        </TabItem>
         <TabItem Header="General Geometry Manipulation">
             <tab2:Tab2View DataContext="{Binding Tab2ViewModel}"/>
         </TabItem>
-        <!--<TabItem Header="Line of Sight">
+        <TabItem Header="Line of Sight">
             <tab3:Tab3View DataContext="{Binding Tab3ViewModel}"/>
         </TabItem>
         <TabItem Header="Triangle Rasterization">
             <tab4:Tab4View DataContext="{Binding Tab4ViewModel}"/>
-        </TabItem>-->
+        </TabItem>
     </TabControl>
 </Window>
