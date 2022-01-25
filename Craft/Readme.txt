@@ -8,3 +8,7 @@ Hmmm bemærk, at man for wpf class libraries og wpf applications kan VÆLGE mellem
 passende default, da den tilsyneladende bare foreslår det samme som man valgte tidligere.
 
 Så spørgsmålet er: Hvornår er det en fordel at vælge .Net 6.0 og hvornår er det en fordel at vælge .Net Core 3.1?
+
+Iagttagelse: Man kan GODT eksekvere en WPF applikation fra Visual Studio Code. I hvert fald når:
+* Man arbejder på en Windows pc
+* Applikationen baserer sig på .Net 6.0
