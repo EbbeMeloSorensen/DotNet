@@ -43,4 +43,3 @@ CreateCreatureType("Zombie");
 CountAllCreatureTypes();
 ListAllCreatureTypes();
 Console.WriteLine("Done");
-
