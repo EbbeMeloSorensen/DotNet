@@ -46,6 +46,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Algorithms.UnitTest",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.DataStructures.UnitTest", "Craft.DataStructures.UnitTest\Craft.DataStructures.UnitTest.csproj", "{E51509FF-1874-4990-86D0-0B48116ACBE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.GeometryEditor3D.UI.WPF", "Craft.GeometryEditor3D.UI.WPF\Craft.GeometryEditor3D.UI.WPF.csproj", "{987D6CE2-40CF-4300-ADF6-5034B9AF252B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,6 +130,10 @@ Global
 		{E51509FF-1874-4990-86D0-0B48116ACBE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E51509FF-1874-4990-86D0-0B48116ACBE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E51509FF-1874-4990-86D0-0B48116ACBE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{987D6CE2-40CF-4300-ADF6-5034B9AF252B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{987D6CE2-40CF-4300-ADF6-5034B9AF252B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{987D6CE2-40CF-4300-ADF6-5034B9AF252B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{987D6CE2-40CF-4300-ADF6-5034B9AF252B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
