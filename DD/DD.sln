@@ -13,11 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Memory", "DD.Persistence.Memory\DD.Persistence.Memory.csproj", "{9B271CB1-6BF2-49B6-A42A-253E712F99B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Memory.UI.Console", "DD.Persistence.Memory.UI.Console\DD.Persistence.Memory.UI.Console.csproj", "{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Npgsql", "DD.Persistence.Npgsql\DD.Persistence.Npgsql.csproj", "{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Npgsql.UI.Console", "DD.Persistence.Npgsql.UI.Console\DD.Persistence.Npgsql.UI.Console.csproj", "{2707BFE6-230C-4EFA-9871-FAFE24691C53}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Npgsql", "DD.Persistence.Npgsql\DD.Persistence.Npgsql.csproj", "{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Memory.UI.Console", "DD.Persistence.Memory.UI.Console\DD.Persistence.Memory.UI.Console.csproj", "{D043B6AD-ADC6-4739-91E5-DC45DA015075}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,18 +43,14 @@ Global
 		{9B271CB1-6BF2-49B6-A42A-253E712F99B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B271CB1-6BF2-49B6-A42A-253E712F99B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B271CB1-6BF2-49B6-A42A-253E712F99B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42D39AD8-FDB7-4397-A44B-21C3BE1AA756}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2707BFE6-230C-4EFA-9871-FAFE24691C53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2707BFE6-230C-4EFA-9871-FAFE24691C53}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2707BFE6-230C-4EFA-9871-FAFE24691C53}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2707BFE6-230C-4EFA-9871-FAFE24691C53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D043B6AD-ADC6-4739-91E5-DC45DA015075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D043B6AD-ADC6-4739-91E5-DC45DA015075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D043B6AD-ADC6-4739-91E5-DC45DA015075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D043B6AD-ADC6-4739-91E5-DC45DA015075}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
