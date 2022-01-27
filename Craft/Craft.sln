@@ -36,15 +36,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Algorithms.GuiTest", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.GeometryEditor3D.ViewModel", "Craft.GeometryEditor3D.ViewModel\Craft.GeometryEditor3D.ViewModel.csproj", "{2EA82FAF-E845-4166-9900-96CA6DC4A482}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfLibrary1", "WpfLibrary1\WpfLibrary1.csproj", "{04EA63C6-63D7-46B4-8220-8666B5DD3581}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfLibrary1", "WpfLibrary1\WpfLibrary1.csproj", "{04EA63C6-63D7-46B4-8220-8666B5DD3581}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfLibrary2", "WpfLibrary2\WpfLibrary2.csproj", "{5697D979-C991-4CA3-83EC-9549040001D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfLibrary2", "WpfLibrary2\WpfLibrary2.csproj", "{5697D979-C991-4CA3-83EC-9549040001D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{91CB2F77-6C66-450C-8DE0-C3F2FC23CCC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{91CB2F77-6C66-450C-8DE0-C3F2FC23CCC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp2", "WpfApp2\WpfApp2.csproj", "{C4A4F06F-DE51-4E59-BA14-81F5A97996CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp2", "WpfApp2\WpfApp2.csproj", "{C4A4F06F-DE51-4E59-BA14-81F5A97996CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Algorithms.GuiTest2", "Craft.Algorithms.GuiTest2\Craft.Algorithms.GuiTest2.csproj", "{EED67911-8486-43E6-A9BA-42B36A4F79A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Algorithms.GuiTest2", "Craft.Algorithms.GuiTest2\Craft.Algorithms.GuiTest2.csproj", "{EED67911-8486-43E6-A9BA-42B36A4F79A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Logging.Log4Net", "Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{8C299201-2DF2-41FB-851B-C75DCADE293E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -128,6 +130,10 @@ Global
 		{EED67911-8486-43E6-A9BA-42B36A4F79A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EED67911-8486-43E6-A9BA-42B36A4F79A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EED67911-8486-43E6-A9BA-42B36A4F79A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C299201-2DF2-41FB-851B-C75DCADE293E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C299201-2DF2-41FB-851B-C75DCADE293E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C299201-2DF2-41FB-851B-C75DCADE293E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C299201-2DF2-41FB-851B-C75DCADE293E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
