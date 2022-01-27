@@ -1,8 +1,10 @@
-﻿using System.Windows;
+﻿using System.Drawing;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Craft.GeometryEditor3D.ViewModel;
 using Craft.Math;
+using Point = System.Windows.Point;
 
 namespace Craft.GeometryEditor3D.UI.WPF
 {
@@ -22,13 +24,20 @@ namespace Craft.GeometryEditor3D.UI.WPF
 
         private void FrameworkElement_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
+            // Todo:
+            // Her har jeg måttet lave en ændring i forhold til det oprindelige for at få det til at virke.
+            // Jeg er ikke sikker på at denne konstruktion er optimal
+
             //ViewModel.ViewPortSize = e.NewSize;
+            ViewModel.ViewPortSize = new System.Drawing.Size(
+                (int)e.NewSize.Width,
+                (int)e.NewSize.Height);
         }
 
         private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _mouseDownViewport = e.GetPosition((FrameworkElement)sender);
-            //Canvas.CaptureMouse();
+            Canvas.CaptureMouse();
             _dragging = true;
 
             ViewModel.InitiateCameraRotationModification();
@@ -39,7 +48,7 @@ namespace Craft.GeometryEditor3D.UI.WPF
             if (_dragging)
             {
                 _dragging = false;
-                //Canvas.ReleaseMouseCapture();
+                Canvas.ReleaseMouseCapture();
             }
         }
 

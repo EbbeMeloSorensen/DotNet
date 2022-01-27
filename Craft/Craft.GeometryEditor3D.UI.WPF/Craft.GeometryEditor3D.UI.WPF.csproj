@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Craft.GeometryEditor3D.ViewModel\Craft.GeometryEditor3D.ViewModel.csproj" />
+    <ProjectReference Include="..\Craft.UI.Utils\Craft.UI.Utils.csproj" />
   </ItemGroup>
 
 </Project>
