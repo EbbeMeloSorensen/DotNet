@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "Craft.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "Craft.Utils\Craft.Utils.csproj", "{DCB287DD-E248-40FC-B17F-F24E65688320}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "Craft.UI.Utils\Craft.UI.Utils.csproj", "{25E09694-CB38-4A89-98A3-F960A47D1977}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel", "Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{B14443B9-40B7-4C77-951A-6D1308705E1B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.UI.WPF", "Craft.ImageEditor.UI.WPF\Craft.ImageEditor.UI.WPF.csproj", "{350A366C-3D27-4857-ABA5-11DE5D0E5425}"
@@ -39,6 +37,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{8C299201-2DF2-41FB-851B-C75DCADE293E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Math.UI.Console", "Craft.Math.UI.Console\Craft.Math.UI.Console.csproj", "{310F8154-0851-496F-AEC8-573AF2AE1C37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UI.Utils", "Craft.UI.Utils\Craft.UI.Utils.csproj", "{F6F7F0DD-C00C-457E-93F5-24A049A706B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,10 +70,6 @@ Global
 		{DCB287DD-E248-40FC-B17F-F24E65688320}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCB287DD-E248-40FC-B17F-F24E65688320}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCB287DD-E248-40FC-B17F-F24E65688320}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25E09694-CB38-4A89-98A3-F960A47D1977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25E09694-CB38-4A89-98A3-F960A47D1977}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25E09694-CB38-4A89-98A3-F960A47D1977}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25E09694-CB38-4A89-98A3-F960A47D1977}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -110,6 +106,10 @@ Global
 		{310F8154-0851-496F-AEC8-573AF2AE1C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{310F8154-0851-496F-AEC8-573AF2AE1C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{310F8154-0851-496F-AEC8-573AF2AE1C37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6F7F0DD-C00C-457E-93F5-24A049A706B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6F7F0DD-C00C-457E-93F5-24A049A706B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6F7F0DD-C00C-457E-93F5-24A049A706B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6F7F0DD-C00C-457E-93F5-24A049A706B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

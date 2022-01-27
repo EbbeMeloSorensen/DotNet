@@ -1,1 +1,0 @@
-﻿Dette library er lavet som et WPF Class Library, og hvor jeg som target platform accepterede default, hvilket var .Net Core 3.1
