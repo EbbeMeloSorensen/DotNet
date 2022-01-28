@@ -5,23 +5,27 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Domain", "DMI.SMS.Domain\DMI.SMS.Domain.csproj", "{9D30DEB4-64FC-45CA-A9B8-0E4A165A01A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.IO", "DMI.SMS.IO\DMI.SMS.IO.csproj", "{3CB0E9A4-B110-41E4-8ACA-8E7C1CC8667B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.IO", "DMI.SMS.IO\DMI.SMS.IO.csproj", "{3CB0E9A4-B110-41E4-8ACA-8E7C1CC8667B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence", "DMI.SMS.Persistence\DMI.SMS.Persistence.csproj", "{403081DD-69A3-4B75-9833-33CA8306A3C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence", "DMI.SMS.Persistence\DMI.SMS.Persistence.csproj", "{403081DD-69A3-4B75-9833-33CA8306A3C9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{704F40D7-1653-416B-99DC-A34DE008F735}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\..\Craft\Craft.Logging\Craft.Logging.csproj", "{ED6ED6ED-B0D2-4F48-8062-59E14EEA1935}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.Memory", "DMI.SMS.Persistence.Memory\DMI.SMS.Persistence.Memory.csproj", "{B03910F3-61C5-4189-B333-DF48AA28DF14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.Memory", "DMI.SMS.Persistence.Memory\DMI.SMS.Persistence.Memory.csproj", "{B03910F3-61C5-4189-B333-DF48AA28DF14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.File", "DMI.SMS.Persistence.File\DMI.SMS.Persistence.File.csproj", "{8841DEDD-397F-483E-9929-FEAA8DA6F295}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.File", "DMI.SMS.Persistence.File\DMI.SMS.Persistence.File.csproj", "{8841DEDD-397F-483E-9929-FEAA8DA6F295}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Application", "DMI.SMS.Application\DMI.SMS.Application.csproj", "{0A05299F-B419-448A-9996-CCAC528A3379}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Application", "DMI.SMS.Application\DMI.SMS.Application.csproj", "{0A05299F-B419-448A-9996-CCAC528A3379}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.UIDataProvider.Persistence", "DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj", "{CF2BB80C-2DE5-44D3-938A-C047BAAA6947}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.UIDataProvider.Persistence", "DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj", "{CF2BB80C-2DE5-44D3-938A-C047BAAA6947}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj", "{0C928134-54E9-488A-B498-C9176686BCB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.Npgsql", "DMI.SMS.Persistence.Npgsql\DMI.SMS.Persistence.Npgsql.csproj", "{FD5604A3-5FB7-4BD3-A504-E59AD8765C10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\..\Craft\Craft.Utils\Craft.Utils.csproj", "{0E657735-073F-4135-A419-77A787327CD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,14 @@ Global
 		{0C928134-54E9-488A-B498-C9176686BCB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C928134-54E9-488A-B498-C9176686BCB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C928134-54E9-488A-B498-C9176686BCB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD5604A3-5FB7-4BD3-A504-E59AD8765C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD5604A3-5FB7-4BD3-A504-E59AD8765C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD5604A3-5FB7-4BD3-A504-E59AD8765C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD5604A3-5FB7-4BD3-A504-E59AD8765C10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E657735-073F-4135-A419-77A787327CD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E657735-073F-4135-A419-77A787327CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E657735-073F-4135-A419-77A787327CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E657735-073F-4135-A419-77A787327CD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
