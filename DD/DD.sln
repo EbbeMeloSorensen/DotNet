@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Algorithms", "..\Craf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.IO", "DD.IO\DD.IO.csproj", "{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.ViewModel", "DD.ViewModel\DD.ViewModel.csproj", "{69D8E4CE-D089-43B2-94AD-50F78D2D2BE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,10 @@ Global
 		{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69D8E4CE-D089-43B2-94AD-50F78D2D2BE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69D8E4CE-D089-43B2-94AD-50F78D2D2BE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69D8E4CE-D089-43B2-94AD-50F78D2D2BE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69D8E4CE-D089-43B2-94AD-50F78D2D2BE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
