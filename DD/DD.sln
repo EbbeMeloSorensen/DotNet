@@ -47,6 +47,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.UI.WPF", "DD.UI.WPF\DD.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj", "{5DD7D51E-3FB7-4EA2-980C-5968B3F9534E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{E4C25D05-D1AA-438B-A36C-951B8A3594EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{347241CE-1082-4CE4-808D-EB874C359285}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +145,14 @@ Global
 		{5DD7D51E-3FB7-4EA2-980C-5968B3F9534E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DD7D51E-3FB7-4EA2-980C-5968B3F9534E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DD7D51E-3FB7-4EA2-980C-5968B3F9534E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4C25D05-D1AA-438B-A36C-951B8A3594EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4C25D05-D1AA-438B-A36C-951B8A3594EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4C25D05-D1AA-438B-A36C-951B8A3594EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4C25D05-D1AA-438B-A36C-951B8A3594EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{347241CE-1082-4CE4-808D-EB874C359285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{347241CE-1082-4CE4-808D-EB874C359285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{347241CE-1082-4CE4-808D-EB874C359285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{347241CE-1082-4CE4-808D-EB874C359285}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

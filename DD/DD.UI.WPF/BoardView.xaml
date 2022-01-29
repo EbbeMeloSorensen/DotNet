@@ -1,0 +1,240 @@
+﻿<UserControl x:Class="DD.UI.WPF.BoardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+             xmlns:local="clr-namespace:DD.UI.WPF"
+             xmlns:viewModel="clr-namespace:DD.ViewModel;assembly=DD.ViewModel"
+             xmlns:utils="clr-namespace:Craft.UI.Utils;assembly=Craft.UI.Utils"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer x:Name="ScrollViewer"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto"
+                  utils:Helpers.ScrollOffset="{Binding ScrollOffset}"
+                  Loaded="ScrollViewer_OnLoaded"
+                  SizeChanged="ScrollViewer_OnSizeChanged"
+                  ScrollChanged="ScrollViewer_OnScrollChanged">
+        <Canvas x:Name="Canvas" 
+                Background="AntiqueWhite"
+                Width="{Binding ImageWidth}"
+                Height="{Binding ImageHeight}"
+                MouseLeftButtonDown="Canvas_OnMouseLeftButtonDown"
+                MouseLeftButtonUp="Canvas_OnMouseLeftButtonUp"
+                MouseMove="Canvas_OnMouseMove">
+            <ItemsControl ItemsSource="{Binding ObstacleViewModels}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="viewModel:ObstacleViewModel">
+                        <!--<Rectangle Fill="DarkSlateGray" Stroke="Black" Width="{Binding Diameter}" Height="{Binding Diameter}"/>-->
+                        <Image Height="{Binding Diameter}" Width="{Binding Diameter}" 
+                            Source="{Binding Path=ImagePath,
+                            UpdateSourceTrigger=PropertyChanged, 
+                            Converter={StaticResource ImagePathConverter}}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{Binding HighligtedSquareViewModelsForMove}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="viewModel:HighlightedSquareViewModel">
+                        <Rectangle Stroke="LightGray" 
+                                   StrokeThickness="1"
+                                   Width="{Binding Diameter}" 
+                                   Height="{Binding Diameter}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{Binding HighligtedSquareViewModelsForMeleeAttack}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="viewModel:HighlightedSquareViewModel">
+                        <Rectangle Fill="LightSalmon"
+                                   Stroke="Red"
+                                   StrokeThickness="1"
+                                   Width="{Binding Diameter}" 
+                                   Height="{Binding Diameter}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{Binding HighligtedSquareViewModelsForRangedAttack}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="viewModel:HighlightedSquareViewModel">
+                        <Rectangle Fill="MediumPurple"
+                                   Stroke="Purple"
+                                   StrokeThickness="1"
+                                   Width="{Binding Diameter}" 
+                                   Height="{Binding Diameter}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Rectangle Canvas.Left="{Binding SquareForCurrentCreatureLeft}" Canvas.Top="{Binding SquareForCurrentCreatureTop}" 
+                       Width="{Binding SquareForCurrentCreatureWidth}" Height="{Binding SquareForCurrentCreatureWidth}" 
+                       Fill="PaleGoldenrod" 
+                       Stroke="DarkOrange" StrokeThickness="1"
+                       Visibility="{Binding CurrentCreatureIsHighlighted, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            
+            <ItemsControl ItemsSource="{Binding CreatureViewModels}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="viewModel:CreatureViewModel">
+                        <!--Bemærk, at vi bare har et Creature View her-->
+                        <local:CreatureView/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Grid x:Name="CurrentCreatureGrid"
+                  Canvas.Left="{Binding CurrentCreatureViewModel.Left}"
+                  Canvas.Top="{Binding CurrentCreatureViewModel.Top}">
+                <local:CreatureView DataContext="{Binding CurrentCreatureViewModel}"/>
+                <Grid.RenderTransform>
+                    <TranslateTransform X="0" Y="0"/>
+                </Grid.RenderTransform>
+                <b:Interaction.Triggers>
+                    <b:DataTrigger Binding="{Binding MoveCurrentCreatureAnimationRunning, Mode=OneWay}" 
+                                    Value="true">
+                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                            <b:ControlStoryboardAction.Storyboard>
+                                <Storyboard Completed="Storyboard_Completed">
+                                    <DoubleAnimationUsingPath Storyboard.TargetName="CurrentCreatureGrid"
+                                                              Storyboard.TargetProperty="(RenderTransform).X"
+                                                              Duration="{Binding DurationForMoveCurrentCreatureAnimation}"
+                                                              Source="X">
+                                        <DoubleAnimationUsingPath.PathGeometry>
+                                            <PathGeometry Figures="{Binding CreaturePath}"/>
+                                        </DoubleAnimationUsingPath.PathGeometry>
+                                    </DoubleAnimationUsingPath>
+                                    <DoubleAnimationUsingPath Storyboard.TargetName="CurrentCreatureGrid"
+                                                              Storyboard.TargetProperty="(RenderTransform).Y"
+                                                              Duration="{Binding DurationForMoveCurrentCreatureAnimation}"
+                                                              Source="Y">
+                                        <DoubleAnimationUsingPath.PathGeometry>
+                                            <PathGeometry Figures="{Binding CreaturePath}"/>
+                                        </DoubleAnimationUsingPath.PathGeometry>
+                                    </DoubleAnimationUsingPath>
+                                </Storyboard>
+                            </b:ControlStoryboardAction.Storyboard>
+                        </b:ControlStoryboardAction>
+                    </b:DataTrigger>
+                </b:Interaction.Triggers>
+            </Grid>
+
+            <Grid x:Name="ProjectileGrid"
+                  Canvas.Left="{Binding WeaponViewModel.Left}"
+                  Canvas.Top="{Binding WeaponViewModel.Top}"
+                  Visibility="{Binding WeaponViewModel.IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Image Height="{Binding WeaponViewModel.Diameter}" 
+                       Width="{Binding WeaponViewModel.Diameter}"
+                       Source="{Binding Path=WeaponImagePath,
+                            UpdateSourceTrigger=PropertyChanged, 
+                            Converter={StaticResource ImagePathConverter}}">
+                    <!--<Image.Triggers>
+                        <EventTrigger RoutedEvent="Image.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="RotateTransform" Storyboard.TargetProperty="Angle"
+                                                     From="0.0" To="360.0" Duration="0:0:5" AutoReverse="True" RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Image.Triggers>-->
+                    <Image.RenderTransform>
+                        <RotateTransform x:Name="RotateTransform" CenterX="37.5" CenterY="37.5" Angle="{Binding WeaponViewModel.RotationAngle}"/>
+                    </Image.RenderTransform>
+                </Image>
+                <Grid.RenderTransform>
+                    <TranslateTransform X="0" Y="0"/>
+                </Grid.RenderTransform>
+                <b:Interaction.Triggers>
+                    <b:DataTrigger Binding="{Binding PerformAttackAnimationRunning, Mode=OneWay}" 
+                                   Value="true">
+                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                            <b:ControlStoryboardAction.Storyboard>
+                                <Storyboard Completed="FireProjectileStoryboard_Completed">
+                                    <DoubleAnimation Storyboard.TargetName="ProjectileGrid"
+                                                     Storyboard.TargetProperty="(RenderTransform).X"
+                                                     To="{Binding TranslationX}"
+                                                     AutoReverse="{Binding WeaponAutoReverse}"
+                                                     Duration="0:0:0.2"/>
+                                    <DoubleAnimation Storyboard.TargetName="ProjectileGrid"
+                                                     Storyboard.TargetProperty="(RenderTransform).Y"
+                                                     To="{Binding TranslationY}" 
+                                                     AutoReverse="{Binding WeaponAutoReverse}"
+                                                     Duration="0:0:0.2"/>
+                                </Storyboard>
+                            </b:ControlStoryboardAction.Storyboard>
+                        </b:ControlStoryboardAction>
+                    </b:DataTrigger>
+                </b:Interaction.Triggers>
+            </Grid>
+
+        </Canvas>
+    </ScrollViewer>
+</UserControl>

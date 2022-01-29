@@ -17,10 +17,11 @@
     <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
         <!--<Ellipse Stroke="Black" Width="{Binding Diameter}" Height="{Binding Diameter}"
                                      Fill="{Binding Path=IsHostile, Converter={StaticResource BooleanToBrushConverter}}"/>-->
-        <Image Height="{Binding Diameter}" Width="{Binding Diameter}"
-               Source="{Binding Path=ImagePath,
-                                   UpdateSourceTrigger=PropertyChanged, 
-                                   Converter={StaticResource ImagePathConverter}}" />
+        <Image Height="{Binding Diameter}"
+               Width="{Binding Diameter}"
+               Source="{Binding Path=ImagePath, 
+                        UpdateSourceTrigger=PropertyChanged, 
+                        Converter={StaticResource ImagePathConverter}}" />
         <Rectangle Margin="0,0,0,4" Fill="Red" Height="10" VerticalAlignment="Bottom"
                    Width="{Binding Diameter}"
                    Visibility="{Binding IsInjured, Converter={StaticResource BooleanToVisibilityConverter}}"/>

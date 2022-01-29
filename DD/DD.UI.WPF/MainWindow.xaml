@@ -4,9 +4,66 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DD.UI.WPF"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="800"
+        DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="N" 
+                    Command="{Binding CreateCreatureTypeCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </Window.InputBindings>
 
-    </Grid>
+    <DockPanel>
+        <b:Interaction.Triggers>
+            <b:EventTrigger EventName="Loaded">
+                <b:InvokeCommandAction Command="{Binding WindowLoadedCommand}"/>
+            </b:EventTrigger>
+        </b:Interaction.Triggers>
+
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Repository">
+                <MenuItem Header="_New Creature Type" 
+                          Command="{Binding CreateCreatureTypeCommand}"/>
+            </MenuItem>
+        </Menu>
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock>
+                    <Run Text="{Binding BoardViewModel.MouseWorldPosition.X, StringFormat='(X,Y) = ({0}'}"/>
+                    <Run Text="{Binding BoardViewModel.MouseWorldPosition.Y, StringFormat=', {0})'}"/>
+                </TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <local:SceneCollectionView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" 
+                                   DataContext="{Binding SceneCollectionViewModel}"/>
+
+            <local:BoardView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding BoardViewModel}"/>
+
+            <!--<local:SceneEditorView Grid.Row="0" Grid.Column="2" DataContext="{Binding SceneEditorViewModel}"/>-->
+            <local:CreatureTypeCollectionView Grid.Row="0" Grid.Column="2" DataContext="{Binding CreatureTypeCollectionViewModel}">
+
+            </local:CreatureTypeCollectionView>
+
+            <local:ActOutSceneView Grid.Row="1" Grid.Column="2" DataContext="{Binding ActOutSceneViewModel}"/>
+
+            <Expander Grid.Row="2" Grid.ColumnSpan="999" Header="Log" ExpandDirection="Up" IsExpanded="True">
+                <local:LogView Height="200" DataContext="{Binding LogViewModel}"/>
+            </Expander>
+        </Grid>
+    </DockPanel>
 </Window>
