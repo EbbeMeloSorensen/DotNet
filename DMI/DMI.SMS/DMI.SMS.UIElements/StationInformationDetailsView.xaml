@@ -1,0 +1,297 @@
+﻿<UserControl x:Class="DMI.SMS.UIElements.StationInformationDetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DMI.SMS.UIElements"
+             xmlns:viewModel="clr-namespace:DMI.SMS.ViewModel;assembly=DMI.SMS.ViewModel"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" 
+             d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModel:StationInformationDetailsViewModel}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.Visibility>
+        <Binding Path="IsVisible" Converter="{StaticResource BooleanToVisibilityConverter}">
+            <Binding.ConverterParameter>
+                <system:Boolean>True</system:Boolean>
+            </Binding.ConverterParameter>
+        </Binding>
+    </UserControl.Visibility>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" BorderThickness="1">
+                <TextBox Text="{Binding Header}" FontWeight="Bold" Background="LightGray"/>
+            </Border>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+                <Button Margin="3" Content="Discard" Width="75" 
+                        Command="{Binding DiscardChangesCommand}"/>
+                <Button Margin="3" Content="Erase" Width="75" 
+                        Command="{Binding EraseCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Button Margin="3" Content="Manipulate" Width="75" 
+                        Command="{Binding ApplyChangesCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Button Margin="3" Content="Merge" Width="75" 
+                        Command="{Binding MergeCommand}" 
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Button Margin="3" Content="Promote" Width="75" 
+                        Command="{Binding PromoteCommand}" 
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Button Margin="3" Content="Delete" Width="75" 
+                        Command="{Binding DeleteCommand}" 
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Button Margin="3" Content="Update" Width="75" 
+                        Command="{Binding ApplyChangesProperlyCommand}"/>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="0" Grid.Column="0" Text="Station Name:"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"
+                         Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                         Text="{Binding Stationname, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="1" Grid.Column="0" Text="Station ID:"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Text="{Binding Stationid_dmi}"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="2" Grid.Column="0" Text="Station Type:"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1" 
+                              ItemsSource="{Binding StationTypeOptions}"
+                              SelectedValue="{Binding StationType}">
+                    </ComboBox>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="3" Grid.Column="0" Text="Station Owner:"/>
+                    <ComboBox Grid.Row="3" Grid.Column="1" 
+                              ItemsSource="{Binding StationOwnerOptions}"
+                              SelectedValue="{Binding StationOwner}">
+                    </ComboBox>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="4" Grid.Column="0" Text="Country:"/>
+                    <ComboBox Grid.Row="4" Grid.Column="1" 
+                              ItemsSource="{Binding CountryOptions}"
+                              SelectedValue="{Binding Country}">
+                    </ComboBox>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="5" Grid.Column="0" Text="Status:"/>
+                    <ComboBox Grid.Row="5" Grid.Column="1" 
+                              ItemsSource="{Binding StatusOptions}"
+                              SelectedValue="{Binding Status}">
+                    </ComboBox>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="6" Grid.Column="0" Text="WGS, latitude:"/>
+                    <TextBox Grid.Row="6" Grid.Column="1"
+                             Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                             Text="{Binding Wgs_lat, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="7" Grid.Column="0" Text="WGS, longitude:"/>
+                    <TextBox Grid.Row="7" Grid.Column="1"
+                             Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                             Text="{Binding Wgs_long, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="8" Grid.Column="0" Text="Hha:"/>
+                    <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Hha}"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="9" Grid.Column="0" Text="Hhp:"/>
+                    <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Hhp}"/>
+
+                    <Separator Grid.Row="10" Grid.ColumnSpan="2"/>
+                    
+                    <TextBlock Margin="2,2,4,2" Grid.Row="11" Grid.Column="0" Text="Date From:"/>
+                    <TextBox Grid.Row="11" Grid.Column="1"
+                             Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                             Text="{Binding DateFrom, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="12" Grid.Column="0" Text="Date To:"/>
+                    <TextBox Grid.Row="12" Grid.Column="1"
+                             Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                             Text="{Binding DateTo, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Separator Grid.Row="13" Grid.ColumnSpan="2"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="14" Grid.Column="0" Text="Gdb Archive Object ID:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="14" Grid.Column="1" IsReadOnly="True" Text="{Binding Gdb_archive_oid}" Foreground="Gray" FontSize="9"/>
+                    
+                    <TextBlock Margin="2,2,4,2" Grid.Row="15" Grid.Column="0" Text="Object ID:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="15" Grid.Column="1" IsReadOnly="True" Text="{Binding Objectid}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="16" Grid.Column="0" Text="Global ID:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="16" Grid.Column="1" IsReadOnly="True" Text="{Binding Globalid}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="17" Grid.Column="0" Text="Gdb From Date:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="17" Grid.Column="1" IsReadOnly="True" Text="{Binding Gdb_from_date}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="18" Grid.Column="0" Text="Gdb To Date:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="18" Grid.Column="1" IsReadOnly="True" Text="{Binding Gdb_to_date}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="19" Grid.Column="0" Text="Created User:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="19" Grid.Column="1" IsReadOnly="True" Text="{Binding Created_user}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="20" Grid.Column="0" Text="Created Date:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="20" Grid.Column="1" IsReadOnly="True" Text="{Binding Created_date}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="21" Grid.Column="0" Text="Last Edited User:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="21" Grid.Column="1" IsReadOnly="True" Text="{Binding Last_edited_user}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="22" Grid.Column="0" Text="Last Edited Date:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="22" Grid.Column="1" IsReadOnly="True" Text="{Binding Last_edited_date}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="23" Grid.Column="0" Text="Shape:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="23" Grid.Column="1" IsReadOnly="True" Text="{Binding Shape}" Foreground="Gray" FontSize="9"/>
+
+                    <Separator Grid.Row="24" Grid.ColumnSpan="2"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="25" Grid.Column="0" Text="Access Address:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="25" Grid.Column="1" Foreground="Gray" FontSize="9"
+                             Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                             Text="{Binding AccessAddress, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="26" Grid.Column="0" Text="Comment:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="26" Grid.Column="1" IsReadOnly="True" Text="{Binding Comment}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="27" Grid.Column="0" Text="Stationid_icao:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="27" Grid.Column="1" IsReadOnly="True" Text="{Binding Stationid_icao}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="28" Grid.Column="0" Text="Reference to maintenance agreement:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="28" Grid.Column="1" IsReadOnly="True" Text="{Binding Referencetomaintenanceagreement}" Foreground="Gray" FontSize="9"/>
+                    
+                    <TextBlock Margin="2,2,4,2" Grid.Row="29" Grid.Column="0" Text="Facility id:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="29" Grid.Column="1" IsReadOnly="True" Text="{Binding Facilityid}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="30" Grid.Column="0" Text="UTM:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="30" Grid.Column="1" IsReadOnly="True" Text="{Binding Si_utm}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="31" Grid.Column="0" Text="Northing:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="31" Grid.Column="1" IsReadOnly="True" Text="{Binding Si_northing}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="32" Grid.Column="0" Text="Easting:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="32" Grid.Column="1" IsReadOnly="True" Text="{Binding Si_easting}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="33" Grid.Column="0" Text="Geo, lat:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="33" Grid.Column="1" IsReadOnly="True" Text="{Binding Si_geo_lat}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="34" Grid.Column="0" Text="Geo, long:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="34" Grid.Column="1" IsReadOnly="True" Text="{Binding Si_geo_long}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="35" Grid.Column="0" Text="Service interval:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="35" Grid.Column="1" IsReadOnly="True" Text="{Binding Serviceinterval}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="36" Grid.Column="0" Text="Last service date:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="36" Grid.Column="1" IsReadOnly="True" Text="{Binding Lastservicedate}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="37" Grid.Column="0" Text="Next service date:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="37" Grid.Column="1" IsReadOnly="True" Text="{Binding Nextservicedate}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="38" Grid.Column="0" Text="Add workforce date:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="38" Grid.Column="1" IsReadOnly="True" Text="{Binding Addworkforcedate}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="39" Grid.Column="0" Text="Last visit date:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="39" Grid.Column="1" IsReadOnly="True" Text="{Binding Lastvisitdate}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="40" Grid.Column="0" Text="Altstationid:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="40" Grid.Column="1" IsReadOnly="True" Text="{Binding Altstationid}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="41" Grid.Column="0" Text="WMO station id:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="41" Grid.Column="1" IsReadOnly="True" Text="{Binding Wmostationid}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="42" Grid.Column="0" Text="Region id:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="42" Grid.Column="1" IsReadOnly="True" Text="{Binding Regionid}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="43" Grid.Column="0" Text="WIGOS id:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="43" Grid.Column="1" IsReadOnly="True" Text="{Binding Wigosid}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="44" Grid.Column="0" Text="WMO country code:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="44" Grid.Column="1" IsReadOnly="True" Text="{Binding Wmocountrycode}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="45" Grid.Column="0" Text="WMO rb sn:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="45" Grid.Column="1" IsReadOnly="True" Text="{Binding Wmorbsn}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="46" Grid.Column="0" Text="WMO rb cn:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="46" Grid.Column="1" IsReadOnly="True" Text="{Binding Wmorbcn}" Foreground="Gray" FontSize="9"/>
+
+                    <TextBlock Margin="2,2,4,2" Grid.Row="47" Grid.Column="0" Text="WMO rb sn radio:" Foreground="Gray" FontSize="9"/>
+                    <TextBox Grid.Row="47" Grid.Column="1" IsReadOnly="True" Text="{Binding Wmorbsnradio}" Foreground="Gray" FontSize="9"/>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+
+        <local:BusinessRuleViolationListView Grid.Column="1" DataContext="{Binding BusinessRuleViolationListViewModel}"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,135 @@
+﻿<UserControl x:Class="DMI.SMS.UIElements.FindStationInformationsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DMI.SMS.UIElements"
+             xmlns:viewModel="clr-namespace:DMI.SMS.ViewModel;assembly=DMI.SMS.ViewModel"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModel:FindStationInformationsViewModel}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Margin="1,1,3,1" Grid.Row="0" Grid.Column="0" Text="Station Name:"/>
+                <TextBox Margin="1,1,1,1" Grid.Row="0" Grid.Column="1" Text="{Binding NameFilter}"/>
+                <TextBlock Margin="1,1,3,1" Grid.Row="1" Grid.Column="0" Text="Station Id:"/>
+                <TextBox Margin="1,1,1,1" Grid.Row="1" Grid.Column="1" Text="{Binding StationIdFilter}"/>
+                <TextBlock Margin="1,1,3,1" Grid.Row="2" Grid.Column="0" Text="Object Id:"/>
+                <TextBox Margin="1,1,1,1" Grid.Row="2" Grid.Column="1" Text="{Binding ObjectIdFilter}"/>
+            </Grid>
+
+            <GroupBox Grid.Row="1" Grid.Column="0" Header="Station Type">
+                <StackPanel>
+                    <CheckBox Content="Synop" IsChecked="{Binding IncludeStationTypeSynop}"/>
+                    <CheckBox Content="Strømstation" IsChecked="{Binding IncludeStationTypeStroemStation}"/>
+                    <CheckBox Content="SVK gprs" IsChecked="{Binding IncludeStationTypeSVKGPRS}"/>
+                    <CheckBox Content="Vandstandsstation" IsChecked="{Binding IncludeStationTypeVandstand}"/>
+                    <CheckBox Content="GIWS" IsChecked="{Binding IncludeStationTypeGIWS}"/>
+                    <CheckBox Content="Pluvio" IsChecked="{Binding IncludeStationTypePluvio}"/>
+                    <CheckBox Content="SHIP AWS" IsChecked="{Binding IncludeStationTypeShipAWS}"/>
+                    <CheckBox Content="Temp ship" IsChecked="{Binding IncludeStationTypeTempShip}"/>
+                    <CheckBox Content="Lynpejlestation" IsChecked="{Binding IncludeStationTypeLynPejleStation}"/>
+                    <CheckBox Content="Radar" IsChecked="{Binding IncludeStationTypeRadar}"/>
+                    <CheckBox Content="Radiosonde" IsChecked="{Binding IncludeStationTypeRadiosonde}"/>
+                    <CheckBox Content="Historisk stationstype" IsChecked="{Binding IncludeStationTypeHistoriskStationstype}"/>
+                    <CheckBox Content="Manuel nedbør" IsChecked="{Binding IncludeStationTypeManuelNedbør}"/>
+                    <CheckBox Content="Bølgestation" IsChecked="{Binding IncludeStationTypeBølgestation}"/>
+                    <CheckBox Content="Snestation" IsChecked="{Binding IncludeStationTypeSnestation}"/>
+                    <CheckBox Content="Unspecified" IsChecked="{Binding IncludeStationTypeUnspecified}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Status">
+                <StackPanel>
+                    <CheckBox Content="Active" IsChecked="{Binding IncludeStatusActive}"/>
+                    <CheckBox Content="Discontinued" IsChecked="{Binding IncludeStatusDiscontinued}"/>
+                    <CheckBox Content="Unspecified" IsChecked="{Binding IncludeStatusUnspecified}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Grid.Row="1" Grid.Column="1" Header="Station Owner">
+                <StackPanel>
+                    <CheckBox Content="DMI" IsChecked="{Binding IncludeStationOwnerDMI}"/>
+                    <CheckBox Content="SVK" IsChecked="{Binding IncludeStationOwnerSVK}"/>
+                    <CheckBox Content="Havne Kommuner mv" IsChecked="{Binding IncludeStationOwnerHavne_Kommuner_mv}"/>
+                    <CheckBox Content="GC-net (GRL Climate Data)" IsChecked="{Binding IncludeStationOwnerGC_net_Greenland_Climate_data}"/>
+                    <CheckBox Content="Danske Lufthavne" IsChecked="{Binding IncludeStationOwnerDanske_lufthavne}"/>
+                    <CheckBox Content="MITT GRL Lufthavne" IsChecked="{Binding IncludeStationOwnerMITT_GRL_lufthavne}"/>
+                    <CheckBox Content="Vejdirektoratet" IsChecked="{Binding IncludeStationOwnerVejdirektoratet}"/>
+                    <CheckBox Content="Synop Aarhus Uni" IsChecked="{Binding IncludeStationOwnerSynop_Aarhus_Uni}"/>
+                    <CheckBox Content="Asiaq" IsChecked="{Binding IncludeStationOwnerAsiaq}"/>
+                    <CheckBox Content="Kystdirektoratet" IsChecked="{Binding IncludeStationOwnerKystdirektoratet}"/>
+                    <CheckBox Content="Geus_Promice-net (GRL)" IsChecked="{Binding IncludeStationOwnerPROMICE_GEUS_PROMICE_net_i_Grønland}"/>
+                    <CheckBox Content="Forsvaret" IsChecked="{Binding IncludeStationOwnerForsvaret}"/>
+                    <CheckBox Content="Unspecified" IsChecked="{Binding IncludeStationOwnerUnspecified}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Grid.Column="0" Header="Condition of Records">
+                    <StackPanel Grid.Column="0" Margin="0, 0, 12, 0">
+                        <CheckBox Content="Current" IsChecked="{Binding IncludeCurrent}"/>
+                        <CheckBox Content="Deleted" IsChecked="{Binding IncludeDeleted}"/>
+                        <CheckBox Content="Outdated" IsChecked="{Binding IncludeOutdated}"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Grid.Column="1" Header="Outdated Records">
+                    <StackPanel>
+                        <RadioButton Content="All"
+                                     IsChecked="{Binding Path=CurrentOption, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Option1}"/>
+                        <RadioButton Content="Actual Updates"
+                                     IsChecked="{Binding Path=CurrentOption, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Option2}"/>
+                        <RadioButton Content="Historically Relevant Updates"
+                                     IsChecked="{Binding Path=CurrentOption, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Option3}"/>
+                    </StackPanel>
+                    <GroupBox.Visibility>
+                        <Binding Path="IncludeOutdated" Converter="{StaticResource BooleanToVisibilityConverter}">
+                            <Binding.ConverterParameter>
+                                <system:Boolean>True</system:Boolean>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </GroupBox.Visibility>
+                </GroupBox>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

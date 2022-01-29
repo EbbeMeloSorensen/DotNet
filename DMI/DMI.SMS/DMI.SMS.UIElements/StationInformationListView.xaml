@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="DMI.SMS.UIElements.StationInformationListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DMI.SMS.UIElements"
+             xmlns:viewModel="clr-namespace:DMI.SMS.ViewModel;assembly=DMI.SMS.ViewModel"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModel:StationInformationListViewModel}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderThickness="1">
+            <TextBox Text="SMS" FontWeight="Bold" Background="LightGray"/>
+        </Border>
+
+        <Expander Grid.Row="1" ExpandDirection="Down" IsExpanded="True" Header="Filter">
+            <StackPanel>
+                <local:FindStationInformationsView DataContext="{Binding FindStationInformationsViewModel}"/>
+                <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                    <Button Content="Find" Margin="1" Width="75"
+                            Command="{Binding FindStationInformationsCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    <Button Content="Clear Filters" Margin="1" Width="75"
+                            Command="{Binding ClearFiltersCommand}"/>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+
+        <ListBox Grid.Row="2" Margin="1" x:Name="StationInformationsListBox" 
+                 SelectionMode="Extended"
+                 HorizontalContentAlignment="Stretch"
+                 ItemsSource="{Binding StationInformationViewModels}"
+                 ItemTemplate="{StaticResource StationInformationTemplate}">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:InvokeCommandAction Command="{Binding SelectionChangedCommand}"
+                                           CommandParameter="{Binding ElementName=StationInformationsListBox, Path=SelectedItems}"/>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </ListBox>
+
+        <TextBox Grid.Row="3" Text="{Binding ItemCountText}"/>
+    </Grid>
+</UserControl>

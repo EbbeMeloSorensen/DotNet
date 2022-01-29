@@ -33,6 +33,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.ViewModel", "DMI.SM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "..\..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{FA221305-5B3D-43C0-8857-CAE33D425573}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.UIElements", "DMI.SMS.UIElements\DMI.SMS.UIElements.csproj", "{6106F163-D49F-4000-B3D9-D831A1EABAEC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "..\..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj", "{5CD583F6-A2C4-4823-AACE-E7610E842EEE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{CA3826E1-A3FF-4D2E-A092-8234B08E4035}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +105,18 @@ Global
 		{FA221305-5B3D-43C0-8857-CAE33D425573}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA221305-5B3D-43C0-8857-CAE33D425573}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA221305-5B3D-43C0-8857-CAE33D425573}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6106F163-D49F-4000-B3D9-D831A1EABAEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6106F163-D49F-4000-B3D9-D831A1EABAEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6106F163-D49F-4000-B3D9-D831A1EABAEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6106F163-D49F-4000-B3D9-D831A1EABAEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CD583F6-A2C4-4823-AACE-E7610E842EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CD583F6-A2C4-4823-AACE-E7610E842EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CD583F6-A2C4-4823-AACE-E7610E842EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CD583F6-A2C4-4823-AACE-E7610E842EEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA3826E1-A3FF-4D2E-A092-8234B08E4035}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA3826E1-A3FF-4D2E-A092-8234B08E4035}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA3826E1-A3FF-4D2E-A092-8234B08E4035}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA3826E1-A3FF-4D2E-A092-8234B08E4035}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
