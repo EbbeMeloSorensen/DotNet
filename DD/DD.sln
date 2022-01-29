@@ -15,9 +15,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Memory", "DD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Npgsql", "DD.Persistence.Npgsql\DD.Persistence.Npgsql.csproj", "{CFB30F02-12E1-4AFB-B0E9-461918C2FC33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Memory.UI.Console", "DD.Persistence.Memory.UI.Console\DD.Persistence.Memory.UI.Console.csproj", "{D043B6AD-ADC6-4739-91E5-DC45DA015075}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Memory.UI.Console", "DD.Persistence.Memory.UI.Console\DD.Persistence.Memory.UI.Console.csproj", "{D043B6AD-ADC6-4739-91E5-DC45DA015075}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Persistence.Npgsql.UI.Console", "DD.Persistence.Npgsql.UI.Console\DD.Persistence.Npgsql.UI.Console.csproj", "{9807C5F5-E63C-4F39-B612-EB54B26FB7C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Persistence.Npgsql.UI.Console", "DD.Persistence.Npgsql.UI.Console\DD.Persistence.Npgsql.UI.Console.csproj", "{9807C5F5-E63C-4F39-B612-EB54B26FB7C9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{E8021D34-4787-4C70-869F-2B868E17299B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Math", "..\Craft\Craft.Math\Craft.Math.csproj", "{A62E2319-B6E3-4F4B-AB85-0AAB5023ADBA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\Craft\Craft.Utils\Craft.Utils.csproj", "{0D22A9B5-ECCD-4BB1-A4EC-9DDAA82E04BB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\Craft\Craft.ViewModels\Craft.ViewModels.csproj", "{5C4807F7-560A-4452-A077-FB7C536139D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel", "..\Craft\Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{715C55E0-4768-48C8-A9B6-E839A9C6DB21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Application", "DD.Application\DD.Application.csproj", "{98F436DE-C457-49D4-9FA9-5AF26C4AB044}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{6FC405E1-BE33-4FF2-824D-C0DA92160B27}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Algorithms", "..\Craft\Craft.Algorithms\Craft.Algorithms.csproj", "{287860F6-B78F-4D80-AC06-4AAAFC8D9310}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.IO", "DD.IO\DD.IO.csproj", "{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +75,42 @@ Global
 		{9807C5F5-E63C-4F39-B612-EB54B26FB7C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9807C5F5-E63C-4F39-B612-EB54B26FB7C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9807C5F5-E63C-4F39-B612-EB54B26FB7C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8021D34-4787-4C70-869F-2B868E17299B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8021D34-4787-4C70-869F-2B868E17299B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8021D34-4787-4C70-869F-2B868E17299B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8021D34-4787-4C70-869F-2B868E17299B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A62E2319-B6E3-4F4B-AB85-0AAB5023ADBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A62E2319-B6E3-4F4B-AB85-0AAB5023ADBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A62E2319-B6E3-4F4B-AB85-0AAB5023ADBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A62E2319-B6E3-4F4B-AB85-0AAB5023ADBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D22A9B5-ECCD-4BB1-A4EC-9DDAA82E04BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D22A9B5-ECCD-4BB1-A4EC-9DDAA82E04BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D22A9B5-ECCD-4BB1-A4EC-9DDAA82E04BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D22A9B5-ECCD-4BB1-A4EC-9DDAA82E04BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C4807F7-560A-4452-A077-FB7C536139D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C4807F7-560A-4452-A077-FB7C536139D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C4807F7-560A-4452-A077-FB7C536139D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C4807F7-560A-4452-A077-FB7C536139D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{715C55E0-4768-48C8-A9B6-E839A9C6DB21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{715C55E0-4768-48C8-A9B6-E839A9C6DB21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{715C55E0-4768-48C8-A9B6-E839A9C6DB21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{715C55E0-4768-48C8-A9B6-E839A9C6DB21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98F436DE-C457-49D4-9FA9-5AF26C4AB044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98F436DE-C457-49D4-9FA9-5AF26C4AB044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98F436DE-C457-49D4-9FA9-5AF26C4AB044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98F436DE-C457-49D4-9FA9-5AF26C4AB044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FC405E1-BE33-4FF2-824D-C0DA92160B27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FC405E1-BE33-4FF2-824D-C0DA92160B27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FC405E1-BE33-4FF2-824D-C0DA92160B27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FC405E1-BE33-4FF2-824D-C0DA92160B27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{287860F6-B78F-4D80-AC06-4AAAFC8D9310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{287860F6-B78F-4D80-AC06-4AAAFC8D9310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{287860F6-B78F-4D80-AC06-4AAAFC8D9310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{287860F6-B78F-4D80-AC06-4AAAFC8D9310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
