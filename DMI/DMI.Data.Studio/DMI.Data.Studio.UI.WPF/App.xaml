@@ -1,0 +1,44 @@
+﻿<Application x:Class="DMI.Data.Studio.UI.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DMI.Data.Studio.UI.WPF"
+             xmlns:viewmodelcommon="clr-namespace:Craft.ViewModels.Dialogs;assembly=Craft.ViewModels"
+             xmlns:viewmodelsms="clr-namespace:DMI.SMS.ViewModel;assembly=DMI.SMS.ViewModel"
+             xmlns:viewmodeldmidatastudio="clr-namespace:DMI.Data.Studio.ViewModel;assembly=DMI.Data.Studio.ViewModel"
+             xmlns:dialogs="clr-namespace:Craft.UIElements.Dialogs;assembly=Craft.UIElements"
+             xmlns:smsdialogs="clr-namespace:DMI.SMS.UIElements;assembly=DMI.SMS.UIElements"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
+
+            <DataTemplate DataType="{x:Type viewmodelcommon:MessageBoxDialogViewModel}">
+                <dialogs:MessageBoxDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodelsms:CreateStationInformationDialogViewModel}">
+                <smsdialogs:CreateStationInformationDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodelsms:PromoteStationInformationRecordDialogViewModel}">
+                <smsdialogs:PromoteStationInformationRecordDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodelsms:MergeStationInformationRecordsDialogViewModel}">
+                <smsdialogs:MergeStationInformationRecordsDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodeldmidatastudio:SettingsDialogViewModel}">
+                <local:SettingsDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodeldmidatastudio:AboutDialogViewModel}">
+                <local:AboutDialogView/>
+            </DataTemplate>
+
+            <SolidColorBrush Color="WhiteSmoke" x:Key="BackgroundBrush"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Craft.UIElements;component/Charts/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Chronology/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Geometry2D/Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
