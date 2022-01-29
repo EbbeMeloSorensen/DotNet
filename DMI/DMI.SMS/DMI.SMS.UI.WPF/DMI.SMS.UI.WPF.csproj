@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
+    <ProjectReference Include="..\DMI.SMS.Persistence.File\DMI.SMS.Persistence.File.csproj" />
+    <ProjectReference Include="..\DMI.SMS.Persistence\DMI.SMS.Persistence.csproj" />
+    <ProjectReference Include="..\DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj" />
+    <ProjectReference Include="..\DMI.SMS.UIElements\DMI.SMS.UIElements.csproj" />
+    <ProjectReference Include="..\DMI.SMS.ViewModel\DMI.SMS.ViewModel.csproj" />
+  </ItemGroup>
+
+</Project>

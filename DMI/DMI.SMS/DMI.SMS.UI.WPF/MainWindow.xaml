@@ -1,0 +1,79 @@
+﻿<Window x:Class="DMI.SMS.UI.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DMI.SMS.UI.WPF"
+        xmlns:uiElements="clr-namespace:DMI.SMS.UIElements;assembly=DMI.SMS.UIElements"
+        xmlns:geometry2D="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
+        mc:Ignorable="d"
+        Title="{Binding MainWindowTitle}" 
+        Height="450" 
+        Width="800"
+        WindowState="Maximized"
+        DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="N" 
+                    Command="{Binding CreateStationInformationCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </Window.InputBindings>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New Station Information" Command="{Binding CreateStationInformationCommand}"/>
+                <MenuItem Header="_Export" Command="{Binding ExportDataCommand}"/>
+                <MenuItem Header="_Import" Command="{Binding ImportDataCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Settings"
+                          Command="{Binding OpenSettingsDialogCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Separator />
+                <MenuItem Header="_Exit"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="Condition Classification" IsCheckable="True"
+                          IsChecked="{Binding ClassifyRecordsWithCondition}"/>
+                <MenuItem Header="Operational Time Intervals" IsCheckable="True"
+                          IsChecked="{Binding StationInformationCollectionViewModel.IncludeOperationIntervalsBars}"/>
+                <MenuItem Header="Observation Time Intervals" IsCheckable="True"
+                          IsChecked="{Binding StationInformationCollectionViewModel.IncludeObservationIntervalsBars}"/>
+            </MenuItem>
+        </Menu>
+
+        <!--It is shown in the station information list view-->
+        <!--<StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Text="{Binding StationInformationListViewModel.ItemCountText}"/>
+        </StatusBar>-->
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <uiElements:StationInformationListView Grid.Column="0" DataContext="{Binding StationInformationListViewModel}"/>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TabControl Grid.Row="0">
+                    <TabItem Header="Temporal">
+                        <uiElements:StationInformationCollectionView DataContext="{Binding StationInformationCollectionViewModel}"/>
+                    </TabItem>
+                    <TabItem Header="Geospatial">
+                        <geometry2D:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
+                    </TabItem>
+                </TabControl>
+
+                <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Margin="2" HorizontalAlignment="Stretch" Height="2" Background="Gray"/>
+
+                <uiElements:StationInformationDetailsView Grid.Row="1" DataContext="{Binding StationInformationDetailsViewModel}"/>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

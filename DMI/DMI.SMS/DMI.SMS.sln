@@ -39,6 +39,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "..\..\Cra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{CA3826E1-A3FF-4D2E-A092-8234B08E4035}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.UI.WPF", "DMI.SMS.UI.WPF\DMI.SMS.UI.WPF.csproj", "{46EDC280-5A5C-4438-815A-2BD08665BB4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{C64F380A-CE32-4651-B5BA-A0728C5A96B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +121,14 @@ Global
 		{CA3826E1-A3FF-4D2E-A092-8234B08E4035}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA3826E1-A3FF-4D2E-A092-8234B08E4035}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA3826E1-A3FF-4D2E-A092-8234B08E4035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46EDC280-5A5C-4438-815A-2BD08665BB4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46EDC280-5A5C-4438-815A-2BD08665BB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46EDC280-5A5C-4438-815A-2BD08665BB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46EDC280-5A5C-4438-815A-2BD08665BB4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C64F380A-CE32-4651-B5BA-A0728C5A96B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C64F380A-CE32-4651-B5BA-A0728C5A96B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C64F380A-CE32-4651-B5BA-A0728C5A96B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C64F380A-CE32-4651-B5BA-A0728C5A96B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

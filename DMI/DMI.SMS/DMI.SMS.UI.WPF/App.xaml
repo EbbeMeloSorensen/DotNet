@@ -1,0 +1,34 @@
+﻿<Application x:Class="DMI.SMS.UI.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DMI.SMS.UI.WPF"
+             xmlns:uiElements="clr-namespace:DMI.SMS.UIElements;assembly=DMI.SMS.UIElements"
+             xmlns:viewmodel2="clr-namespace:DMI.SMS.ViewModel;assembly=DMI.SMS.ViewModel"
+             xmlns:dialogs="clr-namespace:Craft.UIElements.Dialogs;assembly=Craft.UIElements"
+             xmlns:viewmodel="clr-namespace:Craft.ViewModels.Dialogs;assembly=Craft.ViewModels"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
+
+            <DataTemplate DataType="{x:Type viewmodel:MessageBoxDialogViewModel}">
+                <dialogs:MessageBoxDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel2:SettingsDialogViewModel}">
+                <local:SettingsDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel2:CreateStationInformationDialogViewModel}">
+                <uiElements:CreateStationInformationDialogView/>
+            </DataTemplate>
+
+            <SolidColorBrush Color="WhiteSmoke" x:Key="BackgroundBrush"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Craft.UIElements;component/Charts/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Chronology/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Geometry2D/Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
