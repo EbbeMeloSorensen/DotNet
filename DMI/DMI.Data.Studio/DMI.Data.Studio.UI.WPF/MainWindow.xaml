@@ -1,0 +1,89 @@
+﻿<Window x:Class="DMI.Data.Studio.UI.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DMI.Data.Studio.UI.WPF"
+        xmlns:uiElementsSMS="clr-namespace:DMI.SMS.UIElements;assembly=DMI.SMS.UIElements"
+        xmlns:uiElementsStatDB="clr-namespace:DMI.StatDB.UIElements;assembly=DMI.StatDB.UIElements"
+        xmlns:geometry="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
+        xmlns:chronology="clr-namespace:Craft.UIElements.Chronology;assembly=Craft.UIElements"
+        mc:Ignorable="d"
+        Title="{Binding MainWindowTitle}" 
+        Height="450" 
+        Width="800"
+        WindowState="Maximized"
+        DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New Station Information" Command="{Binding CreateStationInformationCommand}"/>
+                <Separator/>
+                <MenuItem Header="Export Data" Command="{Binding ExportDataCommand}"/>
+                <MenuItem Header="Import Data" Command="{Binding ImportDataCommand}"/>
+                <Separator/>
+                <MenuItem Header="Settings" 
+                          Command="{Binding OpenSettingsDialogCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="Condition Classification" IsCheckable="True"
+                          IsChecked="{Binding ClassifyRecordsWithCondition}"/>
+                <MenuItem Header="Operational Time Intervals" IsCheckable="True"
+                          IsChecked="{Binding IncludeOperationIntervalBars}"/>
+                <MenuItem Header="Transaction Time Intervals" IsCheckable="True"
+                          IsChecked="{Binding IncludeTransactionTimeIntervalBars}"/>
+                <MenuItem Header="Observation Time Intervals" IsCheckable="True"
+                          IsChecked="{Binding IncludeObservationIntervalBars}"/>
+            </MenuItem>
+            <!--<MenuItem Header="_Tools">
+                <MenuItem Header="Restore Test Database" 
+                          Command="{Binding RestoreTestDatabaseCommand}"/>
+            </MenuItem>-->
+            <MenuItem Header="_Help">
+                <MenuItem Header="About" 
+                          Command="{Binding OpenAboutDialogCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <uiElementsSMS:StationInformationListView Grid.Column="0" DataContext="{Binding StationInformationListViewModel}"/>
+
+            <uiElementsStatDB:StationListView Grid.Column="1" DataContext="{Binding StationListViewModel}"/>
+
+            <TabControl Grid.Column="2" SelectedIndex="{Binding SelectedOveralTabIndex}">
+                <TabItem Header="Selected Records">
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TabControl Grid.Row="0">
+                            <TabItem Header="Geospatial">
+                                <geometry:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
+                            </TabItem>
+                            <TabItem Header="Temporal">
+                                <chronology:ChronologyView DataContext="{Binding ChronologyViewModel}"/>
+                            </TabItem>
+                        </TabControl>
+
+                        <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Margin="2" HorizontalAlignment="Stretch" Height="2" Background="Gray"/>
+
+                        <uiElementsSMS:StationInformationDetailsView Grid.Row="1" DataContext="{Binding StationInformationDetailsViewModel}"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Statistics (Entire Dataset)">
+                    <uiElementsSMS:StatisticsView DataContext="{Binding StatisticsViewModel}"/>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </DockPanel>
+</Window>
