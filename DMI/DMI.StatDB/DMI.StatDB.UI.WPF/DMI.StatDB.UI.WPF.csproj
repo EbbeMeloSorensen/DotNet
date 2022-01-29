@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj" />
+    <ProjectReference Include="..\..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
+    <ProjectReference Include="..\DMI.StatDB.Persistence.Npgsql\DMI.StatDB.Persistence.Npgsql.csproj" />
+    <ProjectReference Include="..\DMI.StatDB.UIDataProvider.Persistence\DMI.StatDB.UIDataProvider.Persistence.csproj" />
+    <ProjectReference Include="..\DMI.StatDB.UIElements\DMI.StatDB.UIElements.csproj" />
+    <ProjectReference Include="..\DMI.StatDB.ViewModel\DMI.StatDB.ViewModel.csproj" />
+  </ItemGroup>
+
+</Project>

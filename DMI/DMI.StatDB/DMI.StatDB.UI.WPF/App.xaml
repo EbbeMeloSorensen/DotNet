@@ -1,0 +1,26 @@
+﻿<Application x:Class="DMI.StatDB.UI.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DMI.StatDB.UI.WPF"
+             xmlns:viewmodel="clr-namespace:Craft.ViewModels.Dialogs;assembly=Craft.ViewModels"
+             xmlns:dialogs="clr-namespace:Craft.UIElements.Dialogs;assembly=Craft.UIElements"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
+
+            <DataTemplate DataType="{x:Type viewmodel:MessageBoxDialogViewModel}">
+                <dialogs:MessageBoxDialogView/>
+            </DataTemplate>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Craft.UIElements;component/Charts/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Chronology/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Geometry2D/Resources.xaml" />
+                <ResourceDictionary Source="../Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Application.Resources>
+</Application>

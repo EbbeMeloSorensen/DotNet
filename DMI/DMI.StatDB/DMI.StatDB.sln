@@ -3,25 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.Domain", "DMI.StatDB.Domain\DMI.StatDB.Domain.csproj", "{7CDA2354-91D0-4D93-BC8C-4FB2340DBF6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.Domain", "DMI.StatDB.Domain\DMI.StatDB.Domain.csproj", "{7CDA2354-91D0-4D93-BC8C-4FB2340DBF6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.Persistence", "DMI.StatDB.Persistence\DMI.StatDB.Persistence.csproj", "{F46C267B-929A-4D6F-9C1A-DEA8B3970FF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.Persistence", "DMI.StatDB.Persistence\DMI.StatDB.Persistence.csproj", "{F46C267B-929A-4D6F-9C1A-DEA8B3970FF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{72F81419-8D37-426E-B058-3F8C9D4B7CB8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\..\Craft\Craft.Logging\Craft.Logging.csproj", "{F8046A44-3A19-42F6-97A3-5CACD107B660}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.Application", "DMI.StatDB.Application\DMI.StatDB.Application.csproj", "{46BD66D3-6E92-471D-9849-7708F771A217}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.Application", "DMI.StatDB.Application\DMI.StatDB.Application.csproj", "{46BD66D3-6E92-471D-9849-7708F771A217}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.Persistence.Npgsql", "DMI.StatDB.Persistence.Npgsql\DMI.StatDB.Persistence.Npgsql.csproj", "{818469BB-76C0-4524-B4F0-D1BB952A8320}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.Persistence.Npgsql", "DMI.StatDB.Persistence.Npgsql\DMI.StatDB.Persistence.Npgsql.csproj", "{818469BB-76C0-4524-B4F0-D1BB952A8320}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.UIDataProvider.Persistence", "DMI.StatDB.UIDataProvider.Persistence\DMI.StatDB.UIDataProvider.Persistence.csproj", "{C9C5FC9D-ABCE-4012-B66E-0744F8F7B877}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.UIDataProvider.Persistence", "DMI.StatDB.UIDataProvider.Persistence\DMI.StatDB.UIDataProvider.Persistence.csproj", "{C9C5FC9D-ABCE-4012-B66E-0744F8F7B877}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.ViewModel", "DMI.StatDB.ViewModel\DMI.StatDB.ViewModel.csproj", "{7E76D9E9-979F-4FF1-99C1-C6EE57B37C7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.ViewModel", "DMI.StatDB.ViewModel\DMI.StatDB.ViewModel.csproj", "{7E76D9E9-979F-4FF1-99C1-C6EE57B37C7F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj", "{B23F7426-2397-441E-97F8-651609240BC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.UIElements", "DMI.StatDB.UIElements\DMI.StatDB.UIElements.csproj", "{7B605AFC-C670-4916-B605-589CCB349A5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.UIElements", "DMI.StatDB.UIElements\DMI.StatDB.UIElements.csproj", "{7B605AFC-C670-4916-B605-589CCB349A5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.UI.WPF", "DMI.StatDB.UI.WPF\DMI.StatDB.UI.WPF.csproj", "{83562298-D1BF-48A0-89DA-1E4A713D7136}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "..\..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj", "{1EA05596-FEC7-45B2-AAA2-C4A7AB066548}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{59553604-FB23-4163-BAEE-DD112E99B077}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +75,18 @@ Global
 		{7B605AFC-C670-4916-B605-589CCB349A5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B605AFC-C670-4916-B605-589CCB349A5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B605AFC-C670-4916-B605-589CCB349A5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83562298-D1BF-48A0-89DA-1E4A713D7136}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83562298-D1BF-48A0-89DA-1E4A713D7136}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83562298-D1BF-48A0-89DA-1E4A713D7136}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83562298-D1BF-48A0-89DA-1E4A713D7136}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EA05596-FEC7-45B2-AAA2-C4A7AB066548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EA05596-FEC7-45B2-AAA2-C4A7AB066548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EA05596-FEC7-45B2-AAA2-C4A7AB066548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EA05596-FEC7-45B2-AAA2-C4A7AB066548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59553604-FB23-4163-BAEE-DD112E99B077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59553604-FB23-4163-BAEE-DD112E99B077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59553604-FB23-4163-BAEE-DD112E99B077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59553604-FB23-4163-BAEE-DD112E99B077}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
