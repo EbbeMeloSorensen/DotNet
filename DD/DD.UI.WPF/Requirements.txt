@@ -1,0 +1,39 @@
+﻿Combat requirements
+
+* As long as a creature has any attacks left, it may move, as long as it doesn't exceed its maximum movement, EXCEPT
+  when it moves to a square from where it cannot attack any opponent, in which case its turn ends
+* If a creature moves then its next action needs to be an attack. It cannot move and then move again
+* If a creature stands next to an opponent and then moves away from that opponent, then the opponent gets an 
+  "opportunity attack", i.e. a free attack
+* A creature can only perform an opportunity once each round
+
+Behaviour of creature with ranged attack
+* A creature with a ranged attack will try to position itself in an optimal position before making the attack.
+  Generally, the optimal position is a square where the creature can attack an opponent and where the
+  distance to the opponent is as close as possible the the range of the creature. E.g. if a an archer has a 
+  range of 5 squares then it will try to position itself 5 squares away from an opponent.
+  Since a creature with a ranged attack gets disadvantage when standing next to an opponent, it will
+  generally try to avoid standing next to an opponent.
+  If a creature with a ranged attack stands next to an opponent at the start of its turn, it may either
+  attack or move to a more suitable position. If it does the latter it provokes an opportunity attack
+  from the opponents it moves away from. The creature will move away if it benefits from doing so.
+  Specifically, the creature will move away, if all of the following criteria are fulfilled:
+  1) It can reach a square where it can make an attack and where it doesn't stand next to an opponent
+  2) The opponent it leaves is incapable of pursuing the creature, either because:
+     a) it cannot move as far as the creature evading it
+	 b) it is standing next to other opponents than the one evading it
+
+Technically, the action of the creature with a ranged attack is determined as follows:
+1) Can the creature move to a square where it can attack an opponent without disadvantage?
+   1a) No, then the creature stays where it is and attacks
+   1b) Yes, then the creature moves and subsequently attacks
+
+You can evaluate the first question like this:
+1) Identify the squares that the creature can move to, including the one it currently occupies (You have an algorithm for that)
+2) Identify the squares from which the creature can attack an opponent (You have an algorithm for that)
+3) Identify the squares that are not adjacent to any opponent (You need to implement a dilation operation based on the euclidean distance transform)
+4) Assign a fitness score to each of the squares that the creature can reach, like this:
+   - The creature can attack an opponent from the square -> add 1000 to the score
+   - The square it not adjacent to an opponent -> Add 100 to the score
+   - Add the distance from the square to the closest opponent to the score
+   .. Perhaps you should just identify the ideal square among the ones the creature can reach

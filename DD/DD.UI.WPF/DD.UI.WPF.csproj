@@ -1,0 +1,237 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\Air myrmidon.PNG" />
+    <None Remove="Images\Apple.png" />
+    <None Remove="Images\Archer.PNG" />
+    <None Remove="Images\Arrow.png" />
+    <None Remove="Images\Barbarian.PNG" />
+    <None Remove="Images\Basilisk.PNG" />
+    <None Remove="Images\Behir.PNG" />
+    <None Remove="Images\Black Panther.PNG" />
+    <None Remove="Images\Blue Dragon.PNG" />
+    <None Remove="Images\Boar.PNG" />
+    <None Remove="Images\Chitine.PNG" />
+    <None Remove="Images\Cleric.PNG" />
+    <None Remove="Images\DragonBorn.PNG" />
+    <None Remove="Images\Ettin.PNG" />
+    <None Remove="Images\Female Elf Archer.PNG" />
+    <None Remove="Images\Ghoul.PNG" />
+    <None Remove="Images\Giant Spider.PNG" />
+    <None Remove="Images\Glass Golem.PNG" />
+    <None Remove="Images\Goblin Archer 2.PNG" />
+    <None Remove="Images\Goblin Archer.PNG" />
+    <None Remove="Images\Goblin.PNG" />
+    <None Remove="Images\Gorgon.PNG" />
+    <None Remove="Images\Green Dragon.PNG" />
+    <None Remove="Images\Iron Fence.PNG" />
+    <None Remove="Images\Iron Golem.PNG" />
+    <None Remove="Images\Knight.PNG" />
+    <None Remove="Images\Nighthaunt.PNG" />
+    <None Remove="Images\NoPreview.png" />
+    <None Remove="Images\Ogre.PNG" />
+    <None Remove="Images\Orange.png" />
+    <None Remove="Images\Orc Shaman.png" />
+    <None Remove="Images\Orc.PNG" />
+    <None Remove="Images\Otyugh.PNG" />
+    <None Remove="Images\Owlbear.PNG" />
+    <None Remove="Images\Panda.JPG" />
+    <None Remove="Images\Quaggoth.PNG" />
+    <None Remove="Images\Red Dragon.PNG" />
+    <None Remove="Images\Sahuagin Baron.PNG" />
+    <None Remove="Images\Sahuagin.PNG" />
+    <None Remove="Images\Sea Troll.PNG" />
+    <None Remove="Images\Skeleton.PNG" />
+    <None Remove="Images\Spectre.PNG" />
+    <None Remove="Images\Spirit Troll.PNG" />
+    <None Remove="Images\Stone Golem.PNG" />
+    <None Remove="Images\Sword.png" />
+    <None Remove="Images\Troglodyte.PNG" />
+    <None Remove="Images\Troll.PNG" />
+    <None Remove="Images\Umber Hulk 2.PNG" />
+    <None Remove="Images\Umber Hulk.PNG" />
+    <None Remove="Images\Wall.jpg" />
+    <None Remove="Images\Water.PNG" />
+    <None Remove="Images\Wizard.PNG" />
+    <None Remove="Images\Wraith and Spectre.PNG" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj" />
+    <ProjectReference Include="..\DD.ViewModel\DD.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Air myrmidon.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Apple.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Archer.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Arrow.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Barbarian.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Basilisk.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Behir.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Black Panther.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Blue Dragon.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Boar.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Chitine.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Cleric.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\DragonBorn.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Ettin.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Female Elf Archer.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Ghoul.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Giant Spider.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Glass Golem.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Goblin Archer 2.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Goblin Archer.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Goblin.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Gorgon.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Green Dragon.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Iron Fence.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Iron Golem.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Knight.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Nighthaunt.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\NoPreview.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Ogre.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Orange.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Orc Shaman.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Orc.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Otyugh.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Owlbear.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Panda.JPG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Quaggoth.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Red Dragon.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Sahuagin Baron.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Sahuagin.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Sea Troll.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Skeleton.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Spectre.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Spirit Troll.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Stone Golem.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Sword.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Troglodyte.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Troll.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Umber Hulk 2.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Umber Hulk.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Wall.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Water.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Wizard.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Wraith and Spectre.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>
