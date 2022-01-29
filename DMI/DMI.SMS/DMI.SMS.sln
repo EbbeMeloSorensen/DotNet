@@ -23,11 +23,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.UIDataProvider.Pers
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj", "{0C928134-54E9-488A-B498-C9176686BCB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.Npgsql", "DMI.SMS.Persistence.Npgsql\DMI.SMS.Persistence.Npgsql.csproj", "{FD5604A3-5FB7-4BD3-A504-E59AD8765C10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.Npgsql", "DMI.SMS.Persistence.Npgsql\DMI.SMS.Persistence.Npgsql.csproj", "{FD5604A3-5FB7-4BD3-A504-E59AD8765C10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\..\Craft\Craft.Utils\Craft.Utils.csproj", "{0E657735-073F-4135-A419-77A787327CD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.Npgsql.UI.Console", "DMI.SMS.Persistence.Npgsql.UI.Console\DMI.SMS.Persistence.Npgsql.UI.Console.csproj", "{099DDDAD-A46C-48B6-9195-B3ADD5B3CF5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.Npgsql.UI.Console", "DMI.SMS.Persistence.Npgsql.UI.Console\DMI.SMS.Persistence.Npgsql.UI.Console.csproj", "{099DDDAD-A46C-48B6-9195-B3ADD5B3CF5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.ViewModel", "DMI.SMS.ViewModel\DMI.SMS.ViewModel.csproj", "{BE439BBB-03D7-4806-8C1D-759FB2DD7E11}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "..\..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{FA221305-5B3D-43C0-8857-CAE33D425573}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +91,14 @@ Global
 		{099DDDAD-A46C-48B6-9195-B3ADD5B3CF5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{099DDDAD-A46C-48B6-9195-B3ADD5B3CF5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{099DDDAD-A46C-48B6-9195-B3ADD5B3CF5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE439BBB-03D7-4806-8C1D-759FB2DD7E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE439BBB-03D7-4806-8C1D-759FB2DD7E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE439BBB-03D7-4806-8C1D-759FB2DD7E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE439BBB-03D7-4806-8C1D-759FB2DD7E11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA221305-5B3D-43C0-8857-CAE33D425573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA221305-5B3D-43C0-8857-CAE33D425573}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA221305-5B3D-43C0-8857-CAE33D425573}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA221305-5B3D-43C0-8857-CAE33D425573}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
