@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj" />
+    <ProjectReference Include="..\Simulator.Application\Simulator.Application.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
+    <ProjectReference Include="..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj" />
+    <ProjectReference Include="..\Simulator.ViewModel\Simulator.ViewModel.csproj" />
+  </ItemGroup>
+
+</Project>
