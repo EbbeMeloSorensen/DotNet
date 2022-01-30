@@ -51,23 +51,14 @@ namespace DD.ViewModel
         }
 
         public ActOutSceneViewModel(
+            Engine engine,
             BoardViewModel boardViewModel,
             ObservableObject<Scene> selectedScene,
-            ObservableObject<int?> squareIndexForCurrentCreature,
-            ObservableObject<Dictionary<int, double>> squareIndexesCurrentCreatureCanMoveTo,
-            ObservableObject<HashSet<int>> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-            ObservableObject<HashSet<int>> squareIndexesCurrentCreatureCanAttackWithRangedWeapon,
             ILogger logger)
         {
+            _engine = engine;
             _boardViewModel = boardViewModel;
             _logger = logger;
-
-            _engine = new Engine(
-                squareIndexForCurrentCreature,
-                squareIndexesCurrentCreatureCanMoveTo,
-                squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-                squareIndexesCurrentCreatureCanAttackWithRangedWeapon,
-                logger);
 
             _engine.BattleHasStarted.PropertyChanged += (s, e) => UpdateCommandStates();
             _engine.BattleHasEnded.PropertyChanged += (s, e) => UpdateCommandStates();

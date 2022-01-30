@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using DD.Domain;
-using GalaSoft.MvvmLight.Command;
 
 namespace DD.ViewModel
 {
@@ -54,32 +54,22 @@ namespace DD.ViewModel
             var obstacleDiameter = 80;
             var creatureDiameter = 75;
             var projectileDiameter = 75;
-            var squareIndexForCurrentCreature = new ObservableObject<int?>();
-            var squareIndexesCurrentCreatureCanMoveTo = new ObservableObject<Dictionary<int, double>>();
-            var squareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
-            var squareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
 
             BoardViewModel = new BoardViewModel(
+                _application.Engine,
                 squareLength,
                 obstacleDiameter,
                 creatureDiameter,
                 projectileDiameter,
-                selectedScene, 
-                squareIndexForCurrentCreature, 
-                squareIndexesCurrentCreatureCanMoveTo,
-                squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-                squareIndexesCurrentCreatureCanAttackWithRangedWeapon);
+                selectedScene);
 
             SceneEditorViewModel = new SceneEditorViewModel(
                 BoardViewModel);
 
             ActOutSceneViewModel = new ActOutSceneViewModel(
+                _application.Engine,
                 BoardViewModel, 
-                selectedScene, 
-                squareIndexForCurrentCreature,
-                squareIndexesCurrentCreatureCanMoveTo,
-                squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-                squareIndexesCurrentCreatureCanAttackWithRangedWeapon,
+                selectedScene,
                 _application.Logger);
         }
 

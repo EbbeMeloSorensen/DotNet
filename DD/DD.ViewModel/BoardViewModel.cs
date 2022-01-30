@@ -375,15 +375,12 @@ namespace DD.ViewModel
         }
 
         public BoardViewModel(
+            Engine engine,
             double squareLength,
             double obstacleDiameter,
             double creatureDiameter,
             double weaponDiameter,
-            ObservableObject<Scene> selectedScene,
-            ObservableObject<int?> squareIndexForCurrentCreature,
-            ObservableObject<Dictionary<int, double>> squareIndexesCurrentCreatureCanMoveTo,
-            ObservableObject<HashSet<int>> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-            ObservableObject<HashSet<int>> squareIndexesCurrentCreatureCanAttackWithRangedWeapon) : base(0, 0)
+            ObservableObject<Scene> selectedScene) : base(0, 0)
         {
             ScrollableOffset = new PointD(0, 0);
             ScrollOffset = new PointD(0, 0);
@@ -428,7 +425,7 @@ namespace DD.ViewModel
                 }
             };
 
-            squareIndexForCurrentCreature.PropertyChanged += (s, e) =>
+            engine.SquareIndexForCurrentCreature.PropertyChanged += (s, e) =>
             {
                 var squareIndex = (s as ObservableObject<int?>)?.Object;
 
@@ -447,7 +444,7 @@ namespace DD.ViewModel
                 }
             };
 
-            squareIndexesCurrentCreatureCanMoveTo.PropertyChanged += (s, e) =>
+            engine.SquareIndexesCurrentCreatureCanMoveTo.PropertyChanged += (s, e) =>
             {
                 var squareIndexes = (s as ObservableObject<Dictionary<int, double>>)?.Object;
 
@@ -462,7 +459,7 @@ namespace DD.ViewModel
                 }
             };
 
-            squareIndexesCurrentCreatureCanAttackWithMeleeWeapon.PropertyChanged += (s, e) =>
+            engine.SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.PropertyChanged += (s, e) =>
             {
                 var squareIndexes = (s as ObservableObject<HashSet<int>>)?.Object;
 
@@ -477,7 +474,7 @@ namespace DD.ViewModel
                 }
             };
 
-            squareIndexesCurrentCreatureCanAttackWithRangedWeapon.PropertyChanged += (s, e) =>
+            engine.SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.PropertyChanged += (s, e) =>
             {
                 var squareIndexes = (s as ObservableObject<HashSet<int>>)?.Object;
 
