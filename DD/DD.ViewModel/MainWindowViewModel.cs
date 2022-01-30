@@ -13,7 +13,8 @@ namespace DD.ViewModel
 {
     public class MainWindowViewModel
     {
-        private readonly IUIDataProvider _dataProvider;
+        //private readonly IUIDataProvider _dataProvider;
+        private readonly Application.Application _application;
         private readonly IDialogService _applicationDialogService;
         private ILogger _logger;
 
@@ -38,11 +39,11 @@ namespace DD.ViewModel
         }
 
         public MainWindowViewModel(
-            IUIDataProvider dataProvider,
+            Application.Application application,
             IDialogService applicationDialogService,
             ILogger logger)
         {
-            _dataProvider = dataProvider;
+            _application = application;
             _applicationDialogService = applicationDialogService;
 
             var selectedScene = new ObservableObject<Scene>();
@@ -54,7 +55,7 @@ namespace DD.ViewModel
             //_logger = new IdleLogger();
             _logger.WriteLine(LogMessageCategory.Debug, "Dungeons and Dragons - starting up");
 
-            CreatureTypeCollectionViewModel = new CreatureTypeCollectionViewModel(dataProvider);
+            CreatureTypeCollectionViewModel = new CreatureTypeCollectionViewModel(_application.UIDataProvider);
             SceneCollectionViewModel = new SceneCollectionViewModel(selectedScene);
 
             var squareLength = 80;
@@ -105,7 +106,8 @@ namespace DD.ViewModel
                 return;
             }
 
-            _dataProvider.CreateCreatureType(new CreatureType(dialogViewModel.Name, 8, 5, 15, 0, 8, null));
+            _application.UIDataProvider.CreateCreatureType(
+                new CreatureType(dialogViewModel.Name, 8, 5, 15, 0, 8, null));
         }
 
         private bool CanCreateCreatureType(object owner)

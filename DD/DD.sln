@@ -29,27 +29,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\Craf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel", "..\Craft\Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{715C55E0-4768-48C8-A9B6-E839A9C6DB21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Application", "DD.Application\DD.Application.csproj", "{98F436DE-C457-49D4-9FA9-5AF26C4AB044}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Application", "DD.Application\DD.Application.csproj", "{98F436DE-C457-49D4-9FA9-5AF26C4AB044}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{6FC405E1-BE33-4FF2-824D-C0DA92160B27}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Algorithms", "..\Craft\Craft.Algorithms\Craft.Algorithms.csproj", "{287860F6-B78F-4D80-AC06-4AAAFC8D9310}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.IO", "DD.IO\DD.IO.csproj", "{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.IO", "DD.IO\DD.IO.csproj", "{8A94CCB1-1A3C-44E2-97A2-256BCDDC24F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.ViewModel", "DD.ViewModel\DD.ViewModel.csproj", "{69D8E4CE-D089-43B2-94AD-50F78D2D2BE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.ViewModel", "DD.ViewModel\DD.ViewModel.csproj", "{69D8E4CE-D089-43B2-94AD-50F78D2D2BE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Application.UnitTest", "DD.Application.UnitTest\DD.Application.UnitTest.csproj", "{CB739754-081F-4D07-A477-4DAC53479761}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Application.UnitTest", "DD.Application.UnitTest\DD.Application.UnitTest.csproj", "{CB739754-081F-4D07-A477-4DAC53479761}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.UIDataProvider.Persistence", "DD.UIDataProvider.Persistence\DD.UIDataProvider.Persistence.csproj", "{8B23ACA4-E5B5-4340-BE25-BA1F7BD7DC3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.UIDataProvider.Persistence", "DD.UIDataProvider.Persistence\DD.UIDataProvider.Persistence.csproj", "{8B23ACA4-E5B5-4340-BE25-BA1F7BD7DC3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.UI.WPF", "DD.UI.WPF\DD.UI.WPF.csproj", "{4C7F953B-DA94-41EF-9291-F3159BB9BFE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.UI.WPF", "DD.UI.WPF\DD.UI.WPF.csproj", "{4C7F953B-DA94-41EF-9291-F3159BB9BFE6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj", "{5DD7D51E-3FB7-4EA2-980C-5968B3F9534E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{E4C25D05-D1AA-438B-A36C-951B8A3594EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{347241CE-1082-4CE4-808D-EB874C359285}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.UI.Console", "DD.UI.Console\DD.UI.Console.csproj", "{7DC93B90-F1F9-4968-8CD1-482663732B7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +155,10 @@ Global
 		{347241CE-1082-4CE4-808D-EB874C359285}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{347241CE-1082-4CE4-808D-EB874C359285}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{347241CE-1082-4CE4-808D-EB874C359285}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DC93B90-F1F9-4968-8CD1-482663732B7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DC93B90-F1F9-4968-8CD1-482663732B7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DC93B90-F1F9-4968-8CD1-482663732B7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DC93B90-F1F9-4968-8CD1-482663732B7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DD.Application\DD.Application.csproj" />
+    <ProjectReference Include="..\DD.Persistence.Memory\DD.Persistence.Memory.csproj" />
+    <ProjectReference Include="..\DD.UIDataProvider.Persistence\DD.UIDataProvider.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
