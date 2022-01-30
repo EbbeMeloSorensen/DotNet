@@ -13,6 +13,10 @@ namespace DMI.SMS.UI.Console
 
             System.Console.WriteLine("Counting StationInformation records...");
             System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllStationInformations().Count}");
+
+            System.Console.WriteLine("Exporting data...");
+            application.UIDataProvider.ExportData(@"C:\Temp\Bamse.xml");
+            System.Console.WriteLine("Done...");
         }
     }
 }
