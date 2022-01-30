@@ -10,7 +10,6 @@ using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D;
 using DMI.SMS.Domain.Entities;
-using DMI.SMS.Application;
 
 namespace DMI.SMS.ViewModel
 {
@@ -83,13 +82,10 @@ namespace DMI.SMS.ViewModel
 
         public MainWindowViewModel(
             Application.Application application,
-            IDialogService applicationDialogService,
-            ILogger logger)
+            IDialogService applicationDialogService)
         {
             _application = application;
             _applicationDialogService = applicationDialogService;
-
-            _application.UIDataProvider.Initialize(logger);
 
             _mainWindowTitle = "SMS Studio";
 

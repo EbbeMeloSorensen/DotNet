@@ -9,6 +9,7 @@ namespace DD.Application
 
         public IUIDataProvider UIDataProvider => _uiDataProvider;
 
+        // It must be possible for an external component to set the Logger, e.g. in order to override with a decorator
         public ILogger Logger
         {
             get => _logger;
