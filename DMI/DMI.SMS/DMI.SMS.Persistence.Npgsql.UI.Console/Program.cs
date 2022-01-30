@@ -19,12 +19,10 @@ void CountStationInformationsWithOTANISKInTheName()
     //var password = "Vm6PAkPh";
     ConnectionStringProvider.Initialize(host, port, database, schema, user, password);
 
-    //Hej med dig steg!!!!!!
     var _nameFilterInUppercase = "Esbjerg";
 
     using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
     {
-
         //var stationInformations = unitOfWork.StationInformations
         //    .Find(s => s.StationName.ToUpper().Contains(_nameFilterInUppercase))
         //    .ToList();
