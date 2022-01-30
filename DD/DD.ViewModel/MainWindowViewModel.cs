@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using Craft.Logging;
 using Craft.Utils;
@@ -14,7 +13,6 @@ namespace DD.ViewModel
     {
         private readonly Application.Application _application;
         private readonly IDialogService _applicationDialogService;
-        private ILogger _logger;
 
         private RelayCommand _windowLoadedCommand;
         private RelayCommand<object> _createCreatureTypeCommand;
@@ -38,23 +36,19 @@ namespace DD.ViewModel
 
         public MainWindowViewModel(
             Application.Application application,
-            IDialogService applicationDialogService,
-            ILogger logger)
+            IDialogService applicationDialogService)
         {
             _application = application;
             _applicationDialogService = applicationDialogService;
 
-            var selectedScene = new ObservableObject<Scene>();
-
             LogViewModel = new LogViewModel();
 
-            //_logger = logger;
-            _logger = new ViewModelLogger(logger, LogViewModel);
-            //_logger = new IdleLogger();
-            _logger.WriteLine(LogMessageCategory.Debug, "Dungeons and Dragons - starting up");
+            _application.Logger = new ViewModelLogger(_application.Logger, LogViewModel);
+            _application.Logger.WriteLine(LogMessageCategory.Debug, "Dungeons and Dragons - starting up");
 
-            CreatureTypeCollectionViewModel = new CreatureTypeCollectionViewModel(_application.UIDataProvider);
+            var selectedScene = new ObservableObject<Scene>();
             SceneCollectionViewModel = new SceneCollectionViewModel(selectedScene);
+            CreatureTypeCollectionViewModel = new CreatureTypeCollectionViewModel(_application.UIDataProvider);
 
             var squareLength = 80;
             var obstacleDiameter = 80;
@@ -86,7 +80,7 @@ namespace DD.ViewModel
                 squareIndexesCurrentCreatureCanMoveTo,
                 squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
                 squareIndexesCurrentCreatureCanAttackWithRangedWeapon,
-                _logger);
+                _application.Logger);
         }
 
         private void WindowLoaded()
