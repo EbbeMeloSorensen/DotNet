@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils;
 
@@ -36,6 +38,37 @@ namespace DD.Application
                 SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
                 SquareIndexesCurrentCreatureCanAttackWithRangedWeapon, 
                 Logger);
+        }
+
+        public async Task ActOutBattle()
+        {
+            await Task.Run(async () =>
+            {
+                Engine.StartBattle();
+                Engine.StartBattleRound();
+                Engine.SwitchToNextCreature();
+
+                while (true)
+                {
+                    if (Engine.BattleDecided)
+                    {
+                        break;
+                    }
+
+                    if (Engine.BattleroundCompleted)
+                    {
+                        Engine.StartBattleRound();
+                        Engine.SwitchToNextCreature();
+                    }
+
+                    var creatureAction = await Engine.ExecuteNextAction();
+
+                    if (creatureAction == CreatureAction.Pass)
+                    {
+                        Engine.SwitchToNextCreature();
+                    }
+                }
+            });
         }
     }
 }
