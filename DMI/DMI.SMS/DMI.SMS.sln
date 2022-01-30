@@ -43,7 +43,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.UI.WPF", "DMI.SMS.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{C64F380A-CE32-4651-B5BA-A0728C5A96B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.UI.Console", "DMI.SMS.UI.Console\DMI.SMS.UI.Console.csproj", "{DFA39599-3EBF-4BEA-987A-7475CC0193A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.UI.Console", "DMI.SMS.UI.Console\DMI.SMS.UI.Console.csproj", "{DFA39599-3EBF-4BEA-987A-7475CC0193A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{702C334A-B463-45CB-8510-9CE5F3FB7B87}"
+	ProjectSection(SolutionItems) = preProject
+		BackLog.txt = BackLog.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

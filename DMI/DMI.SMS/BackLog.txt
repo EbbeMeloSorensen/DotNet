@@ -1,0 +1,5 @@
+Done:
+
+Todo:
+* Implement support for rolling back to an arbitrary date of interest
+* Make is possible to extract the Frie Data station list 
