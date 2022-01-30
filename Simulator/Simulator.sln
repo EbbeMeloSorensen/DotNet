@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Domain", "Simulator.Domain\Simulator.Domain.csproj", "{52A52CA6-C7FF-47C4-BB56-E7C8FA7B9C80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulator.Domain", "Simulator.Domain\Simulator.Domain.csproj", "{52A52CA6-C7FF-47C4-BB56-E7C8FA7B9C80}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Math", "..\Craft\Craft.Math\Craft.Math.csproj", "{80A6F8EE-EEC0-44E1-BDD8-17FFF749AF4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Application", "Simulator.Application\Simulator.Application.csproj", "{46649722-7194-44E9-94EB-A8EC2728FA88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulator.Application", "Simulator.Application\Simulator.Application.csproj", "{46649722-7194-44E9-94EB-A8EC2728FA88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\Craft.Logging\Craft.Logging.csproj", "{A9EA5C10-D12B-47A9-AF17-63F293FCD2AC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{E25A9AEE-BC01-4F9C-922D-98B019BF2F7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.ViewModel", "Simulator.ViewModel\Simulator.ViewModel.csproj", "{FC9BB2CD-CCAB-4628-8D88-563E90F4D976}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulator.ViewModel", "Simulator.ViewModel\Simulator.ViewModel.csproj", "{FC9BB2CD-CCAB-4628-8D88-563E90F4D976}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\Craft\Craft.ViewModels\Craft.ViewModels.csproj", "{CB247783-6C71-45EF-B2FA-6D078989B487}"
 EndProject
@@ -21,11 +21,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\Craft\Craft.Utils\Craft.Utils.csproj", "{2D1986BF-A37A-4C7D-B3EB-F29E57E4D07D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.UIElements", "Simulator.UIElements\Simulator.UIElements.csproj", "{5B106D09-A74F-4547-8735-D2A67784138F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulator.UIElements", "Simulator.UIElements\Simulator.UIElements.csproj", "{5B106D09-A74F-4547-8735-D2A67784138F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Laboratory.ViewModel", "Simulator.Laboratory.ViewModel\Simulator.Laboratory.ViewModel.csproj", "{94A24470-A956-4DDC-9A5E-1E1304D8D0BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulator.Laboratory.ViewModel", "Simulator.Laboratory.ViewModel\Simulator.Laboratory.ViewModel.csproj", "{94A24470-A956-4DDC-9A5E-1E1304D8D0BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Laboratory.UI.WPF", "Simulator.Laboratory.UI.WPF\Simulator.Laboratory.UI.WPF.csproj", "{EFD41F54-E2B4-4774-BD30-C9B5FCB3119B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulator.Laboratory.UI.WPF", "Simulator.Laboratory.UI.WPF\Simulator.Laboratory.UI.WPF.csproj", "{EFD41F54-E2B4-4774-BD30-C9B5FCB3119B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{11F507D5-DA41-466D-B009-C83C45726B9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{EFD41F54-E2B4-4774-BD30-C9B5FCB3119B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFD41F54-E2B4-4774-BD30-C9B5FCB3119B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFD41F54-E2B4-4774-BD30-C9B5FCB3119B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11F507D5-DA41-466D-B009-C83C45726B9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11F507D5-DA41-466D-B009-C83C45726B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11F507D5-DA41-466D-B009-C83C45726B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11F507D5-DA41-466D-B009-C83C45726B9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
