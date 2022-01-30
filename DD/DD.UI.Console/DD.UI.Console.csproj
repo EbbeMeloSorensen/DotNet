@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\DD.Application\DD.Application.csproj" />
     <ProjectReference Include="..\DD.Persistence.Memory\DD.Persistence.Memory.csproj" />
     <ProjectReference Include="..\DD.UIDataProvider.Persistence\DD.UIDataProvider.Persistence.csproj" />

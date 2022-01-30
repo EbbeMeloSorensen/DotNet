@@ -1,16 +1,22 @@
 ﻿using StructureMap;
+using DD.Application;
 
-namespace HelloWorld
+namespace DD.UI.Console
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.WriteLine("Fun with a DD command line User interface");
+            System.Console.WriteLine("Fun with a DD command line User interface");
 
             var container = Container.For<InstanceScanner>();
-            var application = container.GetInstance<DD.Application.Application>();
-            application.UIDataProvider.GetAllCreatureTypes().ToList().ForEach(c => Console.WriteLine(c.Name));
+            var application = container.GetInstance<Application.Application>();
+            application.UIDataProvider.GetAllCreatureTypes()
+                .ToList()
+                .ForEach(c => System.Console.WriteLine(c.Name));
+
+            var scene = SceneGenerator.GenerateScene(2);
+            System.Console.WriteLine("Done");
         }
     }
 }

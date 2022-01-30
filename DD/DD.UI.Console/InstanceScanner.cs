@@ -1,6 +1,6 @@
 ﻿using StructureMap;
 
-namespace HelloWorld;
+namespace DD.UI.Console;
 
 public class InstanceScanner : Registry
 {
