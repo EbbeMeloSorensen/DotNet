@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Windows.Media;
 using System.Windows;
-using Craft.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Craft.ViewModels.Geometry2D;
+using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
+using Craft.ViewModels.Geometry2D;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Application;
 
@@ -16,7 +16,7 @@ namespace DMI.SMS.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly IUIDataProvider _dataProvider;
+        private readonly Application.Application _application;
         private readonly IDialogService _applicationDialogService;
         private string _mainWindowTitle;
         private Brush _pointBrush = new SolidColorBrush(Colors.DarkRed);
@@ -82,14 +82,14 @@ namespace DMI.SMS.ViewModel
         public GeometryEditorViewModel GeometryEditorViewModel { get; private set; }
 
         public MainWindowViewModel(
-            IUIDataProvider dataProvider,
+            Application.Application application,
             IDialogService applicationDialogService,
             ILogger logger)
         {
-            _dataProvider = dataProvider;
+            _application = application;
             _applicationDialogService = applicationDialogService;
 
-            _dataProvider.Initialize(logger);
+            _application.UIDataProvider.Initialize(logger);
 
             _mainWindowTitle = "SMS Studio";
 
@@ -97,18 +97,18 @@ namespace DMI.SMS.ViewModel
             _observableForClassifyRecordsWithCondition.Object = true;
 
             StationInformationListViewModel = new StationInformationListViewModel(
-                dataProvider,
+                _application.UIDataProvider,
                 applicationDialogService,
                 _observableForClassifyRecordsWithCondition);
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
-                dataProvider,
+                _application.UIDataProvider,
                 applicationDialogService,
                 StationInformationListViewModel.SelectedStationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
 
             StationInformationCollectionViewModel = new StationInformationCollectionViewModel(
-                dataProvider,
+                _application.UIDataProvider,
                 StationInformationListViewModel.SelectedStationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
 
@@ -185,7 +185,7 @@ namespace DMI.SMS.ViewModel
 
             var currentTime = DateTime.UtcNow.TruncateToMilliseconds();
 
-            _dataProvider.CreateStationInformation(new StationInformation
+            _application.UIDataProvider.CreateStationInformation(new StationInformation
             {
                 StationName = dialogViewModel.StationName,
                 GdbFromDate = currentTime,
@@ -218,7 +218,7 @@ namespace DMI.SMS.ViewModel
             //}
 
             //_dataProvider.ExportPeople(dialog.FileName);
-            _dataProvider.ExportData(@"C:\Temp\SMSData.xml");
+            _application.UIDataProvider.ExportData(@"C:\Temp\SMSData.xml");
         }
 
         private bool CanExportData()
@@ -238,7 +238,7 @@ namespace DMI.SMS.ViewModel
             //    return;
             //}
 
-            _dataProvider.ImportData(@"C:\Temp\SMSData.xml");
+            _application.UIDataProvider.ImportData(@"C:\Temp\SMSData.xml");
         }
 
         private bool CanImportData()
@@ -250,7 +250,7 @@ namespace DMI.SMS.ViewModel
             object owner)
         {
             var dialogViewModel = new SettingsDialogViewModel(
-                _dataProvider);
+                _application.UIDataProvider);
 
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }

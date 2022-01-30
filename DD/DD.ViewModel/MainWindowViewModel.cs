@@ -5,7 +5,6 @@ using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
-using DD.Application;
 using DD.Domain;
 using GalaSoft.MvvmLight.Command;
 
@@ -13,7 +12,6 @@ namespace DD.ViewModel
 {
     public class MainWindowViewModel
     {
-        //private readonly IUIDataProvider _dataProvider;
         private readonly Application.Application _application;
         private readonly IDialogService _applicationDialogService;
         private ILogger _logger;
