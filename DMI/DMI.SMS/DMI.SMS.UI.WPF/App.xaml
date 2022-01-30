@@ -20,6 +20,9 @@
             <DataTemplate DataType="{x:Type viewmodel2:CreateStationInformationDialogViewModel}">
                 <uiElements:CreateStationInformationDialogView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel2:ExtractFrieDataStationListViewModel}">
+                <uiElements:ExtractFrieDataStationListView/>
+            </DataTemplate>
 
             <SolidColorBrush Color="WhiteSmoke" x:Key="BackgroundBrush"/>
             <ResourceDictionary.MergedDictionaries>

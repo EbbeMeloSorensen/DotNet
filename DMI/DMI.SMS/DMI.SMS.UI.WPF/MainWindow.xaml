@@ -24,6 +24,7 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New Station Information" Command="{Binding CreateStationInformationCommand}"/>
                 <MenuItem Header="_Export" Command="{Binding ExportDataCommand}"/>
+                <MenuItem Header="_Extract Frie Data List" Command="{Binding ExtractFrieDataStationListCommand}"/>
                 <MenuItem Header="_Import" Command="{Binding ImportDataCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Settings"

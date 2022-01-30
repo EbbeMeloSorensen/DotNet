@@ -4,7 +4,6 @@ using System.Windows.Media;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
@@ -25,6 +24,7 @@ namespace DMI.SMS.ViewModel
         private RelayCommand<object> _createStationInformationCommand;
         private RelayCommand _deleteSelectedStationInformationsCommand;
         private RelayCommand _exportDataCommand;
+        private RelayCommand<object> _extractFrieDataStationListCommand;
         private RelayCommand _importDataCommand;
         private RelayCommand<object> _openSettingsDialogCommand;
 
@@ -63,6 +63,11 @@ namespace DMI.SMS.ViewModel
         public RelayCommand ExportDataCommand
         {
             get { return _exportDataCommand ?? (_exportDataCommand = new RelayCommand(ExportData, CanExportData)); }
+        }
+
+        public RelayCommand<object> ExtractFrieDataStationListCommand
+        {
+            get { return _extractFrieDataStationListCommand ?? (_extractFrieDataStationListCommand = new RelayCommand<object>(ExtractFrieDataStationList)); }
         }
 
         public RelayCommand ImportDataCommand
@@ -215,6 +220,19 @@ namespace DMI.SMS.ViewModel
 
             //_dataProvider.ExportPeople(dialog.FileName);
             _application.UIDataProvider.ExportData(@"C:\Temp\SMSData.xml");
+        }
+
+        private void ExtractFrieDataStationList(
+            object owner)
+        {
+            var dialogViewModel = new ExtractFrieDataStationListViewModel();
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            throw new NotImplementedException();
         }
 
         private bool CanExportData()
