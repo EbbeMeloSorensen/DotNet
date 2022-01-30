@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulator.Laboratory.UI.WPF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{11F507D5-DA41-466D-B009-C83C45726B9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.FlappyBird.ViewModel", "Game.FlappyBird.ViewModel\Game.FlappyBird.ViewModel.csproj", "{7B048BBE-5FDC-4306-9AE3-A9B7B77FD3F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.FlappyBird.UI.WPF", "Game.FlappyBird.UI.WPF\Game.FlappyBird.UI.WPF.csproj", "{273D42CF-767A-4E8E-8558-145C6BAA5F72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +91,14 @@ Global
 		{11F507D5-DA41-466D-B009-C83C45726B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11F507D5-DA41-466D-B009-C83C45726B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11F507D5-DA41-466D-B009-C83C45726B9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B048BBE-5FDC-4306-9AE3-A9B7B77FD3F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B048BBE-5FDC-4306-9AE3-A9B7B77FD3F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B048BBE-5FDC-4306-9AE3-A9B7B77FD3F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B048BBE-5FDC-4306-9AE3-A9B7B77FD3F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{273D42CF-767A-4E8E-8558-145C6BAA5F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{273D42CF-767A-4E8E-8558-145C6BAA5F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{273D42CF-767A-4E8E-8558-145C6BAA5F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{273D42CF-767A-4E8E-8558-145C6BAA5F72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
