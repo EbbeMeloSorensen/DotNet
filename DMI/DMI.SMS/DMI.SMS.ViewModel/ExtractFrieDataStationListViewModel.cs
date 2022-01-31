@@ -20,6 +20,8 @@ namespace DMI.SMS.ViewModel
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
+        public string DialogTitle { get; }
+
         public string Date
         {
             get
@@ -43,8 +45,10 @@ namespace DMI.SMS.ViewModel
             get { return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(Cancel, CanCancel)); }
         }
 
-        public ExtractFrieDataStationListViewModel()
+        public ExtractFrieDataStationListViewModel(
+            string dialogTitle)
         {
+            DialogTitle = dialogTitle;
             Date = "";
         }
 

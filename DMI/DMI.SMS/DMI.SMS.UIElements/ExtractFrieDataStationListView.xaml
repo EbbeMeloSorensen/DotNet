@@ -35,7 +35,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="13" FontWeight="Bold" Text="Extract Free Data Station List"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="13" FontWeight="Bold" 
+                       Text="{Binding DialogTitle}"/>
 
             <TextBlock Grid.Row="3" Grid.Column="0" Padding="3" Text="Date:"/>
             <TextBox Grid.Row="3" Grid.Column="1"

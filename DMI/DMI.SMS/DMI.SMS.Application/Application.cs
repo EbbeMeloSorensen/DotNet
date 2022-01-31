@@ -27,9 +27,16 @@ namespace DMI.SMS.Application
             _uiDataProvider.Initialize(logger);
         }
 
-        public void ExtractFrieDataStationList(
+        public void ExtractFrieDataMeteorologicalStationList(
             DateTime? cutDate)
         {
+            throw new NotImplementedException();
+        }
+
+        public void ExtractFrieDataOceanographicalStationList(
+            DateTime? cutDate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

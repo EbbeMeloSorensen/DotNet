@@ -24,7 +24,8 @@ namespace DMI.SMS.ViewModel
         private RelayCommand<object> _createStationInformationCommand;
         private RelayCommand _deleteSelectedStationInformationsCommand;
         private RelayCommand _exportDataCommand;
-        private RelayCommand<object> _extractFrieDataStationListCommand;
+        private RelayCommand<object> _extractFrieDataMeteorologicalStationListCommand;
+        private RelayCommand<object> _extractFrieDataOceanographicalStationListCommand;
         private RelayCommand _importDataCommand;
         private RelayCommand<object> _openSettingsDialogCommand;
 
@@ -65,9 +66,19 @@ namespace DMI.SMS.ViewModel
             get { return _exportDataCommand ?? (_exportDataCommand = new RelayCommand(ExportData, CanExportData)); }
         }
 
-        public RelayCommand<object> ExtractFrieDataStationListCommand
+        public RelayCommand<object> ExtractFrieDataMeteorologicalStationListCommand
         {
-            get { return _extractFrieDataStationListCommand ?? (_extractFrieDataStationListCommand = new RelayCommand<object>(ExtractFrieDataStationList)); }
+            get { return _extractFrieDataMeteorologicalStationListCommand ?? (_extractFrieDataMeteorologicalStationListCommand = 
+                new RelayCommand<object>(ExtractFrieDataMeteorologicalStationList)); }
+        }
+
+        public RelayCommand<object> ExtractFrieDataOceanographicalStationListCommand
+        {
+            get
+            {
+                return _extractFrieDataOceanographicalStationListCommand ?? (_extractFrieDataOceanographicalStationListCommand =
+                    new RelayCommand<object>(ExtractFrieDataOceanographicalStationList));
+            }
         }
 
         public RelayCommand ImportDataCommand
@@ -222,10 +233,10 @@ namespace DMI.SMS.ViewModel
             _application.UIDataProvider.ExportData(@"C:\Temp\SMSData.xml");
         }
 
-        private void ExtractFrieDataStationList(
+        private void ExtractFrieDataMeteorologicalStationList(
             object owner)
         {
-            var dialogViewModel = new ExtractFrieDataStationListViewModel();
+            var dialogViewModel = new ExtractFrieDataStationListViewModel("Extract Meteorological Stations");
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
@@ -240,7 +251,28 @@ namespace DMI.SMS.ViewModel
                 date = temp;
             }
 
-            _application.ExtractFrieDataStationList(date);
+            _application.ExtractFrieDataMeteorologicalStationList(date);
+        }
+
+        private void ExtractFrieDataOceanographicalStationList(
+            object owner)
+        {
+            var dialogViewModel = new ExtractFrieDataStationListViewModel("Extract Oceanographical Stations");
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            DateTime? date = null;
+
+            if (!string.IsNullOrEmpty(dialogViewModel.Date))
+            {
+                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
+                date = temp;
+            }
+
+            _application.ExtractFrieDataOceanographicalStationList(date);
         }
 
         private bool CanExportData()
