@@ -1,4 +1,5 @@
-﻿using Craft.Logging;
+﻿using System;
+using Craft.Logging;
 
 namespace DMI.SMS.Application
 {
@@ -24,6 +25,11 @@ namespace DMI.SMS.Application
             _logger = logger;
 
             _uiDataProvider.Initialize(logger);
+        }
+
+        public void ExtractFrieDataStationList(
+            DateTime? cutDate)
+        {
         }
     }
 }

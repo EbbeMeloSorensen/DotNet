@@ -15,34 +15,20 @@ namespace DMI.SMS.ViewModel
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
 
-        private string _dateFrom;
-        private string _dateTo;
+        private string _date;
 
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
-        public string DateFrom
+        public string Date
         {
             get
             {
-                return _dateFrom;
+                return _date;
             }
             set
             {
-                _dateFrom = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string DateTo
-        {
-            get
-            {
-                return _dateTo;
-            }
-            set
-            {
-                _dateTo = value;
+                _date = value;
                 RaisePropertyChanged();
             }
         }
@@ -59,8 +45,7 @@ namespace DMI.SMS.ViewModel
 
         public ExtractFrieDataStationListViewModel()
         {
-            DateFrom = "";
-            DateTo = "";
+            Date = "";
         }
 
         private void OK(object parameter)
@@ -75,8 +60,7 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            DateFrom = DateFrom.NullifyIfEmpty();
-            DateTo = DateTo.NullifyIfEmpty();
+            Date = Date.NullifyIfEmpty();
 
             CloseDialogWithResult(parameter as Window, DialogResult.OK);
         }
@@ -106,36 +90,18 @@ namespace DMI.SMS.ViewModel
                 {
                     switch (columnName)
                     {
-                        case "DateFrom":
+                        case "Date":
                             {
-                                if (string.IsNullOrEmpty(DateFrom))
+                                if (!string.IsNullOrEmpty(Date))
                                 {
-                                    errorMessage = "Required";
-                                }
-                                else if (!DateFrom.IsProperlyFormattedAsADateTime())
-                                {
-                                    errorMessage = "Format must be yyyy-mm-dd hh.mm.ss.fff";
-                                }
-                                else if (!DateFrom.TryParsingAsDateTime(out var dateTime))
-                                {
-                                    errorMessage = "Must be a valid date";
-                                }
-
-                                break;
-                            }
-                        case "DateTo":
-                            {
-                                if (string.IsNullOrEmpty(DateTo))
-                                {
-                                    errorMessage = "Required";
-                                }
-                                else if (!DateTo.IsProperlyFormattedAsADateTime())
-                                {
-                                    errorMessage = "Format must be yyyy-mm-dd hh.mm.ss.fff";
-                                }
-                                else if (!DateTo.TryParsingAsDateTime(out var dateTime))
-                                {
-                                    errorMessage = "Must be a valid date";
+                                    if (!Date.IsProperlyFormattedAsADate())
+                                    {
+                                        errorMessage = "Format must be yyyy-mm-dd";
+                                    }
+                                    else if (!Date.TryParsingAsDateTime(out var dateTime))
+                                    {
+                                        errorMessage = "Must be a valid date";
+                                    }
                                 }
 
                                 break;
@@ -160,8 +126,7 @@ namespace DMI.SMS.ViewModel
                 {
                     _validationMessages = new ObservableCollection<ValidationError>
                     {
-                        new ValidationError {PropertyName = "DateFrom"},
-                        new ValidationError {PropertyName = "DateTo"},
+                        new ValidationError {PropertyName = "Date"},
                     };
                 }
 
@@ -181,8 +146,7 @@ namespace DMI.SMS.ViewModel
 
         private void RaisePropertyChanges()
         {
-            RaisePropertyChanged("DateFrom");
-            RaisePropertyChanged("DateTo");
+            RaisePropertyChanged("Date");
         }
 
         private void UpdateState(StateOfView state)

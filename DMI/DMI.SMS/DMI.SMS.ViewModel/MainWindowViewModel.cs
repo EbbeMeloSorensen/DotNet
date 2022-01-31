@@ -232,7 +232,15 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            throw new NotImplementedException();
+            DateTime? date = null;
+
+            if (!string.IsNullOrEmpty(dialogViewModel.Date))
+            {
+                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
+                date = temp;
+            }
+
+            _application.ExtractFrieDataStationList(date);
         }
 
         private bool CanExportData()

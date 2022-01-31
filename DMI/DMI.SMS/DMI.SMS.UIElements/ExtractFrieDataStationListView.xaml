@@ -40,7 +40,7 @@
             <TextBlock Grid.Row="3" Grid.Column="0" Padding="3" Text="Date:"/>
             <TextBox Grid.Row="3" Grid.Column="1"
                      Validation.ErrorTemplate="{StaticResource errorTemplate}"
-                     Text="{Binding DateFrom, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding Date, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Width="450" Height="75"
                        Padding="10" VerticalAlignment="Center" TextAlignment="Center" 
