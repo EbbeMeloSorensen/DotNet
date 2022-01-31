@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Craft.Logging;
 
 namespace DMI.SMS.Application
@@ -27,16 +28,29 @@ namespace DMI.SMS.Application
             _uiDataProvider.Initialize(logger);
         }
 
-        public void ExtractFrieDataMeteorologicalStationList(
+        public async Task ExtractFrieDataMeteorologicalStationList(
             DateTime? cutDate)
         {
-            throw new NotImplementedException();
+            await Task.Run(() =>
+            {
+                var result = 0.0;
+
+                for (int i = 0; i < int.MaxValue; i++)
+                {
+                    result += 1.0;
+                }
+            });
         }
 
         public void ExtractFrieDataOceanographicalStationList(
             DateTime? cutDate)
         {
-            throw new NotImplementedException();
+            var result = 0.0;
+
+            for (int i = 0; i < int.MaxValue; i++)
+            {
+                result += 1.0;
+            }
         }
     }
 }
