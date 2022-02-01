@@ -4,6 +4,9 @@ using Craft.Logging;
 
 namespace DMI.SMS.Application
 {
+    public delegate bool ProgressCallback(
+        double progress);
+
     public class Application
     {
         private IUIDataProvider _uiDataProvider;
@@ -29,16 +32,27 @@ namespace DMI.SMS.Application
         }
 
         public async Task ExtractFrieDataMeteorologicalStationList(
-            DateTime? cutDate)
+            DateTime? cutDate,
+            ProgressCallback progressCallback = null)
         {
             await Task.Run(() =>
             {
                 var result = 0.0;
 
-                for (int i = 0; i < int.MaxValue; i++)
+                for (var i = 0; i < 100; i++)
                 {
-                    result += 1.0;
+                    if (progressCallback?.Invoke(i) is true)
+                    {
+                        break;
+                    }
+
+                    for (var j = 0; j < 999999999 / 100; j++)
+                    {
+                        result += 1.0;
+                    }
                 }
+
+                progressCallback?.Invoke(100);
             });
         }
 

@@ -236,28 +236,19 @@ namespace DMI.SMS.ViewModel
         private void ExtractFrieDataMeteorologicalStationList(
             object owner)
         {
-            var dialogViewModel = new ExtractFrieDataStationListViewModel("Extract Meteorological Stations");
+            var dialogViewModel = new ExtractFrieDataStationListViewModel(
+                _application,
+                "Extract Meteorological Stations");
 
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-            {
-                return;
-            }
-
-            DateTime? date = null;
-
-            if (!string.IsNullOrEmpty(dialogViewModel.Date))
-            {
-                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
-                date = temp;
-            }
-
-            _application.ExtractFrieDataMeteorologicalStationList(date);
+            _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }
 
         private void ExtractFrieDataOceanographicalStationList(
             object owner)
         {
-            var dialogViewModel = new ExtractFrieDataStationListViewModel("Extract Oceanographical Stations");
+            var dialogViewModel = new ExtractFrieDataStationListViewModel(
+                _application,
+                "Extract Oceanographical Stations");
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {

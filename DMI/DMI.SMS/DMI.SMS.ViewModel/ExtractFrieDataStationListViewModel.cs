@@ -2,9 +2,11 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
+using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 
 namespace DMI.SMS.ViewModel
@@ -15,10 +17,11 @@ namespace DMI.SMS.ViewModel
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
 
+        private Application.Application _application;
         private string _date;
-
-        private RelayCommand<object> _okCommand;
-        private RelayCommand<object> _cancelCommand;
+        private bool _isBusy;
+        private double _progress;
+        private bool _abort;
 
         public string DialogTitle { get; }
 
@@ -35,24 +38,44 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        public RelayCommand<object> OKCommand
+        public bool IsBusy
         {
-            get { return _okCommand ?? (_okCommand = new RelayCommand<object>(OK, CanOK)); }
+            get => _isBusy;
+            private set => Set(ref _isBusy, value);
         }
 
-        public RelayCommand<object> CancelCommand
+        public double Progress
         {
-            get { return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(Cancel, CanCancel)); }
+            get
+            {
+                return _progress;
+            }
+            set
+            {
+                _progress = value;
+                RaisePropertyChanged();
+            }
         }
+
+        public AsyncCommand ExtractCommand { get; }
+        public RelayCommand AbortCommand { get; }
+
+        public RelayCommand<object> CancelCommand { get; }
 
         public ExtractFrieDataStationListViewModel(
+            Application.Application application,
             string dialogTitle)
         {
+            _application = application;
             DialogTitle = dialogTitle;
             Date = "";
+
+            ExtractCommand = new AsyncCommand(Extract, CanExtract);
+            AbortCommand = new RelayCommand(Abort, CanAbort);
+            CancelCommand = new RelayCommand<object>(Cancel, CanCancel);
         }
 
-        private void OK(object parameter)
+        private async Task Extract()
         {
             UpdateState(StateOfView.Updated);
 
@@ -66,12 +89,48 @@ namespace DMI.SMS.ViewModel
 
             Date = Date.NullifyIfEmpty();
 
-            CloseDialogWithResult(parameter as Window, DialogResult.OK);
+            _abort = false;
+            Progress = 0;
+            IsBusy = true;
+            ExtractCommand.RaiseCanExecuteChanged();
+            AbortCommand.RaiseCanExecuteChanged();
+            CancelCommand.RaiseCanExecuteChanged();
+
+            DateTime? date = null;
+
+            if (!string.IsNullOrEmpty(Date))
+            {
+                Date.TryParsingAsDateTime(out var temp);
+                date = temp;
+            }
+
+            await _application.ExtractFrieDataMeteorologicalStationList(
+                date,
+                progress =>
+                {
+                    Progress = progress;
+                    return _abort;
+                });
+
+            IsBusy = false;
+            ExtractCommand.RaiseCanExecuteChanged();
+            AbortCommand.RaiseCanExecuteChanged();
+            CancelCommand.RaiseCanExecuteChanged();
         }
 
-        private bool CanOK(object parameter)
+        private bool CanExtract()
         {
-            return true;
+            return !IsBusy;
+        }
+
+        private void Abort()
+        {
+            _abort = true;
+        }
+
+        private bool CanAbort()
+        {
+            return IsBusy;
         }
 
         private void Cancel(object parameter)

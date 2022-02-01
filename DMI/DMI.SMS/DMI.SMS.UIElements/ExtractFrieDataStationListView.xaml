@@ -19,6 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -52,10 +53,16 @@
             <Button Content="Cancel" Margin="5,5,0,5" Width="75"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Content="Abort" Margin="5,5,0,5" Width="75"
+                    IsDefault="True"
+                    Command="{Binding AbortCommand}"/>
             <Button Content="OK" Margin="5,5,0,5" Width="75"
                     IsDefault="True"
-                    Command="{Binding OKCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    Command="{Binding ExtractCommand}"/>
         </StackPanel>
+
+        <ProgressBar Grid.Row="2" Height="15"
+                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     Value="{Binding Progress, Mode=OneWay}"/>
     </Grid>
 </UserControl>
