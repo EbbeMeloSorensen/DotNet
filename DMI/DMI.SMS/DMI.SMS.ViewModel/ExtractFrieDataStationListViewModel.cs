@@ -21,6 +21,7 @@ namespace DMI.SMS.ViewModel
         private string _date;
         private bool _isBusy;
         private double _progress;
+        private string _currentActivity;
         private bool _abort;
 
         public string DialogTitle { get; }
@@ -53,6 +54,19 @@ namespace DMI.SMS.ViewModel
             set
             {
                 _progress = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string CurrentActivity
+        {
+            get
+            {
+                return _currentActivity;
+            }
+            set
+            {
+                _currentActivity = value;
                 RaisePropertyChanged();
             }
         }
@@ -106,9 +120,10 @@ namespace DMI.SMS.ViewModel
 
             await _application.ExtractFrieDataMeteorologicalStationList(
                 date,
-                progress =>
+                (progress, currentActivity) =>
                 {
                     Progress = progress;
+                    CurrentActivity = currentActivity;
                     return _abort;
                 });
 
@@ -133,14 +148,16 @@ namespace DMI.SMS.ViewModel
             return IsBusy;
         }
 
-        private void Cancel(object parameter)
+        private void Cancel(
+            object parameter)
         {
             CloseDialogWithResult(parameter as Window, DialogResult.Cancel);
         }
 
-        private bool CanCancel(object parameter)
+        private bool CanCancel(
+            object parameter)
         {
-            return true;
+            return !IsBusy;
         }
 
         public string this[string columnName]

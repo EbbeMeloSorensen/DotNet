@@ -5,7 +5,8 @@ using Craft.Logging;
 namespace DMI.SMS.Application
 {
     public delegate bool ProgressCallback(
-        double progress);
+        double progress,
+        string currentActivity);
 
     public class Application
     {
@@ -38,10 +39,20 @@ namespace DMI.SMS.Application
             await Task.Run(() =>
             {
                 var result = 0.0;
+                var currentActivity = "Baking bread";
 
                 for (var i = 0; i < 100; i++)
                 {
-                    if (progressCallback?.Invoke(i) is true)
+                    if (i >= 70)
+                    {
+                        currentActivity = "Poring Milk";
+                    }
+                    else if (i >= 30)
+                    {
+                        currentActivity = "Frying eggs";
+                    }
+
+                    if (progressCallback?.Invoke(i, currentActivity) is true)
                     {
                         break;
                     }
@@ -52,7 +63,7 @@ namespace DMI.SMS.Application
                     }
                 }
 
-                progressCallback?.Invoke(100);
+                progressCallback?.Invoke(100, "Complete");
             });
         }
 
