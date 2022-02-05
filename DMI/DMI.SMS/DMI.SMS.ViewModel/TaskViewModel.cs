@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 
 namespace DMI.SMS.ViewModel
 {
@@ -6,7 +7,8 @@ namespace DMI.SMS.ViewModel
     {
         private bool _busy;
         private double _progress;
-        private string _currentActivity;
+        private string _nameOfTask;
+        private string _nameOfCurrentSubtask;
 
         public bool Busy
         {
@@ -31,23 +33,40 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        public string CurrentActivity
+        public string NameOfTask
         {
-            get
-            {
-                return _currentActivity;
-            }
+            get => _nameOfTask;
             set
             {
-                _currentActivity = value;
+                _nameOfTask = value;
                 RaisePropertyChanged();
             }
         }
 
+        public string NameOfCurrentSubtask
+        {
+            get => _nameOfCurrentSubtask;
+            set
+            {
+                _nameOfCurrentSubtask = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool Abort { get; set; }
+
+        public RelayCommand AbortCommand { get; }
+
         public TaskViewModel()
         {
             _progress = 0;
-            _currentActivity = "";
+            _nameOfTask = "";
+            _nameOfCurrentSubtask = "";
+
+            AbortCommand = new RelayCommand(() =>
+            {
+                Abort = true;
+            });
         }
     }
 }

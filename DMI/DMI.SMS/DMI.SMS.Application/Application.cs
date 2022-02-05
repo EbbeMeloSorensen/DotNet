@@ -32,7 +32,7 @@ namespace DMI.SMS.Application
             _uiDataProvider.Initialize(logger);
         }
 
-        public async Task ExtractFrieDataMeteorologicalStationList(
+        public async Task MakeBreakfast(
             DateTime? cutDate,
             ProgressCallback progressCallback = null)
         {
@@ -40,42 +40,33 @@ namespace DMI.SMS.Application
             {
                 var result = 0.0;
                 var currentActivity = "Baking bread";
+                var count = 0;
+                var total = 317;
 
-                for (var i = 0; i < 100; i++)
+                while (count < total)
                 {
-                    if (i >= 70)
+                    if (count >= 160)
                     {
                         currentActivity = "Poring Milk";
                     }
-                    else if (i >= 30)
+                    else if (count >= 80)
                     {
                         currentActivity = "Frying eggs";
-                    }
-
-                    if (progressCallback?.Invoke(i, currentActivity) is true)
-                    {
-                        break;
                     }
 
                     for (var j = 0; j < 999999999 / 100; j++)
                     {
                         result += 1.0;
                     }
+
+                    count++;
+
+                    if (progressCallback?.Invoke(100.0 * count / total, currentActivity) is true)
+                    {
+                        break;
+                    }
                 }
-
-                progressCallback?.Invoke(100, "Complete");
             });
-        }
-
-        public void ExtractFrieDataOceanographicalStationList(
-            DateTime? cutDate)
-        {
-            var result = 0.0;
-
-            for (int i = 0; i < int.MaxValue; i++)
-            {
-                result += 1.0;
-            }
         }
     }
 }

@@ -50,6 +50,18 @@ namespace DMI.SMS.ViewModel
         private void OK(
             object parameter)
         {
+            UpdateState(StateOfView.Updated);
+
+            Error = string.Join("",
+                ValidationMessages.Select(e => e.ErrorMessage).ToArray());
+
+            if (!string.IsNullOrEmpty(Error))
+            {
+                return;
+            }
+
+            Date = Date.NullifyIfEmpty();
+
             CloseDialogWithResult(parameter as Window, DialogResult.OK);
         }
 

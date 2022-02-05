@@ -24,9 +24,9 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New Station Information" Command="{Binding CreateStationInformationCommand}"/>
                 <MenuItem Header="_Export" Command="{Binding ExportDataCommand}"/>
-                <MenuItem Header="_Extract Meteorological Stations" Command="{Binding ExtractFrieDataMeteorologicalStationListCommand}"/>
-                <MenuItem Header="_Extract Oceanographical Stations" Command="{Binding ExtractFrieDataOceanographicalStationListCommand}"/>
                 <MenuItem Header="_Import" Command="{Binding ImportDataCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Make Breakfast" Command="{Binding MakeBreakfastCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Settings"
                           Command="{Binding OpenSettingsDialogCommand}"
@@ -43,11 +43,6 @@
                           IsChecked="{Binding StationInformationCollectionViewModel.IncludeObservationIntervalsBars}"/>
             </MenuItem>
         </Menu>
-
-        <!--It is shown in the station information list view-->
-        <!--<StatusBar DockPanel.Dock="Bottom">
-            <TextBlock Text="{Binding StationInformationListViewModel.ItemCountText}"/>
-        </StatusBar>-->
 
         <Grid>
             <Grid.RowDefinitions>

@@ -26,9 +26,8 @@ namespace DMI.SMS.ViewModel
         private RelayCommand<object> _createStationInformationCommand;
         private RelayCommand _deleteSelectedStationInformationsCommand;
         private RelayCommand _exportDataCommand;
-        private AsyncCommand<object> _extractFrieDataMeteorologicalStationListCommand;
-        private RelayCommand<object> _extractFrieDataOceanographicalStationListCommand;
         private RelayCommand _importDataCommand;
+        private AsyncCommand<object> _makeBreakfastCommand;
         private RelayCommand<object> _openSettingsDialogCommand;
 
         public string MainWindowTitle
@@ -68,19 +67,10 @@ namespace DMI.SMS.ViewModel
             get { return _exportDataCommand ?? (_exportDataCommand = new RelayCommand(ExportData, CanExportData)); }
         }
 
-        public AsyncCommand<object> ExtractFrieDataMeteorologicalStationListCommand
+        public AsyncCommand<object> MakeBreakfastCommand
         {
-            get { return _extractFrieDataMeteorologicalStationListCommand ?? (_extractFrieDataMeteorologicalStationListCommand = 
-                new AsyncCommand<object>(ExtractFrieDataMeteorologicalStationList)); }
-        }
-
-        public RelayCommand<object> ExtractFrieDataOceanographicalStationListCommand
-        {
-            get
-            {
-                return _extractFrieDataOceanographicalStationListCommand ?? (_extractFrieDataOceanographicalStationListCommand =
-                    new RelayCommand<object>(ExtractFrieDataOceanographicalStationList));
-            }
+            get { return _makeBreakfastCommand ?? (_makeBreakfastCommand = 
+                new AsyncCommand<object>(MakeBreakfast, CanMakeBreakfast)); }
         }
 
         public RelayCommand ImportDataCommand
@@ -238,7 +228,7 @@ namespace DMI.SMS.ViewModel
             _application.UIDataProvider.ExportData(@"C:\Temp\SMSData.xml");
         }
 
-        private async Task ExtractFrieDataMeteorologicalStationList(
+        private async Task MakeBreakfast(
             object owner)
         {
             var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
@@ -249,42 +239,42 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            var date = DateTime.Now;
-
-            TaskViewModel.Busy = true;
-
-            await _application.ExtractFrieDataMeteorologicalStationList(
-                date,
-                (progress, currentActivity) =>
-                {
-                    TaskViewModel.Progress = progress;
-                    TaskViewModel.CurrentActivity = currentActivity;
-                    return false; // Todo: Man skal kunne aborte
-                });
-
-            TaskViewModel.Busy = false;
-        }
-
-        private void ExtractFrieDataOceanographicalStationList(
-            object owner)
-        {
-            var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
-                "Extract Oceanographical Stations");
-
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-            {
-                return;
-            }
-
-            DateTime? date = null;
+            DateTime? dateTime = null;
 
             if (!string.IsNullOrEmpty(dialogViewModel.Date))
             {
                 dialogViewModel.Date.TryParsingAsDateTime(out var temp);
-                date = temp;
+                dateTime = temp;
             }
 
-            _application.ExtractFrieDataOceanographicalStationList(date);
+            TaskViewModel.NameOfTask = "Making breakfast";
+            TaskViewModel.Abort = false;
+            TaskViewModel.Busy = true;
+            MakeBreakfastCommand.RaiseCanExecuteChanged();
+
+            await _application.MakeBreakfast(
+                dateTime,
+                (progress, currentActivity) =>
+                {
+                    TaskViewModel.Progress = progress;
+                    TaskViewModel.NameOfCurrentSubtask = currentActivity;
+                    return TaskViewModel.Abort;
+                });
+
+            TaskViewModel.Busy = false;
+            MakeBreakfastCommand.RaiseCanExecuteChanged();
+
+            if (!TaskViewModel.Abort)
+            {
+                var messageBoxDialog = new MessageBoxDialogViewModel("Completed breakfast", false);
+                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
+            }
+        }
+
+        private bool CanMakeBreakfast(
+            object owner)
+        {
+            return !TaskViewModel.Busy;
         }
 
         private bool CanExportData()

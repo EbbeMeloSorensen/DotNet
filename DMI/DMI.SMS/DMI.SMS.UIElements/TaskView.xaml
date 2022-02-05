@@ -10,11 +10,16 @@
         <Grid Margin="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="15"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Text="{Binding CurrentActivity}"/>
-            <ProgressBar Grid.Row="1" Value="{Binding Progress, Mode=OneWay}"/>
+            <TextBlock Grid.Row="0" FontSize="14" FontWeight="Bold" Text="{Binding NameOfTask}"/>
+            <TextBlock Grid.Row="1" Text="{Binding NameOfCurrentSubtask}"/>
+            <ProgressBar Grid.Row="2" Value="{Binding Progress, Mode=OneWay}"/>
+            <Button Grid.Row="0" Grid.RowSpan="3" Margin="2" Content="Abort" 
+                    HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Command="{Binding AbortCommand}"/>
         </Grid>
     </Border>
 </UserControl>
