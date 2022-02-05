@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Math;
 using Craft.Utils;
+using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D;
 using DMI.SMS.Domain.Entities;
@@ -25,7 +26,7 @@ namespace DMI.SMS.ViewModel
         private RelayCommand<object> _createStationInformationCommand;
         private RelayCommand _deleteSelectedStationInformationsCommand;
         private RelayCommand _exportDataCommand;
-        private RelayCommand<object> _extractFrieDataMeteorologicalStationListCommand;
+        private AsyncCommand<object> _extractFrieDataMeteorologicalStationListCommand;
         private RelayCommand<object> _extractFrieDataOceanographicalStationListCommand;
         private RelayCommand _importDataCommand;
         private RelayCommand<object> _openSettingsDialogCommand;
@@ -67,10 +68,10 @@ namespace DMI.SMS.ViewModel
             get { return _exportDataCommand ?? (_exportDataCommand = new RelayCommand(ExportData, CanExportData)); }
         }
 
-        public RelayCommand<object> ExtractFrieDataMeteorologicalStationListCommand
+        public AsyncCommand<object> ExtractFrieDataMeteorologicalStationListCommand
         {
             get { return _extractFrieDataMeteorologicalStationListCommand ?? (_extractFrieDataMeteorologicalStationListCommand = 
-                new RelayCommand<object>(ExtractFrieDataMeteorologicalStationList)); }
+                new AsyncCommand<object>(ExtractFrieDataMeteorologicalStationList)); }
         }
 
         public RelayCommand<object> ExtractFrieDataOceanographicalStationListCommand
@@ -237,11 +238,10 @@ namespace DMI.SMS.ViewModel
             _application.UIDataProvider.ExportData(@"C:\Temp\SMSData.xml");
         }
 
-        private void ExtractFrieDataMeteorologicalStationList(
+        private async Task ExtractFrieDataMeteorologicalStationList(
             object owner)
         {
             var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
-                _application,
                 "Extract Meteorological Stations");
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
@@ -249,12 +249,9 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            // Todo: Start en proces
-        }
-
-        private async Task Dummy()
-        {
             var date = DateTime.Now;
+
+            TaskViewModel.Busy = true;
 
             await _application.ExtractFrieDataMeteorologicalStationList(
                 date,
@@ -262,15 +259,16 @@ namespace DMI.SMS.ViewModel
                 {
                     TaskViewModel.Progress = progress;
                     TaskViewModel.CurrentActivity = currentActivity;
-                    return false;
+                    return false; // Todo: Man skal kunne aborte
                 });
+
+            TaskViewModel.Busy = false;
         }
 
         private void ExtractFrieDataOceanographicalStationList(
             object owner)
         {
             var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
-                _application,
                 "Extract Oceanographical Stations");
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)

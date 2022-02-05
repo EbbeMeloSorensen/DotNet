@@ -1,4 +1,5 @@
 Done:
+* Gør det muligt at kalde en async metode efter at have åbnet en dialog
 
 Todo:
 * Implement support for rolling back to an arbitrary date of interest
@@ -11,4 +12,5 @@ Løst og fast:
   handlerne kan du fint kalde async metoder, MEN du har svært ved at kalde en async metode
   med udgangspunkt i at brugeren har trykket på en knap, der er bunder til en almindelig RelayCommand.
   Kan en løsning være at lave en variant af AsyncCommand, der modtager sådan et objekt der?
-  Lige som RelayCommand<object>
+  Lige som RelayCommand<object>. Yes - der er faktisk en AsyncCommand<parameter> implementation i den artikel,
+  du fanst i sin tid. and it works :-)

@@ -19,7 +19,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -53,25 +52,10 @@
             <Button Content="Cancel" Margin="5,5,0,5" Width="75"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Content="Extract" Margin="5,5,0,5" Width="75"
-                    Command="{Binding ExtractCommand}"/>
-            <Button Content="Abort" Margin="5,5,0,5" Width="75"
-                    Command="{Binding AbortCommand}"
-                    Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Button Content="OK" Margin="5,5,0,5" Width="75"
                     IsDefault="True"
                     Command="{Binding OKCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
         </StackPanel>
-
-        <Grid Grid.Row="2" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="15"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" Text="{Binding CurrentActivity}"/>
-            <ProgressBar Grid.Row="1" Value="{Binding Progress, Mode=OneWay}"/>
-        </Grid>
     </Grid>
 </UserControl>

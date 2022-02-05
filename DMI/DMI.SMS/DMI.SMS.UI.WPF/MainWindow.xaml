@@ -81,7 +81,8 @@
                 <uiElements:StationInformationDetailsView Grid.Row="1" DataContext="{Binding StationInformationDetailsViewModel}"/>
             </Grid>
 
-            <uiElements:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+            <uiElements:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3"
+                                 Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}"
                                  DataContext="{Binding TaskViewModel}"/>
         </Grid>
     </DockPanel>

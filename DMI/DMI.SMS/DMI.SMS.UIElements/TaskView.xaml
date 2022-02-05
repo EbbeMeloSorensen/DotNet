@@ -6,13 +6,15 @@
              xmlns:local="clr-namespace:DMI.SMS.UIElements"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="15"/>
-        </Grid.RowDefinitions>
+    <Border BorderBrush="DarkGray" BorderThickness="1">
+        <Grid Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="15"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="{Binding CurrentActivity}"/>
-        <ProgressBar Grid.Row="1" Value="{Binding Progress, Mode=OneWay}"/>
-    </Grid>
+            <TextBlock Grid.Row="0" Text="{Binding CurrentActivity}"/>
+            <ProgressBar Grid.Row="1" Value="{Binding Progress, Mode=OneWay}"/>
+        </Grid>
+    </Border>
 </UserControl>

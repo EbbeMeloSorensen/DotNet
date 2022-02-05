@@ -4,8 +4,19 @@ namespace DMI.SMS.ViewModel
 {
     public class TaskViewModel : ViewModelBase
     {
+        private bool _busy;
         private double _progress;
         private string _currentActivity;
+
+        public bool Busy
+        {
+            get => _busy;
+            set
+            {
+                _busy = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public double Progress
         {
@@ -35,8 +46,8 @@ namespace DMI.SMS.ViewModel
 
         public TaskViewModel()
         {
-            Progress = 50;
-            CurrentActivity = "Bamse";
+            _progress = 0;
+            _currentActivity = "";
         }
     }
 }
