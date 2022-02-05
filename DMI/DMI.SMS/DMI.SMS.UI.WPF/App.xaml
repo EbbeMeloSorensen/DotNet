@@ -20,7 +20,7 @@
             <DataTemplate DataType="{x:Type viewmodel2:CreateStationInformationDialogViewModel}">
                 <uiElements:CreateStationInformationDialogView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel2:ExtractFrieDataStationListViewModel}">
+            <DataTemplate DataType="{x:Type viewmodel2:ExtractFrieDataStationListDialogViewModel}">
                 <uiElements:ExtractFrieDataStationListView/>
             </DataTemplate>
 

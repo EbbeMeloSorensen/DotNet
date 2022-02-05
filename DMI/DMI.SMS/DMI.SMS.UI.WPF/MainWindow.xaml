@@ -50,14 +50,18 @@
         </StatusBar>-->
 
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <uiElements:StationInformationListView Grid.Column="0" DataContext="{Binding StationInformationListViewModel}"/>
+            <uiElements:StationInformationListView Grid.Row="0" Grid.Column="0" DataContext="{Binding StationInformationListViewModel}"/>
 
-            <Grid Grid.Column="1">
+            <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -76,6 +80,9 @@
 
                 <uiElements:StationInformationDetailsView Grid.Row="1" DataContext="{Binding StationInformationDetailsViewModel}"/>
             </Grid>
+
+            <uiElements:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                 DataContext="{Binding TaskViewModel}"/>
         </Grid>
     </DockPanel>
 </Window>

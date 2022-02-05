@@ -53,12 +53,15 @@
             <Button Content="Cancel" Margin="5,5,0,5" Width="75"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Content="OK" Margin="5,5,0,5" Width="75"
-                    IsDefault="True"
+            <Button Content="Extract" Margin="5,5,0,5" Width="75"
                     Command="{Binding ExtractCommand}"/>
             <Button Content="Abort" Margin="5,5,0,5" Width="75"
                     Command="{Binding AbortCommand}"
                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Content="OK" Margin="5,5,0,5" Width="75"
+                    IsDefault="True"
+                    Command="{Binding OKCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
         </StackPanel>
 
         <Grid Grid.Row="2" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">

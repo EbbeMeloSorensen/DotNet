@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows;
 using GalaSoft.MvvmLight;
@@ -95,6 +96,7 @@ namespace DMI.SMS.ViewModel
         public StationInformationDetailsViewModel StationInformationDetailsViewModel { get; private set; }
         public StationInformationCollectionViewModel StationInformationCollectionViewModel { get; private set; }
         public GeometryEditorViewModel GeometryEditorViewModel { get; private set; }
+        public TaskViewModel TaskViewModel { get; private set; }
 
         public MainWindowViewModel(
             Application.Application application,
@@ -134,6 +136,8 @@ namespace DMI.SMS.ViewModel
             GeometryEditorViewModel = new GeometryEditorViewModel();
             GeometryEditorViewModel.Magnification = 240;
             GeometryEditorViewModel.WorldWindowUpperLeft = new System.Windows.Point(7.4, 53.9);
+
+            TaskViewModel = new TaskViewModel();
 
             var lineThickness = 0.02;
 
@@ -236,17 +240,36 @@ namespace DMI.SMS.ViewModel
         private void ExtractFrieDataMeteorologicalStationList(
             object owner)
         {
-            var dialogViewModel = new ExtractFrieDataStationListViewModel(
+            var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
                 _application,
                 "Extract Meteorological Stations");
 
-            _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            // Todo: Start en proces
+        }
+
+        private async Task Dummy()
+        {
+            var date = DateTime.Now;
+
+            await _application.ExtractFrieDataMeteorologicalStationList(
+                date,
+                (progress, currentActivity) =>
+                {
+                    TaskViewModel.Progress = progress;
+                    TaskViewModel.CurrentActivity = currentActivity;
+                    return false;
+                });
         }
 
         private void ExtractFrieDataOceanographicalStationList(
             object owner)
         {
-            var dialogViewModel = new ExtractFrieDataStationListViewModel(
+            var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
                 _application,
                 "Extract Oceanographical Stations");
 

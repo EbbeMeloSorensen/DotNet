@@ -3,3 +3,12 @@ Done:
 Todo:
 * Implement support for rolling back to an arbitrary date of interest
 * Make is possible to extract the Frie Data station list 
+
+
+Løst og fast:
+- I den gamle DMI.Data.Studio har du nogle buttons, der er bundet til Async Commands. 
+  Det har du for den sags skyld også her, hvor du checker settings... I command
+  handlerne kan du fint kalde async metoder, MEN du har svært ved at kalde en async metode
+  med udgangspunkt i at brugeren har trykket på en knap, der er bunder til en almindelig RelayCommand.
+  Kan en løsning være at lave en variant af AsyncCommand, der modtager sådan et objekt der?
+  Lige som RelayCommand<object>

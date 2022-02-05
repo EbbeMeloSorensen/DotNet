@@ -11,7 +11,7 @@ using Craft.ViewModels.Dialogs;
 
 namespace DMI.SMS.ViewModel
 {
-    public class ExtractFrieDataStationListViewModel : DialogViewModelBase, IDataErrorInfo
+    public class ExtractFrieDataStationListDialogViewModel : DialogViewModelBase, IDataErrorInfo
     {
         private StateOfView _state;
         private ObservableCollection<ValidationError> _validationMessages;
@@ -74,18 +74,20 @@ namespace DMI.SMS.ViewModel
         public AsyncCommand ExtractCommand { get; }
         public RelayCommand AbortCommand { get; }
 
+        public RelayCommand<object> OKCommand { get; }
         public RelayCommand<object> CancelCommand { get; }
 
-        public ExtractFrieDataStationListViewModel(
+        public ExtractFrieDataStationListDialogViewModel(
             Application.Application application,
             string dialogTitle)
         {
-            _application = application;
+            _application = application; 
             DialogTitle = dialogTitle;
             Date = "";
 
             ExtractCommand = new AsyncCommand(Extract, CanExtract);
             AbortCommand = new RelayCommand(Abort, CanAbort);
+            OKCommand = new RelayCommand<object>(OK, CanOK);
             CancelCommand = new RelayCommand<object>(Cancel, CanCancel);
         }
 
@@ -146,6 +148,18 @@ namespace DMI.SMS.ViewModel
         private bool CanAbort()
         {
             return IsBusy;
+        }
+
+        private void OK(
+            object parameter)
+        {
+            CloseDialogWithResult(parameter as Window, DialogResult.OK);
+        }
+
+        private bool CanOK(
+            object parameter)
+        {
+            return true;
         }
 
         private void Cancel(
