@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
+using Craft.UI.Utils;
 using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Domain.EntityClassExtensions;

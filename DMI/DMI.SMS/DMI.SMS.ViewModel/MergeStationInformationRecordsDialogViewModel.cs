@@ -3,9 +3,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
-using GalaSoft.MvvmLight.Command;
+using Craft.UI.Utils;
 
 namespace DMI.SMS.ViewModel
 {

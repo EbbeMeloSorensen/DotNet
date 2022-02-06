@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
+using Craft.UI.Utils;
 
 namespace DMI.SMS.ViewModel
 {
