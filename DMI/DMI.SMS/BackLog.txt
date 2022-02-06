@@ -2,6 +2,7 @@ Done:
 * Gør det muligt at kalde en async metode efter at have åbnet en dialog
 
 Todo:
+* Gør det muligt at kalde MakeBreakfast fra command line applikationen
 * Implement support for rolling back to an arbitrary date of interest
 * Make is possible to extract the Frie Data station list 
 
