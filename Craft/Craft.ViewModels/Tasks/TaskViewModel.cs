@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
-namespace DMI.SMS.ViewModel
+namespace Craft.ViewModels.Tasks
 {
     public class TaskViewModel : ViewModelBase
     {

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DMI.SMS.UIElements
+namespace Craft.UIElements.Tasks
 {
     /// <summary>
     /// Interaction logic for TaskView.xaml

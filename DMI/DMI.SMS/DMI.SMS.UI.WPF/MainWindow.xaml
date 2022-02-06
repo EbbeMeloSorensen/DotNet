@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:DMI.SMS.UI.WPF"
         xmlns:uiElements="clr-namespace:DMI.SMS.UIElements;assembly=DMI.SMS.UIElements"
         xmlns:geometry2D="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
+        xmlns:tasks="clr-namespace:Craft.UIElements.Tasks;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="{Binding MainWindowTitle}" 
         Height="450" 
@@ -76,9 +77,9 @@
                 <uiElements:StationInformationDetailsView Grid.Row="1" DataContext="{Binding StationInformationDetailsViewModel}"/>
             </Grid>
 
-            <uiElements:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3"
-                                 Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                 DataContext="{Binding TaskViewModel}"/>
+            <tasks:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3"
+                            Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            DataContext="{Binding TaskViewModel}"/>
         </Grid>
     </DockPanel>
 </Window>

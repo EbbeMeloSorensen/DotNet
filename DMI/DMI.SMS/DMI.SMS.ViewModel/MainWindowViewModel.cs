@@ -10,6 +10,7 @@ using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D;
+using Craft.ViewModels.Tasks;
 using DMI.SMS.Domain.Entities;
 
 namespace DMI.SMS.ViewModel
