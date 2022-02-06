@@ -349,6 +349,7 @@ namespace DMI.SMS.ViewModel
 
             await _application.ExtractMeteorologicalStations(
                 dateTime,
+                
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;
