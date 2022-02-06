@@ -347,7 +347,7 @@ namespace DMI.SMS.ViewModel
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
-            await _application.MakeBreakfast(
+            await _application.ExtractMeteorologicalStations(
                 dateTime,
                 (progress, currentActivity) =>
                 {

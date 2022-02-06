@@ -8,6 +8,32 @@ namespace DMI.SMS.Application
 {
     public static class Helpers
     {
+        private static Dictionary<string, string> _stationsThatAreExemptedFromTheThresholdRule = new Dictionary<string, string>
+        {
+            { "20375", "Brovst" },
+            { "23360", "Haderslev" }
+        };
+
+        private static Dictionary<string, string> _stationsThatMeasurePrecipitationManually = new Dictionary<string, string>
+        {
+            { "34270", "Narsarsuaq" },
+            { "34320", "Danmarkshavn" },
+            { "34339", "Ittoqqortoormiit" }
+        };
+
+        private static Dictionary<string, string> _stationsWhereWeExcludeTemperatureMeasurements = new Dictionary<string, string>
+        {
+            { "20566", "Hobro Havn I" },
+            { "22058", "Randers Havn I" },
+            { "22121", "Grenå Havn I" },
+            { "22598", "Hov Havn I" },
+            { "29038", "Holbæk Havn I" },
+            { "30202", "Vedbæk Havn I" },
+            { "30361", "Dragør Havn I" },
+            { "30407", "Roskilde Havn I" },
+            { "30478", "Køge Havn I" }
+        };
+
         public static List<StationInformation> Sort(
             this IEnumerable<StationInformation> stationInformations)
         {
@@ -282,6 +308,58 @@ namespace DMI.SMS.Application
                         result[s.GdbArchiveOid].ViolatedBusinessRules
                             .Add(BusinessRule.OverlappingCurrentRecordsWithSameStationIdExists);
                     });
+                }
+            }
+
+            return result;
+        }
+
+        // This method is used in conjunction with transforming observation counts read from file into a proper data structure
+        public static Dictionary<string, List<string>> ConvertToParameterListMap(
+            this Dictionary<string, Dictionary<string, int>> referenceMap,
+            int threshold)
+        {
+            // If the number of observations is less than the threshold then we regard it as invalid data and assume that the real number is zero
+            // Exceptions to this are Brovst (20375) and Haderslev (23360) that are quite new snow stations with few observations
+            // Besides, we manually add precip_past24h for 3 stations from Greenland since they're not included in ObsDB.
+            // Finally, we reset counts of tw observations for a number of stations
+            var result = new Dictionary<string, List<string>>();
+
+            // Iterate over all stations
+            foreach (var kvp1 in referenceMap)
+            {
+                // iterate over all parameters
+                foreach (var kvp2 in kvp1.Value)
+                {
+                    if (kvp2.Value > threshold ||
+                        (kvp2.Value > 0 && _stationsThatAreExemptedFromTheThresholdRule.Keys.Contains(kvp1.Key)))
+                    {
+                        // Make sure we don't add the tw parameter for the stations where we need to disregard that parameter
+                        if (_stationsWhereWeExcludeTemperatureMeasurements.Keys.Contains(kvp1.Key) &&
+                            kvp2.Key == "tw")
+                        {
+                            continue;
+                        }
+
+                        // Make sure we don't the list is initialized
+                        if (!result.ContainsKey(kvp1.Key))
+                        {
+                            result[kvp1.Key] = new List<string>();
+                        }
+
+                        result[kvp1.Key].Add(kvp2.Key);
+                    }
+                }
+
+                if (_stationsThatMeasurePrecipitationManually.Keys.Contains(kvp1.Key))
+                {
+                    // Make sure we don't the list is initialized
+                    if (!result.ContainsKey(kvp1.Key))
+                    {
+                        result[kvp1.Key] = new List<string>();
+                    }
+
+                    result[kvp1.Key].Add("precip_past24h");
                 }
             }
 
