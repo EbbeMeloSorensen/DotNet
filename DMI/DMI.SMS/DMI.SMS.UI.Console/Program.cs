@@ -28,7 +28,8 @@ namespace DMI.SMS.UI.Console
             //application.UIDataProvider.ExportData(".//Kylling.xml");
             //System.Console.WriteLine("Done...");
 
-            await MakeBreakfast(application);
+            //await MakeBreakfast(application);
+            await ExtractMeteorologicalStations(application);
         }
 
         private static async Task MakeBreakfast(
@@ -37,6 +38,20 @@ namespace DMI.SMS.UI.Console
             System.Console.Write("Making breakfast...\nProgress: ");
             var dateTime = DateTime.Now;
             await application.MakeBreakfast(dateTime, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task ExtractMeteorologicalStations(
+            Application.Application application)
+        {
+            System.Console.Write("Extracting Meteorological stations...\nProgress: ");
+            var dateTime = DateTime.Now;
+            await application.ExtractMeteorologicalStations(dateTime, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

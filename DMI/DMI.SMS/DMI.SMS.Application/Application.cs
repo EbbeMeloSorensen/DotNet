@@ -85,25 +85,22 @@ namespace DMI.SMS.Application
         {
             await Task.Run(async () =>
             {
-                var allParams = new List<string>();
-
-                //allParams = allParams.Concat(
-                //    SettingsViewModel.MeteorologicalParameterListViewModel.GetAllStrings()).ToList();
-
-                allParams = allParams.OrderBy(p => p).ToList();
+                var dataFolder = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\..\..", "Data"));
+                var metParameterListFileName = Path.Combine(dataFolder, "metObs_parameter.json");
+                var metParameters = FD.Domain.IO.Helpers.ReadParametersFromJsonFile(metParameterListFileName);
+                var allParams = metParameters.Select(p => p.parameterId).OrderBy(paramId => paramId).ToList();
 
                 var referenceMapBasedOnObsDB = new Dictionary<string, Dictionary<string, int>>();
 
-                // Udkommenteret, fordi vi lige skal have styr på matricerne
-                //for (var year = 1953; year <= 2021; year++)
-                //{
-                //    var referenceFile = new FileInfo(
-                //        Path.Combine(SettingsViewModel.InputDataFolder, @"ObservationMatrices\Meteorological", $"Meteorological_observations_in_{year}_from_nanoq.dmi.dk.txt"));
+                for (var year = 1953; year <= 2021; year++)
+                {
+                    //var referenceFile = new FileInfo(
+                    //    Path.Combine(SettingsViewModel.InputDataFolder, @"ObservationMatrices\Meteorological", $"Meteorological_observations_in_{year}_from_nanoq.dmi.dk.txt"));
 
-                //    var referenceMapForCurrentYear = referenceFile.ReadStationTableFromFile();
+                    //var referenceMapForCurrentYear = referenceFile.ReadStationTableFromFile();
 
-                //    referenceMapBasedOnObsDB.Aggregate(referenceMapForCurrentYear);
-                //}
+                    //referenceMapBasedOnObsDB.Aggregate(referenceMapForCurrentYear);
+                }
 
                 var paramsDictionary = referenceMapBasedOnObsDB.ConvertToParameterListMap(500);
 
@@ -123,6 +120,9 @@ namespace DMI.SMS.Application
         {
             await Task.Run(() =>
             {
+                // For fun:
+                File.WriteAllLines("Bamse.txt", allParams);
+
                 var timeNow = DateTime.UtcNow.AsEpochInMicroSeconds();
 
                 string modeAsString;
