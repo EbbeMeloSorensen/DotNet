@@ -85,7 +85,7 @@ namespace DMI.SMS.Application
         {
             await Task.Run(async () =>
             {
-                var dataFolder = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\..\..", "Data"));
+                var dataFolder = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..//..//..//..", "Data"));
                 var metParameterListFileName = Path.Combine(dataFolder, "metObs_parameter.json");
                 var metParameters = FD.Domain.IO.Helpers.ReadParametersFromJsonFile(metParameterListFileName);
                 var allParams = metParameters.Select(p => p.parameterId).OrderBy(paramId => paramId).ToList();
