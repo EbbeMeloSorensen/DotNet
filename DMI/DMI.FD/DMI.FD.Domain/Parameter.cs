@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DMI.FD.Domain
+﻿namespace DMI.FD.Domain
 {
     public class Parameter
     {

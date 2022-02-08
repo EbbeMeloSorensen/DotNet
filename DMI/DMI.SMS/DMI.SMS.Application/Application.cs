@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Craft.Utils;
 using Craft.Logging;
+using DMI.FD.Domain;
+using DMI.FD.Domain.IO;
 
 namespace DMI.SMS.Application
 {
@@ -94,12 +96,12 @@ namespace DMI.SMS.Application
 
                 for (var year = 1953; year <= 2021; year++)
                 {
-                    //var referenceFile = new FileInfo(
-                    //    Path.Combine(SettingsViewModel.InputDataFolder, @"ObservationMatrices\Meteorological", $"Meteorological_observations_in_{year}_from_nanoq.dmi.dk.txt"));
+                    var referenceFile = new FileInfo(
+                        Path.Combine(dataFolder, "ObservationMatrices//Meteorological", $"Meteorological_observations_in_{year}_from_nanoq.dmi.dk.txt"));
 
-                    //var referenceMapForCurrentYear = referenceFile.ReadStationTableFromFile();
+                    var referenceMapForCurrentYear = referenceFile.ReadStationTableFromFile();
 
-                    //referenceMapBasedOnObsDB.Aggregate(referenceMapForCurrentYear);
+                    referenceMapBasedOnObsDB.Aggregate(referenceMapForCurrentYear);
                 }
 
                 var paramsDictionary = referenceMapBasedOnObsDB.ConvertToParameterListMap(500);
@@ -120,9 +122,6 @@ namespace DMI.SMS.Application
         {
             await Task.Run(() =>
             {
-                // For fun:
-                File.WriteAllLines("Bamse.txt", allParams);
-
                 var timeNow = DateTime.UtcNow.AsEpochInMicroSeconds();
 
                 string modeAsString;
@@ -169,13 +168,13 @@ namespace DMI.SMS.Application
                 var outputCsvFullFileName = Path.Combine(outputFolderName, outputCsvFileName);
                 var outputOGCJsonFullFileName = Path.Combine(outputFolderName, outputOGCJsonFileName);
 
-                /*
                 var stations = new List<Station>();
 
-                var smsDBHost = "172.25.7.23";
-                var smsDBName = "sms_prod";
-                var smsDBUser = SettingsViewModel.SMSDatabaseUser;
-                var smsDBPassword = SettingsViewModel.SMSDatabasePassword;
+                //var smsDBHost = "172.25.7.23";
+                //var smsDBName = "sms_prod";
+                //var smsDBUser = SettingsViewModel.SMSDatabaseUser;
+                //var smsDBPassword = SettingsViewModel.SMSDatabasePassword;
+
 
                 List<int> stationOwners = new List<int>();
 
@@ -199,7 +198,10 @@ namespace DMI.SMS.Application
                 stationTypes.Add(stationTypeCodeForManualPrecipitation);
                 stationTypes.Add(stationTypeCodeForManualSnow);
 
+                File.WriteAllLines("Gundabad.txt", allParams);
+
                 // Fetch all rows
+                /*
                 var stationDataRaw = await _smsDBDataProvider.RetrieveDataFromStationInformationTable(
                     smsDBHost, smsDBName, smsDBUser, smsDBPassword, null, null, null, null, limit, false);
 

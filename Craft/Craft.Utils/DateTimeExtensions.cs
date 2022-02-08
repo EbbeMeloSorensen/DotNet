@@ -16,6 +16,32 @@ namespace Craft.Utils
             return (long)(dateTime - new DateTime(1970, 1, 1)).TotalMilliseconds * 1000;
         }
 
+        // Todo: Se om det giver mening at lave een metode ved navn AsDateTimeString i stedet for de 2, der er her
+        public static string AsDateTimeString(
+            this DateTime dateTime,
+            bool includeMilliseconds)
+        {
+            var year = dateTime.Year;
+            var month = dateTime.Month.ToString().PadLeft(2, '0');
+            var day = dateTime.Day.ToString().PadLeft(2, '0');
+
+            var hour = dateTime.Hour.ToString().PadLeft(2, '0');
+            var minute = dateTime.Minute.ToString().PadLeft(2, '0');
+            var second = dateTime.Second.ToString().PadLeft(2, '0');
+
+            var result = $"{year}-{month}-{day} {hour}:{minute}:{second}";
+
+            if (includeMilliseconds)
+            {
+                var millisecond = dateTime.Millisecond.ToString().PadLeft(3, '0');
+
+                result += $".{millisecond}";
+            }
+
+            return result;
+        }
+
+        // Todo: Se om det giver mening at lave een metode ved navn AsDateTimeString i stedet for de 2, der er her
         public static string AsDateTimeString(
             this DateTime dateTime,
             bool includeMilliseconds,

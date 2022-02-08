@@ -54,6 +54,86 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.FD.Domain", "..\DMI.FD\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.FD.Domain.IO", "..\DMI.FD\DMI.FD.Domain.IO\DMI.FD.Domain.IO.csproj", "{2486BF0E-4EC7-485D-B79B-978A32BEBC43}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{F736426A-611B-4D28-9B51-D9211CC8624F}"
+	ProjectSection(SolutionItems) = preProject
+		Data\metObs_parameter.json = Data\metObs_parameter.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ObservationMatrices", "ObservationMatrices", "{81CEFB59-00A5-49BE-8A3A-D96EC89AF853}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meteorological", "Meteorological", "{63F5E072-3997-4094-B9DC-D62B53070DD6}"
+	ProjectSection(SolutionItems) = preProject
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1953_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1953_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1954_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1954_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1955_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1955_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1956_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1956_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1957_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1957_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1958_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1958_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1959_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1959_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1960_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1960_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1961_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1961_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1962_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1962_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1963_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1963_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1964_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1964_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1965_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1965_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1966_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1966_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1967_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1967_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1968_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1968_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1969_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1969_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1970_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1970_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1971_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1971_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1972_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1972_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1973_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1973_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1974_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1974_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1975_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1975_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1976_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1976_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1977_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1977_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1978_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1978_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1979_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1979_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1980_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1980_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1981_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1981_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1982_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1982_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1983_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1983_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1984_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1984_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1985_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1985_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1986_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1986_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1987_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1987_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1988_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1988_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1989_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1989_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1990_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1990_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1991_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1991_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1992_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1992_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1993_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1993_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1994_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1994_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1995_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1995_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1996_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1996_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1997_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1997_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1998_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1998_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1999_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_1999_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2000_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2000_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2001_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2001_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2002_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2002_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2003_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2003_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2004_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2004_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2005_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2005_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2006_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2006_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2007_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2007_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2008_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2008_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2009_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2009_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2010_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2010_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2011_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2011_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2012_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2012_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2013_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2013_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2014_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2014_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2015_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2015_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2016_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2016_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2017_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2017_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2018_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2018_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2019_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2019_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2020_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2020_from_nanoq.dmi.dk.txt
+		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2021_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2021_from_nanoq.dmi.dk.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -155,6 +235,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F736426A-611B-4D28-9B51-D9211CC8624F} = {702C334A-B463-45CB-8510-9CE5F3FB7B87}
+		{81CEFB59-00A5-49BE-8A3A-D96EC89AF853} = {F736426A-611B-4D28-9B51-D9211CC8624F}
+		{63F5E072-3997-4094-B9DC-D62B53070DD6} = {81CEFB59-00A5-49BE-8A3A-D96EC89AF853}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {27D388D7-955F-4594-84BD-6F3FC772F280}

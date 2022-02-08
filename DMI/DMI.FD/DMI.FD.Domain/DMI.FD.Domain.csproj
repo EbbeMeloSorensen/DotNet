@@ -5,4 +5,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Craft\Craft.Utils\Craft.Utils.csproj" />
+  </ItemGroup>
+
 </Project>
