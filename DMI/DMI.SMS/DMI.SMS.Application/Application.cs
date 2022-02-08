@@ -5,8 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Craft.Utils;
 using Craft.Logging;
+using DMI.SMS.Application;
 using DMI.FD.Domain;
 using DMI.FD.Domain.IO;
+using DMI.SMS.Domain.Entities;
 
 namespace DMI.SMS.Application
 {
@@ -168,42 +170,34 @@ namespace DMI.SMS.Application
                 var outputCsvFullFileName = Path.Combine(outputFolderName, outputCsvFileName);
                 var outputOGCJsonFullFileName = Path.Combine(outputFolderName, outputOGCJsonFileName);
 
-                var stations = new List<Station>();
-
                 //var smsDBHost = "172.25.7.23";
                 //var smsDBName = "sms_prod";
                 //var smsDBUser = SettingsViewModel.SMSDatabaseUser;
                 //var smsDBPassword = SettingsViewModel.SMSDatabasePassword;
 
-
-                List<int> stationOwners = new List<int>();
+                var stationOwners = new List<StationOwner>();
 
                 var stationOwnerCodeForDMI = 0;
-                stationOwners.Add(stationOwnerCodeForDMI);
+                stationOwners.Add(StationOwner.DMI);
 
-                List<int> status = new List<int> { 1 };
+                var status = new List<Status> { Status.Active };
                 int? limit = null;
 
-                var stationTypes = new List<int>();
-
-                var stationTypeCodeForSynop = 0;
-                var stationTypeCodeForGiws = 4;
-                var stationTypeCodeForPluvio = 5;
-                var stationTypeCodeForManualPrecipitation = 12;
-                var stationTypeCodeForManualSnow = 14;
-
-                stationTypes.Add(stationTypeCodeForSynop);
-                stationTypes.Add(stationTypeCodeForGiws);
-                stationTypes.Add(stationTypeCodeForPluvio);
-                stationTypes.Add(stationTypeCodeForManualPrecipitation);
-                stationTypes.Add(stationTypeCodeForManualSnow);
-
-                File.WriteAllLines("Gundabad.txt", allParams);
+                var stationTypes = new List<StationType>
+                {
+                    StationType.Synop,
+                    StationType.GIWS,
+                    StationType.Pluvio,
+                    StationType.Manuel_nedbør,
+                    StationType.Snestation
+                };
 
                 // Fetch all rows
-                /*
-                var stationDataRaw = await _smsDBDataProvider.RetrieveDataFromStationInformationTable(
-                    smsDBHost, smsDBName, smsDBUser, smsDBPassword, null, null, null, null, limit, false);
+                //var stationDataRaw = await _smsDBDataProvider.RetrieveDataFromStationInformationTable(
+                //    smsDBHost, smsDBName, smsDBUser, smsDBPassword, null, null, null, null, limit, false);
+                var stationDataRaw = UIDataProvider.GetAllStationInformations();
+
+                // Todo: Sørg for at frafiltrere de rækker, der er blacklistet
 
                 // Optionally roll back to given date of interest
                 var dateTimeOfInterest = new DateTime(2021, 1, 24, 0, 0, 0);
@@ -211,20 +205,16 @@ namespace DMI.SMS.Application
 
                 // Filter out everything that is not current
                 var stationData = stationDataRaw
-                    .Where(row => row.gdb_to_date.HasValue && row.gdb_to_date.Value.Year == 9999)
+                    .Where(row => row.GdbToDate.Year == 9999)
                     .ToList();
 
                 // Filter out everything that doesn't match criteria, and convert to Frie Data stations
-                stations = stationData
-                    .Where(row => row.stationowner.HasValue && stationOwners.Contains(row.stationowner.Value))
-                    .Where(row => row.status.HasValue && status.Contains(row.status.Value))
-                    .Where(row => row.stationtype.HasValue && stationTypes.Contains(row.stationtype.Value))
+                var stations = stationData
+                    .Where(row => row.StationOwner.HasValue && stationOwners.Contains(row.StationOwner.Value))
+                    .Where(row => row.Status.HasValue && status.Contains(row.Status.Value))
+                    .Where(row => row.Stationtype.HasValue && stationTypes.Contains(row.Stationtype.Value))
                     .Select(s => s.ConvertToFrieDataStation(false))
                     .ToList();
-
-                // Remove blacklisted stations
-                // (Gøres direkte i DAL layeret)
-                //stations = stations.Where(s => !_blackListedStations.Keys.Contains(s.stationId)).ToList();
 
                 // Remove stations that should not be included in the given dataset, if any
                 if (mode == MeteorologicalStationListGenerationMode.Climate)
@@ -232,10 +222,10 @@ namespace DMI.SMS.Application
                     stations = stations.Where(s => s.stationId != "06183").ToList();
                 }
 
+                File.WriteAllLines("station_names.txt", stations.Select(s => s.name));
+
+                /*
                 // Add historical meteorological stations
-                // (tilføj nedlagte stationer, der før har været udstillet)
-                // NB: Vi skal også have Vestervig med, men den er slet ikke blevet overført fra SnowStation-tabellen
-                // og til StationInformation-tabellen
 
                 // Kolding snestation (23327)
                 var koldingSnowStation = await _smsDBDataProvider.RetrieveDataFromStationInformationTable(
