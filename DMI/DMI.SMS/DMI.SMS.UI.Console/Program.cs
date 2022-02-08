@@ -1,5 +1,5 @@
-﻿using StructureMap;
-//using DMI.SMS.Persistence.Npgsql;
+﻿using DMI.SMS.Persistence.Npgsql;
+using StructureMap;
 
 namespace DMI.SMS.UI.Console
 {
@@ -12,13 +12,13 @@ namespace DMI.SMS.UI.Console
             var container = Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();
 
-            //var host = "172.25.7.23";
-            //var port = 5432;
-            //var schema = "sde";
-            //var database = "sms_prod";
-            //var user = "ebs";
-            //var password = "Vm6PAkPh";
-            //ConnectionStringProvider.Initialize(host, port, database, schema, user, password);
+            var host = "172.25.7.23";
+            var port = 5432;
+            var schema = "sde";
+            var database = "sms_prod";
+            var user = "ebs";
+            var password = "Vm6PAkPh";
+            ConnectionStringProvider.Initialize(host, port, database, schema, user, password);
 
             System.Console.WriteLine("Counting StationInformation records...");
             System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllStationInformations().Count}");
