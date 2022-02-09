@@ -7,6 +7,57 @@ namespace DMI.FD.Domain.IO
 {
     public static class Helpers
     {
+        public static void WriteStationsToJsonFile(
+            this IEnumerable<Station> stations,
+            string fileName)
+        {
+            var json = JsonConvert.SerializeObject(
+                stations, Formatting.Indented, new DoubleJsonConverter(), new NullableDoubleJsonConverter());
+
+            using (var streamWriter = new StreamWriter(fileName))
+            {
+                streamWriter.WriteLine(json);
+            }
+        }
+
+        public static void WriteStationsToCsvFile(
+            this IEnumerable<Station> stations,
+            string fileName,
+            bool allColumns,
+            bool skipInactiveRecords)
+        {
+            var includeStatus = !skipInactiveRecords;
+
+            if (allColumns)
+            {
+                var csvLines = new List<string> { Station.GenerateCSVHeaderFull(includeStatus) };
+
+                File.WriteAllLines(fileName, csvLines.Concat(
+                    stations
+                        .Where(s => s.status == "Active" || !skipInactiveRecords)
+                        .Select(s => s.GenerateCSVLineFull(includeStatus))));
+            }
+            else
+            {
+                var csvLines = new List<string> { Station.GenerateCSVHeader(includeStatus) };
+
+                File.WriteAllLines(fileName, csvLines.Concat(stations.Select(s => s.GenerateCSVLine(includeStatus))));
+            }
+        }
+
+        public static void WriteOGCMeteorologicalStationsToJsonFile(
+            this IEnumerable<OGC.MeteorologicalStation> stations,
+            string fileName)
+        {
+            var json = JsonConvert.SerializeObject(
+                stations, Formatting.Indented, new DoubleJsonConverter(), new NullableDoubleJsonConverter());
+
+            using (var streamWriter = new StreamWriter(fileName))
+            {
+                streamWriter.WriteLine(json);
+            }
+        }
+
         public static IList<Parameter> ReadParametersFromJsonFile(
             string fileName)
         {

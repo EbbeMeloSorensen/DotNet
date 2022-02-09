@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Craft.Utils;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Domain.EntityClassExtensions;
 using DMI.FD.Domain;
+using DMI.FD.Domain.OGC;
 
 namespace DMI.SMS.Application
 {
@@ -127,6 +129,27 @@ namespace DMI.SMS.Application
             { "30361", "Dragør Havn I" },
             { "30407", "Roskilde Havn I" },
             { "30478", "Køge Havn I" }
+        };
+
+        private static List<string> _stationsThatOnlySwitchedNameBecauseATypoWasCorrected = new List<string>
+        {
+            "Angissoq",
+            "Hevringsholm",
+            "Hesseballe",
+            "Oksvang Andrup"
+        };
+
+        private static Dictionary<string, string> _stationsTakenOverFromFarvandsvaesenet = new Dictionary<string, string>
+        {
+            { "20002", "Skagen Havn" },
+            { "22121", "Grenå Havn I" },
+            { "22122", "Grenå Havn II" },
+            { "23132", "Juelsminde Havn" },
+            { "27084", "Ballen Havn" },
+            { "28548", "Bagenkop Havn" },
+            { "29002", "Havnebyen/Sjællands Odde" },
+            { "30357", "Drogden Fyr" },
+            { "31063", "Rødvig Havn" }
         };
 
         public static List<StationInformation> Sort(
@@ -644,6 +667,447 @@ namespace DMI.SMS.Application
             return station;
         }
 
+        public static int ConvertToSMSStationId(
+            this string s)
+        {
+            if (_kdiStationIdMap.Values.Contains(s))
+            {
+                s = _kdiStationIdMap.Single(kvp => kvp.Value == s).Key;
+            }
+
+            return int.Parse(s);
+        }
+
+        public static StationType ConvertToStationType(
+            this string stationType)
+        {
+            if (stationType.Contains("Tide-gauge"))
+            {
+                return _stationTypeMap.Single(kvp => kvp.Value == "Tide Gauge").Key;
+            }
+
+            return _stationTypeMap.Single(kvp => kvp.Value == stationType).Key;
+        }
+
+        public static List<Station> AsFrieDataStationHistory(
+            this List<StationInformation> smsStationHistory,
+            bool overwriteCountry,
+            bool overwriteOwner,
+            bool overwriteRegionId,
+            bool overwriteWMOCountryCode,
+            bool overwriteWMOStationId,
+            bool overwriteNameForStationsWithHistoricalTypos,
+            bool setHeightToNullForTideGaugeStations,
+            bool fillOutMissingStationHeightIfLocationUnchanged,
+            bool fillOutMissingWgsCoordinatesIfUtmCoordinatesUnchanged,
+            bool includeArchivedStations,
+            DateTime? timeOfOldestObservationForStation,
+            DateTime? timeOfMostRecentObservationForStation,
+            bool convertFromDMIStationIdToKDIStationId,
+            long timeNow)
+        {
+            var result = new List<Station>();
+
+            var currentSMSRow = smsStationHistory.Last();
+            var currentRow = smsStationHistory.Last().ConvertToFrieDataStation(convertFromDMIStationIdToKDIStationId);
+            var currentStationName = currentRow.name;
+            var currentStationId = currentRow.stationId;
+
+            result.Add(currentRow);
+
+            if (result.Single().type.Substring(0, 4).ToLower() == "tide" &&
+                result.Single().status == "Inactive" &&
+                result.Single().stationId != "20002")
+            {
+                // Vi har at gøre med en HISTORISK VANDSTANDSSTATION (altså de tusse-gamle, dvs ikke Skagen Havn 20002), som skal have særbehandling
+                if (!timeOfOldestObservationForStation.HasValue ||
+                    !timeOfMostRecentObservationForStation.HasValue)
+                {
+                    throw new InvalidOperationException("The station is inactive - therefore we need the time of the oldest and most recent observation to determine the period in which it was active");
+                }
+
+                var firstActiveDate = timeOfOldestObservationForStation.Value.Date;
+                var firstActiveDateAsEpochInMicroSeconds = firstActiveDate.AsEpochInMicroSeconds();
+
+                var firstInactiveDate = timeOfMostRecentObservationForStation.Value.Date + new TimeSpan(1, 0, 0, 0);
+                var firstInactiveDateAsEpochInMicroSeconds = firstInactiveDate.AsEpochInMicroSeconds();
+
+                result.Single().owner = "DMI";
+                result.Single().status = "Active";
+                result.Single().timeOperationFrom = firstActiveDateAsEpochInMicroSeconds;
+                result.Single().timeValidFrom = firstActiveDateAsEpochInMicroSeconds;
+                result.Single().timeOperationTo = firstInactiveDateAsEpochInMicroSeconds;
+                result.Single().timeValidTo = firstInactiveDateAsEpochInMicroSeconds;
+
+                Station newLatestFrieDataStationRow = result.Single().Clone();
+                newLatestFrieDataStationRow.status = "Inactive";
+                newLatestFrieDataStationRow.timeValidFrom = result.Last().timeOperationTo;
+                newLatestFrieDataStationRow.timeValidTo = null;
+                result.Add(newLatestFrieDataStationRow);
+            }
+            else
+            {
+                // Vi har at gøre med en almindelig station (dvs IKKE en historisk vandstandsstation)
+                // .. eller også har vi fat i Skagen Havn
+
+                // We need to identify the oldest date associated with the station
+                // It will be represented either by the oldest gdb_date_from or datefrom
+                long? oldestDate = null;
+                long? mostRecentDate = currentRow.timeOperationTo.HasValue ? currentRow.timeOperationTo.Value : new long?();
+
+                oldestDate = UpdateOldestDateTime(oldestDate, currentRow);
+                mostRecentDate = UpdateMostRecentDateTime(mostRecentDate, currentRow);
+
+                if (setHeightToNullForTideGaugeStations && result.Single().type.Substring(0, 4).ToLower() == "tide")
+                {
+                    result.Single().location.height = null;
+                }
+
+                if (currentStationId == "06183") // Drogden Fyr
+                {
+                    // Ifølge SMS så går Drogden Fyr tilbage til 1937,
+                    // men i ObsDB ligger der kun data fra Januar 1962, så det sætter vi den til i Frie Data
+                    oldestDate = new DateTime(1962, 1, 1).AsEpochInMicroSeconds();
+
+                    // I øvrigt er der i forbindelse med ingres-afviklingen blevet indsat en gammel højde.
+                    // Den nulstiller vi her
+
+                    for (var i = 0; i < smsStationHistory.Count; i++)
+                    {
+                        smsStationHistory[i].DateFrom = new DateTime(1962, 1, 1);
+
+                        if (smsStationHistory[i].Hha == 18)
+                        {
+                            smsStationHistory[i].Hha = null;
+                        }
+                    }
+                }
+
+                if (currentStationId == "23327") // Kolding snestation
+                {
+                    // Kolding snestation har ikke nogen wgs-koordinater i sms,
+                    // så vi sætter den manuelt (koordinater modtaget af Ib Damsgård pr mail den 10. december 2020)
+                    var wgs_lat = 55.471557;
+                    var wgs_long = 9.484661;
+
+                    for (var i = 0; i < smsStationHistory.Count; i++)
+                    {
+                        smsStationHistory[i].Wgs_lat = wgs_lat;
+                        smsStationHistory[i].Wgs_long = wgs_long;
+                    }
+                }
+
+                var rowWasMigratedFromStatDB = false;
+
+                for (var i = smsStationHistory.Count - 1; i > 0; i--)
+                {
+                    var rowBefore = smsStationHistory[i - 1];
+                    var rowAfter = smsStationHistory[i];
+
+                    if (rowBefore.ObjectId != rowAfter.ObjectId)
+                    {
+                        // We need this for resetting height values for old rows (migrated from statdb)
+                        rowWasMigratedFromStatDB = true;
+
+                        if (!includeArchivedStations)
+                        {
+                            // Hvis vi opererer med at stationen kun anskues som den samme, hvis den har samme OBJEKT ID, så er vi færdige nu
+                            break;
+                        }
+                    }
+
+                    if (rowWasMigratedFromStatDB && rowBefore.Hha != null)
+                    {
+                        rowBefore.Hha = null;
+                    }
+
+                    if (setHeightToNullForTideGaugeStations && result.Last().type.Substring(0, 4).ToLower() == "tide")
+                    {
+                        rowBefore.Hha = null;
+                        rowAfter.Hha = null;
+                    }
+
+                    if (overwriteCountry)
+                    {
+                        rowBefore.Country = currentSMSRow.Country;
+                    }
+
+                    if (overwriteOwner)
+                    {
+                        rowBefore.StationOwner = currentSMSRow.StationOwner;
+                    }
+
+                    if (overwriteRegionId)
+                    {
+                        rowBefore.Regionid = currentSMSRow.Regionid;
+                    }
+
+                    if (overwriteWMOCountryCode)
+                    {
+                        rowBefore.Wmocountrycode = currentSMSRow.Wmocountrycode;
+                    }
+
+                    if (overwriteWMOStationId)
+                    {
+                        rowBefore.Wmostationid = currentSMSRow.Wmostationid;
+                    }
+
+                    if (overwriteNameForStationsWithHistoricalTypos)
+                    {
+                        if (_stationsThatOnlySwitchedNameBecauseATypoWasCorrected.Contains(rowAfter.StationName))
+                        {
+                            rowBefore.StationName = rowAfter.StationName;
+                        }
+                    }
+
+                    // Hvis wgs-koordinaterne ikke fremgår af den ældste af de 2 rækker men i øvrigt gælder,
+                    // at UTM-koordinaterne fremgår af begge rækker og er identiske, så kopierer vi
+                    // wgs-koordinaterne fra den nyeste til den ældste række.
+                    // Vi gør dog en undtagelse for Tarm
+                    if (fillOutMissingWgsCoordinatesIfUtmCoordinatesUnchanged)
+                    {
+                        // Hvis wgs-koordinaterne går fra at være kendt til at være ukendt..
+                        if ((rowAfter.Wgs_lat.HasValue && !rowBefore.Wgs_lat.HasValue) ||
+                            (rowAfter.Wgs_long.HasValue && !rowBefore.Wgs_long.HasValue))
+                        {
+                            // .. så check om utm-koordinaterne er kendt i begge rækker ..
+                            if (rowAfter.Si_utm == rowBefore.Si_utm &&
+                                rowAfter.Si_northing == rowBefore.Si_northing &&
+                                rowAfter.Si_easting == rowBefore.Si_easting &&
+                                rowAfter.Si_geo_lat == rowBefore.Si_geo_lat &&
+                                rowAfter.Si_geo_long == rowBefore.Si_geo_long)
+                            {
+                                // .. og hvis de er, så kopier wgs-koordinaterne til den ælste række
+                                rowBefore.Wgs_lat = rowAfter.Wgs_lat;
+                                rowBefore.Wgs_long = rowAfter.Wgs_long;
+                            }
+                            else
+                            {
+                                // Lige præcis for Tarm overskriver vi lokationen, selv om UTM-koordinaterne
+                                // er forskellige .... det skyldes, at Tarm blev oprettet i november 2019,
+                                // og at dens lokation først blev indtastet i december 2019
+                                // Sørg dog for ikke at skrive Tarms lokationen for Borris, som var dens navn før
+                                if (currentStationName.ToLower() == "tarm")
+                                {
+                                    rowBefore.Wgs_lat = rowAfter.Wgs_lat;
+                                    rowBefore.Wgs_long = rowAfter.Wgs_long;
+                                }
+                            }
+                        }
+                    }
+
+                    if (fillOutMissingStationHeightIfLocationUnchanged)
+                    {
+                        if (!rowBefore.Hha.HasValue &&
+                            rowAfter.Hha.HasValue)
+                        {
+                            if (rowBefore.Wgs_lat.HasValue &&
+                                rowBefore.Wgs_long.HasValue &&
+                                rowAfter.Wgs_lat.HasValue &&
+                                rowAfter.Wgs_long.HasValue)
+                            {
+                                var latDiff = System.Math.Abs(rowAfter.Wgs_lat.Value - rowBefore.Wgs_lat.Value);
+                                var longDiff = System.Math.Abs(rowAfter.Wgs_long.Value - rowBefore.Wgs_long.Value);
+
+                                if (latDiff < 0.002 &&
+                                    longDiff < 0.002)
+                                {
+                                    rowBefore.Hha = rowAfter.Hha;
+                                }
+                            }
+                        }
+                    }
+
+                    // For vandstandsstationer overskriver vi eventuelle gamle navne med det nyeste navn
+                    if (result.First().type.Substring(0, 4).ToLower() == "tide")
+                    {
+                        rowBefore.StationName = result.First().name;
+                    }
+
+
+                    // Nu ser vi så, om de 2 rækker er forskellige
+                    var columnsWithDifferentValues = rowBefore.Difference(rowAfter);
+
+                    // Vi laver den uanset om den skal tilføjes, da vi skal bruge dens timeValidFrom i tilfælde af at den ikke skal tilføjes
+                    var newEarliestFrieDataStationRowCandidate = rowBefore.ConvertToFrieDataStation(convertFromDMIStationIdToKDIStationId);
+
+                    if (columnsWithDifferentValues.Count > 0)
+                    {
+                        // De 2 rækker er tilsyneladende forskellige - nu finder vi så lige ud af, om de også er det i Frie Data perspektiv
+
+                        // Når der sker en opdatering af en station, som allerede var i databasen, da man startede, så passer gdb_date_from generelt ikke med gdb_date_to
+                        // (det er de tidspunkter, der er fremhævet med rødt i viewet)
+                        // Når det sker, så "lukker vi hullet" ved at overskrive gdb_date_from i den seneste række
+                        if (rowAfter.GdbFromDate != rowBefore.GdbToDate)
+                        {
+                            result.Last().timeValidFrom = rowBefore.GdbToDate.AsEpochInMicroSeconds();
+                        }
+                    }
+
+                    // Opdaterer også "fødselsdag" og "dødsdag" (skal gøres uanset om der er forskel)
+                    oldestDate = UpdateOldestDateTime(oldestDate, newEarliestFrieDataStationRowCandidate);
+                    mostRecentDate = UpdateMostRecentDateTime(mostRecentDate, newEarliestFrieDataStationRowCandidate);
+
+                    if (columnsWithDifferentValues.Count > 0)
+                    {
+                        // Check lige om det er en hhp, der er indtastet umiddelbart efter en hha
+                        var timeSpanOfRowBefore = rowBefore.GdbToDate - rowBefore.GdbFromDate;
+
+                        // Hvis der er mindre end 10 minutter mellem hha og hhp, så opererer vi med at de effektivt er indtastet samtidigt
+                        // Hvis det kun er hha eller hhp, der har ændret sig, og forskellen mellem indtastningerne er under 10 minutter,
+                        // så gør vi lige som vi normalt gør, når vi ikke anskuer den for at være anderledes i Frie Data perspektiv,
+                        // dvs vi ignorerer den, men snupper tidspunktet for hvornår den blev lavet og overskriver værdierne i den række,
+                        // der repræsenterer næste tidsperiode
+                        if (timeSpanOfRowBefore < new TimeSpan(0, 10, 0) &&
+                            columnsWithDifferentValues.Count == 1 &&
+                            (columnsWithDifferentValues.Single() == "hha" || columnsWithDifferentValues.Single() == "hhp"))
+                        {
+                            result.Last().timeValidFrom = newEarliestFrieDataStationRowCandidate.timeValidFrom;
+
+                            // Sørg også for at skrive både hha og hhp i rowbefore, så det slår igennem som en samlet ændring,
+                            // når vi kigger på næste række - uanset om hha føres op pga uændret lokation
+                            rowBefore.Hha = rowAfter.Hha;
+                            rowBefore.Hhp = rowAfter.Hhp;
+                        }
+                        else
+                        {
+                            result.Add(newEarliestFrieDataStationRowCandidate);
+                        }
+                    }
+                    else
+                    {
+                        // Hvis ikke den er anderledes i Frie Data Perspektiv, så ignorerer vi den bare, men snupper tidspunktet for hvornår den blev lavet
+                        // og overskriver værdierne i den række, der repræsenterer næste tidsperiode
+                        // (Vi klapper så at sige de 2 rækker sammen)
+                        result.Last().timeValidFrom = newEarliestFrieDataStationRowCandidate.timeValidFrom;
+                    }
+                }
+
+                // Vend rækkefølgen, så den seneste række ligger til sidst
+                result.Reverse();
+
+                // Vi bruger ældste fundne dato til at markere ældste starttid for valid time
+                result.First().timeValidFrom = oldestDate;
+
+                // Lav korrektioner, der gælder for alle rækker (for almindelige stationer)
+                result.ForEach(s =>
+                {
+                    s.timeOperationFrom = oldestDate;
+                    s.timeOperationTo = mostRecentDate;
+                });
+            }
+
+            // Lav korrektioner, der gælder for alle rækker (uanset, om det er almindelige stationer eller historiske vandstandsstationer)
+            result.ForEach(s =>
+            {
+                s._id = Guid.NewGuid().ToString();
+                s.timeCreated = timeNow;
+            });
+
+            // Vi laver lige en sidste korrektion for stationer overtaget fra Farvandsvæsenet i 2012
+            if (_stationsTakenOverFromFarvandsvaesenet.Keys.Contains(result.Last().stationId))
+            {
+                var minTimeForFarvandsvaesenetsStationer = new DateTime(2012, 1, 1).AsEpochInMicroSeconds();
+
+                result = result.SkipWhile(s => s.timeValidTo < minTimeForFarvandsvaesenetsStationer).ToList();
+
+                result.ForEach(s =>
+                {
+                    if (s.timeOperationFrom < minTimeForFarvandsvaesenetsStationer)
+                    {
+                        s.timeOperationFrom = minTimeForFarvandsvaesenetsStationer;
+                        s.timeValidFrom = minTimeForFarvandsvaesenetsStationer;
+                    }
+                });
+
+                if (result.Count() > 1)
+                {
+                    // Her er vi lige netop for Skagen 20002, derfor skal vi lave en sidste korrektion
+                    // Rent faktisk så lader Skagen havn til at være den eneste station for hvilken der gælder,
+                    // at Ib har sat en dødsdato for en station ca en måned tidligere, hvorefter han har markeret
+                    // stationen som nedlagt
+                    if (result.First().stationId != "20002" ||
+                        result.Count() != 2)
+                    {
+                        // Hvis vi er her, er der noget galt - nok fordi der er sket mere med Skagen Havn
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        result.First().timeValidTo = result.First().timeOperationTo;
+                        result.Last().timeValidFrom = result.Last().timeOperationTo;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static Station TrimLatLongCoordinates(
+            this Station station,
+            int decimals)
+        {
+            station.location.latitude = station.location.latitude.TrimCoordinate(decimals);
+            station.location.longitude = station.location.longitude.TrimCoordinate(decimals);
+
+            return station;
+        }
+
+        public static MeteorologicalStation ConvertToFrieDataOGCMeteorologicalStation(
+            this Station freeDataStation,
+            DateTime currentTime)
+        {
+            var station = new MeteorologicalStation();
+
+            station.type = "Feature";
+            station._id = Guid.NewGuid().ToString();
+            station.lon = freeDataStation.location.longitude;
+            station.lat = freeDataStation.location.latitude;
+            station.timeValidTo = freeDataStation.timeValidTo;
+            station.timeValidFrom = freeDataStation.timeValidFrom;
+
+            station.geometry = new StationLocation
+            {
+                type = "Point",
+                coordinates = new List<double?>
+                {
+                    freeDataStation.location.longitude,
+                    freeDataStation.location.latitude
+                }
+            };
+
+            station.properties = new MeteorologicalStationProperties
+            {
+                country = freeDataStation.country,
+                //instrumentParameter = freeDataStation.instrumentParameter,
+                name = freeDataStation.name,
+                owner = freeDataStation.owner,
+                parameterId = freeDataStation.parameterId,
+                regionId = freeDataStation.regionId,
+                stationId = freeDataStation.stationId,
+                status = freeDataStation.status,
+                type = freeDataStation.type,
+                stationHeight = freeDataStation.location.height,
+                wmoCountryCode = freeDataStation.wmoCountryCode,
+                wmoStationId = freeDataStation.wmoStationId,
+                created = currentTime.AsRFC3339(false),
+                updated = null,
+                operationFrom = freeDataStation.timeOperationFrom.HasValue ? freeDataStation.timeOperationFrom.Value.AsRFC3339() : null,
+                operationTo = freeDataStation.timeOperationTo.HasValue ? freeDataStation.timeOperationTo.Value.AsRFC3339() : null,
+                validFrom = freeDataStation.timeValidFrom.HasValue ? freeDataStation.timeValidFrom.Value.AsRFC3339() : null,
+                validTo = freeDataStation.timeValidTo.HasValue ? freeDataStation.timeValidTo.Value.AsRFC3339() : null
+            };
+
+            var barHeightInstrumentParameter = freeDataStation.instrumentParameter.SingleOrDefault(s => s.parameterId == "bar_height");
+
+            if (barHeightInstrumentParameter != null)
+            {
+                station.properties.barometerHeight = barHeightInstrumentParameter.value;
+            }
+
+            return station;
+        }
+
         private static Dictionary<int, List<StationInformation>> GroupByObjectId(
             this IEnumerable<StationInformation> stationInformations)
         {
@@ -775,6 +1239,139 @@ namespace DMI.SMS.Application
             }
 
             return _kdiStationIdMap[s];
+        }
+
+        // Acts like a Min operator, returning the oldest date of the one passed to the method
+        // and the timeValidFrom and timeOperationFrom fields of the station row.
+        // Note that an actual date overrides a null
+        private static long? UpdateOldestDateTime(
+            long? oldestSoFar,
+            Station station)
+        {
+            var result = oldestSoFar;
+
+            if (station.timeValidFrom.HasValue &&
+                (result == null || result.Value > station.timeValidFrom.Value))
+            {
+                result = station.timeValidFrom.Value;
+            }
+
+            if (station.timeOperationFrom.HasValue &&
+                (result == null || result.Value > station.timeOperationFrom.Value))
+            {
+                result = station.timeOperationFrom.Value;
+            }
+
+            return result;
+        }
+
+        // Acts like a Max operator, returning the most recent date of the one passed to the method
+        // and the timeValidTo and timeOperationTo fields of the station row.
+        // Note that a null overrides an actual date, since null indicates that the station is still active
+        private static long? UpdateMostRecentDateTime(
+            long? mostRecentSoFar,
+            Station station)
+        {
+            var result = mostRecentSoFar;
+
+            if (!result.HasValue)
+            {
+                return result;
+            }
+
+            //if (station.timeValidTo.HasValue &&
+            //    result.Value < station.timeValidTo.Value)
+            //{
+            //    result = station.timeValidTo.Value;
+            //}
+
+            if (station.timeOperationTo.HasValue &&
+                result.Value < station.timeOperationTo.Value)
+            {
+                result = station.timeOperationTo.Value;
+            }
+
+            return result;
+        }
+
+        private static HashSet<string> Difference(
+            this StationInformation row1,
+            StationInformation row2)
+        {
+            var columnsWithDifferentValues = new HashSet<string>();
+
+            if (row1.StationName.FixCapitalization() != row2.StationName.FixCapitalization())
+            {
+                columnsWithDifferentValues.Add("stationname");
+            }
+
+            if (row1.StationIDDMI != row2.StationIDDMI)
+            {
+                columnsWithDifferentValues.Add("stationid_dmi");
+            }
+
+            if (row1.Stationtype != row2.Stationtype)
+            {
+                columnsWithDifferentValues.Add("stationtype");
+            }
+
+            if (row1.Country != row2.Country)
+            {
+                columnsWithDifferentValues.Add("country");
+            }
+
+            if (row1.Status != row2.Status)
+            {
+                columnsWithDifferentValues.Add("status");
+            }
+
+            if (row1.StationOwner != row2.StationOwner)
+            {
+                columnsWithDifferentValues.Add("stationowner");
+            }
+
+            if (row1.Wmostationid != row2.Wmostationid)
+            {
+                columnsWithDifferentValues.Add("wmostationid");
+            }
+
+            if (row1.Regionid != row2.Regionid)
+            {
+                columnsWithDifferentValues.Add("regionid");
+            }
+
+            if (row1.Wmocountrycode != row2.Wmocountrycode)
+            {
+                columnsWithDifferentValues.Add("wmocountrycode");
+            }
+
+            if (row1.Hha != row2.Hha)
+            {
+                columnsWithDifferentValues.Add("hha");
+            }
+
+            if (row1.Hhp != row2.Hhp)
+            {
+                columnsWithDifferentValues.Add("hhp");
+            }
+
+            if (row1.Wgs_lat.TrimCoordinate(4).AsString() != row2.Wgs_lat.TrimCoordinate(4).AsString())
+            {
+                columnsWithDifferentValues.Add("wgs_lat");
+            }
+
+            if (row1.Wgs_long.TrimCoordinate(4).AsString() != row2.Wgs_long.TrimCoordinate(4).AsString())
+            {
+                columnsWithDifferentValues.Add("wgs_long");
+            }
+
+            return columnsWithDifferentValues;
+        }
+
+        private static string AsString(
+            this double? number)
+        {
+            return number.HasValue ? string.Format(CultureInfo.InvariantCulture, "{0}", number) : "";
         }
     }
 }

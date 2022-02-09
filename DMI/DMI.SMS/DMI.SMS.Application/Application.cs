@@ -166,10 +166,6 @@ namespace DMI.SMS.Application
                     outputFolder.Create();
                 }
 
-                var outputJsonFullFileName = Path.Combine(outputFolderName, outputJsonFileName);
-                var outputCsvFullFileName = Path.Combine(outputFolderName, outputCsvFileName);
-                var outputOGCJsonFullFileName = Path.Combine(outputFolderName, outputOGCJsonFileName);
-
                 //var smsDBHost = "172.25.7.23";
                 //var smsDBName = "sms_prod";
                 //var smsDBUser = SettingsViewModel.SMSDatabaseUser;
@@ -224,26 +220,12 @@ namespace DMI.SMS.Application
 
                 File.WriteAllLines("station_names.txt", stations.Select(s => s.name));
 
-                /*
                 // Add historical meteorological stations
+                var koldingSneStation = stationData
+                    .Single(row => row.StationIDDMI == 23327);
 
-                // Kolding snestation (23327)
-                var koldingSnowStation = await _smsDBDataProvider.RetrieveDataFromStationInformationTable(
-                    smsDBHost, smsDBName, smsDBUser, smsDBPassword, null, null, new List<int> { 14 }, new List<int> { 23327 }, null, true);
 
-                stations.Add(koldingSnowStation.Single().ConvertToFrieDataStation(false));
-
-                // Roerslev snestation (28032)
-                //var roerslevSnowStation = await _smsDBDataProvider.RetrieveDataFromStationInformationTable(
-                //    smsDBHost, smsDBName, smsDBUser, smsDBPassword, null, null, new List<int> { 14 }, new List<int> { 28032 }, null, true);
-
-                //stations.Add(roerslevSnowStation.Single().ConvertToFrieDataStation(false));
-
-                // Årslev snestation (28280)
-                //var aarslevSnowStation = await _smsDBDataProvider.RetrieveDataFromStationInformationTable(
-                //    smsDBHost, smsDBName, smsDBUser, smsDBPassword, null, null, new List<int> { 14 }, new List<int> { 28280 }, null, true);
-
-                //stations.Add(aarslevSnowStation.Single().ConvertToFrieDataStation(false));
+                stations.Add(koldingSneStation.ConvertToFrieDataStation(false));
 
                 // Tilføj Vestervig snestation - den kom ikke med over fra SnowStation tabellen til StationInformation tabellen
                 stations.Add(new Station
@@ -273,23 +255,21 @@ namespace DMI.SMS.Application
                 // Traverse the list of stations in order to retrieve details for each of them
                 var nStations = stations.Count;
 
-                StationMasterDetailViewModel.StationMasterViewModels.Clear();
                 var stationsWithHistory = new List<Station>();
                 var stationCount = 0;
 
                 // Traverse all stations and add details for them
                 foreach (var station in stations)
                 {
-                    List<Domain.SMS.StationInformationRow> smsStationHistory = null;
+                    List<StationInformation> smsStationHistory = null;
                     List<Station> frieDataStationHistory = null;
-                    List<Domain.SMS.ElevationAnglesRow> elevationAngles = null;
 
-                    if (IncludeStationHistory)
+                    if (true)
                     {
                         if (station.stationId == "21100") // Vestervig (Manual snow)
                         {
-                            message = $"Generating history for station {station.stationId} ({station.name}) (because it is not in the StationInformation table of the SMS database)";
-                            _logger.WriteLine(message, true, true, false);
+                            //message = $"Generating history for station {station.stationId} ({station.name}) (because it is not in the StationInformation table of the SMS database)";
+                            //_logger.WriteLine(message, true, true, false);
 
                             frieDataStationHistory = new List<Station>();
 
@@ -317,48 +297,16 @@ namespace DMI.SMS.Application
                             });
 
                             frieDataStationHistory.Add(station);
-
-                            outputFolderName = Path.Combine(SettingsViewModel.OutputDataFolder, "StationHistory_FD");
-                            outputFolder = new DirectoryInfo(outputFolderName);
-
-                            if (!outputFolder.Exists)
-                            {
-                                outputFolder.Create();
-                            }
-
-                            var fileNameFDHistory = $"{station.stationId}_{station.type}_History_FD.txt";
-                            frieDataStationHistory.WriteStationHistoryToFile(Path.Combine(outputFolderName, fileNameFDHistory));
-
                             stationsWithHistory = stationsWithHistory.Concat(frieDataStationHistory).ToList();
                         }
                         else
                         {
-                            message = $"Inspecting history for station {station.stationId} ({station.name})..";
-                            _logger.WriteLine(message, true, true, false);
-
+                            // Inspect station history
                             smsStationHistory = stationDataRaw
-                                .Where(row => row.stationid_dmi == station.stationId.ConvertToSMSStationId())
-                                .Where(row => row.stationtype == station.type.ConvertToStationTypeCode())
+                                .Where(row => row.StationIDDMI == station.stationId.ConvertToSMSStationId())
+                                .Where(row => row.Stationtype == station.type.ConvertToStationType())
+                                .OrderBy(row => row.GdbFromDate)
                                 .ToList();
-
-                            // Write the full sms history to file
-                            outputFolderName = Path.Combine(SettingsViewModel.OutputDataFolder, "StationHistory_SMS");
-                            outputFolder = new DirectoryInfo(outputFolderName);
-
-                            if (!outputFolder.Exists)
-                            {
-                                outputFolder.Create();
-                            }
-
-                            var outputDirectory = new DirectoryInfo(Path.Combine(SettingsViewModel.OutputDataFolder, "StationHistory"));
-
-                            if (!outputDirectory.Exists)
-                            {
-                                outputDirectory.Create();
-                            }
-
-                            var fileNameSMSHistory = $"{station.stationId}_{station.type}_History_SMS.txt";
-                            smsStationHistory.WriteStationHistoryToFile(Path.Combine(outputDirectory.FullName, fileNameSMSHistory));
 
                             // Also generate FrieData history and dump to file
                             frieDataStationHistory = smsStationHistory.AsFrieDataStationHistory(
@@ -375,40 +323,18 @@ namespace DMI.SMS.Application
                                 null,
                                 null,
                                 false,
-                                timeNow,
-                                _logger);
-
-                            outputFolderName = Path.Combine(SettingsViewModel.OutputDataFolder, "StationHistory_FD");
-                            outputFolder = new DirectoryInfo(outputFolderName);
-
-                            if (!outputFolder.Exists)
-                            {
-                                outputFolder.Create();
-                            }
-
-                            var fileNameFDHistory = $"{station.stationId}_{station.type}_History_FD.txt";
-                            frieDataStationHistory.WriteStationHistoryToFile(Path.Combine(outputFolderName, fileNameFDHistory));
+                                timeNow);
 
                             stationsWithHistory = stationsWithHistory.Concat(frieDataStationHistory).ToList();
                         }
                     }
 
-                    var toleranceInSeconds = 10;
-
-                    // Pass a "station with details" object to the StationMasterDetail ViewModel
-                    StationMasterDetailViewModel.StationMasterViewModels.Add(new StationMasterViewModel(
-                        station.stationId,
-                        station.name,
-                        station.type,
-                        smsStationHistory,
-                        frieDataStationHistory,
-                        elevationAngles,
-                        toleranceInSeconds,
-                        null,
-                        null));
-
                     stationCount++;
-                    CurrentProgress = (int)System.Math.Round(2.0 + 96.0 * stationCount / nStations);
+
+                    if (progressCallback.Invoke(2.0 + 96.0 * stationCount / nStations, ""))
+                    {
+                        return;
+                    }
                 }
 
                 stations = stationsWithHistory;
@@ -426,20 +352,8 @@ namespace DMI.SMS.Application
                 // Trim the lat long coordinates
                 stations = stations.Select(s => s.TrimLatLongCoordinates(4)).ToList();
 
-                // Er der forskel på, hvilke stationer du har fra sms og så dem du har i reference-matricerne?
-                stations
-                    .Select(s => s.stationId).Distinct().ToList()
-                    .CompareStringLists(
-                        "station ids from sms",
-                        paramsDictionary.Keys.ToList(),
-                        "station ids from pregenerated reference lists",
-                        _logger);
-
                 // Sæt parametre på stationerne eller mere specifikt på alle stationsrækkerne
-                // Desuden kontrol af, at:
-                // * alle stationer udbyder mindst én officiel parameter
-                // * alle officielle parametre er udbudt af mindst én station
-                if (IncludeParameters)
+                if (true)
                 {
                     var officialParametersEncountered = new HashSet<string>();
                     var idsOfStationsWithoutParameters = new List<string>();
@@ -459,35 +373,8 @@ namespace DMI.SMS.Application
                         else
                         {
                             idsOfStationsWithoutParameters.Add(s.stationId);
-
-                            var warningMessage = $"WARNING - NO PARAMETERS FOUND FOR STATION: {s.stationId} ({s.name})..";
-                            _logger.WriteLine(warningMessage, true, true, false);
                         }
                     });
-
-                    // Summary, part 1
-                    if (idsOfStationsWithoutParameters.Count == 0)
-                    {
-                        message = $"All {stationCount} stations each deal in at least one of the {allParams.Count} official parameters";
-                        _logger.WriteLine(message, true, true, false);
-                    }
-                    else
-                    {
-                        var warningMessage = $"WARNING - NO PARAMETERS FOUND FOR {idsOfStationsWithoutParameters.Count} OUT OF {stationCount} STATIONS";
-                        _logger.WriteLine(warningMessage, true, true, false);
-                    }
-
-                    // Summary, part 2
-                    if (officialParametersEncountered.Count == allParams.Count)
-                    {
-                        message = $"All {allParams.Count} official parameters are each published by at least one station";
-                        _logger.WriteLine(message, true, true, false);
-                    }
-                    else
-                    {
-                        var warningMessage = $"WARNING - {allParams.Count - officialParametersEncountered.Count} official parameters were not published by any station";
-                        _logger.WriteLine(warningMessage, true, true, false);
-                    }
                 }
 
                 // Fix errors and make corrections
@@ -502,28 +389,18 @@ namespace DMI.SMS.Application
 
                 stations = stations.OrderBy(s => s.stationId).ToList();
 
-                if (TrimHistoricalData)
-                {
-                    stations = stations.AsFrieDataStationHistoryCollapsedToActual();
-                }
-
-                stations.WriteStationsToJsonFile(outputJsonFullFileName);
-                _logger.WriteLine($"  Saved {outputJsonFullFileName}", true, true, false);
+                stations.WriteStationsToJsonFile(outputJsonFileName);
 
                 var allColumns = true;
                 var skipInactiveRecords = false;
-                stations.WriteStationsToCsvFile(outputCsvFullFileName, allColumns, skipInactiveRecords);
-                _logger.WriteLine($"  Saved {outputCsvFullFileName}", true, true, false);
+                stations.WriteStationsToCsvFile(outputCsvFileName, allColumns, skipInactiveRecords);
 
-                var ogcStations = stations.Select(s => s.ConvertToFrieDataOGCMeteorologicalStation(DateTime.UtcNow)).ToList();
-                ogcStations.WriteOGCMeteorologicalStationsToJsonFile(outputOGCJsonFullFileName);
-                _logger.WriteLine($"  Saved {outputOGCJsonFullFileName}", true, true, false);
+                var ogcStations = stations
+                    .Select(s => s.ConvertToFrieDataOGCMeteorologicalStation(DateTime.UtcNow)).ToList();
 
-                message = $"Completed generating {modeAsString} station list ({stationCount} stations)";
-                _logger.WriteLine(message, true, true, false);
-                CurrentProgress = 100;
-                await Task.Delay(100);
-                */
+                ogcStations.WriteOGCMeteorologicalStationsToJsonFile(outputOGCJsonFileName);
+
+                progressCallback.Invoke(100, "");
             });
         }
     }

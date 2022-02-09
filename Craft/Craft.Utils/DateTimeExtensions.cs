@@ -112,5 +112,21 @@ namespace Craft.Utils
 
             return result;
         }
+
+        public static string AsRFC3339(
+            this long epochInMicroseconds)
+        {
+            var dateTime = epochInMicroseconds.ConvertFromEpochInMicrosecondsToDateTime();
+
+            var year = dateTime.Year;
+            var month = dateTime.Month.ToString().PadLeft(2, '0');
+            var day = dateTime.Day.ToString().PadLeft(2, '0');
+
+            var hour = dateTime.Hour.ToString().PadLeft(2, '0');
+            var minute = dateTime.Minute.ToString().PadLeft(2, '0');
+            var second = dateTime.Second.ToString().PadLeft(2, '0');
+
+            return $"{year}-{month}-{day}T{hour}:{minute}:{second}Z";
+        }
     }
 }
