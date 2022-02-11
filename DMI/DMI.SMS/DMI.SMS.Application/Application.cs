@@ -9,6 +9,7 @@ using DMI.SMS.Application;
 using DMI.FD.Domain;
 using DMI.FD.Domain.IO;
 using DMI.SMS.Domain.Entities;
+using DMI.SMS.IO;
 
 namespace DMI.SMS.Application
 {
@@ -358,6 +359,11 @@ namespace DMI.SMS.Application
                                 .Where(row => row.Stationtype == station.type.ConvertToStationType())
                                 .OrderBy(row => row.GdbFromDate)
                                 .ToList();
+
+                            var dataIOHandler = new DataIOHandler();
+                            dataIOHandler.WriteStationHistoryToFile(
+                                smsStationHistory,
+                                $"{station.stationId}_{station.type}_History_SMS.txt");
 
                             // Also generate FrieData history and dump to file
                             frieDataStationHistory = smsStationHistory.AsFrieDataStationHistory(

@@ -277,5 +277,47 @@ namespace DMI.SMS.IO
 
             return result;
         }
+
+        public void WriteStationHistoryToFile(
+            List<StationInformation> stationHistory,
+            string fileName)
+        {
+            var headerAsListOfStrings = stationHistory
+                .First()
+                .GenerateHeaderAsListOfString();
+
+            var linesAsListsOfStrings = stationHistory
+                .Select(s => s.AsListOfStrings())
+                .ToList();
+
+            var columnWidths = headerAsListOfStrings
+                .Select(h => h.Length + 1)
+                .ToList();
+
+            linesAsListsOfStrings.ForEach(line =>
+            {
+                columnWidths = columnWidths
+                    .Zip(line, (first, second) => System.Math.Max(first, second.Length + 1))
+                    .ToList();
+            });
+
+            using (var streamWriter = new StreamWriter(fileName))
+            {
+                var header = Enumerable.Range(0, columnWidths.Count)
+                    .Select(c => string.Format($"{{0,{-columnWidths[c]}}}", headerAsListOfStrings[c]))
+                    .Aggregate((c, n) => c + ", " + n);
+
+                streamWriter.WriteLine(header);
+
+                linesAsListsOfStrings.ForEach(lineAsListsOfStrings =>
+                {
+                    var line = Enumerable.Range(0, columnWidths.Count)
+                        .Select(c => string.Format($"{{0,{-columnWidths[c]}}}", lineAsListsOfStrings[c]))
+                        .Aggregate((c, n) => c + ", " + n);
+
+                    streamWriter.WriteLine(line);
+                });
+            }
+        }
     }
 }
