@@ -49,7 +49,6 @@ namespace DMI.SMS.Application
         public static Dictionary<int, List<int>> _blackListedStationRowsIdentifiedByObjectId = new Dictionary<int, List<int>>
         {
             { 6051, new List<int>{ 102091, 102092 } },                                                 // Vestervig
-            //{ 6079, new List<int>{ 102177, 102178, 102179, 102180 } },                               // Anholt Havn
             { 6116, new List<int>{ 102273 } },                                                         // Store Jyndevad
             { 6147, new List<int>{ 102325, 102326, 102327, 102329, 102332, 102337, 102338, 102341 } }, // Vindebæk Kyst
             { 6181, new List<int>{ 102447 } },                                                         // Jægersborg
@@ -240,12 +239,12 @@ namespace DMI.SMS.Application
                 stationDataRaw = stationDataRaw.RollbackToPreviousDate(dateTimeOfInterest);
 
                 // Remove records with blacklisted station ids
-                var stationData = stationDataRaw
+                stationDataRaw = stationDataRaw
                     .Where(row => !(row.StationIDDMI.HasValue && 
                                   _blackListedStationIds.Keys.Contains(row.StationIDDMI.Value)))
                     .ToList();
 
-                stationData = stationData
+                stationDataRaw = stationDataRaw
                     .Where(row => !(
                         row.StationIDDMI.HasValue && 
                         _blackListedStationRowsIdentifiedByObjectId.Keys.Contains(row.StationIDDMI.Value) &&
@@ -253,7 +252,7 @@ namespace DMI.SMS.Application
                     .ToList();
 
                 // Filter out everything that is not current
-                stationData = stationData
+                var stationData = stationDataRaw
                     .Where(row => row.GdbToDate.Year == 9999)
                     .ToList();
 

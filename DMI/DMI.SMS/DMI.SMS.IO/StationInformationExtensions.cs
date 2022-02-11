@@ -99,7 +99,6 @@ namespace DMI.SMS.IO
                 stationInformation.Hha.HasValue ? string.Format(CultureInfo.InvariantCulture, "{0}", stationInformation.Hha.Value) : "",
                 stationInformation.Hhp.HasValue ? string.Format(CultureInfo.InvariantCulture, "{0}", stationInformation.Hhp.Value) : "",
                 stationInformation.Wmorbsn.HasValue ? stationInformation.Wmorbsn.Value.ToString() : "",
-                stationInformation.Wmorbsn.HasValue ? stationInformation.Wmorbsn.Value.ToString() : "",
                 stationInformation.Wmorbcn.HasValue ? stationInformation.Wmorbcn.Value.ToString() : "",
                 stationInformation.Wmorbsnradio.HasValue ? stationInformation.Wmorbsnradio.Value.ToString() : "",
                 stationInformation.Wgs_lat.HasValue ? string.Format(CultureInfo.InvariantCulture, "{0}", stationInformation.Wgs_lat.Value) : "",
