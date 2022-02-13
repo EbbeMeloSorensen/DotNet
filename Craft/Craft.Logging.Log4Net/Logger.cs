@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using log4net;
+using log4net.Config;
 
 namespace Craft.Logging.Log4Net
 {
@@ -22,6 +25,9 @@ namespace Craft.Logging.Log4Net
 
             if (log == null)
             {
+                var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+                XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+
                 log = LogManager.GetLogger(aspect);
                 _aspectToLoggerMap[aspect] = log;
             }
