@@ -2,6 +2,14 @@ Done:
 * Gør det muligt at kalde en async metode efter at have åbnet en dialog
 
 Todo:
+* Log på banen igen i DMI.SMS
+  - Sikr, at logging til fil virker, lige som i DD. Det skal virke både når man kører gui'en og console appen
+  - Byg et logging vindue som i DD
+  - Skriv i loggen, hvor mange rækker, der loades op af fil repoet
+  - Skriv i loggen, hvor mange rækker, der exporteres
+* Færdiggør funktionalitet til at eksportere
+  - Verificer, at export fra en underliggende file repo giver en fil, der er identisk med file repo filen
+  - Mulighed for indskrænke sig til at eksportere det, der passerer filter settings
 * Gør det muligt at kalde MakeBreakfast fra command line applikationen
 * Implement support for rolling back to an arbitrary date of interest
 * Make is possible to extract the Frie Data station list 
