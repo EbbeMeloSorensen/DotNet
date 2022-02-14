@@ -26,10 +26,13 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New Station Information" 
                           Command="{Binding CreateStationInformationCommand}"/>
-                <!--<MenuItem Header="_Export" 
-                          Command="{Binding ExportDataCommand}"/>
-                <MenuItem Header="_Import" 
-                          Command="{Binding ImportDataCommand}"/>-->
+                <Separator/>
+                <MenuItem Header="Export Data" 
+                          Command="{Binding ExportDataCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <MenuItem Header="Import Data" 
+                          Command="{Binding ImportDataCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
                 <Separator/>
                 <MenuItem Header="Make _Breakfast" 
                           Command="{Binding MakeBreakfastCommand}"

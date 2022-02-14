@@ -20,19 +20,10 @@ namespace DMI.SMS.ViewModel
     {
         private readonly Application.Application _application;
         private readonly IDialogService _applicationDialogService;
-        private string _mainWindowTitle;
-        private Brush _pointBrush = new SolidColorBrush(Colors.DarkRed);
-        private bool _classifyRecordsWithCondition;
+        private readonly Brush _pointBrush = new SolidColorBrush(Colors.DarkRed);
         private readonly ObservableObject<bool> _observableForClassifyRecordsWithCondition;
-
-        private RelayCommand<object> _createStationInformationCommand;
-        private RelayCommand _deleteSelectedStationInformationsCommand;
-        //private RelayCommand _exportDataCommand;
-        //private RelayCommand _importDataCommand;
-        private AsyncCommand<object> _makeBreakfastCommand;
-        private AsyncCommand<object> _extractMeteorologicalStationsCommand;
-        private AsyncCommand<object> _extractOceanographicalStationsCommand;
-        private RelayCommand<object> _openSettingsDialogCommand;
+        private string _mainWindowTitle;
+        private bool _classifyRecordsWithCondition;
 
         public string MainWindowTitle
         {
@@ -56,54 +47,14 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        public RelayCommand<object> CreateStationInformationCommand
-        {
-            get { return _createStationInformationCommand ?? (_createStationInformationCommand = new RelayCommand<object>(CreateStationInformation)); }
-        }
-
-        public RelayCommand DeleteSelectedStationInformationsCommand
-        {
-            get { return _deleteSelectedStationInformationsCommand ?? (_deleteSelectedStationInformationsCommand = new RelayCommand(DeleteSelectedStationInformations, CanDeleteSelectedStationInformations)); }
-        }
-
-        //public RelayCommand ExportDataCommand
-        //{
-        //    get { return _exportDataCommand ?? (_exportDataCommand = new RelayCommand(ExportData, CanExportData)); }
-        //}
-
-        public AsyncCommand<object> MakeBreakfastCommand
-        {
-            get { return _makeBreakfastCommand ?? (_makeBreakfastCommand = 
-                new AsyncCommand<object>(MakeBreakfast, CanMakeBreakfast)); }
-        }
-
-        public AsyncCommand<object> ExtractMeteorologicalStationsCommand
-        {
-            get
-            {
-                return _extractMeteorologicalStationsCommand ?? (_extractMeteorologicalStationsCommand =
-                    new AsyncCommand<object>(ExtractMeteorologicalStations, CanExtractMeteorologicalStations));
-            }
-        }
-
-        public AsyncCommand<object> ExtractOceanographicalStationsCommand
-        {
-            get
-            {
-                return _extractOceanographicalStationsCommand ?? (_extractOceanographicalStationsCommand =
-                    new AsyncCommand<object>(ExtractOceanographicalStations, CanExtractOceanographicalStations));
-            }
-        }
-
-        //public RelayCommand ImportDataCommand
-        //{
-        //    get { return _importDataCommand ?? (_importDataCommand = new RelayCommand(ImportData, CanImportData)); }
-        //}
-
-        public RelayCommand<object> OpenSettingsDialogCommand
-        {
-            get { return _openSettingsDialogCommand ?? (_openSettingsDialogCommand = new RelayCommand<object>(OpenSettingsDialog)); }
-        }
+        public RelayCommand<object> CreateStationInformationCommand { get; }
+        public RelayCommand DeleteSelectedStationInformationsCommand { get; }
+        public AsyncCommand<object> ExportDataCommand { get; }
+        public AsyncCommand<object> ImportDataCommand { get; }
+        public AsyncCommand<object> MakeBreakfastCommand { get; }
+        public AsyncCommand<object> ExtractMeteorologicalStationsCommand { get; }
+        public AsyncCommand<object> ExtractOceanographicalStationsCommand { get; }
+        public RelayCommand<object> OpenSettingsDialogCommand { get; }
 
         public StationInformationListViewModel StationInformationListViewModel { get; }
         public StationInformationDetailsViewModel StationInformationDetailsViewModel { get; }
@@ -159,6 +110,17 @@ namespace DMI.SMS.ViewModel
             GeometryEditorViewModel.WorldWindowUpperLeft = new System.Windows.Point(7.4, 53.9);
 
             TaskViewModel = new TaskViewModel();
+
+            CreateStationInformationCommand = new RelayCommand<object>(CreateStationInformation);
+            DeleteSelectedStationInformationsCommand = new RelayCommand(DeleteSelectedStationInformations, CanDeleteSelectedStationInformations);
+            ExportDataCommand = new AsyncCommand<object>(ExportData, CanExportData);
+            ImportDataCommand = new AsyncCommand<object>(ImportData, CanImportData);
+            MakeBreakfastCommand = new AsyncCommand<object>(MakeBreakfast, CanMakeBreakfast);
+            ExportDataCommand = new AsyncCommand<object>(ExportData, CanExportData);
+            ImportDataCommand = new AsyncCommand<object>(ImportData, CanImportData);
+            ExtractMeteorologicalStationsCommand = new AsyncCommand<object>(ExtractMeteorologicalStations, CanExtractMeteorologicalStations);
+            ExtractOceanographicalStationsCommand = new AsyncCommand<object>(ExtractOceanographicalStations, CanExtractOceanographicalStations);
+            OpenSettingsDialogCommand = new RelayCommand<object>(OpenSettingsDialog);
 
             var lineThickness = 0.02;
 
@@ -282,6 +244,84 @@ namespace DMI.SMS.ViewModel
         //{
         //    return true;
         //}
+
+        private async Task ExportData(
+            object owner)
+        {
+            var dialogViewModel = new MessageBoxDialogViewModel("Export data", true);
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            TaskViewModel.NameOfTask = "Exporting data";
+            TaskViewModel.Abort = false;
+            TaskViewModel.Busy = true;
+            RefreshCommandAvailability();
+
+            await _application.ExportData(
+                (progress, currentActivity) =>
+                {
+                    TaskViewModel.Progress = progress;
+                    TaskViewModel.NameOfCurrentSubtask = currentActivity;
+                    return TaskViewModel.Abort;
+                });
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
+
+            if (!TaskViewModel.Abort)
+            {
+                var messageBoxDialog = new MessageBoxDialogViewModel("Completed exporting data", false);
+                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
+            }
+        }
+
+        private bool CanExportData(
+            object owner)
+        {
+            return !TaskViewModel.Busy;
+        }
+
+        private async Task ImportData(
+            object owner)
+        {
+            var dialogViewModel = new MessageBoxDialogViewModel("Import Data", true);
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            TaskViewModel.NameOfTask = "Importing data";
+            TaskViewModel.Abort = false;
+            TaskViewModel.Busy = true;
+            RefreshCommandAvailability();
+
+            await _application.ExportData(
+                (progress, currentActivity) =>
+                {
+                    TaskViewModel.Progress = progress;
+                    TaskViewModel.NameOfCurrentSubtask = currentActivity;
+                    return TaskViewModel.Abort;
+                });
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
+
+            if (!TaskViewModel.Abort)
+            {
+                var messageBoxDialog = new MessageBoxDialogViewModel("Completed importing data", false);
+                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
+            }
+        }
+
+        private bool CanImportData(
+            object owner)
+        {
+            return !TaskViewModel.Busy;
+        }
 
         private async Task MakeBreakfast(
             object owner)
@@ -471,6 +511,8 @@ namespace DMI.SMS.ViewModel
 
         private void RefreshCommandAvailability()
         {
+            ExportDataCommand.RaiseCanExecuteChanged();
+            ImportDataCommand.RaiseCanExecuteChanged();
             MakeBreakfastCommand.RaiseCanExecuteChanged();
             ExtractMeteorologicalStationsCommand.RaiseCanExecuteChanged();
             ExtractOceanographicalStationsCommand.RaiseCanExecuteChanged();
