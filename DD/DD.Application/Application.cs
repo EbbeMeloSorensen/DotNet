@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils;
@@ -8,10 +7,20 @@ namespace DD.Application
 {
     public class Application
     {
+        private ILogger _logger;
+
         public IUIDataProvider UIDataProvider { get; }
 
         // It must be possible for an external component to set the Logger, e.g. in order to override with a decorator
-        public ILogger Logger { get; set; }
+        public ILogger Logger
+        {
+            get { return _logger;}
+            set
+            {
+                _logger = value;
+                Engine.Logger = value;
+            }
+        }
 
         public Engine Engine { get; }
 
@@ -25,7 +34,7 @@ namespace DD.Application
             ILogger logger)
         {
             UIDataProvider = uiDataProvider;
-            Logger = logger;
+            _logger = logger;
 
             SquareIndexForCurrentCreature = new ObservableObject<int?>();
             SquareIndexesCurrentCreatureCanMoveTo = new ObservableObject<Dictionary<int, double>>();
@@ -37,7 +46,7 @@ namespace DD.Application
                 SquareIndexesCurrentCreatureCanMoveTo,
                 SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
                 SquareIndexesCurrentCreatureCanAttackWithRangedWeapon, 
-                Logger);
+                _logger);
         }
 
         public async Task ActOutBattle()

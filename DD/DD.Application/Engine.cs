@@ -66,7 +66,6 @@ namespace DD.Application
         private int _battleRoundCount;
         private bool _currentCreatureJustMoved;
         private double _moveDistanceRemaningForCurrentCreature;
-        private ILogger _logger;
 
         public int[] CurrentCreaturePath { get; set; }
         public bool BattleroundCompleted { get; set; }
@@ -85,7 +84,7 @@ namespace DD.Application
                 }
                 else
                 {
-                    _logger?.WriteLine(LogMessageCategory.Information,
+                    Logger.WriteLine(LogMessageCategory.Information,
                         $"Selected scene: \"{_scene.Name}\"");
 
                     _obstacleIndexes = new HashSet<int>(_scene.Obstacles
@@ -131,6 +130,8 @@ namespace DD.Application
             }
         }
 
+        public ILogger Logger { get; set; }
+
         public List<Creature> Creatures { get; set; }
         public Creature CurrentCreature { get; set; }
         public Creature TargetCreature { get; set; }
@@ -161,7 +162,7 @@ namespace DD.Application
             BattleHasStarted = new ObservableObject<bool>();
             BattleHasEnded = new ObservableObject<bool>();
             AutoRunning = new ObservableObject<bool>();
-            _logger = logger;
+            Logger = logger;
             _actingOrder = new Queue<Creature>();
             _evasionEvents = new Queue<EvasionEvent>();
         }
@@ -177,7 +178,7 @@ namespace DD.Application
                     switch (evasionEvent)
                     {
                         case InitiativeSwitch initiativeSwitch:
-                            _logger?.WriteLine(LogMessageCategory.Information, $"        Initiative goes to {Tag(initiativeSwitch.Creature)}");
+                            Logger.WriteLine(LogMessageCategory.Information, $"        Initiative goes to {Tag(initiativeSwitch.Creature)}");
                             CurrentCreature = initiativeSwitch.Creature;
                             SquareIndexForCurrentCreature.Object = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
                             return CreatureAction.InitiativeSwitchDuringEvasion;
@@ -407,7 +408,7 @@ namespace DD.Application
                 if (indexOfDestinationSquare == currentSquareIndex)
                 {
                     var message = $"        {Tag(CurrentCreature)} passes";
-                    _logger?.WriteLine(LogMessageCategory.Information, message);
+                    Logger.WriteLine(LogMessageCategory.Information, message);
 
                     result.IndexOfDestinationSquare = null;
                 }
@@ -641,7 +642,7 @@ namespace DD.Application
                     // Player controlled creature moves in a way that provokes a number of opportunity attacks
                     PopulateEvasionEventQueue(path, evadedCreatures);
                     _evadingCreature = CurrentCreature;
-                    _logger?.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
+                    Logger.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
 
                     return CreatureAction.Evade;
                 }
@@ -747,14 +748,14 @@ namespace DD.Application
                 throw new InvalidOperationException("Assign a scene to the engine before starting a battle");
             }
 
-            _logger?.WriteLine(LogMessageCategory.Information, "  Starting Battle..");
+            Logger.WriteLine(LogMessageCategory.Information, "  Starting Battle..");
 
             BattleDecided = false;
             BattleHasStarted.Object = true;
             _battleRoundCount = 0;
 
             var message = "    Determining initial acting order of creatures..";
-            _logger?.WriteLine(LogMessageCategory.Information, message);
+            Logger.WriteLine(LogMessageCategory.Information, message);
 
             var creatureTypeToDieRollMap = new Dictionary<CreatureType, int>();
             var dieRollToCreatureMap = new Dictionary<int, Dictionary<CreatureType, List<Creature>>>();
@@ -813,7 +814,7 @@ namespace DD.Application
                 dieRollToCreatureMap[dieRoll][c.CreatureType].Add(c);
             });
 
-            _logger?.WriteLine(LogMessageCategory.Information, "    Initial acting order:");
+            Logger.WriteLine(LogMessageCategory.Information, "    Initial acting order:");
 
             var queueNumberInBattleRound = 0;
             foreach (var kvp1 in dieRollToCreatureMap.OrderByDescending(kvp => kvp.Key))
@@ -828,7 +829,7 @@ namespace DD.Application
 
                         creature.BattleRoundQueueNumber = queueNumberInBattleRound++;
 
-                        _logger?.WriteLine(
+                        Logger.WriteLine(
                             LogMessageCategory.Information,
                             $"      {queueNumberInBattleRound}: {Tag(creature)}");
                     }
@@ -847,7 +848,7 @@ namespace DD.Application
                             {
                                 c.BattleRoundQueueNumber = queueNumberInBattleRound++;
 
-                                _logger?.WriteLine(
+                                Logger.WriteLine(
                                     LogMessageCategory.Information,
                                     $"      {queueNumberInBattleRound}: {Tag(c)}");
                             });
@@ -895,7 +896,7 @@ namespace DD.Application
 
         public void StartBattleRound()
         {
-            _logger?.WriteLine(LogMessageCategory.Information, $"    Starting battle round {++_battleRoundCount}");
+            Logger.WriteLine(LogMessageCategory.Information, $"    Starting battle round {++_battleRoundCount}");
 
             // Todo: Perform updates for each the round (such as trolls regenerating, poison draining life, etc)
 
@@ -926,7 +927,7 @@ namespace DD.Application
             SquareIndexForCurrentCreature.Object = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
 
             var message = $"      Turn goes to {Tag(CurrentCreature)}";
-            _logger?.WriteLine(LogMessageCategory.Information, message);
+            Logger.WriteLine(LogMessageCategory.Information, message);
 
             _moveDistanceRemaningForCurrentCreature = CurrentCreature.CreatureType.Movement;
 
@@ -1121,7 +1122,7 @@ namespace DD.Application
                 $"        {CurrentCreature.CreatureType.Name}{Tag(CurrentCreature)}" +
                 $" moves to position (X, Y) = ({CurrentCreature.PositionX}, {CurrentCreature.PositionY})";
 
-            _logger?.WriteLine(LogMessageCategory.Information, message);
+            Logger.WriteLine(LogMessageCategory.Information, message);
 
             SquareIndexForCurrentCreature.Object = indexOfTargetSquare;
         }
@@ -1206,7 +1207,7 @@ namespace DD.Application
                 message += $" and misses";
             }
 
-            _logger?.WriteLine(LogMessageCategory.Information, message);
+            Logger.WriteLine(LogMessageCategory.Information, message);
         }
 
         private bool OpponentsStillRemaining(
@@ -1257,7 +1258,7 @@ namespace DD.Application
                 PopulateEvasionEventQueue(path, evadedCreatures);
                 _evadingCreature = CurrentCreature;
 
-                _logger?.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
+                Logger.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
 
                 return CreatureAction.Evade;
             }
