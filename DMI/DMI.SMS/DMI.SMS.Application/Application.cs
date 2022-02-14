@@ -81,8 +81,13 @@ namespace DMI.SMS.Application
         {
             _uiDataProvider = uiDataProvider;
             _logger = logger;
+        }
 
-            _uiDataProvider.Initialize(logger);
+        public void Initialize()
+        {
+            Logger?.WriteLine(LogMessageCategory.Debug, "DMI.SMS.UI.WPF - initializing application");
+
+            _uiDataProvider.Initialize(_logger);
         }
 
         public async Task MakeBreakfast(
@@ -128,6 +133,7 @@ namespace DMI.SMS.Application
         {
             await Task.Run(async () =>
             {
+                Logger?.WriteLine(LogMessageCategory.Information, "Extracting meteorological stations..");
                 var dataFolder = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..//..//..//..", "Data"));
                 var metParameterListFileName = Path.Combine(dataFolder, "metObs_parameter.json");
                 var metParameters = FD.Domain.IO.Helpers.ReadParametersFromJsonFile(metParameterListFileName);
@@ -152,6 +158,8 @@ namespace DMI.SMS.Application
                     paramsDictionary,
                     MeteorologicalStationListGenerationMode.Meteorological,
                     progressCallback);
+
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed extracting meteorological stations");
             });
         }
 
@@ -187,9 +195,6 @@ namespace DMI.SMS.Application
                     default:
                         throw new ArgumentOutOfRangeException("Invalid mode for station list generation");
                 }
-
-                var message = $"Generating {modeAsString} station list";
-                _logger.WriteLine(LogMessageCategory.Information, message, "general");
 
                 if (progressCallback.Invoke(2, ""))
                 {
@@ -312,6 +317,8 @@ namespace DMI.SMS.Application
                 // Traverse all stations and add details for them
                 foreach (var station in stations)
                 {
+                    Logger?.WriteLine(LogMessageCategory.Information, $"  processing station {station.stationId} ({station.name})..");
+
                     List<StationInformation> smsStationHistory = null;
                     List<Station> frieDataStationHistory = null;
 

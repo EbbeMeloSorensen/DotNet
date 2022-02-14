@@ -7,6 +7,7 @@
         xmlns:uiElements="clr-namespace:DMI.SMS.UIElements;assembly=DMI.SMS.UIElements"
         xmlns:geometry2D="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
         xmlns:tasks="clr-namespace:Craft.UIElements.Tasks;assembly=Craft.UIElements"
+        xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="{Binding MainWindowTitle}" 
         Height="450" 
@@ -64,9 +65,11 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <uiElements:StationInformationListView Grid.Row="0" Grid.Column="0" DataContext="{Binding StationInformationListViewModel}"/>
+            <uiElements:StationInformationListView Grid.Row="0" Grid.Column="0" 
+                                                   DataContext="{Binding StationInformationListViewModel}"/>
 
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -88,7 +91,18 @@
                 <uiElements:StationInformationDetailsView Grid.Row="1" DataContext="{Binding StationInformationDetailsViewModel}"/>
             </Grid>
 
-            <tasks:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3"
+            <Expander Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" IsExpanded="False" ExpandDirection="Left">
+                <Expander.Header>
+                    <TextBlock Text="Log">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="90"/>
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <logging:LogView Width="400" DataContext="{Binding LogViewModel}"/>
+            </Expander>
+
+            <tasks:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3"
                             Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}"
                             DataContext="{Binding TaskViewModel}"/>
         </Grid>

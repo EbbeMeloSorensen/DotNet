@@ -31,6 +31,8 @@ namespace DMI.SMS.Persistence.File
             dataIOHandler.ImportDataFromXML(@"C:\Temp\SMSFileRepository.xml", out stationInformations);
 
             _stationInformationRepository.Load(stationInformations);
+
+            logger?.WriteLine(LogMessageCategory.Information, $"Loaded {stationInformations.Count} station information records");
         }
 
         public async Task<bool> CheckRepositoryConnection()

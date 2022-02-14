@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows;
+using Craft.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Math;
@@ -104,11 +105,12 @@ namespace DMI.SMS.ViewModel
             get { return _openSettingsDialogCommand ?? (_openSettingsDialogCommand = new RelayCommand<object>(OpenSettingsDialog)); }
         }
 
-        public StationInformationListViewModel StationInformationListViewModel { get; private set; }
-        public StationInformationDetailsViewModel StationInformationDetailsViewModel { get; private set; }
-        public StationInformationCollectionViewModel StationInformationCollectionViewModel { get; private set; }
-        public GeometryEditorViewModel GeometryEditorViewModel { get; private set; }
-        public TaskViewModel TaskViewModel { get; private set; }
+        public StationInformationListViewModel StationInformationListViewModel { get; }
+        public StationInformationDetailsViewModel StationInformationDetailsViewModel { get; }
+        public StationInformationCollectionViewModel StationInformationCollectionViewModel { get; }
+        public GeometryEditorViewModel GeometryEditorViewModel { get; }
+        public TaskViewModel TaskViewModel { get; }
+        public LogViewModel LogViewModel { get; }
 
         public MainWindowViewModel(
             Application.Application application,
@@ -116,6 +118,13 @@ namespace DMI.SMS.ViewModel
         {
             _application = application;
             _applicationDialogService = applicationDialogService;
+
+            LogViewModel = new LogViewModel();
+
+            _application.Logger = new ViewModelLogger(_application.Logger, LogViewModel);
+            //_application.Logger = null; // Set to null to disable logging
+
+            _application.Initialize();
 
             _mainWindowTitle = "SMS Studio";
 
