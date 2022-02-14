@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DD.UI.WPF
+namespace Craft.UIElements.Logging
 {
     /// <summary>
     /// Interaction logic for LogView.xaml
