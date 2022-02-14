@@ -44,7 +44,8 @@ namespace DD.ViewModel
             LogViewModel = new LogViewModel();
 
             _application.Logger = new ViewModelLogger(_application.Logger, LogViewModel);
-            _application.Logger.WriteLine(LogMessageCategory.Debug, "Dungeons and Dragons - starting up");
+            //_application.Logger = null;
+            _application.Logger?.WriteLine(LogMessageCategory.Debug, "Dungeons and Dragons - starting up");
 
             var selectedScene = new ObservableObject<Scene>();
             SceneCollectionViewModel = new SceneCollectionViewModel(selectedScene);
