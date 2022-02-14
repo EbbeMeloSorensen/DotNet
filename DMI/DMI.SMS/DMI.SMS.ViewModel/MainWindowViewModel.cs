@@ -27,8 +27,8 @@ namespace DMI.SMS.ViewModel
 
         private RelayCommand<object> _createStationInformationCommand;
         private RelayCommand _deleteSelectedStationInformationsCommand;
-        private RelayCommand _exportDataCommand;
-        private RelayCommand _importDataCommand;
+        //private RelayCommand _exportDataCommand;
+        //private RelayCommand _importDataCommand;
         private AsyncCommand<object> _makeBreakfastCommand;
         private AsyncCommand<object> _extractMeteorologicalStationsCommand;
         private AsyncCommand<object> _extractOceanographicalStationsCommand;
@@ -66,10 +66,10 @@ namespace DMI.SMS.ViewModel
             get { return _deleteSelectedStationInformationsCommand ?? (_deleteSelectedStationInformationsCommand = new RelayCommand(DeleteSelectedStationInformations, CanDeleteSelectedStationInformations)); }
         }
 
-        public RelayCommand ExportDataCommand
-        {
-            get { return _exportDataCommand ?? (_exportDataCommand = new RelayCommand(ExportData, CanExportData)); }
-        }
+        //public RelayCommand ExportDataCommand
+        //{
+        //    get { return _exportDataCommand ?? (_exportDataCommand = new RelayCommand(ExportData, CanExportData)); }
+        //}
 
         public AsyncCommand<object> MakeBreakfastCommand
         {
@@ -95,10 +95,10 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        public RelayCommand ImportDataCommand
-        {
-            get { return _importDataCommand ?? (_importDataCommand = new RelayCommand(ImportData, CanImportData)); }
-        }
+        //public RelayCommand ImportDataCommand
+        //{
+        //    get { return _importDataCommand ?? (_importDataCommand = new RelayCommand(ImportData, CanImportData)); }
+        //}
 
         public RelayCommand<object> OpenSettingsDialogCommand
         {
@@ -242,46 +242,46 @@ namespace DMI.SMS.ViewModel
                    StationInformationListViewModel.SelectedStationInformations.Objects.Any();
         }
 
-        private void ExportData()
-        {
-            //var dialog = new SaveFileDialog
-            //{
-            //    Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
-            //};
+        //private void ExportData()
+        //{
+        //    //var dialog = new SaveFileDialog
+        //    //{
+        //    //    Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
+        //    //};
 
-            //if (dialog.ShowDialog() == false)
-            //{
-            //    return;
-            //}
+        //    //if (dialog.ShowDialog() == false)
+        //    //{
+        //    //    return;
+        //    //}
 
-            //_dataProvider.ExportPeople(dialog.FileName);
-            _application.UIDataProvider.ExportData(@"C:\Temp\SMSData.xml");
-        }
+        //    //_dataProvider.ExportPeople(dialog.FileName);
+        //    _application.UIDataProvider.ExportData(@"C:\Temp\SMSData.xml");
+        //}
 
-        private bool CanExportData()
-        {
-            return true;
-        }
+        //private bool CanExportData()
+        //{
+        //    return true;
+        //}
 
-        private void ImportData()
-        {
-            //var dialog = new OpenFileDialog
-            //{
-            //    Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
-            //};
+        //private void ImportData()
+        //{
+        //    //var dialog = new OpenFileDialog
+        //    //{
+        //    //    Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
+        //    //};
 
-            //if (dialog.ShowDialog() == false)
-            //{
-            //    return;
-            //}
+        //    //if (dialog.ShowDialog() == false)
+        //    //{
+        //    //    return;
+        //    //}
 
-            _application.UIDataProvider.ImportData(@"C:\Temp\SMSData.xml");
-        }
+        //    _application.UIDataProvider.ImportData(@"C:\Temp\SMSData.xml");
+        //}
 
-        private bool CanImportData()
-        {
-            return true;
-        }
+        //private bool CanImportData()
+        //{
+        //    return true;
+        //}
 
         private async Task MakeBreakfast(
             object owner)

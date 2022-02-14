@@ -96,23 +96,37 @@ namespace DMI.SMS.Application
         {
             await Task.Run(() =>
             {
+                Logger?.WriteLine(LogMessageCategory.Information, "Making breakfast..");
+
                 var result = 0.0;
                 var currentActivity = "Baking bread";
                 var count = 0;
                 var total = 317;
+
+                Logger?.WriteLine(LogMessageCategory.Information, $"  {currentActivity}");
 
                 while (count < total)
                 {
                     if (count >= 160)
                     {
                         currentActivity = "Poring Milk";
+
+                        if (count == 160)
+                        {
+                            Logger?.WriteLine(LogMessageCategory.Information, $"  {currentActivity}");
+                        }
                     }
                     else if (count >= 80)
                     {
                         currentActivity = "Frying eggs";
+
+                        if (count == 80)
+                        {
+                            Logger?.WriteLine(LogMessageCategory.Information, $"  {currentActivity}");
+                        }
                     }
 
-                    for (var j = 0; j < 999999999 / 100; j++)
+                    for (var j = 0; j < 499999999 / 100; j++)
                     {
                         result += 1.0;
                     }
@@ -124,6 +138,8 @@ namespace DMI.SMS.Application
                         break;
                     }
                 }
+
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed breakfast");
             });
         }
 
