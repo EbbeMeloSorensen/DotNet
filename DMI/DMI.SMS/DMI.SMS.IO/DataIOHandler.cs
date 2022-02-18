@@ -77,7 +77,15 @@ namespace DMI.SMS.IO
             string fileName,
             out IList<StationInformation> stationInformations)
         {
-            throw new NotImplementedException();
+            List<StationInformation> stationInformationList;
+
+            using (var streamReader = new StreamReader(fileName))
+            {
+                var json = streamReader.ReadToEnd();
+                parameterList = JsonConvert.DeserializeObject<List<StationInformation>>(json);
+            }
+
+            return stationInformationList;
         }
 
         public List<DateTime> ReadObservationsForStationFromFile(
