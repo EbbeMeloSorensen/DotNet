@@ -32,7 +32,8 @@ namespace DMI.SMS.Persistence.File
 
             _stationInformationRepository.Load(stationInformations);
 
-            logger?.WriteLine(LogMessageCategory.Information, $"Loaded {stationInformations.Count} station information records");
+            logger?.WriteLine(LogMessageCategory.Information, 
+                $"Loaded {stationInformations.Count} station information records from file into memory");
         }
 
         public async Task<bool> CheckRepositoryConnection()

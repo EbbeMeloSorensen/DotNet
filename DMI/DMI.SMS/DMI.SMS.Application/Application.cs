@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Craft.Utils;
 using Craft.Logging;
-using DMI.SMS.Application;
 using DMI.FD.Domain;
 using DMI.FD.Domain.IO;
 using DMI.SMS.Domain.Entities;
@@ -149,9 +148,11 @@ namespace DMI.SMS.Application
             await Task.Run(() =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
+                progressCallback?.Invoke(0.0, "Exporting data");
 
-                UIDataProvider.ExportData(@"C:\Temp\SMSData.xml");
+                UIDataProvider.ExportData("SMSData.xml");
 
+                progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
             });
         }

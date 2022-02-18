@@ -72,18 +72,24 @@ namespace DMI.SMS.Application
                 throw new ArgumentException();
             }
 
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all stationinformation records from repository..");
             var allStationInformations = GetAllStationInformations();
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {allStationInformations.Count} stationinformation records");
 
             switch (extension)
             {
                 case ".xml":
                 {
                     _dataIOHandler.ExportDataToXML(allStationInformations, fileName);
+                    _logger?.WriteLine(LogMessageCategory.Information, 
+                        $"  Exported {allStationInformations.Count} stationinformation records to xml file");
                     break;
                 }
                 case ".json":
                 {
                     _dataIOHandler.ExportDataToJson(allStationInformations, fileName);
+                    _logger?.WriteLine(LogMessageCategory.Information,
+                        $"  Exported {allStationInformations.Count} stationinformation records to json file");
                     break;
                 }
                 default:

@@ -1,13 +1,15 @@
 Done:
 * Gør det muligt at kalde en async metode efter at have åbnet en dialog
+* Log på banen igen i DMI.SMS
+  - Sikr, at logging til fil virker, lige som i DD. Det skal virke både når man kører gui'en og console appen (OK)
+  - Byg et logging vindue som i DD (OK)
+  - Skriv i loggen, hvor mange rækker, der loades op af fil repoet (OK)
+  - Skriv i loggen, hvor mange rækker, der exporteres (OK)
 
 Todo:
-* Log på banen igen i DMI.SMS
-  - Sikr, at logging til fil virker, lige som i DD. Det skal virke både når man kører gui'en og console appen
-  - Byg et logging vindue som i DD
-  - Skriv i loggen, hvor mange rækker, der loades op af fil repoet
-  - Skriv i loggen, hvor mange rækker, der exporteres
 * Færdiggør funktionalitet til at eksportere
+  - eksporter til json i stedet for xml
+  - Lad brugeren vælge, om man skal exportere til xml eller json
   - Verificer, at export fra en underliggende file repo giver en fil, der er identisk med file repo filen
   - Mulighed for indskrænke sig til at eksportere det, der passerer filter settings
 * Gør det muligt at kalde MakeBreakfast fra command line applikationen
