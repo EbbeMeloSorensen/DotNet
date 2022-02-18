@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Craft\Craft.IO.Utils\Craft.IO.Utils.csproj" />
     <ProjectReference Include="..\..\..\Craft\Craft.Utils\Craft.Utils.csproj" />
     <ProjectReference Include="..\DMI.SMS.Domain\DMI.SMS.Domain.csproj" />
   </ItemGroup>

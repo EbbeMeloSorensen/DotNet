@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using Craft.IO.Utils;
 using DMI.SMS.Domain.Entities;
+using Newtonsoft.Json;
 
 namespace DMI.SMS.IO
 {
@@ -51,7 +53,13 @@ namespace DMI.SMS.IO
             IList<StationInformation> stationInformations,
             string fileName)
         {
-            throw new NotImplementedException();
+            var json = JsonConvert.SerializeObject(
+                stationInformations, Formatting.Indented, new DoubleJsonConverter(), new NullableDoubleJsonConverter());
+
+            using (var streamWriter = new StreamWriter(fileName))
+            {
+                streamWriter.WriteLine(json);
+            }
         }
 
         public void ImportDataFromXML(

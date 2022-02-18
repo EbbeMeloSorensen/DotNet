@@ -2,7 +2,7 @@
 using System.Globalization;
 using Newtonsoft.Json;
 
-namespace DMI.FD.Domain.IO
+namespace Craft.IO.Utils
 {
     // I use this when serializing json to avoid writing trailing zeros for doubles,
     // For example: We have a variable of type double, and we assign it the value 4

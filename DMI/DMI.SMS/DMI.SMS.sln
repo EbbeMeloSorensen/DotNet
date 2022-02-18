@@ -134,7 +134,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meteorological", "Meteorolo
 		Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2021_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Meteorological\Meteorological_observations_in_2021_from_nanoq.dmi.dk.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.IO.UnitTest", "DMI.SMS.IO.UnitTest\DMI.SMS.IO.UnitTest.csproj", "{DAD3130A-2C81-422B-B331-EE2FD23545DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.IO.UnitTest", "DMI.SMS.IO.UnitTest\DMI.SMS.IO.UnitTest.csproj", "{DAD3130A-2C81-422B-B331-EE2FD23545DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.IO.Utils", "..\..\Craft\Craft.IO.Utils\Craft.IO.Utils.csproj", "{1B2650FC-DBCF-4BA6-9662-FFA8E88EB4CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -238,6 +240,10 @@ Global
 		{DAD3130A-2C81-422B-B331-EE2FD23545DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAD3130A-2C81-422B-B331-EE2FD23545DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAD3130A-2C81-422B-B331-EE2FD23545DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B2650FC-DBCF-4BA6-9662-FFA8E88EB4CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B2650FC-DBCF-4BA6-9662-FFA8E88EB4CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B2650FC-DBCF-4BA6-9662-FFA8E88EB4CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B2650FC-DBCF-4BA6-9662-FFA8E88EB4CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

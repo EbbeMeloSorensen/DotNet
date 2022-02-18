@@ -9,9 +9,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Craft\Craft.IO.Utils\Craft.IO.Utils.csproj" />
-    <ProjectReference Include="..\DMI.FD.Domain\DMI.FD.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -2,7 +2,7 @@
 using System.Globalization;
 using Newtonsoft.Json;
 
-namespace DMI.FD.Domain.IO
+namespace Craft.IO.Utils
 {
     public class NullableDoubleJsonConverter : JsonConverter
     {

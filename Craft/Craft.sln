@@ -48,7 +48,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.UnitTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.GeometryEditor3D.UI.WPF", "Craft.GeometryEditor3D.UI.WPF\Craft.GeometryEditor3D.UI.WPF.csproj", "{987D6CE2-40CF-4300-ADF6-5034B9AF252B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.ViewModel.Utils", "Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{4DFF1D0C-0B74-4DA8-9AF2-66078CE08E27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{4DFF1D0C-0B74-4DA8-9AF2-66078CE08E27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.IO.Utils", "Craft.IO.Utils\Craft.IO.Utils.csproj", "{C58BE099-983A-4C34-AB58-A0CEA7B75B3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -140,6 +142,10 @@ Global
 		{4DFF1D0C-0B74-4DA8-9AF2-66078CE08E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DFF1D0C-0B74-4DA8-9AF2-66078CE08E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DFF1D0C-0B74-4DA8-9AF2-66078CE08E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C58BE099-983A-4C34-AB58-A0CEA7B75B3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C58BE099-983A-4C34-AB58-A0CEA7B75B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C58BE099-983A-4C34-AB58-A0CEA7B75B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C58BE099-983A-4C34-AB58-A0CEA7B75B3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
