@@ -22,13 +22,13 @@ namespace DMI.SMS.Persistence.File
 
         public void Initialize(ILogger logger)
         {
-            var file = new FileInfo(@"C:\Temp\SMSFileRepository.xml");
+            var file = new FileInfo("SMSFileRepository.json");
 
             if (!file.Exists) return;
 
             var dataIOHandler = new DataIOHandler();
             IList<StationInformation> stationInformations;
-            dataIOHandler.ImportDataFromXML(@"C:\Temp\SMSFileRepository.xml", out stationInformations);
+            dataIOHandler.ImportDataFromJson(file.Name, out stationInformations);
 
             _stationInformationRepository.Load(stationInformations);
 

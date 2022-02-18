@@ -77,15 +77,11 @@ namespace DMI.SMS.IO
             string fileName,
             out IList<StationInformation> stationInformations)
         {
-            List<StationInformation> stationInformationList;
-
             using (var streamReader = new StreamReader(fileName))
             {
                 var json = streamReader.ReadToEnd();
-                parameterList = JsonConvert.DeserializeObject<List<StationInformation>>(json);
+                stationInformations = JsonConvert.DeserializeObject<List<StationInformation>>(json);
             }
-
-            return stationInformationList;
         }
 
         public List<DateTime> ReadObservationsForStationFromFile(
