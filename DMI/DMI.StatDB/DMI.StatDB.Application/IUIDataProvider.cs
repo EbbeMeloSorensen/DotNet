@@ -31,5 +31,7 @@ namespace DMI.StatDB.Application
 
         IList<Station> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates);
+
+        void ExportData(string fileName);
     }
 }

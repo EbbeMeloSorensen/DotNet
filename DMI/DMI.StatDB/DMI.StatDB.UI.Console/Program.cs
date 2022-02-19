@@ -15,7 +15,8 @@ namespace DMI.StatDB.UI.Console
             System.Console.WriteLine("Counting Station records...");
             System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllStations().Count}");
 
-            await MakeBreakfast(application);
+            //await MakeBreakfast(application);
+            await ExportData(application);
         }
 
         private static async Task MakeBreakfast(
@@ -24,6 +25,19 @@ namespace DMI.StatDB.UI.Console
             System.Console.Write("Making breakfast...\nProgress: ");
             var dateTime = DateTime.Now;
             await application.MakeBreakfast((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task ExportData(
+            Application.Application application)
+        {
+            System.Console.Write("Exporting data...\nProgress: ");
+            await application.ExportData((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

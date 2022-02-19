@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Application;
+using DMI.StatDB.IO;
 using DMI.StatDB.Persistence;
 
 namespace DMI.StatDB.UIDataProvider.Persistence
@@ -85,7 +86,8 @@ namespace DMI.StatDB.UIDataProvider.Persistence
         }
 
         public UIDataProvider(
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IDataIOHandler dataIOHandler) : base(dataIOHandler)
         {
             UnitOfWorkFactory = unitOfWorkFactory;
 

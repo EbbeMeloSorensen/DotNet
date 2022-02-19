@@ -88,5 +88,20 @@ namespace DMI.StatDB.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed breakfast");
             });
         }
+
+        public async Task ExportData(
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
+                progressCallback?.Invoke(0.0, "Exporting data");
+
+                UIDataProvider.ExportData("StatDBData_gylle.json");
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
+            });
+        }
     }
 }
