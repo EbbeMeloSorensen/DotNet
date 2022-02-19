@@ -31,8 +31,7 @@ namespace DMI.SMS.UI.Console
             Application.Application application)
         {
             System.Console.Write("Making breakfast...\nProgress: ");
-            var dateTime = DateTime.Now;
-            await application.MakeBreakfast(dateTime, (progress, nameOfSubtask) =>
+            await application.MakeBreakfast((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

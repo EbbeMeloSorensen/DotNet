@@ -90,7 +90,6 @@ namespace DMI.SMS.Application
         }
 
         public async Task MakeBreakfast(
-            DateTime? cutDate,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(() =>

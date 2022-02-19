@@ -334,21 +334,12 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            DateTime? dateTime = null;
-
-            if (!string.IsNullOrEmpty(dialogViewModel.Date))
-            {
-                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
-                dateTime = temp;
-            }
-
             TaskViewModel.NameOfTask = "Making breakfast";
             TaskViewModel.Abort = false;
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
             await _application.MakeBreakfast(
-                dateTime,
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;
@@ -433,21 +424,12 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            DateTime? dateTime = null;
-
-            if (!string.IsNullOrEmpty(dialogViewModel.Date))
-            {
-                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
-                dateTime = temp;
-            }
-
             TaskViewModel.NameOfTask = "Extracting Oceanographical Stations";
             TaskViewModel.Abort = false;
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
             await _application.MakeBreakfast(
-                dateTime,
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;
