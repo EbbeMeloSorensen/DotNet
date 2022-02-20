@@ -8,6 +8,7 @@ Done:
   - Skriv i loggen, hvor mange rækker, der exporteres (OK)
 
 Todo:
+* Læs connection info fra en settings fil i stedet for at hardkode det
 * Færdiggør funktionalitet til at eksportere
   - eksporter til json i stedet for xml
   - Lad brugeren vælge, om man skal exportere til xml eller json

@@ -8,12 +8,22 @@ namespace DMI.SMS.Persistence.Npgsql
         public void Initialize(
             ILogger logger)
         {
-            var host = "172.25.7.23";
+            // MELO-HOME
+            var host = "localhost";
             var port = 5432;
-            var schema = "sde";
-            var database = "sms_prod";
-            var user = "ebs";
-            var password = "Vm6PAkPh";
+            var schema = "public";
+            var database = "SMS";
+            var user = "postgres";
+            var password = "L1on8Zebra";
+
+            // DMI
+            //var host = "172.25.7.23";
+            //var port = 5432;
+            //var schema = "sde";
+            //var database = "sms_prod";
+            //var user = "ebs";
+            //var password = "Vm6PAkPh";
+
             ConnectionStringProvider.Initialize(host, port, database, schema, user, password);
         }
 
