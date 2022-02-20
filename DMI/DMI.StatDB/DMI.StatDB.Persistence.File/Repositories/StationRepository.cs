@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using DMI.StatDB.Domain.Entities;
+using DMI.StatDB.IO;
 using DMI.StatDB.Persistence.Repositories;
 
 namespace DMI.StatDB.Persistence.File.Repositories
@@ -11,6 +12,11 @@ namespace DMI.StatDB.Persistence.File.Repositories
     {
         private static int _nextId = 1;
         private List<Station> _stations;
+
+        // Der er behov for at man kan slette
+        // elementer herfra, når man sletter stationer. Hvis man gør det fra Entity Framework repositoryet,
+        // så sker det tilsyneladende via kaskade deletion
+        public IPositionRepository PositionRepository { get; set; }
 
         public StationRepository()
         {
@@ -155,12 +161,12 @@ namespace DMI.StatDB.Persistence.File.Repositories
 
         private void UpdateRepositoryFile()
         {
-            // Todo: implementer DataIOHandler
-            //var dataIOHandler = new DataIOHandler();
+            var dataIOHandler = new DataIOHandler();
 
-            //dataIOHandler.ExportDataToXML(
-            //    _stations,
-            //    @"C:\Temp\StatDBFileRepository.xml");
+            dataIOHandler.ExportDataToJson(
+                _stations,
+                PositionRepository.GetAll().ToList(),
+                @"C:\Temp\Bananarama.json");
         }
     }
 }

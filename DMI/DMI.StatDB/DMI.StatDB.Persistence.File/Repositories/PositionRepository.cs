@@ -1,13 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using DMI.StatDB.Domain.Entities;
+using DMI.StatDB.IO;
 using DMI.StatDB.Persistence.Repositories;
 
 namespace DMI.StatDB.Persistence.File.Repositories
 {
     public class PositionRepository : IPositionRepository
     {
+        private static int _nextId = 1;
+        private List<Position> _positions;
+
+        public IStationRepository StationRepository { get; set; }
+
+        public PositionRepository()
+        {
+            _positions = new List<Position>();
+        }
+
         public Position Get(decimal id)
         {
             throw new NotImplementedException();
@@ -30,7 +42,7 @@ namespace DMI.StatDB.Persistence.File.Repositories
 
         public IEnumerable<Position> GetAll()
         {
-            throw new NotImplementedException();
+            return _positions;
         }
 
         public IEnumerable<Position> Find(Expression<Func<Position, bool>> predicate)
@@ -78,9 +90,37 @@ namespace DMI.StatDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public void Load(IEnumerable<Position> entities)
+        public void Load(
+            IEnumerable<Position> positions)
         {
-            throw new NotImplementedException();
+            _positions.Clear(); // In case we call load after having done so earlier. Might wanna clean this up..
+            _positions.AddRange(positions);
+
+            _positions.ForEach(p =>
+            {
+                p.Station = StationRepository.Get(p.StatID);
+
+                if (p.Station.Positions == null)
+                {
+                    p.Station.Positions = new List<Position>();
+                }
+
+                p.Station.Positions.Add(p);
+            });
+
+            _nextId = _positions.Count == 0 ? 1 : _positions.Max(p => p.StatID) + 1;
+
+            UpdateRepositoryFile();
+        }
+
+        private void UpdateRepositoryFile()
+        {
+            var dataIOHandler = new DataIOHandler();
+
+            dataIOHandler.ExportDataToJson(
+                StationRepository.GetAll().ToList(),
+                _positions,
+                @"C:\Temp\Bananarama.json");
         }
     }
 }

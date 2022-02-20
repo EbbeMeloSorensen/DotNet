@@ -25,6 +25,7 @@ namespace DMI.StatDB.UIDataProvider.Persistence
             UnitOfWorkFactory = unitOfWorkFactory;
 
             _stationCache = new Dictionary<int, Station>();
+            _positionCache = new Dictionary<int, Position>();
         }
 
         public override void Initialize(

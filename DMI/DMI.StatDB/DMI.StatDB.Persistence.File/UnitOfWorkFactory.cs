@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Craft.Logging;
 using DMI.StatDB.Domain.Entities;
+using DMI.StatDB.IO;
 using DMI.StatDB.Persistence.File.Repositories;
 
 namespace DMI.StatDB.Persistence.File
@@ -16,25 +18,28 @@ namespace DMI.StatDB.Persistence.File
             _stationRepository = new StationRepository();
             _positionRepository = new PositionRepository();
 
-            PopulateWithDummyData();
+            _stationRepository.PositionRepository = _positionRepository;
+            _positionRepository.StationRepository = _stationRepository;
+
+            //PopulateWithDummyData();
         }
 
         public void Initialize(ILogger logger)
         {
-            var file = new FileInfo("StatDBFileRepository.json");
+            var file = new FileInfo(@"C:\Temp\StatDBData.json");
 
             if (!file.Exists) return;
 
-            // Todo: Implement
+            var dataIOHandler = new DataIOHandler();
+            IList<Station> stations;
+            IList<Position> positions;
+            dataIOHandler.ImportDataFromJson(file.FullName, out stations, out positions);
 
-            //var dataIOHandler = new DataIOHandler();
-            //IList<Station> stations;
-            //dataIOHandler.ImportDataFromJson(file.Name, out stations);
+            _stationRepository.Load(stations);
+            _positionRepository.Load(positions);
 
-            //_stationRepository.Load(stations);
-
-            //logger?.WriteLine(LogMessageCategory.Information,
-            //    $"Loaded {stations.Count} station records from file into memory");
+            logger?.WriteLine(LogMessageCategory.Information,
+                $"Loaded {stations.Count} station records and {positions.Count} position records from file into memory");
         }
 
         public async Task<bool> CheckRepositoryConnection()

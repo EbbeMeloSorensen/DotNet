@@ -14,7 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\DMI.StatDB.Application\DMI.StatDB.Application.csproj" />
-    <ProjectReference Include="..\DMI.StatDB.Persistence.Npgsql\DMI.StatDB.Persistence.Npgsql.csproj" />
+    <ProjectReference Include="..\DMI.StatDB.Persistence.File\DMI.StatDB.Persistence.File.csproj" />
     <ProjectReference Include="..\DMI.StatDB.UIDataProvider.Persistence\DMI.StatDB.UIDataProvider.Persistence.csproj" />
   </ItemGroup>
 

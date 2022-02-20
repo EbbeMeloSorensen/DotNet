@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DMI.StatDB.IO\DMI.StatDB.IO.csproj" />
     <ProjectReference Include="..\DMI.StatDB.Persistence\DMI.StatDB.Persistence.csproj" />
   </ItemGroup>
 
