@@ -9,10 +9,12 @@ namespace DMI.StatDB.Persistence.File
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
         private StationRepository _stationRepository;
+        private PositionRepository _positionRepository;
 
         public UnitOfWorkFactory()
         {
             _stationRepository = new StationRepository();
+            _positionRepository = new PositionRepository();
 
             PopulateWithDummyData();
         }
@@ -45,7 +47,7 @@ namespace DMI.StatDB.Persistence.File
 
         public IUnitOfWork GenerateUnitOfWork()
         {
-            return new UnitOfWork(_stationRepository);
+            return new UnitOfWork(_stationRepository, _positionRepository);
         }
 
         private void PopulateWithDummyData()

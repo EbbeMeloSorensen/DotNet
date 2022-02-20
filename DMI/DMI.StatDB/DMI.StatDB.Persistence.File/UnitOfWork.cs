@@ -5,11 +5,14 @@ namespace DMI.StatDB.Persistence.File
     public class UnitOfWork : IUnitOfWork
     {
         public IStationRepository Stations { get; }
+        public IPositionRepository Positions { get; }
 
         public UnitOfWork(
-            IStationRepository stationRepository)
+            IStationRepository stationRepository,
+            IPositionRepository positionRepository)
         {
             Stations = stationRepository;
+            Positions = positionRepository;
         }
 
         public void Dispose()

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Transactions;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Persistence.Repositories;
 using Npgsql;

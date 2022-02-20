@@ -10,6 +10,7 @@ namespace DMI.StatDB.Persistence.Npgsql
         private TransactionScope _scope;
 
         public IStationRepository Stations { get; }
+        public IPositionRepository Positions { get; }
 
         public UnitOfWork()
         {
@@ -17,6 +18,7 @@ namespace DMI.StatDB.Persistence.Npgsql
             {
                 _scope = new TransactionScope();
                 Stations = new StationRepository();
+                Positions = new PositionRepository();
             }
             catch (Exception e)
             {

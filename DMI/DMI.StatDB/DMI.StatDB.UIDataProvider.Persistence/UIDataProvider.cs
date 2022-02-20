@@ -14,6 +14,7 @@ namespace DMI.StatDB.UIDataProvider.Persistence
     public class UIDataProvider : UIDataProviderBase
     {
         private Dictionary<int, Station> _stationCache;
+        private Dictionary<int, Position> _positionCache;
 
         public IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
@@ -83,24 +84,38 @@ namespace DMI.StatDB.UIDataProvider.Persistence
 
         public override IList<Station> GetAllStations()
         {
-            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
-
             var stations = new List<Station>();
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var stationInformationsFromRepository = unitOfWork.Stations.GetAll().ToList();
+                var stationsFromRepository = unitOfWork.Stations.GetAll().ToList();
 
-                stationInformationsFromRepository.ForEach(s =>
+                stationsFromRepository.ForEach(s =>
                 {
-                    var cacheStationInformation = IncludeInCache(s);
-                    stations.Add(cacheStationInformation);
+                    var cacheStation = IncludeInCache(s);
+                    stations.Add(cacheStation);
                 });
             }
 
-            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
-
             return stations;
+        }
+
+        public override IList<Position> GetAllPositions()
+        {
+            var positions = new List<Position>();
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var positionsFromRepository = unitOfWork.Positions.GetAll().ToList();
+
+                positionsFromRepository.ForEach(p =>
+                {
+                    var cachePosition = IncludeInCache(p);
+                    positions.Add(cachePosition);
+                });
+            }
+
+            return positions;
         }
 
         public override IList<Station> FindStations(
@@ -116,8 +131,8 @@ namespace DMI.StatDB.UIDataProvider.Persistence
 
                 stationsFromRepository.ForEach(s =>
                 {
-                    var cacheStationInformation = IncludeInCache(s);
-                    stations.Add(cacheStationInformation);
+                    var cacheStation = IncludeInCache(s);
+                    stations.Add(cacheStation);
                 });
             }
 
@@ -139,8 +154,8 @@ namespace DMI.StatDB.UIDataProvider.Persistence
 
                 stationsFromRepository.ForEach(s =>
                 {
-                    var cacheStationInformation = IncludeInCache(s);
-                    stations.Add(cacheStationInformation);
+                    var cacheStation = IncludeInCache(s);
+                    stations.Add(cacheStation);
                 });
             }
 
@@ -162,8 +177,8 @@ namespace DMI.StatDB.UIDataProvider.Persistence
 
                 stationsFromRepository.ForEach(s =>
                 {
-                    var cacheStationInformation = IncludeInCache(s);
-                    stations.Add(cacheStationInformation);
+                    var cacheStation = IncludeInCache(s);
+                    stations.Add(cacheStation);
                 });
             }
 
@@ -185,5 +200,20 @@ namespace DMI.StatDB.UIDataProvider.Persistence
 
             return station;
         }
+
+        private Position IncludeInCache(
+            Position positionFromRepository)
+        {
+            if (_positionCache.ContainsKey(positionFromRepository.StatID))
+            {
+                return _positionCache[positionFromRepository.StatID];
+            }
+
+            var position = positionFromRepository.Clone();
+            _positionCache[position.StatID] = position;
+
+            return position;
+        }
+
     }
 }

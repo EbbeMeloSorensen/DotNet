@@ -23,6 +23,8 @@ namespace DMI.StatDB.Application
 
         IList<Station> GetAllStations();
 
+        IList<Position> GetAllPositions();
+
         IList<Station> FindStations(
             IList<Expression<Func<Station, bool>>> predicates);
 

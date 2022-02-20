@@ -2,7 +2,7 @@
 
 namespace DMI.StatDB.Domain.Entities
 {
-    public class Position : ChildEntity
+    public class Position
     {
         private Station _station;
         private int _statid;

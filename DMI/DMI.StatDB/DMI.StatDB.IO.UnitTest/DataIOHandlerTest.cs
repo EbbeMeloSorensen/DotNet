@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Xunit;
 using DMI.StatDB.Domain.Entities;
@@ -9,26 +10,61 @@ namespace DMI.StatDB.IO.UnitTest
         [Fact]
         public void Test1()
         {
+            var station1 = new Station()
+            {
+                StatID = 573520,
+                Country = "Danmark",
+                IcaoId = "Bamse",
+                Source = "ing"
+            };
+
+            var station2 = new Station()
+            {
+                StatID = 573620,
+                Country = "Danmark",
+                IcaoId = "Kylling",
+                Source = "ing"
+            };
+
             var stations = new List<Station>
             {
-                new Station()
+                station1,
+                station2
+            };
+
+            var positions = new List<Position>
+            {
+                new Position
                 {
+                    Station = station1,
                     StatID = 573520,
-                    Country = "Danmark",
-                    IcaoId = "Bamse",
-                    Source = "ing"
+                    Height = 15,
+                    Lat = 5.5,
+                    Long = 10.2,
+                    StartTime = new DateTime(1972, 3, 17)
                 },
-                new Station()
+                new Position
                 {
-                    StatID = 573620,
-                    Country = "Danmark",
-                    IcaoId = "Kylling",
-                    Source = "ing"
+                    Station = station1,
+                    StatID = 573520,
+                    Height = 15,
+                    Lat = 5.5,
+                    Long = 10.2,
+                    StartTime = new DateTime(1975, 7, 24)
                 },
+                new Position
+                {
+                    Station = station2,
+                    StatID = 573620,
+                    Height = 15,
+                    Lat = 5.5,
+                    Long = 10.2,
+                    StartTime = new DateTime(1980, 6, 13)
+                }
             };
 
             var dataIOHandler = new DataIOHandler();
-            dataIOHandler.ExportDataToJson(stations, @"C:\Temp\Stations.json");
+            dataIOHandler.ExportDataToJson(stations, positions, @"C:\Temp\StatDBData.json");
         }
 
         [Fact]
@@ -36,7 +72,10 @@ namespace DMI.StatDB.IO.UnitTest
         {
             var dataIOHandler = new DataIOHandler();
 
-            dataIOHandler.ImportDataFromJson(@"C:\Temp\Stations.json", out var stations);
+            dataIOHandler.ImportDataFromJson(
+                @"C:\Temp\Stations.json",
+                out var stations,
+                out var positions);
         }
     }
 }

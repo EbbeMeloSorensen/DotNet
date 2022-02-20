@@ -38,6 +38,8 @@ namespace DMI.StatDB.Application
 
         public abstract IList<Station> GetAllStations();
 
+        public abstract IList<Position> GetAllPositions();
+
         public abstract IList<Station> FindStations(
             IList<Expression<Func<Station, bool>>> predicates);
 
@@ -56,9 +58,13 @@ namespace DMI.StatDB.Application
                 throw new ArgumentException();
             }
 
-            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all stationinformation records from repository..");
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all station records from repository..");
             var allStations = GetAllStations();
-            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {allStations.Count} stationinformation records");
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {allStations.Count} station records");
+
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all position records from repository..");
+            var allPositions = GetAllPositions();
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {allPositions.Count} position records");
 
             switch (extension)
             {
@@ -71,7 +77,7 @@ namespace DMI.StatDB.Application
                 //}
                 case ".json":
                 {
-                    _dataIOHandler.ExportDataToJson(allStations, fileName);
+                    _dataIOHandler.ExportDataToJson(allStations, allPositions, fileName);
                     _logger?.WriteLine(LogMessageCategory.Information,
                         $"  Exported {allStations.Count} stationinformation records to json file");
                     break;
