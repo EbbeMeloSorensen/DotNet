@@ -73,7 +73,7 @@ namespace DMI.StatDB.IO.UnitTest
             var dataIOHandler = new DataIOHandler();
 
             dataIOHandler.ImportDataFromJson(
-                @"C:\Temp\Stations.json",
+                @"C:\Temp\StatDBData.json",
                 out var stations,
                 out var positions);
         }

@@ -66,10 +66,10 @@ namespace DMI.StatDB.IO
             using (var streamReader = new StreamReader(fileName))
             {
                 var json = streamReader.ReadToEnd();
-                stations = JsonConvert.DeserializeObject<List<Station>>(json);
+                var statDBData = JsonConvert.DeserializeObject<StatDBData>(json);
+                stations = statDBData.Stations;
+                positions = statDBData.Positions;
             }
-
-            throw new NotImplementedException();
         }
     }
 }
