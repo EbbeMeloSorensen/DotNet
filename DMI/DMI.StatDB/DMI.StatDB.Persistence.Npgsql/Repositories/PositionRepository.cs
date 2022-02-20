@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Persistence.Repositories;
+using Npgsql;
 
 namespace DMI.StatDB.Persistence.Npgsql.Repositories
 {
@@ -30,7 +31,7 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
 
         public IEnumerable<Position> GetAll()
         {
-            throw new NotImplementedException();
+            return GetPositions(null);
         }
 
         public IEnumerable<Position> Find(Expression<Func<Position, bool>> predicate)
@@ -81,6 +82,52 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
         public void Load(IEnumerable<Position> entities)
         {
             throw new NotImplementedException();
+        }
+
+        private IEnumerable<Position> GetPositions(
+            string whereClause)
+        {
+            var positions = new List<Position>();
+
+            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            {
+                conn.Open();
+
+                var query = $"SELECT " +
+                            "\"statid\", " +
+                            "\"start_time\", " +
+                            "\"end_time\", " +
+                            "\"lat\", " +
+                            "\"long\", " +
+                            "\"height\" " +
+                            $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.position";
+
+                if (whereClause != null)
+                {
+                    query += $" WHERE {whereClause}";
+                }
+
+                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        positions.Add(new Position
+                        {
+                            StatID = reader.GetInt32(0),
+                            StartTime = reader.IsDBNull(1) ? new DateTime?() : reader.GetDateTime(1),
+                            EndTime = reader.IsDBNull(2) ? new DateTime?() : reader.GetDateTime(2),
+                            Lat = reader.IsDBNull(3) ? new double?() : reader.GetDouble(3),
+                            Long = reader.IsDBNull(4) ? new double?() : reader.GetDouble(4),
+                            Height = reader.IsDBNull(5) ? new double?() : reader.GetDouble(5)
+                        });
+                    }
+
+                    reader.Close();
+                }
+            }
+
+            return positions;
         }
     }
 }

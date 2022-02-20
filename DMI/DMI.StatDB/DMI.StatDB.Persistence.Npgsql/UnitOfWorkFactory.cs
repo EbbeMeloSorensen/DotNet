@@ -10,20 +10,20 @@ namespace DMI.StatDB.Persistence.Npgsql
         public void Initialize(ILogger logger)
         {
             // MELO-HOME
-            var host = "localhost";
-            var port = 5432;
-            var schema = "public";
-            var database = "statdb";
-            var user = "postgres";
-            var password = "L1on8Zebra";
+            //var host = "localhost";
+            //var port = 5432;
+            //var schema = "public";
+            //var database = "statdb";
+            //var user = "postgres";
+            //var password = "L1on8Zebra";
 
             // DMI
-            //var host = "nanoq.dmi.dk";
-            //var port = 5432;
-            //var schema = "sde";
-            //var database = "statdb";
-            //var user = "ebs";
-            //var password = "Vm6PAkPh";
+            var host = "nanoq.dmi.dk";
+            var port = 5432;
+            var schema = "sde";
+            var database = "statdb";
+            var user = "ebs";
+            var password = "Vm6PAkPh";
             ConnectionStringProvider.Initialize(host, port, database, schema, user, password);
         }
 
