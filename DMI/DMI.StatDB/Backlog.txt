@@ -1,0 +1,3 @@
+Todo:
+* Læs connection info fra en settings fil i stedet for at hardkode det
+* Sørg for at læse port fra settings filen i stedet for at hardkode

@@ -9,22 +9,7 @@ namespace DMI.StatDB.Persistence.Npgsql
 
         static ConnectionStringProvider()
         {
-            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var settings = configFile.AppSettings.Settings;
-            var host = settings["StatDB_PostgreSQL_Host"]?.Value;
-            var database = settings["StatDB_PostgreSQL_Database"]?.Value;
-            var schema = settings["StatDB_PostgreSQL_Schema"]?.Value;
-            var userID = settings["StatDB_PostgreSQL_UserID"]?.Value;
-            var password = settings["StatDB_PostgreSQL_Password"]?.Value;
-
-            if (host != null &&
-                database != null &&
-                schema != null &&
-                userID != null &&
-                password != null)
-            {
-                Initialize(host, database, schema, userID, password);
-            }
+            InitializeFromSettingsFile();
         }
 
         public static void InitializeFromSettingsFile()
@@ -32,16 +17,18 @@ namespace DMI.StatDB.Persistence.Npgsql
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
             var host = settings["StatDB_PostgreSQL_Host"]?.Value;
+            var port = settings["StatDB_PostgreSQL_Port"]?.Value;
             var database = settings["StatDB_PostgreSQL_Database"]?.Value;
             var schema = settings["StatDB_PostgreSQL_Schema"]?.Value;
             var userID = settings["StatDB_PostgreSQL_UserID"]?.Value;
             var password = settings["StatDB_PostgreSQL_Password"]?.Value;
 
-            Initialize(host, database, schema, userID, password);
+            Initialize(host, string.IsNullOrEmpty(port) ? 5432 : int.Parse(port), database, schema, userID, password);
         }
 
         public static void Initialize(
             string host,
+            int port,
             string database,
             string schema,
             string user,
@@ -58,7 +45,7 @@ namespace DMI.StatDB.Persistence.Npgsql
                 return;
             }
 
-            _connectionString = $"Host={host};Username={user};Password={password};Database={database}";
+            _connectionString = $"Host={host};Port={port};Username={user};Password={password};Database={database}";
         }
 
         public static string GetConnectionString()

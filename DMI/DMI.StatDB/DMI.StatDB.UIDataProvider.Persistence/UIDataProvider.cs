@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Craft.Logging;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Application;
 using DMI.StatDB.IO;
@@ -15,6 +16,23 @@ namespace DMI.StatDB.UIDataProvider.Persistence
         private Dictionary<int, Station> _stationCache;
 
         public IUnitOfWorkFactory UnitOfWorkFactory { get; }
+
+        public UIDataProvider(
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IDataIOHandler dataIOHandler) : base(dataIOHandler)
+        {
+            UnitOfWorkFactory = unitOfWorkFactory;
+
+            _stationCache = new Dictionary<int, Station>();
+        }
+
+        public override void Initialize(
+            ILogger logger)
+        {
+            base.Initialize(logger);
+
+            UnitOfWorkFactory.Initialize(logger);
+        }
 
         public override async Task<bool> CheckConnection()
         {
@@ -83,15 +101,6 @@ namespace DMI.StatDB.UIDataProvider.Persistence
             //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
 
             return stations;
-        }
-
-        public UIDataProvider(
-            IUnitOfWorkFactory unitOfWorkFactory,
-            IDataIOHandler dataIOHandler) : base(dataIOHandler)
-        {
-            UnitOfWorkFactory = unitOfWorkFactory;
-
-            _stationCache = new Dictionary<int, Station>();
         }
 
         public override IList<Station> FindStations(

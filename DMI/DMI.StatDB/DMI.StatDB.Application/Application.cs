@@ -32,7 +32,7 @@ namespace DMI.StatDB.Application
 
         public void Initialize()
         {
-            Logger?.WriteLine(LogMessageCategory.Debug, "DMI.SMS.UI.WPF - initializing application");
+            Logger?.WriteLine(LogMessageCategory.Debug, "DMI.StatDB - initializing application");
 
             _uiDataProvider.Initialize(_logger);
         }
