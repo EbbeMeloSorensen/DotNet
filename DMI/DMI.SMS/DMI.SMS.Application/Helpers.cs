@@ -763,26 +763,6 @@ namespace DMI.SMS.Application
                     result.Single().location.height = null;
                 }
 
-                if (currentStationId == "06183") // Drogden Fyr
-                {
-                    // Ifølge SMS så går Drogden Fyr tilbage til 1937,
-                    // men i ObsDB ligger der kun data fra Januar 1962, så det sætter vi den til i Frie Data
-                    oldestDate = new DateTime(1962, 1, 1).AsEpochInMicroSeconds();
-
-                    // I øvrigt er der i forbindelse med ingres-afviklingen blevet indsat en gammel højde.
-                    // Den nulstiller vi her
-
-                    for (var i = 0; i < smsStationHistory.Count; i++)
-                    {
-                        smsStationHistory[i].DateFrom = new DateTime(1962, 1, 1);
-
-                        if (smsStationHistory[i].Hha == 18)
-                        {
-                            smsStationHistory[i].Hha = null;
-                        }
-                    }
-                }
-
                 if (currentStationId == "23327") // Kolding snestation
                 {
                     // Kolding snestation har ikke nogen wgs-koordinater i sms,
@@ -889,8 +869,16 @@ namespace DMI.SMS.Application
                                 // Sørg dog for ikke at skrive Tarms lokationen for Borris, som var dens navn før
                                 if (currentStationName.ToLower() == "tarm")
                                 {
-                                    rowBefore.Wgs_lat = rowAfter.Wgs_lat;
-                                    rowBefore.Wgs_long = rowAfter.Wgs_long;
+                                    if (rowBefore.StationName.ToLower() == "tarm")
+                                    {
+                                        rowBefore.Wgs_lat = rowAfter.Wgs_lat;
+                                        rowBefore.Wgs_long = rowAfter.Wgs_long;
+                                    }
+                                    else if (rowBefore.StationName.ToLower() == "borris")
+                                    {
+                                        rowBefore.Wgs_lat = rowBefore.Si_geo_lat;
+                                        rowBefore.Wgs_long = rowBefore.Si_geo_long;
+                                    }
                                 }
                             }
                         }

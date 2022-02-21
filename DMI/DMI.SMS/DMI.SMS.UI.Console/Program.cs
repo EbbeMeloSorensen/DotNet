@@ -22,9 +22,9 @@ namespace DMI.SMS.UI.Console
 
             // Works
             //await MakeBreakfast(application);
-            //await ExtractMeteorologicalStations(application);
+            await ExtractMeteorologicalStations(application);
 
-            await ExportData(application);
+            //await ExportData(application);
         }
 
         private static async Task MakeBreakfast(

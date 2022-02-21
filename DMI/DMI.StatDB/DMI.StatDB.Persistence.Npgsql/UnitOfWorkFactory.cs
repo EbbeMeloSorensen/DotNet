@@ -20,7 +20,7 @@ namespace DMI.StatDB.Persistence.Npgsql
             // DMI
             var host = "nanoq.dmi.dk";
             var port = 5432;
-            var schema = "sde";
+            var schema = "public";
             var database = "statdb";
             var user = "ebs";
             var password = "Vm6PAkPh";

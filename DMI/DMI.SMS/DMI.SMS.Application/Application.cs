@@ -356,8 +356,6 @@ namespace DMI.SMS.Application
                     stations = stations.Where(s => s.stationId != "06183").ToList();
                 }
 
-                File.WriteAllLines("station_names.txt", stations.Select(s => s.name));
-
                 // Add historical meteorological stations
                 var koldingSneStation = stationData
                     .Single(row => row.StationIDDMI == 23327);
@@ -447,10 +445,10 @@ namespace DMI.SMS.Application
                                 .OrderBy(row => row.GdbFromDate)
                                 .ToList();
 
-                            var dataIOHandler = new DataIOHandler();
-                            dataIOHandler.WriteStationHistoryToFile(
-                                smsStationHistory,
-                                $"{station.stationId}_{station.type}_History_SMS.txt");
+                            // var dataIOHandler = new DataIOHandler();
+                            // dataIOHandler.WriteStationHistoryToFile(
+                            //     smsStationHistory,
+                            //     $"{station.stationId}_{station.type}_History_SMS.txt");
 
                             // Also generate FrieData history and dump to file
                             frieDataStationHistory = smsStationHistory.AsFrieDataStationHistory(
