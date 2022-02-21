@@ -1,0 +1,113 @@
+Station                           ,                 sea_reg,              sealev_dvr,               sealev_ln,                      tw
+  20002 (Skagen Havn)             ,                       0,                       0,                       0,                       0
+  20043 (Hirtshals Havn II)       ,                       0,                       0,                       0,                       0
+  20047 (Hirtshals Havn I)        ,                   52203,                   52203,                   52203,                    3967
+  20048 (Hirtshals Havn)          ,                       0,                       0,                       0,                       0
+  20098 (Frederikshavn)           ,                       0,                       0,                       0,                       0
+  20101 (Frederikshavn I)         ,                   51461,                   51461,                   51461,                    6408
+  20102 (Frederikshavn II)        ,                       0,                       0,                       0,                       0
+  20566 (Hobro Havn I)            ,                       0,                       0,                       0,                       0
+  20567 (Hobro Havn II)           ,                       0,                       0,                       0,                       0
+  21008 (Hanstholm Havn)          ,                       0,                       0,                       0,                       0
+  21009 (Hanstholm Havn I)        ,                   52530,                   52530,                   52530,                   52553
+  21011 (Hanstholm Havn II)       ,                       0,                       0,                       0,                       0
+  22009 (Udbyhøj Havn II)         ,                       0,                       0,                       0,                       0
+  22058 (Randers Havn I)          ,                       0,                       0,                       0,                       0
+  22059 (Randers Havn II)         ,                       0,                       0,                       0,                       0
+  22121 (Grenå Havn I)            ,                       0,                       0,                       0,                       0
+  22122 (Grenå Havn II)           ,                       0,                       0,                       0,                       0
+  22331 (Århus Havn I)            ,                   52028,                   52028,                   52028,                    5285
+  22332 (Århus Havn)              ,                       0,                       0,                       0,                       0
+  22333 (Århus Havn II)           ,                       0,                       0,                       0,                       0
+  22598 (Hov Havn I)              ,                       0,                       0,                       0,                       0
+  22599 (Hov Havn II)             ,                       0,                       0,                       0,                       0
+  23132 (Juelsminde Havn)         ,                       0,                       0,                       0,                       0
+  23289 (Fredericia Havn II)      ,                       0,                       0,                       0,                       0
+  23292 (Fredericia Havn)         ,                       0,                       0,                       0,                       0
+  23293 (Fredericia Havn)         ,                   51359,                   51359,                   51359,                   51361
+  25148 (Esbjerg Havn)            ,                       0,                       0,                       0,                       0
+  25149 (Esbjerg Havn)            ,                   52548,                   52548,                   52548,                   52554
+  26359 (Vidåslusen/Højer)        ,                   52444,                   52444,                   52444,                   52476
+  26457 (Fynshav Havn I)          ,                   52179,                   52179,                   52179,                   52523
+  26458 (Fynshav Havn)            ,                       0,                       0,                       0,                       0
+  26459 (Fynshav Havn II)         ,                       0,                       0,                       0,                       0
+  27084 (Ballen Havn)             ,                       0,                       0,                       0,                       0
+  28232 (Slipshavn)               ,                       0,                       0,                       0,                       0
+  28233 (Slipshavn)               ,                       0,                       0,                       0,                       0
+  28234 (Slipshavn)               ,                   52128,                   52128,                   52128,                   52238
+  28548 (Bagenkop Havn)           ,                       0,                       0,                       0,                       0
+  29002 (Havnebyen/Sjællands Odde),                       0,                       0,                       0,                       0
+  29038 (Holbæk Havn I)           ,                       0,                       0,                       0,                       0
+  29039 (Holbæk Havn II)          ,                       0,                       0,                       0,                       0
+  29392 (Korsør Havn)             ,                       0,                       0,                       0,                       0
+  29393 (Korsør Havn I)           ,                   51188,                   51188,                   51188,                   51466
+  29394 (Korsør Havn II)          ,                       0,                       0,                       0,                       0
+  30017 (Hornbæk Havn)            ,                   52162,                   52162,                   52162,                   52162
+  30018 (Hornbæk Havn)            ,                       0,                       0,                       0,                       0
+  30202 (Vedbæk Havn I)           ,                       0,                       0,                       0,                       0
+  30203 (Vedbæk Havn II)          ,                       0,                       0,                       0,                       0
+  30336 (Københavns Havn)         ,                   51615,                   51615,                   51615,                   51617
+  30337 (Københavns Havn)         ,                       0,                       0,                       0,                       0
+  30338 (Københavns Havn)         ,                       0,                       0,                       0,                       0
+  30339 (Københavns Havn)         ,                       0,                       0,                       0,                       0
+  30357 (Drogden Fyr)             ,                       0,                       0,                       0,                       0
+  30361 (Dragør Havn I)           ,                       0,                       0,                       0,                       0
+  30363 (Dragør Havn II)          ,                       0,                       0,                       0,                       0
+  30407 (Roskilde Havn I)         ,                       0,                       0,                       0,                       0
+  30409 (Roskilde Havn II)        ,                       0,                       0,                       0,                       0
+  30478 (Køge Havn I)             ,                       0,                       0,                       0,                       0
+  30479 (Køge Havn II)            ,                       0,                       0,                       0,                       0
+  31063 (Rødvig Havn)             ,                       0,                       0,                       0,                       0
+  31572 (Rødbyhavns Havn)         ,                       0,                       0,                       0,                       0
+  31573 (Rødbyhavns Havn I)       ,                   52078,                   52078,                   52078,                   52507
+  31574 (Rødbyhavns Havn II)      ,                       0,                       0,                       0,                       0
+  31616 (Gedser Havn I)           ,                   52519,                   52519,                   52519,                   52520
+  31618 (Gedser Havn)             ,                       0,                       0,                       0,                       0
+  31623 (Gedser Havn II)          ,                       0,                       0,                       0,                       0
+  32048 (Tejn Havn)               ,                   52546,                   52546,                   52546,                   52548
+9004201 (Thyborøn Havn)           ,                   52245,                       0,                       0,                       0
+9004203 (Thyborøn Kyst)           ,                   52246,                       0,                       0,                       0
+9004303 (Ferring)                 ,                   52239,                       0,                       0,                       0
+9005101 (Thorsminde Havn)         ,                   52249,                       0,                       0,                       0
+9005103 (Thorsminde Kyst I)       ,                   48612,                       0,                       0,                       0
+9005104 (Thorsminde Kyst II)      ,                       0,                       0,                       0,                       0
+9005110 (Thorsminde Fjord)        ,                   52249,                       0,                       0,                       0
+9005113 (Felsted Kog/Klosterhul)  ,                   51815,                       0,                       0,                       0
+9005201 (Hvide Sande Havn)        ,                   52157,                       0,                       0,                       0
+9005203 (Hvide Sande Kyst)        ,                   52156,                       0,                       0,                       0
+9005210 (Hvide Sande Fjord)       ,                   52157,                       0,                       0,                       0
+9005212 (Ringkøbing Havn)         ,                   52254,                       0,                       0,                       0
+9005213 (Bork Havn)               ,                   52284,                       0,                       0,                       0
+9006401 (Esbjerg Havn)            ,                   52322,                       0,                       0,                       0
+9006501 (Vidåslusen/Højer)        ,                   52318,                       0,                       0,                       0
+9006601 (Ballum Sluse)            ,                   52303,                       0,                       0,                       0
+9006701 (Ribe Kammersluse I)      ,                   52417,                       0,                       0,                       0
+9006703 (Ribe Kammersluse II)     ,                   52415,                       0,                       0,                       0
+9006801 (Havneby Havn I)          ,                   52396,                       0,                       0,                       0
+9006802 (Havneby Havn II)         ,                       0,                       0,                       0,                       0
+9006901 (Brøns Sluse I)           ,                   52455,                       0,                       0,                       0
+9006902 (Brøns Sluse II)          ,                   52455,                       0,                       0,                       0
+9007101 (Mandø I)                 ,                   52456,                       0,                       0,                       0
+9007102 (Mandø II)                ,                   52456,                       0,                       0,                       0
+9010101 (Haderslev Havn I)        ,                   52411,                       0,                       0,                       0
+9010102 (Haderslev Havn II)       ,                   52411,                       0,                       0,                       0
+9010201 (Sønderborg Havn I)       ,                   52383,                       0,                       0,                       0
+9010202 (Sønderborg Havn II)      ,                   52383,                       0,                       0,                       0
+9020101 (Bogense Havn I)          ,                   52379,                       0,                       0,                       0
+9020102 (Bogense Havn II)         ,                   52379,                       0,                       0,                       0
+9020201 (Assens Havn I)           ,                   52393,                       0,                       0,                       0
+9020202 (Assens Havn II)          ,                   52393,                       0,                       0,                       0
+9020301 (Fåborg Havn I)           ,                   52327,                       0,                       0,                       0
+9020302 (Fåborg Havn II)          ,                   52327,                       0,                       0,                       0
+9020401 (Kerteminde Havn I)       ,                       0,                       0,                       0,                       0
+9020402 (Kerteminde Havn II)      ,                       0,                       0,                       0,                       0
+9030101 (Karrebæksminde I)        ,                   52371,                       0,                       0,                       0
+9030102 (Karrebæksminde II)       ,                   52371,                       0,                       0,                       0
+9030201 (Kalvehave I)             ,                   52423,                       0,                       0,                       0
+9030202 (Kalvehave II)            ,                   52423,                       0,                       0,                       0
+9030301 (Hesnæs Havn I)           ,                       0,                       0,                       0,                       0
+9030302 (Hesnæs Havn II)          ,                       0,                       0,                       0,                       0
+9030401 (Rønne Havn I)            ,                       0,                       0,                       0,                       0
+9030402 (Rønne Havn II)           ,                       0,                       0,                       0,                       0
+9030501 (Bandholm Havn I)         ,                       0,                       0,                       0,                       0
+9030502 (Bandholm Havn II)        ,                       0,                       0,                       0,                       0

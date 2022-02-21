@@ -667,15 +667,26 @@ namespace DMI.SMS.Application
             return station;
         }
 
-        public static int ConvertToSMSStationId(
-            this string s)
+        public static string ConvertFromSMSStationIdToKDIStationId(
+            this string smsStationId)
         {
-            if (_kdiStationIdMap.Values.Contains(s))
+            if (_kdiStationIdMap.Keys.Contains(smsStationId))
             {
-                s = _kdiStationIdMap.Single(kvp => kvp.Value == s).Key;
+                return _kdiStationIdMap[smsStationId];
             }
 
-            return int.Parse(s);
+            return smsStationId;
+        }
+
+        public static int ConvertFromKDIStationIdToSMSStationId(
+            this string kdiStationId)
+        {
+            if (_kdiStationIdMap.Values.Contains(kdiStationId))
+            {
+                kdiStationId = _kdiStationIdMap.Single(kvp => kvp.Value == kdiStationId).Key;
+            }
+
+            return int.Parse(kdiStationId);
         }
 
         public static StationType ConvertToStationType(

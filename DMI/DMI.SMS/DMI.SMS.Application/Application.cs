@@ -208,6 +208,62 @@ namespace DMI.SMS.Application
             });
         }
 
+        public async Task ExtractOceanographicalStations(
+            DateTime? cutDate,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(async () =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Extracting oceanographical stations..");
+                var dataFolder = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..//..//..//..", "Data"));
+                var oceanParameterListFileName = Path.Combine(dataFolder, "oceanObs_parameter.json");
+                var oceanParameters = FD.Domain.IO.Helpers.ReadParametersFromJsonFile(oceanParameterListFileName);
+                var allParams = oceanParameters.Select(p => p.parameterId).OrderBy(paramId => paramId).ToList();
+
+                var referenceMapBasedOnSeaDB = new Dictionary<string, Dictionary<string, int>>();
+
+                for (var year = 1889; year <= 2020; year++)
+                {
+                    var referenceFile = new FileInfo(
+                        Path.Combine(dataFolder, "ObservationMatrices//Oceanographic", $"Oceanographic_observations_in_{year}_from_nanoq.dmi.dk.txt"));
+
+                    var referenceMapForCurrentYear = referenceFile.ReadStationTableFromFile();
+
+                    // Du laver et nyt dictionary identisk med det gamle, bortset fra at KDI stationer har
+                    // det ID, som vi opererer med i Frie Data
+                    var referenceMapForCurrentYearWithKDIStationIds = new Dictionary<string, Dictionary<string, int>>();
+
+                    foreach (var kvp in referenceMapForCurrentYear)
+                    {
+                        referenceMapForCurrentYearWithKDIStationIds[kvp.Key.ConvertFromSMSStationIdToKDIStationId()] = kvp.Value;
+                    }
+
+                    referenceMapBasedOnSeaDB.Aggregate(referenceMapForCurrentYearWithKDIStationIds);
+                }
+
+                var paramsDictionary = referenceMapBasedOnSeaDB.ConvertToParameterListMap(500);
+
+                // Generate output file names
+                var outputJsonFileName = "oceanObs_station.json";
+                var outputCsvFileName = "oceanObs_station.csv";
+                var outputOGCJsonFileName = "ogcoceanObs_station.json";
+
+                // Fetch all rows
+                var stationDataRaw = RetrieveAllRows(new DateTime(2021, 4, 28));
+
+                // Configure filters
+                var stationTypes = new List<StationType> { StationType.Vandstandsstation };
+                var stationOwners = new List<StationOwner> { StationOwner.DMI, StationOwner.Kystdirektoratet };
+                var status = new List<Status> { Status.Active };
+                int? limit = null;
+
+                // ...
+
+
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed extracting oceanographical stations");
+            });
+        }
+
         public async Task ExtractMeteorologicalStations(
             DateTime? cutDate,
             ProgressCallback progressCallback = null)
@@ -291,19 +347,10 @@ namespace DMI.SMS.Application
                     outputFolder.Create();
                 }
 
-                //var smsDBHost = "172.25.7.23";
-                //var smsDBName = "sms_prod";
-                //var smsDBUser = SettingsViewModel.SMSDatabaseUser;
-                //var smsDBPassword = SettingsViewModel.SMSDatabasePassword;
+                // Fetch all rows
+                var stationDataRaw = RetrieveAllRows(new DateTime(2021, 1, 24));
 
-                var stationOwners = new List<StationOwner>();
-
-                var stationOwnerCodeForDMI = 0;
-                stationOwners.Add(StationOwner.DMI);
-
-                var status = new List<Status> { Status.Active };
-                int? limit = null;
-
+                // Configure filters
                 var stationTypes = new List<StationType>
                 {
                     StationType.Synop,
@@ -313,29 +360,9 @@ namespace DMI.SMS.Application
                     StationType.Snestation
                 };
 
-                // Fetch all rows
-                //var stationDataRaw = await _smsDBDataProvider.RetrieveDataFromStationInformationTable(
-                //    smsDBHost, smsDBName, smsDBUser, smsDBPassword, null, null, null, null, limit, false);
-                var stationDataRaw = UIDataProvider.GetAllStationInformations();
-
-                // Todo: Sørg for at frafiltrere de rækker, der er blacklistet
-
-                // Optionally roll back to given date of interest
-                var dateTimeOfInterest = new DateTime(2021, 1, 24, 0, 0, 0);
-                stationDataRaw = stationDataRaw.RollbackToPreviousDate(dateTimeOfInterest);
-
-                // Remove records with blacklisted station ids
-                stationDataRaw = stationDataRaw
-                    .Where(row => !(row.StationIDDMI.HasValue && 
-                                  _blackListedStationIds.Keys.Contains(row.StationIDDMI.Value)))
-                    .ToList();
-
-                stationDataRaw = stationDataRaw
-                    .Where(row => !(
-                        row.StationIDDMI.HasValue && 
-                        _blackListedStationRowsIdentifiedByObjectId.Keys.Contains(row.StationIDDMI.Value) &&
-                        _blackListedStationRowsIdentifiedByObjectId[row.StationIDDMI.Value].Contains(row.ObjectId)))
-                    .ToList();
+                var stationOwners = new List<StationOwner> {StationOwner.DMI};
+                var status = new List<Status> { Status.Active };
+                int? limit = null;
 
                 // Filter out everything that is not current
                 var stationData = stationDataRaw
@@ -440,7 +467,7 @@ namespace DMI.SMS.Application
                         {
                             // Inspect station history
                             smsStationHistory = stationDataRaw
-                                .Where(row => row.StationIDDMI == station.stationId.ConvertToSMSStationId())
+                                .Where(row => row.StationIDDMI == station.stationId.ConvertFromKDIStationIdToSMSStationId())
                                 .Where(row => row.Stationtype == station.type.ConvertToStationType())
                                 .OrderBy(row => row.GdbFromDate)
                                 .ToList();
@@ -544,6 +571,31 @@ namespace DMI.SMS.Application
 
                 progressCallback.Invoke(100, "");
             });
+        }
+
+        private IList<StationInformation> RetrieveAllRows(
+            DateTime rollBackDate)
+        {
+            // Fetch all rows
+            var stationDataRaw = UIDataProvider.GetAllStationInformations();
+
+            // Roll back to given date of interest
+            stationDataRaw = stationDataRaw.RollbackToPreviousDate(rollBackDate);
+
+            // Remove records with blacklisted station ids
+            stationDataRaw = stationDataRaw
+                .Where(row => !(row.StationIDDMI.HasValue &&
+                                _blackListedStationIds.Keys.Contains(row.StationIDDMI.Value)))
+                .ToList();
+
+            stationDataRaw = stationDataRaw
+                .Where(row => !(
+                    row.StationIDDMI.HasValue &&
+                    _blackListedStationRowsIdentifiedByObjectId.Keys.Contains(row.StationIDDMI.Value) &&
+                    _blackListedStationRowsIdentifiedByObjectId[row.StationIDDMI.Value].Contains(row.ObjectId)))
+                .ToList();
+
+            return stationDataRaw;
         }
     }
 }

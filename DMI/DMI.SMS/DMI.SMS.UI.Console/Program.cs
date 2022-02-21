@@ -22,9 +22,9 @@ namespace DMI.SMS.UI.Console
 
             // Works
             //await MakeBreakfast(application);
-            await ExtractMeteorologicalStations(application);
-
             //await ExportData(application);
+            //await ExtractMeteorologicalStations(application);
+            await ExtractOceanographicalStations(application);
         }
 
         private static async Task MakeBreakfast(
@@ -60,6 +60,20 @@ namespace DMI.SMS.UI.Console
             System.Console.Write("Extracting meteorological stations...\nProgress: ");
             var dateTime = DateTime.Now;
             await application.ExtractMeteorologicalStations(dateTime, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task ExtractOceanographicalStations(
+            Application.Application application)
+        {
+            System.Console.Write("Extracting oceanographical stations...\nProgress: ");
+            var dateTime = DateTime.Now;
+            await application.ExtractOceanographicalStations(dateTime, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

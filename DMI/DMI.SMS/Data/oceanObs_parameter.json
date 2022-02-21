@@ -1,0 +1,46 @@
+[
+  {
+    "_id": "1b0011ba-0b17-46ed-a065-bb1388a0c017",
+    "description": "Sea level registration",
+    "number": null,
+    "parameterId": "sea_reg",
+    "timeCreated": 1584612751404000,
+    "timeUpdated": null,
+    "timeValidFrom": -536457600000000,
+    "timeValidTo": null,
+    "unit": "cm"
+  },
+  {
+    "_id": "d0bc8c29-8bab-478e-a791-903cde83b22c",
+    "description": "Sea level relative to DVR (Danish Vertical Reference)",
+    "number": null,
+    "parameterId": "sealev_dvr",
+    "timeCreated": 1584612751404000,
+    "timeUpdated": null,
+    "timeValidFrom": -536457600000000,
+    "timeValidTo": null,
+    "unit": "cm"
+  },
+  {
+    "_id": "c6eac3c5-7aa2-462a-bff1-6d7579e7501e",
+    "description": "Sea level relative to local zero for the station",
+    "number": null,
+    "parameterId": "sealev_ln",
+    "timeCreated": 1584612751404000,
+    "timeUpdated": null,
+    "timeValidFrom": -536457600000000,
+    "timeValidTo": null,
+    "unit": "cm"
+  },
+  {
+    "_id": "16926230-7c4d-4db2-ba23-7e658b436fdd",
+    "description": "Sea temperature",
+    "number": null,
+    "parameterId": "tw",
+    "timeCreated": 1584612751404000,
+    "timeUpdated": null,
+    "timeValidFrom": -536457600000000,
+    "timeValidTo": null,
+    "unit": "deg C"
+  }
+]
