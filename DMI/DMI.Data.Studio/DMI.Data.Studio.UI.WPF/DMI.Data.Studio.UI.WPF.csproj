@@ -18,7 +18,7 @@
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.Persistence.File\DMI.SMS.Persistence.File.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.UIElements\DMI.SMS.UIElements.csproj" />
-    <ProjectReference Include="..\..\DMI.StatDB\DMI.StatDB.Persistence.Npgsql\DMI.StatDB.Persistence.Npgsql.csproj" />
+    <ProjectReference Include="..\..\DMI.StatDB\DMI.StatDB.Persistence.File\DMI.StatDB.Persistence.File.csproj" />
     <ProjectReference Include="..\..\DMI.StatDB\DMI.StatDB.UIDataProvider.Persistence\DMI.StatDB.UIDataProvider.Persistence.csproj" />
     <ProjectReference Include="..\..\DMI.StatDB\DMI.StatDB.UIElements\DMI.StatDB.UIElements.csproj" />
     <ProjectReference Include="..\DMI.Data.Studio.ViewModel\DMI.Data.Studio.ViewModel.csproj" />

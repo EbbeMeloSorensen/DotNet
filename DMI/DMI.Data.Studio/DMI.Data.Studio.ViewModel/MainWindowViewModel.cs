@@ -174,6 +174,7 @@ namespace DMI.Data.Studio.ViewModel
             _logger = logger;
 
             _smsDataProvider.Initialize(logger);
+            _statDBDataProvider.Initialize(logger);
 
             _mainWindowTitle = "DMI Data Studio";
 

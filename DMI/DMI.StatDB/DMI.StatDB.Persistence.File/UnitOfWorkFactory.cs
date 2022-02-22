@@ -26,7 +26,7 @@ namespace DMI.StatDB.Persistence.File
 
         public void Initialize(ILogger logger)
         {
-            var file = new FileInfo(@"C:\Temp\StatDBData.json");
+            var file = new FileInfo(@"StatDBData.json");
 
             if (!file.Exists) return;
 
