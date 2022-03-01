@@ -154,7 +154,8 @@ namespace DMI.StatDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Station> FindStationsWithPositions(IList<Expression<Func<Station, bool>>> predicates)
+        public IEnumerable<Station> FindStationsWithPositions(
+            IList<Expression<Func<Station, bool>>> predicates)
         {
             throw new NotImplementedException();
         }

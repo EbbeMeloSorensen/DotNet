@@ -72,7 +72,7 @@ namespace DMI.StatDB.ViewModel
 
             if (CountryFilterInPlace)
             {
-                result.Add(s => s.Country.ToUpper().Contains(_countryFilterInUppercase));
+                result.Add(s => s.Country != null && s.Country.ToUpper().Contains(_countryFilterInUppercase));
             }
 
             if (StationIdFilterInPlace)
