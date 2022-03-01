@@ -163,15 +163,28 @@ namespace DMI.SMS.Application
             //    .ThenBy(s => s.GdbFromDate)
             //    .ToList();
 
+            // Ideen er, at vi gerne vil sortere rækkerne på en måde så
+            // man f.eks for Livgardens Kaserne ser de ældste objekter først,
+            // Så man får et gant style view
+            // Du ser imidlertid, at stationer ikke sorteres efter stationsid,
+            // og det skal de helst være.. de er nemlig blot sorteret efter
+            // MinDateFrom. Du vil gerne gøre det at du primært sorterer efter
+            // stationsid og sekundært efter MinDateFrom
+
             var groupedByObjectId = stationInformations.GroupByObjectId();
 
             var result = new List<StationInformation>();
 
+            // Her identificerer vi for hvert objekt id: evt stationsid, evt MinDateFrom 
             var temp = groupedByObjectId.Select(kvp => new
             {
-                MinDateFrom = kvp.Value.Where(x => x.GdbToDate.Year == 9999 && x.DateFrom.HasValue).Min(y => y.DateFrom),
-                ObjectId = kvp.Key
-            }).OrderBy(s => s.MinDateFrom).ToList();
+                ObjectId = kvp.Key,
+                StationId = kvp.Value.Last().StationIDDMI,
+                MinDateFrom = kvp.Value.Where(x => x.GdbToDate.Year == 9999 && x.DateFrom.HasValue).Min(y => y.DateFrom)
+            })
+            .OrderBy(s => s.StationId)
+            .ThenBy(s => s.MinDateFrom)
+            .ToList();
 
             temp.ForEach(x =>
             {
