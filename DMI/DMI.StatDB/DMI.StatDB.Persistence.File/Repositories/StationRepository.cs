@@ -79,7 +79,23 @@ namespace DMI.StatDB.Persistence.File.Repositories
 
         public void Add(Station station)
         {
-            station.StatID = _nextId++;
+
+            if (station.StatID == 0)
+            {
+                // Generate an id for the record
+                station.StatID = _nextId++;
+            }
+            else
+            {
+                // The record has an id already, make sure it doesn't already exist
+                if (_stations.Select(s => s.StatID).Contains(station.StatID))
+                {
+                    throw new InvalidOperationException("ID already exists");
+                }
+
+                // Determine the next id
+                _nextId = Math.Max(_nextId, station.StatID + 1);
+            }
 
             _stations.Add(station);
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Craft.Logging;
@@ -21,7 +22,7 @@ namespace DMI.StatDB.Persistence.File
             _stationRepository.PositionRepository = _positionRepository;
             _positionRepository.StationRepository = _stationRepository;
 
-            //PopulateWithDummyData();
+            PopulateWithDummyData();
         }
 
         public void Initialize(ILogger logger)
@@ -67,10 +68,40 @@ namespace DMI.StatDB.Persistence.File
 
             _stationRepository.Add(new Station
             {
-                StatID = 573520,
+                StatID = 573620,
                 Country = "Danmark",
                 IcaoId = "Kylling",
                 Source = "wmo"
+            });
+
+            _positionRepository.Add(new Position
+            {
+                StartTime = new DateTime(1972, 3, 17),
+                EndTime = new DateTime(1975, 7, 24),
+                Height = 2,
+                Lat = 10,
+                Long = 11,
+                StatID = 573520
+            });
+
+            _positionRepository.Add(new Position
+            {
+                StartTime = new DateTime(1975, 7, 24),
+                EndTime = new DateTime?(),
+                Height = 3,
+                Lat = 11,
+                Long = 12,
+                StatID = 573520
+            });
+
+            _positionRepository.Add(new Position
+            {
+                StartTime = new DateTime(1972, 3, 17),
+                EndTime = new DateTime(1980, 6, 13),
+                Height = 4,
+                Lat = 12,
+                Long = 13,
+                StatID = 573520
             });
         }
     }

@@ -65,6 +65,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.Persistence.File
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.IO", "..\DMI.StatDB\DMI.StatDB.IO\DMI.StatDB.IO.csproj", "{4215DE4D-C081-404D-B751-018FB190D18B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1C4E073F-95E2-4A9B-B4AA-D0A343028290}"
+	ProjectSection(SolutionItems) = preProject
+		Backlog.txt = Backlog.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

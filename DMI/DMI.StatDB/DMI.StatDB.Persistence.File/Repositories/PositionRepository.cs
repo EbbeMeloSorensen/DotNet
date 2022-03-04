@@ -60,9 +60,11 @@ namespace DMI.StatDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public void Add(Position entity)
+        public void Add(
+            Position position)
         {
-            throw new NotImplementedException();
+            var station = StationRepository.Get(position.StatID);
+
         }
 
         public void AddRange(IEnumerable<Position> entities)

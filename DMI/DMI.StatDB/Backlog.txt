@@ -1,5 +1,6 @@
 Todo:
 * Find lige ud af, hvordan det forholder sig med primary key for position... den er jo child af station of har ikke umiddelbart en primary key selv... eller hvad?
   ..kan det tænkes at være en kombination af statid og datefrom?
+* Lav noget EntityFramework CodeFirst for statdb
 * Læs connection info fra en settings fil i stedet for at hardkode det
 * Sørg for at læse port fra settings filen i stedet for at hardkode

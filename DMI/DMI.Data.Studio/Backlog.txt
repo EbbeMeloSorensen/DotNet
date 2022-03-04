@@ -1,0 +1,4 @@
+Done:
+
+Todo:
+* Man skal kunne operere med positions fra et file repo

@@ -97,7 +97,7 @@ namespace DMI.StatDB.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
                 progressCallback?.Invoke(0.0, "Exporting data");
 
-                UIDataProvider.ExportData("StatDBData_gylle.json");
+                UIDataProvider.ExportData("StatDBData.json");
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
