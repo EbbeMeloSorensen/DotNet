@@ -1,7 +1,9 @@
-* Sørg for at binde objekter korrekt sammen, når man opererer med et file repo
+* Sørg for at binde objekter korrekt sammen, når man laver objekter opererer over for et file repo
+* Sikr, at man kan exporter statdb data korrekt fra en postfres database på melo home
 
 Todo:
-* Exporter statdb data korrekt fra en postfres database på melo home
+* Sørg for at binde objekter korrekt sammen, når man starter op ved at loade filer fra et file repo. Brug bananarama på melo-home
+  o Position er nødt til at have et id, som ikke er statid, lige som personassociation og svarende til hvad du sikkert har gjort i battlefield
 * Find lige ud af, hvordan det forholder sig med primary key for position... den er jo child af station of har ikke umiddelbart en primary key selv... eller hvad?
   ..kan det tænkes at være en kombination af statid og datefrom?
 * Lav noget EntityFramework CodeFirst for statdb
