@@ -35,7 +35,7 @@ namespace DMI.StatDB.Domain.Entities
 
         public Station()
         {
-            Positions = new HashSet<Position>();
+            //Positions = new HashSet<Position>();
         }
 
         public virtual ICollection<Position> Positions { get; set; }

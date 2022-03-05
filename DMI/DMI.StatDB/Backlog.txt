@@ -1,4 +1,7 @@
+* Sørg for at binde objekter korrekt sammen, når man opererer med et file repo
+
 Todo:
+* Exporter statdb data korrekt fra en postfres database på melo home
 * Find lige ud af, hvordan det forholder sig med primary key for position... den er jo child af station of har ikke umiddelbart en primary key selv... eller hvad?
   ..kan det tænkes at være en kombination af statid og datefrom?
 * Lav noget EntityFramework CodeFirst for statdb

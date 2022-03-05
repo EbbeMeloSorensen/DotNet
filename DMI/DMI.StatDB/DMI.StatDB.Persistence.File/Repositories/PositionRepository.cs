@@ -65,6 +65,18 @@ namespace DMI.StatDB.Persistence.File.Repositories
         {
             var station = StationRepository.Get(position.StatID);
 
+            position.Station = station;
+
+            if (station.Positions == null)
+            {
+                station.Positions = new List<Position>();
+            }
+
+            station.Positions.Add(position);
+
+            _positions.Add(position);
+
+            UpdateRepositoryFile();
         }
 
         public void AddRange(IEnumerable<Position> entities)
@@ -119,6 +131,7 @@ namespace DMI.StatDB.Persistence.File.Repositories
         {
             var dataIOHandler = new DataIOHandler();
 
+            // Todo: Generate a proper file name
             dataIOHandler.ExportDataToJson(
                 StationRepository.GetAll().ToList(),
                 _positions,

@@ -260,12 +260,15 @@ namespace DMI.SMS.Domain.Entities
 
         public StationInformation()
         {
-            ContactPersons = new HashSet<ContactPerson>();
-            LegalOwners = new HashSet<LegalOwner>();
-            SensorLocations = new HashSet<SensorLocation>();
-            StationKeepers = new List<StationKeeper>();
-            MaintenanceRegulations = new List<MaintenanceRegulation>();
-            Errors = new List<Error>();
+            // Ikke sikker på hvorfor jeg gjorde dette - det virker som dødvægt,
+            // hvor man kan nøjes med at tilføje det, hvis der er behov for det
+
+            //ContactPersons = new HashSet<ContactPerson>();
+            //LegalOwners = new HashSet<LegalOwner>();
+            //SensorLocations = new HashSet<SensorLocation>();
+            //StationKeepers = new List<StationKeeper>();
+            //MaintenanceRegulations = new List<MaintenanceRegulation>();
+            //Errors = new List<Error>();
         }
 
         public virtual ICollection<SensorLocation> SensorLocations { get; set; }
