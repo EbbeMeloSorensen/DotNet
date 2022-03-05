@@ -205,16 +205,15 @@ namespace DMI.StatDB.UIDataProvider.Persistence
         private Position IncludeInCache(
             Position positionFromRepository)
         {
-            if (_positionCache.ContainsKey(positionFromRepository.StatID))
+            if (_positionCache.ContainsKey(positionFromRepository.Id))
             {
-                return _positionCache[positionFromRepository.StatID];
+                return _positionCache[positionFromRepository.Id];
             }
 
             var position = positionFromRepository.Clone();
-            _positionCache[position.StatID] = position;
+            _positionCache[position.Id] = position;
 
             return position;
         }
-
     }
 }

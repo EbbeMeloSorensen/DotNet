@@ -183,7 +183,7 @@ namespace DMI.StatDB.Persistence.File.Repositories
             dataIOHandler.ExportDataToJson(
                 _stations,
                 PositionRepository.GetAll().ToList(),
-                @"C:\Temp\Bananarama.json");
+                @"StatDBFileRepository.json");
         }
     }
 }

@@ -22,7 +22,7 @@ namespace DMI.StatDB.Persistence.File
             _stationRepository.PositionRepository = _positionRepository;
             _positionRepository.StationRepository = _stationRepository;
 
-            PopulateWithDummyData();
+            //PopulateWithDummyData();
         }
 
         public void Initialize(ILogger logger)

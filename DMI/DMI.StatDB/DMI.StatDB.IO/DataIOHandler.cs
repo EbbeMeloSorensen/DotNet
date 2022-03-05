@@ -25,6 +25,7 @@ namespace DMI.StatDB.IO
         {
             var jsonResolver = new ContractResolver();
             jsonResolver.IgnoreProperty(typeof(Station), "Positions");
+            jsonResolver.IgnoreProperty(typeof(Position), "Id");
             jsonResolver.IgnoreProperty(typeof(Position), "Station");
 
             var settings = new JsonSerializerSettings
@@ -70,6 +71,13 @@ namespace DMI.StatDB.IO
                 stations = statDBData.Stations;
                 positions = statDBData.Positions;
             }
+
+            var nextId = 1;
+
+            // We don't read ids from the json file, so we have to generate them
+            positions
+                .ToList()
+                .ForEach(p => p.Id = nextId++);
         }
     }
 }

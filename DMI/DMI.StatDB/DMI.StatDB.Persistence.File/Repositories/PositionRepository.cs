@@ -65,6 +65,7 @@ namespace DMI.StatDB.Persistence.File.Repositories
         {
             var station = StationRepository.Get(position.StatID);
 
+            position.Id = _nextId++;
             position.Station = station;
 
             if (station.Positions == null)
@@ -122,7 +123,7 @@ namespace DMI.StatDB.Persistence.File.Repositories
                 p.Station.Positions.Add(p);
             });
 
-            _nextId = _positions.Count == 0 ? 1 : _positions.Max(p => p.StatID) + 1;
+            _nextId = _positions.Count == 0 ? 1 : _positions.Max(p => p.Id) + 1;
 
             UpdateRepositoryFile();
         }
@@ -131,7 +132,6 @@ namespace DMI.StatDB.Persistence.File.Repositories
         {
             var dataIOHandler = new DataIOHandler();
 
-            // Todo: Generate a proper file name
             dataIOHandler.ExportDataToJson(
                 StationRepository.GetAll().ToList(),
                 _positions,
