@@ -9,3 +9,9 @@ Todo:
 * Lav noget EntityFramework CodeFirst for statdb
 * Læs connection info fra en settings fil i stedet for at hardkode det
 * Sørg for at læse port fra settings filen i stedet for at hardkode
+
+
+
+
+Når du læser positioner op fra databasen, så får du jo i sagens natur ikke nogle ids med, selv om de er med i domænemodellen.
+Det betyder så, at ...
