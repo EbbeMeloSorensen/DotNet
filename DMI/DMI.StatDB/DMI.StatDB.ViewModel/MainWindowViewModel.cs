@@ -133,10 +133,7 @@ namespace DMI.StatDB.ViewModel
             {
                 foreach (var position in station.Positions)
                 {
-                    if (position.StartTime.HasValue)
-                    {
-                        startTimes.Add(position.StartTime.Value);
-                    }
+                    startTimes.Add(position.StartTime);
                 }
             }
 
@@ -199,9 +196,9 @@ namespace DMI.StatDB.ViewModel
                         GeometryEditorViewModel.AddPoint(point, 20, _pointBrush);
                     }
 
-                    if (position.StartTime.HasValue)
-                    {
-                        var startTime = position.StartTime.Value;
+                    //if (position.StartTime.HasValue)
+                    //{
+                        var startTime = position.StartTime;
                         var endTime = DateTime.UtcNow.TruncateToMilliseconds();
 
                         if (position.EndTime.HasValue &&
@@ -223,7 +220,7 @@ namespace DMI.StatDB.ViewModel
                             Height = heightPrPositionRecord,
                             Brush = new SolidColorBrush(Colors.Gray)
                         });
-                    }
+                    //}
 
                     positionCount++;
                 }

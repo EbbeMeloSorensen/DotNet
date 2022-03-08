@@ -10,7 +10,6 @@ namespace DMI.StatDB.Persistence.File.Repositories
 {
     public class PositionRepository : IPositionRepository
     {
-        private static int _nextId = 1;
         private List<Position> _positions;
 
         public IStationRepository StationRepository { get; set; }
@@ -63,9 +62,9 @@ namespace DMI.StatDB.Persistence.File.Repositories
         public void Add(
             Position position)
         {
+            // Todo: Make sure you don't add a position with the same combination of station id and start date
             var station = StationRepository.Get(position.StatID);
 
-            position.Id = _nextId++;
             position.Station = station;
 
             if (station.Positions == null)
@@ -122,8 +121,6 @@ namespace DMI.StatDB.Persistence.File.Repositories
 
                 p.Station.Positions.Add(p);
             });
-
-            _nextId = _positions.Count == 0 ? 1 : _positions.Max(p => p.Id) + 1;
 
             UpdateRepositoryFile();
         }

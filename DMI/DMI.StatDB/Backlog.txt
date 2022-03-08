@@ -14,4 +14,4 @@ Todo:
 
 
 Når du læser positioner op fra databasen, så får du jo i sagens natur ikke nogle ids med, selv om de er med i domænemodellen.
-Det betyder så, at ...
+Det betyder så, at du, når du efter

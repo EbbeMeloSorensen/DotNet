@@ -4,20 +4,13 @@ namespace DMI.StatDB.Domain.Entities
 {
     public class Position
     {
-        private int _id;
         private Station _station;
         private int _statid;
-        private DateTime? _start_time;
+        private DateTime _start_time;
         private DateTime? _end_time;
         private double? _lat;
         private double? _long;
         private double? _height;
-
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
 
         public Station Station
         {
@@ -31,7 +24,7 @@ namespace DMI.StatDB.Domain.Entities
             set { _statid = value; }
         }
 
-        public DateTime? StartTime
+        public DateTime StartTime
         {
             get { return _start_time; }
             set { _start_time = value; }

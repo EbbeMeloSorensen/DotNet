@@ -296,7 +296,7 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
                     {
                         var statId = reader.GetInt32(0);
 
-                        DateTime? startTime = DateTime.MinValue;
+                        DateTime startTime = DateTime.MinValue;
                         DateTime? endTime = DateTime.MaxValue;
 
                         try
