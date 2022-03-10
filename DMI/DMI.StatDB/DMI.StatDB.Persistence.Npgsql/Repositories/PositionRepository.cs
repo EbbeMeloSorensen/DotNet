@@ -16,7 +16,7 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
 
         public int CountAll()
         {
-            throw new NotImplementedException();
+            return CountPositions(null);
         }
 
         public int Count(Expression<Func<Position, bool>> predicate)
@@ -82,6 +82,42 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
         public void Load(IEnumerable<Position> entities)
         {
             throw new NotImplementedException();
+        }
+
+        private int CountPositions(
+            string whereClause)
+        {
+            var result = -1;
+
+            var query = $"SELECT COUNT(\"statid\") FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.position";
+
+            if (whereClause != null)
+            {
+                query += $" WHERE {whereClause}";
+            }
+
+            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        result = reader.GetInt32(0);
+                    }
+
+                    reader.Close();
+                }
+            }
+
+            if (result == -1)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return result;
         }
 
         private IEnumerable<Position> GetPositions(
