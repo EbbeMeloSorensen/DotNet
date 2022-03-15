@@ -276,6 +276,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oceanographic", "Oceanograp
 		Data\ObservationMatrices\Oceanographic\Oceanographic_observations_in_2021_from_nanoq.dmi.dk.txt = Data\ObservationMatrices\Oceanographic\Oceanographic_observations_in_2021_from_nanoq.dmi.dk.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.EntityFrameworkCore.SqlServer", "DMI.SMS.Persistence.EntityFrameworkCore.SqlServer\DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.csproj", "{0E14D243-3077-4538-B450-154400021912}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -382,6 +384,10 @@ Global
 		{1B2650FC-DBCF-4BA6-9662-FFA8E88EB4CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B2650FC-DBCF-4BA6-9662-FFA8E88EB4CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B2650FC-DBCF-4BA6-9662-FFA8E88EB4CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E14D243-3077-4538-B450-154400021912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E14D243-3077-4538-B450-154400021912}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E14D243-3077-4538-B450-154400021912}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E14D243-3077-4538-B450-154400021912}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
