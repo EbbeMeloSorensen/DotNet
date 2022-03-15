@@ -6,6 +6,7 @@ namespace DMI.StatDB.Domain.Entities
     {
         private Station _station;
         private int _statid;
+        private string _entity;
         private DateTime _start_time;
         private DateTime? _end_time;
         private double? _lat;
@@ -22,6 +23,12 @@ namespace DMI.StatDB.Domain.Entities
         {
             get { return _statid; }
             set { _statid = value; }
+        }
+
+        public string Entity
+        {
+            get { return _entity; }
+            set { _entity = value; }
         }
 
         public DateTime StartTime

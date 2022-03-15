@@ -12,9 +12,9 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.EntityConfigurati
             builder.HasKey(s => s.StatID);
 
             builder.Property(s => s.StatID).HasColumnName("statid");
-            builder.Property(s => s.IcaoId).HasColumnName("icao_id");
-            builder.Property(s => s.Country).HasColumnName("country");
-            builder.Property(s => s.Source).HasColumnName("source");
+            builder.Property(s => s.IcaoId).HasColumnName("icao_id").IsRequired(false);
+            builder.Property(s => s.Country).HasColumnName("country").IsRequired(false);
+            builder.Property(s => s.Source).HasColumnName("source").IsRequired(false);
         }
     }
 }
