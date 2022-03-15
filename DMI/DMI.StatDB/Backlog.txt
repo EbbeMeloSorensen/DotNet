@@ -2,6 +2,9 @@
 * Sikr, at man kan exporter statdb data korrekt fra en postfres database på melo home
 
 Todo:
+* Generer databasen statdb_test bare med tabellen station
+* Lav et par unit tests, der dækker create og read
+* Tilføj tabellen position og sørg for at den får en primary key, der er sammensat af statid og datefrom
 * Sørg for at binde objekter korrekt sammen, når man starter op ved at loade filer fra et file repo. Brug bananarama på melo-home
   o Position er nødt til at have et id, som ikke er statid, lige som personassociation og svarende til hvad du sikkert har gjort i battlefield
 * Find lige ud af, hvordan det forholder sig med primary key for position... den er jo child af station of har ikke umiddelbart en primary key selv... eller hvad?
