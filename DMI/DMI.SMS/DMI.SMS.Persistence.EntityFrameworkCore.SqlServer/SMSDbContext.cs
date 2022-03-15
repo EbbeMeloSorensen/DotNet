@@ -1,5 +1,6 @@
-﻿using DMI.SMS.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using DMI.SMS.Domain.Entities;
+using DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.EntityConfigurations;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer
 {
@@ -12,6 +13,12 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer
         {
             var connectionString = ConnectionStringProvider.GetConnectionString();
             optionsBuilder.UseSqlServer(connectionString);
+        }
+
+        protected override void OnModelCreating(
+            ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new StationInformationConfiguration());
         }
     }
 }

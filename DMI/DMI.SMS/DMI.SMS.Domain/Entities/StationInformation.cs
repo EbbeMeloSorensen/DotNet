@@ -271,12 +271,12 @@ namespace DMI.SMS.Domain.Entities
             //Errors = new List<Error>();
         }
 
-        public virtual ICollection<SensorLocation> SensorLocations { get; set; }
-        public virtual ICollection<ContactPerson> ContactPersons { get; set; }
-        public virtual ICollection<LegalOwner> LegalOwners { get; set; }
-        public virtual ICollection<StationKeeper> StationKeepers { get; set; }
-        public virtual ICollection<MaintenanceRegulation> MaintenanceRegulations { get; set; }
-        public virtual ICollection<Error> Errors { get; set; }
+        //public virtual ICollection<SensorLocation> SensorLocations { get; set; }
+        //public virtual ICollection<ContactPerson> ContactPersons { get; set; }
+        //public virtual ICollection<LegalOwner> LegalOwners { get; set; }
+        //public virtual ICollection<StationKeeper> StationKeepers { get; set; }
+        //public virtual ICollection<MaintenanceRegulation> MaintenanceRegulations { get; set; }
+        //public virtual ICollection<Error> Errors { get; set; }
         //public virtual ICollection<ServiceVisitReport> ServiceVisitReports { get; set; }
     }
 }

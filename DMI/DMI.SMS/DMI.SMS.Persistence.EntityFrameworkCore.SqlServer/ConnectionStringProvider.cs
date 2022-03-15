@@ -9,6 +9,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer
 
         static ConnectionStringProvider()
         {
+            // Todo: Dette skal med igen, så man kan læse connection string fra en konfigurationsfil
             //var configFile = ConfigurationManager<>.OpenExeConfiguration(ConfigurationUserLevel.None);
             //var settings = configFile.AppSettings.Settings;
             //var host = settings["Host"]?.Value;
