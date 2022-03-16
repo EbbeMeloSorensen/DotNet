@@ -1,3 +1,4 @@
+using DMI.StatDB.Domain.Entities;
 using Xunit;
 
 namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest
@@ -5,16 +6,23 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest
     public class StationRepositoryTest
     {
         [Fact]
-        public void Test1()
+        public void CreateStation()
         {
             // Arrange
             var unitOfWorkFactory = new UnitOfWorkFactory();
-            unitOfWorkFactory.Initialize(null);
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 // Act
-                var count = unitOfWork.Stations.CountAll();
+                unitOfWork.Stations.Add(new Station
+                {
+                    Country = "Danmark",
+                    IcaoId = "bamse",
+                    Source = "kylling",
+                    //StatID = 12345
+                });
+
+                unitOfWork.Complete();
 
                 // Assert
                 //count.Should().Be(1);
