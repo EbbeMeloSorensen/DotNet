@@ -20,6 +20,10 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer
         {
             modelBuilder.ApplyConfiguration(new StationConfiguration());
             modelBuilder.ApplyConfiguration(new PositionConfiguration());
+
+            modelBuilder.Entity<Position>()
+                .HasOne(p => p.Station)
+                .WithMany(s => s.Positions);
         }
     }
 }
