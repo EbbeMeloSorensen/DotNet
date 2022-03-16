@@ -48,15 +48,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.IO.UnitTest", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.Persistence.Npgsql.UnitTest", "DMI.StatDB.Persistence.Npgsql.UnitTest\DMI.StatDB.Persistence.Npgsql.UnitTest.csproj", "{B90C54C1-F3CE-4D7F-8ABB-5CD28C6F2078}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer", "DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer\DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.csproj", "{40A957C3-EE90-4065-A417-A378DEB11DB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer", "DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer\DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.csproj", "{40A957C3-EE90-4065-A417-A378DEB11DB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest", "DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest\DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest.csproj", "{192EA8B9-A034-48B5-8710-CD6681362A3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest", "DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest\DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest.csproj", "{192EA8B9-A034-48B5-8710-CD6681362A3A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\..\Craft\Craft.Utils\Craft.Utils.csproj", "{CB9F4B5E-5B98-4D28-98EB-345A7673159C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Math", "..\..\Craft\Craft.Math\Craft.Math.csproj", "{57D09648-025E-4CB3-B9FB-997497CFE128}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel", "..\..\Craft\Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{4627EB78-9E1B-42BB-9AEB-F644BA9D5691}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{78FEE087-1633-498A-BC80-583241E5CC3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -164,6 +166,10 @@ Global
 		{4627EB78-9E1B-42BB-9AEB-F644BA9D5691}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4627EB78-9E1B-42BB-9AEB-F644BA9D5691}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4627EB78-9E1B-42BB-9AEB-F644BA9D5691}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78FEE087-1633-498A-BC80-583241E5CC3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78FEE087-1633-498A-BC80-583241E5CC3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78FEE087-1633-498A-BC80-583241E5CC3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78FEE087-1633-498A-BC80-583241E5CC3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\DMI.StatDB.Persistence\DMI.StatDB.Persistence.csproj" />
   </ItemGroup>
 
