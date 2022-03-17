@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
 using Craft.Persistence.EntityFrameworkCore;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Persistence.Repositories;
@@ -8,13 +7,16 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.Repositories
 {
     public class StationRepository : Repository<Station>, IStationRepository
     {
-        public StationRepository(DbContext context) : base(context)
+        public StationRepository(
+            StatDbContext context) : base(context)
         {
         }
 
         public Station GetStation(int statid)
         {
-            return Context.Set<Station>().Find(statid);
+            var statDbContext = Context as StatDbContext;
+
+            return statDbContext.Stations.Single(s => s.StatID == statid);
         }
 
         public Station GetStationWithPositions(int statid)
