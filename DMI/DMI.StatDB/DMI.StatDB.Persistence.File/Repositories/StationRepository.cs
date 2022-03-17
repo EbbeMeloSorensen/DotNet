@@ -23,7 +23,7 @@ namespace DMI.StatDB.Persistence.File.Repositories
             _stations = new List<Station>();
         }
 
-        public Station Get(decimal id)
+        public Station GetStation(int id)
         {
             return _stations.Single(p => p.StatID == id);
         }
@@ -109,7 +109,7 @@ namespace DMI.StatDB.Persistence.File.Repositories
 
         public void Update(Station station)
         {
-            var stationFromRepository = Get(station.StatID);
+            var stationFromRepository = GetStation(station.StatID);
             stationFromRepository.CopyAttributes(station);
 
             UpdateRepositoryFile();

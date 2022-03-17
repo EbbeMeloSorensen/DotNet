@@ -79,8 +79,8 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
             return CountStations(whereClause);
         }
 
-        public Station Get(
-            decimal id)
+        public Station GetStation(
+            int id)
         {
             throw new NotImplementedException();
         }

@@ -8,6 +8,8 @@ namespace DMI.StatDB.Persistence.Repositories
 {
     public interface IStationRepository : IRepository<Station>
     {
+        Station GetStation(int statid);
+
         Station GetStationWithPositions(int statid);
 
         IEnumerable<Station> GetAllStationsWithPositions();

@@ -6,7 +6,7 @@ namespace Craft.Persistence
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        TEntity Get(decimal id);
+        //TEntity Get(decimal id);
 
         int CountAll();
         int Count(Expression<Func<TEntity, bool>> predicate);

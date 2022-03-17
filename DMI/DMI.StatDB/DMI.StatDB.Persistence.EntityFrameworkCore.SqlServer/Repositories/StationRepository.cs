@@ -12,14 +12,9 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.Repositories
         {
         }
 
-        public override void Update(Station entity)
+        public Station GetStation(int statid)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void UpdateRange(IEnumerable<Station> entities)
-        {
-            throw new NotImplementedException();
+            return Context.Set<Station>().Find(statid);
         }
 
         public Station GetStationWithPositions(int statid)
@@ -38,6 +33,16 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.Repositories
         }
 
         public IEnumerable<Station> FindStationsWithPositions(IList<Expression<Func<Station, bool>>> predicates)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(Station entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UpdateRange(IEnumerable<Station> entities)
         {
             throw new NotImplementedException();
         }

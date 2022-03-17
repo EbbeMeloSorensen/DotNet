@@ -28,5 +28,22 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest
                 //count.Should().Be(1);
             }
         }
+
+        [Fact]
+        public void ReadStation()
+        {
+            // Arrange
+            var unitOfWorkFactory = new UnitOfWorkFactory();
+
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                // Act
+                var station = unitOfWork.Stations.GetStation(1);
+
+                // Assert
+                //count.Should().Be(1);
+            }
+        }
+
     }
 }
