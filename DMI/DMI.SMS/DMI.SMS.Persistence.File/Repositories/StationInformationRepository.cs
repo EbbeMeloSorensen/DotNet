@@ -19,7 +19,7 @@ namespace DMI.SMS.Persistence.File.Repositories
             _stationInformations = new List<StationInformation>();
         }
 
-        public StationInformation Get(decimal id)
+        public StationInformation Get(int id)
         {
             return _stationInformations.Single(p => p.GdbArchiveOid == id);
         }

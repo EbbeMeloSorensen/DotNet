@@ -333,10 +333,7 @@ namespace DMI.Data.Studio.ViewModel
                     {
                         foreach (var position in station.Positions)
                         {
-                            if (position.StartTime.HasValue)
-                            {
-                                startTimes.Add(position.StartTime.Value);
-                            }
+                            startTimes.Add(position.StartTime);
                         }
                     }
                 }
@@ -570,62 +567,59 @@ namespace DMI.Data.Studio.ViewModel
                 {
                     foreach (var position in station.Positions)
                     {
-                        if (position.StartTime.HasValue)
+                        var startTime = position.StartTime;
+                        var endTime = DateTime.UtcNow.TruncateToMilliseconds();
+
+                        if (position.EndTime.HasValue &&
+                            position.EndTime.Value < endTime)
                         {
-                            var startTime = position.StartTime.Value;
-                            var endTime = DateTime.UtcNow.TruncateToMilliseconds();
+                            endTime = position.EndTime.Value;
+                        }
 
-                            if (position.EndTime.HasValue &&
-                                position.EndTime.Value < endTime)
+                        var leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (startTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
+                        var right = widthOfLaneLabelColumn + totalWidthOfMainPart * (endTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
+                        var width = right - leftOfBar;
+
+                        ChronologyViewModel.TimeIntervalBarViewModels.Add(
+                            new Craft.ViewModels.Chronology.TimeIntervalBarViewModel
                             {
-                                endTime = position.EndTime.Value;
-                            }
+                                Label = station.StatID.ToString(),
+                                LabelBrush = _stationIdLabelBrush,
+                                Top = heightOfHeader + timeIntervalBarCount * heightPrPositionRecord,
+                                LeftOfBar = leftOfBar,
+                                Width = width,
+                                Height = heightPrPositionRecord,
+                                Brush = _StatDBTimeIntervalBrush
+                            });
 
-                            var leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (startTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
-                            var right = widthOfLaneLabelColumn + totalWidthOfMainPart * (endTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
-                            var width = right - leftOfBar;
+                        if (IncludeObservationIntervalBars)
+                        {
+                            var stationId = station.StatID.ToString();
+                            stationId = stationId.Substring(0, stationId.Length - 2);
+                            stationId = $"{stationId}".PadLeft(5, '0');
+                            var intervals = GetObservationIntervalsForStation(stationId);
 
-                            ChronologyViewModel.TimeIntervalBarViewModels.Add(
-                                new Craft.ViewModels.Chronology.TimeIntervalBarViewModel
-                                {
-                                    Label = station.StatID.ToString(),
-                                    LabelBrush = _stationIdLabelBrush,
-                                    Top = heightOfHeader + timeIntervalBarCount * heightPrPositionRecord,
-                                    LeftOfBar = leftOfBar,
-                                    Width = width,
-                                    Height = heightPrPositionRecord,
-                                    Brush = _StatDBTimeIntervalBrush
-                                });
+                            var barHeightRatio = 0.3;
 
-                            if (IncludeObservationIntervalBars)
+                            if (intervals != null && intervals.Any())
                             {
-                                var stationId = station.StatID.ToString();
-                                stationId = stationId.Substring(0, stationId.Length - 2);
-                                stationId = $"{stationId}".PadLeft(5, '0');
-                                var intervals = GetObservationIntervalsForStation(stationId);
-
-                                var barHeightRatio = 0.3;
-
-                                if (intervals != null && intervals.Any())
+                                // Make bars for the observation intervals (originating from ObsDB)
+                                foreach (var interval in intervals)
                                 {
-                                    // Make bars for the observation intervals (originating from ObsDB)
-                                    foreach (var interval in intervals)
-                                    {
-                                        leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item1 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
-                                        right = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item2 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
-                                        width = right - leftOfBar;
+                                    leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item1 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
+                                    right = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item2 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
+                                    width = right - leftOfBar;
 
-                                        ChronologyViewModel.TimeIntervalBarViewModels.Add(
-                                            new Craft.ViewModels.Chronology.TimeIntervalBarViewModel
-                                            {
-                                                Label = "",
-                                                Top = heightOfHeader + timeIntervalBarCount * heightPrPositionRecord + heightPrPositionRecord * (0.5 - barHeightRatio / 2),
-                                                LeftOfBar = leftOfBar,
-                                                Width = width,
-                                                Height = heightPrPositionRecord * barHeightRatio,
-                                                Brush = _observationTimeIntervalBrush
-                                            });
-                                    }
+                                    ChronologyViewModel.TimeIntervalBarViewModels.Add(
+                                        new Craft.ViewModels.Chronology.TimeIntervalBarViewModel
+                                        {
+                                            Label = "",
+                                            Top = heightOfHeader + timeIntervalBarCount * heightPrPositionRecord + heightPrPositionRecord * (0.5 - barHeightRatio / 2),
+                                            LeftOfBar = leftOfBar,
+                                            Width = width,
+                                            Height = heightPrPositionRecord * barHeightRatio,
+                                            Brush = _observationTimeIntervalBrush
+                                        });
                                 }
                             }
                         }

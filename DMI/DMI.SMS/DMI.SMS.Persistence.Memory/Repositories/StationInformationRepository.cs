@@ -17,7 +17,7 @@ namespace DMI.SMS.Persistence.Memory.Repositories
             _stationInformations = new List<StationInformation>();
         }
 
-        public StationInformation Get(decimal id)
+        public StationInformation Get(int id)
         {
             throw new NotImplementedException();
         }

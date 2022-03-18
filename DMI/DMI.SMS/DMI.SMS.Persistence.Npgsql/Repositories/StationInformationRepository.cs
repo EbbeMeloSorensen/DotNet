@@ -143,7 +143,7 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
         }
 
         public StationInformation Get(
-            decimal id)
+            int id)
         {
             var stationInformation = GetStationInformations($" WHERE gdb_archive_oid = {id}").SingleOrDefault();
 
