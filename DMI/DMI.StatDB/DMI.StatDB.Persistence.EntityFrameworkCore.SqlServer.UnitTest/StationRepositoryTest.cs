@@ -5,6 +5,14 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest
 {
     public class StationRepositoryTest
     {
+        public StationRepositoryTest()
+        {
+            TestHelper.ClearTable("Stations");
+
+            TestHelper.InsertRowInTable("Stations", "(statid, country, source) VALUES (1, 'Danmark', 'WMO')");
+            TestHelper.InsertRowInTable("Stations", "(statid, country, source) VALUES (2, 'Grønland', 'WMO')");
+        }
+
         [Fact]
         public void CreateStation()
         {
@@ -35,14 +43,13 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.UnitTest
             // Arrange
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
-            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
-            {
-                // Act
-                var station = unitOfWork.Stations.GetStation(1);
+            using var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork();
+            
+            // Act
+            var station = unitOfWork.Stations.GetStation(1);
 
-                // Assert
-                //count.Should().Be(1);
-            }
+            // Assert
+            //count.Should().Be(1);
         }
 
     }
