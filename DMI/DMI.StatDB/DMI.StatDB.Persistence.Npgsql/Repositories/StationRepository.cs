@@ -79,7 +79,7 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
             return CountStations(whereClause);
         }
 
-        public Station GetStation(
+        public Station Get(
             int id)
         {
             throw new NotImplementedException();
@@ -154,7 +154,7 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public Station GetStationWithPositions(int statid)
+        public Station GetWithPositions(int statid)
         {
             return GetStationsWithPositions($"statid = {statid}").Single();
         }

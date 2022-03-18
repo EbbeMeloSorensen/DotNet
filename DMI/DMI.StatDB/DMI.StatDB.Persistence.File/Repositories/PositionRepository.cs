@@ -63,7 +63,7 @@ namespace DMI.StatDB.Persistence.File.Repositories
             Position position)
         {
             // Todo: Make sure you don't add a position with the same combination of station id and start date
-            var station = StationRepository.GetStation(position.StatID);
+            var station = StationRepository.Get(position.StatID);
 
             position.Station = station;
 
@@ -112,7 +112,7 @@ namespace DMI.StatDB.Persistence.File.Repositories
 
             _positions.ForEach(p =>
             {
-                p.Station = StationRepository.GetStation(p.StatID);
+                p.Station = StationRepository.Get(p.StatID);
 
                 if (p.Station.Positions == null)
                 {

@@ -2,26 +2,33 @@
 using Craft.Persistence.EntityFrameworkCore;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.Repositories
 {
     public class StationRepository : Repository<Station>, IStationRepository
     {
+        private StatDbContext StatDbContext
+        {
+            get { return Context as StatDbContext; }
+        }
+
         public StationRepository(
             StatDbContext context) : base(context)
         {
         }
 
-        public Station GetStation(int statid)
+        public Station Get(int statid)
         {
-            var statDbContext = Context as StatDbContext;
-
-            return statDbContext.Stations.Single(s => s.StatID == statid);
+            return StatDbContext.Stations.Single(s => s.StatID == statid);
         }
 
-        public Station GetStationWithPositions(int statid)
+        public Station GetWithPositions(
+            int statid)
         {
-            throw new NotImplementedException();
+            return StatDbContext.Stations
+                .Include(s => s.Positions)
+                .SingleOrDefault(s => s.StatID == statid) ?? throw new InvalidOperationException();
         }
 
         public IEnumerable<Station> GetAllStationsWithPositions()
