@@ -17,6 +17,7 @@ namespace DMI.StatDB.Persistence
             Position other)
         {
             position.StatID = other.StatID;
+            position.Entity = other.Entity;
             position.StartTime = other.StartTime;
             position.EndTime = other.EndTime;
             position.Long = other.Long;

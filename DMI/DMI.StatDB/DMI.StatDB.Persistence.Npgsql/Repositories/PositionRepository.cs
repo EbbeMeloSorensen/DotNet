@@ -131,6 +131,7 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
 
                 var query = $"SELECT " +
                             "\"statid\", " +
+                            "\"entity\", " +
                             "\"start_time\", " +
                             "\"end_time\", " +
                             "\"lat\", " +
@@ -151,11 +152,12 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
                         positions.Add(new Position
                         {
                             StatID = reader.GetInt32(0),
-                            StartTime = reader.GetDateTime(1),
-                            EndTime = reader.IsDBNull(2) ? new DateTime?() : reader.GetDateTime(2),
-                            Lat = reader.IsDBNull(3) ? new double?() : reader.GetDouble(3),
-                            Long = reader.IsDBNull(4) ? new double?() : reader.GetDouble(4),
-                            Height = reader.IsDBNull(5) ? new double?() : reader.GetDouble(5)
+                            Entity = reader.GetString(1),
+                            StartTime = reader.GetDateTime(2),
+                            EndTime = reader.IsDBNull(3) ? new DateTime?() : reader.GetDateTime(3),
+                            Lat = reader.IsDBNull(4) ? new double?() : reader.GetDouble(4),
+                            Long = reader.IsDBNull(5) ? new double?() : reader.GetDouble(5),
+                            Height = reader.IsDBNull(6) ? new double?() : reader.GetDouble(6)
                         });
                     }
 

@@ -173,7 +173,14 @@ namespace DMI.StatDB.Persistence.File.Repositories
         public IEnumerable<Station> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates)
         {
-            throw new NotImplementedException();
+            IEnumerable<Station> temp = _stations;
+
+            foreach (var predicate in predicates)
+            {
+                temp = temp.Where(predicate.Compile());
+            }
+
+            return temp;
         }
 
         private void UpdateRepositoryFile()

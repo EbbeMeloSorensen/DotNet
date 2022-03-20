@@ -205,8 +205,10 @@ namespace DMI.StatDB.UIDataProvider.Persistence
         private Position IncludeInCache(
             Position positionFromRepository)
         {
-            var hashCode = new Tuple<int, DateTime>(
-                positionFromRepository.StatID, positionFromRepository.StartTime).GetHashCode();
+            var hashCode = new Tuple<int, string, DateTime>(
+                positionFromRepository.StatID,
+                positionFromRepository.Entity,
+                positionFromRepository.StartTime).GetHashCode();
 
             if (_positionCache.ContainsKey(hashCode))
             {

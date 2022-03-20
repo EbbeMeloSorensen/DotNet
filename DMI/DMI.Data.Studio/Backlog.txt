@@ -2,3 +2,7 @@ Done:
 
 Todo:
 * Man skal kunne operere med positions fra et file repo
+  o Statiner OG Positions skal læses op i memory (OK)
+  o Når man trykker på Find-knappen med country filter sat til Danmark, skal den hive 2140 stationer op (OK)
+  o Den export, du har brugt til at lave StatDBFile Repo virker ikke, idet den har givet samme startinterval til alle
+    (mon ikke det skyldes det der rod med cachen..)
