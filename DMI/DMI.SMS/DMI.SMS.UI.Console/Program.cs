@@ -16,15 +16,15 @@ namespace DMI.SMS.UI.Console
             System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllStationInformations().Count}");
 
             // Works
-            //System.Console.WriteLine("Exporting data...");
+            System.Console.WriteLine("Exporting data...");
             //application.UIDataProvider.ExportData(".//Kylling.xml");
-            //System.Console.WriteLine("Done...");
+            System.Console.WriteLine("Done...");
 
             // Works
             //await MakeBreakfast(application);
-            //await ExportData(application);
+            await ExportData(application);
             //await ExtractMeteorologicalStations(application);
-            await ExtractOceanographicalStations(application);
+            //await ExtractOceanographicalStations(application);
         }
 
         private static async Task MakeBreakfast(
