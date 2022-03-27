@@ -1,4 +1,5 @@
 ﻿using DD.Domain;
+using DD.Persistence;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,32 +9,19 @@ namespace DD.WebAPI.Controllers
     [ApiController]
     public class CreatureTypesController : ControllerBase
     {
-        private static List<CreatureType> creatureTypes = new List<CreatureType>()
+        private IUnitOfWorkFactory UnitOfWorkFactory { get; }
+
+        public CreatureTypesController(
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
-            new CreatureType
-            {
-                Id = 1,
-                Name = "Goblin",
-                MaxHitPoints = 8,
-                ArmorClass = 7,
-                Movement = 6,
-                Thaco = 16
-            },
-            new CreatureType
-            {
-                Id = 2,
-                Name = "Skeleton",
-                MaxHitPoints = 5,
-                ArmorClass = 5,
-                Movement = 7,
-                Thaco = 14
-            }
-        };
+            UnitOfWorkFactory = unitOfWorkFactory;
+        }
 
         [HttpGet]
         public IEnumerable<CreatureType> Get()
         {
-            return creatureTypes;
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            return unitOfWork.CreatureTypes.GetAll();
         }
     }
 }

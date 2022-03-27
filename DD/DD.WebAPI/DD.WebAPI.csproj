@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DD.Domain\DD.Domain.csproj" />
+    <ProjectReference Include="..\DD.Persistence.Memory\DD.Persistence.Memory.csproj" />
+    <ProjectReference Include="..\DD.Persistence\DD.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
