@@ -20,6 +20,7 @@
                 <MenuItem Header="_New Station Information" Command="{Binding CreateStationInformationCommand}"/>
                 <Separator/>
                 <MenuItem Header="Export Data" Command="{Binding ExportDataCommand}"/>
+                <MenuItem Header="Fetch Stations" Command="{Binding GenerateMeteorologicalStationListCommand}"/>
                 <MenuItem Header="Import Data" Command="{Binding ImportDataCommand}"/>
                 <Separator/>
                 <MenuItem Header="Settings" 

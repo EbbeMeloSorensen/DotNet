@@ -154,7 +154,7 @@ namespace DMI.SMS.Persistence.File.Repositories
         {
             var dataIOHandler = new DataIOHandler();
 
-            dataIOHandler.ExportDataToXML(
+            dataIOHandler.ExportDataToJson(
                 _stationInformations,
                 "SMSFileRepository.json");
         }

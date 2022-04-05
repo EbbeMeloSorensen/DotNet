@@ -1,8 +1,15 @@
 Done:
-
-Todo:
 * Man skal kunne operere med positions fra et file repo
   o Statiner OG Positions skal læses op i memory (OK)
   o Når man trykker på Find-knappen med country filter sat til Danmark, skal den hive 2140 stationer op (OK)
   o Den export, du har brugt til at lave StatDBFile Repo virker ikke, idet den har givet samme startinterval til alle
-    (mon ikke det skyldes det der rod med cachen..)
+    (mon ikke det skyldes det der rod med cachen..) (OK)
+
+Todo:
+* Fra DMi.Data.Studio - hvis man opererer med et file repo så læser den det ind korrekt, men så gemmer den det, og
+  i den forbindelse stripper den alle line endings væk, og så kan den gudhjælpemig ikke læse det bagefter..
+  .. hvad er forskellen på at man explicit kalder export og så på at den bare selv opdaterer sit repo?
+  export bruger: _smsDataProvider.ExportData -> bruger dataIOHandler.ExportDataToJson
+
+
+* Man skal kunne køre stationfetcher fra DMI.Data.Studio og ikke bare fra DMI.SMS

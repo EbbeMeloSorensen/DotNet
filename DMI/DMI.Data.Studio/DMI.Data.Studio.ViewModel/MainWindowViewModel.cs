@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Craft.Logging;
@@ -11,6 +12,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Math;
 using Craft.Utils;
+using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D;
 using Craft.ViewModels.Chronology;
@@ -44,6 +46,7 @@ namespace DMI.Data.Studio.ViewModel
         private RelayCommand<object> _openAboutDialogCommand;
         private RelayCommand<object> _createStationInformationCommand;
         private RelayCommand<object> _exportDataCommand;
+        private AsyncCommand<object> _generateMeteorologicalStationListCommand;
         private RelayCommand<object> _importDataCommand;
         private RelayCommand<object> _restoreTestDatabaseCommand;
         private Brush _stationInformationBrush = new SolidColorBrush(Colors.DarkRed);
@@ -54,7 +57,9 @@ namespace DMI.Data.Studio.ViewModel
         private Brush _stationIdLabelBrush = new SolidColorBrush(Colors.Black);
         private bool _classifyRecordsWithCondition;
         private readonly ObservableObject<bool> _observableForClassifyRecordsWithCondition;
-        private int _selectedOveralTabIndex; 
+        private int _selectedOveralTabIndex;
+
+        private SMS.Application.Application _smsApplication;
 
         private string _mainWindowTitle;
 
@@ -152,6 +157,12 @@ namespace DMI.Data.Studio.ViewModel
             get { return _exportDataCommand ?? (_exportDataCommand = new RelayCommand<object>(ExportData)); }
         }
 
+        public AsyncCommand<object> GenerateMeteorologicalStationListCommand
+        {
+            get { return _generateMeteorologicalStationListCommand ?? (
+                    _generateMeteorologicalStationListCommand = new AsyncCommand<object>(GenerateMeteorologicalStationList)); }
+        }
+
         public RelayCommand<object> ImportDataCommand
         {
             get { return _importDataCommand ?? (_importDataCommand = new RelayCommand<object>(ImportData)); }
@@ -175,6 +186,9 @@ namespace DMI.Data.Studio.ViewModel
 
             _smsDataProvider.Initialize(logger);
             _statDBDataProvider.Initialize(logger);
+
+            _smsApplication = new SMS.Application.Application(
+                _smsDataProvider, _logger);
 
             _mainWindowTitle = "DMI Data Studio";
 
@@ -752,8 +766,14 @@ namespace DMI.Data.Studio.ViewModel
                 @"C:\Temp\SMSData_Export.json",
                 StationInformationListViewModel.FindStationInformationsViewModel.FilterAsExpressionCollection());
 
-            dialogViewModel = new MessageBoxDialogViewModel("Exported data succesfully to C:\\Temp\\SMSData.xml", false);
+            dialogViewModel = new MessageBoxDialogViewModel("Exported data succesfully to C:\\Temp\\SMSData.json", false);
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+        }
+
+        private async Task GenerateMeteorologicalStationList(
+            object owner)
+        {
+            await _smsApplication.ExtractMeteorologicalStations(null);
         }
 
         private void ImportData(
