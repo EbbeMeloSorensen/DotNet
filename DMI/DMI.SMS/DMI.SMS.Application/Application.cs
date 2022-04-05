@@ -149,7 +149,7 @@ namespace DMI.SMS.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
                 progressCallback?.Invoke(0.0, "Exporting data");
 
-                UIDataProvider.ExportData("SMSData.json");
+                UIDataProvider.ExportData("SMSData.json", null);
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");

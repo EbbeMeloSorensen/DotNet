@@ -47,7 +47,9 @@ namespace DMI.SMS.Application
         void DeleteDeleteStationInformations(
             IList<StationInformation> stationInformation);
 
-        void ExportData(string fileName);
+        void ExportData(
+            string fileName,
+            IList<Expression<Func<StationInformation, bool>>> predicates);
 
         void ImportData(string fileName);
 

@@ -748,7 +748,9 @@ namespace DMI.Data.Studio.ViewModel
                 return;
             }
 
-            _smsDataProvider.ExportData(@"C:\Temp\SMSData.xml");
+            _smsDataProvider.ExportData(
+                @"C:\Temp\SMSData_Export.json",
+                StationInformationListViewModel.FindStationInformationsViewModel.FilterAsExpressionCollection());
 
             dialogViewModel = new MessageBoxDialogViewModel("Exported data succesfully to C:\\Temp\\SMSData.xml", false);
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);

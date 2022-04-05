@@ -14,7 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\DMI.SMS.Application\DMI.SMS.Application.csproj" />
-    <ProjectReference Include="..\DMI.SMS.Persistence.Npgsql\DMI.SMS.Persistence.Npgsql.csproj" />
+    <ProjectReference Include="..\DMI.SMS.Persistence.File\DMI.SMS.Persistence.File.csproj" />
     <ProjectReference Include="..\DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj" />
   </ItemGroup>
 

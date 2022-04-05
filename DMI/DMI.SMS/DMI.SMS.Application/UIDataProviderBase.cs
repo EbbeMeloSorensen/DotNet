@@ -63,7 +63,9 @@ namespace DMI.SMS.Application
         public abstract void DeleteDeleteStationInformations(
             IList<StationInformation> stationInformation);
 
-        public void ExportData(string fileName)
+        public void ExportData(
+            string fileName,
+            IList<Expression<Func<StationInformation, bool>>> predicates)
         {
             var extension = Path.GetExtension(fileName)?.ToLower();
 
@@ -72,24 +74,35 @@ namespace DMI.SMS.Application
                 throw new ArgumentException();
             }
 
-            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all stationinformation records from repository..");
-            var allStationInformations = GetAllStationInformations();
-            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {allStationInformations.Count} stationinformation records");
+            IList<StationInformation> stationInformations;
+
+            if (predicates == null || predicates.Count == 0)
+            {
+                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all stationinformation records from repository..");
+                stationInformations = GetAllStationInformations();
+            }
+            else
+            {
+                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving matching stationinformation records from repository..");
+                stationInformations = FindStationInformations(predicates);
+            }
+
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {stationInformations.Count} stationinformation records");
 
             switch (extension)
             {
                 case ".xml":
                 {
-                    _dataIOHandler.ExportDataToXML(allStationInformations, fileName);
+                    _dataIOHandler.ExportDataToXML(stationInformations, fileName);
                     _logger?.WriteLine(LogMessageCategory.Information, 
-                        $"  Exported {allStationInformations.Count} stationinformation records to xml file");
+                        $"  Exported {stationInformations.Count} stationinformation records to xml file");
                     break;
                 }
                 case ".json":
                 {
-                    _dataIOHandler.ExportDataToJson(allStationInformations, fileName);
+                    _dataIOHandler.ExportDataToJson(stationInformations, fileName);
                     _logger?.WriteLine(LogMessageCategory.Information,
-                        $"  Exported {allStationInformations.Count} stationinformation records to json file");
+                        $"  Exported {stationInformations.Count} stationinformation records to json file");
                     break;
                 }
                 default:

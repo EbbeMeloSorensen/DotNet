@@ -156,7 +156,7 @@ namespace DMI.SMS.Persistence.File.Repositories
 
             dataIOHandler.ExportDataToXML(
                 _stationInformations,
-                @"C:\Temp\SMSFileRepository.xml");
+                "SMSFileRepository.json");
         }
 
         public void RemoveLogically(
