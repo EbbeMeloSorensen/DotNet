@@ -304,7 +304,7 @@ namespace DMI.SMS.Application
             List<string> allParams,
             Dictionary<string, List<string>> paramsDictionary,
             MeteorologicalStationListGenerationMode mode,
-            ProgressCallback progressCallback)
+            ProgressCallback? progressCallback)
         {
             await Task.Run(() =>
             {
@@ -333,7 +333,7 @@ namespace DMI.SMS.Application
                         throw new ArgumentOutOfRangeException("Invalid mode for station list generation");
                 }
 
-                if (progressCallback.Invoke(2, ""))
+                if (progressCallback != null && progressCallback.Invoke(2, ""))
                 {
                     return;
                 }
@@ -385,32 +385,38 @@ namespace DMI.SMS.Application
 
                 // Add historical meteorological stations
                 var koldingSneStation = stationData
-                    .Single(row => row.StationIDDMI == 23327);
+                    .SingleOrDefault(row => row.StationIDDMI == 23327);
 
-                stations.Add(koldingSneStation.ConvertToFrieDataStation(false));
-
-                // Tilføj Vestervig snestation - den kom ikke med over fra SnowStation tabellen til StationInformation tabellen
-                stations.Add(new Station
+                if (koldingSneStation != null)
                 {
-                    _id = Guid.NewGuid().ToString(),
-                    country = "DNK",
-                    instrumentParameter = new List<InstrumentParameter>(),
-                    location = new Location
+                    stations.Add(koldingSneStation.ConvertToFrieDataStation(false));
+                }
+
+                if (false) // temporary
+                {
+                    // Tilføj Vestervig snestation - den kom ikke med over fra SnowStation tabellen til StationInformation tabellen
+                    stations.Add(new Station
                     {
-                        latitude = 56.7637,
-                        longitude = 8.3207
-                    },
-                    name = "Vestervig",
-                    owner = "DMI",
-                    parameterId = new List<string>(),
-                    stationId = "21100",
-                    status = "Inactive",
-                    timeCreated = timeNow,
-                    timeOperationFrom = new DateTime(1971, 1, 1).AsEpochInMicroSeconds(),
-                    timeOperationTo = new DateTime(2019, 5, 1).AsEpochInMicroSeconds(),
-                    timeValidFrom = new DateTime(2019, 5, 1).AsEpochInMicroSeconds(),
-                    type = "Manual snow"
-                });
+                        _id = Guid.NewGuid().ToString(),
+                        country = "DNK",
+                        instrumentParameter = new List<InstrumentParameter>(),
+                        location = new Location
+                        {
+                            latitude = 56.7637,
+                            longitude = 8.3207
+                        },
+                        name = "Vestervig",
+                        owner = "DMI",
+                        parameterId = new List<string>(),
+                        stationId = "21100",
+                        status = "Inactive",
+                        timeCreated = timeNow,
+                        timeOperationFrom = new DateTime(1971, 1, 1).AsEpochInMicroSeconds(),
+                        timeOperationTo = new DateTime(2019, 5, 1).AsEpochInMicroSeconds(),
+                        timeValidFrom = new DateTime(2019, 5, 1).AsEpochInMicroSeconds(),
+                        type = "Manual snow"
+                    });
+                }
 
                 stations = stations.OrderBy(s => s.stationId).ToList();
 
@@ -472,10 +478,10 @@ namespace DMI.SMS.Application
                                 .OrderBy(row => row.GdbFromDate)
                                 .ToList();
 
-                            // var dataIOHandler = new DataIOHandler();
-                            // dataIOHandler.WriteStationHistoryToFile(
-                            //     smsStationHistory,
-                            //     $"{station.stationId}_{station.type}_History_SMS.txt");
+                            var dataIOHandler = new DataIOHandler();
+                            dataIOHandler.WriteStationHistoryToFile(
+                                 smsStationHistory,
+                                 $"{station.stationId}_{station.type}_History_SMS.txt");
 
                             // Also generate FrieData history and dump to file
                             frieDataStationHistory = smsStationHistory.AsFrieDataStationHistory(
@@ -500,7 +506,8 @@ namespace DMI.SMS.Application
 
                     stationCount++;
 
-                    if (progressCallback.Invoke(2.0 + 96.0 * stationCount / nStations, ""))
+                    if (progressCallback != null && 
+                        progressCallback.Invoke(2.0 + 96.0 * stationCount / nStations, ""))
                     {
                         return;
                     }
@@ -569,7 +576,7 @@ namespace DMI.SMS.Application
 
                 ogcStations.WriteOGCMeteorologicalStationsToJsonFile(outputOGCJsonFileName);
 
-                progressCallback.Invoke(100, "");
+                progressCallback?.Invoke(100, "");
             });
         }
 
