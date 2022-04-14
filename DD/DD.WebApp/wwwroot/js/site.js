@@ -6,7 +6,8 @@
 function dummyFunction() {
     // Dollartegnet indikerer, at vi bruger en funktion fra jquery
     $.ajax({
-        url: "http://api.exchangeratesapi.io/v1/latest?access_key=3d5861a43985fbc3778eda7aaa2fefa9&symbols=USD,INR",
+        //url: "http://api.exchangeratesapi.io/v1/latest?access_key=3d5861a43985fbc3778eda7aaa2fefa9&symbols=USD,INR",
+        url: "https://localhost:44358/api/artists",
         type: "GET",
         dataType: "json",
         success: function(result) {
