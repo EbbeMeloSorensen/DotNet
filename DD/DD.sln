@@ -55,7 +55,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.UI.Console", "DD.UI.Cons
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.WebAPI", "DD.WebAPI\DD.WebAPI.csproj", "{A98DB40A-7B17-4C76-971B-314102E4BC00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.WebApp", "DD.WebApp\DD.WebApp.csproj", "{13117B22-B621-41DC-BCB0-56F974CBECE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.WebApp", "DD.WebApp\DD.WebApp.csproj", "{13117B22-B621-41DC-BCB0-56F974CBECE3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA299E97-F995-4124-86FA-F61BB75CFC2B}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.txt = Readme.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
