@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities;
@@ -15,5 +17,17 @@ namespace PR.Application
             Person person);
 
         Person GetPerson(Guid id);
+
+        IList<Person> GetAllPeople();
+
+        IList<Person> FindPeople(
+            Expression<Func<Person, bool>> predicate);
+
+        IList<Person> FindPeople(
+            IList<Expression<Func<Person, bool>>> predicates);
+
+        void ExportData(
+            string fileName,
+            IList<Expression<Func<Person, bool>>> predicates);
     }
 }

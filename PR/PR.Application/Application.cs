@@ -1,7 +1,12 @@
-﻿using Craft.Logging;
+﻿using System.Threading.Tasks;
+using Craft.Logging;
 
 namespace PR.Application
 {
+    public delegate bool ProgressCallback(
+        double progress,
+        string currentActivity);
+
     public class Application
     {
         private IUIDataProvider _uiDataProvider;
@@ -29,6 +34,73 @@ namespace PR.Application
             Logger?.WriteLine(LogMessageCategory.Debug, "DMI.SMS.UI.WPF - initializing application");
 
             _uiDataProvider.Initialize(_logger);
+        }
+
+        public async Task MakeBreakfast(
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Making breakfast..");
+
+                var result = 0.0;
+                var currentActivity = "Baking bread";
+                var count = 0;
+                var total = 317;
+
+                Logger?.WriteLine(LogMessageCategory.Information, $"  {currentActivity}");
+
+                while (count < total)
+                {
+                    if (count >= 160)
+                    {
+                        currentActivity = "Poring Milk";
+
+                        if (count == 160)
+                        {
+                            Logger?.WriteLine(LogMessageCategory.Information, $"  {currentActivity}");
+                        }
+                    }
+                    else if (count >= 80)
+                    {
+                        currentActivity = "Frying eggs";
+
+                        if (count == 80)
+                        {
+                            Logger?.WriteLine(LogMessageCategory.Information, $"  {currentActivity}");
+                        }
+                    }
+
+                    for (var j = 0; j < 499999999 / 100; j++)
+                    {
+                        result += 1.0;
+                    }
+
+                    count++;
+
+                    if (progressCallback?.Invoke(100.0 * count / total, currentActivity) is true)
+                    {
+                        break;
+                    }
+                }
+
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed breakfast");
+            });
+        }
+
+        public async Task ExportData(
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
+                progressCallback?.Invoke(0.0, "Exporting data");
+
+                UIDataProvider.ExportData("People.json", null);
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
+            });
         }
     }
 }

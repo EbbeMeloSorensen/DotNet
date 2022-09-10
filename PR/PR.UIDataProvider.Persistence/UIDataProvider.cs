@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain;
@@ -63,6 +65,95 @@ namespace PR.UIDataProvider.Persistence
                 _personCache[id] = person;
                 return person;
             }
+        }
+
+        public override IList<Person> GetAllPeople()
+        {
+            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
+
+            var stationInformations = new List<Person>();
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var stationInformationsFromRepository = unitOfWork.People.GetAll().ToList();
+
+                stationInformationsFromRepository.ForEach(s =>
+                {
+                    var cacheStationInformation = IncludeInCache(s);
+                    stationInformations.Add(cacheStationInformation);
+                });
+            }
+
+            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
+
+            return stationInformations;
+        }
+
+        public override IList<Person> FindPeople(
+            Expression<Func<Person, bool>> predicate)
+        {
+            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
+
+            var people = new List<Person>();
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var peopleFromRepository = unitOfWork.People.Find(predicate).ToList();
+
+                peopleFromRepository.ForEach(p =>
+                {
+                    var cachePerson = IncludeInCache(p);
+                    people.Add(cachePerson);
+                });
+            }
+
+            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
+
+            return people;
+        }
+
+        public override IList<Person> FindPeople(
+            IList<Expression<Func<Person, bool>>> predicates)
+        {
+            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
+
+            var stationInformations = new List<Person>();
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var stationInformationsFromRepository = unitOfWork.People.Find(predicates).ToList();
+
+                stationInformationsFromRepository.ForEach(s =>
+                {
+                    var cacheStationInformation = IncludeInCache(s);
+                    stationInformations.Add(cacheStationInformation);
+                });
+            }
+
+            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
+
+            return stationInformations;
+        }
+
+        private Person IncludeInCache(
+            Person personFromRepository)
+        {
+            if (_personCache.ContainsKey(personFromRepository.Id))
+            {
+                return _personCache[personFromRepository.Id];
+            }
+
+            var person = personFromRepository.Clone();
+            _personCache[person.Id] = person;
+
+            return person;
+        }
+
+        private void RemoveFromCache(Person person)
+        {
+            if (!_personCache.ContainsKey(person.Id)) return;
+
+            _personCache.Remove(person.Id);
         }
     }
 }
