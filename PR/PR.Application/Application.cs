@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Craft.Logging;
+using PR.Domain.Entities;
 
 namespace PR.Application
 {
@@ -85,6 +86,22 @@ namespace PR.Application
                 }
 
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed breakfast");
+            });
+        }
+
+        public async Task CreatePerson(
+            Person person,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
+                progressCallback?.Invoke(0.0, "Creating Person");
+
+                UIDataProvider.CreatePerson(person);
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
             });
         }
 

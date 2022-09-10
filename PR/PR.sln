@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.UIDataProvider.Persisten
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.UI.Console", "PR.UI.Console\PR.UI.Console.csproj", "{D329B3CB-CF03-4B26-81EF-3208C6DACB9D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{D30CA8E7-38E1-41A5-940D-680E7D46A306}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{93AFE2FE-8DA2-4909-A93E-FB5C8AC8C749}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{D329B3CB-CF03-4B26-81EF-3208C6DACB9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D329B3CB-CF03-4B26-81EF-3208C6DACB9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D329B3CB-CF03-4B26-81EF-3208C6DACB9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D30CA8E7-38E1-41A5-940D-680E7D46A306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D30CA8E7-38E1-41A5-940D-680E7D46A306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D30CA8E7-38E1-41A5-940D-680E7D46A306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D30CA8E7-38E1-41A5-940D-680E7D46A306}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93AFE2FE-8DA2-4909-A93E-FB5C8AC8C749}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93AFE2FE-8DA2-4909-A93E-FB5C8AC8C749}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93AFE2FE-8DA2-4909-A93E-FB5C8AC8C749}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93AFE2FE-8DA2-4909-A93E-FB5C8AC8C749}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
