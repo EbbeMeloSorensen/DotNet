@@ -7,13 +7,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{C88E4626-8B45-47E4-99A3-97A51502B45E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Domain", "PR.Domain\PR.Domain.csproj", "{99F78784-4B49-41BC-88D4-972EAD85F968}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Domain", "PR.Domain\PR.Domain.csproj", "{99F78784-4B49-41BC-88D4-972EAD85F968}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence", "PR.Persistence\PR.Persistence.csproj", "{C23DEFA8-E75B-49E8-917A-8E46609E4F1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence", "PR.Persistence\PR.Persistence.csproj", "{C23DEFA8-E75B-49E8-917A-8E46609E4F1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.EntityFrameworkCore.SqlServer", "PR.Persistence.EntityFrameworkCore.SqlServer\PR.Persistence.EntityFrameworkCore.SqlServer.csproj", "{24D95C75-9397-4B69-8678-E211358FEBCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.SqlServer", "PR.Persistence.EntityFrameworkCore.SqlServer\PR.Persistence.EntityFrameworkCore.SqlServer.csproj", "{24D95C75-9397-4B69-8678-E211358FEBCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp", "PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp\PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp.csproj", "{1B9474B2-6C67-4DF6-A003-EF00F106CC51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp", "PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp\PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp.csproj", "{1B9474B2-6C67-4DF6-A003-EF00F106CC51}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.IO", "PR.IO\PR.IO.csproj", "{507122B5-6F52-4FF4-B639-697782E0615E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Application", "PR.Application\PR.Application.csproj", "{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.UIDataProvider.Persistence", "PR.UIDataProvider.Persistence\PR.UIDataProvider.Persistence.csproj", "{6364B2A2-BA51-442D-AB7F-13867983BC10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +51,18 @@ Global
 		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{507122B5-6F52-4FF4-B639-697782E0615E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{507122B5-6F52-4FF4-B639-697782E0615E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{507122B5-6F52-4FF4-B639-697782E0615E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{507122B5-6F52-4FF4-B639-697782E0615E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6364B2A2-BA51-442D-AB7F-13867983BC10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6364B2A2-BA51-442D-AB7F-13867983BC10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6364B2A2-BA51-442D-AB7F-13867983BC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6364B2A2-BA51-442D-AB7F-13867983BC10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
