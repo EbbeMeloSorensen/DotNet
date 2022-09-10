@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence", "PR.Persis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.EntityFrameworkCore.SqlServer", "PR.Persistence.EntityFrameworkCore.SqlServer\PR.Persistence.EntityFrameworkCore.SqlServer.csproj", "{24D95C75-9397-4B69-8678-E211358FEBCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp", "PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp\PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp.csproj", "{1B9474B2-6C67-4DF6-A003-EF00F106CC51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{24D95C75-9397-4B69-8678-E211358FEBCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24D95C75-9397-4B69-8678-E211358FEBCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24D95C75-9397-4B69-8678-E211358FEBCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
