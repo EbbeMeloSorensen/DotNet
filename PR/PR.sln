@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.EntityFrameworkCore.Sqlite", "PR.Persistence.EntityFrameworkCore.Sqlite\PR.Persistence.EntityFrameworkCore.Sqlite.csproj", "{83832CA8-0A51-447C-A0A1-CE47E3318E4B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.EntityFrameworkCore.Sqlite.ConsoleApp", "PR.Persistence.EntityFrameworkCore.Sqlite.ConsoleApp\PR.Persistence.EntityFrameworkCore.Sqlite.ConsoleApp.csproj", "{A33B2CC6-C108-4EC6-849F-131D701AB814}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{83832CA8-0A51-447C-A0A1-CE47E3318E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83832CA8-0A51-447C-A0A1-CE47E3318E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83832CA8-0A51-447C-A0A1-CE47E3318E4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
