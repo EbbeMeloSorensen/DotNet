@@ -18,10 +18,11 @@ namespace PR.UI.Console
 
             //await MakeBreakfast(application);
             //await ExportData(application);
-            await CreatePerson(new Person
-            {
-                FirstName = "Sofus"
-            }, application);
+            //await CreatePerson(new Person
+            //{
+            //    FirstName = "Sofus"
+            //}, application);
+            await ListPeople(application);
         }
 
         private static async Task MakeBreakfast(
@@ -50,6 +51,17 @@ namespace PR.UI.Console
                 return false;
             });
             System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task ListPeople(
+            Application.Application application)
+        {
+            await application.ListPeople((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
         }
 
         private static async Task ExportData(

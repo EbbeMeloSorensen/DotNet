@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities;
 
@@ -15,7 +18,6 @@ namespace PR.Application
 
         public IUIDataProvider UIDataProvider => _uiDataProvider;
 
-        // It must be possible for an external component to set the Logger, e.g. in order to override with a decorator
         public ILogger Logger
         {
             get => _logger;
@@ -103,6 +105,25 @@ namespace PR.Application
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
             });
+        }
+
+        public async Task ListPeople(
+            ProgressCallback progressCallback = null)
+        {
+            IList<Person>? people = null;
+
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
+                progressCallback?.Invoke(0.0, "Retrieving people");
+
+                people = UIDataProvider.GetAllPeople();
+
+                progressCallback?.Invoke(100, "");
+            });
+
+            Console.WriteLine();
+            people?.ToList().ForEach(p => Console.WriteLine($"  {p.FirstName}"));
         }
 
         public async Task ExportData(
