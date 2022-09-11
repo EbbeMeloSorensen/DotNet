@@ -6,8 +6,8 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
     {
         static UnitOfWorkFactory()
         {
-            //var dbContext = new PRDbContext();
-            //dbContext.Database.CreateIfNotExists();
+            var dbContext = new PRDbContext();
+            dbContext.Database.EnsureCreated();
         }
 
         public void Initialize(ILogger logger)
