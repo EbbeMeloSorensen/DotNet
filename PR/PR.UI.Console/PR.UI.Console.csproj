@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\PR.Application\PR.Application.csproj" />
+    <ProjectReference Include="..\PR.Persistence.EntityFrameworkCore.PostgreSQL\PR.Persistence.EntityFrameworkCore.PostgreSQL.csproj" />
     <ProjectReference Include="..\PR.UIDataProvider.Persistence\PR.UIDataProvider.Persistence.csproj" />
   </ItemGroup>
 

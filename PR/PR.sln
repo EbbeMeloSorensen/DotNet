@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFramew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.Sqlite.ConsoleApp", "PR.Persistence.EntityFrameworkCore.Sqlite.ConsoleApp\PR.Persistence.EntityFrameworkCore.Sqlite.ConsoleApp.csproj", "{A33B2CC6-C108-4EC6-849F-131D701AB814}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.EntityFrameworkCore.PostgreSQL", "PR.Persistence.EntityFrameworkCore.PostgreSQL\PR.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
