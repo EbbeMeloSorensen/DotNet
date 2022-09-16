@@ -143,8 +143,44 @@ namespace PR.UI.Console
         }
         */
 
+        public static async Task<int> Method1(CreateOptions options)
+        {
+            System.Console.WriteLine($"Method1, options: {options.FirstName}");
+            await Task.Delay(200);
+
+            var container = Container.For<InstanceScanner>();
+            var application = container.GetInstance<Application.Application>();
+            application.Initialize();
+
+            await MakeBreakfast(application);
+
+            return 1;
+        }
+
+        public static async Task<int> Method2(UpdateOptions options)
+        {
+            System.Console.WriteLine("Method2");
+            await Task.Delay(200);
+            return 1;
+        }
+
+        public static async Task<int> Method3(DeleteOptions options)
+        {
+            System.Console.WriteLine("Method3");
+            await Task.Delay(200);
+            return 1;
+        }
+
         static async Task Main(string[] args)
         {
+            await Parser.Default.ParseArguments<CreateOptions, UpdateOptions, DeleteOptions>(args)
+                .MapResult(
+                    (CreateOptions options) => Method1(options),
+                    (UpdateOptions options) => Method2(options),
+                    (DeleteOptions options) => Method3(options),
+                    errs => Task.FromResult(0));
+
+            /*
             await Parser.Default.ParseArguments<Options1>(args)
                 .WithParsedAsync(async opts1 =>
                 {
@@ -167,6 +203,7 @@ namespace PR.UI.Console
                     //}, application);
                     //await ListPeople(application);
                 });
+            */
         }
 
         private static void DoSomeWork(Options1 opts)
