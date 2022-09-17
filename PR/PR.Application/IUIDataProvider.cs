@@ -4,11 +4,14 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities;
+using PR.Persistence;
 
 namespace PR.Application
 {
     public interface IUIDataProvider
     {
+        IUnitOfWorkFactory UnitOfWorkFactory { get; }
+
         void Initialize(ILogger logger);
 
         Task<bool> CheckConnection();

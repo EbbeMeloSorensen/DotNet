@@ -4,7 +4,7 @@ using PR.Domain.Entities;
 
 namespace PR.Persistence.EntityFrameworkCore.Sqlite
 {
-    public class UnitOfWorkFactory : IUnitOfWorkFactory
+    public class UnitOfWorkFactory : UnitOfWorkFactoryBase
     {
         static UnitOfWorkFactory()
         {
@@ -16,16 +16,16 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             SeedDatabase(context);
         }
 
-        public void Initialize(ILogger logger)
+        public override void Initialize(ILogger logger)
         {
         }
 
-        public Task<bool> CheckRepositoryConnection()
+        public override Task<bool> CheckRepositoryConnection()
         {
             throw new NotImplementedException();
         }
 
-        public IUnitOfWork GenerateUnitOfWork()
+        public override IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(new PRDbContext());
         }

@@ -32,9 +32,22 @@ namespace PR.Application
             _logger = logger;
         }
 
-        public void Initialize()
+        public void Initialize(
+            string host,
+            string port,
+            string database,
+            string schema,
+            string user,
+            string password)
         {
             Logger?.WriteLine(LogMessageCategory.Debug, "DMI.SMS.UI.WPF - initializing application");
+
+            _uiDataProvider.UnitOfWorkFactory.Host = host;
+            _uiDataProvider.UnitOfWorkFactory.Port = port;
+            _uiDataProvider.UnitOfWorkFactory.Database = database;
+            _uiDataProvider.UnitOfWorkFactory.Schema = schema;
+            _uiDataProvider.UnitOfWorkFactory.User = user;
+            _uiDataProvider.UnitOfWorkFactory.Password = password;
 
             _uiDataProvider.Initialize(_logger);
         }

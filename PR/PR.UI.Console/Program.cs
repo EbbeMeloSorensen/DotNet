@@ -7,6 +7,13 @@ namespace PR.UI.Console
 {
     class Program
     {
+        private static string _host;
+        private static string _port;
+        private static string _database;
+        private static string _schema;
+        private static string _user;
+        private static string _password;
+
         public static async Task CreatePerson(Create options)
         {
             System.Console.Write("Creating Person...\nProgress: ");
@@ -15,6 +22,13 @@ namespace PR.UI.Console
             {
                 FirstName = options.FirstName
             };
+
+            _host = "localhost";
+            _port = "5432";
+            _database = "People";
+            _schema = "public";
+            _user = options.User;
+            _password = options.Password;
 
             await GetApplication().CreatePerson(person, (progress, nameOfSubtask) =>
             {
@@ -91,9 +105,9 @@ namespace PR.UI.Console
         static async Task Main(string[] args)
         {
             //args = "breakfast".Split();
-            //args = "create --user john --password secret --firstname Heidi".Split();
+            //args = "create --host localhost --user postgres --password L1on8Zebra --firstname Egon".Split();
             //args = "count --user john --password secret".Split();
-            args = "list --user john --password secret".Split();
+            args = "list --host localhost --user postgres --password L1on8Zebra".Split();
             //args = "export --user john --password secret".Split();
             //args = "update --user john --password secret --id 67".Split();
             //args = "delete --user john --password secret --id 67".Split();
@@ -122,7 +136,7 @@ namespace PR.UI.Console
         {
             var container = Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();
-            application.Initialize();
+            application.Initialize(_host, _port, _database, _schema, _user, _password);
             return application;
         }
     }

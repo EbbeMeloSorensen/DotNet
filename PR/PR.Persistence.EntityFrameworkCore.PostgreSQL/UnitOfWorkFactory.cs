@@ -4,7 +4,7 @@ using PR.Domain.Entities;
 
 namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
 {
-    public class UnitOfWorkFactory : IUnitOfWorkFactory
+    public class UnitOfWorkFactory : UnitOfWorkFactoryBase
     {
         static UnitOfWorkFactory()
         {
@@ -16,16 +16,25 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
             SeedDatabase(context);
         }
 
-        public void Initialize(ILogger logger)
+        public override void Initialize(ILogger logger)
         {
+            if (!string.IsNullOrEmpty(Host) &&
+                !string.IsNullOrEmpty(Port) &&
+                !string.IsNullOrEmpty(Database) &&
+                !string.IsNullOrEmpty(Schema) &&
+                !string.IsNullOrEmpty(User) &&
+                !string.IsNullOrEmpty(Password))
+            {
+                ConnectionStringProvider.Initialize(Host, int.Parse(Port), Database, Schema, User, Password);
+            }
         }
 
-        public Task<bool> CheckRepositoryConnection()
+        public override Task<bool> CheckRepositoryConnection()
         {
             throw new NotImplementedException();
         }
 
-        public IUnitOfWork GenerateUnitOfWork()
+        public override IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(new PRDbContext());
         }

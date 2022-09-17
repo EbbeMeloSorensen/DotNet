@@ -16,7 +16,7 @@ namespace PR.UIDataProvider.Persistence
     {
         private Dictionary<Guid, Person> _personCache;
 
-        public IUnitOfWorkFactory UnitOfWorkFactory { get; }
+        public override IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
         public UIDataProvider(
             IUnitOfWorkFactory unitOfWorkFactory,

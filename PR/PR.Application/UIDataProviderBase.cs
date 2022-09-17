@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities;
 using PR.IO;
+using PR.Persistence;
 
 namespace PR.Application
 {
@@ -13,6 +14,8 @@ namespace PR.Application
     {
         protected ILogger _logger;
         private readonly IDataIOHandler _dataIOHandler;
+
+        public abstract IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
         protected UIDataProviderBase(
             IDataIOHandler dataIOHandler)
