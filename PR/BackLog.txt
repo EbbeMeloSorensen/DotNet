@@ -5,7 +5,10 @@ Done:
   (it does - on https://meloreactivities.herokuapp.com)
 * Make the API target a local postgres database
 
-Todo:
+Epic: Sadle om til at vedligeholde People-datasættet hos Heroku
 * 
 * Implement support for exporting the database contents to a file
 * Implement support for importing a file to the database
+
+Todo, ellers:
+* 

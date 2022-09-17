@@ -1,279 +1,129 @@
-﻿using System.Collections;
-using CommandLine;
+﻿using CommandLine;
 using StructureMap;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using PR.Domain.Entities;
+using PR.UI.Console.Verbs;
 
 namespace PR.UI.Console
 {
     class Program
     {
-        [Verb("create", HelpText = "Create a new Person.")]
-        public sealed class CreateOptions
+        public static async Task CreatePerson(Create options)
         {
-            [Option('f', "firstname", Required = true, HelpText = "First Name")]
-            public string FirstName { get; set; }
+            System.Console.Write("Creating Person...\nProgress: ");
+
+            var person = new Person()
+            {
+                FirstName = options.FirstName
+            };
+
+            await GetApplication().CreatePerson(person, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+
+            //System.Console.WriteLine("Counting Person records...");
+            //System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllPeople().Count}");
+
+            //await ExportData(application);
+            //await CreatePerson(new Person
+            //{
+            //    FirstName = "Sofus"
+            //}, application);
+            //await ListPeople(application);
         }
 
-        [Verb("update", HelpText = "Update an existing person.")]
-        public sealed class UpdateOptions
+        public static async Task ListPeople(List options)
         {
-            [Option('i', "id", Required = true, HelpText = "Person ID")]
-            public string ID{ get; set; }
-
-            [Option('f', "firstname", Required = false, HelpText = "First Name")]
-            public string FirstName { get; set; }
+            await GetApplication().ListPeople((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
         }
 
-        [Verb("delete", HelpText = "Delete an existing person.")]
-        public sealed class DeleteOptions
+        public static async Task CountPeople(Count options)
         {
-            [Option('i', "id", Required = true, HelpText = "Person ID")]
-            public string ID { get; set; }
-        }
-
-        public sealed class Options1
-        {
-            [Option('u', "username", Required = true, HelpText = "Your username")]
-            public string Username { get; set; }
-
-            [Option('p', "password", Required = true, HelpText = "Your password")]
-            public string Password { get; set; }
-        }
-
-        // Works fine but is not async
-        //static int Main(string[] args)
-        //{
-        //    Parser.Default.ParseArguments<CreateOptions, UpdateOptions, DeleteOptions>(args)
-        //        .WithParsed<CreateOptions>(options => { System.Console.WriteLine("Create called"); })
-        //        .WithParsed<UpdateOptions>(options => { System.Console.WriteLine("Update called"); })
-        //        .WithParsed<DeleteOptions>(options => { System.Console.WriteLine("Delete called"); })
-        //        .WithNotParsed(errors => { System.Console.WriteLine("Invalid arguments"); });
-
-        //    return 0;
-        //}
-
-        /* Alternativ måde at gøre det på ifølge manualen - det virker også
-        static int Main(string[] args) =>
-            Parser.Default.ParseArguments<CreateOptions, UpdateOptions, DeleteOptions>(args)
-                .MapResult(
-                    (CreateOptions options) => RunAddAndReturnExitCode(options),
-                    (UpdateOptions options) => RunCommitAndReturnExitCode(options),
-                    (DeleteOptions options) => RunCloneAndReturnExitCode(options),
-                    errors => 1);
-
-        private static int RunCloneAndReturnExitCode(DeleteOptions options)
-        {
-            System.Console.WriteLine("Satan");
-            return 0;
-        }
-
-        private static int RunCommitAndReturnExitCode(object options)
-        {
-            System.Console.WriteLine("Helvede");
-            return 0;
-        }
-
-        private static int RunAddAndReturnExitCode(object options)
-        {
-            System.Console.WriteLine("Fanden");
-            return 0;
-        }
-        */
-
-        /* Virker også, men hvordan opererer man med flere verbs
-        public static async Task Main(string[] args)
-        {
-            await Parser.Default.ParseArguments<CreateOptions>(args)
-                .WithParsedAsync(RunAsync1);
-
-            //await Parser.Default.ParseArguments<UpdateOptions>(args)
-            //    .WithParsedAsync(RunAsync2);
-
-            System.Console.WriteLine($"Exit code= {Environment.ExitCode}");
-        }
-
-        static async Task RunAsync1(CreateOptions options)
-        {
-            System.Console.WriteLine("Before Task in RunAsync1");
-            await Task.Delay(20); //simulate async method 
-            System.Console.WriteLine("After Task in RunAsync1");
-        }
-
-        static async Task RunAsync2(UpdateOptions options)
-        {
-            System.Console.WriteLine("Before Task in RunAsync2");
-            await Task.Delay(20); //simulate async method 
-            System.Console.WriteLine("After Task in RunAsync2");
-        }
-        */
-
-        /* Det her virker, men hvordan igen . hvordan fanden opererer vi med flere verbs
-        public static async Task Main(string[] args)
-        {
-            var retValue = await Parser.Default.ParseArguments<CreateOptions>(args)
-                .MapResult(RunAndReturnExitCodeAsync1, _ => Task.FromResult(1));
-
-            System.Console.WriteLine($"retValue= {retValue}");
-        }
-        static async Task<int> RunAndReturnExitCodeAsync1(CreateOptions options)
-        {
-            System.Console.WriteLine("Before Task (Create)");
-            await Task.Delay(20); //simulate async method
-            System.Console.WriteLine("After Task (Create)");
-            return 0;
-        }
-        */
-
-        /*
-        static int Main(string[] args)
-        {
-            return Parser.Default.ParseArguments<CreateOptions>(args)
-                .MapResult(
-                    options => RunAndReturnExitCode(options),
-                    _ => 1);
-        }
-
-        static int RunAndReturnExitCode(CreateOptions options)
-        {
-            //options.Dump();
-            return 0;
-        }
-        */
-
-        public static async Task<int> Method1(CreateOptions options)
-        {
-            System.Console.WriteLine($"Method1, options: {options.FirstName}");
+            System.Console.WriteLine("Coming soon: CountPeople");
             await Task.Delay(200);
-
-            var container = Container.For<InstanceScanner>();
-            var application = container.GetInstance<Application.Application>();
-            application.Initialize();
-
-            await MakeBreakfast(application);
-
-            return 1;
         }
 
-        public static async Task<int> Method2(UpdateOptions options)
+        public static async Task ExportPeople(Export options)
         {
-            System.Console.WriteLine("Method2");
-            await Task.Delay(200);
-            return 1;
+            System.Console.Write("Exporting data...\nProgress: ");
+            var dateTime = DateTime.Now;
+            await GetApplication().ExportData((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
         }
 
-        public static async Task<int> Method3(DeleteOptions options)
+        public static async Task UpdatePerson(Update options)
         {
-            System.Console.WriteLine("Method3");
+            System.Console.WriteLine("Coming soon: UpdatePerson");
             await Task.Delay(200);
-            return 1;
+        }
+
+        public static async Task DeletePerson(Delete options)
+        {
+            System.Console.WriteLine("Coming soon: DeletePerson");
+            await Task.Delay(200);
+        }
+
+        public static async Task MakeBreakfast(Breakfast options)
+        {
+            System.Console.Write("Making breakfast...\nProgress: ");
+            await GetApplication().MakeBreakfast((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
         }
 
         static async Task Main(string[] args)
         {
-            await Parser.Default.ParseArguments<CreateOptions, UpdateOptions, DeleteOptions>(args)
+            //args = "breakfast".Split();
+            //args = "create --user john --password secret --firstname Heidi".Split();
+            //args = "count --user john --password secret".Split();
+            args = "list --user john --password secret".Split();
+            //args = "export --user john --password secret".Split();
+            //args = "update --user john --password secret --id 67".Split();
+            //args = "delete --user john --password secret --id 67".Split();
+
+            await Parser.Default.ParseArguments<
+                    Create,
+                    Count,
+                    List,
+                    Export,
+                    Update, 
+                    Delete,
+                    Breakfast>(args)
                 .MapResult(
-                    (CreateOptions options) => Method1(options),
-                    (UpdateOptions options) => Method2(options),
-                    (DeleteOptions options) => Method3(options),
+                    (Create options) => CreatePerson(options),
+                    (Count options) => CountPeople(options),
+                    (List options) => ListPeople(options),
+                    (Export options) => ExportPeople(options),
+                    (Update options) => UpdatePerson(options),
+                    (Delete options) => DeletePerson(options),
+                    (Breakfast options) => MakeBreakfast(options),
                     errs => Task.FromResult(0));
-
-            /*
-            await Parser.Default.ParseArguments<Options1>(args)
-                .WithParsedAsync(async opts1 =>
-                {
-                    System.Console.WriteLine(opts1.Username);
-                    DoSomeWork(opts1);
-
-                    var container = Container.For<InstanceScanner>();
-                    var application = container.GetInstance<Application.Application>();
-                    application.Initialize();
-
-                    await MakeBreakfast(application);
-
-                    System.Console.WriteLine("Counting Person records...");
-                    System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllPeople().Count}");
-
-                    //await ExportData(application);
-                    //await CreatePerson(new Person
-                    //{
-                    //    FirstName = "Sofus"
-                    //}, application);
-                    //await ListPeople(application);
-                });
-            */
         }
 
-        private static void DoSomeWork(Options1 opts)
+        // Helper
+        private static Application.Application GetApplication()
         {
-            System.Console.WriteLine("Command Line parameters provided were valid :)");
-        }
-
-        private static void HandleParseError(IEnumerable errs)
-        {
-            System.Console.WriteLine("Command Line parameters provided were not valid!");
-        }
-
-        private static async Task MakeBreakfast(
-            Application.Application application)
-        {
-            System.Console.Write("Making breakfast...\nProgress: ");
-            await application.MakeBreakfast((progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-            System.Console.WriteLine("\nDone");
-        }
-
-        private static async Task MakeLunch()
-        {
-            System.Console.Write("Making lunch...");
-            await Task.Delay(1000);
-            System.Console.WriteLine("\nDone");
-        }
-
-        private static async Task CreatePerson(
-            Person person,
-            Application.Application application)
-        {
-            System.Console.Write("Creating Person...\nProgress: ");
-
-            await application.CreatePerson(person, (progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-            System.Console.WriteLine("\nDone");
-        }
-
-        private static async Task ListPeople(
-            Application.Application application)
-        {
-            await application.ListPeople((progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-        }
-
-        private static async Task ExportData(
-            Application.Application application)
-        {
-            System.Console.Write("Exporting data...\nProgress: ");
-            var dateTime = DateTime.Now;
-            await application.ExportData((progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-            System.Console.WriteLine("\nDone");
+            var container = Container.For<InstanceScanner>();
+            var application = container.GetInstance<Application.Application>();
+            application.Initialize();
+            return application;
         }
     }
 }
