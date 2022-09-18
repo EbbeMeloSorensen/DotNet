@@ -24,7 +24,7 @@
             // MELO-HOME
             var host = "localhost";
             var port = "5432";
-            var database = "People";
+            var database = "PR";
             var schema = "public";
             var userID = "postgres";
             var password = "L1on8Zebra";

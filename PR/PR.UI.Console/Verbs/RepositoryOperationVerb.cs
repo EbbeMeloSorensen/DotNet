@@ -10,7 +10,7 @@ namespace PR.UI.Console.Verbs
         [Option('o', "port", Required = false, Default = "5432", HelpText = "Port")]
         public string Port { get; set; }
 
-        [Option('d', "database", Required = false, Default = "People", HelpText = "Database")]
+        [Option('d', "database", Required = false, Default = "PR", HelpText = "Database")]
         public string Database { get; set; }
 
         [Option('s', "schema", Required = false, Default = "public", HelpText = "Schema")]

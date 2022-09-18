@@ -147,7 +147,7 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
                 progressCallback?.Invoke(0.0, "Exporting data");
 
-                UIDataProvider.ExportData("People.json", null);
+                UIDataProvider.ExportData("PR.json", null);
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
@@ -162,7 +162,7 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
                 progressCallback?.Invoke(0.0, "Importing data");
 
-                UIDataProvider.ImportData(@"C:/Temp/People.json");
+                UIDataProvider.ImportData("PR.json");
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");

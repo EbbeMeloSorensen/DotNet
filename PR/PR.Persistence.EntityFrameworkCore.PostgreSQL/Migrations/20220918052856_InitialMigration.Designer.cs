@@ -12,7 +12,7 @@ using PR.Persistence.EntityFrameworkCore.PostgreSQL;
 namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
 {
     [DbContext(typeof(PRDbContext))]
-    [Migration("20220911174456_InitialMigration")]
+    [Migration("20220918052856_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,6 +29,9 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

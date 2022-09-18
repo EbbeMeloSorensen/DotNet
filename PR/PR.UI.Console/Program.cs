@@ -74,6 +74,13 @@ namespace PR.UI.Console
 
         public static async Task ExportPeople(Export options)
         {
+            _host = options.Host;
+            _port = options.Port;
+            _database = options.Database;
+            _schema = options.Schema;
+            _user = options.User;
+            _password = options.Password;
+
             System.Console.Write("Exporting data...\nProgress: ");
             var dateTime = DateTime.Now;
             await GetApplication().ExportData((progress, nameOfSubtask) =>
@@ -87,6 +94,13 @@ namespace PR.UI.Console
 
         public static async Task ImportPeople(Import options)
         {
+            _host = options.Host;
+            _port = options.Port;
+            _database = options.Database;
+            _schema = options.Schema;
+            _user = options.User;
+            _password = options.Password;
+
             System.Console.Write("Importing data...\nProgress: ");
             await GetApplication().ImportData((progress, nameOfSubtask) =>
             {
@@ -128,7 +142,7 @@ namespace PR.UI.Console
             //args = "count --user john --password secret".Split();
             //args = "list --host localhost --user postgres --password L1on8Zebra".Split();
             //args = "import --host localhost --user postgres --password L1on8Zebra".Split();
-            //args = "export --user john --password secret".Split();
+            //args = "export --host localhost --user postgres --password L1on8Zebra".Split();
             //args = "update --user john --password secret --id 67".Split();
             //args = "delete --user john --password secret --id 67".Split();
             //args = "list -h localhost -d People -u postgres -p L1on8Zebra".Split();

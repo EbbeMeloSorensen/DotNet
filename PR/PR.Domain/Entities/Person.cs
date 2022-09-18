@@ -11,6 +11,7 @@ namespace PR.Domain.Entities
         // and get on with business rather than having to wait for the server side to generate the id
         private Guid _id;
         private string _firstName;
+        private DateTime _created;
 
         public Guid Id
         {
@@ -22,6 +23,12 @@ namespace PR.Domain.Entities
         {
             get { return _firstName; }
             set { _firstName = value; }
+        }
+
+        public DateTime Created
+        {
+            get { return _created; }
+            set { _created = value; }
         }
     }
 }

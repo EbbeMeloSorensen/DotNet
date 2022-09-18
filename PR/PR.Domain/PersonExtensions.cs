@@ -18,6 +18,7 @@ namespace PR.Domain
         {
             person.Id = other.Id;
             person.FirstName = other.FirstName;
+            person.Created = other.Created;
         }
     }
 }

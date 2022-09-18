@@ -45,15 +45,18 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
             {
                 new Person
                 {
-                    FirstName = "Kasper"
+                    FirstName = "Kasper",
+                    Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
                 },
                 new Person
                 {
-                    FirstName = "Jesper"
+                    FirstName = "Jesper",
+                    Created = new DateTime(2022, 1, 1, 3, 3, 4).ToUniversalTime()
                 },
                 new Person
                 {
-                    FirstName = "Jonathan"
+                    FirstName = "Jonathan",
+                    Created = new DateTime(2022, 1, 1, 3, 3, 5).ToUniversalTime()
                 }
             };
 
