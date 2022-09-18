@@ -51,6 +51,13 @@ namespace PR.UI.Console
 
         public static async Task ListPeople(List options)
         {
+            _host = options.Host;
+            _port = options.Port;
+            _database = options.Database;
+            _schema = options.Schema;
+            _user = options.User;
+            _password = options.Password;
+
             await GetApplication().ListPeople((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
@@ -70,6 +77,18 @@ namespace PR.UI.Console
             System.Console.Write("Exporting data...\nProgress: ");
             var dateTime = DateTime.Now;
             await GetApplication().ExportData((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+        }
+
+        public static async Task ImportPeople(Import options)
+        {
+            System.Console.Write("Importing data...\nProgress: ");
+            await GetApplication().ImportData((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
@@ -107,16 +126,19 @@ namespace PR.UI.Console
             //args = "breakfast".Split();
             //args = "create --host localhost --user postgres --password L1on8Zebra --firstname Egon".Split();
             //args = "count --user john --password secret".Split();
-            args = "list --host localhost --user postgres --password L1on8Zebra".Split();
+            //args = "list --host localhost --user postgres --password L1on8Zebra".Split();
+            //args = "import --host localhost --user postgres --password L1on8Zebra".Split();
             //args = "export --user john --password secret".Split();
             //args = "update --user john --password secret --id 67".Split();
             //args = "delete --user john --password secret --id 67".Split();
+            //args = "list -h localhost -d People -u postgres -p L1on8Zebra".Split();
 
             await Parser.Default.ParseArguments<
                     Create,
                     Count,
                     List,
                     Export,
+                    Import,
                     Update, 
                     Delete,
                     Breakfast>(args)
@@ -125,6 +147,7 @@ namespace PR.UI.Console
                     (Count options) => CountPeople(options),
                     (List options) => ListPeople(options),
                     (Export options) => ExportPeople(options),
+                    (Import options) => ImportPeople(options),
                     (Update options) => UpdatePerson(options),
                     (Delete options) => DeletePerson(options),
                     (Breakfast options) => MakeBreakfast(options),

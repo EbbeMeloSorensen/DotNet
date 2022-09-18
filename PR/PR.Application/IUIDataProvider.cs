@@ -32,5 +32,7 @@ namespace PR.Application
         void ExportData(
             string fileName,
             IList<Expression<Func<Person, bool>>> predicates);
+
+        void ImportData(string fileName);
     }
 }

@@ -92,5 +92,42 @@ namespace PR.Application
                     }
             }
         }
+
+        public void ImportData(string fileName)
+        {
+            var extension = Path.GetExtension(fileName)?.ToLower();
+
+            if (extension == null)
+            {
+                throw new ArgumentException();
+            }
+
+            IList<Person> people;
+
+            switch (extension)
+            {
+                case ".xml":
+                {
+                    _dataIOHandler.ImportDataFromXML(
+                        fileName, out people);
+                    break;
+                }
+                case ".json":
+                {
+                    _dataIOHandler.ImportDataFromJson(
+                        fileName, out people);
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentException();
+                }
+            }
+
+            LoadPeople(people);
+        }
+
+        protected abstract void LoadPeople(
+            IList<Person> people);
     }
 }

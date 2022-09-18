@@ -153,5 +153,21 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
             });
         }
+
+        public async Task ImportData(
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
+                progressCallback?.Invoke(0.0, "Importing data");
+
+                UIDataProvider.ImportData(@"C:/Temp/People.json");
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
+            });
+        }
+
     }
 }

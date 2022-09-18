@@ -6,8 +6,7 @@ Done:
 * Make the API target a local postgres database
 
 Epic: Sadle om til at vedligeholde People-datasættet hos Heroku
-* 
-* Implement support for exporting the database contents to a file
+* Implement support for exporting the database contents to a file (OK)
 * Implement support for importing a file to the database
 
 Todo, ellers:

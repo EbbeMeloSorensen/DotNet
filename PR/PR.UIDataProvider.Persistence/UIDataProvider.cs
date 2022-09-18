@@ -135,6 +135,20 @@ namespace PR.UIDataProvider.Persistence
             return stationInformations;
         }
 
+        protected override void LoadPeople(
+            IList<Person> people)
+        {
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.People.AddRange(people);
+                unitOfWork.Complete();
+            }
+
+            _personCache.Clear();
+            // We don't update the cache, because it might be a lot of data
+            // On the contrary, we clear the cache, so we're not looking at obsolete data
+        }
+
         private Person IncludeInCache(
             Person personFromRepository)
         {

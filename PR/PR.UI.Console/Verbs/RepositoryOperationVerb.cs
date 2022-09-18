@@ -7,7 +7,7 @@ namespace PR.UI.Console.Verbs
         [Option('h', "host", Required = true, HelpText = "Host")]
         public string Host { get; set; }
 
-        [Option('p', "port", Required = false, Default = "5432", HelpText = "Port")]
+        [Option('o', "port", Required = false, Default = "5432", HelpText = "Port")]
         public string Port { get; set; }
 
         [Option('d', "database", Required = false, Default = "People", HelpText = "Database")]
