@@ -12,5 +12,21 @@ Epic: Sadle om til at vedligeholde People-datasættet hos Heroku
 * PersonAssociation
 * Implementer en måde at konvertere fra det gamle sæt til det nye
 
-Todo, ellers:
-* 
+
+
+Procedure for at tilføje attribut:
+1) Tilføj property i Person-klassen
+2) Opdater SeedDatabase-metoden
+3) Opdater CopyAttributes-metoden i PersonExtensions-klassen
+4) Slet den lokale PR-database
+5) Sæt PR.Persistence.EntityFrameworkCore.PostgreSQL.ConsoleApp som startup project
+6) I Package Manager Console: 5a) Sæt PR.Persistence.EntityFrameworkCore.PostgreSQL som Default project
+                              5b) Eksekver f.eks. add-migration AddedSurname
+                              5c) Eksekver update-database
+   -> Verificer, at databasen er blevet lavet med pgAdmin
+7) Opdater DataIOHandlerTest og kør
+8) Sæt PR.UI.Console som startup project og eksekver med list som verb og lokale db creds
+   -> Verificer, at databasen er blevet seeded med pgAdmin
+9) Eksekver PR.UI.Console med export som verb og lokale db creds
+10) Tøm remote (heroku) database
+11) Eksekver PR.UI.Console med import som verb og remote (heroku) database creds

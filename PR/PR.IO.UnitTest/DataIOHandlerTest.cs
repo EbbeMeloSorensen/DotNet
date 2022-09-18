@@ -12,32 +12,16 @@ namespace PR.IO.UnitTest
         [Fact]
         public void ExportDataToXML_Works()
         {
-            var people = new List<Person>
-            {
-                new Person
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Bamse"
-                },
-                new Person
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Kylling"
-                }
-            };
-
-            var dataIOHandler = new DataIOHandler();
-            dataIOHandler.ExportDataToXML(people, @"C:/Temp/People.xml");
+            new DataIOHandler()
+                .ExportDataToXML(GenerateDataSet(), @"C:/Temp/People.xml");
         }
 
         [Fact]
         public void ImportDataFromXML_Works()
         {
-            var dataIOHandler = new DataIOHandler();
-            IList<Person> people;
-            dataIOHandler.ImportDataFromXML(@"C:/Temp/People.xml", out people);
+            new DataIOHandler().ImportDataFromXML(@"C:/Temp/People.xml", out IList<Person> people);
 
-            people.Count.Should().Be(2);
+            people.Count.Should().Be(3);
             people.Count(p => p.FirstName == "Bamse").Should().Be(1);
             people.Count(p => p.FirstName == "Kylling").Should().Be(1);
         }
@@ -45,22 +29,7 @@ namespace PR.IO.UnitTest
         [Fact]
         public void ExportDataToJson_Works()
         {
-            var people = new List<Person>
-            {
-                new Person
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Bamse"
-                },
-                new Person
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Kylling"
-                }
-            };
-
-            var dataIOHandler = new DataIOHandler();
-            dataIOHandler.ExportDataToJson(people, @"C:/Temp/People.json");
+            new DataIOHandler().ExportDataToJson(GenerateDataSet(), @"C:/Temp/People.json");
         }
 
         [Fact]
@@ -70,10 +39,46 @@ namespace PR.IO.UnitTest
             IList<Person> people;
             dataIOHandler.ImportDataFromJson(@"C:/Temp/People.json", out people);
 
-            people.Count.Should().Be(2);
+            people.Count.Should().Be(3);
             people.Count(p => p.FirstName == "Bamse").Should().Be(1);
             people.Count(p => p.FirstName == "Kylling").Should().Be(1);
         }
 
+        // Helper
+        private List<Person> GenerateDataSet()
+        {
+            var now = DateTime.UtcNow;
+
+            return new List<Person>
+            {
+                new Person
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = "Bamse",
+                    Surname = "Hansen",
+                    Created = now
+                },
+                new Person
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = "Kylling",
+                    Created = now
+                },
+                new Person
+                {
+                    FirstName = "Ana Tayze",
+                    Surname = "Melo Sørensen",
+                    Nickname = "Hamos",
+                    Address = "Danshøjvej 33",
+                    ZipCode = "2500",
+                    City = "Valby",
+                    Birthday = new DateTime(1980, 6, 13).ToUniversalTime(),
+                    Category = "Familie",
+                    Description = "Min kone",
+                    Dead = false,
+                    Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()
+                }
+            };
+        }
     }
 }

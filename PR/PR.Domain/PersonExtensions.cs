@@ -18,6 +18,15 @@ namespace PR.Domain
         {
             person.Id = other.Id;
             person.FirstName = other.FirstName;
+            person.Surname = other.Surname;
+            person.Nickname = other.Nickname;
+            person.Address = other.Address;
+            person.ZipCode = other.ZipCode;
+            person.City = other.City;
+            person.Birthday = other.Birthday;
+            person.Category = other.Category;
+            person.Description = other.Description;
+            person.Dead = other.Dead;
             person.Created = other.Created;
         }
     }
