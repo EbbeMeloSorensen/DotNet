@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using PR.Domain.Entities;
+using PR.Domain.Foreign;
 using Xunit;
+using Person = PR.Domain.Entities.Person;
 
 namespace PR.IO.UnitTest
 {
@@ -42,6 +43,14 @@ namespace PR.IO.UnitTest
             people.Count.Should().Be(3);
             people.Count(p => p.FirstName == "Bamse").Should().Be(1);
             people.Count(p => p.FirstName == "Kylling").Should().Be(1);
+        }
+
+        [Fact]
+        public void ImportForeignDataFromJson_Works()
+        {
+            var dataIOHandler = new DataIOHandler();
+            ContactData contactData;
+            dataIOHandler.ImportForeignDataFromJson(@"C:/Temp/Contacts.json", out contactData);
         }
 
         // Helper

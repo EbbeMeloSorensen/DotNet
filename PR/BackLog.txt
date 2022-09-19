@@ -8,7 +8,7 @@ Done:
 Epic: Sadle om til at vedligeholde People-datasættet hos Heroku
 * Implement support for exporting the database contents to a file (OK)
 * Implement support for importing a file to the database (OK)
-* Samme attributter som i web-applikationen
+* Samme attributter som i web-applikationen (OK)
 * PersonAssociation
 * Implementer en måde at konvertere fra det gamle sæt til det nye
 

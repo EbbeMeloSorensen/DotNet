@@ -5,7 +5,8 @@ using System.Linq;
 using System.Xml.Serialization;
 using Craft.IO.Utils;
 using Newtonsoft.Json;
-using PR.Domain.Entities;
+using PR.Domain.Foreign;
+using Person = PR.Domain.Entities.Person;
 
 namespace PR.IO
 {
@@ -28,7 +29,9 @@ namespace PR.IO
             }
         }
 
-        public void ExportDataToXML(IList<Person> people, string fileName)
+        public void ExportDataToXML(
+            IList<Person> people, 
+            string fileName)
         {
             using (var streamWriter = new StreamWriter(fileName))
             {
@@ -41,7 +44,9 @@ namespace PR.IO
             }
         }
 
-        public void ExportDataToJson(IList<Person> people, string fileName)
+        public void ExportDataToJson(
+            IList<Person> people, 
+            string fileName)
         {
             var json = JsonConvert.SerializeObject(
                 people, Formatting.Indented, new DoubleJsonConverter(), new NullableDoubleJsonConverter());
@@ -52,7 +57,9 @@ namespace PR.IO
             }
         }
 
-        public void ImportDataFromXML(string fileName, out IList<Person> people)
+        public void ImportDataFromXML(
+            string fileName, 
+            out IList<Person> people)
         {
             using (var streamReader = new StreamReader(fileName))
             {
@@ -61,13 +68,24 @@ namespace PR.IO
             }
         }
 
-        public void ImportDataFromJson(string fileName, out IList<Person> people)
+        public void ImportDataFromJson(
+            string fileName, 
+            out IList<Person> people)
         {
             using (var streamReader = new StreamReader(fileName))
             {
                 var json = streamReader.ReadToEnd();
                 people = JsonConvert.DeserializeObject<List<Person>>(json);
             }
+        }
+
+        public void ImportForeignDataFromJson(
+            string fileName, 
+            out ContactData contactData)
+        {
+            using var streamReader = new StreamReader(fileName);
+            var json = streamReader.ReadToEnd();
+            contactData = JsonConvert.DeserializeObject<ContactData>(json);
         }
     }
 }
