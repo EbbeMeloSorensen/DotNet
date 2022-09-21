@@ -146,7 +146,7 @@ namespace PR.UI.Console
             //args = "export --host localhost --user postgres --password L1on8Zebra".Split();
             //args = "update --user john --password secret --id 67".Split();
             //args = "delete --user john --password secret --id 67".Split();
-            //args = "list -h localhost -d People -u postgres -p L1on8Zebra".Split();
+            //args = "list -h localhost -d PR -u postgres -p L1on8Zebra".Split();
             //args = "import --filename Contacts.json --legacy true --host localhost --user postgres --password L1on8Zebra".Split();
 
             await Parser.Default.ParseArguments<

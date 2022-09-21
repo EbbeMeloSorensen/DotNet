@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PR.Domain.Entities
 {
@@ -93,5 +94,8 @@ namespace PR.Domain.Entities
             get { return _created; }
             set { _created = value; }
         }
+
+        public virtual ICollection<PersonAssociation> ObjectPeople { get; set; }
+        public virtual ICollection<PersonAssociation> SubjectPeople { get; set; }
     }
 }

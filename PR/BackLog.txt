@@ -10,6 +10,8 @@ Epic: Sadle om til at vedligeholde People-datasættet hos Heroku
 * Implement support for importing a file to the database (OK)
 * Samme attributter som i web-applikationen (OK)
 * PersonAssociation
+  - Databasewise
+* Porter wpf brugergrænsefladen
 * Implementer en måde at konvertere fra det gamle sæt til det nye
 
 

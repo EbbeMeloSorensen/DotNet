@@ -8,6 +8,7 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer
         private readonly PRDbContext _context;
 
         public IPersonRepository People { get; }
+        public IPersonAssociationRepository PersonAssociations { get; }
 
         public UnitOfWork(PRDbContext context)
         {

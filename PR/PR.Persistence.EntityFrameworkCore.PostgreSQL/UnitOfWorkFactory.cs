@@ -13,7 +13,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
 
             if (context.People.Any()) return;
 
-            //SeedDatabase(context);
+            SeedDatabase(context);
         }
 
         public override void Initialize(ILogger logger)
@@ -41,6 +41,28 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
 
         private static void SeedDatabase(DbContext context)
         {
+            var person1 = new Person
+            {
+                FirstName = "Uffe",
+                Surname = "Sørensen",
+                Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
+            };
+
+            var person2 = new Person
+            {
+                FirstName = "Ebbe",
+                Surname = "Melo Sørensen",
+                Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
+            };
+
+            var personAssociation = new PersonAssociation
+            {
+                SubjectPerson = person1,
+                ObjectPerson = person2,
+                Description = "is the brother of",
+                Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
+            };
+
             var people = new List<Person>
             {
                 new Person
@@ -76,7 +98,10 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
                 }
             };
 
-            context.AddRange(people);
+            //context.AddRange(people);
+            context.Add(person1);
+            context.Add(person2);
+            context.Add(personAssociation);
             context.SaveChanges();
         }
     }

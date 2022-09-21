@@ -12,7 +12,7 @@ using PR.Persistence.EntityFrameworkCore.PostgreSQL;
 namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
 {
     [DbContext(typeof(PRDbContext))]
-    [Migration("20220918144146_InitialMigration")]
+    [Migration("20220921155759_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,59 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("People");
+                });
+
+            modelBuilder.Entity("PR.Domain.Entities.PersonAssociation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ObjectPersonId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SubjectPersonId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ObjectPersonId");
+
+                    b.HasIndex("SubjectPersonId");
+
+                    b.ToTable("PersonAssociations");
+                });
+
+            modelBuilder.Entity("PR.Domain.Entities.PersonAssociation", b =>
+                {
+                    b.HasOne("PR.Domain.Entities.Person", "ObjectPerson")
+                        .WithMany("SubjectPeople")
+                        .HasForeignKey("ObjectPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PR.Domain.Entities.Person", "SubjectPerson")
+                        .WithMany("ObjectPeople")
+                        .HasForeignKey("SubjectPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ObjectPerson");
+
+                    b.Navigation("SubjectPerson");
+                });
+
+            modelBuilder.Entity("PR.Domain.Entities.Person", b =>
+                {
+                    b.Navigation("ObjectPeople");
+
+                    b.Navigation("SubjectPeople");
                 });
 #pragma warning restore 612, 618
         }

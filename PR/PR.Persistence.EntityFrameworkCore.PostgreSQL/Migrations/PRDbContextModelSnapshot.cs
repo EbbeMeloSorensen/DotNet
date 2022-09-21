@@ -66,6 +66,59 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
 
                     b.ToTable("People");
                 });
+
+            modelBuilder.Entity("PR.Domain.Entities.PersonAssociation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ObjectPersonId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SubjectPersonId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ObjectPersonId");
+
+                    b.HasIndex("SubjectPersonId");
+
+                    b.ToTable("PersonAssociations");
+                });
+
+            modelBuilder.Entity("PR.Domain.Entities.PersonAssociation", b =>
+                {
+                    b.HasOne("PR.Domain.Entities.Person", "ObjectPerson")
+                        .WithMany("SubjectPeople")
+                        .HasForeignKey("ObjectPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PR.Domain.Entities.Person", "SubjectPerson")
+                        .WithMany("ObjectPeople")
+                        .HasForeignKey("SubjectPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ObjectPerson");
+
+                    b.Navigation("SubjectPerson");
+                });
+
+            modelBuilder.Entity("PR.Domain.Entities.Person", b =>
+                {
+                    b.Navigation("ObjectPeople");
+
+                    b.Navigation("SubjectPeople");
+                });
 #pragma warning restore 612, 618
         }
     }
