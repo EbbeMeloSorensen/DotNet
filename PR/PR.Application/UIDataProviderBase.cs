@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Craft.Logging;
-using PR.Domain.Entities;
+using PR.Domain;
+using PR.Domain.Foreign;
 using PR.IO;
 using PR.Persistence;
+using Person = PR.Domain.Entities.Person;
 
 namespace PR.Application
 {
@@ -93,7 +96,9 @@ namespace PR.Application
             }
         }
 
-        public void ImportData(string fileName)
+        public void ImportData(
+            string fileName,
+            bool legacy)
         {
             var extension = Path.GetExtension(fileName)?.ToLower();
 
@@ -114,8 +119,17 @@ namespace PR.Application
                 }
                 case ".json":
                 {
-                    _dataIOHandler.ImportDataFromJson(
-                        fileName, out people);
+                    if (legacy)
+                    {
+                        _dataIOHandler.ImportForeignDataFromJson(fileName, out var contactData);
+
+                        people = new List<Person>(contactData.People.Select(p => p.ConvertFromLegacyPerson()));
+                    }
+                    else
+                    {
+                        _dataIOHandler.ImportDataFromJson(
+                            fileName, out people);
+                    }
                     break;
                 }
                 default:

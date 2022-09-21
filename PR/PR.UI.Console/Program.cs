@@ -102,7 +102,8 @@ namespace PR.UI.Console
             _password = options.Password;
 
             System.Console.Write("Importing data...\nProgress: ");
-            await GetApplication().ImportData((progress, nameOfSubtask) =>
+            await GetApplication().ImportData(
+                options.FileName, options.Legacy, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
@@ -146,6 +147,7 @@ namespace PR.UI.Console
             //args = "update --user john --password secret --id 67".Split();
             //args = "delete --user john --password secret --id 67".Split();
             //args = "list -h localhost -d People -u postgres -p L1on8Zebra".Split();
+            //args = "import --filename Contacts.json --legacy true --host localhost --user postgres --password L1on8Zebra".Split();
 
             await Parser.Default.ParseArguments<
                     Create,

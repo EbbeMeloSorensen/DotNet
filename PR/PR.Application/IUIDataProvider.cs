@@ -33,6 +33,8 @@ namespace PR.Application
             string fileName,
             IList<Expression<Func<Person, bool>>> predicates);
 
-        void ImportData(string fileName);
+        void ImportData(
+            string fileName,
+            bool legacy);
     }
 }

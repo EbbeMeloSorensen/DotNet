@@ -155,6 +155,8 @@ namespace PR.Application
         }
 
         public async Task ImportData(
+            string fileName,
+            bool legacy,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(() =>
@@ -162,7 +164,7 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
                 progressCallback?.Invoke(0.0, "Importing data");
 
-                UIDataProvider.ImportData("PR.json");
+                UIDataProvider.ImportData(fileName, legacy);
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
