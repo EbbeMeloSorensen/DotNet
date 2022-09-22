@@ -10,6 +10,7 @@ using PR.Domain.Foreign;
 using PR.IO;
 using PR.Persistence;
 using Person = PR.Domain.Entities.Person;
+using PersonAssociation = PR.Domain.Entities.PersonAssociation;
 
 namespace PR.Application
 {
@@ -33,11 +34,33 @@ namespace PR.Application
         }
 
         public abstract Task<bool> CheckConnection();
+        public int CountAllPeople()
+        {
+            throw new NotImplementedException();
+        }
 
         public abstract void CreatePerson(Person person);
 
+        public void CreatePersonAssociation(
+            PersonAssociation personAssociation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CountPeople(
+            Expression<Func<Person, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
         public abstract Person GetPerson(
             Guid id);
+
+        public Person GetPersonWithAssociations(
+            Guid id)
+        {
+            throw new NotImplementedException();
+        }
 
         public abstract IList<Person> GetAllPeople();
 
@@ -46,6 +69,36 @@ namespace PR.Application
 
         public abstract IList<Person> FindPeople(
             IList<Expression<Func<Person, bool>>> predicates);
+
+        public void UpdatePerson(Person person)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePeople(IList<Person> people)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePersonAssociation(PersonAssociation personAssociation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeletePerson(Person person)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeletePeople(IList<Person> people)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeletePersonAssociations(IList<PersonAssociation> personAssociations)
+        {
+            throw new NotImplementedException();
+        }
 
         public void ExportData(
             string fileName,
@@ -139,6 +192,62 @@ namespace PR.Application
             }
 
             LoadPeople(people);
+        }
+
+        public void ExportPeople(string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ImportPeople(string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public event EventHandler<PersonEventArgs> PersonCreated;
+        public event EventHandler<PeopleEventArgs> PeopleUpdated;
+        public event EventHandler<PeopleEventArgs> PeopleDeleted;
+
+        protected virtual void OnPersonCreated(
+            Person person)
+        {
+            var handler = PersonCreated;
+
+            // Event will be null if there are no subscribers
+            if (handler != null)
+            {
+                handler(this, new PersonEventArgs(person));
+            }
+        }
+
+        protected virtual void OnPeopleUpdated(
+            IEnumerable<Person> people)
+        {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            var handler = PeopleUpdated;
+
+            // Event will be null if there are no subscribers
+            if (handler != null)
+            {
+                handler(this, new PeopleEventArgs(people));
+            }
+        }
+
+        protected virtual void OnPeopleDeleted(
+            IEnumerable<Person> people)
+        {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            var handler = PeopleDeleted;
+
+            // Event will be null if there are no subscribers
+            if (handler != null)
+            {
+                handler(this, new PeopleEventArgs(people));
+            }
         }
 
         protected abstract void LoadPeople(

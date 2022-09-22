@@ -16,10 +16,20 @@ namespace PR.Application
 
         Task<bool> CheckConnection();
 
+        int CountAllPeople();
+
         void CreatePerson(
             Person person);
 
+        void CreatePersonAssociation(
+            PersonAssociation personAssociation);
+
+        int CountPeople(
+            Expression<Func<Person, bool>> predicate);
+
         Person GetPerson(Guid id);
+
+        Person GetPersonWithAssociations(Guid id);
 
         IList<Person> GetAllPeople();
 
@@ -29,6 +39,24 @@ namespace PR.Application
         IList<Person> FindPeople(
             IList<Expression<Func<Person, bool>>> predicates);
 
+        void UpdatePerson(
+            Person person);
+
+        void UpdatePeople(
+            IList<Person> people);
+
+        void UpdatePersonAssociation(
+            PersonAssociation personAssociation);
+
+        void DeletePerson(
+            Person person);
+
+        void DeletePeople(
+            IList<Person> people);
+
+        void DeletePersonAssociations(
+            IList<PersonAssociation> personAssociations);
+
         void ExportData(
             string fileName,
             IList<Expression<Func<Person, bool>>> predicates);
@@ -36,5 +64,14 @@ namespace PR.Application
         void ImportData(
             string fileName,
             bool legacy);
+
+        void ExportPeople(
+            string fileName);
+        void ImportPeople(
+            string fileName);
+
+        event EventHandler<PersonEventArgs> PersonCreated;
+        event EventHandler<PeopleEventArgs> PeopleUpdated;
+        event EventHandler<PeopleEventArgs> PeopleDeleted;
     }
 }
