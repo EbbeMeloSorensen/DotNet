@@ -25,5 +25,10 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public Person GetPersonIncludingAssociations(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

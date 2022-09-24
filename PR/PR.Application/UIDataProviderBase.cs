@@ -47,20 +47,14 @@ namespace PR.Application
             throw new NotImplementedException();
         }
 
-        public int CountPeople(
-            Expression<Func<Person, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract int CountPeople(
+            Expression<Func<Person, bool>> predicate);
 
         public abstract Person GetPerson(
             Guid id);
 
-        public Person GetPersonWithAssociations(
-            Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract Person GetPersonWithAssociations(
+            Guid id);
 
         public abstract IList<Person> GetAllPeople();
 

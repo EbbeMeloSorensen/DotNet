@@ -15,6 +15,7 @@ namespace PR.UIDataProvider.Persistence
     public class UIDataProvider : UIDataProviderBase
     {
         private Dictionary<Guid, Person> _personCache;
+        private Dictionary<Guid, PersonAssociation> _personAssociationCache;
 
         public override IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
@@ -25,6 +26,7 @@ namespace PR.UIDataProvider.Persistence
             UnitOfWorkFactory = unitOfWorkFactory;
 
             _personCache = new Dictionary<Guid, Person>();
+            _personAssociationCache = new Dictionary<Guid, PersonAssociation>();
         }
 
         public override void Initialize(
@@ -52,6 +54,18 @@ namespace PR.UIDataProvider.Persistence
             _personCache[person.Id] = cacheObj;
         }
 
+        public override int CountPeople(Expression<Func<Person, bool>> predicate)
+        {
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var count = unitOfWork.People.Count(predicate);
+
+                //_logger.StopStopWatchAndWriteLine("Completed counting people");
+
+                return count;
+            }
+        }
+
         public override Person GetPerson(Guid id)
         {
             if (_personCache.ContainsKey(id))
@@ -65,6 +79,23 @@ namespace PR.UIDataProvider.Persistence
                 _personCache[id] = person;
                 return person;
             }
+        }
+
+        public override Person GetPersonWithAssociations(Guid id)
+        {
+            Person personFromRepository;
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                personFromRepository = unitOfWork.People.GetPersonIncludingAssociations(id);
+            }
+
+            var person = IncludeInCache(personFromRepository);
+
+            person.ObjectPeople = personFromRepository.ObjectPeople?.Select(IncludeInCache).ToList();
+            person.SubjectPeople = personFromRepository.SubjectPeople?.Select(IncludeInCache).ToList();
+
+            return person;
         }
 
         public override IList<Person> GetAllPeople()
@@ -161,6 +192,25 @@ namespace PR.UIDataProvider.Persistence
             _personCache[person.Id] = person;
 
             return person;
+        }
+
+        private PersonAssociation IncludeInCache(
+            PersonAssociation personAssociationFromRepository)
+        {
+            if (_personAssociationCache.ContainsKey(personAssociationFromRepository.Id))
+            {
+                return _personAssociationCache[personAssociationFromRepository.Id];
+            }
+
+            var personAssociation = personAssociationFromRepository.Clone();
+
+            personAssociation.LinkToPeople(
+                IncludeInCache(personAssociationFromRepository.SubjectPerson),
+                IncludeInCache(personAssociationFromRepository.ObjectPerson));
+
+            _personAssociationCache[personAssociation.Id] = personAssociation;
+
+            return personAssociation;
         }
 
         private void RemoveFromCache(Person person)
