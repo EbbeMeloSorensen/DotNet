@@ -180,6 +180,18 @@ namespace PR.UIDataProvider.Persistence
             // On the contrary, we clear the cache, so we're not looking at obsolete data
         }
 
+        protected override void LoadPersonAssociations(
+            IList<PersonAssociation> personAssociations)
+        {
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.PersonAssociations.AddRange(personAssociations);
+                unitOfWork.Complete();
+            }
+
+            _personAssociationCache.Clear();
+        }
+
         private Person IncludeInCache(
             Person personFromRepository)
         {

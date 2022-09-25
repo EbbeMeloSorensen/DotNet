@@ -155,6 +155,7 @@ namespace PR.Application
             }
 
             IList<Person> people;
+            IList<PersonAssociation> personAssociations = null;
 
             switch (extension)
             {
@@ -170,7 +171,18 @@ namespace PR.Application
                     {
                         _dataIOHandler.ImportForeignDataFromJson(fileName, out var contactData);
 
-                        people = new List<Person>(contactData.People.Select(p => p.ConvertFromLegacyPerson()));
+                        people = new List<Person>();
+                        var personIdMap = new Dictionary<int, Guid>();
+
+                        contactData.People.ForEach(p =>
+                        {
+                            var person = p.ConvertFromLegacyPerson();
+                            personIdMap[p.Id] = person.Id;
+                            people.Add(person);
+                        });
+
+                        personAssociations = new List<PersonAssociation>(contactData.PersonAssociations.Select(
+                            pa => pa.ConvertFromLegacyPersonAssociation(personIdMap)));
                     }
                     else
                     {
@@ -186,6 +198,7 @@ namespace PR.Application
             }
 
             LoadPeople(people);
+            LoadPersonAssociations(personAssociations);
         }
 
         public void ExportPeople(string fileName)
@@ -246,5 +259,8 @@ namespace PR.Application
 
         protected abstract void LoadPeople(
             IList<Person> people);
+
+        protected abstract void LoadPersonAssociations(
+            IList<PersonAssociation> personAssociations);
     }
 }

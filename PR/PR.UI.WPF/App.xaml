@@ -9,6 +9,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
+
             <DataTemplate DataType="{x:Type viewModel:OptionsDialogViewModel}">
                 <local:OptionsDialogView/>
             </DataTemplate>
@@ -21,6 +22,11 @@
             <DataTemplate DataType="{x:Type viewModel:DefinePersonAssociationDialogViewModel}">
                 <local:CreatePersonAssociationDialogView/>
             </DataTemplate>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
