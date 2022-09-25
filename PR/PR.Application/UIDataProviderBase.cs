@@ -181,8 +181,11 @@ namespace PR.Application
                             people.Add(person);
                         });
 
-                        personAssociations = new List<PersonAssociation>(contactData.PersonAssociations.Select(
-                            pa => pa.ConvertFromLegacyPersonAssociation(personIdMap)));
+                        if (contactData.PersonAssociations != null)
+                        {
+                            personAssociations = new List<PersonAssociation>(contactData.PersonAssociations.Select(
+                                pa => pa.ConvertFromLegacyPersonAssociation(personIdMap)));
+                        }
                     }
                     else
                     {

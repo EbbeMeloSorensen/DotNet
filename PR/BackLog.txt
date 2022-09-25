@@ -4,13 +4,11 @@ Done:
 * Figure out if your Heroku application still runs (OK)
   (it does - on https://meloreactivities.herokuapp.com)
 * Make the API target a local postgres database
-
-Epic: Sadle om til at vedligeholde People-datasættet hos Heroku
 * Implement support for exporting the database contents to a file (OK)
 * Implement support for importing a file to the database (OK)
 * Samme attributter som i web-applikationen (OK)
 * PersonAssociation
-  - Databasewise
+  o Importer fra legacy (OK)
 * Porter wpf brugergrænsefladen
 * Implementer en måde at konvertere fra det gamle sæt til det nye
 
