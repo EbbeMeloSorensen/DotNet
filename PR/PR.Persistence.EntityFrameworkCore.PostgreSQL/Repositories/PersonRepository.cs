@@ -24,9 +24,27 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
         }
 
         public override void UpdateRange(
-            IEnumerable<Person> entities)
+            IEnumerable<Person> people)
         {
-            throw new NotImplementedException();
+            var listOfUpdatedPeople = people.ToList();
+            var ids = listOfUpdatedPeople.Select(p => p.Id);
+            var peopleFromRepository = Find(p => ids.Contains(p.Id)).ToList();
+
+            peopleFromRepository.ForEach(pRepo =>
+            {
+                var updatedPerson = listOfUpdatedPeople.Single(pUpd => pUpd.Id == pRepo.Id);
+
+                pRepo.FirstName = updatedPerson.FirstName;
+                pRepo.Surname = updatedPerson.Surname;
+                pRepo.Nickname = updatedPerson.Nickname;
+                pRepo.Address = updatedPerson.Address;
+                pRepo.ZipCode = updatedPerson.ZipCode;
+                pRepo.City = updatedPerson.City;
+                pRepo.Birthday = updatedPerson.Birthday;
+                pRepo.Category = updatedPerson.Category;
+                pRepo.Description = updatedPerson.Description;
+                pRepo.Created = updatedPerson.Created;
+            });
         }
 
         public Person Get(

@@ -41,11 +41,8 @@ namespace PR.Application
 
         public abstract void CreatePerson(Person person);
 
-        public void CreatePersonAssociation(
-            PersonAssociation personAssociation)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void CreatePersonAssociation(
+            PersonAssociation personAssociation);
 
         public abstract int CountPeople(
             Expression<Func<Person, bool>> predicate);

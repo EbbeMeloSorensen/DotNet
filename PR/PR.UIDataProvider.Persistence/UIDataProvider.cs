@@ -57,6 +57,24 @@ namespace PR.UIDataProvider.Persistence
             OnPersonCreated(cacheObj);
         }
 
+        public override void CreatePersonAssociation(
+            PersonAssociation personAssociation)
+        {
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.PersonAssociations.Add(personAssociation);
+                unitOfWork.Complete();
+            }
+
+            var modelObjForCache = personAssociation.Clone();
+
+            var subjectPerson = GetPerson(personAssociation.SubjectPersonId);
+            var objectPerson = GetPerson(personAssociation.ObjectPersonId);
+
+            modelObjForCache.LinkToPeople(subjectPerson, objectPerson);
+            _personAssociationCache[modelObjForCache.Id] = modelObjForCache;
+        }
+
         public override int CountPeople(
             Expression<Func<Person, bool>> predicate)
         {
@@ -181,7 +199,20 @@ namespace PR.UIDataProvider.Persistence
         public override void UpdatePeople(
             IList<Person> people)
         {
-            throw new NotImplementedException();
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.People.UpdateRange(people);
+                unitOfWork.Complete();
+            }
+
+            // Update the people of the cache too
+            foreach (var person in people)
+            {
+                var cacheObj = GetPerson(person.Id);
+                cacheObj.CopyAttributes(person);
+            }
+
+            OnPeopleUpdated(people);
         }
 
         public override void UpdatePersonAssociation(
@@ -226,7 +257,22 @@ namespace PR.UIDataProvider.Persistence
         public override void DeletePersonAssociations(
             IList<PersonAssociation> personAssociations)
         {
-            throw new NotImplementedException();
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var ids = personAssociations.Select(p => p.Id).ToList();
+                var forDeletion = unitOfWork.PersonAssociations.Find(pa => ids.Contains(pa.Id));
+
+                unitOfWork.PersonAssociations.RemoveRange(forDeletion);
+                unitOfWork.Complete();
+            }
+
+            // Update memory objects
+            personAssociations.ToList().ForEach(pa =>
+            {
+                pa.SubjectPerson?.ObjectPeople?.Remove(pa);
+                pa.ObjectPerson?.SubjectPeople?.Remove(pa);
+                _personAssociationCache.Remove(pa.Id);
+            });
         }
 
         protected override void LoadPeople(
