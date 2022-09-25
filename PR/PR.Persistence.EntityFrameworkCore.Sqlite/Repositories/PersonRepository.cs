@@ -1,4 +1,5 @@
-﻿using Craft.Persistence.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Craft.Persistence.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
@@ -11,12 +12,14 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
         }
 
-        public override void Update(Person entity)
+        public override void Update(
+            Person entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<Person> entities)
+        public override void UpdateRange(
+            IEnumerable<Person> entities)
         {
             throw new NotImplementedException();
         }
@@ -26,7 +29,14 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
             throw new NotImplementedException();
         }
 
-        public Person GetPersonIncludingAssociations(Guid id)
+        public Person GetPersonIncludingAssociations(
+            Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Person> GetPeopleIncludingAssociations(
+            Expression<Func<Person, bool>> predicate)
         {
             throw new NotImplementedException();
         }

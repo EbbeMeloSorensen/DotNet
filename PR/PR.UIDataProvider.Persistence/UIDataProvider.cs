@@ -42,7 +42,8 @@ namespace PR.UIDataProvider.Persistence
             return await UnitOfWorkFactory.CheckRepositoryConnection();
         }
 
-        public override void CreatePerson(Person person)
+        public override void CreatePerson(
+            Person person)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -52,9 +53,12 @@ namespace PR.UIDataProvider.Persistence
 
             var cacheObj = person.Clone();
             _personCache[person.Id] = cacheObj;
+
+            OnPersonCreated(cacheObj);
         }
 
-        public override int CountPeople(Expression<Func<Person, bool>> predicate)
+        public override int CountPeople(
+            Expression<Func<Person, bool>> predicate)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -66,7 +70,8 @@ namespace PR.UIDataProvider.Persistence
             }
         }
 
-        public override Person GetPerson(Guid id)
+        public override Person GetPerson(
+            Guid id)
         {
             if (_personCache.ContainsKey(id))
             {
@@ -81,7 +86,8 @@ namespace PR.UIDataProvider.Persistence
             }
         }
 
-        public override Person GetPersonWithAssociations(Guid id)
+        public override Person GetPersonWithAssociations(
+            Guid id)
         {
             Person personFromRepository;
 
@@ -166,6 +172,63 @@ namespace PR.UIDataProvider.Persistence
             return stationInformations;
         }
 
+        public override void UpdatePerson(
+            Person person)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UpdatePeople(
+            IList<Person> people)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UpdatePersonAssociation(
+            PersonAssociation personAssociation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DeletePerson(
+            Person person)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DeletePeople(
+            IList<Person> people)
+        {
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var ids = people.Select(p => p.Id).ToList();
+
+                var peopleForDeletion = unitOfWork.People
+                    .GetPeopleIncludingAssociations(p => ids.Contains(p.Id))
+                    .ToList();
+
+                var personAssociationsForDeletion = peopleForDeletion
+                    .SelectMany(p => p.ObjectPeople)
+                    .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
+                    .ToList();
+
+                unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
+                unitOfWork.People.RemoveRange(peopleForDeletion);
+                unitOfWork.Complete();
+
+                personAssociationsForDeletion.ForEach(RemoveFromCache);
+                peopleForDeletion.ForEach(RemoveFromCache);
+            }
+
+            OnPeopleDeleted(people);
+        }
+
+        public override void DeletePersonAssociations(
+            IList<PersonAssociation> personAssociations)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void LoadPeople(
             IList<Person> people)
         {
@@ -225,11 +288,21 @@ namespace PR.UIDataProvider.Persistence
             return personAssociation;
         }
 
-        private void RemoveFromCache(Person person)
+        private void RemoveFromCache(
+            Person person)
         {
             if (!_personCache.ContainsKey(person.Id)) return;
 
             _personCache.Remove(person.Id);
+        }
+
+        private void RemoveFromCache(
+            PersonAssociation personAssociation)
+        {
+            if (!_personAssociationCache.ContainsKey(personAssociation.Id)) return;
+
+            _personAssociationCache[personAssociation.Id].DecoupleFromPeople();
+            _personAssociationCache.Remove(personAssociation.Id);
         }
     }
 }

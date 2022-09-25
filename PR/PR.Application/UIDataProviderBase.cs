@@ -64,35 +64,18 @@ namespace PR.Application
         public abstract IList<Person> FindPeople(
             IList<Expression<Func<Person, bool>>> predicates);
 
-        public void UpdatePerson(Person person)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void UpdatePerson(Person person);
 
-        public void UpdatePeople(IList<Person> people)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void UpdatePeople(IList<Person> people);
 
-        public void UpdatePersonAssociation(PersonAssociation personAssociation)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void UpdatePersonAssociation(PersonAssociation personAssociation);
 
-        public void DeletePerson(Person person)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void DeletePerson(Person person);
 
-        public void DeletePeople(IList<Person> people)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void DeletePeople(IList<Person> people);
 
-        public void DeletePersonAssociations(IList<PersonAssociation> personAssociations)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void DeletePersonAssociations(
+            IList<PersonAssociation> personAssociations);
 
         public void ExportData(
             string fileName,
