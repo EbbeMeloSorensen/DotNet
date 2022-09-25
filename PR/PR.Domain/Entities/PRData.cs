@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using PR.Domain.Entities;
 
-namespace PR.IO
+namespace PR.Domain.Entities
 {
     public class PRData
     {

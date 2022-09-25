@@ -23,6 +23,10 @@ namespace PR.IO
 
                 var xOver = new XmlAttributeOverrides();
                 var attrs = new XmlAttributes { XmlIgnore = true };
+                xOver.Add(typeof(Person), "ObjectPeople", attrs);
+                xOver.Add(typeof(Person), "SubjectPeople", attrs);
+                xOver.Add(typeof(PersonAssociation), "SubjectPerson", attrs);
+                xOver.Add(typeof(PersonAssociation), "ObjectPerson", attrs);
                 _xmlSerializer = new XmlSerializer(typeof(PRData), xOver);
 
                 return _xmlSerializer;
@@ -30,53 +34,58 @@ namespace PR.IO
         }
 
         public void ExportDataToXML(
-            IList<Person> people, 
+            PRData prData, 
             string fileName)
         {
             using (var streamWriter = new StreamWriter(fileName))
             {
-                var smsData = new PRData
-                {
-                    People = people.ToList()
-                };
-
-                XmlSerializer.Serialize(streamWriter, smsData);
+                XmlSerializer.Serialize(streamWriter, prData);
             }
         }
 
         public void ExportDataToJson(
-            IList<Person> people, 
+            PRData prData, 
             string fileName)
         {
-            var json = JsonConvert.SerializeObject(
-                people, Formatting.Indented, new DoubleJsonConverter(), new NullableDoubleJsonConverter());
+            var jsonResolver = new ContractResolver();
+            jsonResolver.IgnoreProperty(typeof(Person), "ObjectPeople");
+            jsonResolver.IgnoreProperty(typeof(Person), "SubjectPeople");
+            jsonResolver.IgnoreProperty(typeof(PersonAssociation), "SubjectPerson");
+            jsonResolver.IgnoreProperty(typeof(PersonAssociation), "ObjectPerson");
 
-            using (var streamWriter = new StreamWriter(fileName))
+            var settings = new JsonSerializerSettings
             {
-                streamWriter.WriteLine(json);
-            }
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = jsonResolver
+            };
+
+            var json = JsonConvert.SerializeObject(
+                prData,
+                Formatting.Indented,
+                settings);
+
+            using var streamWriter = new StreamWriter(fileName);
+
+            streamWriter.WriteLine(json);
         }
 
         public void ImportDataFromXML(
             string fileName, 
-            out IList<Person> people)
+            out PRData prData)
         {
-            using (var streamReader = new StreamReader(fileName))
-            {
-                var data = XmlSerializer.Deserialize(streamReader) as PRData;
-                people = data.People;
-            }
+            using var streamReader = new StreamReader(fileName);
+
+            prData = XmlSerializer.Deserialize(streamReader) as PRData;
         }
 
         public void ImportDataFromJson(
             string fileName, 
-            out IList<Person> people)
+            out PRData prData)
         {
-            using (var streamReader = new StreamReader(fileName))
-            {
-                var json = streamReader.ReadToEnd();
-                people = JsonConvert.DeserializeObject<List<Person>>(json);
-            }
+            using var streamReader = new StreamReader(fileName);
+
+            var json = streamReader.ReadToEnd();
+            prData = JsonConvert.DeserializeObject<PRData>(json);
         }
 
         public void ImportForeignDataFromJson(

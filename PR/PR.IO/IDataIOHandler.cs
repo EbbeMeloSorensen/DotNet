@@ -6,20 +6,20 @@ namespace PR.IO
     public interface IDataIOHandler
     {
         void ExportDataToXML(
-            IList<Person> people,
+            PRData prData,
             string fileName);
 
         void ExportDataToJson(
-            IList<Person> people,
+            PRData prData,
             string fileName);
 
         void ImportDataFromXML(
             string fileName,
-            out IList<Person> people);
+            out PRData prData);
 
         void ImportDataFromJson(
             string fileName,
-            out IList<Person> people);
+            out PRData prData);
 
         void ImportForeignDataFromJson(
             string fileName,

@@ -66,7 +66,7 @@ namespace PR.ViewModel
 
         public void WriteLine(LogMessageCategory category, string message, string aspect = "general")
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

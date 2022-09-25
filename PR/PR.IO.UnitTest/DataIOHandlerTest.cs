@@ -5,6 +5,7 @@ using FluentAssertions;
 using PR.Domain.Foreign;
 using Xunit;
 using Person = PR.Domain.Entities.Person;
+using PersonAssociation = PR.Domain.Entities.PersonAssociation;
 
 namespace PR.IO.UnitTest
 {
@@ -20,11 +21,11 @@ namespace PR.IO.UnitTest
         [Fact]
         public void ImportDataFromXML_Works()
         {
-            new DataIOHandler().ImportDataFromXML(@"C:/Temp/People.xml", out IList<Person> people);
+            new DataIOHandler().ImportDataFromXML(@"C:/Temp/People.xml", out PRData prData);
 
-            people.Count.Should().Be(3);
-            people.Count(p => p.FirstName == "Bamse").Should().Be(1);
-            people.Count(p => p.FirstName == "Kylling").Should().Be(1);
+            prData.People.Count.Should().Be(3);
+            prData.People.Count(p => p.FirstName == "Ebbe").Should().Be(1);
+            prData.People.Count(p => p.FirstName == "Uffe").Should().Be(1);
         }
 
         [Fact]
@@ -37,12 +38,11 @@ namespace PR.IO.UnitTest
         public void ImportDataFromJson_Works()
         {
             var dataIOHandler = new DataIOHandler();
-            IList<Person> people;
-            dataIOHandler.ImportDataFromJson(@"C:/Temp/People.json", out people);
+            dataIOHandler.ImportDataFromJson(@"C:/Temp/People.json", out var prData);
 
-            people.Count.Should().Be(3);
-            people.Count(p => p.FirstName == "Bamse").Should().Be(1);
-            people.Count(p => p.FirstName == "Kylling").Should().Be(1);
+            prData.People.Count.Should().Be(3);
+            prData.People.Count(p => p.FirstName == "Ebbe").Should().Be(1);
+            prData.People.Count(p => p.FirstName == "Uffe").Should().Be(1);
         }
 
         [Fact]
@@ -54,38 +54,68 @@ namespace PR.IO.UnitTest
         }
 
         // Helper
-        private List<Person> GenerateDataSet()
+        private PRData GenerateDataSet()
         {
             var now = DateTime.UtcNow;
 
-            return new List<Person>
+            var ebbe = new Person
             {
-                new Person
+                Id = Guid.NewGuid(),
+                FirstName = "Ebbe",
+                Surname = "Melo Sørensen",
+                Nickname = "Bebsen",
+                Address = "Danshøjvej 33",
+                ZipCode = "2500",
+                City = "Valby",
+                Birthday = new DateTime(1980, 6, 13).ToUniversalTime(),
+                Category = "Familie",
+                Description = "Mig selv",
+                Dead = false,
+                Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()
+            };
+
+            var ana = new Person
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Ana Tayze",
+                Surname = "Melo Sørensen",
+                Created = now
+            };
+
+            var uffe = new Person
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Uffe",
+                Surname = "Sørensen",
+                Created = now
+            };
+
+            return new PRData
+            {
+                People = new List<Person>
                 {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Bamse",
-                    Surname = "Hansen",
-                    Created = now
+                    ebbe,
+                    ana,
+                    uffe
                 },
-                new Person
+                PersonAssociations = new List<PersonAssociation>
                 {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Kylling",
-                    Created = now
-                },
-                new Person
-                {
-                    FirstName = "Ana Tayze",
-                    Surname = "Melo Sørensen",
-                    Nickname = "Hamos",
-                    Address = "Danshøjvej 33",
-                    ZipCode = "2500",
-                    City = "Valby",
-                    Birthday = new DateTime(1980, 6, 13).ToUniversalTime(),
-                    Category = "Familie",
-                    Description = "Min kone",
-                    Dead = false,
-                    Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()
+                    new()
+                    {
+                        Id = Guid.NewGuid(),
+                        Description = "is the brother of",
+                        Created = now,
+                        ObjectPersonId = ebbe.Id,
+                        SubjectPersonId = uffe.Id
+                    },
+                    new()
+                    {
+                        Id = Guid.NewGuid(),
+                        Description = "is married with",
+                        Created = now,
+                        ObjectPersonId = ana.Id,
+                        SubjectPersonId = ebbe.Id
+                    }
                 }
             };
         }

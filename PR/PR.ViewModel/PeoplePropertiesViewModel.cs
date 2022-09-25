@@ -253,7 +253,13 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             Address = SharedAddress != _originalSharedAddress ? SharedAddress : p.Address,
             ZipCode = SharedZipCode != _originalSharedZipCode ? SharedZipCode : p.ZipCode,
             City = SharedCity != _originalSharedCity ? SharedCity : p.City,
-            Birthday = SharedBirthday != _originalSharedBirthday ? SharedBirthday : p.Birthday,
+            Birthday = SharedBirthday != _originalSharedBirthday
+                ? new DateTime(
+                    SharedBirthday.Value.Year,
+                    SharedBirthday.Value.Month,
+                    SharedBirthday.Value.Day,
+                    0, 0, 0, DateTimeKind.Utc) 
+                : p.Birthday,
             Category = SharedCategory != _originalSharedCategory ? SharedCategory : p.Category,
             Description = SharedComments != _originalSharedComments ? SharedComments : p.Description,
             Created = p.Created

@@ -114,6 +114,14 @@ namespace PR.ViewModel
                 return;
             }
 
+            var birthday = dialogViewModel.Birthday.HasValue
+                ? new DateTime(
+                    dialogViewModel.Birthday.Value.Year,
+                    dialogViewModel.Birthday.Value.Month,
+                    dialogViewModel.Birthday.Value.Day,
+                    0, 0, 0, DateTimeKind.Utc)
+                : new DateTime?();
+
             _dataProvider.CreatePerson(new Person
             {
                 FirstName = dialogViewModel.FirstName,
@@ -122,7 +130,7 @@ namespace PR.ViewModel
                 Address = dialogViewModel.Address,
                 ZipCode = dialogViewModel.ZipCode,
                 City = dialogViewModel.City,
-                Birthday = dialogViewModel.Birthday,
+                Birthday = birthday,
                 Category = dialogViewModel.Category,
                 Description = dialogViewModel.Comments,
                 Created = DateTime.UtcNow
@@ -157,7 +165,7 @@ namespace PR.ViewModel
                 return;
             }
 
-            _dataProvider.ExportPeople(dialog.FileName);
+            _dataProvider.ExportData(dialog.FileName, null);
         }
 
         private bool CanExportPeople()
@@ -177,7 +185,7 @@ namespace PR.ViewModel
                 return;
             }
 
-            _dataProvider.ImportPeople(dialog.FileName);
+            _dataProvider.ImportData(dialog.FileName, false);
         }
 
         private bool CanImportPeople()

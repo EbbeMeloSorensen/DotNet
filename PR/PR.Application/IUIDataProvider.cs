@@ -65,11 +65,6 @@ namespace PR.Application
             string fileName,
             bool legacy);
 
-        void ExportPeople(
-            string fileName);
-        void ImportPeople(
-            string fileName);
-
         event EventHandler<PersonEventArgs> PersonCreated;
         event EventHandler<PeopleEventArgs> PeopleUpdated;
         event EventHandler<PeopleEventArgs> PeopleDeleted;

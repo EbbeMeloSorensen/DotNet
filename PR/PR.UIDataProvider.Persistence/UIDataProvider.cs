@@ -144,6 +144,20 @@ namespace PR.UIDataProvider.Persistence
             return stationInformations;
         }
 
+        public override IList<PersonAssociation> GetAllPersonAssociations()
+        {
+            IList<PersonAssociation> personAssociations;
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                personAssociations = unitOfWork.PersonAssociations.GetAll()
+                    .Select(pa => pa.Clone())
+                    .ToList();
+            }
+
+            return personAssociations;
+        }
+
         public override IList<Person> FindPeople(
             Expression<Func<Person, bool>> predicate)
         {

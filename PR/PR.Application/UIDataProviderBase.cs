@@ -55,6 +55,8 @@ namespace PR.Application
 
         public abstract IList<Person> GetAllPeople();
 
+        public abstract IList<PersonAssociation> GetAllPersonAssociations();
+
         public abstract IList<Person> FindPeople(
             Expression<Func<Person, bool>> predicate);
 
@@ -86,34 +88,45 @@ namespace PR.Application
             }
 
             IList<Person> people;
+            IList<PersonAssociation> personAssociations;
 
             if (predicates == null || predicates.Count == 0)
             {
                 _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all person records from repository..");
                 people = GetAllPeople();
+                personAssociations = GetAllPersonAssociations();
             }
             else
             {
                 _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving matching person records from repository..");
                 people = FindPeople(predicates);
+
+                // Todo: Handle person associtations
+                throw new NotImplementedException();
             }
 
             _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {people.Count} person records");
+
+            var prData = new PRData
+            {
+                People = people.ToList(),
+                PersonAssociations = personAssociations.ToList()
+            };
 
             switch (extension)
             {
                 case ".xml":
                     {
-                        _dataIOHandler.ExportDataToXML(people, fileName);
+                        _dataIOHandler.ExportDataToXML(prData, fileName);
                         _logger?.WriteLine(LogMessageCategory.Information,
-                            $"  Exported {people.Count} stationinformation records to xml file");
+                            $"  Exported {people.Count} person records to xml file");
                         break;
                     }
                 case ".json":
                     {
-                        _dataIOHandler.ExportDataToJson(people, fileName);
+                        _dataIOHandler.ExportDataToJson(prData, fileName);
                         _logger?.WriteLine(LogMessageCategory.Information,
-                            $"  Exported {people.Count} stationinformation records to json file");
+                            $"  Exported {people.Count} person records to json file");
                         break;
                     }
                 default:
@@ -134,15 +147,14 @@ namespace PR.Application
                 throw new ArgumentException();
             }
 
-            IList<Person> people;
-            IList<PersonAssociation> personAssociations = null;
+            var prData = new PRData();
 
             switch (extension)
             {
                 case ".xml":
                 {
                     _dataIOHandler.ImportDataFromXML(
-                        fileName, out people);
+                        fileName, out prData);
                     break;
                 }
                 case ".json":
@@ -151,26 +163,23 @@ namespace PR.Application
                     {
                         _dataIOHandler.ImportForeignDataFromJson(fileName, out var contactData);
 
-                        people = new List<Person>();
+                        prData.People = new List<Person>();
                         var personIdMap = new Dictionary<int, Guid>();
 
                         contactData.People.ForEach(p =>
                         {
                             var person = p.ConvertFromLegacyPerson();
                             personIdMap[p.Id] = person.Id;
-                            people.Add(person);
+                            prData.People.Add(person);
                         });
 
-                        if (contactData.PersonAssociations != null)
-                        {
-                            personAssociations = new List<PersonAssociation>(contactData.PersonAssociations.Select(
-                                pa => pa.ConvertFromLegacyPersonAssociation(personIdMap)));
-                        }
+                        prData.PersonAssociations = new List<PersonAssociation>(contactData.PersonAssociations.Select(
+                            pa => pa.ConvertFromLegacyPersonAssociation(personIdMap)));
                     }
                     else
                     {
                         _dataIOHandler.ImportDataFromJson(
-                            fileName, out people);
+                            fileName, out prData);
                     }
                     break;
                 }
@@ -180,18 +189,8 @@ namespace PR.Application
                 }
             }
 
-            LoadPeople(people);
-            LoadPersonAssociations(personAssociations);
-        }
-
-        public void ExportPeople(string fileName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ImportPeople(string fileName)
-        {
-            throw new NotImplementedException();
+            LoadPeople(prData.People);
+            LoadPersonAssociations(prData.PersonAssociations);
         }
 
         public event EventHandler<PersonEventArgs> PersonCreated;
