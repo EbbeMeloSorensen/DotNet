@@ -1,4 +1,6 @@
-﻿namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
+﻿using System.Configuration;
+
+namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
 {
     public static class ConnectionStringProvider
     {
@@ -12,22 +14,14 @@
 
         public static void InitializeFromSettingsFile()
         {
-            //var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            //var settings = configFile.AppSettings.Settings;
-            //var host = settings["SMS_PostgreSQL_Host"]?.Value;
-            //var port = settings["SMS_PostgreSQL_Port"]?.Value;
-            //var database = settings["SMS_PostgreSQL_Database"]?.Value;
-            //var schema = settings["SMS_PostgreSQL_Schema"]?.Value;
-            //var userID = settings["SMS_PostgreSQL_UserID"]?.Value;
-            //var password = settings["SMS_PostgreSQL_Password"]?.Value;
-
-            // MELO-HOME
-            var host = "localhost";
-            var port = "5432";
-            var database = "PR";
-            var schema = "public";
-            var userID = "postgres";
-            var password = "L1on8Zebra";
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+            var host = settings["Host"]?.Value;
+            var port = settings["Port"]?.Value;
+            var database = settings["Database"]?.Value;
+            var schema = settings["Schema"]?.Value;
+            var userID = settings["User"]?.Value;
+            var password = settings["Password"]?.Value;
 
             Initialize(host, string.IsNullOrEmpty(port) ? 5432 : int.Parse(port), database, schema, userID, password);
         }
