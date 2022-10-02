@@ -95,7 +95,7 @@ namespace PR.Domain.Entities
             set { _created = value; }
         }
 
-        public virtual ICollection<PersonAssociation> ObjectPeople { get; set; }
-        public virtual ICollection<PersonAssociation> SubjectPeople { get; set; }
+        public virtual ICollection<PersonAssociation>? ObjectPeople { get; set; }
+        public virtual ICollection<PersonAssociation>? SubjectPeople { get; set; }
     }
 }

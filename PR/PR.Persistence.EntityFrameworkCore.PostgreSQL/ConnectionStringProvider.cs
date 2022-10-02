@@ -20,10 +20,26 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
             var port = settings["Port"]?.Value;
             var database = settings["Database"]?.Value;
             var schema = settings["Schema"]?.Value;
-            var userID = settings["User"]?.Value;
+            var user = settings["User"]?.Value;
             var password = settings["Password"]?.Value;
 
-            Initialize(host, string.IsNullOrEmpty(port) ? 5432 : int.Parse(port), database, schema, userID, password);
+            if (string.IsNullOrEmpty(host) ||
+                string.IsNullOrEmpty(port) ||
+                string.IsNullOrEmpty(database) ||
+                string.IsNullOrEmpty(schema) ||
+                string.IsNullOrEmpty(user) ||
+                string.IsNullOrEmpty(password))
+            {
+                // If we are here, it may be because we're attempting to generate a migration
+                host = "localhost";
+                port = "5432";
+                database = "PR";
+                schema = "public";
+                user = "postgres";
+                password = "L1on8Zebra";
+            }
+
+            Initialize(host, string.IsNullOrEmpty(port) ? 5432 : int.Parse(port), database, schema, user, password);
         }
 
         public static void Initialize(

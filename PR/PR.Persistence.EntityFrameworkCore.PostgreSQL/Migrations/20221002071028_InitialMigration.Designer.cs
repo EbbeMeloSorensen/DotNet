@@ -12,7 +12,7 @@ using PR.Persistence.EntityFrameworkCore.PostgreSQL;
 namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
 {
     [DbContext(typeof(PRDbContext))]
-    [Migration("20220921155759_InitialMigration")]
+    [Migration("20221002071028_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
