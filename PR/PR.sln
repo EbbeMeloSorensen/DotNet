@@ -58,9 +58,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj", "{0E57F576-FD0D-48BF-ABE3-7C1CE7AE7F8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.UI.WPF", "PR.UI.WPF\PR.UI.WPF.csproj", "{7B338DED-21C1-4A9B-95BD-32C361490E5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.UI.WPF", "PR.UI.WPF\PR.UI.WPF.csproj", "{7B338DED-21C1-4A9B-95BD-32C361490E5C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{55EC76ED-A75C-48BB-9866-41727E54DCF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Web.Persistence", "PR.Web.Persistence\PR.Web.Persistence.csproj", "{FE443996-F519-4571-9176-A674EB5F793B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -176,6 +178,10 @@ Global
 		{55EC76ED-A75C-48BB-9866-41727E54DCF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55EC76ED-A75C-48BB-9866-41727E54DCF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55EC76ED-A75C-48BB-9866-41727E54DCF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE443996-F519-4571-9176-A674EB5F793B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE443996-F519-4571-9176-A674EB5F793B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE443996-F519-4571-9176-A674EB5F793B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE443996-F519-4571-9176-A674EB5F793B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
