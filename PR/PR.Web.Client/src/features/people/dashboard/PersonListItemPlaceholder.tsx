@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { Segment, Button, Placeholder } from 'semantic-ui-react';
+import React from 'react';
+import { Placeholder } from 'semantic-ui-react';
 
 export default function PersonListItemPlaceholder() {
     return (

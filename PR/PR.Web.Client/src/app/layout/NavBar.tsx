@@ -14,11 +14,10 @@ export default observer(function NavBar() {
                     Who is Who
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/people' name='People' />
-                <Menu.Item as={NavLink} to='/errors' name='Errors' />
                 <Menu.Item>
                     <Button as={NavLink} to='/createPerson' positive content='Create Person' />
                 </Menu.Item>
-                <Menu.Item as={NavLink} to='/playground' name='Playground' />
+                <Menu.Item as={NavLink} to='/errors' name='Errors' />
                 <Menu.Item position='right'>
                     <Dropdown pointing='top left' text={user?.displayName}>
                         <Dropdown.Menu>

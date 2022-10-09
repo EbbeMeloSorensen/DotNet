@@ -8,7 +8,6 @@ import HomePage from '../../features/home/HomePage';
 import PersonForm from '../../features/people/form/PersonForm';
 import PersonDetails from '../../features/people/details/PersonDetails';
 import TestErrors from '../../features/errors/TestError';
-import Playground from '../../features/playground/Playground';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
 import ServerError from '../../features/errors/ServerError';
@@ -47,7 +46,6 @@ function App() {
                 <PrivateRoute path='/people/:id' component={PersonDetails} />
                 <PrivateRoute key={location.key} path={['/createPerson', '/manage/:id']} component={PersonForm} />
                 <PrivateRoute path='/errors' component={TestErrors} />
-                <PrivateRoute path='/playground' component={Playground} />
                 <Route path='/server-error' component={ServerError} />
                 <Route component={NotFound} />
               </Switch>
