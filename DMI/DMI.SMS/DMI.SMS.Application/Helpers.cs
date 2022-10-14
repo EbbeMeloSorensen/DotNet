@@ -949,10 +949,17 @@ namespace DMI.SMS.Application
 
                         // Når der sker en opdatering af en station, som allerede var i databasen, da man startede, så passer gdb_date_from generelt ikke med gdb_date_to
                         // (det er de tidspunkter, der er fremhævet med rødt i viewet)
-                        // Når det sker, så "lukker vi hullet" ved at overskrive gdb_date_from i den seneste række
+                        // Når det sker, så "lukker vi hullet" ved at overskrive gdb_date_from i den senest tilføjede række med 
+                        // den dato, som vi læser i dateto-feltet (i praksis skulle der gerne gælde, at denne dato altid er der. hvis denne antagelse viser sig
+                        // ikke at holde, skal vi havbe kigget på det, og så er det måske en mulighed at bruge værdien fra gdb_to_date-feltet, som altid er der)
                         if (rowAfter.GdbFromDate != rowBefore.GdbToDate)
                         {
-                            result.Last().timeValidFrom = rowBefore.GdbToDate.AsEpochInMicroSeconds();
+                            if (!rowBefore.DateTo.HasValue)
+                            {
+                                throw new NotImplementedException("We don't expect this to occur");
+                            }
+
+                            result.Last().timeValidFrom = rowBefore.DateTo.Value.AsEpochInMicroSeconds();
                         }
                     }
 
@@ -991,7 +998,12 @@ namespace DMI.SMS.Application
                         // Hvis ikke den er anderledes i Frie Data Perspektiv, så ignorerer vi den bare, men snupper tidspunktet for hvornår den blev lavet
                         // og overskriver værdierne i den række, der repræsenterer næste tidsperiode
                         // (Vi klapper så at sige de 2 rækker sammen)
-                        result.Last().timeValidFrom = newEarliestFrieDataStationRowCandidate.timeValidFrom;
+                        // Bemærk, at vi IKKE må gøre dette, hvis datoen er nyere end den, der overskrives. Det gælder nemlig, når vi har at gøre med
+                        // en række, der er lavet i henhold til de nye brugsregler
+                        if (newEarliestFrieDataStationRowCandidate.timeValidFrom < result.Last().timeValidFrom)
+                        {
+                            result.Last().timeValidFrom = newEarliestFrieDataStationRowCandidate.timeValidFrom;
+                        }
                     }
                 }
 

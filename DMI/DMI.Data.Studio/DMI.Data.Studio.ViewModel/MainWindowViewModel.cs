@@ -773,7 +773,12 @@ namespace DMI.Data.Studio.ViewModel
         private async Task GenerateMeteorologicalStationList(
             object owner)
         {
-            await _smsApplication.ExtractMeteorologicalStations(null);
+            // Todo: Show a dialog where the user can enter a rollback date
+            // For now, we don't use a rollback date
+            // Bemærk lige, at du altså har sådan en dialog i SMS-applikationen
+            DateTime? rollbackDate = null;
+
+            await _smsApplication.ExtractMeteorologicalStations(rollbackDate);
         }
 
         private void ImportData(

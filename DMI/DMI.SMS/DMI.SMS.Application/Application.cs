@@ -265,7 +265,7 @@ namespace DMI.SMS.Application
         }
 
         public async Task ExtractMeteorologicalStations(
-            DateTime? cutDate,
+            DateTime? rollBackDate,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(async () =>
@@ -293,6 +293,7 @@ namespace DMI.SMS.Application
                 await GenerateStationListAndAddParameters(
                     allParams,
                     paramsDictionary,
+                    rollBackDate,
                     MeteorologicalStationListGenerationMode.Meteorological,
                     progressCallback);
 
@@ -303,6 +304,7 @@ namespace DMI.SMS.Application
         private async Task GenerateStationListAndAddParameters(
             List<string> allParams,
             Dictionary<string, List<string>> paramsDictionary,
+            DateTime? rollbackDate,
             MeteorologicalStationListGenerationMode mode,
             ProgressCallback? progressCallback)
         {
@@ -348,7 +350,8 @@ namespace DMI.SMS.Application
                 }
 
                 // Fetch all rows
-                var stationDataRaw = RetrieveAllRows(new DateTime(2021, 1, 24));
+                //var stationDataRaw = RetrieveAllRows(new DateTime(2021, 1, 24)); 
+                var stationDataRaw = RetrieveAllRows(rollbackDate);
 
                 // Configure filters
                 var stationTypes = new List<StationType>
@@ -367,6 +370,11 @@ namespace DMI.SMS.Application
                 // Filter out everything that is not current
                 var stationData = stationDataRaw
                     .Where(row => row.GdbToDate.Year == 9999)
+                    .ToList();
+
+                // Experiment: Filter out all stations that were added according to new usage rules (this should not affect the stationfetcher)
+                stationData = stationData
+                    .Where(row => !(row.DateTo.HasValue && row.Status == Status.Active))
                     .ToList();
 
                 // Filter out everything that doesn't match criteria, and convert to Frie Data stations
@@ -475,7 +483,8 @@ namespace DMI.SMS.Application
                             smsStationHistory = stationDataRaw
                                 .Where(row => row.StationIDDMI == station.stationId.ConvertFromKDIStationIdToSMSStationId())
                                 .Where(row => row.Stationtype == station.type.ConvertToStationType())
-                                .OrderBy(row => row.GdbFromDate)
+                                //.OrderBy(row => row.GdbFromDate) // Denne sortering virker ikke, hvis man har tilføjet data i henhold til nye brugsregler
+                                .OrderBy(row => row.DateFrom).ThenBy(row => row.GdbFromDate) // Dette er et bud på noget, der også kan håndtere de nye brugsregler
                                 .ToList();
 
                             var dataIOHandler = new DataIOHandler();
@@ -581,13 +590,16 @@ namespace DMI.SMS.Application
         }
 
         private IList<StationInformation> RetrieveAllRows(
-            DateTime rollBackDate)
+            DateTime? rollBackDate)
         {
             // Fetch all rows
             var stationDataRaw = UIDataProvider.GetAllStationInformations();
 
-            // Roll back to given date of interest
-            stationDataRaw = stationDataRaw.RollbackToPreviousDate(rollBackDate);
+            if (rollBackDate.HasValue)
+            {
+                // Roll back to given date of interest
+                stationDataRaw = stationDataRaw.RollbackToPreviousDate(rollBackDate.Value);
+            }
 
             // Remove records with blacklisted station ids
             stationDataRaw = stationDataRaw

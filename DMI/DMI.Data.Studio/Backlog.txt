@@ -4,12 +4,28 @@ Done:
   o Når man trykker på Find-knappen med country filter sat til Danmark, skal den hive 2140 stationer op (OK)
   o Den export, du har brugt til at lave StatDBFile Repo virker ikke, idet den har givet samme startinterval til alle
     (mon ikke det skyldes det der rod med cachen..) (OK)
+* Man skal kunne køre stationfetcher fra DMI.Data.Studio og ikke bare fra DMI.SMS
 
 Todo:
-* Fra DMi.Data.Studio - hvis man opererer med et file repo så læser den det ind korrekt, men så gemmer den det, og
-  i den forbindelse stripper den alle line endings væk, og så kan den gudhjælpemig ikke læse det bagefter..
-  .. hvad er forskellen på at man explicit kalder export og så på at den bare selv opdaterer sit repo?
-  export bruger: _smsDataProvider.ExportData -> bruger dataIOHandler.ExportDataToJson
+* Undersøg, om man kan refaktorere station fetcheren, så den også virker selv om man ændrer brugen
+  - pt hiver du alle stationer op, som har det rigtige stationsid og den rigtige stationstype, og så sorterer du på
+    gdb_from_date. Hvis du så laver nye data, så tolkes de som nye stationer, og så kommer der jo altså flere stationer med samme navn osv i listen
+    .. måske kan du sige, at du i første omgang IKKE vil have stationer op, hvorom der gælder:
+      * De er current (gdb_date = 9999)
+      * de har en dateto
+      * de har status som aktive
+    (Der er nemlig ikke en eneste af de nuværende rækker, dvs under de gamle brugsregler, der matcher på dette)
+  - Umiddelbart kløjs station fetcheren i det mht at generere virkningstidsintervaller, og det skyldes formentlig,
+    at den gerne vil bruge gdb_to_date som afslutning på virkningstidsintervallet. Du kunne prøve at lave det om således at
+    den plukker dateto frem for gdb_to_date, hvis den er der. Man kunne også gøre det endnu mere rent ved at benytte
+    dette princip:
+    - Når man traverserer historikken for en station, så skal man operere med, at en række kan tage PRÆCEDENS for en anden,
+      dvs, at hvis en række har et virkningstidsinterval, som overlapper med en, der allerede er gælder, så ignoreres den.
+      I praksis skulle man kunne nøjes med at sammenligne gdb_from_date med datefrom for seneste
+* For station fetcheren skal man i brugergrænsefladen optionelt kunne angive en skæringsdato
+* Genindfør det der med at man kan overlejre intervaller, hvor der er udført observationer
+* Der skal være en minimum bredde for stationinformation list viewet eller måske snarere hele første kolonne
+* Hvis man ikke har checket noget af i row condition filteret, skal det svare til, at man har checket det hele af
 
 
-* Man skal kunne køre stationfetcher fra DMI.Data.Studio og ikke bare fra DMI.SMS
+
