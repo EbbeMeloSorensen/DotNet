@@ -27,11 +27,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\Craf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{BB50D64A-36BA-4D85-B25E-3D0A77DB09A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Domain", "Glossary.Domain\Glossary.Domain.csproj", "{84769F8B-79E3-4D17-B37E-5D919A988A66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.Domain", "Glossary.Domain\Glossary.Domain.csproj", "{84769F8B-79E3-4D17-B37E-5D919A988A66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.IO", "Glossary.IO\Glossary.IO.csproj", "{5C14C749-2A9B-4031-AAC1-30599B2F6812}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.IO", "Glossary.IO\Glossary.IO.csproj", "{5C14C749-2A9B-4031-AAC1-30599B2F6812}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Persistence", "Glossary.Persistence\Glossary.Persistence.csproj", "{C3725EBB-0F97-4D3B-8C78-6BCC75A7D6F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.Persistence", "Glossary.Persistence\Glossary.Persistence.csproj", "{C3725EBB-0F97-4D3B-8C78-6BCC75A7D6F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Persistence.EntityFrameworkCore.PostgreSQL", "Glossary.Persistence.EntityFrameworkCore.PostgreSQL\Glossary.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{F43092DB-A43D-4658-AE54-F2C4DD1D3391}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Persistence.EntityFrameworkCore.PostgreSQL.ConsoleApp", "Glossary.Persistence.EntityFrameworkCore.PostgreSQL.ConsoleApp\Glossary.Persistence.EntityFrameworkCore.PostgreSQL.ConsoleApp.csproj", "{2BADD7FB-4488-4799-B9FB-C9BF27468307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Application", "Glossary.Application\Glossary.Application.csproj", "{220546E0-DD33-4273-AA7B-5D875F0C3860}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.IO.UnitTest", "Glossary.IO.UnitTest\Glossary.IO.UnitTest.csproj", "{DA9BF299-CA55-4D00-B861-F7E974964C97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +107,22 @@ Global
 		{C3725EBB-0F97-4D3B-8C78-6BCC75A7D6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3725EBB-0F97-4D3B-8C78-6BCC75A7D6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3725EBB-0F97-4D3B-8C78-6BCC75A7D6F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F43092DB-A43D-4658-AE54-F2C4DD1D3391}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F43092DB-A43D-4658-AE54-F2C4DD1D3391}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F43092DB-A43D-4658-AE54-F2C4DD1D3391}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F43092DB-A43D-4658-AE54-F2C4DD1D3391}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BADD7FB-4488-4799-B9FB-C9BF27468307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BADD7FB-4488-4799-B9FB-C9BF27468307}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BADD7FB-4488-4799-B9FB-C9BF27468307}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BADD7FB-4488-4799-B9FB-C9BF27468307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{220546E0-DD33-4273-AA7B-5D875F0C3860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{220546E0-DD33-4273-AA7B-5D875F0C3860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{220546E0-DD33-4273-AA7B-5D875F0C3860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{220546E0-DD33-4273-AA7B-5D875F0C3860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA9BF299-CA55-4D00-B861-F7E974964C97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA9BF299-CA55-4D00-B861-F7E974964C97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA9BF299-CA55-4D00-B861-F7E974964C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA9BF299-CA55-4D00-B861-F7E974964C97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
