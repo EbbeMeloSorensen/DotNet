@@ -1,1 +1,0 @@
-﻿This project only serves to support generation of migrations for the project PR.Persistence.FrameworkCore.SqlServer

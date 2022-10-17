@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence", "PR.Persis
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.SqlServer", "PR.Persistence.EntityFrameworkCore.SqlServer\PR.Persistence.EntityFrameworkCore.SqlServer.csproj", "{24D95C75-9397-4B69-8678-E211358FEBCC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp", "PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp\PR.Persistence.EntityFrameworkCore.SqlServer.ConsoleApp.csproj", "{1B9474B2-6C67-4DF6-A003-EF00F106CC51}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.IO", "PR.IO\PR.IO.csproj", "{507122B5-6F52-4FF4-B639-697782E0615E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Application", "PR.Application\PR.Application.csproj", "{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}"
@@ -29,11 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.Sqlite", "PR.Persistence.EntityFrameworkCore.Sqlite\PR.Persistence.EntityFrameworkCore.Sqlite.csproj", "{83832CA8-0A51-447C-A0A1-CE47E3318E4B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.Sqlite.ConsoleApp", "PR.Persistence.EntityFrameworkCore.Sqlite.ConsoleApp\PR.Persistence.EntityFrameworkCore.Sqlite.ConsoleApp.csproj", "{A33B2CC6-C108-4EC6-849F-131D701AB814}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.PostgreSQL", "PR.Persistence.EntityFrameworkCore.PostgreSQL\PR.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.PostgreSQL.ConsoleApp", "PR.Persistence.EntityFrameworkCore.PostgreSQL.ConsoleApp\PR.Persistence.EntityFrameworkCore.PostgreSQL.ConsoleApp.csproj", "{9CAB2D9C-A232-4E32-A706-71DFFAF57DB2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AB7D95F8-C937-4CEF-9D22-36D781426970}"
 	ProjectSection(SolutionItems) = preProject
@@ -62,13 +56,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.UI.WPF", "PR.UI.WPF\PR.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{55EC76ED-A75C-48BB-9866-41727E54DCF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Web.Persistence", "PR.Web.Persistence\PR.Web.Persistence.csproj", "{FE443996-F519-4571-9176-A674EB5F793B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Web.Persistence", "PR.Web.Persistence\PR.Web.Persistence.csproj", "{FE443996-F519-4571-9176-A674EB5F793B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Web.Application", "PR.Web.Application\PR.Web.Application.csproj", "{3859A415-5A63-4985-A024-72A4F0046776}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Web.Application", "PR.Web.Application\PR.Web.Application.csproj", "{3859A415-5A63-4985-A024-72A4F0046776}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Web.Infrastructure", "PR.Web.Infrastructure\PR.Web.Infrastructure.csproj", "{10F33C6E-F07C-4239-A0B8-EF0F683ECC2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Web.Infrastructure", "PR.Web.Infrastructure\PR.Web.Infrastructure.csproj", "{10F33C6E-F07C-4239-A0B8-EF0F683ECC2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Web.API", "PR.Web.API\PR.Web.API.csproj", "{2BB6BB72-E5ED-4D0F-9A81-A08C296D2BA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Web.API", "PR.Web.API\PR.Web.API.csproj", "{2BB6BB72-E5ED-4D0F-9A81-A08C296D2BA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.EntityFrameworkCore.Helper", "PR.Persistence.EntityFrameworkCore.Helper\PR.Persistence.EntityFrameworkCore.Helper.csproj", "{CE629DE2-1ED7-4E84-A7C7-7910D72734E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,10 +92,6 @@ Global
 		{24D95C75-9397-4B69-8678-E211358FEBCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24D95C75-9397-4B69-8678-E211358FEBCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24D95C75-9397-4B69-8678-E211358FEBCC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1B9474B2-6C67-4DF6-A003-EF00F106CC51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{507122B5-6F52-4FF4-B639-697782E0615E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{507122B5-6F52-4FF4-B639-697782E0615E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{507122B5-6F52-4FF4-B639-697782E0615E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -128,18 +120,10 @@ Global
 		{83832CA8-0A51-447C-A0A1-CE47E3318E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83832CA8-0A51-447C-A0A1-CE47E3318E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83832CA8-0A51-447C-A0A1-CE47E3318E4B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A33B2CC6-C108-4EC6-849F-131D701AB814}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7DDFBEC-2961-49ED-BE05-C5F2F0441EB5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9CAB2D9C-A232-4E32-A706-71DFFAF57DB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CAB2D9C-A232-4E32-A706-71DFFAF57DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CAB2D9C-A232-4E32-A706-71DFFAF57DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CAB2D9C-A232-4E32-A706-71DFFAF57DB2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B173AC5F-42BD-4061-988A-365A6DE89F1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B173AC5F-42BD-4061-988A-365A6DE89F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B173AC5F-42BD-4061-988A-365A6DE89F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -200,6 +184,10 @@ Global
 		{2BB6BB72-E5ED-4D0F-9A81-A08C296D2BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BB6BB72-E5ED-4D0F-9A81-A08C296D2BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BB6BB72-E5ED-4D0F-9A81-A08C296D2BA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE629DE2-1ED7-4E84-A7C7-7910D72734E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE629DE2-1ED7-4E84-A7C7-7910D72734E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE629DE2-1ED7-4E84-A7C7-7910D72734E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE629DE2-1ED7-4E84-A7C7-7910D72734E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
