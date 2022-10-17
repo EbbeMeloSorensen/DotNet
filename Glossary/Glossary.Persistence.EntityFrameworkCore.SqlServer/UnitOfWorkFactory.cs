@@ -24,7 +24,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
                 !string.IsNullOrEmpty(User) &&
                 !string.IsNullOrEmpty(Password))
             {
-                ConnectionStringProvider.Initialize(Host, int.Parse(Port), Database, Schema, Password);
+                ConnectionStringProvider.Initialize(Host, Database, Schema, Password);
             }
         }
 

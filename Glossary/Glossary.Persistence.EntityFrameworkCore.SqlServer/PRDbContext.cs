@@ -25,12 +25,14 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
             modelBuilder.Entity<PersonAssociation>()
                 .HasOne(p => p.SubjectPerson)
                 .WithMany(pa => pa.ObjectPeople)
-                .HasForeignKey(pa => pa.SubjectPersonId);
+                .HasForeignKey(pa => pa.SubjectPersonId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<PersonAssociation>()
                 .HasOne(p => p.ObjectPerson)
                 .WithMany(pa => pa.SubjectPeople)
-                .HasForeignKey(pa => pa.ObjectPersonId);
+                .HasForeignKey(pa => pa.ObjectPersonId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

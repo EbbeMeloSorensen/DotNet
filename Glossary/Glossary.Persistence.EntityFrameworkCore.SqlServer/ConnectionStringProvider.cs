@@ -1,10 +1,10 @@
 ﻿using System.Configuration;
+using Microsoft.Data.SqlClient;
 
 namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
 {
     public static class ConnectionStringProvider
     {
-        private static string _schema;
         private static string _connectionString;
 
         static ConnectionStringProvider()
@@ -17,31 +17,27 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
             var host = settings["Host"]?.Value;
-            var port = settings["Port"]?.Value;
             var database = settings["Database"]?.Value;
             var user = settings["User"]?.Value;
             var password = settings["Password"]?.Value;
 
             if (string.IsNullOrEmpty(host) ||
-                string.IsNullOrEmpty(port) ||
                 string.IsNullOrEmpty(database) ||
                 string.IsNullOrEmpty(user) ||
                 string.IsNullOrEmpty(password))
             {
                 // If we are here, it may be because we're attempting to generate a migration
-                host = "localhost";
-                port = "5432";
+                host = "melo-home\\sqlexpress";
                 database = "Glossary";
-                user = "postgres";
+                user = "sa";
                 password = "L1on8Zebra";
             }
 
-            Initialize(host, string.IsNullOrEmpty(port) ? 5432 : int.Parse(port), database, user, password);
+            Initialize(host, database, user, password);
         }
 
         public static void Initialize(
             string host,
-            int port,
             string database,
             string user,
             string password)
@@ -54,17 +50,20 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
                 return;
             }
 
-            _connectionString = $"Host={host};Port={port};Username={user};Password={password};Database={database}";
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder
+            {
+                DataSource = host,
+                InitialCatalog = database,
+                UserID = user,
+                Password = password
+            };
+            
+            _connectionString = sqlConnectionStringBuilder.ToString();
         }
 
         public static string GetConnectionString()
         {
             return _connectionString;
-        }
-
-        public static string GetPostgreSqlSchema()
-        {
-            return _schema;
         }
     }
 }

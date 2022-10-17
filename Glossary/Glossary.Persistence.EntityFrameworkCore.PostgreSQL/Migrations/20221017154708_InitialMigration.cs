@@ -49,13 +49,13 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                         column: x => x.ObjectPersonId,
                         principalTable: "People",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PersonAssociations_People_SubjectPersonId",
                         column: x => x.SubjectPersonId,
                         principalTable: "People",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
