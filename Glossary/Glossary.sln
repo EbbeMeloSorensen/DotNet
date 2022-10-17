@@ -45,7 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.UIDataProvider.Per
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.ViewModel", "Glossary.ViewModel\Glossary.ViewModel.csproj", "{97562656-A0C3-459A-A1FC-ECBBE269944F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.UI.WPF", "Glossary.UI.WPF\Glossary.UI.WPF.csproj", "{19264335-9112-4DD2-9897-D00398489F87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.UI.WPF", "Glossary.UI.WPF\Glossary.UI.WPF.csproj", "{19264335-9112-4DD2-9897-D00398489F87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.UI.Console", "Glossary.UI.Console\Glossary.UI.Console.csproj", "{EBBE753C-C23F-4A1C-972F-71E2ECDFBC46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +143,10 @@ Global
 		{19264335-9112-4DD2-9897-D00398489F87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19264335-9112-4DD2-9897-D00398489F87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19264335-9112-4DD2-9897-D00398489F87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBBE753C-C23F-4A1C-972F-71E2ECDFBC46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBBE753C-C23F-4A1C-972F-71E2ECDFBC46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBBE753C-C23F-4A1C-972F-71E2ECDFBC46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBBE753C-C23F-4A1C-972F-71E2ECDFBC46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
