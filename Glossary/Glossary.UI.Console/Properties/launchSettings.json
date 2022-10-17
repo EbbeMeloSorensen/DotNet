@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Glossary.UI.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "list -h localhost -d Glossary -u postgres -p L1on8Zebra"
+    }
+  }
+}
