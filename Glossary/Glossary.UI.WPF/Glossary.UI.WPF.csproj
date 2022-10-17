@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
+    <ProjectReference Include="..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
+    <ProjectReference Include="..\Glossary.Persistence.EntityFrameworkCore.PostgreSQL\Glossary.Persistence.EntityFrameworkCore.PostgreSQL.csproj" />
+    <ProjectReference Include="..\Glossary.UIDataProvider.Persistence\Glossary.UIDataProvider.Persistence.csproj" />
+    <ProjectReference Include="..\Glossary.ViewModel\Glossary.ViewModel.csproj" />
+  </ItemGroup>
+
+</Project>

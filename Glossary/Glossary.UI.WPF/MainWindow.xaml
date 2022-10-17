@@ -1,0 +1,68 @@
+﻿<Window x:Class="Glossary.UI.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Glossary.UI.WPF"
+        xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
+        mc:Ignorable="d"
+        Title="{Binding MainWindowTitle}" 
+        Height="450" 
+        Width="800"
+        DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="N" 
+                    Command="{Binding CreatePersonCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </Window.InputBindings>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Export" Command="{Binding ExportPeopleCommand}"/>
+                <MenuItem Header="_Import" Command="{Binding ImportPeopleCommand}" />
+                <Separator />
+                <MenuItem Header="_Options" Command="{Binding ShowOptionsDialogCommand}" />
+                <Separator />
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
+            </MenuItem>
+        </Menu>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Button Content="New.." Command="{Binding CreatePersonCommand}" 
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Button Content="Delete" Command="{Binding DeleteSelectedPeopleCommand}"/>
+            </StackPanel>
+
+            <local:PersonListView Grid.Row="1" Grid.Column="0" DataContext="{Binding PersonListViewModel}"/>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <local:PeoplePropertiesView Grid.Row="0" DataContext="{Binding PeoplePropertiesViewModel}"/>
+
+                <local:PersonAssociationsView Grid.Row="1" DataContext="{Binding PersonAssociationsViewModel}"/>
+            </Grid>
+
+            <Expander Header="Log" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ExpandDirection="Up" IsExpanded="True">
+                <logging:LogView Height="80" DataContext="{Binding LogViewModel}"/>
+            </Expander>
+        </Grid>
+    </DockPanel>
+</Window>

@@ -33,7 +33,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
                 // If we are here, it may be because we're attempting to generate a migration
                 host = "localhost";
                 port = "5432";
-                database = "PR";
+                database = "Glossary";
                 schema = "public";
                 user = "postgres";
                 password = "L1on8Zebra";

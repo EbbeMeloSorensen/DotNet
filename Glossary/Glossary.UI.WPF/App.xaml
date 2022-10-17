@@ -1,0 +1,33 @@
+﻿<Application x:Class="Glossary.UI.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Glossary.UI.WPF"
+             xmlns:viewModel="clr-namespace:Glossary.ViewModel;assembly=Glossary.ViewModel"
+             xmlns:viewModel1="clr-namespace:Craft.ViewModels.Dialogs;assembly=Craft.ViewModels"
+             xmlns:dialogs="clr-namespace:Craft.UIElements.Dialogs;assembly=Craft.UIElements"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
+
+            <DataTemplate DataType="{x:Type viewModel:OptionsDialogViewModel}">
+                <local:OptionsDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel1:MessageBoxDialogViewModel}">
+                <dialogs:MessageBoxDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:CreatePersonDialogViewModel}">
+                <local:CreatePersonDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:DefinePersonAssociationDialogViewModel}">
+                <local:CreatePersonAssociationDialogView/>
+            </DataTemplate>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
+</Application.Resources>
+</Application>
