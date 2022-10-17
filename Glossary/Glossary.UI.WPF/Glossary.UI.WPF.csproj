@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
-    <ProjectReference Include="..\Glossary.Persistence.EntityFrameworkCore.SqlServer\Glossary.Persistence.EntityFrameworkCore.SqlServer.csproj" />
+    <ProjectReference Include="..\Glossary.Persistence.EntityFrameworkCore.PostgreSQL\Glossary.Persistence.EntityFrameworkCore.PostgreSQL.csproj" />
     <ProjectReference Include="..\Glossary.UIDataProvider.Persistence\Glossary.UIDataProvider.Persistence.csproj" />
     <ProjectReference Include="..\Glossary.ViewModel\Glossary.ViewModel.csproj" />
   </ItemGroup>
