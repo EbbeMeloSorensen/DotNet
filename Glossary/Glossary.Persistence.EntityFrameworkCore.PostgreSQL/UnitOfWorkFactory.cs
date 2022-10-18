@@ -13,7 +13,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
 
             if (context.People.Any()) return;
 
-            SeedDatabase(context);
+            //SeedDatabase(context);
         }
 
         public override void Initialize(ILogger logger)
