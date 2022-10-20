@@ -132,7 +132,7 @@ namespace Glossary.ViewModel
             switch (Sorting)
             {
                 case Sorting.Name:
-                    _people = _people.OrderBy(p => p.FirstName).ToList();
+                    _people = _people.OrderBy(p => p.Term).ToList();
                     break;
                 case Sorting.Created:
                     _people = _people.OrderByDescending(p => p.Created).ToList();

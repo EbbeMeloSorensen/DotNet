@@ -23,11 +23,11 @@
 
         <Rectangle Grid.Row="0" Grid.Column="0" Fill="Aquamarine"/>
         <TextBox Grid.Row="0" Grid.Column="0" Margin="1" Background="PaleGoldenrod" IsReadOnly="True"
-                 Text="{Binding SubjectPerson.FirstName}"/>
+                 Text="{Binding SubjectPerson.Term}"/>
         <TextBox Grid.Row="0" Grid.Column="1" Margin="1" Background="PaleGoldenrod" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
         <Rectangle Grid.Row="0" Grid.Column="2" Fill="LightSeaGreen"/>
         <TextBox Grid.Row="0" Grid.Column="2" Margin="1" Background="PaleGoldenrod" IsReadOnly="True"
-                 Text="{Binding ObjectPerson.FirstName}"/>
+                 Text="{Binding ObjectPerson.Term}"/>
 
         <!-- hvordan sætter jeg selection mode til Single for den-->
         <!-- måske ved at binde til en prop-->

@@ -136,7 +136,7 @@ namespace Glossary.Application
             });
 
             Console.WriteLine();
-            people?.ToList().ForEach(p => Console.WriteLine($"  {p.FirstName}"));
+            people?.ToList().ForEach(p => Console.WriteLine($"  {p.Term}"));
         }
 
         public async Task ExportData(

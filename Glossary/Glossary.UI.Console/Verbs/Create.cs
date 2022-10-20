@@ -5,7 +5,7 @@ namespace Glossary.UI.Console.Verbs
     [Verb("create", HelpText = "Create a new Person.")]
     public sealed class Create : RepositoryOperationVerb
     {
-        [Option('f', "firstname", Required = true, HelpText = "First Name")]
-        public string FirstName { get; set; }
+        [Option('f', "term", Required = true, HelpText = "Term")]
+        public string Term { get; set; }
     }
 }

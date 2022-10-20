@@ -20,12 +20,12 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private readonly IUIDataProvider _dataProvider;
     private ObjectCollection<Person> _people;
 
-    private string _originalSharedFirstName;
+    private string _originalSharedTerm;
     private string _originalSharedAddress;
     private string _originalSharedCategory;
     private string _originalSharedComments;
 
-    private string _sharedFirstName;
+    private string _sharedTerm;
     private string _sharedAddress;
     private string _sharedCategory;
     private string _sharedComments;
@@ -34,12 +34,12 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private RelayCommand _applyChangesCommand;
 
-    public string SharedFirstName
+    public string SharedTerm
     {
-        get { return _sharedFirstName; }
+        get { return _sharedTerm; }
         set
         {
-            _sharedFirstName = value;
+            _sharedTerm = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
@@ -118,8 +118,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         IsVisible = true;
 
-        SharedFirstName = temp.Objects.All(p => p.FirstName == firstPerson.FirstName)
-            ? firstPerson.FirstName
+        SharedTerm = temp.Objects.All(p => p.Term == firstPerson.Term)
+            ? firstPerson.Term
             : null;
 
         SharedAddress = temp.Objects.All(p => p.Address == firstPerson.Address)
@@ -134,7 +134,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? firstPerson.Description
             : null;
 
-        _originalSharedFirstName = SharedFirstName;
+        _originalSharedTerm = SharedTerm;
         _originalSharedAddress = SharedAddress;
         _originalSharedCategory = SharedCategory;
         _originalSharedComments = SharedComments;
@@ -157,7 +157,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         var updatedPeople = _people.Objects.Select(p => new Person
         {
             Id = p.Id,
-            FirstName = SharedFirstName != _originalSharedFirstName ? SharedFirstName : p.FirstName,
+            Term = SharedTerm != _originalSharedTerm ? SharedTerm : p.Term,
             Address = SharedAddress != _originalSharedAddress ? SharedAddress : p.Address,
             Category = SharedCategory != _originalSharedCategory ? SharedCategory : p.Category,
             Description = SharedComments != _originalSharedComments ? SharedComments : p.Description,
@@ -170,7 +170,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private bool CanApplyChanges()
     {
         return
-            SharedFirstName != _originalSharedFirstName ||
+            SharedTerm != _originalSharedTerm ||
             SharedAddress != _originalSharedAddress ||
             SharedCategory != _originalSharedCategory ||
             SharedComments != _originalSharedComments;
@@ -184,11 +184,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             {
                 _validationMessages = new ObservableCollection<ValidationError>
                 {
-                    new ValidationError {PropertyName = "SharedFirstName"},
+                    new ValidationError {PropertyName = "SharedTerm"},
                     new ValidationError {PropertyName = "SharedAddress"},
-                    new ValidationError {PropertyName = "SharedZipCode"},
-                    new ValidationError {PropertyName = "SharedCity"},
-                    new ValidationError {PropertyName = "SharedBirthday"},
                     new ValidationError {PropertyName = "SharedCategory"},
                     new ValidationError {PropertyName = "SharedComments"}
                 };
@@ -208,18 +205,18 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             {
                 switch (columnName)
                 {
-                    case "SharedFirstName":
+                    case "SharedTerm":
                     {
-                        if (string.IsNullOrEmpty(SharedFirstName))
+                        if (string.IsNullOrEmpty(SharedTerm))
                         {
                             if (_people.Objects.Count() == 1)
                             {
-                                errorMessage = "First name is required";
+                                errorMessage = "Term is required";
                             }
                         }
-                        else if (SharedFirstName.Length > 127)
+                        else if (SharedTerm.Length > 127)
                         {
-                            errorMessage = "First name cannot exceed 127 characters";
+                            errorMessage = "Term cannot exceed 127 characters";
                         }
 
                         break;
@@ -273,11 +270,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private void RaisePropertyChanges()
     {
-        RaisePropertyChanged("SharedFirstName");
+        RaisePropertyChanged("SharedTerm");
         RaisePropertyChanged("SharedAddress");
-        RaisePropertyChanged("SharedZipCode");
-        RaisePropertyChanged("SharedCity");
-        RaisePropertyChanged("SharedBirthday");
         RaisePropertyChanged("SharedCategory");
         RaisePropertyChanged("SharedComments");
     }

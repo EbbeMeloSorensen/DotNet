@@ -124,7 +124,7 @@ namespace Glossary.ViewModel
 
             _dataProvider.CreatePerson(new Person
             {
-                FirstName = dialogViewModel.FirstName,
+                Term = dialogViewModel.Term,
                 Address = dialogViewModel.Address,
                 Category = dialogViewModel.Category,
                 Description = dialogViewModel.Comments,

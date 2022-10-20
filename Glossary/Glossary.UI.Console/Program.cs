@@ -20,7 +20,7 @@ namespace Glossary.UI.Console
 
             var person = new Person()
             {
-                FirstName = options.FirstName
+                Term = options.Term
             };
 
             _host = "localhost";
@@ -44,7 +44,7 @@ namespace Glossary.UI.Console
             //await ExportData(application);
             //await CreatePerson(new Person
             //{
-            //    FirstName = "Sofus"
+            //    Term = "Sofus"
             //}, application);
             //await ListPeople(application);
         }
@@ -139,7 +139,7 @@ namespace Glossary.UI.Console
         static async Task Main(string[] args)
         {
             //args = "breakfast".Split();
-            //args = "create --host localhost --user postgres --password L1on8Zebra --firstname Egon".Split();
+            //args = "create --host localhost --user postgres --password L1on8Zebra --term Egon".Split();
             //args = "count --user john --password secret".Split();
             //args = "list --host localhost --user postgres --password L1on8Zebra".Split();
             //args = "import --host localhost --user postgres --password L1on8Zebra".Split();

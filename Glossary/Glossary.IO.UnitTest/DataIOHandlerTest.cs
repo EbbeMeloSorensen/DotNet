@@ -24,8 +24,8 @@ namespace Glossary.IO.UnitTest
             new DataIOHandler().ImportDataFromXML(@"C:/Temp/People.xml", out PRData prData);
 
             prData.People.Count.Should().Be(3);
-            prData.People.Count(p => p.FirstName == "Ebbe").Should().Be(1);
-            prData.People.Count(p => p.FirstName == "Uffe").Should().Be(1);
+            prData.People.Count(p => p.Term == "Ebbe").Should().Be(1);
+            prData.People.Count(p => p.Term == "Uffe").Should().Be(1);
         }
 
         [Fact]
@@ -41,8 +41,8 @@ namespace Glossary.IO.UnitTest
             dataIOHandler.ImportDataFromJson(@"C:/Temp/People.json", out var prData);
 
             prData.People.Count.Should().Be(3);
-            prData.People.Count(p => p.FirstName == "Ebbe").Should().Be(1);
-            prData.People.Count(p => p.FirstName == "Uffe").Should().Be(1);
+            prData.People.Count(p => p.Term == "Ebbe").Should().Be(1);
+            prData.People.Count(p => p.Term == "Uffe").Should().Be(1);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Glossary.IO.UnitTest
             var ebbe = new Person
             {
                 Id = Guid.NewGuid(),
-                FirstName = "Ebbe",
+                Term = "Ebbe",
                 Address = "Danshøjvej 33",
                 Category = "Familie",
                 Description = "Mig selv",
@@ -71,14 +71,14 @@ namespace Glossary.IO.UnitTest
             var ana = new Person
             {
                 Id = Guid.NewGuid(),
-                FirstName = "Ana Tayze",
+                Term = "Ana Tayze",
                 Created = now
             };
 
             var uffe = new Person
             {
                 Id = Guid.NewGuid(),
-                FirstName = "Uffe",
+                Term = "Uffe",
                 Created = now
             };
 

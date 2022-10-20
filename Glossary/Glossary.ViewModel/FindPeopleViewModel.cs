@@ -37,7 +37,7 @@ namespace Glossary.ViewModel
 
         public Expression<Func<Person, bool>> FilterAsExpression()
         {
-            return p => p.FirstName.ToUpper().Contains(_nameFilterInUppercase) &&
+            return p => p.Term.ToUpper().Contains(_nameFilterInUppercase) &&
                         (p.Category == null && _categoryFilterInUppercase == "" ||
                          p.Category != null && p.Category.ToUpper().Contains(_categoryFilterInUppercase));
         }
@@ -45,7 +45,7 @@ namespace Glossary.ViewModel
         public bool PersonPassesFilter(Person person)
         {
             var nameOK = string.IsNullOrEmpty(NameFilter) ||
-                         person.FirstName.ToUpper().Contains(NameFilter.ToUpper());
+                         person.Term.ToUpper().Contains(NameFilter.ToUpper());
 
             var categoryOK = string.IsNullOrEmpty(CategoryFilter) ||
                              person.Category != null && person.Category.ToUpper().Contains(CategoryFilter.ToUpper());

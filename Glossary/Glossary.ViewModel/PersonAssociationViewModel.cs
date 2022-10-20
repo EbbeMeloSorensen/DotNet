@@ -30,7 +30,7 @@ namespace Glossary.ViewModel
 
         public string DisplayText
         {
-            get { return $"{_personAssociation.SubjectPerson.FirstName} {_personAssociation.Description} {_personAssociation.ObjectPerson.FirstName}"; }
+            get { return $"{_personAssociation.SubjectPerson.Term} {_personAssociation.Description} {_personAssociation.ObjectPerson.Term}"; }
         }
     }
 }

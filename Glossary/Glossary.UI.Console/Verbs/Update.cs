@@ -8,7 +8,7 @@ namespace Glossary.UI.Console.Verbs
         [Option('i', "id", Required = true, HelpText = "Person ID")]
         public string ID { get; set; }
 
-        [Option('f', "firstname", Required = false, HelpText = "First Name")]
-        public string FirstName { get; set; }
+        [Option('f', "term", Required = false, HelpText = "Term")]
+        public string Term { get; set; }
     }
 }

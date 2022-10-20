@@ -16,7 +16,7 @@ namespace Glossary.ViewModel
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
 
-        private string _firstName;
+        private string _term;
         private string _surname;
         private string _nickname;
         private string _address;
@@ -29,12 +29,12 @@ namespace Glossary.ViewModel
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
-        public string FirstName
+        public string Term
         {
-            get { return _firstName; }
+            get { return _term; }
             set
             {
-                _firstName = value;
+                _term = value;
                 RaisePropertyChanged();
             }
         }
@@ -141,7 +141,7 @@ namespace Glossary.ViewModel
                 return;
             }
 
-            FirstName = FirstName.NullifyIfEmpty();
+            Term = Term.NullifyIfEmpty();
             Surname = Surname.NullifyIfEmpty();
             Nickname = Nickname.NullifyIfEmpty();
             Address = Address.NullifyIfEmpty();
@@ -178,15 +178,15 @@ namespace Glossary.ViewModel
                 {
                     switch (columnName)
                     {
-                        case "FirstName":
+                        case "Term":
                             {
-                                if (string.IsNullOrEmpty(FirstName))
+                                if (string.IsNullOrEmpty(Term))
                                 {
-                                    errorMessage = "First name is required";
+                                    errorMessage = "Term is required";
                                 }
-                                else if (FirstName.Length > 127)
+                                else if (Term.Length > 127)
                                 {
-                                    errorMessage = "First name cannot exceed 127 characters";
+                                    errorMessage = "Term cannot exceed 127 characters";
                                 }
 
                                 break;
@@ -272,13 +272,8 @@ namespace Glossary.ViewModel
                 {
                     _validationMessages = new ObservableCollection<ValidationError>
                     {
-                        new ValidationError {PropertyName = "FirstName"},
-                        new ValidationError {PropertyName = "Surname"},
-                        new ValidationError {PropertyName = "Nickname"},
+                        new ValidationError {PropertyName = "Term"},
                         new ValidationError {PropertyName = "Address"},
-                        new ValidationError {PropertyName = "ZipCode"},
-                        new ValidationError {PropertyName = "City"},
-                        new ValidationError {PropertyName = "Birthday"},
                         new ValidationError {PropertyName = "Category"},
                         new ValidationError {PropertyName = "Comments"}
                     };
@@ -300,13 +295,8 @@ namespace Glossary.ViewModel
 
         private void RaisePropertyChanges()
         {
-            RaisePropertyChanged("FirstName");
-            RaisePropertyChanged("Surname");
-            RaisePropertyChanged("Nickname");
+            RaisePropertyChanged("Term");
             RaisePropertyChanged("Address");
-            RaisePropertyChanged("ZipCode");
-            RaisePropertyChanged("City");
-            RaisePropertyChanged("Birthday");
             RaisePropertyChanged("Category");
             RaisePropertyChanged("Comments");
         }

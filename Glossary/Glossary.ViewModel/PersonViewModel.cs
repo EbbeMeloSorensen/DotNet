@@ -21,7 +21,7 @@ public class PersonViewModel : ViewModelBase
     {
         get
         {
-            var displayText = _person.FirstName;
+            var displayText = _person.Term;
 
             return displayText;
         }

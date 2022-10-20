@@ -18,7 +18,7 @@ namespace Glossary.Domain
             Person other)
         {
             person.Id = other.Id;
-            person.FirstName = other.FirstName;
+            person.Term= other.Term;
             person.Address = other.Address;
             person.Category = other.Category;
             person.Description = other.Description;
@@ -39,7 +39,7 @@ namespace Glossary.Domain
             var result = new Person
             {
                 Id = Guid.NewGuid(),
-                FirstName = person.FirstName,
+                Term = person.FirstName,
                 Address = string.IsNullOrEmpty(person.Address) ? null : person.Address,
                 Category = string.IsNullOrEmpty(person.Category) ? null : person.Category,
                 Description = string.IsNullOrEmpty(person.Comments) ? null : person.Comments,

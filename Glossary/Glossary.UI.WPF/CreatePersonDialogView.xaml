@@ -15,7 +15,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid FocusManager.FocusedElement="{Binding ElementName=FirstNameTextBox}">
+    <Grid FocusManager.FocusedElement="{Binding ElementName=TermTextBox}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -37,10 +37,10 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Padding="3" Text="First name:"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Name="FirstNameTextBox"
+            <TextBlock Grid.Row="0" Grid.Column="0" Padding="3" Text="Term:"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Name="TermTextBox"
                      Validation.ErrorTemplate="{StaticResource errorTemplate}"
-                     Text="{Binding FirstName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding Term, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Padding="3" Text="Surname:"/>
             <TextBox Grid.Row="1" Grid.Column="1" 
                      Validation.ErrorTemplate="{StaticResource errorTemplate}"

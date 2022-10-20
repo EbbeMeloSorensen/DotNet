@@ -13,7 +13,7 @@ namespace Glossary.Domain.Entities
 
         public Guid Id { get; set; }
 
-        public string FirstName { get; set; }
+        public string Term { get; set; }
 
         public string? Address { get; set; }
 
@@ -28,7 +28,7 @@ namespace Glossary.Domain.Entities
 
         public Person()
         {
-            FirstName = "";
+            Term = "";
         }
     }
 }

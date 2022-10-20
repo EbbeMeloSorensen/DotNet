@@ -57,27 +57,12 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Margin="3" Grid.Row="2" Grid.Column="0" Text="First Name:"/>
+            <TextBlock Margin="3" Grid.Row="2" Grid.Column="0" Text="Term:"/>
             <TextBox Margin="3" Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
-                     Text="{Binding SharedFirstName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="3" Grid.Row="3" Grid.Column="0" Text="Surname:"/>
-            <TextBox Margin="3" Grid.Row="3" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}" 
-                     Text="{Binding SharedSurname, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="3" Grid.Row="4" Grid.Column="0" Text="Nickname:"/>
-            <TextBox Margin="3" Grid.Row="4" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
-                     Text="{Binding SharedNickname, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding SharedTerm, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" Grid.Row="5" Grid.Column="0" Text="Address:"/>
             <TextBox Margin="3" Grid.Row="5" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding SharedAddress, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="3" Grid.Row="6" Grid.Column="0" Text="Zip code:"/>
-            <TextBox Margin="3" Grid.Row="6" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
-                     Text="{Binding SharedZipCode, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="3" Grid.Row="7" Grid.Column="0" Text="City:"/>
-            <TextBox Margin="3" Grid.Row="7" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
-                     Text="{Binding SharedCity, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="3" Grid.Row="8" Grid.Column="0" Text="Birthday:"/>
-            <DatePicker Margin="3" Grid.Row="8" Grid.Column="1" 
-                        SelectedDate ="{Binding SharedBirthday, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" Grid.Row="9" Grid.Column="0" Text="Category:"/>
             <TextBox Margin="3" Grid.Row="9" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding SharedCategory, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>

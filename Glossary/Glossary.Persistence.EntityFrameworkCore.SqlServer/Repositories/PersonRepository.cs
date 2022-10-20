@@ -34,7 +34,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
             {
                 var updatedPerson = listOfUpdatedPeople.Single(pUpd => pUpd.Id == pRepo.Id);
 
-                pRepo.FirstName = updatedPerson.FirstName;
+                pRepo.Term = updatedPerson.Term;
                 pRepo.Address = updatedPerson.Address;
                 pRepo.Category = updatedPerson.Category;
                 pRepo.Description = updatedPerson.Description;

@@ -42,13 +42,13 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
         {
             var person1 = new Person
             {
-                FirstName = "Uffe",
+                Term = "Uffe",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
             var person2 = new Person
             {
-                FirstName = "Ebbe",
+                Term = "Ebbe",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
@@ -64,22 +64,22 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
             {
                 new Person
                 {
-                    FirstName = "Uffe",
+                    Term = "Uffe",
                     Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
                 },
                 new Person
                 {
-                    FirstName = "Tina",
+                    Term = "Tina",
                     Created = new DateTime(2022, 1, 1, 3, 3, 4).ToUniversalTime()
                 },
                 new Person
                 {
-                    FirstName = "Ebbe",
+                    Term = "Ebbe",
                     Created = new DateTime(2022, 1, 1, 3, 3, 5).ToUniversalTime()
                 },
                 new Person
                 {
-                    FirstName = "Ana Tayze",
+                    Term = "Ana Tayze",
                     Address = "Danshøjvej 33",
                     Category = "Familie",
                     Description = "Min kone",
