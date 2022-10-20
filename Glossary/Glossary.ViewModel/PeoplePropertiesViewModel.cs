@@ -21,22 +21,12 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private ObjectCollection<Person> _people;
 
     private string _originalSharedFirstName;
-    private string _originalSharedSurname;
-    private string _originalSharedNickname;
     private string _originalSharedAddress;
-    private string _originalSharedZipCode;
-    private string _originalSharedCity;
-    private DateTime? _originalSharedBirthday;
     private string _originalSharedCategory;
     private string _originalSharedComments;
 
     private string _sharedFirstName;
-    private string _sharedSurname;
-    private string _sharedNickname;
     private string _sharedAddress;
-    private string _sharedZipCode;
-    private string _sharedCity;
-    private DateTime? _sharedBirthday;
     private string _sharedCategory;
     private string _sharedComments;
 
@@ -55,67 +45,12 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    public string SharedSurname
-    {
-        get { return _sharedSurname; }
-        set
-        {
-            _sharedSurname = value;
-            RaisePropertyChanged();
-            ApplyChangesCommand.RaiseCanExecuteChanged();
-        }
-    }
-
-    public string SharedNickname
-    {
-        get { return _sharedNickname; }
-        set
-        {
-            _sharedNickname = value;
-            RaisePropertyChanged();
-            ApplyChangesCommand.RaiseCanExecuteChanged();
-        }
-    }
-
     public string SharedAddress
     {
         get { return _sharedAddress; }
         set
         {
             _sharedAddress = value;
-            RaisePropertyChanged();
-            ApplyChangesCommand.RaiseCanExecuteChanged();
-        }
-    }
-
-    public string SharedZipCode
-    {
-        get { return _sharedZipCode; }
-        set
-        {
-            _sharedZipCode = value;
-            RaisePropertyChanged();
-            ApplyChangesCommand.RaiseCanExecuteChanged();
-        }
-    }
-
-    public string SharedCity
-    {
-        get { return _sharedCity; }
-        set
-        {
-            _sharedCity = value;
-            RaisePropertyChanged();
-            ApplyChangesCommand.RaiseCanExecuteChanged();
-        }
-    }
-
-    public DateTime? SharedBirthday
-    {
-        get { return _sharedBirthday; }
-        set
-        {
-            _sharedBirthday = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
@@ -187,28 +122,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? firstPerson.FirstName
             : null;
 
-        SharedSurname = temp.Objects.All(p => p.Surname == firstPerson.Surname)
-            ? firstPerson.Surname
-            : null;
-
-        SharedNickname = temp.Objects.All(p => p.Nickname == firstPerson.Nickname)
-            ? firstPerson.Nickname
-            : null;
-
         SharedAddress = temp.Objects.All(p => p.Address == firstPerson.Address)
             ? firstPerson.Address
-            : null;
-
-        SharedZipCode = temp.Objects.All(p => p.ZipCode == firstPerson.ZipCode)
-            ? firstPerson.ZipCode
-            : null;
-
-        SharedCity = temp.Objects.All(p => p.City == firstPerson.City)
-            ? firstPerson.City
-            : null;
-
-        SharedBirthday = temp.Objects.All(p => p.Birthday == firstPerson.Birthday)
-            ? firstPerson.Birthday
             : null;
 
         SharedCategory = temp.Objects.All(p => p.Category == firstPerson.Category)
@@ -220,12 +135,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             : null;
 
         _originalSharedFirstName = SharedFirstName;
-        _originalSharedSurname = SharedSurname;
-        _originalSharedNickname = SharedNickname;
         _originalSharedAddress = SharedAddress;
-        _originalSharedZipCode = SharedZipCode;
-        _originalSharedCity = SharedCity;
-        _originalSharedBirthday = SharedBirthday;
         _originalSharedCategory = SharedCategory;
         _originalSharedComments = SharedComments;
 
@@ -248,18 +158,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         {
             Id = p.Id,
             FirstName = SharedFirstName != _originalSharedFirstName ? SharedFirstName : p.FirstName,
-            Surname = SharedSurname != _originalSharedSurname ? SharedSurname : p.Surname,
-            Nickname = SharedNickname != _originalSharedNickname ? SharedNickname : p.Nickname,
             Address = SharedAddress != _originalSharedAddress ? SharedAddress : p.Address,
-            ZipCode = SharedZipCode != _originalSharedZipCode ? SharedZipCode : p.ZipCode,
-            City = SharedCity != _originalSharedCity ? SharedCity : p.City,
-            Birthday = SharedBirthday != _originalSharedBirthday
-                ? new DateTime(
-                    SharedBirthday.Value.Year,
-                    SharedBirthday.Value.Month,
-                    SharedBirthday.Value.Day,
-                    0, 0, 0, DateTimeKind.Utc) 
-                : p.Birthday,
             Category = SharedCategory != _originalSharedCategory ? SharedCategory : p.Category,
             Description = SharedComments != _originalSharedComments ? SharedComments : p.Description,
             Created = p.Created
@@ -272,12 +171,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     {
         return
             SharedFirstName != _originalSharedFirstName ||
-            SharedSurname != _originalSharedSurname ||
-            SharedNickname != _originalSharedNickname ||
             SharedAddress != _originalSharedAddress ||
-            SharedZipCode != _originalSharedZipCode ||
-            SharedCity != _originalSharedCity ||
-            SharedBirthday != _originalSharedBirthday ||
             SharedCategory != _originalSharedCategory ||
             SharedComments != _originalSharedComments;
     }
@@ -291,8 +185,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
                 _validationMessages = new ObservableCollection<ValidationError>
                 {
                     new ValidationError {PropertyName = "SharedFirstName"},
-                    new ValidationError {PropertyName = "SharedSurname"},
-                    new ValidationError {PropertyName = "SharedNickname"},
                     new ValidationError {PropertyName = "SharedAddress"},
                     new ValidationError {PropertyName = "SharedZipCode"},
                     new ValidationError {PropertyName = "SharedCity"},
@@ -332,47 +224,11 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
                         break;
                     }
-                    case "SharedSurname":
-                    {
-                        if (SharedSurname != null && SharedSurname.Length > 255)
-                        {
-                            errorMessage = "Surname cannot exceed 255 characters";
-                        }
-
-                        break;
-                    }
-                    case "SharedNickname":
-                    {
-                        if (SharedNickname != null && SharedNickname.Length > 127)
-                        {
-                            errorMessage = "Nickname cannot exceed 127 characters";
-                        }
-
-                        break;
-                    }
                     case "SharedAddress":
                     {
                         if (SharedAddress != null && SharedAddress.Length > 511)
                         {
                             errorMessage = "Address cannot exceed 511 characters";
-                        }
-
-                        break;
-                    }
-                    case "SharedZipCode":
-                    {
-                        if (SharedZipCode != null && SharedZipCode.Length > 127)
-                        {
-                            errorMessage = "Zip code cannot exceed 127 characters";
-                        }
-
-                        break;
-                    }
-                    case "SharedCity":
-                    {
-                        if (SharedCity != null && SharedCity.Length > 255)
-                        {
-                            errorMessage = "City cannot exceed 255 characters";
                         }
 
                         break;
@@ -418,8 +274,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private void RaisePropertyChanges()
     {
         RaisePropertyChanged("SharedFirstName");
-        RaisePropertyChanged("SharedSurname");
-        RaisePropertyChanged("SharedNickname");
         RaisePropertyChanged("SharedAddress");
         RaisePropertyChanged("SharedZipCode");
         RaisePropertyChanged("SharedCity");

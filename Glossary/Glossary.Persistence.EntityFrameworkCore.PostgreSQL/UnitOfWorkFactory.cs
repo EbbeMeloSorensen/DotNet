@@ -44,14 +44,12 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
             var person1 = new Person
             {
                 FirstName = "Uffe",
-                Surname = "Sørensen",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
             var person2 = new Person
             {
                 FirstName = "Ebbe",
-                Surname = "Melo Sørensen",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
@@ -68,13 +66,11 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
                 new Person
                 {
                     FirstName = "Uffe",
-                    Surname = "Sørensen",
                     Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
                 },
                 new Person
                 {
                     FirstName = "Tina",
-                    Surname = "Gosman",
                     Created = new DateTime(2022, 1, 1, 3, 3, 4).ToUniversalTime()
                 },
                 new Person
@@ -85,15 +81,9 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
                 new Person
                 {
                     FirstName = "Ana Tayze",
-                    Surname = "Melo Sørensen",
-                    Nickname = "Hamos",
                     Address = "Danshøjvej 33",
-                    ZipCode = "2500",
-                    City = "Valby",
-                    Birthday = new DateTime(1980, 6, 13).ToUniversalTime(),
                     Category = "Familie",
                     Description = "Min kone",
-                    Dead = false,
                     Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()
                 }
             };

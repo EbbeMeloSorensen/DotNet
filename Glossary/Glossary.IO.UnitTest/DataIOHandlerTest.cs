@@ -62,15 +62,9 @@ namespace Glossary.IO.UnitTest
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Ebbe",
-                Surname = "Melo Sørensen",
-                Nickname = "Bebsen",
                 Address = "Danshøjvej 33",
-                ZipCode = "2500",
-                City = "Valby",
-                Birthday = new DateTime(1980, 6, 13).ToUniversalTime(),
                 Category = "Familie",
                 Description = "Mig selv",
-                Dead = false,
                 Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()
             };
 
@@ -78,7 +72,6 @@ namespace Glossary.IO.UnitTest
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Ana Tayze",
-                Surname = "Melo Sørensen",
                 Created = now
             };
 
@@ -86,7 +79,6 @@ namespace Glossary.IO.UnitTest
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Uffe",
-                Surname = "Sørensen",
                 Created = now
             };
 

@@ -19,15 +19,9 @@ namespace Glossary.Domain
         {
             person.Id = other.Id;
             person.FirstName = other.FirstName;
-            person.Surname = other.Surname;
-            person.Nickname = other.Nickname;
             person.Address = other.Address;
-            person.ZipCode = other.ZipCode;
-            person.City = other.City;
-            person.Birthday = other.Birthday;
             person.Category = other.Category;
             person.Description = other.Description;
-            person.Dead = other.Dead;
             person.Created = other.Created;
         }
 
@@ -46,15 +40,9 @@ namespace Glossary.Domain
             {
                 Id = Guid.NewGuid(),
                 FirstName = person.FirstName,
-                Surname = string.IsNullOrEmpty(person.Surname) ? null : person.Surname,
-                Nickname = string.IsNullOrEmpty(person.Nickname) ? null : person.Nickname,
                 Address = string.IsNullOrEmpty(person.Address) ? null : person.Address,
-                ZipCode = string.IsNullOrEmpty(person.ZipCode) ? null : person.ZipCode,
-                City = string.IsNullOrEmpty(person.City) ? null : person.City,
-                Birthday = birthday,
                 Category = string.IsNullOrEmpty(person.Category) ? null : person.Category,
                 Description = string.IsNullOrEmpty(person.Comments) ? null : person.Comments,
-                Dead = null,
                 Created = person.Created.ToUniversalTime()
             };
 

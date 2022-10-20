@@ -22,10 +22,6 @@ public class PersonViewModel : ViewModelBase
         get
         {
             var displayText = _person.FirstName;
-            if (_person.Surname != null)
-            {
-                displayText += $" {_person.Surname}";
-            }
 
             return displayText;
         }

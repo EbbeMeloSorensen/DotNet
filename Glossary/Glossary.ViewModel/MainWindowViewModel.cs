@@ -125,12 +125,7 @@ namespace Glossary.ViewModel
             _dataProvider.CreatePerson(new Person
             {
                 FirstName = dialogViewModel.FirstName,
-                Surname = dialogViewModel.Surname,
-                Nickname = dialogViewModel.Nickname,
                 Address = dialogViewModel.Address,
-                ZipCode = dialogViewModel.ZipCode,
-                City = dialogViewModel.City,
-                Birthday = birthday,
                 Category = dialogViewModel.Category,
                 Description = dialogViewModel.Comments,
                 Created = DateTime.UtcNow
