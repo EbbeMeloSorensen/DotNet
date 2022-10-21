@@ -68,8 +68,8 @@ namespace Glossary.UIDataProvider.Persistence
 
             var modelObjForCache = personAssociation.Clone();
 
-            var subjectPerson = GetRecord(personAssociation.SubjectPersonId);
-            var objectPerson = GetRecord(personAssociation.ObjectPersonId);
+            var subjectPerson = GetRecord(personAssociation.SubjectRecordId);
+            var objectPerson = GetRecord(personAssociation.ObjectRecordId);
 
             modelObjForCache.LinkToPeople(subjectPerson, objectPerson);
             _personAssociationCache[modelObjForCache.Id] = modelObjForCache;
@@ -283,8 +283,8 @@ namespace Glossary.UIDataProvider.Persistence
             // Update memory objects
             personAssociations.ToList().ForEach(pa =>
             {
-                pa.SubjectPerson?.ObjectPeople?.Remove(pa);
-                pa.ObjectPerson?.SubjectPeople?.Remove(pa);
+                pa.SubjectRecord?.ObjectPeople?.Remove(pa);
+                pa.ObjectRecord?.SubjectPeople?.Remove(pa);
                 _personAssociationCache.Remove(pa.Id);
             });
         }
@@ -340,8 +340,8 @@ namespace Glossary.UIDataProvider.Persistence
             var personAssociation = personAssociationFromRepository.Clone();
 
             personAssociation.LinkToPeople(
-                IncludeInCache(personAssociationFromRepository.SubjectPerson),
-                IncludeInCache(personAssociationFromRepository.ObjectPerson));
+                IncludeInCache(personAssociationFromRepository.SubjectRecord),
+                IncludeInCache(personAssociationFromRepository.ObjectRecord));
 
             _personAssociationCache[personAssociation.Id] = personAssociation;
 

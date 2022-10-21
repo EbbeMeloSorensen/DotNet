@@ -23,15 +23,15 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
             modelBuilder.ApplyConfiguration(new PersonAssociationConfiguration());
 
             modelBuilder.Entity<RecordAssociation>()
-                .HasOne(p => p.SubjectPerson)
+                .HasOne(p => p.SubjectRecord)
                 .WithMany(pa => pa.ObjectPeople)
-                .HasForeignKey(pa => pa.SubjectPersonId)
+                .HasForeignKey(pa => pa.SubjectRecordId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<RecordAssociation>()
-                .HasOne(p => p.ObjectPerson)
+                .HasOne(p => p.ObjectRecord)
                 .WithMany(pa => pa.SubjectPeople)
-                .HasForeignKey(pa => pa.ObjectPersonId)
+                .HasForeignKey(pa => pa.ObjectRecordId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

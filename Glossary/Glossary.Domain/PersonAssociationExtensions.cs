@@ -12,8 +12,8 @@ namespace Glossary.Domain
             return new RecordAssociation
             {
                 Id = personAssociation.Id,
-                SubjectPersonId = personAssociation.SubjectPersonId,
-                ObjectPersonId = personAssociation.ObjectPersonId,
+                SubjectRecordId = personAssociation.SubjectRecordId,
+                ObjectRecordId = personAssociation.ObjectRecordId,
                 Description = personAssociation.Description,
                 Created = personAssociation.Created
             };
@@ -23,7 +23,7 @@ namespace Glossary.Domain
             this RecordAssociation personAssociation,
             Record subjectPerson)
         {
-            personAssociation.SubjectPerson = subjectPerson;
+            personAssociation.SubjectRecord = subjectPerson;
 
             if (subjectPerson.ObjectPeople == null)
             {
@@ -37,7 +37,7 @@ namespace Glossary.Domain
             this RecordAssociation personAssociation,
             Record objectPerson)
         {
-            personAssociation.ObjectPerson = objectPerson;
+            personAssociation.ObjectRecord = objectPerson;
 
             if (objectPerson.SubjectPeople == null)
             {
@@ -59,13 +59,13 @@ namespace Glossary.Domain
         public static void DecoupleFromSubjectPerson(
             this RecordAssociation personAssociation)
         {
-            personAssociation.SubjectPerson.ObjectPeople.Remove(personAssociation);
+            personAssociation.SubjectRecord.ObjectPeople.Remove(personAssociation);
         }
 
         public static void DecoupleFromObjectPerson(
             this RecordAssociation personAssociation)
         {
-            personAssociation.ObjectPerson.SubjectPeople.Remove(personAssociation);
+            personAssociation.ObjectRecord.SubjectPeople.Remove(personAssociation);
         }
 
         public static void DecoupleFromPeople(
@@ -84,8 +84,8 @@ namespace Glossary.Domain
                 Id = Guid.NewGuid(),
                 Description = personAssociation.Description,
                 Created = personAssociation.Created.ToUniversalTime(),
-                SubjectPersonId = personIdMap[personAssociation.SubjectPersonId],
-                ObjectPersonId = personIdMap[personAssociation.ObjectPersonId]
+                SubjectRecordId = personIdMap[personAssociation.SubjectPersonId],
+                ObjectRecordId = personIdMap[personAssociation.ObjectPersonId]
             };
 
             return result;

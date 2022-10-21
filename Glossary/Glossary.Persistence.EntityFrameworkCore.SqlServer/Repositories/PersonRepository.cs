@@ -52,8 +52,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
             Guid id)
         {
             return PrDbContext.People
-                .Include(p => p.ObjectPeople).ThenInclude(pa => pa.ObjectPerson)
-                .Include(p => p.SubjectPeople).ThenInclude(pa => pa.SubjectPerson)
+                .Include(p => p.ObjectPeople).ThenInclude(pa => pa.ObjectRecord)
+                .Include(p => p.SubjectPeople).ThenInclude(pa => pa.SubjectRecord)
                 .SingleOrDefault(p => p.Id == id) ?? throw new InvalidOperationException();
         }
 
@@ -61,8 +61,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
             Expression<Func<Record, bool>> predicate)
         {
             return PrDbContext.People
-                .Include(p => p.ObjectPeople).ThenInclude(pa => pa.ObjectPerson)
-                .Include(p => p.SubjectPeople).ThenInclude(pa => pa.SubjectPerson)
+                .Include(p => p.ObjectPeople).ThenInclude(pa => pa.ObjectRecord)
+                .Include(p => p.SubjectPeople).ThenInclude(pa => pa.SubjectRecord)
                 .Where(predicate)
                 .ToList();
         }

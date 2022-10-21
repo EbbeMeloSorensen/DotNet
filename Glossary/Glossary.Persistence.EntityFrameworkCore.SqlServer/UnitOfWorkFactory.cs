@@ -54,8 +54,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
 
             var personAssociation = new RecordAssociation
             {
-                SubjectPerson = person1,
-                ObjectPerson = person2,
+                SubjectRecord = person1,
+                ObjectRecord = person2,
                 Description = "is the brother of",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };

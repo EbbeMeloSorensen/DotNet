@@ -97,16 +97,16 @@ namespace Glossary.IO.UnitTest
                         Id = Guid.NewGuid(),
                         Description = "is the brother of",
                         Created = now,
-                        ObjectPersonId = ebbe.Id,
-                        SubjectPersonId = uffe.Id
+                        ObjectRecordId = ebbe.Id,
+                        SubjectRecordId = uffe.Id
                     },
                     new()
                     {
                         Id = Guid.NewGuid(),
                         Description = "is married with",
                         Created = now,
-                        ObjectPersonId = ana.Id,
-                        SubjectPersonId = ebbe.Id
+                        ObjectRecordId = ana.Id,
+                        SubjectRecordId = ebbe.Id
                     }
                 }
             };

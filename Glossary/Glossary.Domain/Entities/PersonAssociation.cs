@@ -6,13 +6,13 @@ namespace Glossary.Domain.Entities
     {
         public Guid Id { get; set; }
 
-        public Guid SubjectPersonId { get; set; }
+        public Guid SubjectRecordId { get; set; }
 
-        public Guid ObjectPersonId { get; set; }
+        public Guid ObjectRecordId { get; set; }
 
-        public Record SubjectPerson { get; set; }
+        public Record SubjectRecord { get; set; }
 
-        public Record ObjectPerson { get; set; }
+        public Record ObjectRecord { get; set; }
 
         public string? Description { get; set; }
 

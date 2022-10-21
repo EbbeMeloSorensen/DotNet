@@ -177,8 +177,8 @@ namespace Glossary.ViewModel
             {
                 _dataProvider.CreateRecordAssociation(new RecordAssociation
                 {
-                    SubjectPersonId = dialogViewModel.SubjectPerson.Id,
-                    ObjectPersonId = dialogViewModel.ObjectPerson.Id,
+                    SubjectRecordId = dialogViewModel.SubjectPerson.Id,
+                    ObjectRecordId = dialogViewModel.ObjectPerson.Id,
                     Description = dialogViewModel.Description,
                     Created = DateTime.UtcNow
                 });
@@ -199,8 +199,8 @@ namespace Glossary.ViewModel
             var dialogViewModel = new DefinePersonAssociationDialogViewModel(
                 _dataProvider,
                 _applicationDialogService,
-                personAssociation.SubjectPerson,
-                personAssociation.ObjectPerson,
+                personAssociation.SubjectRecord,
+                personAssociation.ObjectRecord,
                 personAssociation.Description);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
@@ -209,8 +209,8 @@ namespace Glossary.ViewModel
             }
 
             personAssociation.Description = dialogViewModel.Description;
-            personAssociation.SubjectPersonId = dialogViewModel.SubjectPerson.Id;
-            personAssociation.ObjectPersonId = dialogViewModel.ObjectPerson.Id;
+            personAssociation.SubjectRecordId = dialogViewModel.SubjectPerson.Id;
+            personAssociation.ObjectRecordId = dialogViewModel.ObjectPerson.Id;
 
             _dataProvider.UpdatePersonAssociation(personAssociation);
 
