@@ -5,8 +5,8 @@ namespace Glossary.Persistence
 {
     public interface IUnitOfWork : IDisposable
     {
-        IPersonRepository People { get; }
-        IPersonAssociationRepository PersonAssociations { get; }
+        IRecordRepository Records { get; }
+        IRecordAssociationRepository RecordAssociations { get; }
 
         int Complete();
     }

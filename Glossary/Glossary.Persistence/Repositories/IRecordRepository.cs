@@ -6,15 +6,15 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.Persistence.Repositories
 {
-    public interface IPersonRepository : IRepository<Record>
+    public interface IRecordRepository : IRepository<Record>
     {
         Record Get(
             Guid id);
 
-        Record GetPersonIncludingAssociations(
+        Record GetRecordIncludingAssociations(
             Guid id);
 
-        IList<Record> GetPeopleIncludingAssociations(
+        IList<Record> GetRecordsIncludingAssociations(
             Expression<Func<Record, bool>> predicate);
     }
 }

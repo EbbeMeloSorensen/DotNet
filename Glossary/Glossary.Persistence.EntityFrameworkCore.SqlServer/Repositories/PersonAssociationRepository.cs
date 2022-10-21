@@ -6,7 +6,7 @@ using Glossary.Persistence.Repositories;
 
 namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
 {
-    public class PersonAssociationRepository : Repository<RecordAssociation>, IPersonAssociationRepository
+    public class PersonAssociationRepository : Repository<RecordAssociation>, IRecordAssociationRepository
     {
         public PersonAssociationRepository(
             DbContext context) : base(context)

@@ -47,7 +47,7 @@ namespace Glossary.UIDataProvider.Persistence
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.People.Add(person);
+                unitOfWork.Records.Add(person);
                 unitOfWork.Complete();
             }
 
@@ -62,7 +62,7 @@ namespace Glossary.UIDataProvider.Persistence
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.PersonAssociations.Add(personAssociation);
+                unitOfWork.RecordAssociations.Add(personAssociation);
                 unitOfWork.Complete();
             }
 
@@ -80,7 +80,7 @@ namespace Glossary.UIDataProvider.Persistence
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var count = unitOfWork.People.Count(predicate);
+                var count = unitOfWork.Records.Count(predicate);
 
                 //_logger.StopStopWatchAndWriteLine("Completed counting people");
 
@@ -98,7 +98,7 @@ namespace Glossary.UIDataProvider.Persistence
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var person = unitOfWork.People.Get(id).Clone();
+                var person = unitOfWork.Records.Get(id).Clone();
                 _personCache[id] = person;
                 return person;
             }
@@ -111,7 +111,7 @@ namespace Glossary.UIDataProvider.Persistence
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                personFromRepository = unitOfWork.People.GetPersonIncludingAssociations(id);
+                personFromRepository = unitOfWork.Records.GetRecordIncludingAssociations(id);
             }
 
             var person = IncludeInCache(personFromRepository);
@@ -130,7 +130,7 @@ namespace Glossary.UIDataProvider.Persistence
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var stationInformationsFromRepository = unitOfWork.People.GetAll().ToList();
+                var stationInformationsFromRepository = unitOfWork.Records.GetAll().ToList();
 
                 stationInformationsFromRepository.ForEach(s =>
                 {
@@ -150,7 +150,7 @@ namespace Glossary.UIDataProvider.Persistence
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                personAssociations = unitOfWork.PersonAssociations.GetAll()
+                personAssociations = unitOfWork.RecordAssociations.GetAll()
                     .Select(pa => pa.Clone())
                     .ToList();
             }
@@ -167,7 +167,7 @@ namespace Glossary.UIDataProvider.Persistence
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var peopleFromRepository = unitOfWork.People.Find(predicate).ToList();
+                var peopleFromRepository = unitOfWork.Records.Find(predicate).ToList();
 
                 peopleFromRepository.ForEach(p =>
                 {
@@ -190,7 +190,7 @@ namespace Glossary.UIDataProvider.Persistence
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var stationInformationsFromRepository = unitOfWork.People.Find(predicates).ToList();
+                var stationInformationsFromRepository = unitOfWork.Records.Find(predicates).ToList();
 
                 stationInformationsFromRepository.ForEach(s =>
                 {
@@ -215,7 +215,7 @@ namespace Glossary.UIDataProvider.Persistence
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.People.UpdateRange(people);
+                unitOfWork.Records.UpdateRange(people);
                 unitOfWork.Complete();
             }
 
@@ -248,8 +248,8 @@ namespace Glossary.UIDataProvider.Persistence
             {
                 var ids = people.Select(p => p.Id).ToList();
 
-                var peopleForDeletion = unitOfWork.People
-                    .GetPeopleIncludingAssociations(p => ids.Contains(p.Id))
+                var peopleForDeletion = unitOfWork.Records
+                    .GetRecordsIncludingAssociations(p => ids.Contains(p.Id))
                     .ToList();
 
                 var personAssociationsForDeletion = peopleForDeletion
@@ -257,8 +257,8 @@ namespace Glossary.UIDataProvider.Persistence
                     .Concat(peopleForDeletion.SelectMany(p => p.SubjectRecords))
                     .ToList();
 
-                unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
-                unitOfWork.People.RemoveRange(peopleForDeletion);
+                unitOfWork.RecordAssociations.RemoveRange(personAssociationsForDeletion);
+                unitOfWork.Records.RemoveRange(peopleForDeletion);
                 unitOfWork.Complete();
 
                 personAssociationsForDeletion.ForEach(RemoveFromCache);
@@ -274,9 +274,9 @@ namespace Glossary.UIDataProvider.Persistence
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
                 var ids = personAssociations.Select(p => p.Id).ToList();
-                var forDeletion = unitOfWork.PersonAssociations.Find(pa => ids.Contains(pa.Id));
+                var forDeletion = unitOfWork.RecordAssociations.Find(pa => ids.Contains(pa.Id));
 
-                unitOfWork.PersonAssociations.RemoveRange(forDeletion);
+                unitOfWork.RecordAssociations.RemoveRange(forDeletion);
                 unitOfWork.Complete();
             }
 
@@ -294,7 +294,7 @@ namespace Glossary.UIDataProvider.Persistence
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.People.AddRange(people);
+                unitOfWork.Records.AddRange(people);
                 unitOfWork.Complete();
             }
 
@@ -308,7 +308,7 @@ namespace Glossary.UIDataProvider.Persistence
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.PersonAssociations.AddRange(personAssociations);
+                unitOfWork.RecordAssociations.AddRange(personAssociations);
                 unitOfWork.Complete();
             }
 

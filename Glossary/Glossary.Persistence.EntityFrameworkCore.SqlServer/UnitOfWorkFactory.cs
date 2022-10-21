@@ -8,7 +8,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
     {
         static UnitOfWorkFactory()
         {
-            using var context = new PRDbContext();
+            using var context = new GlossaryDbContext();
             context.Database.EnsureCreated();
 
             if (context.People.Any()) return;
@@ -35,7 +35,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
 
         public override IUnitOfWork GenerateUnitOfWork()
         {
-            return new UnitOfWork(new PRDbContext());
+            return new UnitOfWork(new GlossaryDbContext());
         }
 
         private static void SeedDatabase(DbContext context)

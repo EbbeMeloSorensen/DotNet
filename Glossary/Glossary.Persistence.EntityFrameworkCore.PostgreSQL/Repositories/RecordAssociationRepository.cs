@@ -5,9 +5,9 @@ using Glossary.Persistence.Repositories;
 
 namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
 {
-    public class PersonAssociationRepository : Repository<RecordAssociation>, IPersonAssociationRepository
+    public class RecordAssociationRepository : Repository<RecordAssociation>, IRecordAssociationRepository
     {
-        public PersonAssociationRepository(
+        public RecordAssociationRepository(
             DbContext context) : base(context)
         {
         }

@@ -5,16 +5,16 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly PRDbContext _context;
+        private readonly GlossaryDbContext _context;
 
-        public IPersonRepository People { get; }
-        public IPersonAssociationRepository PersonAssociations { get; }
+        public IRecordRepository Records { get; }
+        public IRecordAssociationRepository RecordAssociations { get; }
 
-        public UnitOfWork(PRDbContext context)
+        public UnitOfWork(GlossaryDbContext context)
         {
             _context = context;
-            People = new PersonRepository(_context);
-            PersonAssociations = new PersonAssociationRepository(_context);
+            Records = new PersonRepository(_context);
+            RecordAssociations = new PersonAssociationRepository(_context);
         }
 
         public int Complete()

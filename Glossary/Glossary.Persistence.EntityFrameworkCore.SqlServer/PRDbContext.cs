@@ -4,7 +4,7 @@ using Glossary.Persistence.EntityFrameworkCore.SqlServer.EntityConfigurations;
 
 namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
 {
-    public class PRDbContext : DbContext
+    public class GlossaryDbContext : DbContext
     {
         public DbSet<Record> People { get; set; }
         public DbSet<RecordAssociation> PersonAssociations { get; set; }

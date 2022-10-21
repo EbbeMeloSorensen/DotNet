@@ -6,14 +6,14 @@ using Glossary.Persistence.Repositories;
 
 namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
 {
-    public class PersonRepository : Repository<Record>, IPersonRepository
+    public class RecordRepository : Repository<Record>, IRecordRepository
     {
-        public PRDbContext PrDbContext
+        public GlossaryDbContext PrDbContext
         {
-            get { return Context as PRDbContext; }
+            get { return Context as GlossaryDbContext; }
         }
 
-        public PersonRepository(DbContext context) : base(context)
+        public RecordRepository(DbContext context) : base(context)
         {
         }
 
@@ -48,7 +48,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
             throw new NotImplementedException();
         }
 
-        public Record GetPersonIncludingAssociations(
+        public Record GetRecordIncludingAssociations(
             Guid id)
         {
             return PrDbContext.People
@@ -57,7 +57,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
                 .SingleOrDefault(p => p.Id == id) ?? throw new InvalidOperationException();
         }
 
-        public IList<Record> GetPeopleIncludingAssociations(
+        public IList<Record> GetRecordsIncludingAssociations(
             Expression<Func<Record, bool>> predicate)
         {
             return PrDbContext.People
