@@ -2,10 +2,10 @@
 
 namespace Glossary.UI.Console.Verbs
 {
-    [Verb("delete", HelpText = "Delete an existing person.")]
+    [Verb("delete", HelpText = "Delete an existing record.")]
     public sealed class Delete : RepositoryOperationVerb
     {
-        [Option('i', "id", Required = true, HelpText = "Person ID")]
+        [Option('i', "id", Required = true, HelpText = "Record ID")]
         public string ID { get; set; }
     }
 }

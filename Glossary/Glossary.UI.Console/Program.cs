@@ -14,23 +14,23 @@ namespace Glossary.UI.Console
         private static string _user;
         private static string _password;
 
-        public static async Task CreatePerson(Create options)
+        public static async Task CreateRecord(Create options)
         {
-            System.Console.Write("Creating Person...\nProgress: ");
+            System.Console.Write("Creating Record...\nProgress: ");
 
-            var person = new Record()
+            var record = new Record()
             {
                 Term = options.Term
             };
 
             _host = "localhost";
             _port = "5432";
-            _database = "People";
+            _database = "Glossary";
             _schema = "public";
             _user = options.User;
             _password = options.Password;
 
-            await GetApplication().CreateRecord(person, (progress, nameOfSubtask) =>
+            await GetApplication().CreateRecord(record, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
@@ -38,18 +38,18 @@ namespace Glossary.UI.Console
             });
             System.Console.WriteLine("\nDone");
 
-            //System.Console.WriteLine("Counting Person records...");
+            //System.Console.WriteLine("Counting records...");
             //System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllPeople().Count}");
 
             //await ExportData(application);
-            //await CreatePerson(new Person
+            //await CreateRecord(new Record
             //{
             //    Term = "Sofus"
             //}, application);
             //await ListPeople(application);
         }
 
-        public static async Task ListPeople(List options)
+        public static async Task ListRecords(List options)
         {
             _host = options.Host;
             _port = options.Port;
@@ -66,13 +66,13 @@ namespace Glossary.UI.Console
             });
         }
 
-        public static async Task CountPeople(Count options)
+        public static async Task CountRecords(Count options)
         {
             System.Console.WriteLine("Coming soon: CountPeople");
             await Task.Delay(200);
         }
 
-        public static async Task ExportPeople(Export options)
+        public static async Task ExportRecords(Export options)
         {
             _host = options.Host;
             _port = options.Port;
@@ -92,7 +92,7 @@ namespace Glossary.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        public static async Task ImportPeople(Import options)
+        public static async Task ImportRecords(Import options)
         {
             _host = options.Host;
             _port = options.Port;
@@ -112,15 +112,15 @@ namespace Glossary.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        public static async Task UpdatePerson(Update options)
+        public static async Task UpdateRecord(Update options)
         {
-            System.Console.WriteLine("Coming soon: UpdatePerson");
+            System.Console.WriteLine("Coming soon: UpdateRecord");
             await Task.Delay(200);
         }
 
-        public static async Task DeletePerson(Delete options)
+        public static async Task DeleteRecord(Delete options)
         {
-            System.Console.WriteLine("Coming soon: DeletePerson");
+            System.Console.WriteLine("Coming soon: DeleteRecord");
             await Task.Delay(200);
         }
 
@@ -159,13 +159,13 @@ namespace Glossary.UI.Console
                     Delete,
                     Breakfast>(args)
                 .MapResult(
-                    (Create options) => CreatePerson(options),
-                    (Count options) => CountPeople(options),
-                    (List options) => ListPeople(options),
-                    (Export options) => ExportPeople(options),
-                    (Import options) => ImportPeople(options),
-                    (Update options) => UpdatePerson(options),
-                    (Delete options) => DeletePerson(options),
+                    (Create options) => CreateRecord(options),
+                    (Count options) => CountRecords(options),
+                    (List options) => ListRecords(options),
+                    (Export options) => ExportRecords(options),
+                    (Import options) => ImportRecords(options),
+                    (Update options) => UpdateRecord(options),
+                    (Delete options) => DeleteRecord(options),
                     (Breakfast options) => MakeBreakfast(options),
                     errs => Task.FromResult(0));
         }

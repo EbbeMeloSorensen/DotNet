@@ -5,7 +5,7 @@ namespace Glossary.UI.Console.Verbs
     [Verb("update", HelpText = "Update an existing person.")]
     public sealed class Update : RepositoryOperationVerb
     {
-        [Option('i', "id", Required = true, HelpText = "Person ID")]
+        [Option('i', "id", Required = true, HelpText = "Record ID")]
         public string ID { get; set; }
 
         [Option('f', "term", Required = false, HelpText = "Term")]

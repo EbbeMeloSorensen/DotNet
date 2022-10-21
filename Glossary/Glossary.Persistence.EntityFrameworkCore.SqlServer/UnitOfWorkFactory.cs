@@ -40,27 +40,27 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
 
         private static void SeedDatabase(DbContext context)
         {
-            var person1 = new Record
+            var record1 = new Record
             {
                 Term = "Uffe",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
-            var person2 = new Record
+            var record2 = new Record
             {
                 Term = "Ebbe",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
-            var personAssociation = new RecordAssociation
+            var recordAssociation = new RecordAssociation
             {
-                SubjectRecord = person1,
-                ObjectRecord = person2,
+                SubjectRecord = record1,
+                ObjectRecord = record2,
                 Description = "is the brother of",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
-            var people = new List<Record>
+            var records = new List<Record>
             {
                 new Record
                 {
@@ -88,9 +88,9 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
             };
 
             //context.AddRange(people);
-            context.Add(person1);
-            context.Add(person2);
-            context.Add(personAssociation);
+            context.Add(record1);
+            context.Add(record2);
+            context.Add(recordAssociation);
             context.SaveChanges();
         }
     }

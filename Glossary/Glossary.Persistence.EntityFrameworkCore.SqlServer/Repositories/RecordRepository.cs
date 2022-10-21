@@ -24,21 +24,21 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
         }
 
         public override void UpdateRange(
-            IEnumerable<Record> people)
+            IEnumerable<Record> records)
         {
-            var listOfUpdatedPeople = people.ToList();
-            var ids = listOfUpdatedPeople.Select(p => p.Id);
-            var peopleFromRepository = Find(p => ids.Contains(p.Id)).ToList();
+            var listOfUpdatedRecords = records.ToList();
+            var ids = listOfUpdatedRecords.Select(p => p.Id);
+            var recordsFromRepository = Find(p => ids.Contains(p.Id)).ToList();
 
-            peopleFromRepository.ForEach(pRepo =>
+            recordsFromRepository.ForEach(pRepo =>
             {
-                var updatedPerson = listOfUpdatedPeople.Single(pUpd => pUpd.Id == pRepo.Id);
+                var updatedRecord = listOfUpdatedRecords.Single(pUpd => pUpd.Id == pRepo.Id);
 
-                pRepo.Term = updatedPerson.Term;
-                pRepo.Source = updatedPerson.Source;
-                pRepo.Category = updatedPerson.Category;
-                pRepo.Description = updatedPerson.Description;
-                pRepo.Created = updatedPerson.Created;
+                pRepo.Term = updatedRecord.Term;
+                pRepo.Source = updatedRecord.Source;
+                pRepo.Category = updatedRecord.Category;
+                pRepo.Description = updatedRecord.Description;
+                pRepo.Created = updatedRecord.Created;
             });
         }
 
