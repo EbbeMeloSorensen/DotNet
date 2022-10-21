@@ -4,7 +4,7 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.Domain
 {
-    public static class PersonAssociationExtensions
+    public static class RecordAssociationExtensions
     {
         public static RecordAssociation Clone(
             this RecordAssociation recordAssociation)

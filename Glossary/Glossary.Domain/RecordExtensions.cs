@@ -3,7 +3,7 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.Domain
 {
-    public static class PersonExtensions
+    public static class RecordExtensions
     {
         public static Record Clone(
             this Record person)
