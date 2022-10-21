@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Glossary.Domain.Entities
 {
-    public class Person
+    public class Record
     {
         // Notice that we're using a guid here rather than an int.
         // Usually I have always used int, but then I came across the Udemy course "Complete guide to
@@ -23,10 +23,10 @@ namespace Glossary.Domain.Entities
 
         public DateTime Created { get; set; }
 
-        public virtual ICollection<PersonAssociation>? ObjectPeople { get; set; }
-        public virtual ICollection<PersonAssociation>? SubjectPeople { get; set; }
+        public virtual ICollection<RecordAssociation>? ObjectPeople { get; set; }
+        public virtual ICollection<RecordAssociation>? SubjectPeople { get; set; }
 
-        public Person()
+        public Record()
         {
             Term = "";
         }

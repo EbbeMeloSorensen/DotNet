@@ -6,10 +6,10 @@ namespace Glossary.Application
 {
     public class PeopleEventArgs : EventArgs
     {
-        public readonly IEnumerable<Person> People;
+        public readonly IEnumerable<Record> People;
 
         public PeopleEventArgs(
-            IEnumerable<Person> people)
+            IEnumerable<Record> people)
         {
             People = people;
         }

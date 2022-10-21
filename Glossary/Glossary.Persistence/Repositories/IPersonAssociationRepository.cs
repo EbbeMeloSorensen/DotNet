@@ -3,7 +3,7 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.Persistence.Repositories
 {
-    public interface IPersonAssociationRepository : IRepository<PersonAssociation>
+    public interface IPersonAssociationRepository : IRepository<RecordAssociation>
     {
     }
 }

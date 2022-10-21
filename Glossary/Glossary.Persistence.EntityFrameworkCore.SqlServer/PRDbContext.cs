@@ -6,8 +6,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
 {
     public class PRDbContext : DbContext
     {
-        public DbSet<Person> People { get; set; }
-        public DbSet<PersonAssociation> PersonAssociations { get; set; }
+        public DbSet<Record> People { get; set; }
+        public DbSet<RecordAssociation> PersonAssociations { get; set; }
 
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
@@ -22,13 +22,13 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
             modelBuilder.ApplyConfiguration(new PersonConfiguration());
             modelBuilder.ApplyConfiguration(new PersonAssociationConfiguration());
 
-            modelBuilder.Entity<PersonAssociation>()
+            modelBuilder.Entity<RecordAssociation>()
                 .HasOne(p => p.SubjectPerson)
                 .WithMany(pa => pa.ObjectPeople)
                 .HasForeignKey(pa => pa.SubjectPersonId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<PersonAssociation>()
+            modelBuilder.Entity<RecordAssociation>()
                 .HasOne(p => p.ObjectPerson)
                 .WithMany(pa => pa.SubjectPeople)
                 .HasForeignKey(pa => pa.ObjectPersonId)

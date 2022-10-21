@@ -40,7 +40,7 @@ namespace Glossary.ViewModel
             Enumerable.Range(1, NumberOfPeopleToCreate).ToList().ForEach(i =>
             {
                 var name = "Person" + i.ToString().PadLeft(4, '0');
-                _dataProvider.CreatePerson(new Person { Term = name, Created = DateTime.UtcNow });
+                _dataProvider.CreateRecord(new Record { Term = name, Created = DateTime.UtcNow });
             });
         }
     }

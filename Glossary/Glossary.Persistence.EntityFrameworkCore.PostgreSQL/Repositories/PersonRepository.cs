@@ -6,7 +6,7 @@ using Glossary.Persistence.Repositories;
 
 namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
 {
-    public class PersonRepository : Repository<Person>, IPersonRepository
+    public class PersonRepository : Repository<Record>, IPersonRepository
     {
         public PRDbContext PrDbContext
         {
@@ -18,13 +18,13 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
         }
 
         public override void Update(
-            Person entity)
+            Record entity)
         {
             throw new NotImplementedException();
         }
 
         public override void UpdateRange(
-            IEnumerable<Person> people)
+            IEnumerable<Record> people)
         {
             var listOfUpdatedPeople = people.ToList();
             var ids = listOfUpdatedPeople.Select(p => p.Id);
@@ -42,13 +42,13 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
             });
         }
 
-        public Person Get(
+        public Record Get(
             Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Person GetPersonIncludingAssociations(
+        public Record GetPersonIncludingAssociations(
             Guid id)
         {
             return PrDbContext.People
@@ -57,8 +57,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
                 .SingleOrDefault(p => p.Id == id) ?? throw new InvalidOperationException();
         }
 
-        public IList<Person> GetPeopleIncludingAssociations(
-            Expression<Func<Person, bool>> predicate)
+        public IList<Record> GetPeopleIncludingAssociations(
+            Expression<Func<Record, bool>> predicate)
         {
             return PrDbContext.People
                 .Include(p => p.ObjectPeople).ThenInclude(pa => pa.ObjectPerson)

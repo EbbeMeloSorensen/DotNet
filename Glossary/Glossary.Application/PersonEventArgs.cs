@@ -5,12 +5,12 @@ namespace Glossary.Application
 {
     public class PersonEventArgs : EventArgs
     {
-        public readonly Person Person;
+        public readonly Record Record;
 
         public PersonEventArgs(
-            Person person)
+            Record record)
         {
-            Person = person;
+            Record = record;
         }
     }
 }

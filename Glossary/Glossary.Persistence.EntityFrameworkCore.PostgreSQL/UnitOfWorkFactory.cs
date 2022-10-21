@@ -41,19 +41,19 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
 
         private static void SeedDatabase(DbContext context)
         {
-            var person1 = new Person
+            var person1 = new Record
             {
                 Term = "Uffe",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
-            var person2 = new Person
+            var person2 = new Record
             {
                 Term = "Ebbe",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
-            var personAssociation = new PersonAssociation
+            var personAssociation = new RecordAssociation
             {
                 SubjectPerson = person1,
                 ObjectPerson = person2,
@@ -61,24 +61,24 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
-            var people = new List<Person>
+            var people = new List<Record>
             {
-                new Person
+                new Record
                 {
                     Term = "Uffe",
                     Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
                 },
-                new Person
+                new Record
                 {
                     Term = "Tina",
                     Created = new DateTime(2022, 1, 1, 3, 3, 4).ToUniversalTime()
                 },
-                new Person
+                new Record
                 {
                     Term = "Ebbe",
                     Created = new DateTime(2022, 1, 1, 3, 3, 5).ToUniversalTime()
                 },
-                new Person
+                new Record
                 {
                     Term = "Ana Tayze",
                     Source = "Danshøjvej 33",

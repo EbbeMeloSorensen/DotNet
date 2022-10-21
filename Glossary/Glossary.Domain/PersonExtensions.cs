@@ -5,17 +5,17 @@ namespace Glossary.Domain
 {
     public static class PersonExtensions
     {
-        public static Person Clone(
-            this Person person)
+        public static Record Clone(
+            this Record person)
         {
-            var clone = new Person();
+            var clone = new Record();
             clone.CopyAttributes(person);
             return clone;
         }
 
         public static void CopyAttributes(
-            this Person person,
-            Person other)
+            this Record person,
+            Record other)
         {
             person.Id = other.Id;
             person.Term= other.Term;
@@ -25,7 +25,7 @@ namespace Glossary.Domain
             person.Created = other.Created;
         }
 
-        public static Person ConvertFromLegacyPerson(
+        public static Record ConvertFromLegacyPerson(
             this Foreign.Person person)
         {
             var birthday = person.Birthday.HasValue
@@ -36,7 +36,7 @@ namespace Glossary.Domain
                     0, 0, 0, DateTimeKind.Utc)
                 : new DateTime?();
 
-            var result = new Person
+            var result = new Record
             {
                 Id = Guid.NewGuid(),
                 Term = person.FirstName,

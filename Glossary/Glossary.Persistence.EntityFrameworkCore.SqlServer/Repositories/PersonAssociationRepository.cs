@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Craft.Persistence.EntityFrameworkCore;
 using Glossary.Domain.Entities;
+using Glossary.Domain.Foreign;
 using Glossary.Persistence.Repositories;
 
 namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
 {
-    public class PersonAssociationRepository : Repository<PersonAssociation>, IPersonAssociationRepository
+    public class PersonAssociationRepository : Repository<RecordAssociation>, IPersonAssociationRepository
     {
         public PersonAssociationRepository(
             DbContext context) : base(context)
@@ -13,13 +14,13 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
         }
 
         public override void Update(
-            PersonAssociation entity)
+            RecordAssociation entity)
         {
             throw new NotImplementedException();
         }
 
         public override void UpdateRange(
-            IEnumerable<PersonAssociation> entities)
+            IEnumerable<RecordAssociation> entities)
         {
             throw new NotImplementedException();
         }

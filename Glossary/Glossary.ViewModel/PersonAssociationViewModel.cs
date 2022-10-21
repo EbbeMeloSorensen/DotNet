@@ -5,10 +5,10 @@ namespace Glossary.ViewModel
 {
     public class PersonAssociationViewModel : ViewModelBase
     {
-        private PersonAssociation _personAssociation;
+        private RecordAssociation _personAssociation;
         private bool _isSelected;
 
-        public PersonAssociation PersonAssociation
+        public RecordAssociation PersonAssociation
         {
             get { return _personAssociation; }
             set

@@ -114,7 +114,7 @@ namespace Glossary.ViewModel
                 return;
             }
 
-            _dataProvider.CreatePerson(new Person
+            _dataProvider.CreateRecord(new Record
             {
                 Term = dialogViewModel.Term,
                 Source = dialogViewModel.Source,

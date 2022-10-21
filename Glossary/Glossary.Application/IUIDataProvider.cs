@@ -18,48 +18,48 @@ namespace Glossary.Application
 
         int CountAllPeople();
 
-        void CreatePerson(
-            Person person);
+        void CreateRecord(
+            Record record);
 
-        void CreatePersonAssociation(
-            PersonAssociation personAssociation);
+        void CreateRecordAssociation(
+            RecordAssociation recordAssociation);
 
         int CountPeople(
-            Expression<Func<Person, bool>> predicate);
+            Expression<Func<Record, bool>> predicate);
 
-        Person GetPerson(Guid id);
+        Record GetRecord(Guid id);
 
-        Person GetPersonWithAssociations(Guid id);
+        Record GetPersonWithAssociations(Guid id);
 
-        IList<Person> GetAllPeople();
+        IList<Record> GetAllPeople();
 
-        IList<Person> FindPeople(
-            Expression<Func<Person, bool>> predicate);
+        IList<Record> FindPeople(
+            Expression<Func<Record, bool>> predicate);
 
-        IList<Person> FindPeople(
-            IList<Expression<Func<Person, bool>>> predicates);
+        IList<Record> FindPeople(
+            IList<Expression<Func<Record, bool>>> predicates);
 
         void UpdatePerson(
-            Person person);
+            Record person);
 
         void UpdatePeople(
-            IList<Person> people);
+            IList<Record> people);
 
         void UpdatePersonAssociation(
-            PersonAssociation personAssociation);
+            RecordAssociation personAssociation);
 
         void DeletePerson(
-            Person person);
+            Record person);
 
         void DeletePeople(
-            IList<Person> people);
+            IList<Record> people);
 
         void DeletePersonAssociations(
-            IList<PersonAssociation> personAssociations);
+            IList<RecordAssociation> personAssociations);
 
         void ExportData(
             string fileName,
-            IList<Expression<Func<Person, bool>>> predicates);
+            IList<Expression<Func<Record, bool>>> predicates);
 
         void ImportData(
             string fileName,

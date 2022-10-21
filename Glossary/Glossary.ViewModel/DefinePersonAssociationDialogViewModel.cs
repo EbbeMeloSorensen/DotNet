@@ -17,11 +17,11 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
     private ObservableCollection<ValidationError> _validationMessages;
     private string _error = string.Empty;
 
-    private Person _originalSubjectPerson;
-    private Person _originalObjectPerson;
+    private Record _originalSubjectPerson;
+    private Record _originalObjectPerson;
     private string _originalDescription;
-    private Person _subjectPerson;
-    private Person _objectPerson;
+    private Record _subjectPerson;
+    private Record _objectPerson;
     private string _description;
 
     public PersonListViewModel PersonListViewModelSubject { get; private set; }
@@ -41,7 +41,7 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
         }
     }
 
-    public Person SubjectPerson
+    public Record SubjectPerson
     {
         get { return _subjectPerson; }
         set
@@ -52,7 +52,7 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
         }
     }
 
-    public Person ObjectPerson
+    public Record ObjectPerson
     {
         get { return _objectPerson; }
         set
@@ -76,8 +76,8 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
     public DefinePersonAssociationDialogViewModel(
         IUIDataProvider dataProvider,
         IDialogService applicationDialogService,
-        Person subjectPerson,
-        Person objectPerson,
+        Record subjectPerson,
+        Record objectPerson,
         string description)
     {
         _originalSubjectPerson = SubjectPerson = subjectPerson;
@@ -89,7 +89,7 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
 
         PersonListViewModelSubject.SelectedPeople.PropertyChanged += (s, e) =>
         {
-            var temp = s as ObjectCollection<Person>;
+            var temp = s as ObjectCollection<Record>;
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)
             {
                 SubjectPerson = temp.Objects.Single();
@@ -100,7 +100,7 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
 
         PersonListViewModelObject.SelectedPeople.PropertyChanged += (s, e) =>
         {
-            var temp = s as ObjectCollection<Person>;
+            var temp = s as ObjectCollection<Record>;
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)
             {
                 ObjectPerson = temp.Objects.Single();

@@ -5,7 +5,7 @@ namespace Glossary.IO
 {
     public class PRData
     {
-        public List<Person> People { get; set; }
-        public List<PersonAssociation> PersonAssociations { get; set; }
+        public List<Record> People { get; set; }
+        public List<RecordAssociation> RecordAssociations { get; set; }
     }
 }

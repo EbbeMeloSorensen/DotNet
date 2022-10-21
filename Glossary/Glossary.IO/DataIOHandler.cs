@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 using Craft.IO.Utils;
 using Newtonsoft.Json;
 using Glossary.Domain.Foreign;
-using Person = Glossary.Domain.Entities.Person;
+using Record = Glossary.Domain.Entities.Record;
 
 namespace Glossary.IO
 {

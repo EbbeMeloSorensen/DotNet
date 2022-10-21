@@ -5,9 +5,9 @@ namespace Glossary.ViewModel;
 
 public class PersonViewModel : ViewModelBase
 {
-    private Person _person;
+    private Record _person;
 
-    public Person Person
+    public Record Person
     {
         get { return _person; }
         set

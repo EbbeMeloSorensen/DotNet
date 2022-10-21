@@ -104,26 +104,26 @@ namespace Glossary.Application
             });
         }
 
-        public async Task CreatePerson(
-            Person person,
+        public async Task CreateRecord(
+            Record record,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(() =>
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
-                progressCallback?.Invoke(0.0, "Creating Person");
+                Logger?.WriteLine(LogMessageCategory.Information, "Creating Record..");
+                progressCallback?.Invoke(0.0, "Creating Record");
 
-                UIDataProvider.CreatePerson(person);
+                UIDataProvider.CreateRecord(record);
 
                 progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Record");
             });
         }
 
         public async Task ListPeople(
             ProgressCallback progressCallback = null)
         {
-            IList<Person>? people = null;
+            IList<Record>? people = null;
 
             await Task.Run(() =>
             {

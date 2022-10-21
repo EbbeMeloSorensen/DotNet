@@ -18,7 +18,7 @@ namespace Glossary.UI.Console
         {
             System.Console.Write("Creating Person...\nProgress: ");
 
-            var person = new Person()
+            var person = new Record()
             {
                 Term = options.Term
             };
@@ -30,7 +30,7 @@ namespace Glossary.UI.Console
             _user = options.User;
             _password = options.Password;
 
-            await GetApplication().CreatePerson(person, (progress, nameOfSubtask) =>
+            await GetApplication().CreateRecord(person, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

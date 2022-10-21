@@ -17,7 +17,7 @@ namespace Glossary.ViewModel
     {
         private readonly IUIDataProvider _dataProvider;
         private readonly IDialogService _applicationDialogService;
-        private IList<Person> _people;
+        private IList<Record> _people;
         private Sorting _sorting;
 
         public FindPeopleViewModel FindPeopleViewModel { get; private set; }
@@ -36,7 +36,7 @@ namespace Glossary.ViewModel
             }
         }
 
-        public ObjectCollection<Person> SelectedPeople { get; private set; }
+        public ObjectCollection<Record> SelectedPeople { get; private set; }
 
         public Sorting Sorting
         {
@@ -73,18 +73,18 @@ namespace Glossary.ViewModel
 
             FindPeopleViewModel = new FindPeopleViewModel();
 
-            _people = new List<Person>();
+            _people = new List<Record>();
 
-            SelectedPeople = new ObjectCollection<Person>();
+            SelectedPeople = new ObjectCollection<Record>();
 
             dataProvider.PersonCreated += (s, e) =>
             {
-                if (!FindPeopleViewModel.PersonPassesFilter(e.Person))
+                if (!FindPeopleViewModel.PersonPassesFilter(e.Record))
                 {
                     return;
                 }
 
-                _people.Add(e.Person);
+                _people.Add(e.Record);
                 UpdatePersonViewModels();
             };
 
@@ -179,7 +179,7 @@ namespace Glossary.ViewModel
             UpdatePeopleSelection(peopleViewModels.Select(pvm => pvm.Person));
         }
 
-        private void UpdatePeopleSelection(IEnumerable<Person> people)
+        private void UpdatePeopleSelection(IEnumerable<Record> people)
         {
             SelectedPeople.Objects = people;
         }

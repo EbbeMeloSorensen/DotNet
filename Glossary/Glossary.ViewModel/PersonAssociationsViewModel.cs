@@ -21,8 +21,8 @@ namespace Glossary.ViewModel
         private readonly IDialogService _applicationDialogService;
 
         private bool _isVisible;
-        private ObjectCollection<Person> _people;
-        private Person _activePerson;
+        private ObjectCollection<Record> _people;
+        private Record _activePerson;
         private ObservableCollection<PersonAssociationViewModel> _personAssociationViewModels;
         private RelayCommand _selectionChangedCommand;
         private RelayCommand _deleteSelectedPersonAssociationsCommand;
@@ -39,7 +39,7 @@ namespace Glossary.ViewModel
             }
         }
 
-        public ObjectCollection<PersonAssociation> SelectedPersonAssociations { get; private set; }
+        public ObjectCollection<RecordAssociation> SelectedPersonAssociations { get; private set; }
 
         public ObservableCollection<PersonAssociationViewModel> PersonAssociationViewModels
         {
@@ -86,12 +86,12 @@ namespace Glossary.ViewModel
         public PersonAssociationsViewModel(
             IUIDataProvider dataProvider,
             IDialogService applicationDialogService,
-            ObjectCollection<Person> people)
+            ObjectCollection<Record> people)
         {
             _dataProvider = dataProvider;
             _applicationDialogService = applicationDialogService;
             _people = people;
-            SelectedPersonAssociations = new ObjectCollection<PersonAssociation>();
+            SelectedPersonAssociations = new ObjectCollection<RecordAssociation>();
 
             // Den her lader til at være tung..
             _people.PropertyChanged += Initialize;
@@ -99,7 +99,7 @@ namespace Glossary.ViewModel
 
         private void Initialize(object sender, PropertyChangedEventArgs e)
         {
-            var temp = sender as ObjectCollection<Person>;
+            var temp = sender as ObjectCollection<Record>;
 
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)
             {
@@ -175,7 +175,7 @@ namespace Glossary.ViewModel
 
             if (_activePerson != null)
             {
-                _dataProvider.CreatePersonAssociation(new PersonAssociation
+                _dataProvider.CreateRecordAssociation(new RecordAssociation
                 {
                     SubjectPersonId = dialogViewModel.SubjectPerson.Id,
                     ObjectPersonId = dialogViewModel.ObjectPerson.Id,

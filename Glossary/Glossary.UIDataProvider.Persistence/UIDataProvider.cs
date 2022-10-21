@@ -14,8 +14,8 @@ namespace Glossary.UIDataProvider.Persistence
 {
     public class UIDataProvider : UIDataProviderBase
     {
-        private Dictionary<Guid, Person> _personCache;
-        private Dictionary<Guid, PersonAssociation> _personAssociationCache;
+        private Dictionary<Guid, Record> _personCache;
+        private Dictionary<Guid, RecordAssociation> _personAssociationCache;
 
         public override IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
@@ -25,8 +25,8 @@ namespace Glossary.UIDataProvider.Persistence
         {
             UnitOfWorkFactory = unitOfWorkFactory;
 
-            _personCache = new Dictionary<Guid, Person>();
-            _personAssociationCache = new Dictionary<Guid, PersonAssociation>();
+            _personCache = new Dictionary<Guid, Record>();
+            _personAssociationCache = new Dictionary<Guid, RecordAssociation>();
         }
 
         public override void Initialize(
@@ -42,8 +42,8 @@ namespace Glossary.UIDataProvider.Persistence
             return await UnitOfWorkFactory.CheckRepositoryConnection();
         }
 
-        public override void CreatePerson(
-            Person person)
+        public override void CreateRecord(
+            Record person)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -57,8 +57,8 @@ namespace Glossary.UIDataProvider.Persistence
             OnPersonCreated(cacheObj);
         }
 
-        public override void CreatePersonAssociation(
-            PersonAssociation personAssociation)
+        public override void CreateRecordAssociation(
+            RecordAssociation personAssociation)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -68,15 +68,15 @@ namespace Glossary.UIDataProvider.Persistence
 
             var modelObjForCache = personAssociation.Clone();
 
-            var subjectPerson = GetPerson(personAssociation.SubjectPersonId);
-            var objectPerson = GetPerson(personAssociation.ObjectPersonId);
+            var subjectPerson = GetRecord(personAssociation.SubjectPersonId);
+            var objectPerson = GetRecord(personAssociation.ObjectPersonId);
 
             modelObjForCache.LinkToPeople(subjectPerson, objectPerson);
             _personAssociationCache[modelObjForCache.Id] = modelObjForCache;
         }
 
         public override int CountPeople(
-            Expression<Func<Person, bool>> predicate)
+            Expression<Func<Record, bool>> predicate)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -88,7 +88,7 @@ namespace Glossary.UIDataProvider.Persistence
             }
         }
 
-        public override Person GetPerson(
+        public override Record GetRecord(
             Guid id)
         {
             if (_personCache.ContainsKey(id))
@@ -104,10 +104,10 @@ namespace Glossary.UIDataProvider.Persistence
             }
         }
 
-        public override Person GetPersonWithAssociations(
+        public override Record GetPersonWithAssociations(
             Guid id)
         {
-            Person personFromRepository;
+            Record personFromRepository;
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -122,11 +122,11 @@ namespace Glossary.UIDataProvider.Persistence
             return person;
         }
 
-        public override IList<Person> GetAllPeople()
+        public override IList<Record> GetAllPeople()
         {
             //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
 
-            var stationInformations = new List<Person>();
+            var stationInformations = new List<Record>();
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -144,9 +144,9 @@ namespace Glossary.UIDataProvider.Persistence
             return stationInformations;
         }
 
-        public override IList<PersonAssociation> GetAllPersonAssociations()
+        public override IList<RecordAssociation> GetAllPersonAssociations()
         {
-            IList<PersonAssociation> personAssociations;
+            IList<RecordAssociation> personAssociations;
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -158,12 +158,12 @@ namespace Glossary.UIDataProvider.Persistence
             return personAssociations;
         }
 
-        public override IList<Person> FindPeople(
-            Expression<Func<Person, bool>> predicate)
+        public override IList<Record> FindPeople(
+            Expression<Func<Record, bool>> predicate)
         {
             //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
 
-            var people = new List<Person>();
+            var people = new List<Record>();
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -181,12 +181,12 @@ namespace Glossary.UIDataProvider.Persistence
             return people;
         }
 
-        public override IList<Person> FindPeople(
-            IList<Expression<Func<Person, bool>>> predicates)
+        public override IList<Record> FindPeople(
+            IList<Expression<Func<Record, bool>>> predicates)
         {
             //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
 
-            var stationInformations = new List<Person>();
+            var stationInformations = new List<Record>();
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -205,13 +205,13 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         public override void UpdatePerson(
-            Person person)
+            Record person)
         {
             throw new NotImplementedException();
         }
 
         public override void UpdatePeople(
-            IList<Person> people)
+            IList<Record> people)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -222,7 +222,7 @@ namespace Glossary.UIDataProvider.Persistence
             // Update the people of the cache too
             foreach (var person in people)
             {
-                var cacheObj = GetPerson(person.Id);
+                var cacheObj = GetRecord(person.Id);
                 cacheObj.CopyAttributes(person);
             }
 
@@ -230,19 +230,19 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         public override void UpdatePersonAssociation(
-            PersonAssociation personAssociation)
+            RecordAssociation personAssociation)
         {
             throw new NotImplementedException();
         }
 
         public override void DeletePerson(
-            Person person)
+            Record person)
         {
             throw new NotImplementedException();
         }
 
         public override void DeletePeople(
-            IList<Person> people)
+            IList<Record> people)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -269,7 +269,7 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         public override void DeletePersonAssociations(
-            IList<PersonAssociation> personAssociations)
+            IList<RecordAssociation> personAssociations)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -290,7 +290,7 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         protected override void LoadPeople(
-            IList<Person> people)
+            IList<Record> people)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -304,7 +304,7 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         protected override void LoadPersonAssociations(
-            IList<PersonAssociation> personAssociations)
+            IList<RecordAssociation> personAssociations)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -315,8 +315,8 @@ namespace Glossary.UIDataProvider.Persistence
             _personAssociationCache.Clear();
         }
 
-        private Person IncludeInCache(
-            Person personFromRepository)
+        private Record IncludeInCache(
+            Record personFromRepository)
         {
             if (_personCache.ContainsKey(personFromRepository.Id))
             {
@@ -329,8 +329,8 @@ namespace Glossary.UIDataProvider.Persistence
             return person;
         }
 
-        private PersonAssociation IncludeInCache(
-            PersonAssociation personAssociationFromRepository)
+        private RecordAssociation IncludeInCache(
+            RecordAssociation personAssociationFromRepository)
         {
             if (_personAssociationCache.ContainsKey(personAssociationFromRepository.Id))
             {
@@ -349,7 +349,7 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         private void RemoveFromCache(
-            Person person)
+            Record person)
         {
             if (!_personCache.ContainsKey(person.Id)) return;
 
@@ -357,7 +357,7 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         private void RemoveFromCache(
-            PersonAssociation personAssociation)
+            RecordAssociation personAssociation)
         {
             if (!_personAssociationCache.ContainsKey(personAssociation.Id)) return;
 

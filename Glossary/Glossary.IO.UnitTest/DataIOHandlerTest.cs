@@ -4,8 +4,8 @@ using System.Linq;
 using FluentAssertions;
 using Glossary.Domain.Foreign;
 using Xunit;
-using Person = Glossary.Domain.Entities.Person;
-using PersonAssociation = Glossary.Domain.Entities.PersonAssociation;
+using Record = Glossary.Domain.Entities.Record;
+using RecordAssociation = Glossary.Domain.Entities.RecordAssociation;
 
 namespace Glossary.IO.UnitTest
 {
@@ -58,7 +58,7 @@ namespace Glossary.IO.UnitTest
         {
             var now = DateTime.UtcNow;
 
-            var ebbe = new Person
+            var ebbe = new Record
             {
                 Id = Guid.NewGuid(),
                 Term = "Ebbe",
@@ -68,14 +68,14 @@ namespace Glossary.IO.UnitTest
                 Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()
             };
 
-            var ana = new Person
+            var ana = new Record
             {
                 Id = Guid.NewGuid(),
                 Term = "Ana Tayze",
                 Created = now
             };
 
-            var uffe = new Person
+            var uffe = new Record
             {
                 Id = Guid.NewGuid(),
                 Term = "Uffe",
@@ -84,13 +84,13 @@ namespace Glossary.IO.UnitTest
 
             return new PRData
             {
-                People = new List<Person>
+                People = new List<Record>
                 {
                     ebbe,
                     ana,
                     uffe
                 },
-                PersonAssociations = new List<PersonAssociation>
+                RecordAssociations = new List<RecordAssociation>
                 {
                     new()
                     {

@@ -4,9 +4,9 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.EntityConfigurations
 {
-    public class PersonConfiguration : IEntityTypeConfiguration<Person>
+    public class PersonConfiguration : IEntityTypeConfiguration<Record>
     {
-        public void Configure(EntityTypeBuilder<Person> builder)
+        public void Configure(EntityTypeBuilder<Record> builder)
         {
             builder.HasKey(p => p.Id);
         }

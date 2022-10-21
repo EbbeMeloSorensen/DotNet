@@ -9,8 +9,8 @@ using Glossary.Domain;
 using Glossary.Domain.Foreign;
 using Glossary.IO;
 using Glossary.Persistence;
-using Person = Glossary.Domain.Entities.Person;
-using PersonAssociation = Glossary.Domain.Entities.PersonAssociation;
+using Record = Glossary.Domain.Entities.Record;
+using RecordAssociation = Glossary.Domain.Entities.RecordAssociation;
 
 namespace Glossary.Application
 {
@@ -39,46 +39,46 @@ namespace Glossary.Application
             throw new NotImplementedException();
         }
 
-        public abstract void CreatePerson(Person person);
+        public abstract void CreateRecord(Record person);
 
-        public abstract void CreatePersonAssociation(
-            PersonAssociation personAssociation);
+        public abstract void CreateRecordAssociation(
+            RecordAssociation personAssociation);
 
         public abstract int CountPeople(
-            Expression<Func<Person, bool>> predicate);
+            Expression<Func<Record, bool>> predicate);
 
-        public abstract Person GetPerson(
+        public abstract Record GetRecord(
             Guid id);
 
-        public abstract Person GetPersonWithAssociations(
+        public abstract Record GetPersonWithAssociations(
             Guid id);
 
-        public abstract IList<Person> GetAllPeople();
+        public abstract IList<Record> GetAllPeople();
 
-        public abstract IList<PersonAssociation> GetAllPersonAssociations();
+        public abstract IList<RecordAssociation> GetAllPersonAssociations();
 
-        public abstract IList<Person> FindPeople(
-            Expression<Func<Person, bool>> predicate);
+        public abstract IList<Record> FindPeople(
+            Expression<Func<Record, bool>> predicate);
 
-        public abstract IList<Person> FindPeople(
-            IList<Expression<Func<Person, bool>>> predicates);
+        public abstract IList<Record> FindPeople(
+            IList<Expression<Func<Record, bool>>> predicates);
 
-        public abstract void UpdatePerson(Person person);
+        public abstract void UpdatePerson(Record person);
 
-        public abstract void UpdatePeople(IList<Person> people);
+        public abstract void UpdatePeople(IList<Record> people);
 
-        public abstract void UpdatePersonAssociation(PersonAssociation personAssociation);
+        public abstract void UpdatePersonAssociation(RecordAssociation personAssociation);
 
-        public abstract void DeletePerson(Person person);
+        public abstract void DeletePerson(Record person);
 
-        public abstract void DeletePeople(IList<Person> people);
+        public abstract void DeletePeople(IList<Record> people);
 
         public abstract void DeletePersonAssociations(
-            IList<PersonAssociation> personAssociations);
+            IList<RecordAssociation> personAssociations);
 
         public void ExportData(
             string fileName,
-            IList<Expression<Func<Person, bool>>> predicates)
+            IList<Expression<Func<Record, bool>>> predicates)
         {
             var extension = Path.GetExtension(fileName)?.ToLower();
 
@@ -87,8 +87,8 @@ namespace Glossary.Application
                 throw new ArgumentException();
             }
 
-            IList<Person> people;
-            IList<PersonAssociation> personAssociations;
+            IList<Record> people;
+            IList<RecordAssociation> personAssociations;
 
             if (predicates == null || predicates.Count == 0)
             {
@@ -110,7 +110,7 @@ namespace Glossary.Application
             var prData = new PRData
             {
                 People = people.ToList(),
-                PersonAssociations = personAssociations.ToList()
+                RecordAssociations = personAssociations.ToList()
             };
 
             switch (extension)
@@ -163,7 +163,7 @@ namespace Glossary.Application
                     {
                         _dataIOHandler.ImportForeignDataFromJson(fileName, out var contactData);
 
-                        prData.People = new List<Person>();
+                        prData.People = new List<Record>();
                         var personIdMap = new Dictionary<int, Guid>();
 
                         contactData.People.ForEach(p =>
@@ -173,7 +173,7 @@ namespace Glossary.Application
                             prData.People.Add(person);
                         });
 
-                        prData.PersonAssociations = new List<PersonAssociation>(contactData.PersonAssociations.Select(
+                        prData.RecordAssociations = new List<RecordAssociation>(contactData.PersonAssociations.Select(
                             pa => pa.ConvertFromLegacyPersonAssociation(personIdMap)));
                     }
                     else
@@ -190,7 +190,7 @@ namespace Glossary.Application
             }
 
             LoadPeople(prData.People);
-            LoadPersonAssociations(prData.PersonAssociations);
+            LoadPersonAssociations(prData.RecordAssociations);
         }
 
         public event EventHandler<PersonEventArgs> PersonCreated;
@@ -198,7 +198,7 @@ namespace Glossary.Application
         public event EventHandler<PeopleEventArgs> PeopleDeleted;
 
         protected virtual void OnPersonCreated(
-            Person person)
+            Record person)
         {
             var handler = PersonCreated;
 
@@ -210,7 +210,7 @@ namespace Glossary.Application
         }
 
         protected virtual void OnPeopleUpdated(
-            IEnumerable<Person> people)
+            IEnumerable<Record> people)
         {
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
@@ -225,7 +225,7 @@ namespace Glossary.Application
         }
 
         protected virtual void OnPeopleDeleted(
-            IEnumerable<Person> people)
+            IEnumerable<Record> people)
         {
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
@@ -240,9 +240,9 @@ namespace Glossary.Application
         }
 
         protected abstract void LoadPeople(
-            IList<Person> people);
+            IList<Record> people);
 
         protected abstract void LoadPersonAssociations(
-            IList<PersonAssociation> personAssociations);
+            IList<RecordAssociation> personAssociations);
     }
 }

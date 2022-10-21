@@ -18,7 +18,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private string _error = string.Empty;
 
     private readonly IUIDataProvider _dataProvider;
-    private ObjectCollection<Person> _people;
+    private ObjectCollection<Record> _people;
 
     private string _originalSharedTerm;
     private string _originalSharedSource;
@@ -95,7 +95,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public PeoplePropertiesViewModel(
         IUIDataProvider dataProvider,
-        ObjectCollection<Person> people)
+        ObjectCollection<Record> people)
     {
         _dataProvider = dataProvider;
         _people = people;
@@ -106,7 +106,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private void Initialize(object sender, PropertyChangedEventArgs e)
     {
         _state = StateOfView.Initial;
-        var temp = sender as ObjectCollection<Person>;
+        var temp = sender as ObjectCollection<Record>;
 
         var firstPerson = temp?.Objects.FirstOrDefault();
 
@@ -154,7 +154,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             return;
         }
 
-        var updatedPeople = _people.Objects.Select(p => new Person
+        var updatedPeople = _people.Objects.Select(p => new Record
         {
             Id = p.Id,
             Term = SharedTerm != _originalSharedTerm ? SharedTerm : p.Term,

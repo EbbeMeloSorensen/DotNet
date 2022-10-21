@@ -35,14 +35,14 @@ namespace Glossary.ViewModel
             }
         }
 
-        public Expression<Func<Person, bool>> FilterAsExpression()
+        public Expression<Func<Record, bool>> FilterAsExpression()
         {
             return p => p.Term.ToUpper().Contains(_nameFilterInUppercase) &&
                         (p.Category == null && _categoryFilterInUppercase == "" ||
                          p.Category != null && p.Category.ToUpper().Contains(_categoryFilterInUppercase));
         }
 
-        public bool PersonPassesFilter(Person person)
+        public bool PersonPassesFilter(Record person)
         {
             var nameOK = string.IsNullOrEmpty(NameFilter) ||
                          person.Term.ToUpper().Contains(NameFilter.ToUpper());
