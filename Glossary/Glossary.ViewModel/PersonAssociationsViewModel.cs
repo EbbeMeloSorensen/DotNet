@@ -124,12 +124,12 @@ namespace Glossary.ViewModel
 
             var person = _dataProvider.GetPersonWithAssociations(_activePerson.Id);
 
-            PersonAssociationViewModels = new ObservableCollection<PersonAssociationViewModel>(person.ObjectPeople
+            PersonAssociationViewModels = new ObservableCollection<PersonAssociationViewModel>(person.ObjectRecords
                 .Select(pa => new PersonAssociationViewModel
                 {
                     PersonAssociation = pa
                 })
-                .Concat(person.SubjectPeople
+                .Concat(person.SubjectRecords
                     .Select(pa => new PersonAssociationViewModel
                     {
                         PersonAssociation = pa

@@ -107,7 +107,7 @@ namespace Glossary.Application
 
             _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {people.Count} person records");
 
-            var prData = new PRData
+            var prData = new GlossaryData
             {
                 People = people.ToList(),
                 RecordAssociations = personAssociations.ToList()
@@ -147,7 +147,7 @@ namespace Glossary.Application
                 throw new ArgumentException();
             }
 
-            var prData = new PRData();
+            var prData = new GlossaryData();
 
             switch (extension)
             {

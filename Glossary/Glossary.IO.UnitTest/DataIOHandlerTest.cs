@@ -21,7 +21,7 @@ namespace Glossary.IO.UnitTest
         [Fact]
         public void ImportDataFromXML_Works()
         {
-            new DataIOHandler().ImportDataFromXML(@"C:/Temp/People.xml", out PRData prData);
+            new DataIOHandler().ImportDataFromXML(@"C:/Temp/People.xml", out GlossaryData prData);
 
             prData.People.Count.Should().Be(3);
             prData.People.Count(p => p.Term == "Ebbe").Should().Be(1);
@@ -54,7 +54,7 @@ namespace Glossary.IO.UnitTest
         }
 
         // Helper
-        private PRData GenerateDataSet()
+        private GlossaryData GenerateDataSet()
         {
             var now = DateTime.UtcNow;
 
@@ -82,7 +82,7 @@ namespace Glossary.IO.UnitTest
                 Created = now
             };
 
-            return new PRData
+            return new GlossaryData
             {
                 People = new List<Record>
                 {

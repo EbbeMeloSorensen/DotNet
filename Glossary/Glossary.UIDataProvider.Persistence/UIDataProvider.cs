@@ -71,7 +71,7 @@ namespace Glossary.UIDataProvider.Persistence
             var subjectPerson = GetRecord(personAssociation.SubjectRecordId);
             var objectPerson = GetRecord(personAssociation.ObjectRecordId);
 
-            modelObjForCache.LinkToPeople(subjectPerson, objectPerson);
+            modelObjForCache.LinkToRecords(subjectPerson, objectPerson);
             _personAssociationCache[modelObjForCache.Id] = modelObjForCache;
         }
 
@@ -116,8 +116,8 @@ namespace Glossary.UIDataProvider.Persistence
 
             var person = IncludeInCache(personFromRepository);
 
-            person.ObjectPeople = personFromRepository.ObjectPeople?.Select(IncludeInCache).ToList();
-            person.SubjectPeople = personFromRepository.SubjectPeople?.Select(IncludeInCache).ToList();
+            person.ObjectRecords = personFromRepository.ObjectRecords?.Select(IncludeInCache).ToList();
+            person.SubjectRecords = personFromRepository.SubjectRecords?.Select(IncludeInCache).ToList();
 
             return person;
         }
@@ -253,8 +253,8 @@ namespace Glossary.UIDataProvider.Persistence
                     .ToList();
 
                 var personAssociationsForDeletion = peopleForDeletion
-                    .SelectMany(p => p.ObjectPeople)
-                    .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
+                    .SelectMany(p => p.ObjectRecords)
+                    .Concat(peopleForDeletion.SelectMany(p => p.SubjectRecords))
                     .ToList();
 
                 unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
@@ -283,8 +283,8 @@ namespace Glossary.UIDataProvider.Persistence
             // Update memory objects
             personAssociations.ToList().ForEach(pa =>
             {
-                pa.SubjectRecord?.ObjectPeople?.Remove(pa);
-                pa.ObjectRecord?.SubjectPeople?.Remove(pa);
+                pa.SubjectRecord?.ObjectRecords?.Remove(pa);
+                pa.ObjectRecord?.SubjectRecords?.Remove(pa);
                 _personAssociationCache.Remove(pa.Id);
             });
         }
@@ -339,7 +339,7 @@ namespace Glossary.UIDataProvider.Persistence
 
             var personAssociation = personAssociationFromRepository.Clone();
 
-            personAssociation.LinkToPeople(
+            personAssociation.LinkToRecords(
                 IncludeInCache(personAssociationFromRepository.SubjectRecord),
                 IncludeInCache(personAssociationFromRepository.ObjectRecord));
 

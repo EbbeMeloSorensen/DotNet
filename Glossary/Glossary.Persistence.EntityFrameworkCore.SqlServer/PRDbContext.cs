@@ -24,13 +24,13 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
 
             modelBuilder.Entity<RecordAssociation>()
                 .HasOne(p => p.SubjectRecord)
-                .WithMany(pa => pa.ObjectPeople)
+                .WithMany(pa => pa.ObjectRecords)
                 .HasForeignKey(pa => pa.SubjectRecordId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<RecordAssociation>()
                 .HasOne(p => p.ObjectRecord)
-                .WithMany(pa => pa.SubjectPeople)
+                .WithMany(pa => pa.SubjectRecords)
                 .HasForeignKey(pa => pa.ObjectRecordId)
                 .OnDelete(DeleteBehavior.Restrict);
         }

@@ -23,8 +23,8 @@ namespace Glossary.Domain.Entities
 
         public DateTime Created { get; set; }
 
-        public virtual ICollection<RecordAssociation>? ObjectPeople { get; set; }
-        public virtual ICollection<RecordAssociation>? SubjectPeople { get; set; }
+        public virtual ICollection<RecordAssociation>? ObjectRecords { get; set; }
+        public virtual ICollection<RecordAssociation>? SubjectRecords { get; set; }
 
         public Record()
         {

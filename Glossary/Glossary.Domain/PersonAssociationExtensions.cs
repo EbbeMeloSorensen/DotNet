@@ -7,47 +7,47 @@ namespace Glossary.Domain
     public static class PersonAssociationExtensions
     {
         public static RecordAssociation Clone(
-            this RecordAssociation personAssociation)
+            this RecordAssociation recordAssociation)
         {
             return new RecordAssociation
             {
-                Id = personAssociation.Id,
-                SubjectRecordId = personAssociation.SubjectRecordId,
-                ObjectRecordId = personAssociation.ObjectRecordId,
-                Description = personAssociation.Description,
-                Created = personAssociation.Created
+                Id = recordAssociation.Id,
+                SubjectRecordId = recordAssociation.SubjectRecordId,
+                ObjectRecordId = recordAssociation.ObjectRecordId,
+                Description = recordAssociation.Description,
+                Created = recordAssociation.Created
             };
         }
 
         public static void LinkToSubjectPerson(
-            this RecordAssociation personAssociation,
-            Record subjectPerson)
+            this RecordAssociation recordAssociation,
+            Record subjectRecord)
         {
-            personAssociation.SubjectRecord = subjectPerson;
+            recordAssociation.SubjectRecord = subjectRecord;
 
-            if (subjectPerson.ObjectPeople == null)
+            if (subjectRecord.ObjectRecords == null)
             {
-                subjectPerson.ObjectPeople = new List<RecordAssociation>();
+                subjectRecord.ObjectRecords = new List<RecordAssociation>();
             }
 
-            subjectPerson.ObjectPeople.Add(personAssociation);
+            subjectRecord.ObjectRecords.Add(recordAssociation);
         }
 
         public static void LinkToObjectPerson(
-            this RecordAssociation personAssociation,
-            Record objectPerson)
+            this RecordAssociation recordAssociation,
+            Record objectRecord)
         {
-            personAssociation.ObjectRecord = objectPerson;
+            recordAssociation.ObjectRecord = objectRecord;
 
-            if (objectPerson.SubjectPeople == null)
+            if (objectRecord.SubjectRecords == null)
             {
-                objectPerson.SubjectPeople = new List<RecordAssociation>();
+                objectRecord.SubjectRecords = new List<RecordAssociation>();
             }
 
-            objectPerson.SubjectPeople.Add(personAssociation);
+            objectRecord.SubjectRecords.Add(recordAssociation);
         }
 
-        public static void LinkToPeople(
+        public static void LinkToRecords(
             this RecordAssociation personAssociation,
             Record subjectPerson,
             Record objectPerson)
@@ -59,13 +59,13 @@ namespace Glossary.Domain
         public static void DecoupleFromSubjectPerson(
             this RecordAssociation personAssociation)
         {
-            personAssociation.SubjectRecord.ObjectPeople.Remove(personAssociation);
+            personAssociation.SubjectRecord.ObjectRecords.Remove(personAssociation);
         }
 
         public static void DecoupleFromObjectPerson(
             this RecordAssociation personAssociation)
         {
-            personAssociation.ObjectRecord.SubjectPeople.Remove(personAssociation);
+            personAssociation.ObjectRecord.SubjectRecords.Remove(personAssociation);
         }
 
         public static void DecoupleFromPeople(

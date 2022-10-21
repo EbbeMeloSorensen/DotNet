@@ -24,14 +24,14 @@ namespace Glossary.IO
                 xOver.Add(typeof(Person), "SubjectPeople", attrs);
                 xOver.Add(typeof(PersonAssociation), "SubjectPerson", attrs);
                 xOver.Add(typeof(PersonAssociation), "ObjectPerson", attrs);
-                _xmlSerializer = new XmlSerializer(typeof(PRData), xOver);
+                _xmlSerializer = new XmlSerializer(typeof(GlossaryData), xOver);
 
                 return _xmlSerializer;
             }
         }
 
         public void ExportDataToXML(
-            PRData prData, 
+            GlossaryData prData, 
             string fileName)
         {
             using (var streamWriter = new StreamWriter(fileName))
@@ -41,7 +41,7 @@ namespace Glossary.IO
         }
 
         public void ExportDataToJson(
-            PRData prData, 
+            GlossaryData prData, 
             string fileName)
         {
             var jsonResolver = new ContractResolver();
@@ -68,21 +68,21 @@ namespace Glossary.IO
 
         public void ImportDataFromXML(
             string fileName, 
-            out PRData prData)
+            out GlossaryData prData)
         {
             using var streamReader = new StreamReader(fileName);
 
-            prData = XmlSerializer.Deserialize(streamReader) as PRData;
+            prData = XmlSerializer.Deserialize(streamReader) as GlossaryData;
         }
 
         public void ImportDataFromJson(
             string fileName, 
-            out PRData prData)
+            out GlossaryData prData)
         {
             using var streamReader = new StreamReader(fileName);
 
             var json = streamReader.ReadToEnd();
-            prData = JsonConvert.DeserializeObject<PRData>(json);
+            prData = JsonConvert.DeserializeObject<GlossaryData>(json);
         }
 
         public void ImportForeignDataFromJson(
