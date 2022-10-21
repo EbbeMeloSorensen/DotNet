@@ -13,8 +13,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
         public UnitOfWork(GlossaryDbContext context)
         {
             _context = context;
-            Records = new PersonRepository(_context);
-            RecordAssociations = new PersonAssociationRepository(_context);
+            Records = new RecordRepository(_context);
+            RecordAssociations = new RecordAssociationRepository(_context);
         }
 
         public int Complete()

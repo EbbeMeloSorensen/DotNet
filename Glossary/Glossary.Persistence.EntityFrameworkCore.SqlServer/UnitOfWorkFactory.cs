@@ -11,7 +11,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
             using var context = new GlossaryDbContext();
             context.Database.EnsureCreated();
 
-            if (context.People.Any()) return;
+            if (context.Records.Any()) return;
 
             //SeedDatabase(context);
         }

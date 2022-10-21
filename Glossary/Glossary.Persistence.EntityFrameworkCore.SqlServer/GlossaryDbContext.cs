@@ -6,8 +6,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
 {
     public class GlossaryDbContext : DbContext
     {
-        public DbSet<Record> People { get; set; }
-        public DbSet<RecordAssociation> PersonAssociations { get; set; }
+        public DbSet<Record> Records { get; set; }
+        public DbSet<RecordAssociation> RecordAssociations { get; set; }
 
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)

@@ -6,14 +6,14 @@ using Glossary.Persistence.Repositories;
 
 namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
 {
-    public class PersonRepository : Repository<Record>, IRecordRepository
+    public class RecordRepository : Repository<Record>, IRecordRepository
     {
         public GlossaryDbContext PrDbContext
         {
             get { return Context as GlossaryDbContext; }
         }
 
-        public PersonRepository(DbContext context) : base(context)
+        public RecordRepository(DbContext context) : base(context)
         {
         }
 
@@ -51,7 +51,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
         public Record GetRecordIncludingAssociations(
             Guid id)
         {
-            return PrDbContext.People
+            return PrDbContext.Records
                 .Include(p => p.ObjectRecords).ThenInclude(pa => pa.ObjectRecord)
                 .Include(p => p.SubjectRecords).ThenInclude(pa => pa.SubjectRecord)
                 .SingleOrDefault(p => p.Id == id) ?? throw new InvalidOperationException();
@@ -60,7 +60,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
         public IList<Record> GetRecordsIncludingAssociations(
             Expression<Func<Record, bool>> predicate)
         {
-            return PrDbContext.People
+            return PrDbContext.Records
                 .Include(p => p.ObjectRecords).ThenInclude(pa => pa.ObjectRecord)
                 .Include(p => p.SubjectRecords).ThenInclude(pa => pa.SubjectRecord)
                 .Where(predicate)
