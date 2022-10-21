@@ -15,34 +15,34 @@ namespace Glossary.IO.UnitTest
         public void ExportDataToXML_Works()
         {
             new DataIOHandler()
-                .ExportDataToXML(GenerateDataSet(), @"C:/Temp/Records.xml");
+                .ExportDataToXML(GenerateDataSet(), @"C:/Temp/GlossaryData.xml");
         }
 
         [Fact]
         public void ImportDataFromXML_Works()
         {
-            new DataIOHandler().ImportDataFromXML(@"C:/Temp/Records.xml", out GlossaryData prData);
+            new DataIOHandler().ImportDataFromXML(@"C:/Temp/GlossaryData.xml", out GlossaryData prData);
 
             prData.Records.Count.Should().Be(3);
-            prData.Records.Count(p => p.Term == "Ebbe").Should().Be(1);
-            prData.Records.Count(p => p.Term == "Uffe").Should().Be(1);
+            prData.Records.Count(p => p.Term == "Kafka").Should().Be(1);
+            prData.Records.Count(p => p.Term == "Javascript").Should().Be(1);
         }
 
         [Fact]
         public void ExportDataToJson_Works()
         {
-            new DataIOHandler().ExportDataToJson(GenerateDataSet(), @"C:/Temp/People.json");
+            new DataIOHandler().ExportDataToJson(GenerateDataSet(), @"C:/Temp/GlossaryData.json");
         }
 
         [Fact]
         public void ImportDataFromJson_Works()
         {
             var dataIOHandler = new DataIOHandler();
-            dataIOHandler.ImportDataFromJson(@"C:/Temp/Records.json", out var prData);
+            dataIOHandler.ImportDataFromJson(@"C:/Temp/GlossaryData.json", out var prData);
 
             prData.Records.Count.Should().Be(3);
-            prData.Records.Count(p => p.Term == "Ebbe").Should().Be(1);
-            prData.Records.Count(p => p.Term == "Uffe").Should().Be(1);
+            prData.Records.Count(p => p.Term == "Kafka").Should().Be(1);
+            prData.Records.Count(p => p.Term == "Javascript").Should().Be(1);
         }
 
         [Fact]
@@ -58,27 +58,27 @@ namespace Glossary.IO.UnitTest
         {
             var now = DateTime.UtcNow;
 
-            var ebbe = new Record
+            var kafka = new Record
             {
                 Id = Guid.NewGuid(),
-                Term = "Ebbe",
-                Source = "Danshøjvej 33",
-                Category = "Familie",
-                Description = "Mig selv",
+                Term = "Kafka",
+                Source = "Udemy",
+                Category = "Programming",
+                Description = "Message Switch",
                 Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()
             };
 
-            var ana = new Record
+            var python = new Record
             {
                 Id = Guid.NewGuid(),
-                Term = "Ana Tayze",
+                Term = "Python",
                 Created = now
             };
 
-            var uffe = new Record
+            var javascript = new Record
             {
                 Id = Guid.NewGuid(),
-                Term = "Uffe",
+                Term = "Javascript",
                 Created = now
             };
 
@@ -86,27 +86,27 @@ namespace Glossary.IO.UnitTest
             {
                 Records = new List<Record>
                 {
-                    ebbe,
-                    ana,
-                    uffe
+                    kafka,
+                    python,
+                    javascript
                 },
                 RecordAssociations = new List<RecordAssociation>
                 {
                     new()
                     {
                         Id = Guid.NewGuid(),
-                        Description = "is the brother of",
+                        Description = "is related to",
                         Created = now,
-                        ObjectRecordId = ebbe.Id,
-                        SubjectRecordId = uffe.Id
+                        ObjectRecordId = kafka.Id,
+                        SubjectRecordId = javascript.Id
                     },
                     new()
                     {
                         Id = Guid.NewGuid(),
-                        Description = "is married with",
+                        Description = "is related to",
                         Created = now,
-                        ObjectRecordId = ana.Id,
-                        SubjectRecordId = ebbe.Id
+                        ObjectRecordId = python.Id,
+                        SubjectRecordId = kafka.Id
                     }
                 }
             };

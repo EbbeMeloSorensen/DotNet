@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
-using Craft.IO.Utils;
 using Newtonsoft.Json;
+using Craft.IO.Utils;
+using Glossary.Domain.Entities;
 using Glossary.Domain.Foreign;
 using Record = Glossary.Domain.Entities.Record;
 
@@ -20,10 +21,10 @@ namespace Glossary.IO
 
                 var xOver = new XmlAttributeOverrides();
                 var attrs = new XmlAttributes { XmlIgnore = true };
-                xOver.Add(typeof(Record), "ObjectPeople", attrs);
-                xOver.Add(typeof(Record), "SubjectPeople", attrs);
-                xOver.Add(typeof(PersonAssociation), "SubjectPerson", attrs);
-                xOver.Add(typeof(PersonAssociation), "ObjectPerson", attrs);
+                xOver.Add(typeof(Record), "ObjectRecords", attrs);
+                xOver.Add(typeof(Record), "SubjectRecords", attrs);
+                xOver.Add(typeof(RecordAssociation), "SubjectRecord", attrs);
+                xOver.Add(typeof(RecordAssociation), "ObjectRecord", attrs);
                 _xmlSerializer = new XmlSerializer(typeof(GlossaryData), xOver);
 
                 return _xmlSerializer;
@@ -31,12 +32,12 @@ namespace Glossary.IO
         }
 
         public void ExportDataToXML(
-            GlossaryData prData, 
+            GlossaryData glossaryData, 
             string fileName)
         {
             using (var streamWriter = new StreamWriter(fileName))
             {
-                XmlSerializer.Serialize(streamWriter, prData);
+                XmlSerializer.Serialize(streamWriter, glossaryData);
             }
         }
 
