@@ -122,7 +122,7 @@ namespace Glossary.ViewModel
                 return;
             }
 
-            var person = _dataProvider.GetPersonWithAssociations(_activePerson.Id);
+            var person = _dataProvider.GetRecordWithAssociations(_activePerson.Id);
 
             PersonAssociationViewModels = new ObservableCollection<PersonAssociationViewModel>(person.ObjectRecords
                 .Select(pa => new PersonAssociationViewModel
@@ -148,7 +148,7 @@ namespace Glossary.ViewModel
 
         public void DeleteSelectedPersonAssociations()
         {
-            _dataProvider.DeletePersonAssociations(SelectedPersonAssociations.Objects.ToList());
+            _dataProvider.DeleteRecordAssociations(SelectedPersonAssociations.Objects.ToList());
 
             Populate();
         }
@@ -212,7 +212,7 @@ namespace Glossary.ViewModel
             personAssociation.SubjectRecordId = dialogViewModel.SubjectPerson.Id;
             personAssociation.ObjectRecordId = dialogViewModel.ObjectPerson.Id;
 
-            _dataProvider.UpdatePersonAssociation(personAssociation);
+            _dataProvider.UpdateRecordAssociation(personAssociation);
 
             Populate();
         }

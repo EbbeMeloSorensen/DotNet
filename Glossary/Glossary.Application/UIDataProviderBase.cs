@@ -34,47 +34,47 @@ namespace Glossary.Application
         }
 
         public abstract Task<bool> CheckConnection();
-        public int CountAllPeople()
+        public int CountAllRecords()
         {
             throw new NotImplementedException();
         }
 
-        public abstract void CreateRecord(Record person);
+        public abstract void CreateRecord(Record record);
 
         public abstract void CreateRecordAssociation(
-            RecordAssociation personAssociation);
+            RecordAssociation recordAssociation);
 
-        public abstract int CountPeople(
+        public abstract int CountRecords(
             Expression<Func<Record, bool>> predicate);
 
         public abstract Record GetRecord(
             Guid id);
 
-        public abstract Record GetPersonWithAssociations(
+        public abstract Record GetRecordWithAssociations(
             Guid id);
 
-        public abstract IList<Record> GetAllPeople();
+        public abstract IList<Record> GetAllRecords();
 
-        public abstract IList<RecordAssociation> GetAllPersonAssociations();
+        public abstract IList<RecordAssociation> GetAllRecordAssociations();
 
-        public abstract IList<Record> FindPeople(
+        public abstract IList<Record> FindRecords(
             Expression<Func<Record, bool>> predicate);
 
-        public abstract IList<Record> FindPeople(
+        public abstract IList<Record> FindRecords(
             IList<Expression<Func<Record, bool>>> predicates);
 
-        public abstract void UpdatePerson(Record person);
+        public abstract void UpdateRecord(Record record);
 
-        public abstract void UpdatePeople(IList<Record> people);
+        public abstract void UpdateRecords(IList<Record> people);
 
-        public abstract void UpdatePersonAssociation(RecordAssociation personAssociation);
+        public abstract void UpdateRecordAssociation(RecordAssociation recordAssociation);
 
-        public abstract void DeletePerson(Record person);
+        public abstract void DeleteRecord(Record record);
 
-        public abstract void DeletePeople(IList<Record> people);
+        public abstract void DeleteRecords(IList<Record> record);
 
-        public abstract void DeletePersonAssociations(
-            IList<RecordAssociation> personAssociations);
+        public abstract void DeleteRecordAssociations(
+            IList<RecordAssociation> recordAssociations);
 
         public void ExportData(
             string fileName,
@@ -87,30 +87,30 @@ namespace Glossary.Application
                 throw new ArgumentException();
             }
 
-            IList<Record> people;
-            IList<RecordAssociation> personAssociations;
+            IList<Record> records;
+            IList<RecordAssociation> recordAssociations;
 
             if (predicates == null || predicates.Count == 0)
             {
-                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all person records from repository..");
-                people = GetAllPeople();
-                personAssociations = GetAllPersonAssociations();
+                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all records from repository..");
+                records = GetAllRecords();
+                recordAssociations = GetAllRecordAssociations();
             }
             else
             {
-                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving matching person records from repository..");
-                people = FindPeople(predicates);
+                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving matching records from repository..");
+                records = FindRecords(predicates);
 
-                // Todo: Handle person associtations
+                // Todo: Handle record associtations
                 throw new NotImplementedException();
             }
 
-            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {people.Count} person records");
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {records.Count} records");
 
             var prData = new GlossaryData
             {
-                Records = people.ToList(),
-                RecordAssociations = personAssociations.ToList()
+                Records = records.ToList(),
+                RecordAssociations = recordAssociations.ToList()
             };
 
             switch (extension)
@@ -119,14 +119,14 @@ namespace Glossary.Application
                     {
                         _dataIOHandler.ExportDataToXML(prData, fileName);
                         _logger?.WriteLine(LogMessageCategory.Information,
-                            $"  Exported {people.Count} person records to xml file");
+                            $"  Exported {records.Count} records to xml file");
                         break;
                     }
                 case ".json":
                     {
                         _dataIOHandler.ExportDataToJson(prData, fileName);
                         _logger?.WriteLine(LogMessageCategory.Information,
-                            $"  Exported {people.Count} person records to json file");
+                            $"  Exported {records.Count} records to json file");
                         break;
                     }
                 default:
@@ -147,14 +147,14 @@ namespace Glossary.Application
                 throw new ArgumentException();
             }
 
-            var prData = new GlossaryData();
+            var glossaryData = new GlossaryData();
 
             switch (extension)
             {
                 case ".xml":
                 {
                     _dataIOHandler.ImportDataFromXML(
-                        fileName, out prData);
+                        fileName, out glossaryData);
                     break;
                 }
                 case ".json":
@@ -163,23 +163,23 @@ namespace Glossary.Application
                     {
                         _dataIOHandler.ImportForeignDataFromJson(fileName, out var contactData);
 
-                        prData.Records = new List<Record>();
-                        var personIdMap = new Dictionary<int, Guid>();
+                        glossaryData.Records = new List<Record>();
+                        var recordIdMap = new Dictionary<int, Guid>();
 
                         contactData.People.ForEach(p =>
                         {
-                            var person = p.ConvertFromLegacyPerson();
-                            personIdMap[p.Id] = person.Id;
-                            prData.Records.Add(person);
+                            var record = p.ConvertFromLegacyPerson();
+                            recordIdMap[p.Id] = record.Id;
+                            glossaryData.Records.Add(record);
                         });
 
-                        prData.RecordAssociations = new List<RecordAssociation>(contactData.PersonAssociations.Select(
-                            pa => pa.ConvertFromLegacyPersonAssociation(personIdMap)));
+                        glossaryData.RecordAssociations = new List<RecordAssociation>(contactData.PersonAssociations.Select(
+                            pa => pa.ConvertFromLegacyPersonAssociation(recordIdMap)));
                     }
                     else
                     {
                         _dataIOHandler.ImportDataFromJson(
-                            fileName, out prData);
+                            fileName, out glossaryData);
                     }
                     break;
                 }
@@ -189,23 +189,23 @@ namespace Glossary.Application
                 }
             }
 
-            LoadPeople(prData.Records);
-            LoadPersonAssociations(prData.RecordAssociations);
+            LoadRecords(glossaryData.Records);
+            LoadRecordAssociations(glossaryData.RecordAssociations);
         }
 
-        public event EventHandler<PersonEventArgs> PersonCreated;
-        public event EventHandler<PeopleEventArgs> PeopleUpdated;
-        public event EventHandler<PeopleEventArgs> PeopleDeleted;
+        public event EventHandler<RecordEventArgs> RecordCreated;
+        public event EventHandler<RecordsEventArgs> RecordsUpdated;
+        public event EventHandler<RecordsEventArgs> RecordsDeleted;
 
-        protected virtual void OnPersonCreated(
-            Record person)
+        protected virtual void OnRecordCreated(
+            Record record)
         {
-            var handler = PersonCreated;
+            var handler = RecordCreated;
 
             // Event will be null if there are no subscribers
             if (handler != null)
             {
-                handler(this, new PersonEventArgs(person));
+                handler(this, new RecordEventArgs(record));
             }
         }
 
@@ -215,12 +215,12 @@ namespace Glossary.Application
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
             // immediately after the null check and before the event is raised.
-            var handler = PeopleUpdated;
+            var handler = RecordsUpdated;
 
             // Event will be null if there are no subscribers
             if (handler != null)
             {
-                handler(this, new PeopleEventArgs(people));
+                handler(this, new RecordsEventArgs(people));
             }
         }
 
@@ -230,19 +230,19 @@ namespace Glossary.Application
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
             // immediately after the null check and before the event is raised.
-            var handler = PeopleDeleted;
+            var handler = RecordsDeleted;
 
             // Event will be null if there are no subscribers
             if (handler != null)
             {
-                handler(this, new PeopleEventArgs(people));
+                handler(this, new RecordsEventArgs(people));
             }
         }
 
-        protected abstract void LoadPeople(
-            IList<Record> people);
+        protected abstract void LoadRecords(
+            IList<Record> records);
 
-        protected abstract void LoadPersonAssociations(
-            IList<RecordAssociation> personAssociations);
+        protected abstract void LoadRecordAssociations(
+            IList<RecordAssociation> recordAssociations);
     }
 }

@@ -19,8 +19,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new PersonConfiguration());
-            modelBuilder.ApplyConfiguration(new PersonAssociationConfiguration());
+            modelBuilder.ApplyConfiguration(new RecordConfiguration());
+            modelBuilder.ApplyConfiguration(new RecordAssociationConfiguration());
 
             modelBuilder.Entity<RecordAssociation>()
                 .HasOne(p => p.SubjectRecord)

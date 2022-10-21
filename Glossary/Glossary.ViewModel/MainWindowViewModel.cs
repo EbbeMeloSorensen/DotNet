@@ -131,7 +131,7 @@ namespace Glossary.ViewModel
 
         public void DeleteSelectedPeople()
         {
-            _dataProvider.DeletePeople(PersonListViewModel.SelectedPeople.Objects.ToList());
+            _dataProvider.DeleteRecords(PersonListViewModel.SelectedPeople.Objects.ToList());
         }
 
         private bool CanDeleteSelectedPeople()

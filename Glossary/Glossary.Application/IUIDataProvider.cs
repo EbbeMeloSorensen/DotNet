@@ -16,7 +16,7 @@ namespace Glossary.Application
 
         Task<bool> CheckConnection();
 
-        int CountAllPeople();
+        int CountAllRecords();
 
         void CreateRecord(
             Record record);
@@ -24,38 +24,38 @@ namespace Glossary.Application
         void CreateRecordAssociation(
             RecordAssociation recordAssociation);
 
-        int CountPeople(
+        int CountRecords(
             Expression<Func<Record, bool>> predicate);
 
         Record GetRecord(Guid id);
 
-        Record GetPersonWithAssociations(Guid id);
+        Record GetRecordWithAssociations(Guid id);
 
-        IList<Record> GetAllPeople();
+        IList<Record> GetAllRecords();
 
-        IList<Record> FindPeople(
+        IList<Record> FindRecords(
             Expression<Func<Record, bool>> predicate);
 
-        IList<Record> FindPeople(
+        IList<Record> FindRecords(
             IList<Expression<Func<Record, bool>>> predicates);
 
-        void UpdatePerson(
-            Record person);
+        void UpdateRecord(
+            Record record);
 
-        void UpdatePeople(
-            IList<Record> people);
+        void UpdateRecords(
+            IList<Record> records);
 
-        void UpdatePersonAssociation(
-            RecordAssociation personAssociation);
+        void UpdateRecordAssociation(
+            RecordAssociation recordAssociation);
 
-        void DeletePerson(
-            Record person);
+        void DeleteRecord(
+            Record record);
 
-        void DeletePeople(
-            IList<Record> people);
+        void DeleteRecords(
+            IList<Record> records);
 
-        void DeletePersonAssociations(
-            IList<RecordAssociation> personAssociations);
+        void DeleteRecordAssociations(
+            IList<RecordAssociation> recordAssociations);
 
         void ExportData(
             string fileName,
@@ -65,8 +65,8 @@ namespace Glossary.Application
             string fileName,
             bool legacy);
 
-        event EventHandler<PersonEventArgs> PersonCreated;
-        event EventHandler<PeopleEventArgs> PeopleUpdated;
-        event EventHandler<PeopleEventArgs> PeopleDeleted;
+        event EventHandler<RecordEventArgs> RecordCreated;
+        event EventHandler<RecordsEventArgs> RecordsUpdated;
+        event EventHandler<RecordsEventArgs> RecordsDeleted;
     }
 }

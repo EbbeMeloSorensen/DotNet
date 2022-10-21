@@ -24,21 +24,21 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
         }
 
         public override void UpdateRange(
-            IEnumerable<Record> people)
+            IEnumerable<Record> records)
         {
-            var listOfUpdatedPeople = people.ToList();
-            var ids = listOfUpdatedPeople.Select(p => p.Id);
-            var peopleFromRepository = Find(p => ids.Contains(p.Id)).ToList();
+            var listOfUpdatedRecords = records.ToList();
+            var ids = listOfUpdatedRecords.Select(p => p.Id);
+            var recordsFromRepository = Find(p => ids.Contains(p.Id)).ToList();
 
-            peopleFromRepository.ForEach(pRepo =>
+            recordsFromRepository.ForEach(pRepo =>
             {
-                var updatedPerson = listOfUpdatedPeople.Single(pUpd => pUpd.Id == pRepo.Id);
+                var updatedRecord = listOfUpdatedRecords.Single(pUpd => pUpd.Id == pRepo.Id);
 
-                pRepo.Term = updatedPerson.Term;
-                pRepo.Source = updatedPerson.Source;
-                pRepo.Category = updatedPerson.Category;
-                pRepo.Description = updatedPerson.Description;
-                pRepo.Created = updatedPerson.Created;
+                pRepo.Term = updatedRecord.Term;
+                pRepo.Source = updatedRecord.Source;
+                pRepo.Category = updatedRecord.Category;
+                pRepo.Description = updatedRecord.Description;
+                pRepo.Created = updatedRecord.Created;
             });
         }
 
@@ -51,7 +51,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
         public Record GetRecordIncludingAssociations(
             Guid id)
         {
-            return PrDbContext.People
+            return PrDbContext.Records
                 .Include(p => p.ObjectRecords).ThenInclude(pa => pa.ObjectRecord)
                 .Include(p => p.SubjectRecords).ThenInclude(pa => pa.SubjectRecord)
                 .SingleOrDefault(p => p.Id == id) ?? throw new InvalidOperationException();
@@ -60,7 +60,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
         public IList<Record> GetRecordsIncludingAssociations(
             Expression<Func<Record, bool>> predicate)
         {
-            return PrDbContext.People
+            return PrDbContext.Records
                 .Include(p => p.ObjectRecords).ThenInclude(pa => pa.ObjectRecord)
                 .Include(p => p.SubjectRecords).ThenInclude(pa => pa.SubjectRecord)
                 .Where(predicate)

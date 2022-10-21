@@ -154,7 +154,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             return;
         }
 
-        var updatedPeople = _people.Objects.Select(p => new Record
+        var updatedRecords = _people.Objects.Select(p => new Record
         {
             Id = p.Id,
             Term = SharedTerm != _originalSharedTerm ? SharedTerm : p.Term,
@@ -164,7 +164,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             Created = p.Created
         }).ToList();
 
-        _dataProvider.UpdatePeople(updatedPeople);
+        _dataProvider.UpdateRecords(updatedRecords);
     }
 
     private bool CanApplyChanges()

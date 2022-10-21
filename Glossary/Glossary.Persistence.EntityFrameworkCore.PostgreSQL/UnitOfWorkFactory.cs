@@ -11,7 +11,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
             using var context = new GlossaryDbContext();
             context.Database.EnsureCreated();
 
-            if (context.People.Any()) return;
+            if (context.Records.Any()) return;
 
             //SeedDatabase(context);
         }
@@ -41,23 +41,23 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
 
         private static void SeedDatabase(DbContext context)
         {
-            var person1 = new Record
+            var record1 = new Record
             {
-                Term = "Uffe",
+                Term = "Javascript",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
-            var person2 = new Record
+            var record2 = new Record
             {
-                Term = "Ebbe",
+                Term = "Kafka",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
-            var personAssociation = new RecordAssociation
+            var recordAssociation = new RecordAssociation
             {
-                SubjectRecord = person1,
-                ObjectRecord = person2,
-                Description = "is the brother of",
+                SubjectRecord = record1,
+                ObjectRecord = record2,
+                Description = "is related to",
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
@@ -89,9 +89,9 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
             };
 
             //context.AddRange(people);
-            context.Add(person1);
-            context.Add(person2);
-            context.Add(personAssociation);
+            context.Add(record1);
+            context.Add(record2);
+            context.Add(recordAssociation);
             context.SaveChanges();
         }
     }

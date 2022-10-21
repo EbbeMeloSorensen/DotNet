@@ -130,7 +130,7 @@ namespace Glossary.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
                 progressCallback?.Invoke(0.0, "Retrieving people");
 
-                people = UIDataProvider.GetAllPeople();
+                people = UIDataProvider.GetAllRecords();
 
                 progressCallback?.Invoke(100, "");
             });

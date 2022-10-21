@@ -6,8 +6,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
 {
     public class GlossaryDbContext : DbContext
     {
-        public DbSet<Record> People { get; set; }
-        public DbSet<RecordAssociation> PersonAssociations { get; set; }
+        public DbSet<Record> Records { get; set; }
+        public DbSet<RecordAssociation> RecordAssociations { get; set; }
 
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
@@ -19,8 +19,8 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new PersonConfiguration());
-            modelBuilder.ApplyConfiguration(new PersonAssociationConfiguration());
+            modelBuilder.ApplyConfiguration(new RecordConfiguration());
+            modelBuilder.ApplyConfiguration(new RecordAssociationConfiguration());
 
             modelBuilder.Entity<RecordAssociation>()
                 .HasOne(p => p.SubjectRecord)

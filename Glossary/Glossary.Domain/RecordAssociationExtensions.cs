@@ -77,15 +77,15 @@ namespace Glossary.Domain
 
         public static RecordAssociation ConvertFromLegacyPersonAssociation(
             this Foreign.PersonAssociation personAssociation,
-            Dictionary<int, Guid> personIdMap)
+            Dictionary<int, Guid> recordIdMap)
         {
             var result = new RecordAssociation
             {
                 Id = Guid.NewGuid(),
                 Description = personAssociation.Description,
                 Created = personAssociation.Created.ToUniversalTime(),
-                SubjectRecordId = personIdMap[personAssociation.SubjectPersonId],
-                ObjectRecordId = personIdMap[personAssociation.ObjectPersonId]
+                SubjectRecordId = recordIdMap[personAssociation.SubjectPersonId],
+                ObjectRecordId = recordIdMap[personAssociation.ObjectPersonId]
             };
 
             return result;

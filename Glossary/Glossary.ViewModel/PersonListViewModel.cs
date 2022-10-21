@@ -77,7 +77,7 @@ namespace Glossary.ViewModel
 
             SelectedPeople = new ObjectCollection<Record>();
 
-            dataProvider.PersonCreated += (s, e) =>
+            dataProvider.RecordCreated += (s, e) =>
             {
                 if (!FindPeopleViewModel.PersonPassesFilter(e.Record))
                 {
@@ -88,7 +88,7 @@ namespace Glossary.ViewModel
                 UpdatePersonViewModels();
             };
 
-            dataProvider.PeopleUpdated += (s, e) =>
+            dataProvider.RecordsUpdated += (s, e) =>
             {
                 // Der vil nok i praksis som regel gælde, at de opdaterede personer, FØR opdateringen matchede
                 // filteret, dvs at der potentielt vil skulle FJERNES personer fra viewet, men ikke TILFØJES
@@ -100,7 +100,7 @@ namespace Glossary.ViewModel
                 UpdatePersonViewModels();
             };
 
-            dataProvider.PeopleDeleted += (s, e) =>
+            dataProvider.RecordsDeleted += (s, e) =>
             {
                 var countBefore = _people.Count;
                 _people = _people.Except(e.People).ToList();
@@ -119,12 +119,12 @@ namespace Glossary.ViewModel
             // and this method cannot be translated into a store expression"
             //_people = _dataProvider.FindPeople(p => FindPeopleViewModel.PersonPassesFilter(p));
 
-            _people = _dataProvider.FindPeople(FindPeopleViewModel.FilterAsExpression());
+            _people = _dataProvider.FindRecords(FindPeopleViewModel.FilterAsExpression());
         }
 
         private int CountPeopleMatchingFilterFromRepository()
         {
-            return _dataProvider.CountPeople(FindPeopleViewModel.FilterAsExpression());
+            return _dataProvider.CountRecords(FindPeopleViewModel.FilterAsExpression());
         }
 
         private void UpdateSorting()

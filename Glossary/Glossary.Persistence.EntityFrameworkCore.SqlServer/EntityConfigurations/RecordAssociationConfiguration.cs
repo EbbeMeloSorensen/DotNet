@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Glossary.Domain.Entities;
 
-namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.EntityConfigurations;
+namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.EntityConfigurations;
 
-public class PersonAssociationConfiguration : IEntityTypeConfiguration<RecordAssociation>
+public class RecordAssociationConfiguration : IEntityTypeConfiguration<RecordAssociation>
 {
     public void Configure(EntityTypeBuilder<RecordAssociation> builder)
     {

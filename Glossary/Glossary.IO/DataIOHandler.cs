@@ -46,10 +46,10 @@ namespace Glossary.IO
             string fileName)
         {
             var jsonResolver = new ContractResolver();
-            jsonResolver.IgnoreProperty(typeof(Person), "ObjectPeople");
-            jsonResolver.IgnoreProperty(typeof(Person), "SubjectPeople");
-            jsonResolver.IgnoreProperty(typeof(PersonAssociation), "SubjectPerson");
-            jsonResolver.IgnoreProperty(typeof(PersonAssociation), "ObjectPerson");
+            jsonResolver.IgnoreProperty(typeof(Record), "ObjectRecords");
+            jsonResolver.IgnoreProperty(typeof(Record), "SubjectRecords");
+            jsonResolver.IgnoreProperty(typeof(RecordAssociation), "SubjectRecord");
+            jsonResolver.IgnoreProperty(typeof(RecordAssociation), "ObjectRecord");
 
             var settings = new JsonSerializerSettings
             {

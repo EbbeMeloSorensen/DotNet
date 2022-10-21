@@ -3,11 +3,11 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.Application
 {
-    public class PersonEventArgs : EventArgs
+    public class RecordEventArgs : EventArgs
     {
         public readonly Record Record;
 
-        public PersonEventArgs(
+        public RecordEventArgs(
             Record record)
         {
             Record = record;
