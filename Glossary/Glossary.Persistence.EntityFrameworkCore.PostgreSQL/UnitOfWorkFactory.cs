@@ -81,7 +81,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
                 new Person
                 {
                     Term = "Ana Tayze",
-                    Address = "Danshøjvej 33",
+                    Source = "Danshøjvej 33",
                     Category = "Familie",
                     Description = "Min kone",
                     Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()

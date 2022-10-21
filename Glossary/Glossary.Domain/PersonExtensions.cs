@@ -19,7 +19,7 @@ namespace Glossary.Domain
         {
             person.Id = other.Id;
             person.Term= other.Term;
-            person.Address = other.Address;
+            person.Source = other.Source;
             person.Category = other.Category;
             person.Description = other.Description;
             person.Created = other.Created;
@@ -40,7 +40,7 @@ namespace Glossary.Domain
             {
                 Id = Guid.NewGuid(),
                 Term = person.FirstName,
-                Address = string.IsNullOrEmpty(person.Address) ? null : person.Address,
+                Source = string.IsNullOrEmpty(person.Address) ? null : person.Address,
                 Category = string.IsNullOrEmpty(person.Category) ? null : person.Category,
                 Description = string.IsNullOrEmpty(person.Comments) ? null : person.Comments,
                 Created = person.Created.ToUniversalTime()

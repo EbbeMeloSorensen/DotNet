@@ -17,12 +17,7 @@ namespace Glossary.ViewModel
         private string _error = string.Empty;
 
         private string _term;
-        private string _surname;
-        private string _nickname;
-        private string _address;
-        private string _zipCode;
-        private string _city;
-        private DateTime? _birthday;
+        private string _source;
         private string _category;
         private string _comments;
 
@@ -39,62 +34,12 @@ namespace Glossary.ViewModel
             }
         }
 
-        public string Surname
+        public string Source
         {
-            get { return _surname; }
+            get { return _source; }
             set
             {
-                _surname = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Nickname
-        {
-            get { return _nickname; }
-            set
-            {
-                _nickname = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Address
-        {
-            get { return _address; }
-            set
-            {
-                _address = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string ZipCode
-        {
-            get { return _zipCode; }
-            set
-            {
-                _zipCode = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string City
-        {
-            get { return _city; }
-            set
-            {
-                _city = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public DateTime? Birthday
-        {
-            get { return _birthday; }
-            set
-            {
-                _birthday = value;
+                _source = value;
                 RaisePropertyChanged();
             }
         }
@@ -142,11 +87,7 @@ namespace Glossary.ViewModel
             }
 
             Term = Term.NullifyIfEmpty();
-            Surname = Surname.NullifyIfEmpty();
-            Nickname = Nickname.NullifyIfEmpty();
-            Address = Address.NullifyIfEmpty();
-            ZipCode = ZipCode.NullifyIfEmpty();
-            City = City.NullifyIfEmpty();
+            Source = Source.NullifyIfEmpty();
             Category = Category.NullifyIfEmpty();
             Comments = Comments.NullifyIfEmpty();
 
@@ -191,47 +132,11 @@ namespace Glossary.ViewModel
 
                                 break;
                             }
-                        case "Surname":
+                        case "Source":
                             {
-                                if (Surname != null && Surname.Length > 255)
+                                if (Source != null && Source.Length > 511)
                                 {
-                                    errorMessage = "Surname cannot exceed 255 characters";
-                                }
-
-                                break;
-                            }
-                        case "Nickname":
-                            {
-                                if (Nickname != null && Nickname.Length > 127)
-                                {
-                                    errorMessage = "Nickname cannot exceed 127 characters";
-                                }
-
-                                break;
-                            }
-                        case "Address":
-                            {
-                                if (Address != null && Address.Length > 511)
-                                {
-                                    errorMessage = "Address cannot exceed 511 characters";
-                                }
-
-                                break;
-                            }
-                        case "ZipCode":
-                            {
-                                if (ZipCode != null && ZipCode.Length > 127)
-                                {
-                                    errorMessage = "Zip code cannot exceed 127 characters";
-                                }
-
-                                break;
-                            }
-                        case "City":
-                            {
-                                if (City != null && City.Length > 255)
-                                {
-                                    errorMessage = "City cannot exceed 255 characters";
+                                    errorMessage = "Source cannot exceed 511 characters";
                                 }
 
                                 break;
@@ -273,7 +178,7 @@ namespace Glossary.ViewModel
                     _validationMessages = new ObservableCollection<ValidationError>
                     {
                         new ValidationError {PropertyName = "Term"},
-                        new ValidationError {PropertyName = "Address"},
+                        new ValidationError {PropertyName = "Source"},
                         new ValidationError {PropertyName = "Category"},
                         new ValidationError {PropertyName = "Comments"}
                     };
@@ -296,7 +201,7 @@ namespace Glossary.ViewModel
         private void RaisePropertyChanges()
         {
             RaisePropertyChanged("Term");
-            RaisePropertyChanged("Address");
+            RaisePropertyChanged("Source");
             RaisePropertyChanged("Category");
             RaisePropertyChanged("Comments");
         }

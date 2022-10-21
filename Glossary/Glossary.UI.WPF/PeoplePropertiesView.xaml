@@ -60,9 +60,9 @@
             <TextBlock Margin="3" Grid.Row="2" Grid.Column="0" Text="Term:"/>
             <TextBox Margin="3" Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding SharedTerm, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="3" Grid.Row="5" Grid.Column="0" Text="Address:"/>
+            <TextBlock Margin="3" Grid.Row="5" Grid.Column="0" Text="Source:"/>
             <TextBox Margin="3" Grid.Row="5" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
-                     Text="{Binding SharedAddress, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding SharedSource, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" Grid.Row="9" Grid.Column="0" Text="Category:"/>
             <TextBox Margin="3" Grid.Row="9" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding SharedCategory, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>

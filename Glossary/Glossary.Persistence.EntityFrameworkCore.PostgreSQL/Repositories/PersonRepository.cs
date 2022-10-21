@@ -35,7 +35,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
                 var updatedPerson = listOfUpdatedPeople.Single(pUpd => pUpd.Id == pRepo.Id);
 
                 pRepo.Term = updatedPerson.Term;
-                pRepo.Address = updatedPerson.Address;
+                pRepo.Source = updatedPerson.Source;
                 pRepo.Category = updatedPerson.Category;
                 pRepo.Description = updatedPerson.Description;
                 pRepo.Created = updatedPerson.Created;

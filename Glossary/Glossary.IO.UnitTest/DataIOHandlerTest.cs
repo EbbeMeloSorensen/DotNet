@@ -62,7 +62,7 @@ namespace Glossary.IO.UnitTest
             {
                 Id = Guid.NewGuid(),
                 Term = "Ebbe",
-                Address = "Danshøjvej 33",
+                Source = "Danshøjvej 33",
                 Category = "Familie",
                 Description = "Mig selv",
                 Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()

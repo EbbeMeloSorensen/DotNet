@@ -114,18 +114,10 @@ namespace Glossary.ViewModel
                 return;
             }
 
-            var birthday = dialogViewModel.Birthday.HasValue
-                ? new DateTime(
-                    dialogViewModel.Birthday.Value.Year,
-                    dialogViewModel.Birthday.Value.Month,
-                    dialogViewModel.Birthday.Value.Day,
-                    0, 0, 0, DateTimeKind.Utc)
-                : new DateTime?();
-
             _dataProvider.CreatePerson(new Person
             {
                 Term = dialogViewModel.Term,
-                Address = dialogViewModel.Address,
+                Source = dialogViewModel.Source,
                 Category = dialogViewModel.Category,
                 Description = dialogViewModel.Comments,
                 Created = DateTime.UtcNow

@@ -21,12 +21,12 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private ObjectCollection<Person> _people;
 
     private string _originalSharedTerm;
-    private string _originalSharedAddress;
+    private string _originalSharedSource;
     private string _originalSharedCategory;
     private string _originalSharedComments;
 
     private string _sharedTerm;
-    private string _sharedAddress;
+    private string _sharedSource;
     private string _sharedCategory;
     private string _sharedComments;
 
@@ -45,12 +45,12 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    public string SharedAddress
+    public string SharedSource
     {
-        get { return _sharedAddress; }
+        get { return _sharedSource; }
         set
         {
-            _sharedAddress = value;
+            _sharedSource = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
@@ -122,8 +122,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? firstPerson.Term
             : null;
 
-        SharedAddress = temp.Objects.All(p => p.Address == firstPerson.Address)
-            ? firstPerson.Address
+        SharedSource = temp.Objects.All(p => p.Source == firstPerson.Source)
+            ? firstPerson.Source
             : null;
 
         SharedCategory = temp.Objects.All(p => p.Category == firstPerson.Category)
@@ -135,7 +135,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             : null;
 
         _originalSharedTerm = SharedTerm;
-        _originalSharedAddress = SharedAddress;
+        _originalSharedSource = SharedSource;
         _originalSharedCategory = SharedCategory;
         _originalSharedComments = SharedComments;
 
@@ -158,7 +158,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         {
             Id = p.Id,
             Term = SharedTerm != _originalSharedTerm ? SharedTerm : p.Term,
-            Address = SharedAddress != _originalSharedAddress ? SharedAddress : p.Address,
+            Source = SharedSource != _originalSharedSource ? SharedSource : p.Source,
             Category = SharedCategory != _originalSharedCategory ? SharedCategory : p.Category,
             Description = SharedComments != _originalSharedComments ? SharedComments : p.Description,
             Created = p.Created
@@ -171,7 +171,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     {
         return
             SharedTerm != _originalSharedTerm ||
-            SharedAddress != _originalSharedAddress ||
+            SharedSource != _originalSharedSource ||
             SharedCategory != _originalSharedCategory ||
             SharedComments != _originalSharedComments;
     }
@@ -185,7 +185,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
                 _validationMessages = new ObservableCollection<ValidationError>
                 {
                     new ValidationError {PropertyName = "SharedTerm"},
-                    new ValidationError {PropertyName = "SharedAddress"},
+                    new ValidationError {PropertyName = "SharedSource"},
                     new ValidationError {PropertyName = "SharedCategory"},
                     new ValidationError {PropertyName = "SharedComments"}
                 };
@@ -221,11 +221,11 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
                         break;
                     }
-                    case "SharedAddress":
+                    case "SharedSource":
                     {
-                        if (SharedAddress != null && SharedAddress.Length > 511)
+                        if (SharedSource != null && SharedSource.Length > 511)
                         {
-                            errorMessage = "Address cannot exceed 511 characters";
+                            errorMessage = "Source cannot exceed 511 characters";
                         }
 
                         break;
@@ -271,7 +271,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private void RaisePropertyChanges()
     {
         RaisePropertyChanged("SharedTerm");
-        RaisePropertyChanged("SharedAddress");
+        RaisePropertyChanged("SharedSource");
         RaisePropertyChanged("SharedCategory");
         RaisePropertyChanged("SharedComments");
     }

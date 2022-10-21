@@ -15,7 +15,7 @@ namespace Glossary.Domain.Entities
 
         public string Term { get; set; }
 
-        public string? Address { get; set; }
+        public string? Source{ get; set; }
 
         public string? Category { get; set; }
 
