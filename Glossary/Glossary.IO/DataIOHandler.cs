@@ -20,8 +20,8 @@ namespace Glossary.IO
 
                 var xOver = new XmlAttributeOverrides();
                 var attrs = new XmlAttributes { XmlIgnore = true };
-                xOver.Add(typeof(Person), "ObjectPeople", attrs);
-                xOver.Add(typeof(Person), "SubjectPeople", attrs);
+                xOver.Add(typeof(Record), "ObjectPeople", attrs);
+                xOver.Add(typeof(Record), "SubjectPeople", attrs);
                 xOver.Add(typeof(PersonAssociation), "SubjectPerson", attrs);
                 xOver.Add(typeof(PersonAssociation), "ObjectPerson", attrs);
                 _xmlSerializer = new XmlSerializer(typeof(GlossaryData), xOver);

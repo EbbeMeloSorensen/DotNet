@@ -15,17 +15,17 @@ namespace Glossary.IO.UnitTest
         public void ExportDataToXML_Works()
         {
             new DataIOHandler()
-                .ExportDataToXML(GenerateDataSet(), @"C:/Temp/People.xml");
+                .ExportDataToXML(GenerateDataSet(), @"C:/Temp/Records.xml");
         }
 
         [Fact]
         public void ImportDataFromXML_Works()
         {
-            new DataIOHandler().ImportDataFromXML(@"C:/Temp/People.xml", out GlossaryData prData);
+            new DataIOHandler().ImportDataFromXML(@"C:/Temp/Records.xml", out GlossaryData prData);
 
-            prData.People.Count.Should().Be(3);
-            prData.People.Count(p => p.Term == "Ebbe").Should().Be(1);
-            prData.People.Count(p => p.Term == "Uffe").Should().Be(1);
+            prData.Records.Count.Should().Be(3);
+            prData.Records.Count(p => p.Term == "Ebbe").Should().Be(1);
+            prData.Records.Count(p => p.Term == "Uffe").Should().Be(1);
         }
 
         [Fact]
@@ -38,11 +38,11 @@ namespace Glossary.IO.UnitTest
         public void ImportDataFromJson_Works()
         {
             var dataIOHandler = new DataIOHandler();
-            dataIOHandler.ImportDataFromJson(@"C:/Temp/People.json", out var prData);
+            dataIOHandler.ImportDataFromJson(@"C:/Temp/Records.json", out var prData);
 
-            prData.People.Count.Should().Be(3);
-            prData.People.Count(p => p.Term == "Ebbe").Should().Be(1);
-            prData.People.Count(p => p.Term == "Uffe").Should().Be(1);
+            prData.Records.Count.Should().Be(3);
+            prData.Records.Count(p => p.Term == "Ebbe").Should().Be(1);
+            prData.Records.Count(p => p.Term == "Uffe").Should().Be(1);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Glossary.IO.UnitTest
         {
             var dataIOHandler = new DataIOHandler();
             ContactData contactData;
-            dataIOHandler.ImportForeignDataFromJson(@"C:/Temp/Contacts.json", out contactData);
+            dataIOHandler.ImportForeignDataFromJson(@"C:/Temp/Glossary.json", out contactData);
         }
 
         // Helper
@@ -84,7 +84,7 @@ namespace Glossary.IO.UnitTest
 
             return new GlossaryData
             {
-                People = new List<Record>
+                Records = new List<Record>
                 {
                     ebbe,
                     ana,

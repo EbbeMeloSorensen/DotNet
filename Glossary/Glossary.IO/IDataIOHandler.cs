@@ -6,20 +6,20 @@ namespace Glossary.IO
     public interface IDataIOHandler
     {
         void ExportDataToXML(
-            GlossaryData prData,
+            GlossaryData glossaryData,
             string fileName);
 
         void ExportDataToJson(
-            GlossaryData prData,
+            GlossaryData glossaryData,
             string fileName);
 
         void ImportDataFromXML(
             string fileName,
-            out GlossaryData prData);
+            out GlossaryData glossaryData);
 
         void ImportDataFromJson(
             string fileName,
-            out GlossaryData prData);
+            out GlossaryData glossaryData);
 
         void ImportForeignDataFromJson(
             string fileName,

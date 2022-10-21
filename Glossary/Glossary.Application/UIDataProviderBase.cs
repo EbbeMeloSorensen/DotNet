@@ -109,7 +109,7 @@ namespace Glossary.Application
 
             var prData = new GlossaryData
             {
-                People = people.ToList(),
+                Records = people.ToList(),
                 RecordAssociations = personAssociations.ToList()
             };
 
@@ -163,14 +163,14 @@ namespace Glossary.Application
                     {
                         _dataIOHandler.ImportForeignDataFromJson(fileName, out var contactData);
 
-                        prData.People = new List<Record>();
+                        prData.Records = new List<Record>();
                         var personIdMap = new Dictionary<int, Guid>();
 
                         contactData.People.ForEach(p =>
                         {
                             var person = p.ConvertFromLegacyPerson();
                             personIdMap[p.Id] = person.Id;
-                            prData.People.Add(person);
+                            prData.Records.Add(person);
                         });
 
                         prData.RecordAssociations = new List<RecordAssociation>(contactData.PersonAssociations.Select(
@@ -189,7 +189,7 @@ namespace Glossary.Application
                 }
             }
 
-            LoadPeople(prData.People);
+            LoadPeople(prData.Records);
             LoadPersonAssociations(prData.RecordAssociations);
         }
 

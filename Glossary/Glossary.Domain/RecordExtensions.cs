@@ -6,36 +6,28 @@ namespace Glossary.Domain
     public static class RecordExtensions
     {
         public static Record Clone(
-            this Record person)
+            this Record record)
         {
             var clone = new Record();
-            clone.CopyAttributes(person);
+            clone.CopyAttributes(record);
             return clone;
         }
 
         public static void CopyAttributes(
-            this Record person,
+            this Record record,
             Record other)
         {
-            person.Id = other.Id;
-            person.Term= other.Term;
-            person.Source = other.Source;
-            person.Category = other.Category;
-            person.Description = other.Description;
-            person.Created = other.Created;
+            record.Id = other.Id;
+            record.Term= other.Term;
+            record.Source = other.Source;
+            record.Category = other.Category;
+            record.Description = other.Description;
+            record.Created = other.Created;
         }
 
         public static Record ConvertFromLegacyPerson(
             this Foreign.Person person)
         {
-            var birthday = person.Birthday.HasValue
-                ? new DateTime(
-                    person.Birthday.Value.Year,
-                    person.Birthday.Value.Month,
-                    person.Birthday.Value.Day,
-                    0, 0, 0, DateTimeKind.Utc)
-                : new DateTime?();
-
             var result = new Record
             {
                 Id = Guid.NewGuid(),

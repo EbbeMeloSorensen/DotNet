@@ -19,7 +19,7 @@ namespace Glossary.Domain
             };
         }
 
-        public static void LinkToSubjectPerson(
+        public static void LinkToSubjectRecord(
             this RecordAssociation recordAssociation,
             Record subjectRecord)
         {
@@ -33,7 +33,7 @@ namespace Glossary.Domain
             subjectRecord.ObjectRecords.Add(recordAssociation);
         }
 
-        public static void LinkToObjectPerson(
+        public static void LinkToObjectRecord(
             this RecordAssociation recordAssociation,
             Record objectRecord)
         {
@@ -48,31 +48,31 @@ namespace Glossary.Domain
         }
 
         public static void LinkToRecords(
-            this RecordAssociation personAssociation,
-            Record subjectPerson,
-            Record objectPerson)
+            this RecordAssociation recordAssociation,
+            Record subjectRecord,
+            Record objectRecord)
         {
-            personAssociation.LinkToSubjectPerson(subjectPerson);
-            personAssociation.LinkToObjectPerson(objectPerson);
+            recordAssociation.LinkToSubjectRecord(subjectRecord);
+            recordAssociation.LinkToObjectRecord(objectRecord);
         }
 
-        public static void DecoupleFromSubjectPerson(
-            this RecordAssociation personAssociation)
+        public static void DecoupleFromSubjectRecord(
+            this RecordAssociation recordAssociation)
         {
-            personAssociation.SubjectRecord.ObjectRecords.Remove(personAssociation);
+            recordAssociation.SubjectRecord.ObjectRecords.Remove(recordAssociation);
         }
 
-        public static void DecoupleFromObjectPerson(
-            this RecordAssociation personAssociation)
+        public static void DecoupleFromObjectRecord(
+            this RecordAssociation recordAssociation)
         {
-            personAssociation.ObjectRecord.SubjectRecords.Remove(personAssociation);
+            recordAssociation.ObjectRecord.SubjectRecords.Remove(recordAssociation);
         }
 
         public static void DecoupleFromPeople(
-            this RecordAssociation personAssociation)
+            this RecordAssociation recordAssociation)
         {
-            personAssociation.DecoupleFromSubjectPerson();
-            personAssociation.DecoupleFromObjectPerson();
+            recordAssociation.DecoupleFromSubjectRecord();
+            recordAssociation.DecoupleFromObjectRecord();
         }
 
         public static RecordAssociation ConvertFromLegacyPersonAssociation(

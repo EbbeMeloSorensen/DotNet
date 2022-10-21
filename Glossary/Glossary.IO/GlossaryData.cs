@@ -5,7 +5,7 @@ namespace Glossary.IO
 {
     public class GlossaryData
     {
-        public List<Record> People { get; set; }
+        public List<Record> Records { get; set; }
         public List<RecordAssociation> RecordAssociations { get; set; }
     }
 }
