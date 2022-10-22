@@ -68,7 +68,7 @@ namespace Glossary.Domain
             recordAssociation.ObjectRecord.SubjectRecords.Remove(recordAssociation);
         }
 
-        public static void DecoupleFromPeople(
+        public static void DecoupleFromRecords(
             this RecordAssociation recordAssociation)
         {
             recordAssociation.DecoupleFromSubjectRecord();

@@ -11,21 +11,21 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.ViewModel;
 
-public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IDataErrorInfo
+public class DefineRecordAssociationDialogViewModel : DialogViewModelBase, IDataErrorInfo
 {
     private StateOfView _state;
     private ObservableCollection<ValidationError> _validationMessages;
     private string _error = string.Empty;
 
-    private Record _originalSubjectPerson;
-    private Record _originalObjectPerson;
+    private Record _originalSubjectRecord;
+    private Record _originalObjectRecord;
     private string _originalDescription;
-    private Record _subjectPerson;
-    private Record _objectPerson;
+    private Record _subjectRecord;
+    private Record _objectRecord;
     private string _description;
 
-    public PersonListViewModel PersonListViewModelSubject { get; private set; }
-    public PersonListViewModel PersonListViewModelObject { get; private set; }
+    public RecordListViewModel RecordListViewModelSubject { get; private set; }
+    public RecordListViewModel RecordListViewModelObject { get; private set; }
 
     private RelayCommand<object> _okCommand;
     private RelayCommand<object> _cancelCommand;
@@ -41,23 +41,23 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
         }
     }
 
-    public Record SubjectPerson
+    public Record SubjectRecord
     {
-        get { return _subjectPerson; }
+        get { return _subjectRecord; }
         set
         {
-            _subjectPerson = value;
+            _subjectRecord = value;
             RaisePropertyChanged();
             OKCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public Record ObjectPerson
+    public Record ObjectRecord
     {
-        get { return _objectPerson; }
+        get { return _objectRecord; }
         set
         {
-            _objectPerson = value;
+            _objectRecord = value;
             RaisePropertyChanged();
             OKCommand.RaiseCanExecuteChanged();
         }
@@ -73,37 +73,37 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
         get { return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(Cancel, CanCancel)); }
     }
 
-    public DefinePersonAssociationDialogViewModel(
+    public DefineRecordAssociationDialogViewModel(
         IUIDataProvider dataProvider,
         IDialogService applicationDialogService,
-        Record subjectPerson,
-        Record objectPerson,
+        Record subjectRecord,
+        Record objectRecord,
         string description)
     {
-        _originalSubjectPerson = SubjectPerson = subjectPerson;
-        _originalObjectPerson = ObjectPerson = objectPerson;
+        _originalSubjectRecord = SubjectRecord = subjectRecord;
+        _originalObjectRecord = ObjectRecord = objectRecord;
         _originalDescription = Description = description;
 
-        PersonListViewModelSubject = new PersonListViewModel(dataProvider, applicationDialogService);
-        PersonListViewModelObject = new PersonListViewModel(dataProvider, applicationDialogService);
+        RecordListViewModelSubject = new RecordListViewModel(dataProvider, applicationDialogService);
+        RecordListViewModelObject = new RecordListViewModel(dataProvider, applicationDialogService);
 
-        PersonListViewModelSubject.SelectedPeople.PropertyChanged += (s, e) =>
+        RecordListViewModelSubject.SelectedPeople.PropertyChanged += (s, e) =>
         {
             var temp = s as ObjectCollection<Record>;
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)
             {
-                SubjectPerson = temp.Objects.Single();
+                SubjectRecord = temp.Objects.Single();
             }
 
             OKCommand.RaiseCanExecuteChanged();
         };
 
-        PersonListViewModelObject.SelectedPeople.PropertyChanged += (s, e) =>
+        RecordListViewModelObject.SelectedPeople.PropertyChanged += (s, e) =>
         {
             var temp = s as ObjectCollection<Record>;
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)
             {
-                ObjectPerson = temp.Objects.Single();
+                ObjectRecord = temp.Objects.Single();
             }
 
             OKCommand.RaiseCanExecuteChanged();
@@ -128,12 +128,12 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
     private bool CanOK(object parameter)
     {
         return
-            SubjectPerson != null &&
-            ObjectPerson != null &&
+            SubjectRecord != null &&
+            ObjectRecord != null &&
             Description != null &&
             !string.IsNullOrEmpty(Description) &&
-            (SubjectPerson != _originalSubjectPerson ||
-             ObjectPerson != _originalObjectPerson ||
+            (SubjectRecord != _originalSubjectRecord ||
+             ObjectRecord != _originalObjectRecord ||
              Description != _originalDescription);
     }
 

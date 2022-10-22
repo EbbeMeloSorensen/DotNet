@@ -18,9 +18,9 @@ namespace Glossary.UI.WPF
     /// <summary>
     /// Interaction logic for FindPeopleView.xaml
     /// </summary>
-    public partial class FindPeopleView : UserControl
+    public partial class FindRecordsView : UserControl
     {
-        public FindPeopleView()
+        public FindRecordsView()
         {
             InitializeComponent();
         }

@@ -3,7 +3,7 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.ViewModel
 {
-    public class PersonAssociationViewModel : ViewModelBase
+    public class RecordAssociationViewModel : ViewModelBase
     {
         private RecordAssociation _personAssociation;
         private bool _isSelected;

@@ -10,7 +10,7 @@ using GalaSoft.MvvmLight.Command;
 
 namespace Glossary.ViewModel
 {
-    public class CreatePersonDialogViewModel : DialogViewModelBase, IDataErrorInfo
+    public class CreateRecordDialogViewModel : DialogViewModelBase, IDataErrorInfo
     {
         private StateOfView _state;
         private ObservableCollection<ValidationError> _validationMessages;

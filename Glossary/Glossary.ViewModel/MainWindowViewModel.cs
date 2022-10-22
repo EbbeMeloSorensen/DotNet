@@ -30,10 +30,10 @@ namespace Glossary.ViewModel
             }
         }
 
-        public PersonListViewModel PersonListViewModel { get; private set; }
+        public RecordListViewModel RecordListViewModel { get; private set; }
 
-        public PeoplePropertiesViewModel PeoplePropertiesViewModel { get; private set; }
-        public PersonAssociationsViewModel PersonAssociationsViewModel { get; private set; }
+        public RecordPropertiesViewModel RecordPropertiesViewModel { get; private set; }
+        public RecordAssociationsViewModel RecordAssociationsViewModel { get; private set; }
 
         public LogViewModel LogViewModel { get; private set; }
 
@@ -86,18 +86,18 @@ namespace Glossary.ViewModel
             _logger = new LoggerDecorator(logger, LogViewModel);
             _dataProvider.Initialize(_logger);
 
-            PersonListViewModel = new PersonListViewModel(dataProvider, applicationDialogService);
+            RecordListViewModel = new RecordListViewModel(dataProvider, applicationDialogService);
 
-            PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
+            RecordListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
 
-            PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
+            RecordPropertiesViewModel = new RecordPropertiesViewModel(
                 dataProvider,
-                PersonListViewModel.SelectedPeople);
+                RecordListViewModel.SelectedPeople);
 
-            PersonAssociationsViewModel = new PersonAssociationsViewModel(
+            RecordAssociationsViewModel = new RecordAssociationsViewModel(
                 dataProvider,
                 applicationDialogService,
-                PersonListViewModel.SelectedPeople);
+                RecordListViewModel.SelectedPeople);
         }
 
         private void HandlePeopleSelectionChanged(object sender, PropertyChangedEventArgs e)
@@ -107,7 +107,7 @@ namespace Glossary.ViewModel
 
         private void CreatePerson(object owner)
         {
-            var dialogViewModel = new CreatePersonDialogViewModel();
+            var dialogViewModel = new CreateRecordDialogViewModel();
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
@@ -131,13 +131,13 @@ namespace Glossary.ViewModel
 
         public void DeleteSelectedPeople()
         {
-            _dataProvider.DeleteRecords(PersonListViewModel.SelectedPeople.Objects.ToList());
+            _dataProvider.DeleteRecords(RecordListViewModel.SelectedPeople.Objects.ToList());
         }
 
         private bool CanDeleteSelectedPeople()
         {
-            return PersonListViewModel.SelectedPeople.Objects != null &&
-                   PersonListViewModel.SelectedPeople.Objects.Any();
+            return RecordListViewModel.SelectedPeople.Objects != null &&
+                   RecordListViewModel.SelectedPeople.Objects.Any();
         }
 
         private void ExportPeople()

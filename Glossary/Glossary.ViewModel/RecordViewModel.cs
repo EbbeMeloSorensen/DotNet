@@ -3,7 +3,7 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.ViewModel;
 
-public class PersonViewModel : ViewModelBase
+public class RecordViewModel : ViewModelBase
 {
     private Record _person;
 

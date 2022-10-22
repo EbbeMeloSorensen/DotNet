@@ -16,11 +16,11 @@
             <DataTemplate DataType="{x:Type viewModel1:MessageBoxDialogViewModel}">
                 <dialogs:MessageBoxDialogView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModel:CreatePersonDialogViewModel}">
+            <DataTemplate DataType="{x:Type viewModel:CreateRecordDialogViewModel}">
                 <local:CreatePersonDialogView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModel:DefinePersonAssociationDialogViewModel}">
-                <local:CreatePersonAssociationDialogView/>
+            <DataTemplate DataType="{x:Type viewModel:DefineRecordAssociationDialogViewModel}">
+                <local:CreateRecordAssociationDialogView/>
             </DataTemplate>
 
             <ResourceDictionary.MergedDictionaries>

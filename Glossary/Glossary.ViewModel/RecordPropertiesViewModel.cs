@@ -11,7 +11,7 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.ViewModel;
 
-public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
+public class RecordPropertiesViewModel : ViewModelBase, IDataErrorInfo
 {
     private StateOfView _state;
     private ObservableCollection<ValidationError> _validationMessages;
@@ -93,7 +93,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         get { return _applyChangesCommand ?? (_applyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges)); }
     }
 
-    public PeoplePropertiesViewModel(
+    public RecordPropertiesViewModel(
         IUIDataProvider dataProvider,
         ObjectCollection<Record> people)
     {

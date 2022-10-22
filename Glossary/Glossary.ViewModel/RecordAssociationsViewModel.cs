@@ -15,7 +15,7 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.ViewModel
 {
-    public class PersonAssociationsViewModel : ViewModelBase
+    public class RecordAssociationsViewModel : ViewModelBase
     {
         private readonly IUIDataProvider _dataProvider;
         private readonly IDialogService _applicationDialogService;
@@ -23,7 +23,7 @@ namespace Glossary.ViewModel
         private bool _isVisible;
         private ObjectCollection<Record> _people;
         private Record _activePerson;
-        private ObservableCollection<PersonAssociationViewModel> _personAssociationViewModels;
+        private ObservableCollection<RecordAssociationViewModel> _personAssociationViewModels;
         private RelayCommand _selectionChangedCommand;
         private RelayCommand _deleteSelectedPersonAssociationsCommand;
         private RelayCommand<object> _createPersonAssociationCommand;
@@ -41,7 +41,7 @@ namespace Glossary.ViewModel
 
         public ObjectCollection<RecordAssociation> SelectedPersonAssociations { get; private set; }
 
-        public ObservableCollection<PersonAssociationViewModel> PersonAssociationViewModels
+        public ObservableCollection<RecordAssociationViewModel> PersonAssociationViewModels
         {
             get { return _personAssociationViewModels; }
             set
@@ -83,7 +83,7 @@ namespace Glossary.ViewModel
             }
         }
 
-        public PersonAssociationsViewModel(
+        public RecordAssociationsViewModel(
             IUIDataProvider dataProvider,
             IDialogService applicationDialogService,
             ObjectCollection<Record> people)
@@ -118,19 +118,19 @@ namespace Glossary.ViewModel
         {
             if (_activePerson == null)
             {
-                PersonAssociationViewModels = new ObservableCollection<PersonAssociationViewModel>();
+                PersonAssociationViewModels = new ObservableCollection<RecordAssociationViewModel>();
                 return;
             }
 
             var person = _dataProvider.GetRecordWithAssociations(_activePerson.Id);
 
-            PersonAssociationViewModels = new ObservableCollection<PersonAssociationViewModel>(person.ObjectRecords
-                .Select(pa => new PersonAssociationViewModel
+            PersonAssociationViewModels = new ObservableCollection<RecordAssociationViewModel>(person.ObjectRecords
+                .Select(pa => new RecordAssociationViewModel
                 {
                     PersonAssociation = pa
                 })
                 .Concat(person.SubjectRecords
-                    .Select(pa => new PersonAssociationViewModel
+                    .Select(pa => new RecordAssociationViewModel
                     {
                         PersonAssociation = pa
                     })));
@@ -161,7 +161,7 @@ namespace Glossary.ViewModel
 
         private void CreatePersonAssociation(object owner)
         {
-            var dialogViewModel = new DefinePersonAssociationDialogViewModel(
+            var dialogViewModel = new DefineRecordAssociationDialogViewModel(
                 _dataProvider,
                 _applicationDialogService,
                 _activePerson,
@@ -177,8 +177,8 @@ namespace Glossary.ViewModel
             {
                 _dataProvider.CreateRecordAssociation(new RecordAssociation
                 {
-                    SubjectRecordId = dialogViewModel.SubjectPerson.Id,
-                    ObjectRecordId = dialogViewModel.ObjectPerson.Id,
+                    SubjectRecordId = dialogViewModel.SubjectRecord.Id,
+                    ObjectRecordId = dialogViewModel.ObjectRecord.Id,
                     Description = dialogViewModel.Description,
                     Created = DateTime.UtcNow
                 });
@@ -196,7 +196,7 @@ namespace Glossary.ViewModel
         {
             var personAssociation = SelectedPersonAssociations.Objects.Single();
 
-            var dialogViewModel = new DefinePersonAssociationDialogViewModel(
+            var dialogViewModel = new DefineRecordAssociationDialogViewModel(
                 _dataProvider,
                 _applicationDialogService,
                 personAssociation.SubjectRecord,
@@ -209,8 +209,8 @@ namespace Glossary.ViewModel
             }
 
             personAssociation.Description = dialogViewModel.Description;
-            personAssociation.SubjectRecordId = dialogViewModel.SubjectPerson.Id;
-            personAssociation.ObjectRecordId = dialogViewModel.ObjectPerson.Id;
+            personAssociation.SubjectRecordId = dialogViewModel.SubjectRecord.Id;
+            personAssociation.ObjectRecordId = dialogViewModel.ObjectRecord.Id;
 
             _dataProvider.UpdateRecordAssociation(personAssociation);
 

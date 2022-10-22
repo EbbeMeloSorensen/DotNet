@@ -5,7 +5,7 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.ViewModel
 {
-    public class FindPeopleViewModel : ViewModelBase
+    public class FindRecordsViewModel : ViewModelBase
     {
         private string _nameFilter = "";
         private string _nameFilterInUppercase = "";
@@ -42,13 +42,13 @@ namespace Glossary.ViewModel
                          p.Category != null && p.Category.ToUpper().Contains(_categoryFilterInUppercase));
         }
 
-        public bool PersonPassesFilter(Record person)
+        public bool RecordPassesFilter(Record record)
         {
             var nameOK = string.IsNullOrEmpty(NameFilter) ||
-                         person.Term.ToUpper().Contains(NameFilter.ToUpper());
+                         record.Term.ToUpper().Contains(NameFilter.ToUpper());
 
             var categoryOK = string.IsNullOrEmpty(CategoryFilter) ||
-                             person.Category != null && person.Category.ToUpper().Contains(CategoryFilter.ToUpper());
+                             record.Category != null && record.Category.ToUpper().Contains(CategoryFilter.ToUpper());
 
             return nameOK && categoryOK;
         }

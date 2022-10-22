@@ -18,9 +18,9 @@ namespace Glossary.UI.WPF
     /// <summary>
     /// Interaction logic for CreatePersonAssociationDialogView.xaml
     /// </summary>
-    public partial class CreatePersonAssociationDialogView : UserControl
+    public partial class CreateRecordAssociationDialogView : UserControl
     {
-        public CreatePersonAssociationDialogView()
+        public CreateRecordAssociationDialogView()
         {
             InitializeComponent();
         }

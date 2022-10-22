@@ -13,20 +13,20 @@ using Glossary.Domain.Entities;
 
 namespace Glossary.ViewModel
 {
-    public class PersonListViewModel : ViewModelBase
+    public class RecordListViewModel : ViewModelBase
     {
         private readonly IUIDataProvider _dataProvider;
         private readonly IDialogService _applicationDialogService;
         private IList<Record> _people;
         private Sorting _sorting;
 
-        public FindPeopleViewModel FindPeopleViewModel { get; private set; }
-        private ObservableCollection<PersonViewModel> _peopleViewModels;
+        public FindRecordsViewModel FindPeopleViewModel { get; private set; }
+        private ObservableCollection<RecordViewModel> _peopleViewModels;
 
         private RelayCommand<object> _selectionChangedCommand;
         private RelayCommand<object> _findPeopleCommand;
 
-        public ObservableCollection<PersonViewModel> PersonViewModels
+        public ObservableCollection<RecordViewModel> PersonViewModels
         {
             get { return _peopleViewModels; }
             set
@@ -63,7 +63,7 @@ namespace Glossary.ViewModel
             }
         }
 
-        public PersonListViewModel(
+        public RecordListViewModel(
             IUIDataProvider dataProvider,
             IDialogService applicationDialogService)
         {
@@ -71,7 +71,7 @@ namespace Glossary.ViewModel
             _applicationDialogService = applicationDialogService;
             _sorting = Sorting.Name;
 
-            FindPeopleViewModel = new FindPeopleViewModel();
+            FindPeopleViewModel = new FindRecordsViewModel();
 
             _people = new List<Record>();
 
@@ -79,7 +79,7 @@ namespace Glossary.ViewModel
 
             dataProvider.RecordCreated += (s, e) =>
             {
-                if (!FindPeopleViewModel.PersonPassesFilter(e.Record))
+                if (!FindPeopleViewModel.RecordPassesFilter(e.Record))
                 {
                     return;
                 }
@@ -164,7 +164,7 @@ namespace Glossary.ViewModel
 
             UpdateSorting();
 
-            PersonViewModels = new ObservableCollection<PersonViewModel>(_people.Select(p => new PersonViewModel
+            PersonViewModels = new ObservableCollection<RecordViewModel>(_people.Select(p => new RecordViewModel
             {
                 //IsSelected = idsOfSelectedPersons.Contains(p.Id),
                 Person = p
@@ -174,7 +174,7 @@ namespace Glossary.ViewModel
         private void SelectionChanged(object commandParameter)
         {
             IList temp = (IList)commandParameter;
-            var peopleViewModels = temp.Cast<PersonViewModel>();
+            var peopleViewModels = temp.Cast<RecordViewModel>();
 
             UpdatePeopleSelection(peopleViewModels.Select(pvm => pvm.Person));
         }

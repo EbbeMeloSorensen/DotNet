@@ -14,8 +14,8 @@ namespace Glossary.UIDataProvider.Persistence
 {
     public class UIDataProvider : UIDataProviderBase
     {
-        private Dictionary<Guid, Record> _personCache;
-        private Dictionary<Guid, RecordAssociation> _personAssociationCache;
+        private Dictionary<Guid, Record> _recordCache;
+        private Dictionary<Guid, RecordAssociation> _recordAssociationCache;
 
         public override IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
@@ -25,8 +25,8 @@ namespace Glossary.UIDataProvider.Persistence
         {
             UnitOfWorkFactory = unitOfWorkFactory;
 
-            _personCache = new Dictionary<Guid, Record>();
-            _personAssociationCache = new Dictionary<Guid, RecordAssociation>();
+            _recordCache = new Dictionary<Guid, Record>();
+            _recordAssociationCache = new Dictionary<Guid, RecordAssociation>();
         }
 
         public override void Initialize(
@@ -43,36 +43,36 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         public override void CreateRecord(
-            Record person)
+            Record record)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.Records.Add(person);
+                unitOfWork.Records.Add(record);
                 unitOfWork.Complete();
             }
 
-            var cacheObj = person.Clone();
-            _personCache[person.Id] = cacheObj;
+            var cacheObj = record.Clone();
+            _recordCache[record.Id] = cacheObj;
 
             OnRecordCreated(cacheObj);
         }
 
         public override void CreateRecordAssociation(
-            RecordAssociation personAssociation)
+            RecordAssociation recordAssociation)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.RecordAssociations.Add(personAssociation);
+                unitOfWork.RecordAssociations.Add(recordAssociation);
                 unitOfWork.Complete();
             }
 
-            var modelObjForCache = personAssociation.Clone();
+            var modelObjForCache = recordAssociation.Clone();
 
-            var subjectPerson = GetRecord(personAssociation.SubjectRecordId);
-            var objectPerson = GetRecord(personAssociation.ObjectRecordId);
+            var subjectRecord = GetRecord(recordAssociation.SubjectRecordId);
+            var objectRecord = GetRecord(recordAssociation.ObjectRecordId);
 
-            modelObjForCache.LinkToRecords(subjectPerson, objectPerson);
-            _personAssociationCache[modelObjForCache.Id] = modelObjForCache;
+            modelObjForCache.LinkToRecords(subjectRecord, objectRecord);
+            _recordAssociationCache[modelObjForCache.Id] = modelObjForCache;
         }
 
         public override int CountRecords(
@@ -91,35 +91,35 @@ namespace Glossary.UIDataProvider.Persistence
         public override Record GetRecord(
             Guid id)
         {
-            if (_personCache.ContainsKey(id))
+            if (_recordCache.ContainsKey(id))
             {
-                return _personCache[id];
+                return _recordCache[id];
             }
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var person = unitOfWork.Records.Get(id).Clone();
-                _personCache[id] = person;
-                return person;
+                var record = unitOfWork.Records.Get(id).Clone();
+                _recordCache[id] = record;
+                return record;
             }
         }
 
         public override Record GetRecordWithAssociations(
             Guid id)
         {
-            Record personFromRepository;
+            Record recordFromRepository;
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                personFromRepository = unitOfWork.Records.GetRecordIncludingAssociations(id);
+                recordFromRepository = unitOfWork.Records.GetRecordIncludingAssociations(id);
             }
 
-            var person = IncludeInCache(personFromRepository);
+            var record = IncludeInCache(recordFromRepository);
 
-            person.ObjectRecords = personFromRepository.ObjectRecords?.Select(IncludeInCache).ToList();
-            person.SubjectRecords = personFromRepository.SubjectRecords?.Select(IncludeInCache).ToList();
+            record.ObjectRecords = recordFromRepository.ObjectRecords?.Select(IncludeInCache).ToList();
+            record.SubjectRecords = recordFromRepository.SubjectRecords?.Select(IncludeInCache).ToList();
 
-            return person;
+            return record;
         }
 
         public override IList<Record> GetAllRecords()
@@ -146,16 +146,16 @@ namespace Glossary.UIDataProvider.Persistence
 
         public override IList<RecordAssociation> GetAllRecordAssociations()
         {
-            IList<RecordAssociation> personAssociations;
+            IList<RecordAssociation> recordAssociations;
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                personAssociations = unitOfWork.RecordAssociations.GetAll()
+                recordAssociations = unitOfWork.RecordAssociations.GetAll()
                     .Select(pa => pa.Clone())
                     .ToList();
             }
 
-            return personAssociations;
+            return recordAssociations;
         }
 
         public override IList<Record> FindRecords(
@@ -171,8 +171,8 @@ namespace Glossary.UIDataProvider.Persistence
 
                 peopleFromRepository.ForEach(p =>
                 {
-                    var cachePerson = IncludeInCache(p);
-                    people.Add(cachePerson);
+                    var cacheRecord = IncludeInCache(p);
+                    people.Add(cacheRecord);
                 });
             }
 
@@ -211,26 +211,26 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         public override void UpdateRecords(
-            IList<Record> people)
+            IList<Record> records)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.Records.UpdateRange(people);
+                unitOfWork.Records.UpdateRange(records);
                 unitOfWork.Complete();
             }
 
             // Update the people of the cache too
-            foreach (var person in people)
+            foreach (var record in records)
             {
-                var cacheObj = GetRecord(person.Id);
-                cacheObj.CopyAttributes(person);
+                var cacheObj = GetRecord(record.Id);
+                cacheObj.CopyAttributes(record);
             }
 
-            OnPeopleUpdated(people);
+            OnPeopleUpdated(records);
         }
 
         public override void UpdateRecordAssociation(
-            RecordAssociation personAssociation)
+            RecordAssociation recordAssociation)
         {
             throw new NotImplementedException();
         }
@@ -252,16 +252,16 @@ namespace Glossary.UIDataProvider.Persistence
                     .GetRecordsIncludingAssociations(p => ids.Contains(p.Id))
                     .ToList();
 
-                var personAssociationsForDeletion = peopleForDeletion
+                var recordAssociationsForDeletion = peopleForDeletion
                     .SelectMany(p => p.ObjectRecords)
                     .Concat(peopleForDeletion.SelectMany(p => p.SubjectRecords))
                     .ToList();
 
-                unitOfWork.RecordAssociations.RemoveRange(personAssociationsForDeletion);
+                unitOfWork.RecordAssociations.RemoveRange(recordAssociationsForDeletion);
                 unitOfWork.Records.RemoveRange(peopleForDeletion);
                 unitOfWork.Complete();
 
-                personAssociationsForDeletion.ForEach(RemoveFromCache);
+                recordAssociationsForDeletion.ForEach(RemoveFromCache);
                 peopleForDeletion.ForEach(RemoveFromCache);
             }
 
@@ -269,11 +269,11 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         public override void DeleteRecordAssociations(
-            IList<RecordAssociation> personAssociations)
+            IList<RecordAssociation> recordAssociations)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var ids = personAssociations.Select(p => p.Id).ToList();
+                var ids = recordAssociations.Select(p => p.Id).ToList();
                 var forDeletion = unitOfWork.RecordAssociations.Find(pa => ids.Contains(pa.Id));
 
                 unitOfWork.RecordAssociations.RemoveRange(forDeletion);
@@ -281,11 +281,11 @@ namespace Glossary.UIDataProvider.Persistence
             }
 
             // Update memory objects
-            personAssociations.ToList().ForEach(pa =>
+            recordAssociations.ToList().ForEach(pa =>
             {
                 pa.SubjectRecord?.ObjectRecords?.Remove(pa);
                 pa.ObjectRecord?.SubjectRecords?.Remove(pa);
-                _personAssociationCache.Remove(pa.Id);
+                _recordAssociationCache.Remove(pa.Id);
             });
         }
 
@@ -298,71 +298,71 @@ namespace Glossary.UIDataProvider.Persistence
                 unitOfWork.Complete();
             }
 
-            _personCache.Clear();
+            _recordCache.Clear();
             // We don't update the cache, because it might be a lot of data
             // On the contrary, we clear the cache, so we're not looking at obsolete data
         }
 
         protected override void LoadRecordAssociations(
-            IList<RecordAssociation> personAssociations)
+            IList<RecordAssociation> recordAssociations)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.RecordAssociations.AddRange(personAssociations);
+                unitOfWork.RecordAssociations.AddRange(recordAssociations);
                 unitOfWork.Complete();
             }
 
-            _personAssociationCache.Clear();
+            _recordAssociationCache.Clear();
         }
 
         private Record IncludeInCache(
-            Record personFromRepository)
+            Record recordFromRepository)
         {
-            if (_personCache.ContainsKey(personFromRepository.Id))
+            if (_recordCache.ContainsKey(recordFromRepository.Id))
             {
-                return _personCache[personFromRepository.Id];
+                return _recordCache[recordFromRepository.Id];
             }
 
-            var person = personFromRepository.Clone();
-            _personCache[person.Id] = person;
+            var record = recordFromRepository.Clone();
+            _recordCache[record.Id] = record;
 
-            return person;
+            return record;
         }
 
         private RecordAssociation IncludeInCache(
-            RecordAssociation personAssociationFromRepository)
+            RecordAssociation recordAssociationFromRepository)
         {
-            if (_personAssociationCache.ContainsKey(personAssociationFromRepository.Id))
+            if (_recordAssociationCache.ContainsKey(recordAssociationFromRepository.Id))
             {
-                return _personAssociationCache[personAssociationFromRepository.Id];
+                return _recordAssociationCache[recordAssociationFromRepository.Id];
             }
 
-            var personAssociation = personAssociationFromRepository.Clone();
+            var recordAssociation = recordAssociationFromRepository.Clone();
 
-            personAssociation.LinkToRecords(
-                IncludeInCache(personAssociationFromRepository.SubjectRecord),
-                IncludeInCache(personAssociationFromRepository.ObjectRecord));
+            recordAssociation.LinkToRecords(
+                IncludeInCache(recordAssociationFromRepository.SubjectRecord),
+                IncludeInCache(recordAssociationFromRepository.ObjectRecord));
 
-            _personAssociationCache[personAssociation.Id] = personAssociation;
+            _recordAssociationCache[recordAssociation.Id] = recordAssociation;
 
-            return personAssociation;
+            return recordAssociation;
         }
 
         private void RemoveFromCache(
-            Record person)
+            Record record)
         {
-            if (!_personCache.ContainsKey(person.Id)) return;
+            if (!_recordCache.ContainsKey(record.Id)) return;
 
-            _personCache.Remove(person.Id);
+            _recordCache.Remove(record.Id);
         }
 
         private void RemoveFromCache(
-            RecordAssociation personAssociation)
+            RecordAssociation recordAssociation)
         {
-            if (!_personAssociationCache.ContainsKey(personAssociation.Id)) return;
+            if (!_recordAssociationCache.ContainsKey(recordAssociation.Id)) return;
 
-            _personAssociationCache[personAssociation.Id].DecoupleFromPeople();
-            _personAssociationCache.Remove(personAssociation.Id);
+            _recordAssociationCache[recordAssociation.Id].DecoupleFromRecords();
+            _recordAssociationCache.Remove(recordAssociation.Id);
         }
     }
 }
