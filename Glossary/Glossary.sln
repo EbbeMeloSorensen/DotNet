@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Web.Application", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Web.Infrastructure", "Glossary.Web.Infrastructure\Glossary.Web.Infrastructure.csproj", "{3A9CC60B-122B-47A1-AFD1-1810066A6519}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.Web.API", "Glossary.Web.API\Glossary.Web.API.csproj", "{E78831D2-4A5F-4AA8-B3F9-C88E403C7E88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +173,10 @@ Global
 		{3A9CC60B-122B-47A1-AFD1-1810066A6519}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A9CC60B-122B-47A1-AFD1-1810066A6519}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A9CC60B-122B-47A1-AFD1-1810066A6519}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E78831D2-4A5F-4AA8-B3F9-C88E403C7E88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E78831D2-4A5F-4AA8-B3F9-C88E403C7E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E78831D2-4A5F-4AA8-B3F9-C88E403C7E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E78831D2-4A5F-4AA8-B3F9-C88E403C7E88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
