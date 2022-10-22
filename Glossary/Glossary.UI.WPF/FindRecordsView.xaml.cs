@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace Glossary.UI.WPF
 {
     /// <summary>
-    /// Interaction logic for FindPeopleView.xaml
+    /// Interaction logic for FindRecordsView.xaml
     /// </summary>
     public partial class FindRecordsView : UserControl
     {

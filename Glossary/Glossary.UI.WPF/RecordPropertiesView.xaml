@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Glossary.UI.WPF.PeoplePropertiesView"
+﻿<UserControl x:Class="Glossary.UI.WPF.RecordPropertiesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,7 +8,7 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance viewModel:PeoplePropertiesViewModel}">
+             d:DataContext="{d:DesignInstance viewModel:RecordPropertiesViewModel}">
 
     <UserControl.Resources>
         <ResourceDictionary>

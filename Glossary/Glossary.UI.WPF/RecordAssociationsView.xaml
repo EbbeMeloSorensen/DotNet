@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Glossary.UI.WPF.PersonAssociationsView"
+﻿<UserControl x:Class="Glossary.UI.WPF.RecordAssociationsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,7 +9,7 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance viewModel:PersonAssociationsViewModel }">
+             d:DataContext="{d:DesignInstance viewModel:RecordAssociationsViewModel }">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -34,7 +34,7 @@
         </Grid.RowDefinitions>
 
         <ListBox Grid.Row="0" DisplayMemberPath="DisplayText" Margin="3" SelectionMode="Extended" 
-                 ItemsSource="{Binding PersonAssociationViewModels}">
+                 ItemsSource="{Binding RecordAssociationViewModels}">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="SelectionChanged">
                     <b:InvokeCommandAction Command="{Binding SelectionChangedCommand}"/>
@@ -49,13 +49,13 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button Margin="3,0,3,3" Content="New.." 
-                    Command="{Binding CreatePersonAssociationCommand}" 
+                    Command="{Binding CreateRecordAssociationCommand}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             <Button Margin="3,0,3,3" Content="Edit.." 
-                    Command="{Binding UpdatePersonAssociationCommand}" 
+                    Command="{Binding UpdateRecordAssociationCommand}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             <Button Margin="3,0,3,3" Content="Delete" 
-                    Command="{Binding DeleteSelectedPersonAssociationsCommand}"/>
+                    Command="{Binding DeleteSelectedRecordAssociationsCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

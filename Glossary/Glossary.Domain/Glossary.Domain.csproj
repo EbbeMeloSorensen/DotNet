@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Foreign\" />
+    <Compile Remove="Foreign\**" />
+    <EmbeddedResource Remove="Foreign\**" />
+    <None Remove="Foreign\**" />
   </ItemGroup>
 
 </Project>

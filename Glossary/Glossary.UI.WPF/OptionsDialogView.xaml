@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Margin="5" Grid.Column="0" Text="Number of records:"/>
-        <TextBox Margin="5" Grid.Column="1" Text="{Binding NumberOfPeopleToCreate}"/>
-        <Button Margin="5" Grid.Column="2" Content="Create Records" Command="{Binding CreatePeopleCommand}"/>
+        <TextBox Margin="5" Grid.Column="1" Text="{Binding NumberOfRecordsToCreate}"/>
+        <Button Margin="5" Grid.Column="2" Content="Create Records" Command="{Binding CreateRecordsCommand}"/>
     </Grid>
 </UserControl>

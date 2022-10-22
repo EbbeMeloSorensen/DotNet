@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Glossary.UI.WPF
 {
     /// <summary>
-    /// Interaction logic for CreatePersonDialogView.xaml
+    /// Interaction logic for RecordListView.xaml
     /// </summary>
-    public partial class CreatePersonDialogView : UserControl
+    public partial class RecordListView : UserControl
     {
-        public CreatePersonDialogView()
+        public RecordListView()
         {
             InitializeComponent();
         }

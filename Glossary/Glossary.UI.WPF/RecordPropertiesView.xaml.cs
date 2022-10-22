@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Glossary.UI.WPF
 {
     /// <summary>
-    /// Interaction logic for PersonAssociationsView.xaml
+    /// Interaction logic for RecordPropertiesView.xaml
     /// </summary>
-    public partial class PersonAssociationsView : UserControl
+    public partial class RecordPropertiesView : UserControl
     {
-        public PersonAssociationsView()
+        public RecordPropertiesView()
         {
             InitializeComponent();
         }

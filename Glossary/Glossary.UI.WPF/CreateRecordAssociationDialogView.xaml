@@ -19,19 +19,19 @@
             <ColumnDefinition Width="*" MinWidth="200"/>
         </Grid.ColumnDefinitions>
 
-        <local:PersonListView Background="Aquamarine" Grid.Row="1" Grid.Column="0" MinHeight="100" DataContext="{Binding PersonListViewModelSubject}"/>
+        <local:RecordListView Background="Aquamarine" Grid.Row="1" Grid.Column="0" MinHeight="100" DataContext="{Binding RecordListViewModelSubject}"/>
 
         <Rectangle Grid.Row="0" Grid.Column="0" Fill="Aquamarine"/>
         <TextBox Grid.Row="0" Grid.Column="0" Margin="1" Background="PaleGoldenrod" IsReadOnly="True"
-                 Text="{Binding SubjectPerson.Term}"/>
+                 Text="{Binding SubjectRecord.Term}"/>
         <TextBox Grid.Row="0" Grid.Column="1" Margin="1" Background="PaleGoldenrod" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
         <Rectangle Grid.Row="0" Grid.Column="2" Fill="LightSeaGreen"/>
         <TextBox Grid.Row="0" Grid.Column="2" Margin="1" Background="PaleGoldenrod" IsReadOnly="True"
-                 Text="{Binding ObjectPerson.Term}"/>
+                 Text="{Binding ObjectRecord.Term}"/>
 
         <!-- hvordan sætter jeg selection mode til Single for den-->
         <!-- måske ved at binde til en prop-->
-        <local:PersonListView Background="LightSeaGreen" Grid.Row="1" Grid.Column="2" DataContext="{Binding PersonListViewModelObject}"/>
+        <local:RecordListView Background="LightSeaGreen" Grid.Row="1" Grid.Column="2" DataContext="{Binding RecordListViewModelObject}"/>
 
         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button Content="Cancel" Width="75" Margin="3"

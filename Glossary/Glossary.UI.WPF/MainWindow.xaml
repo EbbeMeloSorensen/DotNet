@@ -47,7 +47,7 @@
                 <Button Content="Delete" Command="{Binding DeleteSelectedRecordsCommand}"/>
             </StackPanel>
 
-            <local:PersonListView Grid.Row="1" Grid.Column="0" DataContext="{Binding RecordListViewModel}"/>
+            <local:RecordListView Grid.Row="1" Grid.Column="0" DataContext="{Binding RecordListViewModel}"/>
 
             <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -55,9 +55,9 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <local:PeoplePropertiesView Grid.Row="0" DataContext="{Binding RecordPropertiesViewModel}"/>
+                <local:RecordPropertiesView Grid.Row="0" DataContext="{Binding RecordPropertiesViewModel}"/>
 
-                <local:PersonAssociationsView Grid.Row="1" DataContext="{Binding RecordAssociationsViewModel}"/>
+                <local:RecordAssociationsView Grid.Row="1" DataContext="{Binding RecordAssociationsViewModel}"/>
             </Grid>
 
             <Expander Header="Log" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ExpandDirection="Up" IsExpanded="True">

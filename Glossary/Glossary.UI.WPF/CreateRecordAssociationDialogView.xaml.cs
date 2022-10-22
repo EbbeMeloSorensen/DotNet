@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace Glossary.UI.WPF
 {
     /// <summary>
-    /// Interaction logic for CreatePersonAssociationDialogView.xaml
+    /// Interaction logic for CreateRecordAssociationDialogView.xaml
     /// </summary>
     public partial class CreateRecordAssociationDialogView : UserControl
     {

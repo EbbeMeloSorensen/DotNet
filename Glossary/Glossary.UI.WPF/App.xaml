@@ -17,7 +17,7 @@
                 <dialogs:MessageBoxDialogView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModel:CreateRecordDialogViewModel}">
-                <local:CreatePersonDialogView/>
+                <local:CreateRecordDialogView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModel:DefineRecordAssociationDialogViewModel}">
                 <local:CreateRecordAssociationDialogView/>
