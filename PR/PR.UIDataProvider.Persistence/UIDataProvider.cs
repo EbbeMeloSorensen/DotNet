@@ -232,7 +232,24 @@ namespace PR.UIDataProvider.Persistence
         public override void UpdatePersonAssociation(
             PersonAssociation personAssociation)
         {
-            throw new NotImplementedException();
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.PersonAssociations.Update(personAssociation);
+                unitOfWork.Complete();
+            }
+
+            // Now update cache objs
+            if (personAssociation.SubjectPersonId != personAssociation.SubjectPerson.Id)
+            {
+                personAssociation.DecoupleFromSubjectPerson();
+                personAssociation.LinkToSubjectPerson(GetPerson(personAssociation.SubjectPersonId));
+            }
+
+            if (personAssociation.ObjectPersonId != personAssociation.ObjectPerson.Id)
+            {
+                personAssociation.DecoupleFromObjectPerson();
+                personAssociation.LinkToObjectPerson(GetPerson(personAssociation.ObjectPersonId));
+            }
         }
 
         public override void DeletePerson(

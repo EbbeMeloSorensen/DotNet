@@ -215,7 +215,24 @@ namespace Glossary.UIDataProvider.Persistence
         public override void UpdateRecordAssociation(
             RecordAssociation recordAssociation)
         {
-            throw new NotImplementedException();
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.RecordAssociations.Update(recordAssociation);
+                unitOfWork.Complete();
+            }
+
+            // Now update cache objs
+            if (recordAssociation.SubjectRecordId != recordAssociation.SubjectRecord.Id)
+            {
+                recordAssociation.DecoupleFromSubjectRecord();
+                recordAssociation.LinkToSubjectRecord(GetRecord(recordAssociation.SubjectRecordId));
+            }
+
+            if (recordAssociation.ObjectRecordId != recordAssociation.ObjectRecord.Id)
+            {
+                recordAssociation.DecoupleFromObjectRecord();
+                recordAssociation.LinkToObjectRecord(GetRecord(recordAssociation.ObjectRecordId));
+            }
         }
 
         public override void DeleteRecord(

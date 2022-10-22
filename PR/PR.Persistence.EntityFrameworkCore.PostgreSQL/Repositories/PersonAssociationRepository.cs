@@ -7,15 +7,30 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
 {
     public class PersonAssociationRepository : Repository<PersonAssociation>, IPersonAssociationRepository
     {
+        public PRDbContext PrDbContext
+        {
+            get { return Context as PRDbContext; }
+        }
+
+        public PersonAssociation Get(
+            Guid id)
+        {
+            return PrDbContext.PersonAssociations.Find(id);
+        }
+
         public PersonAssociationRepository(
             DbContext context) : base(context)
         {
         }
 
         public override void Update(
-            PersonAssociation entity)
+            PersonAssociation personAssociation)
         {
-            throw new NotImplementedException();
+            var objFromRepository = Get(personAssociation.Id);
+
+            objFromRepository.SubjectPersonId = personAssociation.SubjectPersonId;
+            objFromRepository.ObjectPersonId = personAssociation.ObjectPersonId;
+            objFromRepository.Description = personAssociation.Description;
         }
 
         public override void UpdateRange(

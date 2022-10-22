@@ -45,7 +45,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
         public Record Get(
             Guid id)
         {
-            throw new NotImplementedException();
+            return PrDbContext.Records.Find(id);
         }
 
         public Record GetRecordIncludingAssociations(

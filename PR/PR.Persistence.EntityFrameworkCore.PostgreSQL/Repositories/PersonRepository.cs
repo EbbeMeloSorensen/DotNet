@@ -50,7 +50,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
         public Person Get(
             Guid id)
         {
-            throw new NotImplementedException();
+            return PrDbContext.People.Find(id);
         }
 
         public Person GetPersonIncludingAssociations(
