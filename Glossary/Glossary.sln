@@ -49,7 +49,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.UI.Console", "Glos
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.Persistence.EntityFrameworkCore.Helper", "Glossary.Persistence.EntityFrameworkCore.Helper\Glossary.Persistence.EntityFrameworkCore.Helper.csproj", "{AB11E92F-B161-4757-BEFC-CFFADF7DDF50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Persistence.EntityFrameworkCore.SqlServer", "Glossary.Persistence.EntityFrameworkCore.SqlServer\Glossary.Persistence.EntityFrameworkCore.SqlServer.csproj", "{9915E6A9-701D-48A1-9892-B1898996F323}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.Persistence.EntityFrameworkCore.SqlServer", "Glossary.Persistence.EntityFrameworkCore.SqlServer\Glossary.Persistence.EntityFrameworkCore.SqlServer.csproj", "{9915E6A9-701D-48A1-9892-B1898996F323}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Web.Persistence", "Glossary.Web.Persistence\Glossary.Web.Persistence.csproj", "{F6889D5F-CAF5-4832-8C0B-F4546331AE77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glossary.Web.Application", "Glossary.Web.Application\Glossary.Web.Application.csproj", "{CC8E92C1-1664-4B32-9FA8-2A6875F18AA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +157,14 @@ Global
 		{9915E6A9-701D-48A1-9892-B1898996F323}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9915E6A9-701D-48A1-9892-B1898996F323}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9915E6A9-701D-48A1-9892-B1898996F323}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6889D5F-CAF5-4832-8C0B-F4546331AE77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6889D5F-CAF5-4832-8C0B-F4546331AE77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6889D5F-CAF5-4832-8C0B-F4546331AE77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6889D5F-CAF5-4832-8C0B-F4546331AE77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC8E92C1-1664-4B32-9FA8-2A6875F18AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC8E92C1-1664-4B32-9FA8-2A6875F18AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC8E92C1-1664-4B32-9FA8-2A6875F18AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC8E92C1-1664-4B32-9FA8-2A6875F18AA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
