@@ -71,3 +71,23 @@ This is also relevant after having updated the migration
 
 **NB: Starting November 28th, 2022, free Heroku Dynos, free Heroku Postgres, and free Heroku Data for Redis® will no longer be available.**
 
+## Noter vedr deployering til Heroku
+
+Denne sekvens brugte jeg, da jeg første gang lykkedes med at deployere til Heroku:
+
+cd .\PR.Web.API
+heroku git:remote -a prubsi
+git subtree push --prefix PR.Web.API heroku main     (nej)
+git subtree push --prefix PR/PR.Web.API heroku main  (nej)
+git subtree push --prefix PR heroku main
+cd PR
+heroku buildpacks:set https://github.com/jincod/dotnetcore-buildpack
+
+
+
+
+H: I terminalvinduet skal du stå i folderen PR.Web.API, når du kalder heroku git:remote -a prebsi
+Bemærk, at du IKKE skal bruge nogen af Craft-bibliotekerne, så når den brokker sig over, at den ikke kan finde dem, skyldes det muligvis, at man har stået et forkert sted, når man har eksekveret heroku git:remote
+
+Dette er den sidste kommando man skal eksekvere, og man skal stå i DotNet-folderen
+git subtree push --prefix PR heroku main
