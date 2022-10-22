@@ -44,7 +44,7 @@ This is also relevant after having updated the migration
    1) På Dashboardet, hvor der er en liste over ens applikationer: Klik på "New" og derefter på "Create new app"
    2) Giv den et unikt navn, f.eks. "prebsi", vælg en region, gerne Europe og klik på "Create app"
    3) Installer evt Heroku Git (det skal ikke gøres hver gang man deployerer). Det gøres ved at downloade og eksekvere 64-bit installeren for Windows fra https://devcenter.heroku.com/articles/heroku-cli
-   4) I VS code: Åbn projekt-folderen og et terminalvindue. I root folderen for Git repositoryet, dvs DotNet: Eksekver: heroku login og klik derefter på Enter. Så popper der en web page op, hvor man skal klikke på en "login"-knap.
+   4) I VS code: Åbn projekt-folderen og et terminalvindue. I root folderen for solutionen, dvs PR, dvs DotNet: Eksekver: heroku login og klik derefter på Enter. Så popper der en web page op, hvor man skal klikke på en "login"-knap.
    5) I VS code: Eksekver `heroku git:remote -a prebsi`
    6) Klik på "Resources"-tabben (for web applikationen) i Heroku. Skriv postgre i "Add-ons"-feltet og vælg derefter "Heroku Postgres" i listen. Vælg et "Plan name", gerne "Hobby Dev - Free" og klik så på "Submit Order Form". Så skulle der gerne poppe et "Heroku Postgres"-item op i listen under Resources, som man kan klikke på, f.eks. for at inspicere data (under Settings) til brug for en connection string. Bemærk, at man også her har mulighed for at resette eller destroye databasen.
    7) Naviger tilbage til Settings-page for selve web applikationen og klik på "Reveal Config Vars"-knappen. Bemærk, at der allerede er en variabel for DATABASE_URL.
