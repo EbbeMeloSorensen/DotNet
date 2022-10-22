@@ -3,7 +3,6 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Craft.IO.Utils;
 using Glossary.Domain.Entities;
-using Glossary.Domain.Foreign;
 using Record = Glossary.Domain.Entities.Record;
 
 namespace Glossary.IO
@@ -42,7 +41,7 @@ namespace Glossary.IO
         }
 
         public void ExportDataToJson(
-            GlossaryData prData, 
+            GlossaryData glossaryData, 
             string fileName)
         {
             var jsonResolver = new ContractResolver();
@@ -58,7 +57,7 @@ namespace Glossary.IO
             };
 
             var json = JsonConvert.SerializeObject(
-                prData,
+                glossaryData,
                 Formatting.Indented,
                 settings);
 
@@ -69,30 +68,21 @@ namespace Glossary.IO
 
         public void ImportDataFromXML(
             string fileName, 
-            out GlossaryData prData)
+            out GlossaryData glossaryData)
         {
             using var streamReader = new StreamReader(fileName);
 
-            prData = XmlSerializer.Deserialize(streamReader) as GlossaryData;
+            glossaryData = XmlSerializer.Deserialize(streamReader) as GlossaryData;
         }
 
         public void ImportDataFromJson(
             string fileName, 
-            out GlossaryData prData)
+            out GlossaryData glossaryData)
         {
             using var streamReader = new StreamReader(fileName);
 
             var json = streamReader.ReadToEnd();
-            prData = JsonConvert.DeserializeObject<GlossaryData>(json);
-        }
-
-        public void ImportForeignDataFromJson(
-            string fileName, 
-            out ContactData contactData)
-        {
-            using var streamReader = new StreamReader(fileName);
-            var json = streamReader.ReadToEnd();
-            contactData = JsonConvert.DeserializeObject<ContactData>(json);
+            glossaryData = JsonConvert.DeserializeObject<GlossaryData>(json);
         }
     }
 }

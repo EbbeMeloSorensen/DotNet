@@ -5,8 +5,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Craft.Logging;
-using Glossary.Domain;
-using Glossary.Domain.Foreign;
 using Glossary.IO;
 using Glossary.Persistence;
 using Record = Glossary.Domain.Entities.Record;
@@ -65,7 +63,7 @@ namespace Glossary.Application
 
         public abstract void UpdateRecord(Record record);
 
-        public abstract void UpdateRecords(IList<Record> people);
+        public abstract void UpdateRecords(IList<Record> records);
 
         public abstract void UpdateRecordAssociation(RecordAssociation recordAssociation);
 
@@ -107,7 +105,7 @@ namespace Glossary.Application
 
             _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {records.Count} records");
 
-            var prData = new GlossaryData
+            var glossaryData = new GlossaryData
             {
                 Records = records.ToList(),
                 RecordAssociations = recordAssociations.ToList()
@@ -117,14 +115,14 @@ namespace Glossary.Application
             {
                 case ".xml":
                     {
-                        _dataIOHandler.ExportDataToXML(prData, fileName);
+                        _dataIOHandler.ExportDataToXML(glossaryData, fileName);
                         _logger?.WriteLine(LogMessageCategory.Information,
                             $"  Exported {records.Count} records to xml file");
                         break;
                     }
                 case ".json":
                     {
-                        _dataIOHandler.ExportDataToJson(prData, fileName);
+                        _dataIOHandler.ExportDataToJson(glossaryData, fileName);
                         _logger?.WriteLine(LogMessageCategory.Information,
                             $"  Exported {records.Count} records to json file");
                         break;
@@ -137,8 +135,7 @@ namespace Glossary.Application
         }
 
         public void ImportData(
-            string fileName,
-            bool legacy)
+            string fileName)
         {
             var extension = Path.GetExtension(fileName)?.ToLower();
 
@@ -159,28 +156,8 @@ namespace Glossary.Application
                 }
                 case ".json":
                 {
-                    if (legacy)
-                    {
-                        _dataIOHandler.ImportForeignDataFromJson(fileName, out var contactData);
-
-                        glossaryData.Records = new List<Record>();
-                        var recordIdMap = new Dictionary<int, Guid>();
-
-                        contactData.People.ForEach(p =>
-                        {
-                            var record = p.ConvertFromLegacyPerson();
-                            recordIdMap[p.Id] = record.Id;
-                            glossaryData.Records.Add(record);
-                        });
-
-                        glossaryData.RecordAssociations = new List<RecordAssociation>(contactData.PersonAssociations.Select(
-                            pa => pa.ConvertFromLegacyPersonAssociation(recordIdMap)));
-                    }
-                    else
-                    {
-                        _dataIOHandler.ImportDataFromJson(
-                            fileName, out glossaryData);
-                    }
+                    _dataIOHandler.ImportDataFromJson(
+                        fileName, out glossaryData);
                     break;
                 }
                 default:
@@ -209,8 +186,8 @@ namespace Glossary.Application
             }
         }
 
-        protected virtual void OnPeopleUpdated(
-            IEnumerable<Record> people)
+        protected virtual void OnRecordsUpdated(
+            IEnumerable<Record> records)
         {
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
@@ -220,12 +197,12 @@ namespace Glossary.Application
             // Event will be null if there are no subscribers
             if (handler != null)
             {
-                handler(this, new RecordsEventArgs(people));
+                handler(this, new RecordsEventArgs(records));
             }
         }
 
-        protected virtual void OnPeopleDeleted(
-            IEnumerable<Record> people)
+        protected virtual void OnRecordsDeleted(
+            IEnumerable<Record> records)
         {
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
@@ -235,7 +212,7 @@ namespace Glossary.Application
             // Event will be null if there are no subscribers
             if (handler != null)
             {
-                handler(this, new RecordsEventArgs(people));
+                handler(this, new RecordsEventArgs(records));
             }
         }
 

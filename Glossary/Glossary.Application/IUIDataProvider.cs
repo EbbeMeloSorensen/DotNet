@@ -62,8 +62,7 @@ namespace Glossary.Application
             IList<Expression<Func<Record, bool>>> predicates);
 
         void ImportData(
-            string fileName,
-            bool legacy);
+            string fileName);
 
         event EventHandler<RecordEventArgs> RecordCreated;
         event EventHandler<RecordsEventArgs> RecordsUpdated;

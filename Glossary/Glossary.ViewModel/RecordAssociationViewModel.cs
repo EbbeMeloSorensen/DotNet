@@ -5,15 +5,15 @@ namespace Glossary.ViewModel
 {
     public class RecordAssociationViewModel : ViewModelBase
     {
-        private RecordAssociation _personAssociation;
+        private RecordAssociation _recordAssociation;
         private bool _isSelected;
 
-        public RecordAssociation PersonAssociation
+        public RecordAssociation RecordAssociation
         {
-            get { return _personAssociation; }
+            get { return _recordAssociation; }
             set
             {
-                _personAssociation = value;
+                _recordAssociation = value;
                 RaisePropertyChanged();
             }
         }
@@ -30,7 +30,7 @@ namespace Glossary.ViewModel
 
         public string DisplayText
         {
-            get { return $"{_personAssociation.SubjectRecord.Term} {_personAssociation.Description} {_personAssociation.ObjectRecord.Term}"; }
+            get { return $"{_recordAssociation.SubjectRecord.Term} {_recordAssociation.Description} {_recordAssociation.ObjectRecord.Term}"; }
         }
     }
 }

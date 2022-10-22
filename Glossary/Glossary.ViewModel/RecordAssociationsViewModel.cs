@@ -21,13 +21,13 @@ namespace Glossary.ViewModel
         private readonly IDialogService _applicationDialogService;
 
         private bool _isVisible;
-        private ObjectCollection<Record> _people;
-        private Record _activePerson;
-        private ObservableCollection<RecordAssociationViewModel> _personAssociationViewModels;
+        private ObjectCollection<Record> _records;
+        private Record _activeRecord;
+        private ObservableCollection<RecordAssociationViewModel> _recordAssociationViewModels;
         private RelayCommand _selectionChangedCommand;
-        private RelayCommand _deleteSelectedPersonAssociationsCommand;
-        private RelayCommand<object> _createPersonAssociationCommand;
-        private RelayCommand<object> _updatePersonAssociationCommand;
+        private RelayCommand _deleteSelectedRecordAssociationsCommand;
+        private RelayCommand<object> _createRecordAssociationCommand;
+        private RelayCommand<object> _updateRecordAssociationCommand;
 
         public bool IsVisible
         {
@@ -39,14 +39,14 @@ namespace Glossary.ViewModel
             }
         }
 
-        public ObjectCollection<RecordAssociation> SelectedPersonAssociations { get; private set; }
+        public ObjectCollection<RecordAssociation> SelectedRecordAssociations { get; private set; }
 
-        public ObservableCollection<RecordAssociationViewModel> PersonAssociationViewModels
+        public ObservableCollection<RecordAssociationViewModel> RecordAssociationViewModels
         {
-            get { return _personAssociationViewModels; }
+            get { return _recordAssociationViewModels; }
             set
             {
-                _personAssociationViewModels = value;
+                _recordAssociationViewModels = value;
                 RaisePropertyChanged();
             }
         }
@@ -56,45 +56,45 @@ namespace Glossary.ViewModel
             get { return _selectionChangedCommand ?? (_selectionChangedCommand = new RelayCommand(SelectionChanged)); }
         }
 
-        public RelayCommand DeleteSelectedPersonAssociationsCommand
+        public RelayCommand DeleteSelectedRecordAssociationsCommand
         {
             get
             {
-                return _deleteSelectedPersonAssociationsCommand ?? (
-                           _deleteSelectedPersonAssociationsCommand = new RelayCommand(DeleteSelectedPersonAssociations, CanDeleteSelectedPersonAssociations));
+                return _deleteSelectedRecordAssociationsCommand ?? (
+                           _deleteSelectedRecordAssociationsCommand = new RelayCommand(DeleteSelectedRecordAssociations, CanDeleteSelectedRecordAssociations));
             }
         }
 
-        public RelayCommand<object> CreatePersonAssociationCommand
+        public RelayCommand<object> CreateRecordAssociationCommand
         {
             get
             {
-                return _createPersonAssociationCommand ?? (
-                           _createPersonAssociationCommand = new RelayCommand<object>(CreatePersonAssociation, CanCreatePersonAssociation));
+                return _createRecordAssociationCommand ?? (
+                           _createRecordAssociationCommand = new RelayCommand<object>(CreateRecordAssociation, CanCreateRecordAssociation));
             }
         }
 
-        public RelayCommand<object> UpdatePersonAssociationCommand
+        public RelayCommand<object> UpdateRecordAssociationCommand
         {
             get
             {
-                return _updatePersonAssociationCommand ?? (
-                           _updatePersonAssociationCommand = new RelayCommand<object>(UpdatePersonAssociation, CanUpdatePersonAssociation));
+                return _updateRecordAssociationCommand ?? (
+                           _updateRecordAssociationCommand = new RelayCommand<object>(UpdateRecordAssociation, CanUpdateRecordAssociation));
             }
         }
 
         public RecordAssociationsViewModel(
             IUIDataProvider dataProvider,
             IDialogService applicationDialogService,
-            ObjectCollection<Record> people)
+            ObjectCollection<Record> records)
         {
             _dataProvider = dataProvider;
             _applicationDialogService = applicationDialogService;
-            _people = people;
-            SelectedPersonAssociations = new ObjectCollection<RecordAssociation>();
+            _records = records;
+            SelectedRecordAssociations = new ObjectCollection<RecordAssociation>();
 
             // Den her lader til at være tung..
-            _people.PropertyChanged += Initialize;
+            _records.PropertyChanged += Initialize;
         }
 
         private void Initialize(object sender, PropertyChangedEventArgs e)
@@ -103,68 +103,68 @@ namespace Glossary.ViewModel
 
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)
             {
-                _activePerson = temp.Objects.Single();
+                _activeRecord = temp.Objects.Single();
                 Populate();
                 IsVisible = true;
             }
             else
             {
-                _activePerson = null;
+                _activeRecord = null;
                 IsVisible = false;
             }
         }
 
         private void Populate()
         {
-            if (_activePerson == null)
+            if (_activeRecord == null)
             {
-                PersonAssociationViewModels = new ObservableCollection<RecordAssociationViewModel>();
+                RecordAssociationViewModels = new ObservableCollection<RecordAssociationViewModel>();
                 return;
             }
 
-            var person = _dataProvider.GetRecordWithAssociations(_activePerson.Id);
+            var record = _dataProvider.GetRecordWithAssociations(_activeRecord.Id);
 
-            PersonAssociationViewModels = new ObservableCollection<RecordAssociationViewModel>(person.ObjectRecords
+            RecordAssociationViewModels = new ObservableCollection<RecordAssociationViewModel>(record.ObjectRecords
                 .Select(pa => new RecordAssociationViewModel
                 {
-                    PersonAssociation = pa
+                    RecordAssociation = pa
                 })
-                .Concat(person.SubjectRecords
+                .Concat(record.SubjectRecords
                     .Select(pa => new RecordAssociationViewModel
                     {
-                        PersonAssociation = pa
+                        RecordAssociation = pa
                     })));
         }
 
         private void SelectionChanged()
         {
-            SelectedPersonAssociations.Objects = _personAssociationViewModels
+            SelectedRecordAssociations.Objects = _recordAssociationViewModels
                 .Where(p => p.IsSelected)
-                .Select(pa => pa.PersonAssociation);
+                .Select(pa => pa.RecordAssociation);
 
-            DeleteSelectedPersonAssociationsCommand.RaiseCanExecuteChanged();
-            UpdatePersonAssociationCommand.RaiseCanExecuteChanged();
+            DeleteSelectedRecordAssociationsCommand.RaiseCanExecuteChanged();
+            UpdateRecordAssociationCommand.RaiseCanExecuteChanged();
         }
 
-        public void DeleteSelectedPersonAssociations()
+        public void DeleteSelectedRecordAssociations()
         {
-            _dataProvider.DeleteRecordAssociations(SelectedPersonAssociations.Objects.ToList());
+            _dataProvider.DeleteRecordAssociations(SelectedRecordAssociations.Objects.ToList());
 
             Populate();
         }
 
-        private bool CanDeleteSelectedPersonAssociations()
+        private bool CanDeleteSelectedRecordAssociations()
         {
-            return SelectedPersonAssociations.Objects != null &&
-                   SelectedPersonAssociations.Objects.Any();
+            return SelectedRecordAssociations.Objects != null &&
+                   SelectedRecordAssociations.Objects.Any();
         }
 
-        private void CreatePersonAssociation(object owner)
+        private void CreateRecordAssociation(object owner)
         {
             var dialogViewModel = new DefineRecordAssociationDialogViewModel(
                 _dataProvider,
                 _applicationDialogService,
-                _activePerson,
+                _activeRecord,
                 null,
                 null);
 
@@ -173,7 +173,7 @@ namespace Glossary.ViewModel
                 return;
             }
 
-            if (_activePerson != null)
+            if (_activeRecord != null)
             {
                 _dataProvider.CreateRecordAssociation(new RecordAssociation
                 {
@@ -187,40 +187,40 @@ namespace Glossary.ViewModel
             }
         }
 
-        private bool CanCreatePersonAssociation(object owner)
+        private bool CanCreateRecordAssociation(object owner)
         {
             return true;
         }
 
-        private void UpdatePersonAssociation(object owner)
+        private void UpdateRecordAssociation(object owner)
         {
-            var personAssociation = SelectedPersonAssociations.Objects.Single();
+            var recordAssociation = SelectedRecordAssociations.Objects.Single();
 
             var dialogViewModel = new DefineRecordAssociationDialogViewModel(
                 _dataProvider,
                 _applicationDialogService,
-                personAssociation.SubjectRecord,
-                personAssociation.ObjectRecord,
-                personAssociation.Description);
+                recordAssociation.SubjectRecord,
+                recordAssociation.ObjectRecord,
+                recordAssociation.Description);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
                 return;
             }
 
-            personAssociation.Description = dialogViewModel.Description;
-            personAssociation.SubjectRecordId = dialogViewModel.SubjectRecord.Id;
-            personAssociation.ObjectRecordId = dialogViewModel.ObjectRecord.Id;
+            recordAssociation.Description = dialogViewModel.Description;
+            recordAssociation.SubjectRecordId = dialogViewModel.SubjectRecord.Id;
+            recordAssociation.ObjectRecordId = dialogViewModel.ObjectRecord.Id;
 
-            _dataProvider.UpdateRecordAssociation(personAssociation);
+            _dataProvider.UpdateRecordAssociation(recordAssociation);
 
             Populate();
         }
 
-        private bool CanUpdatePersonAssociation(object owner)
+        private bool CanUpdateRecordAssociation(object owner)
         {
-            return SelectedPersonAssociations.Objects != null &&
-                   SelectedPersonAssociations.Objects.Count() == 1;
+            return SelectedRecordAssociations.Objects != null &&
+                   SelectedRecordAssociations.Objects.Count() == 1;
         }
     }
 }

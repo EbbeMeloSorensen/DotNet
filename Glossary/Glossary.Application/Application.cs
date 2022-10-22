@@ -120,23 +120,23 @@ namespace Glossary.Application
             });
         }
 
-        public async Task ListPeople(
+        public async Task ListRecords(
             ProgressCallback progressCallback = null)
         {
-            IList<Record>? people = null;
+            IList<Record>? records = null;
 
             await Task.Run(() =>
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
-                progressCallback?.Invoke(0.0, "Retrieving people");
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving records..");
+                progressCallback?.Invoke(0.0, "Retrieving records");
 
-                people = UIDataProvider.GetAllRecords();
+                records = UIDataProvider.GetAllRecords();
 
                 progressCallback?.Invoke(100, "");
             });
 
             Console.WriteLine();
-            people?.ToList().ForEach(p => Console.WriteLine($"  {p.Term}"));
+            records?.ToList().ForEach(p => Console.WriteLine($"  {p.Term}"));
         }
 
         public async Task ExportData(
@@ -157,7 +157,6 @@ namespace Glossary.Application
 
         public async Task ImportData(
             string fileName,
-            bool legacy,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(() =>
@@ -165,7 +164,7 @@ namespace Glossary.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
                 progressCallback?.Invoke(0.0, "Importing data");
 
-                UIDataProvider.ImportData(fileName, legacy);
+                UIDataProvider.ImportData(fileName);
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");

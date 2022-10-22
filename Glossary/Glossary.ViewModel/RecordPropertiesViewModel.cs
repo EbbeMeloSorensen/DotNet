@@ -18,7 +18,7 @@ public class RecordPropertiesViewModel : ViewModelBase, IDataErrorInfo
     private string _error = string.Empty;
 
     private readonly IUIDataProvider _dataProvider;
-    private ObjectCollection<Record> _people;
+    private ObjectCollection<Record> _records;
 
     private string _originalSharedTerm;
     private string _originalSharedSource;
@@ -95,12 +95,12 @@ public class RecordPropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public RecordPropertiesViewModel(
         IUIDataProvider dataProvider,
-        ObjectCollection<Record> people)
+        ObjectCollection<Record> records)
     {
         _dataProvider = dataProvider;
-        _people = people;
+        _records = records;
 
-        _people.PropertyChanged += Initialize;
+        _records.PropertyChanged += Initialize;
     }
 
     private void Initialize(object sender, PropertyChangedEventArgs e)
@@ -108,9 +108,9 @@ public class RecordPropertiesViewModel : ViewModelBase, IDataErrorInfo
         _state = StateOfView.Initial;
         var temp = sender as ObjectCollection<Record>;
 
-        var firstPerson = temp?.Objects.FirstOrDefault();
+        var firstRecord = temp?.Objects.FirstOrDefault();
 
-        if (firstPerson == null)
+        if (firstRecord == null)
         {
             IsVisible = false;
             return;
@@ -118,20 +118,20 @@ public class RecordPropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         IsVisible = true;
 
-        SharedTerm = temp.Objects.All(p => p.Term == firstPerson.Term)
-            ? firstPerson.Term
+        SharedTerm = temp.Objects.All(p => p.Term == firstRecord.Term)
+            ? firstRecord.Term
             : null;
 
-        SharedSource = temp.Objects.All(p => p.Source == firstPerson.Source)
-            ? firstPerson.Source
+        SharedSource = temp.Objects.All(p => p.Source == firstRecord.Source)
+            ? firstRecord.Source
             : null;
 
-        SharedCategory = temp.Objects.All(p => p.Category == firstPerson.Category)
-            ? firstPerson.Category
+        SharedCategory = temp.Objects.All(p => p.Category == firstRecord.Category)
+            ? firstRecord.Category
             : null;
 
-        SharedComments = temp.Objects.All(p => p.Description == firstPerson.Description)
-            ? firstPerson.Description
+        SharedComments = temp.Objects.All(p => p.Description == firstRecord.Description)
+            ? firstRecord.Description
             : null;
 
         _originalSharedTerm = SharedTerm;
@@ -154,7 +154,7 @@ public class RecordPropertiesViewModel : ViewModelBase, IDataErrorInfo
             return;
         }
 
-        var updatedRecords = _people.Objects.Select(p => new Record
+        var updatedRecords = _records.Objects.Select(p => new Record
         {
             Id = p.Id,
             Term = SharedTerm != _originalSharedTerm ? SharedTerm : p.Term,
@@ -209,7 +209,7 @@ public class RecordPropertiesViewModel : ViewModelBase, IDataErrorInfo
                     {
                         if (string.IsNullOrEmpty(SharedTerm))
                         {
-                            if (_people.Objects.Count() == 1)
+                            if (_records.Objects.Count() == 1)
                             {
                                 errorMessage = "Term is required";
                             }

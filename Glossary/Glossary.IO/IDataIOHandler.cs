@@ -20,9 +20,5 @@ namespace Glossary.IO
         void ImportDataFromJson(
             string fileName,
             out GlossaryData glossaryData);
-
-        void ImportForeignDataFromJson(
-            string fileName,
-            out Domain.Foreign.ContactData contactData);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Craft.Persistence.EntityFrameworkCore;
 using Glossary.Domain.Entities;
-using Glossary.Domain.Foreign;
 using Glossary.Persistence.Repositories;
 
 namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories

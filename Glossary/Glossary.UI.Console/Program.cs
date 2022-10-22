@@ -37,16 +37,6 @@ namespace Glossary.UI.Console
                 return false;
             });
             System.Console.WriteLine("\nDone");
-
-            //System.Console.WriteLine("Counting records...");
-            //System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllPeople().Count}");
-
-            //await ExportData(application);
-            //await CreateRecord(new Record
-            //{
-            //    Term = "Sofus"
-            //}, application);
-            //await ListPeople(application);
         }
 
         public static async Task ListRecords(List options)
@@ -58,7 +48,7 @@ namespace Glossary.UI.Console
             _user = options.User;
             _password = options.Password;
 
-            await GetApplication().ListPeople((progress, nameOfSubtask) =>
+            await GetApplication().ListRecords((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
@@ -68,7 +58,7 @@ namespace Glossary.UI.Console
 
         public static async Task CountRecords(Count options)
         {
-            System.Console.WriteLine("Coming soon: CountPeople");
+            System.Console.WriteLine("Coming soon: CountRecords");
             await Task.Delay(200);
         }
 
@@ -103,7 +93,7 @@ namespace Glossary.UI.Console
 
             System.Console.Write("Importing data...\nProgress: ");
             await GetApplication().ImportData(
-                options.FileName, options.Legacy, (progress, nameOfSubtask) =>
+                options.FileName, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
@@ -147,7 +137,7 @@ namespace Glossary.UI.Console
             //args = "update --user john --password secret --id 67".Split();
             //args = "delete --user john --password secret --id 67".Split();
             //args = "list -h localhost -d PR -u postgres -p L1on8Zebra".Split();
-            //args = "import --filename Contacts.json --legacy true --host localhost --user postgres --password L1on8Zebra".Split();
+            //args = "import --filename Contacts.json --host localhost --user postgres --password L1on8Zebra".Split();
 
             await Parser.Default.ParseArguments<
                     Create,

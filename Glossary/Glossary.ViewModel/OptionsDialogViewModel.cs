@@ -11,23 +11,23 @@ namespace Glossary.ViewModel
     {
         private readonly IUIDataProvider _dataProvider;
 
-        private int _numberOfPeopleToCreate = 10;
+        private int _numberOfRecordsToCreate = 10;
 
-        private RelayCommand _createPeopleCommand;
+        private RelayCommand _createRecordsCommand;
 
-        public int NumberOfPeopleToCreate
+        public int NumberOfRecordsToCreate
         {
-            get { return _numberOfPeopleToCreate; }
+            get { return _numberOfRecordsToCreate; }
             set
             {
-                _numberOfPeopleToCreate = value;
+                _numberOfRecordsToCreate = value;
                 RaisePropertyChanged();
             }
         }
 
-        public RelayCommand CreatePeopleCommand
+        public RelayCommand CreateRecordsCommand
         {
-            get { return _createPeopleCommand ?? (_createPeopleCommand = new RelayCommand(CreatePeople)); }
+            get { return _createRecordsCommand ?? (_createRecordsCommand = new RelayCommand(CreateRecords)); }
         }
 
         public OptionsDialogViewModel(IUIDataProvider dataProvider)
@@ -35,11 +35,11 @@ namespace Glossary.ViewModel
             _dataProvider = dataProvider;
         }
 
-        private void CreatePeople()
+        private void CreateRecords()
         {
-            Enumerable.Range(1, NumberOfPeopleToCreate).ToList().ForEach(i =>
+            Enumerable.Range(1, NumberOfRecordsToCreate).ToList().ForEach(i =>
             {
-                var name = "Person" + i.ToString().PadLeft(4, '0');
+                var name = "Record" + i.ToString().PadLeft(4, '0');
                 _dataProvider.CreateRecord(new Record { Term = name, Created = DateTime.UtcNow });
             });
         }

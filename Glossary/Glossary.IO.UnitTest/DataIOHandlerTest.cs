@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Glossary.Domain.Foreign;
 using Xunit;
 using Record = Glossary.Domain.Entities.Record;
 using RecordAssociation = Glossary.Domain.Entities.RecordAssociation;
@@ -21,11 +20,11 @@ namespace Glossary.IO.UnitTest
         [Fact]
         public void ImportDataFromXML_Works()
         {
-            new DataIOHandler().ImportDataFromXML(@"C:/Temp/GlossaryData.xml", out GlossaryData prData);
+            new DataIOHandler().ImportDataFromXML(@"C:/Temp/GlossaryData.xml", out GlossaryData glossaryData);
 
-            prData.Records.Count.Should().Be(3);
-            prData.Records.Count(p => p.Term == "Kafka").Should().Be(1);
-            prData.Records.Count(p => p.Term == "Javascript").Should().Be(1);
+            glossaryData.Records.Count.Should().Be(3);
+            glossaryData.Records.Count(p => p.Term == "Kafka").Should().Be(1);
+            glossaryData.Records.Count(p => p.Term == "Javascript").Should().Be(1);
         }
 
         [Fact]
@@ -38,19 +37,11 @@ namespace Glossary.IO.UnitTest
         public void ImportDataFromJson_Works()
         {
             var dataIOHandler = new DataIOHandler();
-            dataIOHandler.ImportDataFromJson(@"C:/Temp/GlossaryData.json", out var prData);
+            dataIOHandler.ImportDataFromJson(@"C:/Temp/GlossaryData.json", out var glossaryData);
 
-            prData.Records.Count.Should().Be(3);
-            prData.Records.Count(p => p.Term == "Kafka").Should().Be(1);
-            prData.Records.Count(p => p.Term == "Javascript").Should().Be(1);
-        }
-
-        [Fact]
-        public void ImportForeignDataFromJson_Works()
-        {
-            var dataIOHandler = new DataIOHandler();
-            ContactData contactData;
-            dataIOHandler.ImportForeignDataFromJson(@"C:/Temp/Glossary.json", out contactData);
+            glossaryData.Records.Count.Should().Be(3);
+            glossaryData.Records.Count(p => p.Term == "Kafka").Should().Be(1);
+            glossaryData.Records.Count(p => p.Term == "Javascript").Should().Be(1);
         }
 
         // Helper

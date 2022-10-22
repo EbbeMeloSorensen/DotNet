@@ -78,14 +78,9 @@ namespace Glossary.UIDataProvider.Persistence
         public override int CountRecords(
             Expression<Func<Record, bool>> predicate)
         {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var count = unitOfWork.Records.Count(predicate);
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
 
-                //_logger.StopStopWatchAndWriteLine("Completed counting people");
-
-                return count;
-            }
+            return unitOfWork.Records.Count(predicate);
         }
 
         public override Record GetRecord(
@@ -124,9 +119,7 @@ namespace Glossary.UIDataProvider.Persistence
 
         public override IList<Record> GetAllRecords()
         {
-            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
-
-            var stationInformations = new List<Record>();
+            var records = new List<Record>();
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -135,13 +128,11 @@ namespace Glossary.UIDataProvider.Persistence
                 stationInformationsFromRepository.ForEach(s =>
                 {
                     var cacheStationInformation = IncludeInCache(s);
-                    stationInformations.Add(cacheStationInformation);
+                    records.Add(cacheStationInformation);
                 });
             }
 
-            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
-
-            return stationInformations;
+            return records;
         }
 
         public override IList<RecordAssociation> GetAllRecordAssociations()
@@ -161,31 +152,25 @@ namespace Glossary.UIDataProvider.Persistence
         public override IList<Record> FindRecords(
             Expression<Func<Record, bool>> predicate)
         {
-            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
-
-            var people = new List<Record>();
+            var records = new List<Record>();
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var peopleFromRepository = unitOfWork.Records.Find(predicate).ToList();
+                var recordsFromRepository = unitOfWork.Records.Find(predicate).ToList();
 
-                peopleFromRepository.ForEach(p =>
+                recordsFromRepository.ForEach(p =>
                 {
                     var cacheRecord = IncludeInCache(p);
-                    people.Add(cacheRecord);
+                    records.Add(cacheRecord);
                 });
             }
 
-            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
-
-            return people;
+            return records;
         }
 
         public override IList<Record> FindRecords(
             IList<Expression<Func<Record, bool>>> predicates)
         {
-            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
-
             var stationInformations = new List<Record>();
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
@@ -198,8 +183,6 @@ namespace Glossary.UIDataProvider.Persistence
                     stationInformations.Add(cacheStationInformation);
                 });
             }
-
-            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
 
             return stationInformations;
         }
@@ -219,14 +202,14 @@ namespace Glossary.UIDataProvider.Persistence
                 unitOfWork.Complete();
             }
 
-            // Update the people of the cache too
+            // Update the records of the cache too
             foreach (var record in records)
             {
                 var cacheObj = GetRecord(record.Id);
                 cacheObj.CopyAttributes(record);
             }
 
-            OnPeopleUpdated(records);
+            OnRecordsUpdated(records);
         }
 
         public override void UpdateRecordAssociation(
@@ -242,30 +225,30 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         public override void DeleteRecords(
-            IList<Record> people)
+            IList<Record> records)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var ids = people.Select(p => p.Id).ToList();
+                var ids = records.Select(p => p.Id).ToList();
 
-                var peopleForDeletion = unitOfWork.Records
+                var recordsForDeletion = unitOfWork.Records
                     .GetRecordsIncludingAssociations(p => ids.Contains(p.Id))
                     .ToList();
 
-                var recordAssociationsForDeletion = peopleForDeletion
+                var recordAssociationsForDeletion = recordsForDeletion
                     .SelectMany(p => p.ObjectRecords)
-                    .Concat(peopleForDeletion.SelectMany(p => p.SubjectRecords))
+                    .Concat(recordsForDeletion.SelectMany(p => p.SubjectRecords))
                     .ToList();
 
                 unitOfWork.RecordAssociations.RemoveRange(recordAssociationsForDeletion);
-                unitOfWork.Records.RemoveRange(peopleForDeletion);
+                unitOfWork.Records.RemoveRange(recordsForDeletion);
                 unitOfWork.Complete();
 
                 recordAssociationsForDeletion.ForEach(RemoveFromCache);
-                peopleForDeletion.ForEach(RemoveFromCache);
+                recordsForDeletion.ForEach(RemoveFromCache);
             }
 
-            OnPeopleDeleted(people);
+            OnRecordsDeleted(records);
         }
 
         public override void DeleteRecordAssociations(
@@ -290,11 +273,11 @@ namespace Glossary.UIDataProvider.Persistence
         }
 
         protected override void LoadRecords(
-            IList<Record> people)
+            IList<Record> records)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.Records.AddRange(people);
+                unitOfWork.Records.AddRange(records);
                 unitOfWork.Complete();
             }
 

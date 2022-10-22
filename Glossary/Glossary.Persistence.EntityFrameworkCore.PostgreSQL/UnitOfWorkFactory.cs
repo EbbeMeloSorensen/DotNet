@@ -61,7 +61,7 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
                 Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
             };
 
-            var people = new List<Record>
+            var records = new List<Record>
             {
                 new Record
                 {
@@ -88,7 +88,6 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL
                 }
             };
 
-            //context.AddRange(people);
             context.Add(record1);
             context.Add(record2);
             context.Add(recordAssociation);

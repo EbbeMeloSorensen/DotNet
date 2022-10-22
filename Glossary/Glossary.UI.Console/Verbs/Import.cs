@@ -7,7 +7,4 @@ public sealed class Import : RepositoryOperationVerb
 {
     [Option('f', "filename", Required = true, HelpText = "File Name")]
     public string FileName { get; set; }
-
-    [Option('l', "legacy", Required = false, Default = false, HelpText = "Legacy")]
-    public bool Legacy { get; set; }
 }

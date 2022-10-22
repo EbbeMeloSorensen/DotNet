@@ -24,21 +24,5 @@ namespace Glossary.Domain
             record.Description = other.Description;
             record.Created = other.Created;
         }
-
-        public static Record ConvertFromLegacyPerson(
-            this Foreign.Person person)
-        {
-            var result = new Record
-            {
-                Id = Guid.NewGuid(),
-                Term = person.FirstName,
-                Source = string.IsNullOrEmpty(person.Address) ? null : person.Address,
-                Category = string.IsNullOrEmpty(person.Category) ? null : person.Category,
-                Description = string.IsNullOrEmpty(person.Comments) ? null : person.Comments,
-                Created = person.Created.ToUniversalTime()
-            };
-
-            return result;
-        }
     }
 }

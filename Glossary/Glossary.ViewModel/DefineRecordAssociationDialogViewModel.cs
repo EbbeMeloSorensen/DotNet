@@ -87,7 +87,7 @@ public class DefineRecordAssociationDialogViewModel : DialogViewModelBase, IData
         RecordListViewModelSubject = new RecordListViewModel(dataProvider, applicationDialogService);
         RecordListViewModelObject = new RecordListViewModel(dataProvider, applicationDialogService);
 
-        RecordListViewModelSubject.SelectedPeople.PropertyChanged += (s, e) =>
+        RecordListViewModelSubject.SelectedRecords.PropertyChanged += (s, e) =>
         {
             var temp = s as ObjectCollection<Record>;
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)
@@ -98,7 +98,7 @@ public class DefineRecordAssociationDialogViewModel : DialogViewModelBase, IData
             OKCommand.RaiseCanExecuteChanged();
         };
 
-        RecordListViewModelObject.SelectedPeople.PropertyChanged += (s, e) =>
+        RecordListViewModelObject.SelectedRecords.PropertyChanged += (s, e) =>
         {
             var temp = s as ObjectCollection<Record>;
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)

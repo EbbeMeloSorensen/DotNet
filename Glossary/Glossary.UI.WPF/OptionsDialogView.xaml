@@ -13,8 +13,8 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Margin="5" Grid.Column="0" Text="Number of people:"/>
+        <TextBlock Margin="5" Grid.Column="0" Text="Number of records:"/>
         <TextBox Margin="5" Grid.Column="1" Text="{Binding NumberOfPeopleToCreate}"/>
-        <Button Margin="5" Grid.Column="2" Content="Create People" Command="{Binding CreatePeopleCommand}"/>
+        <Button Margin="5" Grid.Column="2" Content="Create Records" Command="{Binding CreatePeopleCommand}"/>
     </Grid>
 </UserControl>

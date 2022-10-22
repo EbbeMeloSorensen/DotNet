@@ -2,7 +2,7 @@
 
 namespace Glossary.UI.Console.Verbs;
 
-[Verb("count", HelpText = "Count all people.")]
+[Verb("count", HelpText = "Count all records.")]
 public sealed class Count : RepositoryOperationVerb
 {
 }

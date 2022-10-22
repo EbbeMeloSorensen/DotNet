@@ -6,12 +6,12 @@ namespace Glossary.Application
 {
     public class RecordsEventArgs : EventArgs
     {
-        public readonly IEnumerable<Record> People;
+        public readonly IEnumerable<Record> Records;
 
         public RecordsEventArgs(
-            IEnumerable<Record> people)
+            IEnumerable<Record> records)
         {
-            People = people;
+            Records = records;
         }
     }
 }

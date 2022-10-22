@@ -37,21 +37,21 @@ namespace Glossary.ViewModel
 
         public LogViewModel LogViewModel { get; private set; }
 
-        private RelayCommand<object> _createPersonCommand;
+        private RelayCommand<object> _createRecordCommand;
         private RelayCommand<object> _showOptionsDialogCommand;
-        private RelayCommand _deleteSelectedPeopleCommand;
-        private RelayCommand _exportPeopleCommand;
-        private RelayCommand _importPeopleCommand;
+        private RelayCommand _deleteSelectedRecordsCommand;
+        private RelayCommand _exportRecordsCommand;
+        private RelayCommand _importRecordsCommand;
         private RelayCommand _exitCommand;
 
-        public RelayCommand DeleteSelectedPeopleCommand
+        public RelayCommand DeleteSelectedRecordsCommand
         {
-            get { return _deleteSelectedPeopleCommand ?? (_deleteSelectedPeopleCommand = new RelayCommand(DeleteSelectedPeople, CanDeleteSelectedPeople)); }
+            get { return _deleteSelectedRecordsCommand ?? (_deleteSelectedRecordsCommand = new RelayCommand(DeleteSelectedRecords, CanDeleteSelectedRecords)); }
         }
 
-        public RelayCommand<object> CreatePersonCommand
+        public RelayCommand<object> CreateRecordCommand
         {
-            get { return _createPersonCommand ?? (_createPersonCommand = new RelayCommand<object>(CreatePerson, CanCreatePerson)); }
+            get { return _createRecordCommand ?? (_createRecordCommand = new RelayCommand<object>(CreateRecord, CanCreateRecord)); }
         }
 
         public RelayCommand<object> ShowOptionsDialogCommand
@@ -59,14 +59,14 @@ namespace Glossary.ViewModel
             get { return _showOptionsDialogCommand ?? (_showOptionsDialogCommand = new RelayCommand<object>(ShowOptionsDialog, CanShowOptionsDialog)); }
         }
 
-        public RelayCommand ExportPeopleCommand
+        public RelayCommand ExportRecordsCommand
         {
-            get { return _exportPeopleCommand ?? (_exportPeopleCommand = new RelayCommand(ExportPeople, CanExportPeople)); }
+            get { return _exportRecordsCommand ?? (_exportRecordsCommand = new RelayCommand(ExportRecords, CanExportRecords)); }
         }
 
-        public RelayCommand ImportPeopleCommand
+        public RelayCommand ImportRecordsCommand
         {
-            get { return _importPeopleCommand ?? (_importPeopleCommand = new RelayCommand(ImportPeople, CanImportPeople)); }
+            get { return _importRecordsCommand ?? (_importRecordsCommand = new RelayCommand(ImportRecords, CanImportRecords)); }
         }
 
         public RelayCommand ExitCommand
@@ -88,24 +88,24 @@ namespace Glossary.ViewModel
 
             RecordListViewModel = new RecordListViewModel(dataProvider, applicationDialogService);
 
-            RecordListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
+            RecordListViewModel.SelectedRecords.PropertyChanged += HandleRecordSelectionChanged;
 
             RecordPropertiesViewModel = new RecordPropertiesViewModel(
                 dataProvider,
-                RecordListViewModel.SelectedPeople);
+                RecordListViewModel.SelectedRecords);
 
             RecordAssociationsViewModel = new RecordAssociationsViewModel(
                 dataProvider,
                 applicationDialogService,
-                RecordListViewModel.SelectedPeople);
+                RecordListViewModel.SelectedRecords);
         }
 
-        private void HandlePeopleSelectionChanged(object sender, PropertyChangedEventArgs e)
+        private void HandleRecordSelectionChanged(object sender, PropertyChangedEventArgs e)
         {
-            DeleteSelectedPeopleCommand.RaiseCanExecuteChanged();
+            DeleteSelectedRecordsCommand.RaiseCanExecuteChanged();
         }
 
-        private void CreatePerson(object owner)
+        private void CreateRecord(object owner)
         {
             var dialogViewModel = new CreateRecordDialogViewModel();
 
@@ -124,23 +124,23 @@ namespace Glossary.ViewModel
             });
         }
 
-        private bool CanCreatePerson(object owner)
+        private bool CanCreateRecord(object owner)
         {
             return true;
         }
 
-        public void DeleteSelectedPeople()
+        public void DeleteSelectedRecords()
         {
-            _dataProvider.DeleteRecords(RecordListViewModel.SelectedPeople.Objects.ToList());
+            _dataProvider.DeleteRecords(RecordListViewModel.SelectedRecords.Objects.ToList());
         }
 
-        private bool CanDeleteSelectedPeople()
+        private bool CanDeleteSelectedRecords()
         {
-            return RecordListViewModel.SelectedPeople.Objects != null &&
-                   RecordListViewModel.SelectedPeople.Objects.Any();
+            return RecordListViewModel.SelectedRecords.Objects != null &&
+                   RecordListViewModel.SelectedRecords.Objects.Any();
         }
 
-        private void ExportPeople()
+        private void ExportRecords()
         {
             var dialog = new SaveFileDialog
             {
@@ -155,12 +155,12 @@ namespace Glossary.ViewModel
             _dataProvider.ExportData(dialog.FileName, null);
         }
 
-        private bool CanExportPeople()
+        private bool CanExportRecords()
         {
             return true;
         }
 
-        private void ImportPeople()
+        private void ImportRecords()
         {
             var dialog = new OpenFileDialog
             {
@@ -172,10 +172,10 @@ namespace Glossary.ViewModel
                 return;
             }
 
-            _dataProvider.ImportData(dialog.FileName, false);
+            _dataProvider.ImportData(dialog.FileName);
         }
 
-        private bool CanImportPeople()
+        private bool CanImportRecords()
         {
             return true;
         }

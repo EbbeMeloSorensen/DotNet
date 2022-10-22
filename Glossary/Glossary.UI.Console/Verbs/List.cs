@@ -2,7 +2,7 @@
 
 namespace Glossary.UI.Console.Verbs
 {
-    [Verb("list", HelpText = "List all people.")]
+    [Verb("list", HelpText = "List all records.")]
     public sealed class List : RepositoryOperationVerb
     {
     }

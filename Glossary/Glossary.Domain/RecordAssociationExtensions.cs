@@ -74,21 +74,5 @@ namespace Glossary.Domain
             recordAssociation.DecoupleFromSubjectRecord();
             recordAssociation.DecoupleFromObjectRecord();
         }
-
-        public static RecordAssociation ConvertFromLegacyPersonAssociation(
-            this Foreign.PersonAssociation personAssociation,
-            Dictionary<int, Guid> recordIdMap)
-        {
-            var result = new RecordAssociation
-            {
-                Id = Guid.NewGuid(),
-                Description = personAssociation.Description,
-                Created = personAssociation.Created.ToUniversalTime(),
-                SubjectRecordId = recordIdMap[personAssociation.SubjectPersonId],
-                ObjectRecordId = recordIdMap[personAssociation.ObjectPersonId]
-            };
-
-            return result;
-        }
     }
 }

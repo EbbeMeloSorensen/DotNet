@@ -17,26 +17,26 @@ namespace Glossary.ViewModel
     {
         private readonly IUIDataProvider _dataProvider;
         private readonly IDialogService _applicationDialogService;
-        private IList<Record> _people;
+        private IList<Record> _records;
         private Sorting _sorting;
 
-        public FindRecordsViewModel FindPeopleViewModel { get; private set; }
-        private ObservableCollection<RecordViewModel> _peopleViewModels;
+        public FindRecordsViewModel FindRecordsViewModel { get; private set; }
+        private ObservableCollection<RecordViewModel> _recordViewModels;
 
         private RelayCommand<object> _selectionChangedCommand;
-        private RelayCommand<object> _findPeopleCommand;
+        private RelayCommand<object> _findRecordsCommand;
 
-        public ObservableCollection<RecordViewModel> PersonViewModels
+        public ObservableCollection<RecordViewModel> RecordViewModels
         {
-            get { return _peopleViewModels; }
+            get { return _recordViewModels; }
             set
             {
-                _peopleViewModels = value;
+                _recordViewModels = value;
                 RaisePropertyChanged();
             }
         }
 
-        public ObjectCollection<Record> SelectedPeople { get; private set; }
+        public ObjectCollection<Record> SelectedRecords { get; private set; }
 
         public Sorting Sorting
         {
@@ -46,7 +46,7 @@ namespace Glossary.ViewModel
                 _sorting = value;
                 RaisePropertyChanged();
                 UpdateSorting();
-                UpdatePersonViewModels();
+                UpdateRecordViewModels();
             }
         }
 
@@ -55,11 +55,11 @@ namespace Glossary.ViewModel
             get { return _selectionChangedCommand ?? (_selectionChangedCommand = new RelayCommand<object>(SelectionChanged)); }
         }
 
-        public RelayCommand<object> FindPeopleCommand
+        public RelayCommand<object> FindRecordsCommand
         {
             get
             {
-                return _findPeopleCommand ?? (_findPeopleCommand = new RelayCommand<object>(FindPeople));
+                return _findRecordsCommand ?? (_findRecordsCommand = new RelayCommand<object>(FindRecords));
             }
         }
 
@@ -71,60 +71,49 @@ namespace Glossary.ViewModel
             _applicationDialogService = applicationDialogService;
             _sorting = Sorting.Name;
 
-            FindPeopleViewModel = new FindRecordsViewModel();
+            FindRecordsViewModel = new FindRecordsViewModel();
 
-            _people = new List<Record>();
+            _records = new List<Record>();
 
-            SelectedPeople = new ObjectCollection<Record>();
+            SelectedRecords = new ObjectCollection<Record>();
 
             dataProvider.RecordCreated += (s, e) =>
             {
-                if (!FindPeopleViewModel.RecordPassesFilter(e.Record))
+                if (!FindRecordsViewModel.RecordPassesFilter(e.Record))
                 {
                     return;
                 }
 
-                _people.Add(e.Record);
-                UpdatePersonViewModels();
+                _records.Add(e.Record);
+                UpdateRecordViewModels();
             };
 
             dataProvider.RecordsUpdated += (s, e) =>
             {
-                // Der vil nok i praksis som regel gælde, at de opdaterede personer, FØR opdateringen matchede
-                // filteret, dvs at der potentielt vil skulle FJERNES personer fra viewet, men ikke TILFØJES
-                // Som sådan burde det være muligt at undgå at skulle besøge repositoryet for at opdatere viewet
-
-                // .. men vi gør det lige alligevel indtil videre
-                // spørgsmålet er sgu egentlig også, om man overhovedet bør fjerne personer fra filteret - det er jo ikke sikkert at det virker super intuitivt
-                //RetrievePeopleMatchingFilterFromRepository();
-                UpdatePersonViewModels();
+                UpdateRecordViewModels();
             };
 
             dataProvider.RecordsDeleted += (s, e) =>
             {
-                var countBefore = _people.Count;
-                _people = _people.Except(e.People).ToList();
-                var countAfter = _people.Count;
+                var countBefore = _records.Count;
+                _records = _records.Except(e.Records).ToList();
+                var countAfter = _records.Count;
 
                 if (countAfter < countBefore)
                 {
-                    UpdatePersonViewModels();
+                    UpdateRecordViewModels();
                 }
             };
         }
 
-        private void RetrievePeopleMatchingFilterFromRepository()
+        private void RetrieveRecordsMatchingFilterFromRepository()
         {
-            // Det her kan den ikke - det munder ud i følgende fejlbesked: "LINQ to Entities does not recognize the method ''
-            // and this method cannot be translated into a store expression"
-            //_people = _dataProvider.FindPeople(p => FindPeopleViewModel.PersonPassesFilter(p));
-
-            _people = _dataProvider.FindRecords(FindPeopleViewModel.FilterAsExpression());
+            _records = _dataProvider.FindRecords(FindRecordsViewModel.FilterAsExpression());
         }
 
-        private int CountPeopleMatchingFilterFromRepository()
+        private int CountRecordsMatchingFilterFromRepository()
         {
-            return _dataProvider.CountRecords(FindPeopleViewModel.FilterAsExpression());
+            return _dataProvider.CountRecords(FindRecordsViewModel.FilterAsExpression());
         }
 
         private void UpdateSorting()
@@ -132,80 +121,61 @@ namespace Glossary.ViewModel
             switch (Sorting)
             {
                 case Sorting.Name:
-                    _people = _people.OrderBy(p => p.Term).ToList();
+                    _records = _records.OrderBy(p => p.Term).ToList();
                     break;
                 case Sorting.Created:
-                    _people = _people.OrderByDescending(p => p.Created).ToList();
+                    _records = _records.OrderByDescending(p => p.Created).ToList();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private void UpdatePersonViewModels()
+        private void UpdateRecordViewModels()
         {
-            // Selected people should stay selected - prøv lige at drop det indtil videre - hvornår er det overhovedet smart
-            // Du antog vist, at det var smart efter følgende hændelser:
-            // - Ændring af sortering
-            // - Oprettelse af ny person
-            // - Efter at have lavet bulk opdatering af en gruppe personer
-            // - Efter at have slettet en gruppe af personer
-            // - Efter at have fremsøgt personer
-
-            //var idsOfSelectedPersons = new int[] { };
-
-            //if (PersonViewModels != null)
-            //{
-            //    idsOfSelectedPersons = PersonViewModels
-            //        .Where(pvm => pvm.IsSelected)
-            //        .Select(pvm => pvm.Person.Id)
-            //        .ToArray();
-            //}
-
             UpdateSorting();
 
-            PersonViewModels = new ObservableCollection<RecordViewModel>(_people.Select(p => new RecordViewModel
+            RecordViewModels = new ObservableCollection<RecordViewModel>(_records.Select(p => new RecordViewModel
             {
-                //IsSelected = idsOfSelectedPersons.Contains(p.Id),
-                Person = p
+                Record = p
             }));
         }
 
         private void SelectionChanged(object commandParameter)
         {
             IList temp = (IList)commandParameter;
-            var peopleViewModels = temp.Cast<RecordViewModel>();
+            var recordViewModels = temp.Cast<RecordViewModel>();
 
-            UpdatePeopleSelection(peopleViewModels.Select(pvm => pvm.Person));
+            UpdateRecordSelection(recordViewModels.Select(rvm => rvm.Record));
         }
 
-        private void UpdatePeopleSelection(IEnumerable<Record> people)
+        private void UpdateRecordSelection(IEnumerable<Record> records)
         {
-            SelectedPeople.Objects = people;
+            SelectedRecords.Objects = records;
         }
 
-        private void FindPeople(object owner)
+        private void FindRecords(object owner)
         {
-            var personLimit = 10;
-            var count = CountPeopleMatchingFilterFromRepository();
+            var recordLimit = 10;
+            var count = CountRecordsMatchingFilterFromRepository();
 
             if (count == 0)
             {
-                var dialogViewModel = new MessageBoxDialogViewModel("No person matches the search criteria", false);
+                var dialogViewModel = new MessageBoxDialogViewModel("No record matches the search criteria", false);
                 _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
             }
 
-            if (count > personLimit)
+            if (count > recordLimit)
             {
-                var dialogViewModel = new MessageBoxDialogViewModel($"{count} people match the search criteria.\nDo you want to retrieve them all from the repository?", true);
+                var dialogViewModel = new MessageBoxDialogViewModel($"{count} records match the search criteria.\nDo you want to retrieve them all from the repository?", true);
                 if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
                 {
                     return;
                 }
             }
 
-            RetrievePeopleMatchingFilterFromRepository();
-            UpdatePersonViewModels();
+            RetrieveRecordsMatchingFilterFromRepository();
+            UpdateRecordViewModels();
         }
     }
 }

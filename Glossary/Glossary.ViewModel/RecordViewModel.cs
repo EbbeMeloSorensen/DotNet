@@ -5,14 +5,14 @@ namespace Glossary.ViewModel;
 
 public class RecordViewModel : ViewModelBase
 {
-    private Record _person;
+    private Record _record;
 
-    public Record Person
+    public Record Record
     {
-        get { return _person; }
+        get { return _record; }
         set
         {
-            _person = value;
+            _record = value;
             RaisePropertyChanged();
         }
     }
@@ -21,7 +21,7 @@ public class RecordViewModel : ViewModelBase
     {
         get
         {
-            var displayText = _person.Term;
+            var displayText = _record.Term;
 
             return displayText;
         }

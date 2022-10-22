@@ -87,7 +87,6 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer
                 }
             };
 
-            //context.AddRange(people);
             context.Add(record1);
             context.Add(record2);
             context.Add(recordAssociation);
