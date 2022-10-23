@@ -2,38 +2,38 @@ import { observer } from 'mobx-react-lite';
 import React, { SyntheticEvent } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { Person } from "../../../app/models/person";
+import { Record } from "../../../app/models/record";
 import { useStore } from '../../../app/stores/store';
 
 interface Props {
-    person: Person
+    record: Record
 }
 
-export default observer (function PersonDetailedHeader({person}: Props) {
+export default observer (function RecordDetailedHeader({record}: Props) {
     const history = useHistory();
-    const {personStore} = useStore();
-    const {deletePerson, loading} = personStore;
+    const {recordStore} = useStore();
+    const {deleteRecord, loading} = recordStore;
 
-    function handlePersonDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
-        if (window.confirm("Do you want to delete this person?") == true) {
-            deletePerson(id).then(() => history.push(`/people`));
+    function handleRecordDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+        if (window.confirm("Do you want to delete this record?") == true) {
+            deleteRecord(id).then(() => history.push(`/records`));
         }
     }
 
     return (
         <Segment.Group>
             <Segment clearing attached='bottom'>
-                <Header>{person.firstName} {person.surname}</Header>
+                <Header>{record.firstName}</Header>
                 <Button.Group floated='right'>
                     <Button
                         loading={loading}
-                        onClick={(e) => handlePersonDelete(e, person.id)} 
+                        onClick={(e) => handleRecordDelete(e, record.id)} 
                         color='red'
                         type='button'>
                         Delete
                     </Button>
                     <Button as={Link} 
-                        to={`/manage/${person.id}`}
+                        to={`/manage/${record.id}`}
                         color='orange'
                         floated='right'
                         type='button'>

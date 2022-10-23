@@ -1,28 +1,28 @@
 import React, { SyntheticEvent, useState } from 'react';
 import { Link } from "react-router-dom";
 import { Button, Item, List, Segment } from "semantic-ui-react";
-import { Person } from "../../../app/models/person";
+import { Record } from "../../../app/models/record";
 import { useStore } from '../../../app/stores/store';
 
 interface Props {
-    person: Person
+    record: Record
 }
 
-export default function PersonListItem({person}: Props) {
-    const {personStore} = useStore();
-    const {deletePerson, loading} = personStore;
+export default function RecordListItem({record}: Props) {
+    const {recordStore} = useStore();
+    const {deleteRecord, loading} = recordStore;
     const [target, setTarget] = useState('');
 
-    function handlePersonDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+    function handleRecordDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name);
-        deletePerson(id);
+        deleteRecord(id);
     }
 
     return (
         <List.Item>
             <List.Content>
-                <List.Header as={Link} to={`/people/${person.id}`}>
-                    {person.firstName} {person.surname}
+                <List.Header as={Link} to={`/records/${record.id}`}>
+                    {record.firstName}
                 </List.Header>
             </List.Content>
         </List.Item>

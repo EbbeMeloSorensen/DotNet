@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
-import { Person, PersonFormValues } from '../models/person';
+import { Record, RecordFormValues } from '../models/record';
 import { PaginatedResult } from '../models/pagination';
 import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
@@ -74,13 +74,13 @@ const requests = {
     del: <T> (url: string) => axios.delete<T>(url).then(responseBody),
 }
 
-const People = {
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<Person[]>>('/people', {params})
+const Records = {
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Record[]>>('/records', {params})
         .then(responseBody),
-    details: (id: string) => requests.get<Person>(`/people/${id}`),
-    create: (person: PersonFormValues) => requests.post<void>('/people', person),
-    update: (person: PersonFormValues) => requests.put<void>(`/people/${person.id}`, person),
-    delete: (id: string) => requests.del<void>(`/people/${id}`)
+    details: (id: string) => requests.get<Record>(`/records/${id}`),
+    create: (record: RecordFormValues) => requests.post<void>('/records', record),
+    update: (record: RecordFormValues) => requests.put<void>(`/records/${record.id}`, record),
+    delete: (id: string) => requests.del<void>(`/records/${id}`)
 }
 
 const Account = {
@@ -90,7 +90,7 @@ const Account = {
 }
 
 const agent = {
-    People,
+    Records,
     Account
 }
 

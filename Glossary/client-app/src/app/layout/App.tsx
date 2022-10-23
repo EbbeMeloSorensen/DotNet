@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Container } from 'semantic-ui-react';
 import NavBar from './NavBar';
-import PersonDashboard from '../../features/people/dashboard/PersonDashboard';
+import RecordDashboard from '../../features/records/dashboard/RecordDashboard';
 import { observer } from 'mobx-react-lite';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
-import PersonForm from '../../features/people/form/PersonForm';
-import PersonDetails from '../../features/people/details/PersonDetails';
+import RecordForm from '../../features/records/form/RecordForm';
+import RecordDetails from '../../features/records/details/RecordDetails';
 import TestErrors from '../../features/errors/TestError';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
@@ -42,9 +42,9 @@ function App() {
             <NavBar />
             <Container style={{marginTop: '7em'}}>
               <Switch>
-                <PrivateRoute exact path='/people' component={PersonDashboard} />
-                <PrivateRoute path='/people/:id' component={PersonDetails} />
-                <PrivateRoute key={location.key} path={['/createPerson', '/manage/:id']} component={PersonForm} />
+                <PrivateRoute exact path='/records' component={RecordDashboard} />
+                <PrivateRoute path='/records/:id' component={RecordDetails} />
+                <PrivateRoute key={location.key} path={['/createRecord', '/manage/:id']} component={RecordForm} />
                 <PrivateRoute path='/errors' component={TestErrors} />
                 <Route path='/server-error' component={ServerError} />
                 <Route component={NotFound} />

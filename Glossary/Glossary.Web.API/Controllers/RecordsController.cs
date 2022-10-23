@@ -4,7 +4,7 @@ using Glossary.Web.Application.Records;
 
 namespace Glossary.Web.API.Controllers;
 
-public class RecordController : BaseApiController
+public class RecordsController : BaseApiController
 {
     [HttpGet]
     public async Task<IActionResult> GetRecords([FromQuery] RecordParams param)

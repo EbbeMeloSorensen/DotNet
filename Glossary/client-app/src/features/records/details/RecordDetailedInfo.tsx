@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react'
 import { Segment, Grid } from 'semantic-ui-react'
-import { Person } from "../../../app/models/person";
+import { Record } from "../../../app/models/record";
 import { format } from 'date-fns';
 
 interface Props {
-    person: Person
+    record: Record
 }
 
-export default observer(function PersonDetailedInfo({person}: Props) {
+export default observer(function RecordDetailedInfo({record}: Props) {
     return (
         <Segment.Group>
             <Segment>
@@ -17,7 +17,7 @@ export default observer(function PersonDetailedInfo({person}: Props) {
                         Nickname
                     </Grid.Column>
                     <Grid.Column width={14}>
-                        <p>{person.nickname}</p>
+                        <p>{record.nickname}</p>
                     </Grid.Column>
                 </Grid>
             </Segment>
@@ -27,7 +27,7 @@ export default observer(function PersonDetailedInfo({person}: Props) {
                         Address
                     </Grid.Column>
                     <Grid.Column width={14}>
-                        <p>{person.address}</p>
+                        <p>{record.address}</p>
                     </Grid.Column>
                 </Grid>
             </Segment>
@@ -37,7 +37,7 @@ export default observer(function PersonDetailedInfo({person}: Props) {
                         Zip Code
                     </Grid.Column>
                     <Grid.Column width={14}>
-                        <p>{person.zipCode}</p>
+                        <p>{record.zipCode}</p>
                     </Grid.Column>
                 </Grid>
             </Segment>
@@ -47,7 +47,7 @@ export default observer(function PersonDetailedInfo({person}: Props) {
                         City
                     </Grid.Column>
                     <Grid.Column width={14}>
-                        <p>{person.city}</p>
+                        <p>{record.city}</p>
                     </Grid.Column>
                 </Grid>
             </Segment>
@@ -58,7 +58,7 @@ export default observer(function PersonDetailedInfo({person}: Props) {
                     </Grid.Column>
                     <Grid.Column width={14}>
                         <span>
-                            {person.birthday === null ? '' : format(person.birthday, 'MMMM d, yyyy')}
+                            {record.birthday === null ? '' : format(record.birthday, 'MMMM d, yyyy')}
                         </span>
                     </Grid.Column>
                 </Grid>
@@ -69,7 +69,7 @@ export default observer(function PersonDetailedInfo({person}: Props) {
                         Category
                     </Grid.Column>
                     <Grid.Column width={14}>
-                        <p>{person.category}</p>
+                        <p>{record.category}</p>
                     </Grid.Column>
                 </Grid>
             </Segment>
@@ -79,7 +79,7 @@ export default observer(function PersonDetailedInfo({person}: Props) {
                         Description
                     </Grid.Column>
                     <Grid.Column width={14}>
-                        <p>{person.description}</p>
+                        <p>{record.description}</p>
                     </Grid.Column>
                 </Grid>
             </Segment>
@@ -90,9 +90,9 @@ export default observer(function PersonDetailedInfo({person}: Props) {
                     </Grid.Column>
                     <Grid.Column width={14}>
                         <span>
-                            { person.dead === null 
+                            { record.dead === null 
                                 ? null 
-                                : person.dead === false
+                                : record.dead === false
                                     ? "No"
                                     : "Yes" }
                         </span>

@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { Button, Checkbox, Form, Header, Label, Radio } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 
-export default observer(function PeopleFilters() {
-    const {personStore: {setPredicate, sorting, setSorting}} = useStore();
+export default observer(function RecordsFilters() {
+    const {recordStore: {setPredicate, sorting, setSorting}} = useStore();
 
-    // Nogle states, vi gerne vil sende til personStore, når man klikker på Search-knappen
+    // Nogle states, vi gerne vil sende til recordStore, når man klikker på Search-knappen
     const [nameFilter, setNameFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
     const [dead, setDead] = useState(false);

@@ -1,11 +1,11 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Person, PersonFormValues } from "../models/person";
+import { Record, RecordFormValues } from "../models/record";
 import { Pagination, PagingParams } from "../models/pagination";
 
-export default class PersonStore {
-    personRegistry = new Map<string, Person>();
-    selectedPerson: Person | undefined = undefined;
+export default class RecordStore {
+    recordRegistry = new Map<string, Record>();
+    selectedRecord: Record | undefined = undefined;
     editMode = false;
     loading = false;
     loadingInitial = false;
@@ -21,8 +21,8 @@ export default class PersonStore {
             () => this.predicate.keys(),
             () => {
                 this.pagingParams = new PagingParams();
-                this.personRegistry.clear();
-                this.loadPeople();
+                this.recordRegistry.clear();
+                this.loadRecords();
             }
         )
     }
@@ -83,9 +83,9 @@ export default class PersonStore {
         return params;
     }
 
-    get sortedPeople() {
+    get sortedRecords() {
         if (this.sorting === "name") {
-            return Array.from(this.personRegistry.values()).sort((a, b) => {
+            return Array.from(this.recordRegistry.values()).sort((a, b) => {
                 if (a.firstName !== b.firstName) {
                     return a.firstName.localeCompare(b.firstName, 'en');
                 }
@@ -95,18 +95,18 @@ export default class PersonStore {
             });
         }
 
-        return Array.from(this.personRegistry.values()).sort((a, b) => {
+        return Array.from(this.recordRegistry.values()).sort((a, b) => {
             return a.created > b.created ? -1 : 1
         });
     }
 
-    loadPeople = async () => {
+    loadRecords = async () => {
         this.loadingInitial = true;
         try {
-            const result = await agent.People.list(this.axiosParams);
+            const result = await agent.Records.list(this.axiosParams);
             console.log(result);
-            result.data.forEach(person => {
-                this.setPerson(person);
+            result.data.forEach(record => {
+                this.setRecord(record);
             })
             this.setPagination(result.pagination);
             this.setLoadingInitial(false);
@@ -120,21 +120,21 @@ export default class PersonStore {
         this.pagination = pagination;
     }
 
-    loadPerson = async (id: string) => {
-        let person = this.getPerson(id);
-        if (person) {
-            this.selectedPerson = person;
-            return person; 
+    loadRecord = async (id: string) => {
+        let record = this.getRecord(id);
+        if (record) {
+            this.selectedRecord = record;
+            return record; 
         } else {
             this.loadingInitial = true;
             try {
-                person = await agent.People.details(id);
-                this.setPerson(person);
+                record = await agent.Records.details(id);
+                this.setRecord(record);
                 runInAction(() => {
-                    this.selectedPerson = person;
+                    this.selectedRecord = record;
                 })
                 this.setLoadingInitial(false);
-                return person; 
+                return record; 
             } catch (error) {
                 console.log(error);
                 this.setLoadingInitial(false);
@@ -142,40 +142,40 @@ export default class PersonStore {
         }
     }
 
-    private setPerson = (person: Person) => {
-        person.birthday = person.birthday === null ? null : new Date(person.birthday);
-        this.personRegistry.set(person.id, person);
+    private setRecord = (record: Record) => {
+        record.birthday = record.birthday === null ? null : new Date(record.birthday);
+        this.recordRegistry.set(record.id, record);
     }
 
-    private getPerson = (id: string) => {
-        return this.personRegistry.get(id);
+    private getRecord = (id: string) => {
+        return this.recordRegistry.get(id);
     }
 
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
     }
 
-    createPerson = async (person: PersonFormValues) => {
+    createRecord = async (record: RecordFormValues) => {
         try {
-            await agent.People.create(person);
-            const newPerson = new Person(person);
-            this.setPerson(newPerson);
+            await agent.Records.create(record);
+            const newRecord = new Record(record);
+            this.setRecord(newRecord);
             runInAction(() => {
-                this.selectedPerson = newPerson;
+                this.selectedRecord = newRecord;
             })
         } catch(error) {
             console.log(error);
         }
     }
 
-    updatePerson = async (person: PersonFormValues) => {
+    updateRecord = async (record: RecordFormValues) => {
         try {
-            await agent.People.update(person);
+            await agent.Records.update(record);
             runInAction(() => {
-                if (person.id) {
-                    let updatedPerson = {...this.getPerson(person.id), ...person}
-                    this.personRegistry.set(person.id, updatedPerson as Person);
-                    this.selectedPerson = updatedPerson as Person;
+                if (record.id) {
+                    let updatedRecord = {...this.getRecord(record.id), ...record}
+                    this.recordRegistry.set(record.id, updatedRecord as Record);
+                    this.selectedRecord = updatedRecord as Record;
                 }
             })
         } catch(error) {
@@ -183,12 +183,12 @@ export default class PersonStore {
         }
     }
 
-    deletePerson = async (id: string) => {
+    deleteRecord = async (id: string) => {
         this.loading = true;
         try {
-            await agent.People.delete(id);
+            await agent.Records.delete(id);
             runInAction(() => {
-                this.personRegistry.delete(id);
+                this.recordRegistry.delete(id);
                 this.loading = false;
             })
         } catch(error) {
@@ -199,7 +199,7 @@ export default class PersonStore {
         }
     }
 
-    clearSelectedPerson = () => {
-        this.selectedPerson = undefined;
+    clearSelectedRecord = () => {
+        this.selectedRecord = undefined;
     }
 }

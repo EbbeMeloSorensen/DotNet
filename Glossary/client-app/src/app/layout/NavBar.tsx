@@ -13,9 +13,9 @@ export default observer(function NavBar() {
                     <img src="/assets/logo.png" alt="logo" style={{marginRight: '10px'}} />
                     Who is Who
                 </Menu.Item>
-                <Menu.Item as={NavLink} to='/people' name='People' />
+                <Menu.Item as={NavLink} to='/records' name='Records' />
                 <Menu.Item>
-                    <Button as={NavLink} to='/createPerson' positive content='Create Person' />
+                    <Button as={NavLink} to='/createRecord' positive content='Create Record' />
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/errors' name='Errors' />
                 <Menu.Item position='right'>
