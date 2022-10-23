@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useState } from 'react';
 import { Link } from "react-router-dom";
-import { Button, Item, List, Segment } from "semantic-ui-react";
+import { List } from "semantic-ui-react";
 import { Record } from "../../../app/models/record";
 import { useStore } from '../../../app/stores/store';
 
@@ -22,7 +22,7 @@ export default function RecordListItem({record}: Props) {
         <List.Item>
             <List.Content>
                 <List.Header as={Link} to={`/records/${record.id}`}>
-                    {record.firstName}
+                    {record.term}
                 </List.Header>
             </List.Content>
         </List.Item>

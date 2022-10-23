@@ -86,12 +86,7 @@ export default class RecordStore {
     get sortedRecords() {
         if (this.sorting === "name") {
             return Array.from(this.recordRegistry.values()).sort((a, b) => {
-                if (a.firstName !== b.firstName) {
-                    return a.firstName.localeCompare(b.firstName, 'en');
-                }
-                let surnameA = a.surname === null ? "" : a.surname;
-                let surnameB = b.surname === null ? "" : b.surname;
-                return surnameA.localeCompare(surnameB, 'en');
+                return a.term.localeCompare(b.term, 'en');
             });
         }
 
@@ -143,7 +138,6 @@ export default class RecordStore {
     }
 
     private setRecord = (record: Record) => {
-        record.birthday = record.birthday === null ? null : new Date(record.birthday);
         this.recordRegistry.set(record.id, record);
     }
 

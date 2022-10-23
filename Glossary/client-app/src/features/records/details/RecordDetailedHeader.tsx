@@ -23,7 +23,7 @@ export default observer (function RecordDetailedHeader({record}: Props) {
     return (
         <Segment.Group>
             <Segment clearing attached='bottom'>
-                <Header>{record.firstName}</Header>
+                <Header>{record.term}</Header>
                 <Button.Group floated='right'>
                     <Button
                         loading={loading}
