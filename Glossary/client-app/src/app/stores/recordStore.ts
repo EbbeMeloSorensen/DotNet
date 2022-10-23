@@ -46,10 +46,7 @@ export default class RecordStore {
     // Network tabben
     setPredicate = (
         nameFilter: string,
-        categoryFilter: string,
-        dead: boolean,
-        notDead: boolean,
-        deadUnspecified: boolean) => {
+        categoryFilter: string) => {
         this.resetPredicate();
 
         if (nameFilter.length > 0)
@@ -60,16 +57,6 @@ export default class RecordStore {
         if (categoryFilter.length > 0)
         {
             this.predicate.set('category', categoryFilter);
-        }
-
-        if (dead || notDead || deadUnspecified)
-        {
-            let deadFilter = new Array<string>();
-            if (dead) deadFilter.push("true");
-            if (notDead) deadFilter.push("false");
-            if (deadUnspecified) deadFilter.push("null");
-    
-            this.predicate.set('dead', deadFilter.join('|'));
         }
 
         this.predicate.set('sorting', this.sorting);

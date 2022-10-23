@@ -9,14 +9,11 @@ export default observer(function RecordsFilters() {
     // Nogle states, vi gerne vil sende til recordStore, når man klikker på Search-knappen
     const [nameFilter, setNameFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
-    const [dead, setDead] = useState(false);
-    const [notDead, setNotDead] = useState(false);
-    const [deadUnspecified, setDeadUnspecified] = useState(false);
     const [sortingLocal, setSortingLocal] = useState(sorting);
 
     function handleClick() {
         setSorting(sortingLocal);
-        setPredicate(nameFilter, categoryFilter, dead, notDead, deadUnspecified);
+        setPredicate(nameFilter, categoryFilter);
     }
 
     return (
@@ -33,36 +30,11 @@ export default observer(function RecordsFilters() {
                 <input value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)}
             />
 
-            <Header>Dead</Header>
-            <Form>
-                <Form.Field>
-                    <Checkbox
-                        label='Yes'
-                        defaultChecked={dead}
-                        onChange={() => setDead(!dead)}
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <Checkbox
-                        label='No'
-                        defaultChecked={notDead}
-                        onChange={() => setNotDead(!notDead)}
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <Checkbox
-                        label='Unspecified'
-                        defaultChecked={deadUnspecified}
-                        onChange={() => setDeadUnspecified(!deadUnspecified)}
-                    />
-                </Form.Field>
-            </Form>
-
             <Header>Sorting</Header>
             <Form>
                 <Form.Field>
                     <Radio
-                        label='Name'
+                        label='Alphabetical'
                         name='radioGroup'
                         value='this'
                         checked={sortingLocal === 'name'}
@@ -71,7 +43,7 @@ export default observer(function RecordsFilters() {
                 </Form.Field>
                 <Form.Field>
                     <Radio
-                        label='Created'
+                        label='Entry Time'
                         name='radioGroup'
                         value='that'
                         checked={sortingLocal === 'created'}
