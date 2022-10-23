@@ -15,7 +15,7 @@ export default observer (function RecordDetailedHeader({record}: Props) {
     const {deleteRecord, loading} = recordStore;
 
     function handleRecordDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
-        if (window.confirm("Do you want to delete this record?") === true) {
+        if (window.confirm("Do you want to delete this term?") === true) {
             deleteRecord(id).then(() => history.push(`/records`));
         }
     }

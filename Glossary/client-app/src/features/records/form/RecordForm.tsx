@@ -68,7 +68,7 @@ export default observer(function RecordForm() {
 
     return (
         <Segment clearing>
-            <Header content='Record Details' sub color='teal' />
+            <Header content='Details' sub color='teal' />
             <Formik
             validationSchema={validationSchema}
                 enableReinitialize
