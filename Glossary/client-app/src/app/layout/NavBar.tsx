@@ -11,11 +11,11 @@ export default observer(function NavBar() {
             <Container>
                 <Menu.Item as={NavLink} to='/' exact header>
                     <img src="/assets/logo.png" alt="logo" style={{marginRight: '10px'}} />
-                    Who is Who
+                    Glossary
                 </Menu.Item>
-                <Menu.Item as={NavLink} to='/records' name='Records' />
+                <Menu.Item as={NavLink} to='/records' name='Terms' />
                 <Menu.Item>
-                    <Button as={NavLink} to='/createRecord' positive content='Create Record' />
+                    <Button as={NavLink} to='/createRecord' positive content='New Term...' />
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/errors' name='Errors' />
                 <Menu.Item position='right'>

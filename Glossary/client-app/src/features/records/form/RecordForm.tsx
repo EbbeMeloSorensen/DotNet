@@ -77,7 +77,7 @@ export default observer(function RecordForm() {
                 {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                     <MyTextInput name='term' placeholder='Term' />
-                    <MyTextInput name='Source' placeholder='Source' />
+                    <MyTextInput name='source' placeholder='Source' />
                     <MyTextInput name='category' placeholder='Category' />
                     <MyTextArea rows={3} placeholder='Description' name='description'/>
                     <Button 

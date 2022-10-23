@@ -51,7 +51,7 @@ export default class RecordStore {
 
         if (nameFilter.length > 0)
         {
-            this.predicate.set('name', nameFilter);
+            this.predicate.set('term', nameFilter);
         }
 
         if (categoryFilter.length > 0)
