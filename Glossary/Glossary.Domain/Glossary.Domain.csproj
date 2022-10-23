@@ -5,10 +5,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Foreign\**" />
-    <EmbeddedResource Remove="Foreign\**" />
-    <None Remove="Foreign\**" />
-  </ItemGroup>
-
 </Project>
