@@ -33,7 +33,7 @@ public class List
 
             switch (request.Params.Sorting)
             {
-                case "term":
+                case "name":
                     query = _context.Records
                         .OrderBy(d => d.Term)
                         .ProjectTo<RecordDto>(_mapper.ConfigurationProvider,
