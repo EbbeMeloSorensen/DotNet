@@ -20,7 +20,11 @@
 
 # Frontend
 
-### Preparing the Frontend
+### Setting Up the Frontend
+
+Se, hvordan det gøres i readme filen for Reactivities projektet under ASP.NET
+
+### Preparing the Frontend after cloning from GitHub Repository
 
 `npm install`
 
