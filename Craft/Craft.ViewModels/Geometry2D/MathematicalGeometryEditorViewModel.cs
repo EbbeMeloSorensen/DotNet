@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
-using Craft.Math;
+using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D
 {
@@ -35,29 +34,29 @@ namespace Craft.ViewModels.Geometry2D
         }
 
         public override void AddPoint(
-            Point2D point,
+            PointD point,
             double diameter,
             Brush brush = null)
         {
-            base.AddPoint(new Point2D(point.X, -point.Y), diameter, brush);
+            base.AddPoint(new PointD(point.X, -point.Y), diameter, brush);
         }
 
         public override void AddShape(
             int id,
             ShapeViewModel shapeViewModel)
         {
-            shapeViewModel.Point = new Point2D(shapeViewModel.Point.X, -shapeViewModel.Point.Y);
+            shapeViewModel.Point = new PointD(shapeViewModel.Point.X, -shapeViewModel.Point.Y);
             base.AddShape(id, shapeViewModel);
         }
 
         public override void AddLine(
-            Point2D point1,
-            Point2D point2,
+            PointD point1,
+            PointD point2,
             double thickness)
         {
             LineViewModels.Add(new LineViewModel(
-                new Point2D(point1.X, -point1.Y),
-                new Point2D(point2.X, -point2.Y),
+                new PointD(point1.X, -point1.Y),
+                new PointD(point2.X, -point2.Y),
                 thickness));
         }
     }

@@ -1,16 +1,16 @@
 ﻿using System.Windows.Media;
 using GalaSoft.MvvmLight;
-using Craft.Math;
+using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D
 {
     public class PointViewModel : ViewModelBase
     {
-        private Point2D _point;
+        private PointD _point;
         private double _diameter;
         private Brush _brush;
 
-        public Point2D Point
+        public PointD Point
         {
             get => _point;
             set
@@ -41,7 +41,7 @@ namespace Craft.ViewModels.Geometry2D
         }
 
         public PointViewModel(
-            Point2D point,
+            PointD point,
             double diameter,
             Brush brush)
         {

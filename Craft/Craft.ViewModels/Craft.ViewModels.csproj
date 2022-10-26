@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj" />
-    <ProjectReference Include="..\Craft.Math\Craft.Math.csproj" />
   </ItemGroup>
 
 </Project>

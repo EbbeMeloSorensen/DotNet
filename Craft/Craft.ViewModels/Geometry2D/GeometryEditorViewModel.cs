@@ -4,9 +4,8 @@ using System.Windows.Media;
 using System.Windows;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
 using GalaSoft.MvvmLight;
-using Craft.Math;
+using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D
 {
@@ -23,7 +22,7 @@ namespace Craft.ViewModels.Geometry2D
         private double _magnification;
         private System.Windows.Media.Matrix _transformationMatrix;
         private Brush _defaultBrush;
-        private Dictionary<Point2D, Tuple<double, Brush>> _pointToDiameterMap;
+        private Dictionary<PointD, Tuple<double, Brush>> _pointToDiameterMap;
         private Dictionary<int, ShapeViewModel> _shapeViewModelMap;
 
         public string ImagePath
@@ -161,14 +160,14 @@ namespace Craft.ViewModels.Geometry2D
             ShapeViewModels = new ObservableCollection<ShapeViewModel>();
             LineViewModels = new ObservableCollection<LineViewModel>();
 
-            _pointToDiameterMap = new Dictionary<Point2D, Tuple<double, Brush>>();
+            _pointToDiameterMap = new Dictionary<PointD, Tuple<double, Brush>>();
             _shapeViewModelMap = new Dictionary<int, ShapeViewModel>();
 
             UpdateTransformationMatrix();
         }
 
         public virtual void AddPoint(
-            Point2D point,
+            PointD point,
             double diameter,
             Brush brush = null)
         {
@@ -193,8 +192,8 @@ namespace Craft.ViewModels.Geometry2D
         }
 
         public virtual void AddLine(
-            Point2D point1,
-            Point2D point2,
+            PointD point1,
+            PointD point2,
             double thickness)
         {
             LineViewModels.Add(new LineViewModel(point1, point2, thickness));
@@ -225,7 +224,7 @@ namespace Craft.ViewModels.Geometry2D
         }
 
         public void SetFocusForWorldWindow(
-            Point2D focus)
+            PointD focus)
         {
             WorldWindowUpperLeft = new Point(
                 focus.X - WorldWindowSize.Width / 2,
@@ -233,7 +232,7 @@ namespace Craft.ViewModels.Geometry2D
         }
 
         public void AdjustWorldWindowSoPointLiesInCentralSquare(
-            Point2D point,
+            PointD point,
             double maxOffsetXFraction,
             double maxOffsetYFraction,
             double correctionXFraction = 0.5,
@@ -243,7 +242,7 @@ namespace Craft.ViewModels.Geometry2D
             var correctionY = WorldWindowSize.Height * (correctionYFraction - 0.5);
 
             // What is the distance between the current focus and the point
-            var currentFocus = new Point2D(
+            var currentFocus = new PointD(
                 _worldWindowUpperLeft.X + _worldWindowSize.Width / 2 + correctionX,
                 _worldWindowUpperLeft.Y + _worldWindowSize.Height / 2 + correctionY);
 
@@ -356,9 +355,9 @@ namespace Craft.ViewModels.Geometry2D
             }
         }
 
-        private Point2D TransformPoint(Point2D point)
+        private PointD TransformPoint(PointD point)
         {
-            return new Point2D(
+            return new PointD(
                 _magnification * point.X - _worldWindowUpperLeft.X * _magnification,
                 _magnification * point.Y - _worldWindowUpperLeft.Y * _magnification);
         }

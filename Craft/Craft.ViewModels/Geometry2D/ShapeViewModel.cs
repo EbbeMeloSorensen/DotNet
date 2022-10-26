@@ -1,15 +1,15 @@
-﻿using Craft.Math;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
+using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D
 {
     public abstract class ShapeViewModel : ViewModelBase
     {
-        private Point2D _point;
+        private PointD _point;
         private double _width;
         private double _height;
 
-        public Point2D Point
+        public PointD Point
         {
             get => _point;
             set
