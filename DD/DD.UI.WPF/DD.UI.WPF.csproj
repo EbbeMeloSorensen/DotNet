@@ -64,14 +64,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.14" />
+    <PackageReference Include="log4net" Version="2.0.15" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
-    <ProjectReference Include="..\..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
     <ProjectReference Include="..\DD.Persistence.Memory\DD.Persistence.Memory.csproj" />
     <ProjectReference Include="..\DD.UIDataProvider.Persistence\DD.UIDataProvider.Persistence.csproj" />

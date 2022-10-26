@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using Craft.IO.Utils;
 using Newtonsoft.Json;
 using DD.Domain;
 
@@ -24,7 +25,7 @@ namespace DD.IO
                 CreatureTypes = creatureTypes.ToList()
             };
 
-            var jsonResolver = new MyContractResolver();
+            var jsonResolver = new ContractResolver();
             jsonResolver.IgnoreProperty(typeof(CreatureType), "Attacks");
 
             var settings = new JsonSerializerSettings

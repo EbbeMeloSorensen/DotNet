@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -7,9 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Craft\Craft.Algorithms\Craft.Algorithms.csproj" />
-    <ProjectReference Include="..\..\Craft\Craft.DataStructures\Craft.DataStructures.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
-    <ProjectReference Include="..\..\Craft\Craft.Math\Craft.Math.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.Utils\Craft.Utils.csproj" />
     <ProjectReference Include="..\DD.Domain\DD.Domain.csproj" />
     <ProjectReference Include="..\DD.IO\DD.IO.csproj" />
