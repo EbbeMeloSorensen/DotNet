@@ -7,6 +7,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
     public class PRDbContext : DbContext
     {
         public DbSet<Person> People { get; set; }
+        public DbSet<PersonAssociation> PersonAssociations { get; set; }
 
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
@@ -19,6 +20,17 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new PersonConfiguration());
+            modelBuilder.ApplyConfiguration(new PersonAssociationConfiguration());
+
+            modelBuilder.Entity<PersonAssociation>()
+                .HasOne(p => p.SubjectPerson)
+                .WithMany(pa => pa.ObjectPeople)
+                .HasForeignKey(pa => pa.SubjectPersonId);
+
+            modelBuilder.Entity<PersonAssociation>()
+                .HasOne(p => p.ObjectPerson)
+                .WithMany(pa => pa.SubjectPeople)
+                .HasForeignKey(pa => pa.ObjectPersonId);
         }
     }
 }
