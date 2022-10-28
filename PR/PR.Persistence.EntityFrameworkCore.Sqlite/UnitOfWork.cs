@@ -14,6 +14,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
         {
             _context = context;
             People = new PersonRepository(_context);
+            PersonAssociations = new PersonAssociationRepository(_context);
         }
 
         public int Complete()

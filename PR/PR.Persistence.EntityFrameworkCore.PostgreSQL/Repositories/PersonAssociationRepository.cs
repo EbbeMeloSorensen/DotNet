@@ -12,15 +12,15 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
             get { return Context as PRDbContext; }
         }
 
+        public PersonAssociationRepository(
+            DbContext context) : base(context)
+        {
+        }
+
         public PersonAssociation Get(
             Guid id)
         {
             return PrDbContext.PersonAssociations.Find(id);
-        }
-
-        public PersonAssociationRepository(
-            DbContext context) : base(context)
-        {
         }
 
         public override void Update(

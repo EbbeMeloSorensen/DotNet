@@ -7,15 +7,30 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
 {
     public class PersonAssociationRepository : Repository<PersonAssociation>, IPersonAssociationRepository
     {
+        public PRDbContext PrDbContext
+        {
+            get { return Context as PRDbContext; }
+        }
+
         public PersonAssociationRepository(
             DbContext context) : base(context)
         {
         }
 
-        public override void Update(
-            PersonAssociation entity)
+        public PersonAssociation Get(
+            Guid id)
         {
-            throw new NotImplementedException();
+            return PrDbContext.PersonAssociations.Find(id);
+        }
+
+        public override void Update(
+            PersonAssociation personAssociation)
+        {
+            var objFromRepository = Get(personAssociation.Id);
+
+            objFromRepository.SubjectPersonId = personAssociation.SubjectPersonId;
+            objFromRepository.ObjectPersonId = personAssociation.ObjectPersonId;
+            objFromRepository.Description = personAssociation.Description;
         }
 
         public override void UpdateRange(

@@ -8,6 +8,11 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
 {
     public class PersonRepository : Repository<Person>, IPersonRepository
     {
+        public PRDbContext PrDbContext
+        {
+            get { return Context as PRDbContext; }
+        }
+
         public PersonRepository(DbContext context) : base(context)
         {
         }
@@ -32,13 +37,20 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
         public Person GetPersonIncludingAssociations(
             Guid id)
         {
-            throw new NotImplementedException();
+            return PrDbContext.People
+                .Include(p => p.ObjectPeople).ThenInclude(pa => pa.ObjectPerson)
+                .Include(p => p.SubjectPeople).ThenInclude(pa => pa.SubjectPerson)
+                .SingleOrDefault(p => p.Id == id) ?? throw new InvalidOperationException();
         }
 
         public IList<Person> GetPeopleIncludingAssociations(
             Expression<Func<Person, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return PrDbContext.People
+                .Include(p => p.ObjectPeople).ThenInclude(pa => pa.ObjectPerson)
+                .Include(p => p.SubjectPeople).ThenInclude(pa => pa.SubjectPerson)
+                .Where(predicate)
+                .ToList();
         }
     }
 }
