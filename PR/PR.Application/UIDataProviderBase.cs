@@ -107,10 +107,70 @@ namespace PR.Application
 
             _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {people.Count} person records");
 
+            // Temporary: Fix the created dates, so there are no duplets (we want to sort by created date,
+            // so we can easily inspect diffs for subsequent versions of the dataset)
+            /*
+            var personMap = new Dictionary<DateTime, List<Person>>();
+            foreach (var person in people)
+            {
+                if (!personMap.ContainsKey(person.Created))
+                {
+                    personMap[person.Created] = new List<Person>();
+                }
+
+                personMap[person.Created].Add(person);
+            }
+
+            foreach (var kvp in personMap)
+            {
+                if (kvp.Value.Count == 1) continue;
+
+                var temp = kvp.Value
+                    .OrderBy(p => p.FirstName)
+                    .ThenBy(p => p.Surname)
+                    .ToList();
+
+                for (var index = 0; index < kvp.Value.Count; index++)
+                {
+                    temp[index].Created = temp[index].Created.AddMilliseconds(index);
+                }
+            }
+
+            var personAssociationMap = new Dictionary<DateTime, List<PersonAssociation>>();
+            foreach (var personAssociation in personAssociations)
+            {
+                if (!personAssociationMap.ContainsKey(personAssociation.Created))
+                {
+                    personAssociationMap[personAssociation.Created] = new List<PersonAssociation>();
+                }
+
+                personAssociationMap[personAssociation.Created].Add(personAssociation);
+            }
+
+            foreach (var kvp in personAssociationMap)
+            {
+                if (kvp.Value.Count == 1) continue;
+
+                for (var index = 0; index < kvp.Value.Count; index++)
+                {
+                    kvp.Value[index].Created = kvp.Value[index].Created.AddMilliseconds(index).AddSeconds(1);
+                }
+            }
+            */
+
+            var numberOfDistinctCreateTimesForPeople = people.Select(p => p.Created).Distinct().Count();
+            var numberOfDistinctCreateTimesForPeopleAssociations = personAssociations.Select(p => p.Created).Distinct().Count();
+
+            if (numberOfDistinctCreateTimesForPeople < people.Count ||
+                numberOfDistinctCreateTimesForPeopleAssociations < personAssociations.Count)
+            {
+                throw new InvalidOperationException("created times not distinct");
+            }
+
             var prData = new PRData
             {
-                People = people.ToList(),
-                PersonAssociations = personAssociations.ToList()
+                People = people.OrderBy(p => p.Created).ToList(),
+                PersonAssociations = personAssociations.OrderBy(pa => pa.Created).ToList()
             };
 
             switch (extension)

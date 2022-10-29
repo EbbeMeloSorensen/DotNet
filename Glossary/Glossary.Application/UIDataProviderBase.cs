@@ -105,10 +105,69 @@ namespace Glossary.Application
 
             _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {records.Count} records");
 
+            // Temporary: Fix the created dates, so there are no duplets (we want to sort by created date,
+            // so we can easily inspect diffs for subsequent versions of the dataset)
+            /*
+            var recordMap = new Dictionary<DateTime, List<Record>>();
+            foreach (var record in records)
+            {
+                if (!recordMap.ContainsKey(record.Created))
+                {
+                    recordMap[record.Created] = new List<Record>();
+                }
+
+                recordMap[record.Created].Add(record);
+            }
+
+            foreach (var kvp in recordMap)
+            {
+                if (kvp.Value.Count == 1) continue;
+
+                var temp = kvp.Value
+                    .OrderBy(r => r.Term)
+                    .ToList();
+
+                for (var index = 0; index < kvp.Value.Count; index++)
+                {
+                    temp[index].Created = temp[index].Created.AddMilliseconds(index);
+                }
+            }
+
+            var recordAssociationMap = new Dictionary<DateTime, List<RecordAssociation>>();
+            foreach (var personAssociation in recordAssociations)
+            {
+                if (!recordAssociationMap.ContainsKey(personAssociation.Created))
+                {
+                    recordAssociationMap[personAssociation.Created] = new List<RecordAssociation>();
+                }
+
+                recordAssociationMap[personAssociation.Created].Add(personAssociation);
+            }
+
+            foreach (var kvp in recordAssociationMap)
+            {
+                if (kvp.Value.Count == 1) continue;
+
+                for (var index = 0; index < kvp.Value.Count; index++)
+                {
+                    kvp.Value[index].Created = kvp.Value[index].Created.AddMilliseconds(index).AddSeconds(1);
+                }
+            }
+            */
+
+            var numberOfDistinctCreateTimesForRecords = records.Select(p => p.Created).Distinct().Count();
+            var numberOfDistinctCreateTimesForRecordAssociations = recordAssociations.Select(p => p.Created).Distinct().Count();
+
+            if (numberOfDistinctCreateTimesForRecords < records.Count ||
+                numberOfDistinctCreateTimesForRecordAssociations < recordAssociations.Count)
+            {
+                throw new InvalidOperationException("created times not distinct");
+            }
+
             var glossaryData = new GlossaryData
             {
-                Records = records.ToList(),
-                RecordAssociations = recordAssociations.ToList()
+                Records = records.OrderBy(r => r.Created).ToList(),
+                RecordAssociations = recordAssociations.OrderBy(ra => ra.Created).ToList()
             };
 
             switch (extension)
