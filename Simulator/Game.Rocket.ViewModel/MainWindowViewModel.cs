@@ -506,7 +506,7 @@ namespace Game.Rocket.ViewModel
                             }
                     }
 
-                    shapeViewModel.Point = new Point2D(bs.Position.X, bs.Position.Y);
+                    shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
                 });
         }
 

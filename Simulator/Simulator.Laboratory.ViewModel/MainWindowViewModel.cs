@@ -116,7 +116,7 @@ namespace Simulator.Laboratory.ViewModel
             // Denne bruges indtil videre kun for Shoot 'Em Up 7 og 8
             ShapeUpdateCallback shapeUpdateCallback1 = (shapeViewModel, bs) =>
             {
-                shapeViewModel.Point = new Point2D(bs.Position.X, bs.Position.Y);
+                shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
 
                 if (shapeViewModel is TaggedEllipseViewModel taggedEllipseViewModel)
                 {
@@ -146,7 +146,7 @@ namespace Simulator.Laboratory.ViewModel
             // Denne bruges indtil videre kun for Rotation og Rocket scenerne
             ShapeUpdateCallback shapeUpdateCallback2 = (shapeViewModel, bs) =>
             {
-                shapeViewModel.Point = new Point2D(bs.Position.X, bs.Position.Y);
+                shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
 
                 if (shapeViewModel is RotatableEllipseViewModel)
                 {

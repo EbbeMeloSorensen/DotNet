@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Craft.Math;
+using Craft.Utils;
 using Craft.ViewModels.Geometry2D;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
@@ -103,7 +104,7 @@ namespace Simulator.ViewModel
         {
             ShapeUpdateCallback = (shapeViewModel, bs) =>
             {
-                shapeViewModel.Point = new Point2D(bs.Position.X, bs.Position.Y);
+                shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
             };
         }
 
@@ -141,54 +142,54 @@ namespace Simulator.ViewModel
                     case HalfPlane halfPlane:
                         var v = halfPlane.SurfaceNormal.Hat();
                         _geometryEditorViewModel.AddLine(
-                            new Point2D(halfPlane.Point.X - 500 * v.X, halfPlane.Point.Y - 500 * v.Y),
-                            new Point2D(halfPlane.Point.X + 500 * v.X, halfPlane.Point.Y + 500 * v.Y),
+                            new PointD(halfPlane.Point.X - 500 * v.X, halfPlane.Point.Y - 500 * v.Y),
+                            new PointD(halfPlane.Point.X + 500 * v.X, halfPlane.Point.Y + 500 * v.Y),
                             lineThickness);
                         break;
                     case LeftFacingHalfPlane halfPlane:
                         _geometryEditorViewModel.AddLine(
-                            new Point2D(halfPlane.X, -500),
-                            new Point2D(halfPlane.X, 500),
+                            new PointD(halfPlane.X, -500),
+                            new PointD(halfPlane.X, 500),
                             lineThickness);
                         break;
                     case RightFacingHalfPlane halfPlane:
                         _geometryEditorViewModel.AddLine(
-                            new Point2D(halfPlane.X, -500),
-                            new Point2D(halfPlane.X, 500),
+                            new PointD(halfPlane.X, -500),
+                            new PointD(halfPlane.X, 500),
                             lineThickness);
                         break;
                     case UpFacingHalfPlane halfPlane:
                         _geometryEditorViewModel.AddLine(
-                            new Point2D(-500, halfPlane.Y),
-                            new Point2D(500, halfPlane.Y),
+                            new PointD(-500, halfPlane.Y),
+                            new PointD(500, halfPlane.Y),
                             lineThickness);
                         break;
                     case DownFacingHalfPlane halfPlane:
                         _geometryEditorViewModel.AddLine(
-                            new Point2D(-500, halfPlane.Y),
-                            new Point2D(500, halfPlane.Y),
+                            new PointD(-500, halfPlane.Y),
+                            new PointD(500, halfPlane.Y),
                             lineThickness);
                         break;
                     case LineSegment lineSegment:
                         _geometryEditorViewModel.AddLine(
-                            lineSegment.Point1.AsPoint2D(),
-                            lineSegment.Point2.AsPoint2D(),
+                            lineSegment.Point1.AsPointD(),
+                            lineSegment.Point2.AsPointD(),
                             lineThickness);
                         break;
                     case VerticalLineSegment lineSegment:
                         _geometryEditorViewModel.AddLine(
-                            lineSegment.Point1.AsPoint2D(),
-                            lineSegment.Point2.AsPoint2D(),
+                            lineSegment.Point1.AsPointD(),
+                            lineSegment.Point2.AsPointD(),
                             lineThickness);
                         break;
                     case HorizontalLineSegment lineSegment:
                         _geometryEditorViewModel.AddLine(
-                            lineSegment.Point1.AsPoint2D(),
-                            lineSegment.Point2.AsPoint2D(),
+                            lineSegment.Point1.AsPointD(),
+                            lineSegment.Point2.AsPointD(),
                             lineThickness);
                         break;
                     case BoundaryPoint boundaryPoint:
-                        _geometryEditorViewModel.AddPoint(boundaryPoint.Point.AsPoint2D(), 3, new SolidColorBrush(Colors.Black));
+                        _geometryEditorViewModel.AddPoint(boundaryPoint.Point.AsPointD(), 3, new SolidColorBrush(Colors.Black));
                         break;
                     default:
                         throw new ArgumentException();
@@ -201,7 +202,7 @@ namespace Simulator.ViewModel
                 {
                     Width = p.Width,
                     Height = p.Height,
-                    Point = p.Position.AsPoint2D()
+                    Point = p.Position.AsPointD()
                 });
             });
 
@@ -241,14 +242,14 @@ namespace Simulator.ViewModel
                     var centerOfMass = state.CenterOfMass();
                     if (centerOfMass != null)
                     {
-                        _geometryEditorViewModel.SetFocusForWorldWindow(centerOfMass.AsPoint2D());
+                        _geometryEditorViewModel.SetFocusForWorldWindow(centerOfMass.AsPointD());
                     }
                     break;
                 case SceneViewMode.FocusOnFirstBody:
                     var centerOfInitialBody = state.CenterOfInitialBody();
                     if (centerOfInitialBody != null)
                     {
-                        _geometryEditorViewModel.SetFocusForWorldWindow(centerOfInitialBody.AsPoint2D());
+                        _geometryEditorViewModel.SetFocusForWorldWindow(centerOfInitialBody.AsPointD());
                     }
                     break;
                 case SceneViewMode.MaintainFocusInVicinityOfPoint:
@@ -256,7 +257,7 @@ namespace Simulator.ViewModel
                     if (centerOfInitialBody2 != null)
                     {
                         _geometryEditorViewModel.AdjustWorldWindowSoPointLiesInCentralSquare(
-                            centerOfInitialBody2.AsPoint2D(),
+                            centerOfInitialBody2.AsPointD(),
                             _application.Engine.Scene.MaxOffsetXFraction,
                             _application.Engine.Scene.MaxOffsetYFraction,
                             _application.Engine.Scene.CorrectionXFraction,
@@ -293,7 +294,7 @@ namespace Simulator.ViewModel
                 else
                 {
                     var shapeViewModel = ShapeSelectorCallback.Invoke(bs);
-                    shapeViewModel.Point = bs.Position.AsPoint2D();
+                    shapeViewModel.Point = bs.Position.AsPointD();
 
                     if (shapeViewModel is RotatableShapeViewModel)
                     {
