@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Craft.ViewModels.Geometry2D
+namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class ShapeTemplateSelector : DataTemplateSelector
     {

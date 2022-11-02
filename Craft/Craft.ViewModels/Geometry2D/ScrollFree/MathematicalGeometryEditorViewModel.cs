@@ -2,7 +2,7 @@
 using System.Windows.Media;
 using Craft.Utils;
 
-namespace Craft.ViewModels.Geometry2D
+namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class MathematicalGeometryEditorViewModel : GeometryEditorViewModel
     {

@@ -2,14 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:valueConverters="clr-namespace:Craft.UI.Utils.ValueConverters;assembly=Craft.UI.Utils"
-                    xmlns:geometry2D="clr-namespace:Craft.ViewModels.Geometry2D;assembly=Craft.ViewModels">
+                    xmlns:geometry2D="clr-namespace:Craft.ViewModels.Geometry2D;assembly=Craft.ViewModels"
+                    xmlns:scrollFree="clr-namespace:Craft.ViewModels.Geometry2D.ScrollFree;assembly=Craft.ViewModels">
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="NavajoWhite"/>
     <valueConverters:ImagePathConverter x:Key="ImagePathConverter"/>
     <valueConverters:CoordinateToMagnifiableCanvasPositionConverter x:Key="CoordinateToMagnifiableCanvasPositionConverter"/>
     <valueConverters:CoordinateToCanvasPositionConverter x:Key="CoordinateToCanvasPositionConverter"/>
     <valueConverters:DoubleScaler x:Key="DoubleScaler"/>
-    <geometry2D:ShapeTemplateSelector x:Key="ShapeTemplateSelector"/>
+    <scrollFree:ShapeTemplateSelector x:Key="ShapeTemplateSelector"/>
 
     <DataTemplate x:Key="Rectangle">
         <Rectangle Fill="DarkSlateGray" Width="{Binding Width}" Height="{Binding Height}">

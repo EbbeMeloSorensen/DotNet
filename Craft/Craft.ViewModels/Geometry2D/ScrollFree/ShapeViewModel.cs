@@ -1,7 +1,7 @@
-﻿using GalaSoft.MvvmLight;
-using Craft.Utils;
+﻿using Craft.Utils;
+using GalaSoft.MvvmLight;
 
-namespace Craft.ViewModels.Geometry2D
+namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public abstract class ShapeViewModel : ViewModelBase
     {

@@ -1,4 +1,4 @@
-﻿namespace Craft.ViewModels.Geometry2D
+﻿namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public abstract class RotatableShapeViewModel : ShapeViewModel
     {

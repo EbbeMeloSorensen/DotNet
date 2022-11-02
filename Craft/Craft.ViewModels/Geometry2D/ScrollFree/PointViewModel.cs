@@ -1,8 +1,8 @@
 ﻿using System.Windows.Media;
-using GalaSoft.MvvmLight;
 using Craft.Utils;
+using GalaSoft.MvvmLight;
 
-namespace Craft.ViewModels.Geometry2D
+namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class PointViewModel : ViewModelBase
     {

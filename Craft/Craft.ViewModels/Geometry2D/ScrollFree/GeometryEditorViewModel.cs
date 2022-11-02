@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Linq;
-using System.Windows.Media;
-using System.Windows;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 using Craft.Utils;
+using GalaSoft.MvvmLight;
 
-namespace Craft.ViewModels.Geometry2D
+namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public delegate void UpdateModelCallBack();
 

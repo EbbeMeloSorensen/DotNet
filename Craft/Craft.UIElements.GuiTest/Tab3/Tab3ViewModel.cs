@@ -1,5 +1,6 @@
 ﻿using Craft.Utils;
 using Craft.ViewModels.Geometry2D;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
 
 namespace Craft.UIElements.GuiTest.Tab3
