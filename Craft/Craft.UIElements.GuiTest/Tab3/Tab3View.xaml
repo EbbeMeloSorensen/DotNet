@@ -3,16 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Craft.UIElements.GuiTest.Tab3"
-             xmlns:geometry2d="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
+             xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
+             xmlns:scrolling="clr-namespace:Craft.UIElements.Geometry2D.Scrolling;assembly=Craft.UIElements"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <TabControl SelectedIndex="0">
-        <TabItem Header="Basic">
-            <geometry2d:GeometryEditorView DataContext="{Binding GeometryEditorViewModel1}"/>
+        <TabItem Header="ScrollFree">
+            <TabControl SelectedIndex="0">
+                <TabItem Header="Basic">
+                    <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel1}"/>
+                </TabItem>
+                <TabItem Header="Mathematical">
+                    <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel2}"/>
+                </TabItem>
+            </TabControl>
         </TabItem>
-        <TabItem Header="Mathematical">
-            <geometry2d:GeometryEditorView DataContext="{Binding GeometryEditorViewModel2}"/>
+        <TabItem Header="Scrolling">
+            <scrolling:ImageEditorView DataContext="{Binding ImageEditorViewModel}"/>
         </TabItem>
     </TabControl>
 </UserControl>

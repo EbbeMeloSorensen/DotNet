@@ -17,7 +17,7 @@
         <TabItem Header="PieChart">
             <tab2:Tab2View DataContext="{Binding Tab2ViewModel}"/>
         </TabItem>
-        <TabItem Header="Geometry">
+        <TabItem Header="Geometry 2D">
             <tab3:Tab3View DataContext="{Binding Tab3ViewModel}"/>
         </TabItem>
         <TabItem Header="Chronology">

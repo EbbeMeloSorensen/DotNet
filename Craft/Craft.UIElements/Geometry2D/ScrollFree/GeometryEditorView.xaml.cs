@@ -3,10 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Craft.ViewModels.Geometry2D;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 
-namespace Craft.UIElements.Geometry2D
+namespace Craft.UIElements.Geometry2D.ScrollFree
 {
     /// <summary>
     /// Interaction logic for GeometryEditorView.xaml

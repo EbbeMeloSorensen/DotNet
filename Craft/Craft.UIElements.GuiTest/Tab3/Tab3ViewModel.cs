@@ -1,19 +1,21 @@
 ﻿using Craft.Utils;
-using Craft.ViewModels.Geometry2D;
 using Craft.ViewModels.Geometry2D.ScrollFree;
+using Craft.ViewModels.Geometry2D.Scrolling;
 using GalaSoft.MvvmLight;
 
 namespace Craft.UIElements.GuiTest.Tab3
 {
     public class Tab3ViewModel : ViewModelBase
     {
-        public GeometryEditorViewModel GeometryEditorViewModel1 { get; private set; }
-        public GeometryEditorViewModel GeometryEditorViewModel2 { get; private set; }
+        public GeometryEditorViewModel GeometryEditorViewModel1 { get; }
+        public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
+        public ImageEditorViewModel ImageEditorViewModel { get; }
 
         public Tab3ViewModel()
         {
             GeometryEditorViewModel1 = new GeometryEditorViewModel(1, 250, 75);
             GeometryEditorViewModel2 = new MathematicalGeometryEditorViewModel(1, 250, 75);
+            ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
             //LineViewModel.Thickness = 0.5;
             DrawAHouse(GeometryEditorViewModel1);
