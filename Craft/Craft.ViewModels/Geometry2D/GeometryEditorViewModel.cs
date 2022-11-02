@@ -20,7 +20,7 @@ namespace Craft.ViewModels.Geometry2D
         private Point _mousePositionWorld;
         protected Point _worldWindowUpperLeft;
         private double _magnification;
-        private System.Windows.Media.Matrix _transformationMatrix;
+        private Matrix _transformationMatrix;
         private Brush _defaultBrush;
         private Dictionary<PointD, Tuple<double, Brush>> _pointToDiameterMap;
         private Dictionary<int, ShapeViewModel> _shapeViewModelMap;
