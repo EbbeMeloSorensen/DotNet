@@ -7,7 +7,7 @@ using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
-using Craft.ViewModels.Geometry2D;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
 using Simulator.Application;

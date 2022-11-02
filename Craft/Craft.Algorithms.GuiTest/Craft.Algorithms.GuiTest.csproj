@@ -15,8 +15,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Craft.Algorithms\Craft.Algorithms.csproj" />
     <ProjectReference Include="..\Craft.DataStructures\Craft.DataStructures.csproj" />
-    <ProjectReference Include="..\Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj" />
     <ProjectReference Include="..\Craft.UI.Utils\Craft.UI.Utils.csproj" />
+    <ProjectReference Include="..\Craft.ViewModels\Craft.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Craft.Algorithms.GuiTest.Common;
-using Craft.ImageEditor.ViewModel;
 using Craft.Math;
 using Craft.Utils;
+using Craft.ViewModels.Geometry2D.Scrolling;
 
 namespace Craft.Algorithms.GuiTest.Tab4
 {

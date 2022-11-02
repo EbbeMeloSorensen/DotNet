@@ -6,11 +6,10 @@ using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
-using Craft.ViewModels.Geometry2D;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
-using Simulator.Application;
 using Simulator.ViewModel;
 
 namespace Simulator.Laboratory.ViewModel

@@ -1,5 +1,4 @@
-﻿using Craft.Math;
-using Craft.ViewModels.Geometry2D;
+﻿using Craft.ViewModels.Geometry2D.ScrollFree;
 
 namespace Simulator.Laboratory.ViewModel
 {

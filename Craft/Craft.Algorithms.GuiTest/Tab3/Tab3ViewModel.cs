@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Craft.Algorithms.GuiTest.Common;
 using Craft.DataStructures.Graph;
 using Craft.Utils;
 using Craft.Math;
-using Craft.ImageEditor.ViewModel;
+using Craft.ViewModels.Geometry2D.Scrolling;
 using GalaSoft.MvvmLight.Command;
 
 namespace Craft.Algorithms.GuiTest.Tab3

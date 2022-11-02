@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Craft.ImageEditor.ViewModel;
+using Craft.ViewModels.Geometry2D.Scrolling;
 
 namespace Craft.ViewModels.Chronology
 {

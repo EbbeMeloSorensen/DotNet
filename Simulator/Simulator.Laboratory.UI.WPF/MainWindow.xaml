@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:geometry2D="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
         xmlns:uiElements="clr-namespace:Simulator.UIElements;assembly=Simulator.UIElements"
-        xmlns:local="clr-namespace:Simulator.Laboratory.UI.WPF"
+        xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="800"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}"
@@ -97,7 +96,7 @@
 
         <uiElements:SceneListView Grid.Row="2" Grid.Column="0" DataContext="{Binding SceneListViewModel}" />
 
-        <geometry2D:GeometryEditorView Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
+        <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
                                        DataContext="{Binding GeometryEditorViewModel}"/>
 
         <!--<TextBlock Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" FontSize="14"

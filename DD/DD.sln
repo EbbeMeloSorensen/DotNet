@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\Craft\Cra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\Craft\Craft.ViewModels\Craft.ViewModels.csproj", "{5C4807F7-560A-4452-A077-FB7C536139D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel", "..\Craft\Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{715C55E0-4768-48C8-A9B6-E839A9C6DB21}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Application", "DD.Application\DD.Application.csproj", "{98F436DE-C457-49D4-9FA9-5AF26C4AB044}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{6FC405E1-BE33-4FF2-824D-C0DA92160B27}"
@@ -118,10 +116,6 @@ Global
 		{5C4807F7-560A-4452-A077-FB7C536139D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C4807F7-560A-4452-A077-FB7C536139D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C4807F7-560A-4452-A077-FB7C536139D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{715C55E0-4768-48C8-A9B6-E839A9C6DB21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{715C55E0-4768-48C8-A9B6-E839A9C6DB21}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{715C55E0-4768-48C8-A9B6-E839A9C6DB21}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{715C55E0-4768-48C8-A9B6-E839A9C6DB21}.Release|Any CPU.Build.0 = Release|Any CPU
 		{98F436DE-C457-49D4-9FA9-5AF26C4AB044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98F436DE-C457-49D4-9FA9-5AF26C4AB044}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98F436DE-C457-49D4-9FA9-5AF26C4AB044}.Release|Any CPU.ActiveCfg = Release|Any CPU

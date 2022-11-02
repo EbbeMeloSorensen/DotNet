@@ -15,10 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "Craft.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "Craft.Utils\Craft.Utils.csproj", "{DCB287DD-E248-40FC-B17F-F24E65688320}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel", "Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{B14443B9-40B7-4C77-951A-6D1308705E1B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.UI.WPF", "Craft.ImageEditor.UI.WPF\Craft.ImageEditor.UI.WPF.csproj", "{350A366C-3D27-4857-ABA5-11DE5D0E5425}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "Craft.ViewModels\Craft.ViewModels.csproj", "{F3725C09-31A4-46DA-8834-339A2821BE88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements.GuiTest", "Craft.UIElements.GuiTest\Craft.UIElements.GuiTest.csproj", "{43982567-EDA2-4F0E-AC3F-B4263B5B8C38}"
@@ -82,14 +78,6 @@ Global
 		{DCB287DD-E248-40FC-B17F-F24E65688320}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCB287DD-E248-40FC-B17F-F24E65688320}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCB287DD-E248-40FC-B17F-F24E65688320}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B14443B9-40B7-4C77-951A-6D1308705E1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{350A366C-3D27-4857-ABA5-11DE5D0E5425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{350A366C-3D27-4857-ABA5-11DE5D0E5425}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{350A366C-3D27-4857-ABA5-11DE5D0E5425}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{350A366C-3D27-4857-ABA5-11DE5D0E5425}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F3725C09-31A4-46DA-8834-339A2821BE88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F3725C09-31A4-46DA-8834-339A2821BE88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3725C09-31A4-46DA-8834-339A2821BE88}.Release|Any CPU.ActiveCfg = Release|Any CPU

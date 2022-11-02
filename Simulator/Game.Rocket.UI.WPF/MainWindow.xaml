@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game.Rocket.UI.WPF"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        xmlns:uielements1="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
-        xmlns:uiElements2="clr-namespace:Simulator.UIElements;assembly=Simulator.UIElements"
+        xmlns:uiElements="clr-namespace:Simulator.UIElements;assembly=Simulator.UIElements"
+        xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="Rocket" Height="600" Width="800"
         WindowState="Maximized"
@@ -39,17 +39,17 @@
             </local:UnlockedLevelsView.Visibility>
         </local:UnlockedLevelsView>
 
-        <uiElements2:ApplicationStateListView Grid.Row="1" Grid.Column="0"
+        <uiElements:ApplicationStateListView Grid.Row="1" Grid.Column="0"
                                               DataContext="{Binding ApplicationStateListViewModel}"/>
 
-        <uielements1:GeometryEditorView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+        <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
                                         DataContext="{Binding GeometryEditorViewModel}">
-            <uielements1:GeometryEditorView.Visibility>
+            <scrollFree:GeometryEditorView.Visibility>
                 <Binding Path="DataContext.GeometryEditorVisible"
                          RelativeSource="{RelativeSource AncestorType=Window}"
                          Converter="{StaticResource BooleanToVisibilityConverter}"/>
-            </uielements1:GeometryEditorView.Visibility>
-        </uielements1:GeometryEditorView>
+            </scrollFree:GeometryEditorView.Visibility>
+        </scrollFree:GeometryEditorView>
 
         <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">
             <Button HorizontalAlignment="Left" FontSize="20" Content="Start"

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using Craft.ViewModels.Geometry2D;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 using Game.Rocket.ViewModel.ShapeViewModels;
 
 namespace Game.Rocket.UI.WPF

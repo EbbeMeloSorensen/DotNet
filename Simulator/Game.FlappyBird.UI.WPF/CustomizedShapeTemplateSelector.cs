@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using Craft.ViewModels.Geometry2D;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 
 namespace Game.FlappyBird.UI.WPF
 {

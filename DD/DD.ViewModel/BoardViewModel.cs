@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using GalaSoft.MvvmLight.Command;
-using DD.Application;
 using Craft.Utils;
-using Craft.ImageEditor.ViewModel;
 using Craft.Math;
+using Craft.ViewModels.Geometry2D.Scrolling;
 using DD.Domain;
+using DD.Application;
 
 namespace DD.ViewModel
 {

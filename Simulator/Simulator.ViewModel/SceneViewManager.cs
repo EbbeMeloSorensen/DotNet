@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Craft.Math;
 using Craft.Utils;
-using Craft.ViewModels.Geometry2D;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
 using LineSegment = Simulator.Domain.Boundaries.LineSegment;

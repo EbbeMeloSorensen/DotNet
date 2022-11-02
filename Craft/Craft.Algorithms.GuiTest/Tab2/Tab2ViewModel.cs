@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using Craft.Algorithms.GuiTest.Common;
 using Craft.Utils;
 using Craft.Math;
-using Craft.ImageEditor.ViewModel;
+using Craft.ViewModels.Geometry2D.Scrolling;
 
 namespace Craft.Algorithms.GuiTest.Tab2
 {

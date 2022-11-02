@@ -8,7 +8,7 @@
             <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Craft.UIElements;component/Geometry2D/Resources.xaml"/>
+                <ResourceDictionary Source="/Craft.UIElements;component/Geometry2D/ScrollFree/Resources.xaml"/>
                 <!--<ResourceDictionary Source="Skins/MainSkin.xaml"/>-->
                 <ResourceDictionary Source="Skins/CeciliesSkin.xaml"/>
                 <!--<ResourceDictionary Source="Skins/CeciliesSkin2.xaml"/>-->

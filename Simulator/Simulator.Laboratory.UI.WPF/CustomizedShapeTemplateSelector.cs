@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Simulator.Laboratory.ViewModel;
-using Craft.ViewModels.Geometry2D;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 
 namespace Simulator.Laboratory.UI.WPF
 {
