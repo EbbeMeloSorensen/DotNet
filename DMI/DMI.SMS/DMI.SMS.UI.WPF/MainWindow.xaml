@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DMI.SMS.UI.WPF"
         xmlns:uiElements="clr-namespace:DMI.SMS.UIElements;assembly=DMI.SMS.UIElements"
-        xmlns:geometry2D="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
         xmlns:tasks="clr-namespace:Craft.UIElements.Tasks;assembly=Craft.UIElements"
         xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
+        xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="{Binding MainWindowTitle}" 
         Height="450" 
@@ -86,7 +86,7 @@
                         <uiElements:StationInformationCollectionView DataContext="{Binding StationInformationCollectionViewModel}"/>
                     </TabItem>
                     <TabItem Header="Geospatial">
-                        <geometry2D:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
+                        <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
                     </TabItem>
                 </TabControl>
 
