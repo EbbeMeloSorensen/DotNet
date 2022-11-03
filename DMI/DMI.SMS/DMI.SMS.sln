@@ -278,8 +278,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oceanographic", "Oceanograp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityFrameworkCore.SqlServer", "DMI.SMS.Persistence.EntityFrameworkCore.SqlServer\DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.csproj", "{0E14D243-3077-4538-B450-154400021912}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Math", "..\..\Craft\Craft.Math\Craft.Math.csproj", "{E2DFEA0E-111C-422A-B1C5-1D9084AB9214}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -390,10 +388,6 @@ Global
 		{0E14D243-3077-4538-B450-154400021912}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E14D243-3077-4538-B450-154400021912}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E14D243-3077-4538-B450-154400021912}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2DFEA0E-111C-422A-B1C5-1D9084AB9214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2DFEA0E-111C-422A-B1C5-1D9084AB9214}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2DFEA0E-111C-422A-B1C5-1D9084AB9214}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2DFEA0E-111C-422A-B1C5-1D9084AB9214}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

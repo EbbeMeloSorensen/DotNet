@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj" />
     <ProjectReference Include="..\..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
     <ProjectReference Include="..\DMI.SMS.ViewModel\DMI.SMS.ViewModel.csproj" />
   </ItemGroup>
