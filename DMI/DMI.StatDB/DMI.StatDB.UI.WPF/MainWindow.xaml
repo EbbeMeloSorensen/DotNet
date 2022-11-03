@@ -7,6 +7,7 @@
         xmlns:uiElements="clr-namespace:DMI.StatDB.UIElements;assembly=DMI.StatDB.UIElements"
         xmlns:geometry="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
         xmlns:chronology="clr-namespace:Craft.UIElements.Chronology;assembly=Craft.UIElements"
+        xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="{Binding MainWindowTitle}"
         Height="450" Width="800"
@@ -36,7 +37,7 @@
                     <chronology:ChronologyView DataContext="{Binding ChronologyViewModel}"/>
                 </TabItem>
                 <TabItem Header="Geospatial">
-                    <geometry:GeometryEditorView Grid.Row="0" Grid.Column="1" DataContext="{Binding GeometryEditorViewModel}"/>
+                    <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="1" DataContext="{Binding GeometryEditorViewModel}"/>
                 </TabItem>
             </TabControl>
 
