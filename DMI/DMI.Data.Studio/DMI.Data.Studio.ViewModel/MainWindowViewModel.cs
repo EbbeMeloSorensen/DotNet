@@ -10,12 +10,11 @@ using System.Windows.Media;
 using Craft.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Craft.Math;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
-using Craft.ViewModels.Geometry2D;
 using Craft.ViewModels.Chronology;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 using DMI.SMS.ViewModel;
 using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
@@ -281,7 +280,7 @@ namespace DMI.Data.Studio.ViewModel
                         if (position.Long.HasValue &&
                             position.Lat.HasValue)
                         {
-                            var point = new Point2D(
+                            var point = new PointD(
                                 position.Long.Value,
                                 position.Lat.Value);
 
@@ -302,7 +301,7 @@ namespace DMI.Data.Studio.ViewModel
                         continue;
                     }
 
-                    var point = new Point2D(
+                    var point = new PointD(
                         stationInformation.Wgs_long.Value,
                         stationInformation.Wgs_lat.Value);
 
@@ -847,28 +846,28 @@ namespace DMI.Data.Studio.ViewModel
         {
             var lineThickness = 0.02;
 
-            var fyn_p1 = new Point2D(9.8, 55.36);
-            var fyn_p2 = new Point2D(10.31, 55.62);
-            var fyn_p3 = new Point2D(10.83, 55.23);
-            var fyn_p4 = new Point2D(10.3, 55.05);
+            var fyn_p1 = new PointD(9.8, 55.36);
+            var fyn_p2 = new PointD(10.31, 55.62);
+            var fyn_p3 = new PointD(10.83, 55.23);
+            var fyn_p4 = new PointD(10.3, 55.05);
             GeometryEditorViewModel.AddLine(fyn_p1, fyn_p2, lineThickness);
             GeometryEditorViewModel.AddLine(fyn_p2, fyn_p3, lineThickness);
             GeometryEditorViewModel.AddLine(fyn_p3, fyn_p4, lineThickness);
             GeometryEditorViewModel.AddLine(fyn_p4, fyn_p1, lineThickness);
 
-            var jylland_p1 = new Point2D(8.65, 54.92);
-            var jylland_p2 = new Point2D(8.08, 55.57);
-            var jylland_p3 = new Point2D(8.13, 56.56);
-            var jylland_p4 = new Point2D(8.61, 57.12);
-            var jylland_p5 = new Point2D(9.61, 57.27);
-            var jylland_p6 = new Point2D(10.62, 57.74);
-            var jylland_p7 = new Point2D(10.43, 56.52);
-            var jylland_p8 = new Point2D(10.89, 56.49);
-            var jylland_p9 = new Point2D(10.76, 56.17);
-            var jylland_p10 = new Point2D(10.33, 56.26);
-            var jylland_p11 = new Point2D(10.2, 55.83);
-            var jylland_p12 = new Point2D(9.6, 55.42);
-            var jylland_p13 = new Point2D(9.46, 54.84);
+            var jylland_p1 = new PointD(8.65, 54.92);
+            var jylland_p2 = new PointD(8.08, 55.57);
+            var jylland_p3 = new PointD(8.13, 56.56);
+            var jylland_p4 = new PointD(8.61, 57.12);
+            var jylland_p5 = new PointD(9.61, 57.27);
+            var jylland_p6 = new PointD(10.62, 57.74);
+            var jylland_p7 = new PointD(10.43, 56.52);
+            var jylland_p8 = new PointD(10.89, 56.49);
+            var jylland_p9 = new PointD(10.76, 56.17);
+            var jylland_p10 = new PointD(10.33, 56.26);
+            var jylland_p11 = new PointD(10.2, 55.83);
+            var jylland_p12 = new PointD(9.6, 55.42);
+            var jylland_p13 = new PointD(9.46, 54.84);
             GeometryEditorViewModel.AddLine(jylland_p1, jylland_p2, lineThickness);
             GeometryEditorViewModel.AddLine(jylland_p2, jylland_p3, lineThickness);
             GeometryEditorViewModel.AddLine(jylland_p3, jylland_p4, lineThickness);
@@ -883,34 +882,34 @@ namespace DMI.Data.Studio.ViewModel
             GeometryEditorViewModel.AddLine(jylland_p12, jylland_p13, lineThickness);
             GeometryEditorViewModel.AddLine(jylland_p13, jylland_p1, lineThickness);
 
-            var sjalland_p1 = new Point2D(10.98, 55.74);
-            var sjalland_p2 = new Point2D(12.26, 56.14);
-            var sjalland_p3 = new Point2D(12.67, 55.6);
-            var sjalland_p4 = new Point2D(12.05, 54.98);
-            var sjalland_p5 = new Point2D(11.22, 55.2);
+            var sjalland_p1 = new PointD(10.98, 55.74);
+            var sjalland_p2 = new PointD(12.26, 56.14);
+            var sjalland_p3 = new PointD(12.67, 55.6);
+            var sjalland_p4 = new PointD(12.05, 54.98);
+            var sjalland_p5 = new PointD(11.22, 55.2);
             GeometryEditorViewModel.AddLine(sjalland_p1, sjalland_p2, lineThickness);
             GeometryEditorViewModel.AddLine(sjalland_p2, sjalland_p3, lineThickness);
             GeometryEditorViewModel.AddLine(sjalland_p3, sjalland_p4, lineThickness);
             GeometryEditorViewModel.AddLine(sjalland_p4, sjalland_p5, lineThickness);
             GeometryEditorViewModel.AddLine(sjalland_p5, sjalland_p1, lineThickness);
 
-            var bornholm_p1 = new Point2D(14.77, 55.3);
-            var bornholm_p2 = new Point2D(15.16, 55.14);
-            var bornholm_p3 = new Point2D(15.08, 54.98);
-            var bornholm_p4 = new Point2D(14.68, 55.09);
+            var bornholm_p1 = new PointD(14.77, 55.3);
+            var bornholm_p2 = new PointD(15.16, 55.14);
+            var bornholm_p3 = new PointD(15.08, 54.98);
+            var bornholm_p4 = new PointD(14.68, 55.09);
             GeometryEditorViewModel.AddLine(bornholm_p1, bornholm_p2, lineThickness);
             GeometryEditorViewModel.AddLine(bornholm_p2, bornholm_p3, lineThickness);
             GeometryEditorViewModel.AddLine(bornholm_p3, bornholm_p4, lineThickness);
             GeometryEditorViewModel.AddLine(bornholm_p4, bornholm_p1, lineThickness);
 
-            var gronland_p1 = new Point2D(-61.08, 81.89);
-            var gronland_p2 = new Point2D(-32.43, 83.63);
-            var gronland_p3 = new Point2D(-11.34, 81.46);
-            var gronland_p4 = new Point2D(-22.23, 70.12);
-            var gronland_p5 = new Point2D(-43.33, 59.77);
-            var gronland_p6 = new Point2D(-58.45, 75.57);
-            var gronland_p7 = new Point2D(-68.47, 76.09);
-            var gronland_p8 = new Point2D(-72.51, 78.44);
+            var gronland_p1 = new PointD(-61.08, 81.89);
+            var gronland_p2 = new PointD(-32.43, 83.63);
+            var gronland_p3 = new PointD(-11.34, 81.46);
+            var gronland_p4 = new PointD(-22.23, 70.12);
+            var gronland_p5 = new PointD(-43.33, 59.77);
+            var gronland_p6 = new PointD(-58.45, 75.57);
+            var gronland_p7 = new PointD(-68.47, 76.09);
+            var gronland_p8 = new PointD(-72.51, 78.44);
             GeometryEditorViewModel.AddLine(gronland_p1, gronland_p2, lineThickness);
             GeometryEditorViewModel.AddLine(gronland_p2, gronland_p3, lineThickness);
             GeometryEditorViewModel.AddLine(gronland_p3, gronland_p4, lineThickness);

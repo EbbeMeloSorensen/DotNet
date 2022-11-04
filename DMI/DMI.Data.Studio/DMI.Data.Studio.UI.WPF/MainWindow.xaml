@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:DMI.Data.Studio.UI.WPF"
         xmlns:uiElementsSMS="clr-namespace:DMI.SMS.UIElements;assembly=DMI.SMS.UIElements"
         xmlns:uiElementsStatDB="clr-namespace:DMI.StatDB.UIElements;assembly=DMI.StatDB.UIElements"
-        xmlns:geometry="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
         xmlns:chronology="clr-namespace:Craft.UIElements.Chronology;assembly=Craft.UIElements"
+        xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="{Binding MainWindowTitle}" 
         Height="450" 
@@ -69,7 +69,7 @@
 
                         <TabControl Grid.Row="0">
                             <TabItem Header="Geospatial">
-                                <geometry:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
+                                <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
                             </TabItem>
                             <TabItem Header="Temporal">
                                 <chronology:ChronologyView DataContext="{Binding ChronologyViewModel}"/>
