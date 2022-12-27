@@ -42,8 +42,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.ViewModel", "PR.ViewMode
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\Craft\Craft.ViewModels\Craft.ViewModels.csproj", "{5022098A-0F88-468B-A3B4-E2C8E247A342}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel", "..\Craft\Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{3E433088-5EF9-4714-A457-FA9672B33670}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\Craft\Craft.Utils\Craft.Utils.csproj", "{F2A39CDA-D43B-4D73-A382-9ADD0BC29AF2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{8AA976BF-5249-4870-9600-BC225FEA7202}"
@@ -138,10 +136,6 @@ Global
 		{5022098A-0F88-468B-A3B4-E2C8E247A342}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5022098A-0F88-468B-A3B4-E2C8E247A342}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5022098A-0F88-468B-A3B4-E2C8E247A342}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E433088-5EF9-4714-A457-FA9672B33670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E433088-5EF9-4714-A457-FA9672B33670}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E433088-5EF9-4714-A457-FA9672B33670}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E433088-5EF9-4714-A457-FA9672B33670}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F2A39CDA-D43B-4D73-A382-9ADD0BC29AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F2A39CDA-D43B-4D73-A382-9ADD0BC29AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2A39CDA-D43B-4D73-A382-9ADD0BC29AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU

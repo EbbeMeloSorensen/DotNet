@@ -95,3 +95,35 @@ Bemærk, at du IKKE skal bruge nogen af Craft-bibliotekerne, så når den brokke
 
 Dette er den sidste kommando man skal eksekvere, og man skal stå i DotNet-folderen
 git subtree push --prefix PR heroku main
+
+## Flere noter vedr deployering til Heroku
+
+23-12-2022
+
+Jeg var opmærksom på at Heroku overgik til at kræve moderat betaling for at hoste ens applikationer ved udgangen af november 2022, så derfor var jeg inde på Heroku websitet og ændre databaserne fra Free til Mini, hvilket, så vidt jeg forstår, indebærer, at der skal betales 5 dollars om måneden. Applikationen virkede også efter ændringen, men ca ved månedsskiftet skete der alligevel det, at web applikationen meldte fejl, på trods af at databasen virkede fint, således at jeg stadig kunne bruge den wpf-baserede desktop applikation. I går, dvs den 22. december, prøvede jeg så at redeployere applikationen ved at gennemløbe den procedure, som jeg har skrevet i dette dokument. Det lykkedes ikke - jeg kunne af en eller anden årsag ikke komme uden om nogle fejlbeskeder, der mindede om dem, jeg havde set tidligere, hvor den brokkede sig over, at den ikke kunne finde Craft-projekterne, selv om de jo altså ikke bliver brugt af web applikationen. I sin tid løste jeg det som beskrevet ovenfor ved at basere mig på git subtree, men det hjalp ikke denne gang.
+
+Jeg lykkedes imidlertid med denne procedure:
+
+1) Opret en ny applikation hos Heroku som beskrevet ovenfor, men bemærk, at man nu tilsyneladende skal angive en applikation, når man tilføjer en buildpack, ved at eksekvere:
+
+   ```
+   heroku buildpacks:set https://github.com/jincod/dotnetcore-buildpack -a prebsi
+   ```
+
+2) Kopier indholdet af `PR`-folderen fra `Dotnet`-folderen (som jo altså kommer fra et Git repository med samme navn) hen i en ny folder, f.eks. ved navn `MyTempFolder`
+
+3) Fjern fra solutionen alle projekter pånær PR.Domain samt dem,  der starter med PR.Web og slet også de pågældende projektfoldere.
+
+4) Opret et lokalt git repo ved at eksekvere `git init` i `MyTempFolder`
+
+5) Eksekver `git add *` og derefter `git commit -m "InitialCommit"`
+
+6) Knyt dette lokale git repo til det remote git repo, der ligger hos Heroku efter oprettelse af en applikation der, ved at eksekvere: `heroku git:remote -a prebsi`
+
+7) Publicer til Heroku ved at eksekvere:
+
+   ```
+   git push heroku master
+   ```
+
+   Bemærk, at jeg før skrev `main `i stedet for `master`, men det kunne jeg af en eller anden årsag ikke nu - muligvis fordi jeg mod sædvane startede med at lave et lokalt repo frem for at klone fra GitHub. Jeg googlede mig til et tip om at eksekvere `git show-ref`for at finde ud af, hvilket navn man skulle bruge.
