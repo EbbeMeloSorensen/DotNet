@@ -22,8 +22,8 @@ namespace DMI.SMS.UI.Console
 
             // Works
             //await MakeBreakfast(application);
-            //await ExportData(application);
-            await ExtractMeteorologicalStations(application);
+            await ExportData(application);
+            //await ExtractMeteorologicalStations(application);
             //await ExtractOceanographicalStations(application);
         }
 
