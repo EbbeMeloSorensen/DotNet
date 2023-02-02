@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
@@ -9,6 +11,33 @@ using DMI.SMS.IO;
 
 namespace DMI.SMS.Application
 {
+    public static class DateTimeExtensions
+    {
+        public static string AsDateTimeString(
+            this DateTime dateTime,
+            bool includeMilliseconds)
+        {
+            var year = dateTime.Year;
+            var month = dateTime.Month.ToString().PadLeft(2, '0');
+            var day = dateTime.Day.ToString().PadLeft(2, '0');
+
+            var hour = dateTime.Hour.ToString().PadLeft(2, '0');
+            var minute = dateTime.Minute.ToString().PadLeft(2, '0');
+            var second = dateTime.Second.ToString().PadLeft(2, '0');
+
+            var result = $"{year}-{month}-{day} {hour}:{minute}:{second}";
+
+            if (includeMilliseconds)
+            {
+                var millisecond = dateTime.Millisecond.ToString().PadLeft(3, '0');
+
+                result += $".{millisecond}";
+            }
+
+            return result;
+        }
+    }
+
     public abstract class UIDataProviderBase : IUIDataProvider
     {
         protected ILogger _logger;
@@ -110,7 +139,51 @@ namespace DMI.SMS.Application
                     throw new ArgumentException();
                 }
             }
+        }
 
+        public void GenerateSQLScriptForTurningElevationAngles(
+            string fileName)
+        {
+            var predicates = new List<Expression<Func<StationInformation, bool>>>();
+
+            var maxDate = new DateTime(9999, 12, 31, 23, 59, 59);
+            predicates.Add(s => s.GdbToDate == maxDate);
+
+            var stationInformationRowsRaw = FindStationInformations(predicates);
+
+            var stationInformationRowsFiltered = stationInformationRowsRaw
+                .Where(_ => _.Status == Status.Active)
+                .Where(_ => _.Stationtype == StationType.Pluvio)
+                .ToList();
+
+            using (var streamWriter = new StreamWriter(fileName))
+            {
+                var now = DateTime.UtcNow;
+                var nowAsString = now.AsDateTimeString(false);
+
+                streamWriter.WriteLine($"---------------------------------------------------------------------------------------");
+                streamWriter.WriteLine($"--                            STATIONS IN TOTAL: {stationInformationRowsFiltered.Count}");
+                streamWriter.WriteLine($"---------------------------------------------------------------------------------------");
+
+                stationInformationRowsFiltered
+                    .ForEach(_ =>
+                    {
+                        streamWriter.WriteLine($"--Station: {_.StationIDDMI} ({_.StationName})");
+
+                        var updateQuery = $"UPDATE sde.elevationangles SET gdb_to_date = '{nowAsString}' WHERE globalid = '{_.GlobalId}' AND gdb_to_date = '9999-12-31 23:59:59';";
+                        streamWriter.WriteLine(updateQuery);
+
+                        var sb = new StringBuilder(
+                            "INSERT INTO sde.stationinformation(" +
+                            "objectid, stationname, stationid_dmi, stationtype, accessaddress, country, status, datefrom, dateto, " +
+                            "stationowner, comment, stationid_icao, referencetomaintenanceagreement, facilityid, si_utm, si_northing, " +
+                            "si_easting, si_geo_lat, si_geo_long, serviceinterval, lastservicedate, nextservicedate, addworkforcedate, " +
+                            "globalid, shape, created_user, created_date, last_edited_user, last_edited_date, gdb_archive_oid, " +
+                            "gdb_from_date, gdb_to_date, lastvisitdate, altstationid, wmostationid, regionid, wigosid, wmocountrycode, " +
+                            "hha, hhp, wmorbsn, wmorbcn, wmorbsnradio, wgs_lat, wgs_long) " +
+                            "VALUES (");
+                    });
+            }
         }
 
         public void ImportData(string fileName)

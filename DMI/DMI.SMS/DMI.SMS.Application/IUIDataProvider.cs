@@ -51,6 +51,9 @@ namespace DMI.SMS.Application
             string fileName,
             IList<Expression<Func<StationInformation, bool>>> predicates);
 
+        void GenerateSQLScriptForTurningElevationAngles(
+            string fileName);
+        
         void ImportData(string fileName);
 
         List<Tuple<DateTime, DateTime>> ReadObservationIntervalsForStation(

@@ -16,15 +16,16 @@ namespace DMI.SMS.UI.Console
             System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllStationInformations().Count}");
 
             // Works
-            System.Console.WriteLine("Exporting data...");
+            //System.Console.WriteLine("Exporting data...");
             //application.UIDataProvider.ExportData(".//Kylling.xml");
-            System.Console.WriteLine("Done...");
+            //System.Console.WriteLine("Done...");
 
             // Works
             //await MakeBreakfast(application);
-            await ExportData(application);
+            //await ExportData(application);
             //await ExtractMeteorologicalStations(application);
             //await ExtractOceanographicalStations(application);
+            await GenerateSQLScriptForTurningElevationAngles(application);
         }
 
         private static async Task MakeBreakfast(
@@ -46,6 +47,20 @@ namespace DMI.SMS.UI.Console
             System.Console.Write("Exporting data...\nProgress: ");
             var dateTime = DateTime.Now;
             await application.ExportData((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task GenerateSQLScriptForTurningElevationAngles(
+            Application.Application application)
+        {
+            System.Console.Write("Generating elevation angles script...\nProgress: ");
+            var dateTime = DateTime.Now;
+            await application.GenerateSQLScriptForTurningElevationAngles((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
