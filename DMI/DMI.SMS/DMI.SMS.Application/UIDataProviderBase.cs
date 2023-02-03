@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Craft.Logging;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.IO;
+using DMI.SMS.Domain;
 
 namespace DMI.SMS.Application
 {
@@ -40,6 +41,8 @@ namespace DMI.SMS.Application
 
     public abstract class UIDataProviderBase : IUIDataProvider
     {
+
+
         protected ILogger _logger;
         private readonly IDataIOHandler _dataIOHandler;
 
@@ -153,7 +156,7 @@ namespace DMI.SMS.Application
 
             var stationInformationRowsFiltered = stationInformationRowsRaw
                 .Where(_ => _.Status == Status.Active)
-                .Where(_ => _.Stationtype == StationType.Pluvio)
+                .Where(_ => _.Stationtype == StationType.Bølgestation)
                 .ToList();
 
             using (var streamWriter = new StreamWriter(fileName))
@@ -166,11 +169,13 @@ namespace DMI.SMS.Application
                 streamWriter.WriteLine($"---------------------------------------------------------------------------------------");
 
                 stationInformationRowsFiltered
+                    //.Take(1)
+                    //.ToList()
                     .ForEach(_ =>
                     {
                         streamWriter.WriteLine($"--Station: {_.StationIDDMI} ({_.StationName})");
 
-                        var updateQuery = $"UPDATE sde.elevationangles SET gdb_to_date = '{nowAsString}' WHERE globalid = '{_.GlobalId}' AND gdb_to_date = '9999-12-31 23:59:59';";
+                        var updateQuery = $"UPDATE sde.stationinformation SET gdb_to_date = '{nowAsString}' WHERE globalid = '{_.GlobalId}' AND gdb_to_date = '9999-12-31 23:59:59';";
                         streamWriter.WriteLine(updateQuery);
 
                         var sb = new StringBuilder(
@@ -182,6 +187,29 @@ namespace DMI.SMS.Application
                             "gdb_from_date, gdb_to_date, lastvisitdate, altstationid, wmostationid, regionid, wigosid, wmocountrycode, " +
                             "hha, hhp, wmorbsn, wmorbcn, wmorbsnradio, wgs_lat, wgs_long) " +
                             "VALUES (");
+
+                        var stationName = string.IsNullOrEmpty(_.StationName) ? "null" : $"\'{_.StationName}\'";
+                        var stationid_dmi = _.StationIDDMI.HasValue ? _.StationIDDMI.ToString() : "null";
+                        var stationtype = _.Stationtype.HasValue ? _.Stationtype.Value.ConvertToStationTypeCode().ToString() : "null";
+                        var accessaddress = string.IsNullOrEmpty(_.AccessAddress) ? "null" : $"\'{_.AccessAddress}\'";
+                        var country = _.Country.HasValue ? _.Country.Value.ConvertToCountryCode().ToString() : "null";
+                        var status = _.Status.HasValue ? _.Status.Value.ConvertToStatusCode().ToString() : "null";
+                        var datefrom = _.DateFrom.HasValue ? $"\'{_.DateFrom.Value.AsDateString()}\'" : "null";
+                        var dateto = _.DateTo.HasValue ? $"\'{_.DateTo.Value.AsDateString()}\'" : "null";
+
+                        sb.Append($"{_.ObjectId}, ");
+                        sb.Append($"{stationName}, ");
+                        sb.Append($"{stationid_dmi}, ");
+                        sb.Append($"{stationtype}, ");
+                        sb.Append($"{accessaddress}, ");
+                        sb.Append($"{country}, ");
+                        sb.Append($"{status}, ");
+                        sb.Append($"{datefrom}, ");
+                        sb.Append($"{dateto}, ");
+
+                        sb.Append(")");
+
+                        streamWriter.WriteLine(sb.ToString());
                     });
             }
         }
