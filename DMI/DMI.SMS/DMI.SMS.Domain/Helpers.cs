@@ -46,6 +46,22 @@ namespace DMI.SMS.Domain
             {StationType.Snestation, 14}
         };
 
+        private static Dictionary<StationOwner, int> _stationOwnerMap = new Dictionary<StationOwner, int>
+        {
+            {StationOwner.DMI, 0},
+            {StationOwner.SVK, 1},
+            {StationOwner.Havne_Kommuner_mv, 2},
+            {StationOwner.GC_net_Greenland_Climate_data, 3},
+            {StationOwner.Danske_lufthavne, 4},
+            {StationOwner.MITT_GRL_lufthavne, 5},
+            {StationOwner.Vejdirektoratet, 6},
+            {StationOwner.Synop_Aarhus_Uni, 7},
+            {StationOwner.Asiaq, 8},
+            {StationOwner.Kystdirektoratet, 9},
+            {StationOwner.PROMICE_GEUS_PROMICE_net_i_Grønland, 10},
+            {StationOwner.Forsvaret, 11}
+        };
+
         public static int ConvertToStationTypeCode(
             this StationType stationType)
         {
@@ -62,6 +78,12 @@ namespace DMI.SMS.Domain
             this Status status)
         {
             return _statusMap[status];
+        }
+
+        public static int ConvertToStationOwnerCode(
+            this StationOwner stationOwner)
+        {
+            return _stationOwnerMap[stationOwner];
         }
 
         public static string AsDateTimeString(
