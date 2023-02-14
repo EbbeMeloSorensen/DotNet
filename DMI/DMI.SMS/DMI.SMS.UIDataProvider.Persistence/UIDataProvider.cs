@@ -108,7 +108,7 @@ namespace DMI.SMS.UIDataProvider.Persistence
             return stationInformations;
         }
 
-        public override void DeleteDeleteStationInformations(
+        public override void DeleteStationInformations(
             IList<StationInformation> stationInformations)
         {
             var gdbArchiveOIDs = stationInformations.Select(s => s.GdbArchiveOid);
