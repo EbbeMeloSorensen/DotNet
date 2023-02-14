@@ -156,6 +156,21 @@ namespace DMI.SMS.Application
             });
         }
 
+        public async Task GenerateSQLScriptForTurningElevationAngles(
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Generating sql script for turning elevation angles..");
+                progressCallback?.Invoke(0.0, "Generating script");
+
+                UIDataProvider.GenerateSQLScriptForTurningElevationAngles("TurnElevationAngles.sql");
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed generating script");
+            });
+        }
+
         public async Task ImportData(
             ProgressCallback progressCallback = null)
         {
