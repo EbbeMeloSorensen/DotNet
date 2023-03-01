@@ -1208,7 +1208,7 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            _dataProvider.DeleteDeleteStationInformations(_selectedStationInformations.Objects.ToList());
+            _dataProvider.DeleteStationInformations(_selectedStationInformations.Objects.ToList());
 
             RefreshButtons();
             OnRepositoryOperationPerformed();

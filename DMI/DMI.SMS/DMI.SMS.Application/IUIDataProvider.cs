@@ -44,8 +44,10 @@ namespace DMI.SMS.Application
         void DeleteStationInformation(
             StationInformation stationInformation);
 
-        void DeleteDeleteStationInformations(
+        void DeleteStationInformations(
             IList<StationInformation> stationInformation);
+
+        void DeleteAllStationInformations();
 
         void ExportData(
             string fileName,
