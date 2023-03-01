@@ -141,6 +141,11 @@ namespace DMI.SMS.UIDataProvider.Persistence
             }
         }
 
+        public override void DeleteAllStationInformations()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void UpdateStationInformation(
             StationInformation stationInformation)
         {
