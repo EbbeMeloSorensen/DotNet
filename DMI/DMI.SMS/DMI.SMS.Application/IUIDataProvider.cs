@@ -53,7 +53,7 @@ namespace DMI.SMS.Application
             string fileName,
             IList<Expression<Func<StationInformation, bool>>> predicates);
 
-        void GenerateSQLScriptForTurningElevationAngles(
+        void GenerateSQLScriptForAddingWigosIDs(
             string fileName);
         
         void ImportData(string fileName);

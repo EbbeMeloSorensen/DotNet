@@ -156,7 +156,7 @@ namespace DMI.SMS.Application
             });
         }
 
-        public async Task GenerateSQLScriptForTurningElevationAngles(
+        public async Task GenerateSQLScriptForAddingWigosIDs(
             ProgressCallback progressCallback = null)
         {
             await Task.Run(() =>
@@ -164,7 +164,7 @@ namespace DMI.SMS.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Generating sql script for turning elevation angles..");
                 progressCallback?.Invoke(0.0, "Generating script");
 
-                UIDataProvider.GenerateSQLScriptForTurningElevationAngles("TurnElevationAngles.sql");
+                UIDataProvider.GenerateSQLScriptForAddingWigosIDs("AddWigosIDs.sql");
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed generating script");

@@ -1,7 +1,8 @@
-﻿using CommandLine;
-using DMI.SMS.Domain.Entities;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using CommandLine;
 using DMI.SMS.UI.Console.Verbs;
-using StructureMap;
+using Container = StructureMap.Container;
 
 namespace DMI.SMS.UI.Console
 {
@@ -15,37 +16,30 @@ namespace DMI.SMS.UI.Console
         //private static string _user;
         //private static string _password;
 
+        [SuppressMessage("ReSharper.DPA", "DPA0003: Excessive memory allocations in LOH", MessageId = "type: System.String; size: 85MB")]
         static async Task Main(string[] args)
         {
-            System.Console.WriteLine("Fun with a DMI.SMS command line User interface");
-
-            var container = Container.For<InstanceScanner>();
-            var application = container.GetInstance<Application.Application>();
-            application.Initialize();
-
-            System.Console.WriteLine("Counting StationInformation records...");
-            System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllStationInformations().Count}");
+            System.Console.WriteLine("DMI.SMS.UI.Console");
 
             // Works
-            //System.Console.WriteLine("Exporting data...");
-            //application.UIDataProvider.ExportData(".//Kylling.xml");
-            //System.Console.WriteLine("Done...");
-
-            // Works
-            //await MakeBreakfast(application);
-            //await ExportData(application);
             //await ExtractMeteorologicalStations(application);
             //await ExtractOceanographicalStations(application);
             //await GenerateSQLScriptForTurningElevationAngles(application);
 
             await Parser.Default.ParseArguments<
-                    Lunch>(args)
+                    Lunch,
+                    Export,
+                    Script,
+                    Extract>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
+                    (Export options) => Export(options),
+                    (Script options) => Script(options),
+                    (Extract options) => Extract(options),
                     errs => Task.FromResult(0));
         }
 
-        public static async Task MakeLunch(Lunch options)
+        private static async Task MakeLunch(Lunch options)
         {
             System.Console.Write("Making lunch...\nProgress: ");
             await GetApplication().MakeBreakfast((progress, nameOfSubtask) =>
@@ -57,11 +51,24 @@ namespace DMI.SMS.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        private static async Task MakeBreakfast(
-            Application.Application application)
+        private static async Task Export(Export options)
         {
-            System.Console.Write("Making breakfast...\nProgress: ");
-            await application.MakeBreakfast((progress, nameOfSubtask) =>
+            System.Console.Write("Exporting...\nProgress: ");
+
+            await GetApplication().ExportData((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task Script(Script options)
+        {
+            System.Console.Write("Generating SQL script...\nProgress: ");
+            await GetApplication().GenerateSQLScriptForAddingWigosIDs((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
@@ -70,60 +77,42 @@ namespace DMI.SMS.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        private static async Task ExportData(
-            Application.Application application)
+        private static async Task Extract(Extract options)
         {
-            System.Console.Write("Exporting data...\nProgress: ");
-            var dateTime = DateTime.Now;
-            await application.ExportData((progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-            System.Console.WriteLine("\nDone");
-        }
+            var dateTime = new DateTime(2021, 5, 1);
 
-        private static async Task GenerateSQLScriptForTurningElevationAngles(
-            Application.Application application)
-        {
-            System.Console.Write("Generating elevation angles script...\nProgress: ");
-            var dateTime = DateTime.Now;
-            await application.GenerateSQLScriptForTurningElevationAngles((progress, nameOfSubtask) =>
+            switch (options.Category)
             {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-            System.Console.WriteLine("\nDone");
-        }
+                case "m":
+                {
+                    System.Console.Write("Extracting meteorological stations...\nProgress: ");
+                    await GetApplication().ExtractMeteorologicalStations(dateTime, (progress, nameOfSubtask) =>
+                    {
+                        System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                        System.Console.Write($"{progress:F2} %");
+                        return false;
+                    });
 
-        private static async Task ExtractMeteorologicalStations(
-            Application.Application application)
-        {
-            System.Console.Write("Extracting meteorological stations...\nProgress: ");
-            var dateTime = DateTime.Now;
-            await application.ExtractMeteorologicalStations(dateTime, (progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-            System.Console.WriteLine("\nDone");
-        }
+                    break;
+                }
+                case "o":
+                {
+                    System.Console.Write("Extracting oceanographical stations...\nProgress: ");
+                    await GetApplication().ExtractOceanographicalStations(dateTime, (progress, nameOfSubtask) =>
+                    {
+                        System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                        System.Console.Write($"{progress:F2} %");
+                        return false;
+                    });
 
-        private static async Task ExtractOceanographicalStations(
-            Application.Application application)
-        {
-            System.Console.Write("Extracting oceanographical stations...\nProgress: ");
-            var dateTime = DateTime.Now;
-            await application.ExtractOceanographicalStations(dateTime, (progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-            System.Console.WriteLine("\nDone");
+                    break;
+                }
+                default:
+                {
+                    System.Console.Write("Invalid argument. Please choose m or o");
+                    break;
+                }
+            }
         }
 
         // Helper

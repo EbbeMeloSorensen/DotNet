@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DMI.SMS.UI.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "export"
+    }
+  }
+}
