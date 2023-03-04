@@ -1,9 +1,20 @@
-﻿using StructureMap;
+﻿using CommandLine;
+using DMI.SMS.Domain.Entities;
+using DMI.SMS.UI.Console.Verbs;
+using StructureMap;
 
 namespace DMI.SMS.UI.Console
 {
     class Program
     {
+        // Disse bruger vi i PR.UI.Console, men ikke umiddelbart her
+        //private static string _host;
+        //private static string _port;
+        //private static string _database;
+        //private static string _schema;
+        //private static string _user;
+        //private static string _password;
+
         static async Task Main(string[] args)
         {
             System.Console.WriteLine("Fun with a DMI.SMS command line User interface");
@@ -25,7 +36,25 @@ namespace DMI.SMS.UI.Console
             //await ExportData(application);
             //await ExtractMeteorologicalStations(application);
             //await ExtractOceanographicalStations(application);
-            await GenerateSQLScriptForTurningElevationAngles(application);
+            //await GenerateSQLScriptForTurningElevationAngles(application);
+
+            await Parser.Default.ParseArguments<
+                    Lunch>(args)
+                .MapResult(
+                    (Lunch options) => MakeLunch(options),
+                    errs => Task.FromResult(0));
+        }
+
+        public static async Task MakeLunch(Lunch options)
+        {
+            System.Console.Write("Making lunch...\nProgress: ");
+            await GetApplication().MakeBreakfast((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
         }
 
         private static async Task MakeBreakfast(
@@ -95,6 +124,16 @@ namespace DMI.SMS.UI.Console
                 return false;
             });
             System.Console.WriteLine("\nDone");
+        }
+
+        // Helper
+        private static Application.Application GetApplication()
+        {
+            var container = Container.For<InstanceScanner>();
+            var application = container.GetInstance<Application.Application>();
+            //application.Initialize(_host, _port, _database, _schema, _user, _password);
+            application.Initialize();
+            return application;
         }
     }
 }

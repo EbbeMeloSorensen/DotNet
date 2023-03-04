@@ -8,6 +8,9 @@ Done:
   - Skriv i loggen, hvor mange rækker, der exporteres (OK)
 
 Todo:
+* Når man skal arbejde med DMI.SMS.UI.Console, skal man ikke genkompilere, dvs du skal have CommandLineParser på banen
+* Sikr, at du kan exportere fra file repo med command line interfacet
+* Man skal kunne tømme databasen fra brugergræsefladen
 * Læs connection info fra en settings fil i stedet for at hardkode det
 * Færdiggør funktionalitet til at eksportere
   - eksporter til json i stedet for xml
