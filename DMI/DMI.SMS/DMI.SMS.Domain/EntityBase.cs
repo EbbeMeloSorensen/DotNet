@@ -7,9 +7,9 @@ namespace DMI.SMS.Domain
         private int _gdb_archive_oid;
         private string _globalid;
         private int _objectid;
-        private string _created_user;
+        private string? _created_user;
         private DateTime? _created_date;
-        private string _last_edited_user;
+        private string? _last_edited_user;
         private DateTime? _last_edited_date;
         private DateTime _gdb_from_date;
         private DateTime _gdb_to_date;
@@ -32,7 +32,7 @@ namespace DMI.SMS.Domain
             set { _objectid = value; }
         }
 
-        public string CreatedUser
+        public string? CreatedUser
         {
             get { return _created_user; }
             set { _created_user = value; }
@@ -44,7 +44,7 @@ namespace DMI.SMS.Domain
             set { _created_date = value; }
         }
 
-        public string LastEditedUser
+        public string? LastEditedUser
         {
             get { return _last_edited_user; }
             set { _last_edited_user = value; }

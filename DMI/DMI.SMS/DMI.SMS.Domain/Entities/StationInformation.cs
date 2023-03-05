@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace DMI.SMS.Domain.Entities
 {
     public class StationInformation : EntityBase
     {
-        private string _stationname;
+        private string? _stationname;
         private int? _stationid_dmi;
         private StationType? _stationtype;
-        private string _accessaddress;
+        private string? _accessaddress;
         private Country? _country;
         private Status? _status;
         private DateTime? _datefrom;
         private DateTime? _dateto;
         private StationOwner? _stationowner;
-        private string _comment;
-        private string _stationid_icao;
-        private string _referencetomaintenanceagreement;
-        private string _facilityid;
+        private string? _comment;
+        private string? _stationid_icao;
+        private string? _referencetomaintenanceagreement;
+        private string? _facilityid;
         private int? _si_utm;
         private double? _si_northing;
         private double? _si_easting;
@@ -28,11 +27,11 @@ namespace DMI.SMS.Domain.Entities
         private DateTime? _nextservicedate;
         private DateTime? _addworkforcedate;
         private DateTime? _lastvisitdate;
-        private string _altstationid;
-        private string _wmostationid;
-        private string _regionid;
-        private string _wigosid;
-        private string _wmocountrycode;
+        private string? _altstationid;
+        private string? _wmostationid;
+        private string? _regionid;
+        private string? _wigosid;
+        private string? _wmocountrycode;
         private double? _hha;
         private double? _hhp;
         private int? _wmorbsn;
@@ -40,9 +39,9 @@ namespace DMI.SMS.Domain.Entities
         private int? _wmorbsnradio;
         private double? _wgs_lat;
         private double? _wgs_long;
-        private string _shape; // This is actually of the type st_geometry which is unknown to Npgsql, but we can read and write it as text, and when we write as text it is interpreted as a Hex string
+        private string? _shape; // This is actually of the type st_geometry which is unknown to Npgsql, but we can read and write it as text, and when we write as text it is interpreted as a Hex string
 
-        public string StationName
+        public string? StationName
         {
             get { return _stationname; }
             set { _stationname = value; }
@@ -60,7 +59,7 @@ namespace DMI.SMS.Domain.Entities
             set { _stationtype = value; }
         }
 
-        public string AccessAddress
+        public string? AccessAddress
         {
             get { return _accessaddress; }
             set { _accessaddress = value; }
@@ -96,25 +95,25 @@ namespace DMI.SMS.Domain.Entities
             set { _stationowner = value; }
         }
 
-        public string Comment
+        public string? Comment
         {
             get { return _comment; }
             set { _comment = value; }
         }
 
-        public string Stationid_icao
+        public string? Stationid_icao
         {
             get { return _stationid_icao; }
             set { _stationid_icao = value; }
         }
 
-        public string Referencetomaintenanceagreement
+        public string? Referencetomaintenanceagreement
         {
             get { return _referencetomaintenanceagreement; }
             set { _referencetomaintenanceagreement = value; }
         }
 
-        public string Facilityid
+        public string? Facilityid
         {
             get { return _facilityid; }
             set { _facilityid = value; }
@@ -180,31 +179,31 @@ namespace DMI.SMS.Domain.Entities
             set { _lastvisitdate = value; }
         }
 
-        public string Altstationid
+        public string? Altstationid
         {
             get { return _altstationid; }
             set { _altstationid = value; }
         }
 
-        public string Wmostationid
+        public string? Wmostationid
         {
             get { return _wmostationid; }
             set { _wmostationid = value; }
         }
 
-        public string Regionid
+        public string? Regionid
         {
             get { return _regionid; }
             set { _regionid = value; }
         }
 
-        public string Wigosid
+        public string? Wigosid
         {
             get { return _wigosid; }
             set { _wigosid = value; }
         }
 
-        public string Wmocountrycode
+        public string? Wmocountrycode
         {
             get { return _wmocountrycode; }
             set { _wmocountrycode = value; }
@@ -252,31 +251,10 @@ namespace DMI.SMS.Domain.Entities
             set { _wgs_long = value; }
         }
 
-        public string Shape
+        public string? Shape
         {
             get { return _shape; }
             set { _shape = value; }
         }
-
-        public StationInformation()
-        {
-            // Ikke sikker på hvorfor jeg gjorde dette - det virker som dødvægt,
-            // hvor man kan nøjes med at tilføje det, hvis der er behov for det
-
-            //ContactPersons = new HashSet<ContactPerson>();
-            //LegalOwners = new HashSet<LegalOwner>();
-            //SensorLocations = new HashSet<SensorLocation>();
-            //StationKeepers = new List<StationKeeper>();
-            //MaintenanceRegulations = new List<MaintenanceRegulation>();
-            //Errors = new List<Error>();
-        }
-
-        //public virtual ICollection<SensorLocation> SensorLocations { get; set; }
-        //public virtual ICollection<ContactPerson> ContactPersons { get; set; }
-        //public virtual ICollection<LegalOwner> LegalOwners { get; set; }
-        //public virtual ICollection<StationKeeper> StationKeepers { get; set; }
-        //public virtual ICollection<MaintenanceRegulation> MaintenanceRegulations { get; set; }
-        //public virtual ICollection<Error> Errors { get; set; }
-        //public virtual ICollection<ServiceVisitReport> ServiceVisitReports { get; set; }
     }
 }

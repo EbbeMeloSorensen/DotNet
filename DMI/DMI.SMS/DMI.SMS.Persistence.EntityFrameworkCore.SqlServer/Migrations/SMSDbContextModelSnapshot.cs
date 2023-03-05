@@ -17,7 +17,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -32,7 +32,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GdbArchiveOid"), 1L, 1);
 
                     b.Property<string>("AccessAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("accessaddress");
 
@@ -41,12 +40,10 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("addworkforcedate");
 
                     b.Property<string>("Altstationid")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("altstationid");
 
                     b.Property<string>("Comment")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("comment");
 
@@ -59,7 +56,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("created_date");
 
                     b.Property<string>("CreatedUser")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("created_user");
 
@@ -72,7 +68,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("dateto");
 
                     b.Property<string>("Facilityid")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("facilityid");
 
@@ -102,7 +97,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("last_edited_date");
 
                     b.Property<string>("LastEditedUser")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("last_edited_user");
 
@@ -123,12 +117,10 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("objectid");
 
                     b.Property<string>("Referencetomaintenanceagreement")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("referencetomaintenanceagreement");
 
                     b.Property<string>("Regionid")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("regionid");
 
@@ -137,7 +129,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("serviceinterval");
 
                     b.Property<string>("Shape")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("Si_easting")
@@ -165,7 +156,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("stationid_dmi");
 
                     b.Property<string>("StationName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("stationname");
 
@@ -174,7 +164,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("stationOwner");
 
                     b.Property<string>("Stationid_icao")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("stationid_icao");
 
@@ -195,12 +184,10 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("wgs_long");
 
                     b.Property<string>("Wigosid")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("wigosid");
 
                     b.Property<string>("Wmocountrycode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("wmocountrycode");
 
@@ -217,7 +204,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .HasColumnName("wmorbsnradio");
 
                     b.Property<string>("Wmostationid")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("wmostationid");
 

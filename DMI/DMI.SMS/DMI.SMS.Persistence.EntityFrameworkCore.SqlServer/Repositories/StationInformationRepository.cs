@@ -43,12 +43,13 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Repositories
 
         public int GenerateUniqueObjectId()
         {
-            throw new NotImplementedException();
+            // Todo: Improve this
+            return 1;
         }
 
         public string GenerateUniqueGlobalId()
         {
-            throw new NotImplementedException();
+            return Guid.NewGuid().ToString();
         }
     }
 }

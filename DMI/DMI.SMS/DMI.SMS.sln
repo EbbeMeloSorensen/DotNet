@@ -280,6 +280,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{842C4AC1-4A27-4530-AD8D-84F3413216AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.EntityFrameworkCore.Helper", "DMI.SMS.Persistence.EntityFrameworkCore.Helper\DMI.SMS.Persistence.EntityFrameworkCore.Helper.csproj", "{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -394,6 +396,10 @@ Global
 		{842C4AC1-4A27-4530-AD8D-84F3413216AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{842C4AC1-4A27-4530-AD8D-84F3413216AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{842C4AC1-4A27-4530-AD8D-84F3413216AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

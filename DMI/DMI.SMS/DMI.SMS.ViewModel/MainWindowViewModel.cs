@@ -10,6 +10,7 @@ using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Tasks;
+using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
 
 namespace DMI.SMS.ViewModel
@@ -184,7 +185,10 @@ namespace DMI.SMS.ViewModel
 
             _application.UIDataProvider.CreateStationInformation(new StationInformation
             {
+                // Todo: Få de andre attributter til at virke
                 StationName = dialogViewModel.StationName,
+                //Stationtype = dialogViewModel.StationType.ConvertToStationType(),
+                //StationOwner = dialogViewModel.StationOwner.ConvertToStationOwner(),
                 GdbFromDate = currentTime,
                 GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59)
             }, true);
