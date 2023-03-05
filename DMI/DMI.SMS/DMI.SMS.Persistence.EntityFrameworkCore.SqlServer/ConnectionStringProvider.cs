@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.Configuration;
+using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Protocols;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer
@@ -9,21 +10,31 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer
 
         static ConnectionStringProvider()
         {
-            // Todo: Dette skal med igen, så man kan læse connection string fra en konfigurationsfil
-            //var configFile = ConfigurationManager<>.OpenExeConfiguration(ConfigurationUserLevel.None);
-            //var settings = configFile.AppSettings.Settings;
-            //var host = settings["Host"]?.Value;
-            //var initialCatalog = settings["InitialCatalog"]?.Value;
-            //var userID = settings["UserID"]?.Value;
-            //var password = settings["Password"]?.Value;
+            InitializeFromSettingsFile();
+        }
 
-            //if (host != null &&
-            //    initialCatalog != null &&
-            //    userID != null &&
-            //    password != null)
-            //{
-            //    Initialize(host, initialCatalog, userID, password);
-            //}
+        public static void InitializeFromSettingsFile()
+        {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+            var host = settings["Host"]?.Value;
+            var database = settings["Database"]?.Value;
+            var user = settings["User"]?.Value;
+            var password = settings["Password"]?.Value;
+
+            if (string.IsNullOrEmpty(host) ||
+                string.IsNullOrEmpty(database) ||
+                string.IsNullOrEmpty(user) ||
+                string.IsNullOrEmpty(password))
+            {
+                // If we are here, it may be because we're attempting to generate a migration
+                host = "localhost";
+                database = "SMS";
+                user = "sa";
+                password = "L1on8Zebra";
+            }
+
+            Initialize(host, database, user, password);
         }
 
         public static void Initialize(

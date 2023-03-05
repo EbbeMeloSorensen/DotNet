@@ -278,6 +278,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oceanographic", "Oceanograp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityFrameworkCore.SqlServer", "DMI.SMS.Persistence.EntityFrameworkCore.SqlServer\DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.csproj", "{0E14D243-3077-4538-B450-154400021912}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{842C4AC1-4A27-4530-AD8D-84F3413216AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -388,6 +390,10 @@ Global
 		{0E14D243-3077-4538-B450-154400021912}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E14D243-3077-4538-B450-154400021912}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E14D243-3077-4538-B450-154400021912}.Release|Any CPU.Build.0 = Release|Any CPU
+		{842C4AC1-4A27-4530-AD8D-84F3413216AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{842C4AC1-4A27-4530-AD8D-84F3413216AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{842C4AC1-4A27-4530-AD8D-84F3413216AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{842C4AC1-4A27-4530-AD8D-84F3413216AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -297,7 +297,7 @@ namespace DMI.SMS.ViewModel
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
-            await _application.ExportData(
+            await _application.ImportData(
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;
