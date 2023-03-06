@@ -116,8 +116,6 @@ namespace DMI.SMS.ViewModel
             ExportDataCommand = new AsyncCommand<object>(ExportData, CanExportData);
             ImportDataCommand = new AsyncCommand<object>(ImportData, CanImportData);
             MakeBreakfastCommand = new AsyncCommand<object>(MakeBreakfast, CanMakeBreakfast);
-            ExportDataCommand = new AsyncCommand<object>(ExportData, CanExportData);
-            ImportDataCommand = new AsyncCommand<object>(ImportData, CanImportData);
             ExtractMeteorologicalStationsCommand = new AsyncCommand<object>(ExtractMeteorologicalStations, CanExtractMeteorologicalStations);
             ExtractOceanographicalStationsCommand = new AsyncCommand<object>(ExtractOceanographicalStations, CanExtractOceanographicalStations);
             OpenSettingsDialogCommand = new RelayCommand<object>(OpenSettingsDialog);
@@ -332,9 +330,12 @@ namespace DMI.SMS.ViewModel
         private async Task ImportData(
             object owner)
         {
-            var dialogViewModel = new MessageBoxDialogViewModel("Import Data", true);
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Json Files(*.json)|*.json|Xml Files(*.xml)|*.xml"
+            };
 
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            if (dialog.ShowDialog() == false)
             {
                 return;
             }
@@ -345,6 +346,7 @@ namespace DMI.SMS.ViewModel
             RefreshCommandAvailability();
 
             await _application.ImportData(
+                dialog.FileName,
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;

@@ -276,12 +276,18 @@ namespace DMI.SMS.UIDataProvider.Persistence
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.StationInformations.Load(stationInformations);
+                // We reset the values of the identity field because we're not allowed to explicitly set it.
+                // Notice that this implies that the rows are assigned new primary keys which may be practically unacceptable.
+                unitOfWork.StationInformations.Load(stationInformations.Select(_ => 
+                {
+                    _.GdbArchiveOid = 0;
+                    return _;
+                }));
             }
 
-            _stationInformationCache.Clear();
             // We don't update the cache, because it might be a lot of data
             // On the contrary, we clear the cache, so we're not looking at obsolete data
+            _stationInformationCache.Clear();
         }
 
         private StationInformation IncludeInCache(

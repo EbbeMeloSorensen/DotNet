@@ -94,10 +94,15 @@ namespace Craft.Persistence.EntityFrameworkCore
         public void Load(
             IEnumerable<TEntity> entities)
         {
-            throw new NotImplementedException();
+            Context.Set<TEntity>().AddRange(entities);
+            Context.SaveChanges();
 
             /*
-            // Notice that we use Z.EntityFramework.Extensions for this
+            // Notice that we use Z.EntityFramework.Extensions for this ..... 
+            // (Dette gjorde jeg for lang tid siden for at addressere problemet med at man ikke uden videre kan sætte værdien
+            // for identity attributes. Det er imidlertid ikke uden implikationer, f.eks. derved at Z.EntityFramework er et
+            // kommercielt tool, der tilsyneladende kun virker i en begrænset periode efter at man har bygget sin applikation
+
             var skip = 0;
             var bufferCapacity = 10;
             var bufferSize = 0;
