@@ -5,15 +5,14 @@ using System.Windows.Media;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Microsoft.Win32;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Tasks;
-using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
 using System.Globalization;
-using Microsoft.Win32;
 
 namespace DMI.SMS.ViewModel
 {
@@ -281,6 +280,8 @@ namespace DMI.SMS.ViewModel
         private async Task ExportData(
             object owner)
         {
+            // Det her er bare den sædvanlige MessageBox, men vi vil gerne bruge den SaveFileDialog,
+            // som ligger i Win32
             //var dialogViewModel = new MessageBoxDialogViewModel("Export data", true);
 
             //if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
@@ -288,16 +289,15 @@ namespace DMI.SMS.ViewModel
             //    return;
             //}
 
-            var dialog = new OpenFileDialog(); //new SaveFileDialog
+            var dialog = new SaveFileDialog
             {
-                //Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
+                Filter = "Json Files(*.json)|*.json|Xml Files(*.xml)|*.xml"
             };
 
-            //if (dialog.ShowDialog() == false)
-            //{
-            //    return;
-            //}
-
+            if (dialog.ShowDialog() == false)
+            {
+                return;
+            }
 
             TaskViewModel.NameOfTask = "Exporting data";
             TaskViewModel.Abort = false;
@@ -305,6 +305,7 @@ namespace DMI.SMS.ViewModel
             RefreshCommandAvailability();
 
             await _application.ExportData(
+                dialog.FileName,
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;
@@ -317,7 +318,7 @@ namespace DMI.SMS.ViewModel
 
             if (!TaskViewModel.Abort)
             {
-                var messageBoxDialog = new MessageBoxDialogViewModel("Completed exporting data", false);
+                var messageBoxDialog = new MessageBoxDialogViewModel($"Exported data to {dialog.FileName}", false);
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
         }

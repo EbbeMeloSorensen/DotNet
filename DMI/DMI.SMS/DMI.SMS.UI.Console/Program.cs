@@ -55,7 +55,7 @@ namespace DMI.SMS.UI.Console
         {
             System.Console.Write("Exporting...\nProgress: ");
 
-            await GetApplication().ExportData((progress, nameOfSubtask) =>
+            await GetApplication().ExportData(options.FileName, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

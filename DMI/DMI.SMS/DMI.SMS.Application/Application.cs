@@ -142,6 +142,7 @@ namespace DMI.SMS.Application
         }
 
         public async Task ExportData(
+            string fileName,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(() =>
@@ -149,10 +150,10 @@ namespace DMI.SMS.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
                 progressCallback?.Invoke(0.0, "Exporting data");
 
-                UIDataProvider.ExportData("SMSData.json", null);
+                UIDataProvider.ExportData(fileName, null);
 
                 progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
+                Logger?.WriteLine(LogMessageCategory.Information, $"Completed exporting data to file: {fileName}");
             });
         }
 
