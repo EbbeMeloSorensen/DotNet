@@ -8,6 +8,9 @@ Done:
   - Skriv i loggen, hvor mange rækker, der exporteres (OK)
 
 Todo:
+* Få create/read/update/delete til at virke for DMI.SMS.UI.WPF for et sql server setup
+  - Create
+    - Den skal respektere alle de ting, den får fra dialogen
 * Når man skal arbejde med DMI.SMS.UI.Console, skal man ikke genkompilere, dvs du skal have CommandLineParser på banen
   - Først skal man lave "Lunch" (OK)
   - Så skal man exportere data (OK)

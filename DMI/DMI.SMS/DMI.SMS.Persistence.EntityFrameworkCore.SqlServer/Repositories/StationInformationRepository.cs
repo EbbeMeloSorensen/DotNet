@@ -43,8 +43,19 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Repositories
 
         public int GenerateUniqueObjectId()
         {
-            // Todo: Improve this
-            return 1;
+            var context = Context as SMSDbContext;
+
+            if (context == null)
+            {
+                throw new InvalidCastException();
+            }
+
+            if (!context.StationInformations.Any())
+            {
+                return 1;
+            }
+
+            return context.StationInformations.Max(_ => _.ObjectId) + 1;
         }
 
         public string GenerateUniqueGlobalId()

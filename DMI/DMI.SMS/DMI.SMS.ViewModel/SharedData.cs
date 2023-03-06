@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using DMI.SMS.Domain.Entities;
 
 namespace DMI.SMS.ViewModel
@@ -56,5 +57,28 @@ namespace DMI.SMS.ViewModel
             { StationOwner.Forsvaret, "Forsvaret" }
         };
 
+        public static StationType ConvertFromDisplayTextToStationType(
+            this string stationTypeDisplayText)
+        {
+            return StationTypeDisplayTextMap.Single(kvp => kvp.Value == stationTypeDisplayText).Key;
+        }
+
+        public static StationOwner ConvertFromDisplayTextToStationOwner(
+            this string stationOwnerDisplayText)
+        {
+            return StationOwnerDisplayTextMap.Single(kvp => kvp.Value == stationOwnerDisplayText).Key;
+        }
+
+        public static Status ConvertFromDisplayTextToStatus(
+            this string statusDisplayText)
+        {
+            return StatusDisplayTextMap.Single(kvp => kvp.Value == statusDisplayText).Key;
+        }
+
+        public static Country ConvertFromDisplayTextToCountry(
+            this string countryDisplayText)
+        {
+            return CountryDisplayTextMap.Single(kvp => kvp.Value == countryDisplayText).Key;
+        }
     }
 }

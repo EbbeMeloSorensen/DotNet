@@ -12,6 +12,7 @@ using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Tasks;
 using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
+using System.Globalization;
 
 namespace DMI.SMS.ViewModel
 {
@@ -183,15 +184,44 @@ namespace DMI.SMS.ViewModel
 
             var currentTime = DateTime.UtcNow.TruncateToMilliseconds();
 
-            _application.UIDataProvider.CreateStationInformation(new StationInformation
+            var stationInformation = new StationInformation
             {
-                // Todo: Få de andre attributter til at virke
                 StationName = dialogViewModel.StationName,
-                //Stationtype = dialogViewModel.StationType.ConvertToStationType(),
-                //StationOwner = dialogViewModel.StationOwner.ConvertToStationOwner(),
+                StationIDDMI = int.Parse(dialogViewModel.Stationid_dmi),
+                Stationtype = dialogViewModel.StationType.ConvertFromDisplayTextToStationType(),
+                StationOwner = dialogViewModel.StationOwner.ConvertFromDisplayTextToStationOwner(),
+                Country = dialogViewModel.Country.ConvertFromDisplayTextToCountry(),
+                Status = dialogViewModel.Status.ConvertFromDisplayTextToStatus(),
+                Wgs_lat = double.Parse(dialogViewModel.Wgs_lat, CultureInfo.InvariantCulture),
+                Wgs_long = double.Parse(dialogViewModel.Wgs_long, CultureInfo.InvariantCulture),
                 GdbFromDate = currentTime,
                 GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59)
-            }, true);
+            };
+
+            if (!string.IsNullOrEmpty(dialogViewModel.Hha))
+            {
+                stationInformation.Hha = double.Parse(dialogViewModel.Hha, CultureInfo.InvariantCulture);
+            }
+
+            if (!string.IsNullOrEmpty(dialogViewModel.Hhp))
+            {
+                stationInformation.Hhp = double.Parse(dialogViewModel.Hhp, CultureInfo.InvariantCulture);
+            }
+
+            if (!string.IsNullOrEmpty(dialogViewModel.DateFrom))
+            {
+                dialogViewModel.DateFrom.TryParsingAsDateTime(out var dateFrom);
+                stationInformation.DateFrom = dateFrom;
+            }
+
+            if (!string.IsNullOrEmpty(dialogViewModel.DateTo))
+            {
+                dialogViewModel.DateTo.TryParsingAsDateTime(out var dateTo);
+                stationInformation.DateTo = dateTo;
+            }
+
+            _application.UIDataProvider.CreateStationInformation(
+                stationInformation, true);
         }
 
         public void DeleteSelectedStationInformations()
