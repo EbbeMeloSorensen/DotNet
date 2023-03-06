@@ -13,6 +13,7 @@ using Craft.ViewModels.Tasks;
 using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
 using System.Globalization;
+using Microsoft.Win32;
 
 namespace DMI.SMS.ViewModel
 {
@@ -287,10 +288,10 @@ namespace DMI.SMS.ViewModel
             //    return;
             //}
 
-            //var dialog = new SaveFileDialog
-            //{
-            //    Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
-            //};
+            var dialog = new OpenFileDialog(); //new SaveFileDialog
+            {
+                //Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
+            };
 
             //if (dialog.ShowDialog() == false)
             //{
