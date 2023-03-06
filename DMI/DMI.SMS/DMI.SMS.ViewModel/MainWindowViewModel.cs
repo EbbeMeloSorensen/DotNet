@@ -280,12 +280,23 @@ namespace DMI.SMS.ViewModel
         private async Task ExportData(
             object owner)
         {
-            var dialogViewModel = new MessageBoxDialogViewModel("Export data", true);
+            //var dialogViewModel = new MessageBoxDialogViewModel("Export data", true);
 
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-            {
-                return;
-            }
+            //if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            //{
+            //    return;
+            //}
+
+            //var dialog = new SaveFileDialog
+            //{
+            //    Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
+            //};
+
+            //if (dialog.ShowDialog() == false)
+            //{
+            //    return;
+            //}
+
 
             TaskViewModel.NameOfTask = "Exporting data";
             TaskViewModel.Abort = false;
