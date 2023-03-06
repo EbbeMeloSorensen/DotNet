@@ -164,7 +164,7 @@ namespace DMI.SMS.Application
             await Task.Run(() =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
-                progressCallback?.Invoke(0.0, "Exporting data");
+                progressCallback?.Invoke(0.0, "Importing data");
 
                 UIDataProvider.ImportData(fileName);
 
