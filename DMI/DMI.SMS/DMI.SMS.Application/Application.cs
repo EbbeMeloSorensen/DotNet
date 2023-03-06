@@ -157,21 +157,6 @@ namespace DMI.SMS.Application
             });
         }
 
-        public async Task GenerateSQLScriptForAddingWigosIDs(
-            ProgressCallback progressCallback = null)
-        {
-            await Task.Run(() =>
-            {
-                Logger?.WriteLine(LogMessageCategory.Information, "Generating sql script for turning elevation angles..");
-                progressCallback?.Invoke(0.0, "Generating script");
-
-                UIDataProvider.GenerateSQLScriptForAddingWigosIDs("AddWigosIDs.sql");
-
-                progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed generating script");
-            });
-        }
-
         public async Task ImportData(
             string fileName,
             ProgressCallback progressCallback = null)
@@ -185,6 +170,36 @@ namespace DMI.SMS.Application
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed importing data");
+            });
+        }
+
+        public async Task ClearRepository(
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Clearing Repository..");
+                progressCallback?.Invoke(0.0, "Clearing Repository");
+
+                UIDataProvider.DeleteAllStationInformations();
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed clearing repository");
+            });
+        }
+
+        public async Task GenerateSQLScriptForAddingWigosIDs(
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Generating sql script for turning elevation angles..");
+                progressCallback?.Invoke(0.0, "Generating script");
+
+                UIDataProvider.GenerateSQLScriptForAddingWigosIDs("AddWigosIDs.sql");
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed generating script");
             });
         }
 

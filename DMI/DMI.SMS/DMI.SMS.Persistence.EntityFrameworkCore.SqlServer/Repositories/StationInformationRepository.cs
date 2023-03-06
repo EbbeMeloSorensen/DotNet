@@ -26,6 +26,14 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Repositories
             throw new NotImplementedException();
         }
 
+        public override void Clear()
+        {
+            var context = Context as SMSDbContext;
+
+            context.RemoveRange(context.StationInformations);
+            context.SaveChanges();
+        }
+
         public void Supersede(StationInformation entity, DateTime transactionTime, string user)
         {
             throw new NotImplementedException();

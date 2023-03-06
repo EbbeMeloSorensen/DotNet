@@ -51,6 +51,7 @@ namespace DMI.SMS.ViewModel
         public RelayCommand DeleteSelectedStationInformationsCommand { get; }
         public AsyncCommand<object> ExportDataCommand { get; }
         public AsyncCommand<object> ImportDataCommand { get; }
+        public AsyncCommand<object> ClearRepositoryCommand { get; }
         public AsyncCommand<object> MakeBreakfastCommand { get; }
         public AsyncCommand<object> ExtractMeteorologicalStationsCommand { get; }
         public AsyncCommand<object> ExtractOceanographicalStationsCommand { get; }
@@ -115,6 +116,7 @@ namespace DMI.SMS.ViewModel
             DeleteSelectedStationInformationsCommand = new RelayCommand(DeleteSelectedStationInformations, CanDeleteSelectedStationInformations);
             ExportDataCommand = new AsyncCommand<object>(ExportData, CanExportData);
             ImportDataCommand = new AsyncCommand<object>(ImportData, CanImportData);
+            ClearRepositoryCommand = new AsyncCommand<object>(ClearRepository, CanClearRepository);
             MakeBreakfastCommand = new AsyncCommand<object>(MakeBreakfast, CanMakeBreakfast);
             ExtractMeteorologicalStationsCommand = new AsyncCommand<object>(ExtractMeteorologicalStations, CanExtractMeteorologicalStations);
             ExtractOceanographicalStationsCommand = new AsyncCommand<object>(ExtractOceanographicalStations, CanExtractOceanographicalStations);
@@ -365,6 +367,45 @@ namespace DMI.SMS.ViewModel
         }
 
         private bool CanImportData(
+            object owner)
+        {
+            return !TaskViewModel.Busy;
+        }
+
+        private async Task ClearRepository(
+            object owner)
+        {
+            var dialogViewModel = new MessageBoxDialogViewModel("Clear Repository?", true);
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            TaskViewModel.NameOfTask = "Clearing Repository";
+            TaskViewModel.Abort = false;
+            TaskViewModel.Busy = true;
+            RefreshCommandAvailability();
+
+            await _application.ClearRepository(
+                (progress, currentActivity) =>
+                {
+                    TaskViewModel.Progress = progress;
+                    TaskViewModel.NameOfCurrentSubtask = currentActivity;
+                    return TaskViewModel.Abort;
+                });
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
+
+            if (!TaskViewModel.Abort)
+            {
+                var messageBoxDialog = new MessageBoxDialogViewModel("Completed clearing repository", false);
+                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
+            }
+        }
+
+        private bool CanClearRepository(
             object owner)
         {
             return !TaskViewModel.Busy;

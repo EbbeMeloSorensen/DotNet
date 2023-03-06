@@ -220,6 +220,11 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             }
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Supersede(
             LegalOwner legalOwner,
             DateTime transactionTime,

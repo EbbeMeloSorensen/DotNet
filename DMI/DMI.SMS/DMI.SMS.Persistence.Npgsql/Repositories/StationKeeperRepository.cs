@@ -91,6 +91,11 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load(
             IEnumerable<StationKeeper> entities)
         {

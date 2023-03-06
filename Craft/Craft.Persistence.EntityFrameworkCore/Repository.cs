@@ -79,6 +79,8 @@ namespace Craft.Persistence.EntityFrameworkCore
             Context.Set<TEntity>().Remove(entity);
         }
 
+        public abstract void Clear();
+
         public abstract void Update(
             TEntity entity);
 

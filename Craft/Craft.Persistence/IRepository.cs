@@ -27,6 +27,7 @@ namespace Craft.Persistence
 
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);
+        void Clear();
 
         // This is not part of the original pattern, but I made it in order to support bulk insert,
         // where we, rather than the database dictate the ids

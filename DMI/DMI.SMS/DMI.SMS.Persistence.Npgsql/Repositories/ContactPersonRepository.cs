@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Text;
 using System.Linq.Expressions;
 using System.Transactions;
 using Npgsql;
@@ -218,6 +215,11 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
         }
 
         public void Supersede(

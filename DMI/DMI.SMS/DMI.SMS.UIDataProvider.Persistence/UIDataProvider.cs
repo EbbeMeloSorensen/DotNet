@@ -143,7 +143,11 @@ namespace DMI.SMS.UIDataProvider.Persistence
 
         public override void DeleteAllStationInformations()
         {
-            throw new NotImplementedException();
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.StationInformations.Clear();
+                unitOfWork.Complete();
+            }
         }
 
         public override void UpdateStationInformation(

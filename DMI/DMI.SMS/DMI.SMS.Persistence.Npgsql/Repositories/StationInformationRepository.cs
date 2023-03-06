@@ -375,6 +375,11 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             entities.ToList().ForEach(cp => Remove(cp));
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load(
             IEnumerable<StationInformation> entities)
         {

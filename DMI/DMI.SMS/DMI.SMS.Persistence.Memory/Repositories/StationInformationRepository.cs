@@ -103,6 +103,11 @@ namespace DMI.SMS.Persistence.Memory.Repositories
             throw new NotImplementedException();
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load(IEnumerable<StationInformation> entities)
         {
             _stationInformations.AddRange(entities);

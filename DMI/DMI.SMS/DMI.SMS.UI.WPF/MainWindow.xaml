@@ -33,6 +33,9 @@
                 <MenuItem Header="Import Data" 
                           Command="{Binding ImportDataCommand}"
                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <MenuItem Header="Clear Repository" 
+                          Command="{Binding ClearRepositoryCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
                 <Separator/>
                 <MenuItem Header="Make _Breakfast" 
                           Command="{Binding MakeBreakfastCommand}"
