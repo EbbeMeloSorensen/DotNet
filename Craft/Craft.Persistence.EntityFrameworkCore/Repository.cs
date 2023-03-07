@@ -51,6 +51,11 @@ namespace Craft.Persistence.EntityFrameworkCore
         public IEnumerable<TEntity> Find(
             IList<Expression<Func<TEntity, bool>>> predicates)
         {
+            if (!predicates.Any())
+            {
+                return GetAll();
+            }
+
             var predicate = predicates.Aggregate((c, n) => c.And(n));
             return Context.Set<TEntity>().Where(predicate);
         }
