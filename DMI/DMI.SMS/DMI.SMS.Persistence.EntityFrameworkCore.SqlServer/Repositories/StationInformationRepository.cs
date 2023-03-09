@@ -13,9 +13,11 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Repositories
         {
         }
 
-        public override void Update(StationInformation entity)
+        public override void Update(StationInformation stationInformation)
         {
-            throw new NotImplementedException();
+            var sRepo = Get(stationInformation.GdbArchiveOid);
+
+            sRepo.CopyAttributes(stationInformation);
         }
 
         public override void UpdateRange(IEnumerable<StationInformation> stationInformations)
@@ -51,7 +53,9 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Repositories
 
         public StationInformation Get(int id)
         {
-            throw new NotImplementedException();
+            var stationInformation = (Context as SMSDbContext).StationInformations.Single(_ => _.GdbArchiveOid == id);
+
+            return stationInformation;
         }
 
         public StationInformation GetStationInformationWithContactPersons(int id)

@@ -1242,6 +1242,7 @@ namespace DMI.SMS.ViewModel
 
             var currentTime = DateTime.UtcNow.TruncateToMilliseconds();
             stationInformation.GdbToDate = currentTime;
+            newStationInformation.GdbArchiveOid = 0;
             newStationInformation.GdbFromDate = currentTime;
             newStationInformation.GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59);
             newStationInformation.LastEditedUser = SharedData.LoggedInUser;
