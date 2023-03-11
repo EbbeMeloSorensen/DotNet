@@ -48,12 +48,24 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
 
         public int GenerateUniqueObjectId()
         {
-            throw new NotImplementedException();
+            var context = Context as SMSDbContext;
+
+            if (context == null)
+            {
+                throw new InvalidCastException();
+            }
+
+            if (!context.StationInformations.Any())
+            {
+                return 1;
+            }
+
+            return context.StationInformations.Max(_ => _.ObjectId) + 1;
         }
 
         public string GenerateUniqueGlobalId()
         {
-            throw new NotImplementedException();
+            return Guid.NewGuid().ToString();
         }
     }
 }

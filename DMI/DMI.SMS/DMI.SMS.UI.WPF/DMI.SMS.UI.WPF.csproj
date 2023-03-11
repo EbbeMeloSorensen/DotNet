@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
-    <ProjectReference Include="..\DMI.SMS.Persistence.EntityFrameworkCore.SqlServer\DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.csproj" />
+    <ProjectReference Include="..\DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL\DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.csproj" />
     <ProjectReference Include="..\DMI.SMS.Persistence\DMI.SMS.Persistence.csproj" />
     <ProjectReference Include="..\DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj" />
     <ProjectReference Include="..\DMI.SMS.UIElements\DMI.SMS.UIElements.csproj" />
