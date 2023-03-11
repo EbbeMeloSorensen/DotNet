@@ -148,6 +148,11 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load(
             IEnumerable<Station> entities)
         {

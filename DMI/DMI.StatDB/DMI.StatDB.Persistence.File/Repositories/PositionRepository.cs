@@ -104,6 +104,11 @@ namespace DMI.StatDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load(
             IEnumerable<Position> positions)
         {

@@ -146,6 +146,11 @@ namespace DMI.StatDB.Persistence.File.Repositories
             UpdateRepositoryFile();
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load(IEnumerable<Station> entities)
         {
             _stations.Clear(); // In case we call load after having done so earlier. Might wanna clean this up..
