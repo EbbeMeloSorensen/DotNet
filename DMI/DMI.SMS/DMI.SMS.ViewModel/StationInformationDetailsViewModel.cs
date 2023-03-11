@@ -92,9 +92,9 @@ namespace DMI.SMS.ViewModel
         private string _originalDateTo;
 
         private RelayCommand _discardChangesCommand; // Den her clearer bare formen, hvis man fortryder de ændringer, man har indtastet
-        private RelayCommand<object> _applyChangesCommand; // Her manipulerer vi bare hårdt
+        private RelayCommand<object> _manipulateCommand; // Her manipulerer vi bare hårdt
         private RelayCommand<object> _eraseCommand; // Her bomber vi hårdt en række væk
-        private RelayCommand _applyChangesProperlyCommand; // Her superseder vi en eksisterende række, så man kan se, hvem der har ændret noget - svarende til, hvad man jo altså gør med det rigtige system. Den kan kun bruges for en current record
+        private RelayCommand _updateCommand; // Her superseder vi en eksisterende række, så man kan se, hvem der har ændret noget - svarende til, hvad man jo altså gør med det rigtige system. Den kan kun bruges for en current record
         private RelayCommand<object> _deleteCommand; // Her foretager vi en logisk delete
         private RelayCommand<object> _promoteCommand; // Den her kan bruges på rækker, der er supersedede, dvs outdated eller deleted - man fisker så at sige rækken op af papirkurven og gør den current
                                                       // Rækken skal tildeles et nyt objekt id
@@ -764,9 +764,9 @@ namespace DMI.SMS.ViewModel
             get { return _discardChangesCommand ?? (_discardChangesCommand = new RelayCommand(DiscardChanges, CanDiscardChanges)); }
         }
 
-        public RelayCommand<object> ApplyChangesCommand
+        public RelayCommand<object> ManipulateCommand
         {
-            get { return _applyChangesCommand ?? (_applyChangesCommand = new RelayCommand<object>(ApplyChanges, CanApplyChanges)); }
+            get { return _manipulateCommand ?? (_manipulateCommand = new RelayCommand<object>(Manipulate, CanManipulate)); }
         }
 
         public RelayCommand<object> EraseCommand
@@ -774,9 +774,9 @@ namespace DMI.SMS.ViewModel
             get { return _eraseCommand ?? (_eraseCommand = new RelayCommand<object>(Erase, CanErase)); }
         }
 
-        public RelayCommand ApplyChangesProperlyCommand
+        public RelayCommand UpdateCommand
         {
-            get { return _applyChangesProperlyCommand ?? (_applyChangesProperlyCommand = new RelayCommand(ApplyChangesProperly, CanApplyChangesProperly)); }
+            get { return _updateCommand ?? (_updateCommand = new RelayCommand(Update, CanUpdate)); }
         }
 
         public RelayCommand<object> DeleteCommand
@@ -1131,7 +1131,7 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        private void ApplyChanges(
+        private void Manipulate(
             object owner)
         {
             UpdateState(StateOfView.Updated);
@@ -1172,7 +1172,7 @@ namespace DMI.SMS.ViewModel
             OnRepositoryOperationPerformed();
         }
 
-        private bool CanApplyChanges(
+        private bool CanManipulate(
             object owner)
         {
             return _nRecordsSelected == 1 && FormIsDirty();
@@ -1220,7 +1220,7 @@ namespace DMI.SMS.ViewModel
             return _nRecordsSelected > 0 && !FormIsDirty();
         }
 
-        private void ApplyChangesProperly()
+        private void Update()
         {
             UpdateState(StateOfView.Updated);
 
@@ -1266,7 +1266,7 @@ namespace DMI.SMS.ViewModel
             OnRepositoryOperationPerformed();
         }
 
-        private bool CanApplyChangesProperly()
+        private bool CanUpdate()
         {
             return
                 _nRecordsSelected == 1 &&
@@ -1568,8 +1568,8 @@ namespace DMI.SMS.ViewModel
         private void RefreshButtons()
         {
             DiscardChangesCommand.RaiseCanExecuteChanged();
-            ApplyChangesCommand.RaiseCanExecuteChanged();
-            ApplyChangesProperlyCommand.RaiseCanExecuteChanged();
+            ManipulateCommand.RaiseCanExecuteChanged();
+            UpdateCommand.RaiseCanExecuteChanged();
             PromoteCommand.RaiseCanExecuteChanged();
             EraseCommand.RaiseCanExecuteChanged();
             DeleteCommand.RaiseCanExecuteChanged();
