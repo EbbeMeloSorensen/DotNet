@@ -195,7 +195,7 @@ namespace DMI.SMS.ViewModel
                 Wgs_lat = double.Parse(dialogViewModel.Wgs_lat, CultureInfo.InvariantCulture),
                 Wgs_long = double.Parse(dialogViewModel.Wgs_long, CultureInfo.InvariantCulture),
                 GdbFromDate = currentTime,
-                GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59)
+                GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             };
 
             if (!string.IsNullOrEmpty(dialogViewModel.Hha))

@@ -52,10 +52,15 @@ namespace Craft.Utils
             this string s,
             out DateTime dateTime)
         {
-            return
+            var success = 
                 DateTime.TryParseExact(s, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime) ||
                 DateTime.TryParseExact(s, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime) ||
                 DateTime.TryParseExact(s, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime);
+
+            dateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute,
+                dateTime.Second, dateTime.Millisecond, DateTimeKind.Utc);
+
+            return success;
         }
     }
 }

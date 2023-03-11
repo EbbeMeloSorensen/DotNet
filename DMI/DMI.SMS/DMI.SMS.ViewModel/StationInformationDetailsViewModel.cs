@@ -1244,7 +1244,7 @@ namespace DMI.SMS.ViewModel
             stationInformation.GdbToDate = currentTime;
             newStationInformation.GdbArchiveOid = 0;
             newStationInformation.GdbFromDate = currentTime;
-            newStationInformation.GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59);
+            newStationInformation.GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
             newStationInformation.LastEditedUser = SharedData.LoggedInUser;
             newStationInformation.LastEditedDate = currentTime;
 
@@ -1347,7 +1347,7 @@ namespace DMI.SMS.ViewModel
             var currentTime = DateTime.UtcNow.TruncateToMilliseconds();
             newStationInformation.GlobalId = Guid.NewGuid().ToString();
             newStationInformation.GdbFromDate = currentTime;
-            newStationInformation.GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59);
+            newStationInformation.GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
             newStationInformation.CreatedUser = SharedData.LoggedInUser;
             newStationInformation.CreatedDate = currentTime;
             newStationInformation.LastEditedUser = null;

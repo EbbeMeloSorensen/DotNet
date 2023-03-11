@@ -674,7 +674,8 @@ namespace DMI.SMS.ViewModel
             if (GdbDateFilterInPlace &&
                 !ConditionFilteringInMemoryRequired)
             {
-                var maxDate = new DateTime(9999, 12, 31, 23, 59, 59);
+                // UTC er nødvendigt for at det virker over for en postgres database
+                var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
                 result.Add(s => s.GdbToDate == maxDate);
             }
 

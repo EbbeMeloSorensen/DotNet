@@ -2,6 +2,8 @@
 using DMI.SMS.Persistence.Repositories;
 using Craft.Persistence.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using DMI.SMS.Domain.EntityClassExtensions;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
 {
@@ -13,17 +15,30 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
 
         public override void Clear()
         {
-            throw new NotImplementedException();
+            var context = Context as SMSDbContext;
+
+            context.RemoveRange(context.StationInformations);
+            context.SaveChanges();
         }
 
-        public override void Update(StationInformation entity)
+        public override void Update(StationInformation stationInformation)
         {
-            throw new NotImplementedException();
+            var sRepo = Get(stationInformation.GdbArchiveOid);
+
+            sRepo.CopyAttributes(stationInformation);
         }
 
-        public override void UpdateRange(IEnumerable<StationInformation> entities)
+        public override void UpdateRange(IEnumerable<StationInformation> stationInformations)
         {
-            throw new NotImplementedException();
+            var ids = stationInformations.Select(p => p.GdbArchiveOid);
+            var stationInformationsFromRepository = Find(s => ids.Contains(s.GdbArchiveOid));
+
+            stationInformationsFromRepository.ToList().ForEach(sRepo =>
+            {
+                var updatedStationInformation = stationInformations.Single(sUpd => sUpd.GdbArchiveOid == sRepo.GdbArchiveOid);
+
+                sRepo.CopyAttributes(updatedStationInformation);
+            });
         }
 
         public void RemoveLogically(StationInformation entity, DateTime transactionTime)
@@ -38,7 +53,9 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
 
         public StationInformation Get(int id)
         {
-            throw new NotImplementedException();
+            var stationInformation = (Context as SMSDbContext).StationInformations.Single(_ => _.GdbArchiveOid == id);
+
+            return stationInformation;
         }
 
         public StationInformation GetStationInformationWithContactPersons(int id)
