@@ -280,7 +280,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{842C4AC1-4A27-4530-AD8D-84F3413216AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.EntityFrameworkCore.Helper", "DMI.SMS.Persistence.EntityFrameworkCore.Helper\DMI.SMS.Persistence.EntityFrameworkCore.Helper.csproj", "{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityFrameworkCore.Helper", "DMI.SMS.Persistence.EntityFrameworkCore.Helper\DMI.SMS.Persistence.EntityFrameworkCore.Helper.csproj", "{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL", "DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL\DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{438C2C02-1736-4097-965F-64C1E86824BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.EntityFrameworkCore.Sqlite", "DMI.SMS.Persistence.EntityFrameworkCore.Sqlite\DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.csproj", "{EB6CDA0F-A136-456F-BAE9-913A15326697}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -400,6 +404,14 @@ Global
 		{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{438C2C02-1736-4097-965F-64C1E86824BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{438C2C02-1736-4097-965F-64C1E86824BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{438C2C02-1736-4097-965F-64C1E86824BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{438C2C02-1736-4097-965F-64C1E86824BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB6CDA0F-A136-456F-BAE9-913A15326697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB6CDA0F-A136-456F-BAE9-913A15326697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB6CDA0F-A136-456F-BAE9-913A15326697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB6CDA0F-A136-456F-BAE9-913A15326697}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
