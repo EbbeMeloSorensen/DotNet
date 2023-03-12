@@ -236,59 +236,9 @@ namespace DMI.SMS.ViewModel
                    StationInformationListViewModel.SelectedStationInformations.Objects.Any();
         }
 
-        //private void ExportData()
-        //{
-        //    //var dialog = new SaveFileDialog
-        //    //{
-        //    //    Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
-        //    //};
-
-        //    //if (dialog.ShowDialog() == false)
-        //    //{
-        //    //    return;
-        //    //}
-
-        //    //_dataProvider.ExportPeople(dialog.FileName);
-        //    _application.UIDataProvider.ExportData(@"C:\Temp\SMSData.xml");
-        //}
-
-        //private bool CanExportData()
-        //{
-        //    return true;
-        //}
-
-        //private void ImportData()
-        //{
-        //    //var dialog = new OpenFileDialog
-        //    //{
-        //    //    Filter = "Xml Files(*.xml)|*.xml|Json Files(*.json)|*.json|All(*.*)|*"
-        //    //};
-
-        //    //if (dialog.ShowDialog() == false)
-        //    //{
-        //    //    return;
-        //    //}
-
-        //    _application.UIDataProvider.ImportData(@"C:\Temp\SMSData.xml");
-        //}
-
-        //private bool CanImportData()
-        //{
-        //    return true;
-        //}
-
         private async Task ExportData(
             object owner)
         {
-            // Det her er bare den sædvanlige MessageBox, men vi vil gerne bruge den SaveFileDialog,
-            // som ligger i Win32
-            //var dialogViewModel = new MessageBoxDialogViewModel("Export data", true);
-
-            //if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-            //{
-            //    return;
-            //}
-
             var dialog = new SaveFileDialog
             {
                 Filter = "Json Files(*.json)|*.json|Xml Files(*.xml)|*.xml"

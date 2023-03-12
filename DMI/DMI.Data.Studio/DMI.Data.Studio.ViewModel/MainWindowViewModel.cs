@@ -19,6 +19,7 @@ using DMI.SMS.ViewModel;
 using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
+using Microsoft.Win32;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -754,18 +755,21 @@ namespace DMI.Data.Studio.ViewModel
         private void ExportData(
             object owner)
         {
-            var dialogViewModel = new MessageBoxDialogViewModel("Export Data?", true);
+            var dialog = new SaveFileDialog
+            {
+                Filter = "Json Files(*.json)|*.json|Xml Files(*.xml)|*.xml"
+            };
 
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            if (dialog.ShowDialog() == false)
             {
                 return;
             }
 
             _smsDataProvider.ExportData(
-                @"C:\Temp\SMSData_Export.json",
+                dialog.FileName,
                 StationInformationListViewModel.FindStationInformationsViewModel.FilterAsExpressionCollection());
 
-            dialogViewModel = new MessageBoxDialogViewModel("Exported data succesfully to C:\\Temp\\SMSData.json", false);
+            var dialogViewModel = new MessageBoxDialogViewModel($"Exported data succesfully to {dialog.FileName}", false);
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }
 

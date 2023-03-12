@@ -14,13 +14,20 @@
         Width="800"
         WindowState="Maximized"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="N" 
+                    Command="{Binding CreateStationInformationCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </Window.InputBindings>
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_New Station Information" Command="{Binding CreateStationInformationCommand}"/>
                 <Separator/>
                 <MenuItem Header="Export Data" Command="{Binding ExportDataCommand}"/>
-                <MenuItem Header="Fetch Stations" Command="{Binding GenerateMeteorologicalStationListCommand}"/>
+                <!--<MenuItem Header="Fetch Stations" Command="{Binding GenerateMeteorologicalStationListCommand}"/>-->
                 <MenuItem Header="Import Data" Command="{Binding ImportDataCommand}"/>
                 <Separator/>
                 <MenuItem Header="Settings" 
