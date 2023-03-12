@@ -14,7 +14,10 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.Repositories
 
         public override void Clear()
         {
-            throw new NotImplementedException();
+            var context = Context as SMSDbContext;
+
+            context.RemoveRange(context.StationInformations);
+            context.SaveChanges();
         }
 
         public override void Update(StationInformation stationInformation)
