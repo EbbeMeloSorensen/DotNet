@@ -20,6 +20,7 @@ using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
 using Microsoft.Win32;
+using Craft.ViewModels.Tasks;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -45,10 +46,10 @@ namespace DMI.Data.Studio.ViewModel
         private RelayCommand<object> _openSettingsDialogCommand;
         private RelayCommand<object> _openAboutDialogCommand;
         private RelayCommand<object> _createStationInformationCommand;
-        private RelayCommand<object> _exportDataCommand;
+        private AsyncCommand<object> _exportDataCommand;
+        private AsyncCommand<object> _importDataCommand;
+        private AsyncCommand<object> _clearRepositoryCommand;
         private AsyncCommand<object> _generateMeteorologicalStationListCommand;
-        private RelayCommand<object> _importDataCommand;
-        private RelayCommand<object> _restoreTestDatabaseCommand;
         private Brush _stationInformationBrush = new SolidColorBrush(Colors.DarkRed);
         private Brush _stationBrush = new SolidColorBrush(Colors.DarkOrange);
         private Brush _StatDBTimeIntervalBrush = new SolidColorBrush(Colors.DarkSlateGray);
@@ -152,9 +153,9 @@ namespace DMI.Data.Studio.ViewModel
             get { return _createStationInformationCommand ?? (_createStationInformationCommand = new RelayCommand<object>(CreateStationInformation)); }
         }
 
-        public RelayCommand<object> ExportDataCommand
+        public AsyncCommand<object> ExportDataCommand
         {
-            get { return _exportDataCommand ?? (_exportDataCommand = new RelayCommand<object>(ExportData)); }
+            get { return _exportDataCommand ?? (_exportDataCommand = new AsyncCommand<object>(ExportData)); }
         }
 
         public AsyncCommand<object> GenerateMeteorologicalStationListCommand
@@ -163,14 +164,14 @@ namespace DMI.Data.Studio.ViewModel
                     _generateMeteorologicalStationListCommand = new AsyncCommand<object>(GenerateMeteorologicalStationList)); }
         }
 
-        public RelayCommand<object> ImportDataCommand
+        public AsyncCommand<object> ImportDataCommand
         {
-            get { return _importDataCommand ?? (_importDataCommand = new RelayCommand<object>(ImportData)); }
+            get { return _importDataCommand ?? (_importDataCommand = new AsyncCommand<object>(ImportData)); }
         }
 
-        public RelayCommand<object> RestoreTestDatabaseCommand
+        public AsyncCommand<object> ClearRepositoryCommand
         {
-            get { return _restoreTestDatabaseCommand ?? (_restoreTestDatabaseCommand = new RelayCommand<object>(RestoreTestDatabase)); }
+            get { return _clearRepositoryCommand ?? (_clearRepositoryCommand = new AsyncCommand<object>(ClearRepository)); }
         }
 
         public MainWindowViewModel(
@@ -752,7 +753,7 @@ namespace DMI.Data.Studio.ViewModel
             StationInformationListViewModel.Refresh();
         }
 
-        private void ExportData(
+        private async Task ExportData(
             object owner)
         {
             var dialog = new SaveFileDialog
@@ -765,9 +766,11 @@ namespace DMI.Data.Studio.ViewModel
                 return;
             }
 
-            _smsDataProvider.ExportData(
-                dialog.FileName,
-                StationInformationListViewModel.FindStationInformationsViewModel.FilterAsExpressionCollection());
+            await _smsApplication.ExportData(dialog.FileName);
+
+            //_smsDataProvider.ExportData(
+            //    dialog.FileName,
+            //    StationInformationListViewModel.FindStationInformationsViewModel.FilterAsExpressionCollection());
 
             var dialogViewModel = new MessageBoxDialogViewModel($"Exported data succesfully to {dialog.FileName}", false);
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
@@ -784,43 +787,59 @@ namespace DMI.Data.Studio.ViewModel
             await _smsApplication.ExtractMeteorologicalStations(rollbackDate);
         }
 
-        private void ImportData(
+        private async Task ImportData(
             object owner)
         {
-            var dialogViewModel = new MessageBoxDialogViewModel("Import Data?\n\n(this requires the presence of a data file named C:\\Temp\\SMSData.xml and will overwrite any data in the repository)", true);
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Json Files(*.json)|*.json|Xml Files(*.xml)|*.xml"
+            };
 
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            if (dialog.ShowDialog() == false)
             {
                 return;
             }
 
-            _smsDataProvider.ImportData(@"C:\Temp\SMSData.xml");
+            await _smsApplication.ImportData(
+                dialog.FileName);
 
-            dialogViewModel = new MessageBoxDialogViewModel("C:\\Temp\\SMSData.xml was imported succesfully", false);
+            var dialogViewModel = new MessageBoxDialogViewModel($"{dialog.FileName} was imported succesfully", false);
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }
 
-        private void RestoreTestDatabase(
+        private async Task ClearRepository(
             object owner)
         {
-            var dialogViewModel = new MessageBoxDialogViewModel("Restore Test database?\n\n(this will undo any changes applied to the contents of the test database)", true);
+            var dialogViewModel = new MessageBoxDialogViewModel("Clear Repository?", true);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
                 return;
             }
 
-            File.Copy(@"C:\Temp\SMSData.xml", @"C:\Temp\SMSFileRepository.xml", true);
+            //TaskViewModel.NameOfTask = "Clearing Repository";
+            //TaskViewModel.Abort = false;
+            //TaskViewModel.Busy = true;
+            //RefreshCommandAvailability();
 
-            _smsDataProvider.Initialize(_logger);
+            await _smsApplication.ClearRepository();
 
-            dialogViewModel = new MessageBoxDialogViewModel("Test database restored", false);
-            _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            //await _application.ClearRepository(
+            //    (progress, currentActivity) =>
+            //    {
+            //        TaskViewModel.Progress = progress;
+            //        TaskViewModel.NameOfCurrentSubtask = currentActivity;
+            //        return TaskViewModel.Abort;
+            //    });
 
-            if (StationInformationListViewModel.ItemCount > 0)
-            {
-                StationInformationListViewModel.Refresh();
-            }
+            //TaskViewModel.Busy = false;
+            //RefreshCommandAvailability();
+
+            //if (!TaskViewModel.Abort)
+            //{
+            var messageBoxDialog = new MessageBoxDialogViewModel("Completed clearing repository", false);
+                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
+            //}
         }
 
         private List<Tuple<DateTime, DateTime>> GetObservationIntervalsForStation(

@@ -51,7 +51,7 @@
                         Command="{Binding EraseCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
                 <Button Margin="3" Content="Manipulate" Width="75" 
-                        Command="{Binding ApplyChangesCommand}"
+                        Command="{Binding ManipulateCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
                 <Button Margin="3" Content="Merge" Width="75" 
                         Command="{Binding MergeCommand}" 
@@ -63,7 +63,7 @@
                         Command="{Binding DeleteCommand}" 
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
                 <Button Margin="3" Content="Update" Width="75" 
-                        Command="{Binding ApplyChangesProperlyCommand}"/>
+                        Command="{Binding UpdateCommand}"/>
             </StackPanel>
 
             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
