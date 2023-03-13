@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
+using DMI.DAL.ObsDB;
 
 namespace DMI.DAL.ObsDB.UnitTest
 {
@@ -21,13 +23,17 @@ namespace DMI.DAL.ObsDB.UnitTest
             _host = "nanoq-ro.dmi.dk"; // nanoq4, dvs mirror databasen for nanoq3
             _database = "obsdb";
 
-            var credentialsFilePath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                @"Documents\credentialsForNanoq.txt");
-
+            // Sådan gør vi for Windows
+            // var credentialsFilePath = Path.Combine(
+            //     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            //     @"Documents\credentialsForNanoq.txt");
             //var lines = File.ReadAllLines(credentialsFilePath);
-            //_obsDBUser = lines[0];
-            //_obsDBPassword = lines[1];
+
+            // Sådan gør vi for Linux. Filen skal ligge i samme folder som de kompilerede assemblies, dvs bin/Debug/net6.0
+            var lines = File.ReadAllLines("credentialsForNanoq.txt");
+
+            _obsDBUser = lines[0];
+            _obsDBPassword = lines[1];
         }
 
         public void Dispose()
@@ -38,14 +44,13 @@ namespace DMI.DAL.ObsDB.UnitTest
         public async Task CheckConnection_GivenValidCredentials_ReturnsTrue()
         {
             // Arrange
-            //var dataProvider = new DataProvider(null);
+            var dataProvider = new DataProvider(null);
 
-            //// Act
-            //var connectionOK = await dataProvider.CheckConnection(_host, _database, _obsDBUser, _obsDBPassword);
+            // Act
+            var connectionOK = await dataProvider.CheckConnection(_host, _database, _obsDBUser, _obsDBPassword);
 
-            //// Assert
-            //connectionOK.Should().BeTrue();
+            // Assert
+            connectionOK.Should().BeTrue();
         }
-
     }
 }

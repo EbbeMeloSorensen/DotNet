@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DMI.Utils\DMI.Utils.csproj" />
+    <ProjectReference Include="..\DMI.DAL.ObsDB\DMI.DAL.ObsDB.csproj" />
   </ItemGroup>
 
 </Project>
