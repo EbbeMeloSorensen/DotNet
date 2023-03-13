@@ -296,6 +296,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityFrameworkCore.SqlServer", "..\DMI.SMS\DMI.SMS.Persistence.EntityFrameworkCore.SqlServer\DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.csproj", "{D2C79F9B-530C-4E6C-B89F-5EFA537FFCCD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{46828317-388D-4C22-ACBB-B46F850655F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -442,6 +444,10 @@ Global
 		{D2C79F9B-530C-4E6C-B89F-5EFA537FFCCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2C79F9B-530C-4E6C-B89F-5EFA537FFCCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2C79F9B-530C-4E6C-B89F-5EFA537FFCCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46828317-388D-4C22-ACBB-B46F850655F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46828317-388D-4C22-ACBB-B46F850655F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46828317-388D-4C22-ACBB-B46F850655F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46828317-388D-4C22-ACBB-B46F850655F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
