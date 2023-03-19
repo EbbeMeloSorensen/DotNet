@@ -298,6 +298,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{46828317-388D-4C22-ACBB-B46F850655F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.Data.Studio.Application", "DMI.Data.Studio.Application\DMI.Data.Studio.Application.csproj", "{06E404B4-7B99-43C8-A66B-3B0DA5D03728}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -448,6 +450,10 @@ Global
 		{46828317-388D-4C22-ACBB-B46F850655F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46828317-388D-4C22-ACBB-B46F850655F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46828317-388D-4C22-ACBB-B46F850655F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06E404B4-7B99-43C8-A66B-3B0DA5D03728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06E404B4-7B99-43C8-A66B-3B0DA5D03728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06E404B4-7B99-43C8-A66B-3B0DA5D03728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06E404B4-7B99-43C8-A66B-3B0DA5D03728}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

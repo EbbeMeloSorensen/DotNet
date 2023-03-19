@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\..\Craf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.HttpClient.GovCloud.UnitTest", "DMI.HttpClient.GovCloud.UnitTest\DMI.HttpClient.GovCloud.UnitTest.csproj", "{F472558B-A641-404B-820D-0401B8FAE45A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.DAL.ObsDB.UI.Console", "DMI.DAL.ObsDB.UI.Console\DMI.DAL.ObsDB.UI.Console.csproj", "{400A101E-6B03-4A85-8AE6-41D937C19F5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{F472558B-A641-404B-820D-0401B8FAE45A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F472558B-A641-404B-820D-0401B8FAE45A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F472558B-A641-404B-820D-0401B8FAE45A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{400A101E-6B03-4A85-8AE6-41D937C19F5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{400A101E-6B03-4A85-8AE6-41D937C19F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{400A101E-6B03-4A85-8AE6-41D937C19F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{400A101E-6B03-4A85-8AE6-41D937C19F5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

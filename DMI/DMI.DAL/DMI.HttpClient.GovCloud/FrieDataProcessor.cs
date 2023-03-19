@@ -41,54 +41,6 @@ namespace DMI.HttpClient.GovCloud
             string govCloudAPIKey,
             string stationId,
             string parameterId,
-            DateTime dateTimeFrom,
-            DateTime dateTimeTo,
-            int? limit)
-        {
-            if (govCloudBasisUrl.Contains("v1"))
-            {
-                var timeStampFrom = dateTimeFrom.AsEpochInMicroSeconds();
-                var timeStampTo = dateTimeTo.AsEpochInMicroSeconds();
-
-                return GenerateURLForV1(govCloudBasisUrl, govCloudAPIKey, stationId, parameterId, timeStampFrom, timeStampTo, limit);
-            }
-            else
-            {
-                return GenerateURLForV2(govCloudBasisUrl, govCloudAPIKey, stationId, parameterId, dateTimeFrom, dateTimeTo, limit);
-            }
-        }
-
-        public static string GenerateURLForV1(
-            string govCloudBasisUrl,
-            string govCloudAPIKey,
-            string stationId,
-            string parameterId,
-            long timeStampFrom,
-            long timeStampTo,
-            int? limit)
-        {
-            var url = govCloudBasisUrl + $"/observation?";
-
-            if (govCloudAPIKey != null && govCloudAPIKey != "")
-            {
-                url += $"api-key={govCloudAPIKey}&";
-            }
-
-            url += $"stationId={stationId}&parameterId={parameterId}&from={timeStampFrom}&to={timeStampTo}";
-
-            if (limit.HasValue)
-            {
-                url += $"&limit={limit.Value}";
-            }
-
-            return url;
-        }
-
-        public static string GenerateURLForV2(
-            string govCloudBasisUrl,
-            string govCloudAPIKey,
-            string stationId,
-            string parameterId,
             DateTime from,
             DateTime to,
             int? limit)
@@ -127,67 +79,7 @@ namespace DMI.HttpClient.GovCloud
             DateTime to,
             int? limit)
         {
-            if (govCloudBasisUrl.Contains("v1"))
-            {
-                var timeStampFrom = from.AsEpochInMicroSeconds();
-                var timeStampTo = to.AsEpochInMicroSeconds();
-
-                return await LoadScalarObservationsForV1(govCloudBasisUrl, govCloudAPIKey, stationId, parameterId, timeStampFrom, timeStampTo, limit);
-            }
-            else
-            {
-                return await LoadScalarObservationsForV2(govCloudBasisUrl, govCloudAPIKey, stationId, parameterId, from, to, limit);
-            }
-        }
-
-        public static async Task<ScalarObservation[]> LoadScalarObservationsForV1(
-            string govCloudBasisUrl,
-            string govCloudAPIKey,
-            string stationId,
-            string parameterId,
-            long timeStampFrom,
-            long timeStampTo,
-            int? limit)
-        {
-            var url = GenerateURLForV1(govCloudBasisUrl, govCloudAPIKey, stationId, parameterId, timeStampFrom, timeStampTo, limit);
-
-            using (var response = await ApiHelper.ApiClient.GetAsync(url))
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    try
-                    {
-                        var observations = await response.Content.ReadAsAsync<ScalarObservation[]>();
-
-                        if (observations == null)
-                        {
-                            return new ScalarObservation[0];
-                        }
-
-                        return observations;
-                    }
-                    catch (Exception e)
-                    {
-                        throw e;
-                    }
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-            }
-        }
-
-        public static async Task<ScalarObservation[]> LoadScalarObservationsForV2(
-            string govCloudBasisUrl,
-            string govCloudAPIKey,
-            string stationId,
-            string parameterId,
-            DateTime from,
-            DateTime to,
-            int? limit)
-        {
-            var url = GenerateURLForV2(govCloudBasisUrl, govCloudAPIKey, stationId, parameterId, from, to, limit);
+            var url = GenerateURL(govCloudBasisUrl, govCloudAPIKey, stationId, parameterId, from, to, limit);
 
             using (var response = await ApiHelper.ApiClient.GetAsync(url))
             {
@@ -210,59 +102,6 @@ namespace DMI.HttpClient.GovCloud
                                 timeObserved = f.properties.observed.ConvertFromRFC3339StringToEpoch().Value
                             })
                             .ToArray();
-                    }
-                    catch (Exception e)
-                    {
-                        throw e;
-                    }
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-            }
-        }
-
-        public static async Task<WaterTemperatureObservation[]> LoadWaterTemperatureObservations(
-            string govCloudBasisUrl,
-            string govCloudAPIKey,
-            string stationId,
-            string parameterId,
-            DateTime dateTimeFrom,
-            DateTime dateTimeTo,
-            int? limit)
-        {
-            var timeStampFrom = dateTimeFrom.AsEpochInMicroSeconds();
-            var timeStampTo = dateTimeTo.AsEpochInMicroSeconds();
-
-            return await LoadWaterTemperatureObservations(govCloudBasisUrl, govCloudAPIKey, stationId, parameterId, timeStampFrom, timeStampTo, limit);
-        }
-
-        public static async Task<WaterTemperatureObservation[]> LoadWaterTemperatureObservations(
-            string govCloudBasisUrl,
-            string govCloudAPIKey,
-            string stationId,
-            string parameterId,
-            long timeStampFrom,
-            long timeStampTo,
-            int? limit)
-        {
-            var url = GenerateURLForV1(govCloudBasisUrl, govCloudAPIKey, stationId, parameterId, timeStampFrom, timeStampTo, limit);
-
-            using (var response = await ApiHelper.ApiClient.GetAsync(url))
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    try
-                    {
-                        var observations = await response.Content.ReadAsAsync<WaterTemperatureObservation[]>();
-
-                        if (observations == null)
-                        {
-                            return new WaterTemperatureObservation[0];
-                        }
-
-                        return observations;
                     }
                     catch (Exception e)
                     {

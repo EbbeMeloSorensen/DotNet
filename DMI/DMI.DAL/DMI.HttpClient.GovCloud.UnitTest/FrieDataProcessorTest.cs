@@ -46,7 +46,8 @@ namespace DMI.HttpClient.GovCloud.UnitTest
         public async Task LoadOceanographicObservations_GivenStation20043_tw_1stJanuary2019_ReturnsCorrectResult()
         {
             // Act
-            WaterTemperatureObservation[] observations = await FrieDataProcessor.LoadWaterTemperatureObservations(
+            //WaterTemperatureObservation[] observations = await FrieDataProcessor.LoadWaterTemperatureObservations(
+            var observations = await FrieDataProcessor.LoadScalarObservations(
                 "https://dmigw.govcloud.dk/v2/oceanObs",
                 "6de4ae83-c739-488a-9b5c-b92f0fff122d",
                 "20043",
@@ -56,7 +57,7 @@ namespace DMI.HttpClient.GovCloud.UnitTest
                 100000);
 
             // Assert
-            observations.Length.Should().Be(280);
+            observations.Length.Should().Be(140);
         }
 
         [Fact]
