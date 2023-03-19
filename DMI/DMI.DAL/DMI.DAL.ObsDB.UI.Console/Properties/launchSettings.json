@@ -2,7 +2,7 @@
   "profiles": {
     "DMI.DAL.ObsDB.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "fetch -h nanoq-ro.dmi.dk -d obsdb -u ebs -p secret"
+      "commandLineArgs": "fetch -h nanoq-ro.dmi.dk -d obsdb -u ebs -p secret -s 06041 -q temp_dry"
     }
   }
 }

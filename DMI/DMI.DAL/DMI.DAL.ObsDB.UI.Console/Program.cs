@@ -42,7 +42,9 @@ namespace DMI.DAL.ObsDB.UI.Console
                 options.Host, 
                 options.Database, 
                 options.User, 
-                options.Password, 
+                options.Password,
+                options.StationID,
+                options.Parameter,
                 (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
@@ -106,37 +108,53 @@ namespace DMI.DAL.ObsDB.UI.Console
             });
         }
 
-        private static async Task<bool> FetchData(
+        private static async Task<int> FetchData(
             string host,
             string database,
             string user,
             string password,
+            string stationId,
+            string parameter,
             ProgressCallback progressCallback = null)
         {
-            var connectionOK = false;
+            var observationCount = -1;
 
             await Task.Run(async () =>
             {
                 var dataProvider = new DataProvider(null);
+                dataProvider.Initialize(new[] { parameter });
 
-                connectionOK = await dataProvider.CheckConnection(host, database, user, password);
+                //connectionOK = await dataProvider.CheckConnection(host, database, user, password);
 
-                var currentActivity = "Making mohitos";
-                var count = 0;
-                var total = 317;
+                var startTime = new DateTime(1953, 1, 1);
+                var endTime = new DateTime(1954, 1, 1);
 
-                while (count < total)
-                {
-                    count++;
+                observationCount = dataProvider.CountObservationsOfIndividualParameterForStation(
+                    host,
+                    database,
+                    user,
+                    password,
+                    parameter,
+                    stationId,
+                    startTime,
+                    endTime);
 
-                    if (progressCallback?.Invoke(100.0 * count / total, currentActivity) is true)
-                    {
-                        break;
-                    }
-                }
+                //var currentActivity = "Making mohitos";
+                //var count = 0;
+                //var total = 317;
+
+                //while (count < total)
+                //{
+                //    count++;
+
+                //    if (progressCallback?.Invoke(100.0 * count / total, currentActivity) is true)
+                //    {
+                //        break;
+                //    }
+                //}
             });
 
-            return connectionOK;
+            return observationCount;
         }
     }
 }

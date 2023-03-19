@@ -16,4 +16,10 @@ public sealed class Fetch
 
     [Option('p', "password", Required = true, HelpText = "Password")]
     public string Password { get; set; }
+
+    [Option('s', "stationid", Required = true, HelpText = "StationID")]
+    public string StationID { get; set; }
+
+    [Option('q', "parameter", Required = true, HelpText = "Parameter")]
+    public string Parameter { get; set; }
 }
