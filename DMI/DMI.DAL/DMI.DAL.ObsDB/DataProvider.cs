@@ -88,7 +88,7 @@ namespace DMI.DAL.ObsDB
             }
 
             var message = $"      Counting observations from table {baseTableName} observations for {stationId}..";
-            _logger.WriteLine(LogMessageCategory.Information, message);
+            _logger?.WriteLine(LogMessageCategory.Information, message);
 
             await Task.Delay(100);
 
@@ -121,7 +121,7 @@ namespace DMI.DAL.ObsDB
                     if (attempt > 1)
                     {
                         message = $"Attempt {attempt} of counting observations from table {baseTableName} observations for {stationId}..";
-                        _logger.WriteLine(LogMessageCategory.Information, message);
+                        _logger?.WriteLine(LogMessageCategory.Information, message);
                         await Task.Delay(100);
                     }
 
@@ -180,7 +180,7 @@ namespace DMI.DAL.ObsDB
                         }
                         else
                         {
-                            _logger.WriteLine(LogMessageCategory.Information, "counting attempt failed (PostgresException)");
+                            _logger?.WriteLine(LogMessageCategory.Information, "counting attempt failed (PostgresException)");
 
                             await Task.Delay(100);
 
@@ -189,7 +189,7 @@ namespace DMI.DAL.ObsDB
                     }
                     catch (NpgsqlException excp)
                     {
-                        _logger.WriteLine(LogMessageCategory.Information, $"counting attempt failed (NpgsqlException, message: {excp.Message})");
+                        _logger?.WriteLine(LogMessageCategory.Information, $"counting attempt failed (NpgsqlException, message: {excp.Message})");
 
                         await Task.Delay(100);
                     }
@@ -201,7 +201,7 @@ namespace DMI.DAL.ObsDB
                 if (attempt == numberOfAttemptsBeforeAborting)
                 {
                     var errorMessage = $"Fatal Error: counting attempt failed {numberOfAttemptsBeforeAborting} times. Aborting";
-                    _logger.WriteLine(LogMessageCategory.Information, errorMessage);
+                    _logger?.WriteLine(LogMessageCategory.Information, errorMessage);
                     throw new Exception(errorMessage);
                 }
 
@@ -458,10 +458,7 @@ namespace DMI.DAL.ObsDB
 
                 do
                 {
-                    if (_logger != null)
-                    {
-                        _logger.WriteLine(LogMessageCategory.Information, $"  Inspecting year {year}");
-                    }
+                    _logger?.WriteLine(LogMessageCategory.Information, $"  Inspecting year {year}");
 
                     _basis_table_names.Keys.ToList().ForEach(btn =>
                     {
@@ -503,10 +500,7 @@ namespace DMI.DAL.ObsDB
 
                 do
                 {
-                    if (_logger != null)
-                    {
-                        _logger.WriteLine(LogMessageCategory.Information, $"  Inspecting year {year}");
-                    }
+                    _logger?.WriteLine(LogMessageCategory.Information, $"  Inspecting year {year}");
 
                     _basis_table_names.Keys.ToList().ForEach(btn =>
                     {

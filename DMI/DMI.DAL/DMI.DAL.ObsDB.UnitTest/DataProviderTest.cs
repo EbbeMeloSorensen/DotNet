@@ -129,9 +129,9 @@ namespace DMI.DAL.ObsDB.UnitTest
             var includeZeroCountparams = false;
 
             // Act
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                dataProvider.CountObservationsCoveredByBasisTableForStation(
+                await dataProvider.CountObservationsCoveredByBasisTableForStation(
                     _host,
                     _database,
                     _obsDBUser,
@@ -272,9 +272,9 @@ namespace DMI.DAL.ObsDB.UnitTest
             var endTime = new DateTime(1953, 1, 2);
 
             // Act
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                dataProvider.RetrieveObservationsCoveredByBasisTableForStationInGivenTimeInterval(
+                await dataProvider.RetrieveObservationsCoveredByBasisTableForStationInGivenTimeInterval(
                     _host,
                     _database,
                     _obsDBUser,
