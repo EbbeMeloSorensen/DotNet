@@ -20,6 +20,8 @@ namespace Craft.DataStructures.Graph
             get { return _vertexCount; }
         }
 
+        public bool IsDirected => _directed;
+
         public GraphAdjacencyMatrix(
             bool directed,
             int numberOfVertices)

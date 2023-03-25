@@ -9,6 +9,8 @@ namespace Craft.DataStructures.Graph
 
         public int VertexCount { get; }
 
+        public bool IsDirected => false;
+
         public GraphMatrix4Connectivity(
             int rows, 
             int columns)

@@ -12,6 +12,8 @@ namespace Craft.DataStructures.Graph
 
         IEnumerable<int> NeighborIds(
             int vertexId);
+
+        bool IsDirected { get; }
     }
 
     // The 'out' keywords indicate that the type parameters are declared as covariant,
