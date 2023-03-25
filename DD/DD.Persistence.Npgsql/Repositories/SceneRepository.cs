@@ -78,6 +78,11 @@ namespace DD.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load(IEnumerable<Scene> entities)
         {
             throw new NotImplementedException();

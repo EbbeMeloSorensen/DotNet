@@ -89,6 +89,11 @@ namespace DD.Persistence.Memory.Repositories
             throw new NotImplementedException();
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load(IEnumerable<CreatureType> entities)
         {
             throw new NotImplementedException();
