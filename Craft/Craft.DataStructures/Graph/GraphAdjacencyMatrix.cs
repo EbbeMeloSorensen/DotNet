@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 namespace Craft.DataStructures.Graph
 {
+    // This is a simple graph class that represents either a directed or an undirected graph.
+    // It stores the graph info as a matrix where a matrix entry indicates the "cost" of getting
+    // from one vertex to another. A cost of 0 indicates that there is no edge between two vertices.
+    // The class is mostly suitable for graphs with a small number of vertices.
     public class GraphAdjacencyMatrix : IGraph
     {
         protected bool _directed;
@@ -58,6 +62,12 @@ namespace Craft.DataStructures.Graph
         }
     }
 
+    // This is a template class for representing graphs where we want to associate some information
+    // with vertices and/or edges such as a location of a vertex.
+    // Note that it derives from GraphAdjacencyMatrix, so it utilizes a matrix for storing cost,
+    // making it ill suited for graphs with many vertices.
+    // This class facilitates inspection of individual vertices and edges, and it facilitates retrieval
+    // of the edges that go in and out of a given vertex
     public class GraphAdjacencyMatrix<TV, TE> : GraphAdjacencyMatrix, IGraph<TV, TE> 
         where TV : IVertex
         where TE : IEdge
@@ -80,17 +90,13 @@ namespace Craft.DataStructures.Graph
             IEnumerable<TV> vertices,
             bool directed) : base(directed, vertices.Count())
         {
-            _directed = directed;
             Vertices = vertices.ToArray();
 
-            var vertexCount = vertices.Count();
-
-            for (var i = 0; i < vertexCount; i++)
+            // Traverse vertices and assign each of them a unique Id
+            for (var i = 0; i < _vertexCount; i++)
             {
                 Vertices[i].Id = i;
             }
-
-            _adjacencyMatrix = new double[vertexCount, vertexCount];
         }
 
         public TV[] Vertices { get; }
@@ -107,17 +113,33 @@ namespace Craft.DataStructures.Graph
 
         // Det her er ikke særligt pænt... Du skal kunne opdatere en vertex i grafen uden at fucke vertex id'er op
         // Husk de tildeles i constructoren
+        // Hvad bruger vi overhovedet den her til? -> Den kaldes af MovePoint i en gui test.. så den bør nok fjernes og erstattes med noget andet
         public void UpdateVertex(int vertexId, TV vertex)
         {
             vertex.Id = vertexId;
             Vertices[vertexId] = vertex;
         }
 
+        // Returns the edges that go to or from a given vertex
         public IEnumerable<TE> GetAdjacentEdges(int vertexId)
         {
             EnsureEdgesAreEstablished();
 
             return _edgeMap[vertexId];
+        }
+
+        private void EnsureEdgesAreEstablished()
+        {
+            if (_edges != null) return;
+
+            if (_directed)
+            {
+                ComputeEdgesDirected();
+            }
+            else
+            {
+                ComputeEdgesUndirected();
+            }
         }
 
         private void ComputeEdgesDirected()
@@ -164,20 +186,6 @@ namespace Craft.DataStructures.Graph
             }
 
             _edges = temp.ToArray();
-        }
-
-        private void EnsureEdgesAreEstablished()
-        {
-            if (_edges != null) return;
-
-            if (_directed)
-            {
-                ComputeEdgesDirected();
-            }
-            else
-            {
-                ComputeEdgesUndirected();
-            }
         }
 
         private void AddEdgeToMap(
