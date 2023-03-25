@@ -1,10 +1,32 @@
-﻿using Craft.DataStructures.Graph;
+﻿using System;
+using Craft.DataStructures.Graph;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace Craft.DataStructures.IO
 {
+    public class Node
+    {
+        public string id { get; set; }
+    }
+
+    public class Edge
+    {
+    }
+
+    public class Graph
+    {
+        public List<Node> Nodes { get; set; }
+    }
+
+    public enum Format
+    {
+        Dot,
+        GraphML
+    }
+
     public static class GraphExtensionMethods
     {
         private static Dictionary<int, char> _letterMap = new Dictionary<int, char>
@@ -39,43 +61,72 @@ namespace Craft.DataStructures.IO
 
         public static void WriteToFile(
             this IGraph graph,
-            string outputFile)
+            string outputFile,
+            Format format)
         {
-            using (var streamWriter = new StreamWriter(outputFile))
+            switch (format)
             {
-                if (graph.IsDirected)
-                {
-                    streamWriter.WriteLine("digraph {");
-
-                    for (var vertexId1 = 0; vertexId1 < graph.VertexCount; vertexId1++)
+                case Format.Dot:
+                    using (var streamWriter = new StreamWriter(outputFile))
                     {
-                        var neighborIds = graph.NeighborIds(vertexId1).ToArray();
-
-                        foreach (var vertexId2 in neighborIds)
+                        if (graph.IsDirected)
                         {
-                            streamWriter.WriteLine($"   {_letterMap[vertexId1]} -> {_letterMap[vertexId2]};");
-                        }
-                    }
-                }
-                else
-                {
-                    streamWriter.WriteLine("graph {");
+                            streamWriter.WriteLine("digraph {");
 
-                    for (var vertexId1 = 0; vertexId1 < graph.VertexCount; vertexId1++)
-                    {
-                        var neighborIds = graph.NeighborIds(vertexId1).ToArray();
-
-                        foreach (var vertexId2 in neighborIds)
-                        {
-                            if (vertexId1 < vertexId2)
+                            for (var vertexId1 = 0; vertexId1 < graph.VertexCount; vertexId1++)
                             {
-                                streamWriter.WriteLine($"   {_letterMap[vertexId1]} -- {_letterMap[vertexId2]};");
+                                var neighborIds = graph.NeighborIds(vertexId1).ToArray();
+
+                                foreach (var vertexId2 in neighborIds)
+                                {
+                                    streamWriter.WriteLine($"   {_letterMap[vertexId1]} -> {_letterMap[vertexId2]};");
+                                }
                             }
                         }
-                    }
-                }
+                        else
+                        {
+                            streamWriter.WriteLine("graph {");
 
-                streamWriter.WriteLine("}");
+                            for (var vertexId1 = 0; vertexId1 < graph.VertexCount; vertexId1++)
+                            {
+                                var neighborIds = graph.NeighborIds(vertexId1).ToArray();
+
+                                foreach (var vertexId2 in neighborIds)
+                                {
+                                    if (vertexId1 < vertexId2)
+                                    {
+                                        streamWriter.WriteLine($"   {_letterMap[vertexId1]} -- {_letterMap[vertexId2]};");
+                                    }
+                                }
+                            }
+                        }
+
+                        streamWriter.WriteLine("}");
+                    }
+
+                    break;
+                case Format.GraphML:
+
+                    var xOver = new XmlAttributeOverrides();
+                    var xmlSerializer = new XmlSerializer(typeof(Graph), xOver);
+
+                    using (var streamWriter = new StreamWriter(outputFile))
+                    {
+                        var g = new Graph();
+
+                        g.Nodes = new List<Node>
+                        {
+                            new Node{ id = "n0" },
+                            new Node{ id = "n1" },
+                            new Node{ id = "n2" }
+                        };
+
+                        xmlSerializer.Serialize(streamWriter, g);
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(format), format, null);
             }
         }
     }
