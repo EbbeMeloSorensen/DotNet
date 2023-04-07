@@ -14,7 +14,7 @@ namespace Craft.DataStructures.Graph
 
     // Pt kan man kun ændre i matricen ved at kalde basisklassens AddEdge metode
 
-    public class GraphAdjacencyMatrixDecoupled<TV, TE> : /*GraphAdjacencyMatrix,*/ IGraph<TV, TE> 
+    public class GraphAdjacencyList<TV, TE> : /*GraphAdjacencyMatrix,*/ IGraph<TV, TE> 
         where TV : IVertex
         where TE : IEdge
     {
@@ -29,7 +29,7 @@ namespace Craft.DataStructures.Graph
 
         public List<TE> Edges { get; }
 
-        static GraphAdjacencyMatrixDecoupled()
+        static GraphAdjacencyList()
         {
             _edgeConstructorInfo = typeof(TE).GetConstructor(new[] { typeof(int), typeof(int) });
 
@@ -39,7 +39,7 @@ namespace Craft.DataStructures.Graph
             }
         }
 
-        public GraphAdjacencyMatrixDecoupled(
+        public GraphAdjacencyList(
             IEnumerable<TV> vertices,
             bool directed)
         {
