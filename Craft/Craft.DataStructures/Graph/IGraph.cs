@@ -16,14 +16,24 @@ namespace Craft.DataStructures.Graph
         bool IsDirected { get; }
     }
 
-    // The 'out' keywords indicate that the type parameters are declared as covariant,
-    // which is apparently recommended
-    public interface IGraph<out TV, out TE> : IGraph 
+    // The 'out' keyword indicates that a type parameter is declared as covariant,
+    // which is apparently recommended when possible. In this case, TE cannot be covariant,
+    // since it constitutes an input parameter in a method of the class
+    public interface IGraph<TV, TE> : IGraph 
         where TV : IVertex 
         where TE : IEdge 
     {
-        TV[] Vertices { get; }
+        List<TV> Vertices { get; }
 
-        TE[] Edges { get; }
+        List<TE> Edges { get; }
+
+        void AddEdge(
+            int vertexId1,
+            int vertexId2);
+
+        void AddEdge(
+            int vertexId1,
+            int vertexId2,
+            TE edge);
     }
 }

@@ -121,22 +121,19 @@ namespace Craft.Algorithms.GuiTest.Tab3
             _viewPoint = new Point2D(155, 155);
 
             // Den her skal vi bruge til at identificere nabo-punkterne
-            // nb - det er lidt skørt, at du er nødt til at angive en cost,
-            // når det jo ikke er relevant for applikationen her, og du endda
-            // angiver, at der skal bruges EmptyEdge
             _graph = new GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge>(vertices, false);
-            _graph.AddEdge(0, 1, 1);
-            _graph.AddEdge(1, 2, 1);
-            _graph.AddEdge(2, 3, 1);
-            _graph.AddEdge(3, 0, 1);
-            _graph.AddEdge(4, 5, 1);
-            _graph.AddEdge(5, 6, 1);
-            _graph.AddEdge(6, 7, 1);
-            _graph.AddEdge(7, 4, 1);
-            _graph.AddEdge(8, 9, 1);
-            _graph.AddEdge(9, 10, 1);
-            _graph.AddEdge(10, 11, 1);
-            _graph.AddEdge(11, 8, 1);
+            _graph.AddEdge(0, 1);
+            _graph.AddEdge(1, 2);
+            _graph.AddEdge(2, 3);
+            _graph.AddEdge(3, 0);
+            _graph.AddEdge(4, 5);
+            _graph.AddEdge(5, 6);
+            _graph.AddEdge(6, 7);
+            _graph.AddEdge(7, 4);
+            _graph.AddEdge(8, 9);
+            _graph.AddEdge(9, 10);
+            _graph.AddEdge(10, 11);
+            _graph.AddEdge(11, 8);
 
             _vertexViewModels = new ObservableCollection<Point2DViewModel>();
 

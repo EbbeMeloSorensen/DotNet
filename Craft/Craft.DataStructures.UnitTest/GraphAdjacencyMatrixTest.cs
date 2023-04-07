@@ -22,7 +22,24 @@ namespace Craft.DataStructures.Graph.UnitTest
         }
 
         [Fact]
-        public void BuildAGraphAdjancencyMatrix_UsingConstructorThatTakesVertexSequence()
+        public void BuildAGraphAdjancencyMatrix_UsingConstructorThatTakesVertexSequence_1()
+        {
+            // Arrange
+            var vertices = Enumerable.Repeat(0, 3).Select(_ => new EmptyVertex());
+
+            // Act
+            var graph = new GraphAdjacencyMatrixDecoupled<EmptyVertex, EmptyEdge>(vertices, false);
+            graph.AddEdge(0, 1);
+            graph.AddEdge(0, 2);
+            graph.AddEdge(1, 2);
+
+            // Assert
+            graph.VertexCount.Should().Be(3);
+            graph.NeighborIds(0).SequenceEqual(new[] { 1, 2 }).Should().BeTrue();
+        }
+
+        [Fact]
+        public void BuildAGraphAdjancencyMatrix_UsingConstructorThatTakesVertexSequence_2()
         {
             // Arrange
             var vertices = new List<Point2DVertex>
@@ -34,34 +51,34 @@ namespace Craft.DataStructures.Graph.UnitTest
 
             // Act
             var graph = new GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge>(vertices, false);
-            graph.AddEdge(0, 1, 5);
-            graph.AddEdge(0, 2, 10);
-            graph.AddEdge(1, 2, 3);
+            graph.AddEdge(0, 1);
+            graph.AddEdge(0, 2);
+            graph.AddEdge(1, 2);
 
             // Assert
             graph.VertexCount.Should().Be(3);
             graph.NeighborIds(0).SequenceEqual(new[] { 1, 2 }).Should().BeTrue();
         }
 
-        [Fact]
-        public void TraverseAllVerticesOfAGraph()
-        {
-            // Arrange
-            var vertices = new List<Point2DVertex>
-            {
-                new Point2DVertex(0, 0),
-                new Point2DVertex(4, 0),
-                new Point2DVertex(4, 3),
-            };
+        //[Fact]
+        //public void TraverseAllVerticesOfAGraph()
+        //{
+        //    // Arrange
+        //    var vertices = new List<Point2DVertex>
+        //    {
+        //        new Point2DVertex(0, 0),
+        //        new Point2DVertex(4, 0),
+        //        new Point2DVertex(4, 3),
+        //    };
 
-            var graph = new GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge>(vertices, false);
-            graph.AddEdge(0, 1, 5);
-            graph.AddEdge(0, 2, 10);
-            graph.AddEdge(1, 2, 3);
+        //    var graph = new GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge>(vertices, false);
+        //    graph.AddEdge(0, 1, 5);
+        //    graph.AddEdge(0, 2, 10);
+        //    graph.AddEdge(1, 2, 3);
 
-            // Act/Assert
-            graph.Vertices.Count().Should().Be(3);
-        }
+        //    // Act/Assert
+        //    graph.Vertices.Count().Should().Be(3);
+        //}
 
         [Fact]
         public void ChangeAVertexInAGraph()
@@ -89,9 +106,9 @@ namespace Craft.DataStructures.Graph.UnitTest
             // Arrange
             var vertices = Enumerable.Repeat(new EmptyVertex(), 3);
             var graph = new GraphAdjacencyMatrixDecoupled<EmptyVertex, EmptyEdge>(vertices, true);
-            graph.AddEdge(0, 1, 5);
-            graph.AddEdge(0, 2, 10);
-            graph.AddEdge(1, 2, 3);
+            graph.AddEdge(0, 1);
+            graph.AddEdge(0, 2);
+            graph.AddEdge(1, 2);
 
             // Act
             var edges = graph.Edges.ToList();
@@ -112,9 +129,9 @@ namespace Craft.DataStructures.Graph.UnitTest
             // Arrange
             var vertices = Enumerable.Repeat(new EmptyVertex(), 3);
             var graph = new GraphAdjacencyMatrixDecoupled<EmptyVertex, EmptyEdge>(vertices, false);
-            graph.AddEdge(0, 1, 5);
-            graph.AddEdge(0, 2, 10);
-            graph.AddEdge(1, 2, 3);
+            graph.AddEdge(0, 1);
+            graph.AddEdge(0, 2);
+            graph.AddEdge(1, 2);
 
             // Act
             var edges = graph.Edges.ToList();
@@ -129,9 +146,9 @@ namespace Craft.DataStructures.Graph.UnitTest
             // Arrange
             var vertices = Enumerable.Repeat(new EmptyVertex(), 3);
             var graph = new GraphAdjacencyMatrixDecoupled<EmptyVertex, EmptyEdge>(vertices, false);
-            graph.AddEdge(0, 1, 5);
-            graph.AddEdge(0, 2, 10);
-            graph.AddEdge(1, 2, 3);
+            graph.AddEdge(0, 1);
+            graph.AddEdge(0, 2);
+            graph.AddEdge(1, 2);
 
             // Act
             var edges1 = graph.Edges.ToList();
@@ -147,9 +164,9 @@ namespace Craft.DataStructures.Graph.UnitTest
             // Arrange
             var vertices = Enumerable.Repeat(new EmptyVertex(), 3);
             var graph = new GraphAdjacencyMatrixDecoupled<EmptyVertex, EmptyEdge>(vertices, false);
-            graph.AddEdge(0, 1, 1);
-            graph.AddEdge(0, 2, 1);
-            graph.AddEdge(1, 2, 1);
+            graph.AddEdge(0, 1);
+            graph.AddEdge(0, 2);
+            graph.AddEdge(1, 2);
 
             // Act
             var edges = graph.GetAdjacentEdges(2);

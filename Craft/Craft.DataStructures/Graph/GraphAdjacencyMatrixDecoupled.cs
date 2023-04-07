@@ -14,25 +14,20 @@ namespace Craft.DataStructures.Graph
 
     // Pt kan man kun ændre i matricen ved at kalde basisklassens AddEdge metode
 
-    public class GraphAdjacencyMatrixDecoupled<TV, TE> : GraphAdjacencyMatrix, IGraph<TV, TE> 
+    public class GraphAdjacencyMatrixDecoupled<TV, TE> : /*GraphAdjacencyMatrix,*/ IGraph<TV, TE> 
         where TV : IVertex
         where TE : IEdge
     {
         private static readonly ConstructorInfo _edgeConstructorInfo;
-        private TE[] _edges;
-        private Dictionary<int, List<TE>> _edgeMap;
+        private List<Tuple<int, TE>>[] _adjacencyList;
 
-        public TV[] Vertices { get; }
+        public bool IsDirected { get; }
 
-        public TE[] Edges
-        {
-            get
-            {
-                EnsureEdgesAreEstablished();
+        public int VertexCount => Vertices.Count;
 
-                return _edges;
-            }
-        }
+        public List<TV> Vertices { get; }
+
+        public List<TE> Edges { get; }
 
         static GraphAdjacencyMatrixDecoupled()
         {
@@ -46,15 +41,50 @@ namespace Craft.DataStructures.Graph
 
         public GraphAdjacencyMatrixDecoupled(
             IEnumerable<TV> vertices,
-            bool directed) : base(directed, vertices.Count())
+            bool directed)
         {
-            Vertices = vertices.ToArray();
+            IsDirected = directed;
+            Vertices = vertices.ToList();
 
             // Traverse vertices and assign each of them a unique Id
-            for (var i = 0; i < _vertexCount; i++)
+            for (var i = 0; i < Vertices.Count; i++)
             {
                 Vertices[i].Id = i;
             }
+
+            Edges = new List<TE>();
+            _adjacencyList = new List<Tuple<int, TE>>[Vertices.Count];
+        }
+
+        public void AddEdge(
+            int vertexId1,
+            int vertexId2)
+        {
+            var edge = (TE) _edgeConstructorInfo.Invoke(new object[] { vertexId1, vertexId2 });
+            Edges.Add(edge);
+
+            if (_adjacencyList[vertexId1] == null)
+            {
+                _adjacencyList[vertexId1] = new List<Tuple<int, TE>>();
+            }
+
+            _adjacencyList[vertexId1].Add(new Tuple<int, TE>(vertexId2, edge));
+
+            if (_adjacencyList[vertexId2] == null)
+            {
+                _adjacencyList[vertexId2] = new List<Tuple<int, TE>>();
+            }
+
+            _adjacencyList[vertexId2].Add(new Tuple<int, TE>(vertexId1, edge));
+        }
+
+        public void AddEdge(
+            int vertexId1,
+            int vertexId2,
+            TE edge)
+        {
+            Edges.Add(edge);
+            _adjacencyList[vertexId1].Add(new Tuple<int, TE>(vertexId2, edge));
         }
 
         // Det her er ikke særligt pænt... Du skal kunne opdatere en vertex i grafen uden at fucke vertex id'er op
@@ -69,81 +99,105 @@ namespace Craft.DataStructures.Graph
         // Returns the edges that go to or from a given vertex
         public IEnumerable<TE> GetAdjacentEdges(int vertexId)
         {
-            EnsureEdgesAreEstablished();
+            //EnsureEdgesAreEstablished();
 
-            return _edgeMap[vertexId];
-        }
+            //return _edgeMap[vertexId];
 
-        private void EnsureEdgesAreEstablished()
-        {
-            if (_edges != null) return;
+            //throw new NotImplementedException();
 
-            if (_directed)
+            if (_adjacencyList[vertexId] == null)
             {
-                ComputeEdgesDirected();
-            }
-            else
-            {
-                ComputeEdgesUndirected();
-            }
-        }
-
-        private void ComputeEdgesDirected()
-        {
-            _edgeMap = new Dictionary<int, List<TE>>();
-            var temp = new List<TE>();
-            var vertexCount = _adjacencyMatrix.GetLength(0);
-
-            for (var i = 0; i < vertexCount; i++)
-            {
-                for (var j = 0; j < vertexCount; j++)
-                {
-                    if (!(_adjacencyMatrix[i, j] > 0)) continue;
-
-                    var edge = (TE) _edgeConstructorInfo.Invoke(new object[] {i, j});
-
-                    temp.Add(edge);
-                    AddEdgeToMap(i, edge);
-                    AddEdgeToMap(j, edge);
-                }
+                return new List<TE>();
             }
 
-            _edges = temp.ToArray();
+            return _adjacencyList[vertexId].Select(_ => _.Item2);
         }
 
-        private void ComputeEdgesUndirected()
-        {
-            _edgeMap = new Dictionary<int, List<TE>>();
-            var temp = new List<TE>();
-            var vertexCount = _adjacencyMatrix.GetLength(0);
+        //private void EnsureEdgesAreEstablished()
+        //{
+        //    if (_edges != null) return;
 
-            for (var i = 0; i < vertexCount; i++)
-            {
-                for (var j = i + 1; j < vertexCount; j++)
-                {
-                    if (!(_adjacencyMatrix[i, j] > 0)) continue;
+        //    if (_directed)
+        //    {
+        //        ComputeEdgesDirected();
+        //    }
+        //    else
+        //    {
+        //        ComputeEdgesUndirected();
+        //    }
+        //}
 
-                    var edge = (TE) _edgeConstructorInfo.Invoke(new object[] {i, j});
+        //private void ComputeEdgesDirected()
+        //{
+        //    _edgeMap = new Dictionary<int, List<TE>>();
+        //    var temp = new List<TE>();
+        //    var vertexCount = _adjacencyMatrix.GetLength(0);
 
-                    temp.Add(edge);
-                    AddEdgeToMap(i, edge);
-                    AddEdgeToMap(j, edge);
-                }
-            }
+        //    for (var i = 0; i < vertexCount; i++)
+        //    {
+        //        for (var j = 0; j < vertexCount; j++)
+        //        {
+        //            if (!(_adjacencyMatrix[i, j] > 0)) continue;
 
-            _edges = temp.ToArray();
-        }
+        //            var edge = (TE) _edgeConstructorInfo.Invoke(new object[] {i, j});
+
+        //            temp.Add(edge);
+        //            AddEdgeToMap(i, edge);
+        //            AddEdgeToMap(j, edge);
+        //        }
+        //    }
+
+        //    _edges = temp.ToArray();
+        //}
+
+        //private void ComputeEdgesUndirected()
+        //{
+        //    _edgeMap = new Dictionary<int, List<TE>>();
+        //    var temp = new List<TE>();
+        //    var vertexCount = _adjacencyMatrix.GetLength(0);
+
+        //    for (var i = 0; i < vertexCount; i++)
+        //    {
+        //        for (var j = i + 1; j < vertexCount; j++)
+        //        {
+        //            if (!(_adjacencyMatrix[i, j] > 0)) continue;
+
+        //            var edge = (TE) _edgeConstructorInfo.Invoke(new object[] {i, j});
+
+        //            temp.Add(edge);
+        //            AddEdgeToMap(i, edge);
+        //            AddEdgeToMap(j, edge);
+        //        }
+        //    }
+
+        //    _edges = temp.ToArray();
+        //}
 
         private void AddEdgeToMap(
             int vertexId, 
             TE edge)
         {
-            if (!_edgeMap.ContainsKey(vertexId))
+            //if (!_edgeMap.ContainsKey(vertexId))
+            //{
+            //    _edgeMap[vertexId] = new List<TE>();
+            //}
+
+            //_edgeMap[vertexId].Add(edge);
+        }
+        
+        public double GetCost(int vertexId1, int vertexId2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<int> NeighborIds(int vertexId)
+        {
+            if (_adjacencyList[vertexId] == null)
             {
-                _edgeMap[vertexId] = new List<TE>();
+                return new List<int>();
             }
 
-            _edgeMap[vertexId].Add(edge);
+            return _adjacencyList[vertexId].Select(_ => _.Item1);
         }
     }
 }
