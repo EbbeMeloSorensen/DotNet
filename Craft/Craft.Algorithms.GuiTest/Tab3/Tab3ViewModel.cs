@@ -13,7 +13,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
     public class Tab3ViewModel : ImageEditorViewModel
     {
         private Point2D _viewPoint;
-        private GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge> _graph;
+        private GraphAdjacencyList<Point2DVertex, EmptyEdge> _graph;
         private ObservableCollection<LineSegment2D> _wallLines;
         private ObservableCollection<LineSegment2D> _triangleLines;
         private ObservableCollection<Triangle2DViewModel> _triangleViewModels;
@@ -121,7 +121,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
             _viewPoint = new Point2D(155, 155);
 
             // Den her skal vi bruge til at identificere nabo-punkterne
-            _graph = new GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge>(vertices, false);
+            _graph = new GraphAdjacencyList<Point2DVertex, EmptyEdge>(vertices, false);
             _graph.AddEdge(0, 1);
             _graph.AddEdge(1, 2);
             _graph.AddEdge(2, 3);
