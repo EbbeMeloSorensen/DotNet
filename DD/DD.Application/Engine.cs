@@ -56,8 +56,8 @@ namespace DD.Application
 
         private Dictionary<Creature, int> _creatureIdMap;
         private GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge> _wallGraph;
-        //private Random _random = new Random(0);
-        private Random _random = new Random(DateTime.Now.Millisecond);
+        private Random _random = new Random(0);
+        //private Random _random = new Random(DateTime.Now.Millisecond);
         private Scene _scene;
         private HashSet<int> _obstacleIndexes;
         private Queue<Creature> _actingOrder;
