@@ -70,36 +70,13 @@ namespace Craft.DataStructures.Graph
     // making it ill suited for graphs with many vertices.
     // This class facilitates inspection of individual vertices and edges, and it facilitates retrieval
     // of the edges that go in and out of a given vertex
-    public class GraphAdjacencyMatrix<TV, TE> : GraphAdjacencyMatrix, IGraph<TV, TE> 
+    public class GraphAdjacencyMatrixDecoupled<TV, TE> : GraphAdjacencyMatrix, IGraph<TV, TE> 
         where TV : IVertex
         where TE : IEdge
     {
         private static readonly ConstructorInfo _edgeConstructorInfo;
         private TE[] _edges;
         private Dictionary<int, List<TE>> _edgeMap;
-
-        static GraphAdjacencyMatrix()
-        {
-            _edgeConstructorInfo = typeof(TE).GetConstructor(new[] { typeof(int), typeof(int) });
-
-            if (_edgeConstructorInfo == null)
-            {
-                throw new InvalidOperationException("Edge class doesn't have a constructor that takes two integer arguments");
-            }
-        }
-
-        public GraphAdjacencyMatrix(
-            IEnumerable<TV> vertices,
-            bool directed) : base(directed, vertices.Count())
-        {
-            Vertices = vertices.ToArray();
-
-            // Traverse vertices and assign each of them a unique Id
-            for (var i = 0; i < _vertexCount; i++)
-            {
-                Vertices[i].Id = i;
-            }
-        }
 
         public TV[] Vertices { get; }
 
@@ -110,6 +87,29 @@ namespace Craft.DataStructures.Graph
                 EnsureEdgesAreEstablished();
 
                 return _edges;
+            }
+        }
+
+        static GraphAdjacencyMatrixDecoupled()
+        {
+            _edgeConstructorInfo = typeof(TE).GetConstructor(new[] { typeof(int), typeof(int) });
+
+            if (_edgeConstructorInfo == null)
+            {
+                throw new InvalidOperationException("Edge class doesn't have a constructor that takes two integer arguments");
+            }
+        }
+
+        public GraphAdjacencyMatrixDecoupled(
+            IEnumerable<TV> vertices,
+            bool directed) : base(directed, vertices.Count())
+        {
+            Vertices = vertices.ToArray();
+
+            // Traverse vertices and assign each of them a unique Id
+            for (var i = 0; i < _vertexCount; i++)
+            {
+                Vertices[i].Id = i;
             }
         }
 

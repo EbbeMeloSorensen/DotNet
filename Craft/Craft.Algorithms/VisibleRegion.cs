@@ -10,7 +10,7 @@ namespace Craft.Algorithms
     public static class VisibleRegion
     {
         public static List<Triangle2D> IdentifyVisibleRegion(
-            GraphAdjacencyMatrix<Point2DVertex, EmptyEdge> wallGraph,
+            GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge> wallGraph,
             Point2D viewPoint)
         {
             // Order the wall edge points by angle from the view point

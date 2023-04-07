@@ -13,7 +13,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
     public class Tab3ViewModel : ImageEditorViewModel
     {
         private Point2D _viewPoint;
-        private GraphAdjacencyMatrix<Point2DVertex, EmptyEdge> _graph;
+        private GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge> _graph;
         private ObservableCollection<LineSegment2D> _wallLines;
         private ObservableCollection<LineSegment2D> _triangleLines;
         private ObservableCollection<Triangle2DViewModel> _triangleViewModels;
@@ -124,7 +124,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
             // nb - det er lidt skørt, at du er nødt til at angive en cost,
             // når det jo ikke er relevant for applikationen her, og du endda
             // angiver, at der skal bruges EmptyEdge
-            _graph = new GraphAdjacencyMatrix<Point2DVertex, EmptyEdge>(vertices, false);
+            _graph = new GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge>(vertices, false);
             _graph.AddEdge(0, 1, 1);
             _graph.AddEdge(1, 2, 1);
             _graph.AddEdge(2, 3, 1);

@@ -55,7 +55,7 @@ namespace DD.Application
 
 
         private Dictionary<Creature, int> _creatureIdMap;
-        private GraphAdjacencyMatrix<Point2DVertex, EmptyEdge> _wallGraph;
+        private GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge> _wallGraph;
         //private Random _random = new Random(0);
         private Random _random = new Random(DateTime.Now.Millisecond);
         private Scene _scene;
@@ -115,7 +115,7 @@ namespace DD.Application
                             vertices.Add(new Point2DVertex(p.X - 0.5, p.Y + 0.5));
                         });
 
-                    _wallGraph = new GraphAdjacencyMatrix<Point2DVertex, EmptyEdge>(vertices, false);
+                    _wallGraph = new GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge>(vertices, false);
 
                     // Todo: You can eliminate and combine edges
                     Enumerable.Range(0, vertices.Count / 4).ToList().ForEach(i =>
