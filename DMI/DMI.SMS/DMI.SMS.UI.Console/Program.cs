@@ -26,6 +26,9 @@ namespace DMI.SMS.UI.Console
             //await ExtractOceanographicalStations(application);
             //await GenerateSQLScriptForTurningElevationAngles(application);
 
+            //args = new string[3] {"export", "-f", "test.json"};
+
+
             await Parser.Default.ParseArguments<
                     Lunch,
                     Export,
