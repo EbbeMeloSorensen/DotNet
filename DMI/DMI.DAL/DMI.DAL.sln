@@ -23,15 +23,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.DAL.SeaDB.UnitTest", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.DAL.StatDB.UnitTest", "DMI.DAL.StatDB.UnitTest\DMI.DAL.StatDB.UnitTest.csproj", "{7481327E-E0A1-4791-B55E-4EBE61C2F7D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.HttpClient.GovCloud", "DMI.HttpClient.GovCloud\DMI.HttpClient.GovCloud.csproj", "{23DF9207-19A3-47B2-808C-FA22FD36ED88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.HttpClient.GovCloud", "DMI.HttpClient.GovCloud\DMI.HttpClient.GovCloud.csproj", "{23DF9207-19A3-47B2-808C-FA22FD36ED88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.Domain", "DMI.Domain\DMI.Domain.csproj", "{7BA9E927-73D8-47AE-B2D9-93BE6140CD5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.Domain", "DMI.Domain\DMI.Domain.csproj", "{7BA9E927-73D8-47AE-B2D9-93BE6140CD5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\..\Craft\Craft.Logging\Craft.Logging.csproj", "{2F1BC3AE-123C-4D8F-81D3-3797B7D97A9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.HttpClient.GovCloud.UnitTest", "DMI.HttpClient.GovCloud.UnitTest\DMI.HttpClient.GovCloud.UnitTest.csproj", "{F472558B-A641-404B-820D-0401B8FAE45A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.HttpClient.GovCloud.UnitTest", "DMI.HttpClient.GovCloud.UnitTest\DMI.HttpClient.GovCloud.UnitTest.csproj", "{F472558B-A641-404B-820D-0401B8FAE45A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.DAL.ObsDB.UI.Console", "DMI.DAL.ObsDB.UI.Console\DMI.DAL.ObsDB.UI.Console.csproj", "{400A101E-6B03-4A85-8AE6-41D937C19F5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.DAL.ObsDB.UI.Console", "DMI.DAL.ObsDB.UI.Console\DMI.DAL.ObsDB.UI.Console.csproj", "{400A101E-6B03-4A85-8AE6-41D937C19F5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevationAngleInspector", "ElevationAngleInspector\ElevationAngleInspector.csproj", "{945D158F-4750-4FE8-83D8-DE90BBA96206}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{400A101E-6B03-4A85-8AE6-41D937C19F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{400A101E-6B03-4A85-8AE6-41D937C19F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{400A101E-6B03-4A85-8AE6-41D937C19F5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{945D158F-4750-4FE8-83D8-DE90BBA96206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{945D158F-4750-4FE8-83D8-DE90BBA96206}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{945D158F-4750-4FE8-83D8-DE90BBA96206}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{945D158F-4750-4FE8-83D8-DE90BBA96206}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
