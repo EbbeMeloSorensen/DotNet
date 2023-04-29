@@ -65,6 +65,11 @@ namespace Craft.DataStructures.Graph
 
             _adjacencyList[vertexId1].Add(new Tuple<int, TE>(vertexId2, edge));
 
+            if (IsDirected)
+            {
+                return;
+            }
+
             if (_adjacencyList[vertexId2] == null)
             {
                 _adjacencyList[vertexId2] = new List<Tuple<int, TE>>();

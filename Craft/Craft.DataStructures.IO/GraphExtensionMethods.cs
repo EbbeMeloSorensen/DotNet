@@ -290,12 +290,6 @@ namespace Craft.DataStructures.IO
                                         "{\"version\":\"2.0.0\",\"__mg\":\"yed-live\",\"theme\":{\"name\":\"light\",\"version\":\"1.0.0\"}}"
                                 }
                             },
-                            //generateNode("n0", "Label1", -40, -163.5),
-                            //generateNode("n1", "Label2", 40, -163.5),
-                            //generateNode("n2", "Label3", 0, -140),
-                            //generateEdge("e0", "n0", "n1"),
-                            //generateEdge("e1", "n1", "n2"),
-                            //generateEdge("e2", "n2", "n0")
                         }
                     };
 

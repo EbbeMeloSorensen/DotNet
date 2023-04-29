@@ -1,3 +1,4 @@
+using System.Linq;
 using Xunit;
 using Craft.DataStructures.Graph;
 
@@ -43,7 +44,7 @@ namespace Craft.DataStructures.IO.UnitTest
         }
 
         [Fact]
-        public void WriteASimpleDirectedGraphToGraphMLFile()
+        public void WriteGraphAdjacencyMatrixToGraphMLFile()
         {
             // Arrange
             var graph = new GraphAdjacencyMatrix(true, 4);
@@ -52,14 +53,29 @@ namespace Craft.DataStructures.IO.UnitTest
             graph.AddEdge(2, 3, 1);
             graph.AddEdge(3, 0, 1);
 
-            var outputFile = @"C:\Temp\SimpleDirectedGraph.graphml";
+            var outputFile = @"C:\Temp\GraphAdjacencyMatrix.graphml";
 
             // Act
             graph.WriteToFile(outputFile, Format.GraphML);
+        }
 
-            // Assert
-            // Det skal gerne ramme det her: http://graphml.graphdrawing.org/primer/graphml-primer.html
-            // men indtil videre laver den det hele som elementer og ikke attributter
+        [Fact]
+        public void WriteGraphAdjacencyListToGraphMLFile()
+        {
+            // Arrange
+            var vertices = Enumerable.Repeat(0, 5).Select(_ => new EmptyVertex());
+
+            var graph = new GraphAdjacencyList<EmptyVertex, EmptyEdge>(vertices, true);
+            graph.AddEdge(0, 1);
+            graph.AddEdge(1, 2);
+            graph.AddEdge(2, 3);
+            graph.AddEdge(3, 4);
+            graph.AddEdge(4, 0);
+
+            var outputFile = @"C:\Temp\GraphAdjacencyList.graphml";
+
+            // Act
+            graph.WriteToFile(outputFile, Format.GraphML);
         }
     }
 }
