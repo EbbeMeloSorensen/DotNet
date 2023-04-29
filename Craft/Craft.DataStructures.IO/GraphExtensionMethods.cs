@@ -7,20 +7,6 @@ using System.Xml.Serialization;
 
 namespace Craft.DataStructures.IO
 {
-    public class Node
-    {
-        public string id { get; set; }
-    }
-
-    public class Edge
-    {
-    }
-
-    public class Graph
-    {
-        public List<Node> Nodes { get; set; }
-    }
-
     public enum Format
     {
         Dot,
@@ -107,22 +93,8 @@ namespace Craft.DataStructures.IO
                     break;
                 case Format.GraphML:
 
-                    var xOver = new XmlAttributeOverrides();
-                    var xmlSerializer = new XmlSerializer(typeof(Graph), xOver);
+                    // Todo: Implement
 
-                    using (var streamWriter = new StreamWriter(outputFile))
-                    {
-                        var g = new Graph();
-
-                        g.Nodes = new List<Node>
-                        {
-                            new Node{ id = "n0" },
-                            new Node{ id = "n1" },
-                            new Node{ id = "n2" }
-                        };
-
-                        xmlSerializer.Serialize(streamWriter, g);
-                    }
 
                     break;
                 default:

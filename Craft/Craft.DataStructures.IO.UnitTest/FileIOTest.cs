@@ -52,7 +52,7 @@ namespace Craft.DataStructures.IO.UnitTest
             graph.AddEdge(2, 3, 1);
             graph.AddEdge(3, 0, 1);
 
-            var outputFile = @"C:\Temp\SimpleDirectedGraph.xml";
+            var outputFile = @"C:\Temp\SimpleDirectedGraph.graphml";
 
             // Act
             graph.WriteToFile(outputFile, Format.GraphML);
