@@ -1,6 +1,9 @@
 using System.Linq;
 using Xunit;
 using Craft.DataStructures.Graph;
+using Craft.DataStructures.IO.graphml;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace Craft.DataStructures.IO.UnitTest
 {
@@ -76,6 +79,42 @@ namespace Craft.DataStructures.IO.UnitTest
 
             // Act
             graph.WriteToFile(outputFile, Format.GraphML);
+        }
+
+
+        // Eksperimenteren med deserialisering af en graphml fil
+        [Fact]
+        public void ReadGraphAdjacencyListFromGraphMLFile()
+        {
+            // Arrange
+            // Vi laver en serializer fuldstændigt som hvis vi skulle SKRIVE til en fil
+            var attrs1 = new XmlAttributes();
+            attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "key", Type = typeof(key) });
+            attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "data", Type = typeof(data) });
+            attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "graph", Type = typeof(graph) });
+
+            var attrs2 = new XmlAttributes();
+            attrs2.XmlElements.Add(new XmlElementAttribute { ElementName = "data", Type = typeof(data) });
+            attrs2.XmlElements.Add(new XmlElementAttribute { ElementName = "node", Type = typeof(node) });
+            attrs2.XmlElements.Add(new XmlElementAttribute { ElementName = "edge", Type = typeof(edge) });
+
+            var attrs3 = new XmlAttributes();
+            attrs3.XmlElements.Add(new XmlElementAttribute { ElementName = "data", Type = typeof(data) });
+            attrs3.XmlElements.Add(new XmlElementAttribute { ElementName = "port", Type = typeof(port) });
+
+            var attrOverrides = new XmlAttributeOverrides();
+            attrOverrides.Add(typeof(graphml.graphml), "graphmlElements", attrs1);
+            attrOverrides.Add(typeof(graph), "graphElements", attrs2);
+            attrOverrides.Add(typeof(node), "nodeElements", attrs3);
+
+            var serializer = new XmlSerializer(typeof(graphml.graphml), attrOverrides);
+
+            var inputFileName = @"C:\Temp\GraphAdjacencyList.graphml";
+
+            var fs = new FileStream(inputFileName, FileMode.Open);
+            var g = (graphml.graphml)serializer.Deserialize(fs);
+
+            // Det kan man tilsyneladende fint - så kan vi lige så godt placere den Serializer et centralt sted
         }
     }
 }
