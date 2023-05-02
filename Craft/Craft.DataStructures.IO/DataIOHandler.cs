@@ -288,7 +288,7 @@ namespace Craft.DataStructures.IO
 
             for (var i = 0; i < graph.VertexCount; i++)
             {
-                g.graphElements.Add(generateNode($"n{i}", graph.GetLabel(i), -40, -163.5));
+                g.graphElements.Add(generateNode($"n{i}", -40, -163.5, graph.GetLabel(i)));
 
                 edges.AddRange(graph.NeighborIds(i).Select(j => generateEdge($"e{edgeId++})", $"n{i}", $"n{j}")));
             }
@@ -306,9 +306,9 @@ namespace Craft.DataStructures.IO
 
         private static node generateNode(
             string nodeId,
-            string label,
             double X,
-            double Y)
+            double Y,
+            string label)
         {
             return new node
             {
