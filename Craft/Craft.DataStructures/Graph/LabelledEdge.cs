@@ -1,11 +1,13 @@
 ﻿namespace Craft.DataStructures.Graph
 {
-    public class LabelledVertex : EmptyVertex
+    public class LabelledEdge : EmptyEdge
     {
         public string Label { get; }
 
-        public LabelledVertex(
-            string label)
+        public LabelledEdge(
+            int vertexId1,
+            int vertexId2,
+            string label) : base(vertexId1, vertexId2)
         {
             Label = label;
         }
