@@ -268,7 +268,7 @@ namespace Craft.DataStructures.IO
             var g = new graph
             {
                 id = "G",
-                edgedefault = edgedefault.directed,
+                edgedefault = graph.IsDirected ? edgedefault.directed : edgedefault.undirected,
                 graphElements = new ArrayList
                 {
                     new data
@@ -288,7 +288,7 @@ namespace Craft.DataStructures.IO
 
             for (var i = 0; i < graph.VertexCount; i++)
             {
-                g.graphElements.Add(generateNode($"n{i}", $"n{i}", -40, -163.5));
+                g.graphElements.Add(generateNode($"n{i}", graph.GetLabel(i), -40, -163.5));
 
                 edges.AddRange(graph.NeighborIds(i).Select(j => generateEdge($"e{edgeId++})", $"n{i}", $"n{j}")));
             }

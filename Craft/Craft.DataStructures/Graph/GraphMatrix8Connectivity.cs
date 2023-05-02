@@ -9,6 +9,11 @@ namespace Craft.DataStructures.Graph
 
         public int VertexCount { get; }
 
+        public string GetLabel(int vertexId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public bool IsDirected => false;
 
         public GraphMatrix8Connectivity(
@@ -87,12 +92,6 @@ namespace Craft.DataStructures.Graph
             {
                 yield return vertexId + _cols;
             }
-        }
-
-        public IEnumerable<IEdge> Edges(
-            bool treatGraphAsDirected)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
