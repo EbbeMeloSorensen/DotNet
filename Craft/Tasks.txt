@@ -1,0 +1,4 @@
+Todo:
+* Når man exporterer grafer, så skal der kun en label på noder, der faktisk har en label
+* Få gjort det færdigt med at have en label på en edge
+  o en edge skal ikke bare have en data property - den skal have en ArrayList property ligesom node allerede har
