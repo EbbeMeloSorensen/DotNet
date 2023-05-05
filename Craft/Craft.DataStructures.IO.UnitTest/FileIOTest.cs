@@ -175,6 +175,7 @@ namespace Craft.DataStructures.IO.UnitTest
             };
 
             var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, false);
+            graph.AddEdge(new LabelledEdge(0, 1, "spouse"));
             graph.AddEdge(new LabelledEdge(2, 0, "parent"));
             graph.AddEdge(new LabelledEdge(2, 1, "parent"));
             graph.AddEdge(new LabelledEdge(3, 0, "parent"));

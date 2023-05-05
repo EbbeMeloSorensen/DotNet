@@ -294,7 +294,7 @@ namespace Craft.DataStructures.IO
             {
                 g.graphElements.Add(generateNode($"n{i}", -40, -163.5, null, graph.GetLabel(i)));
 
-                edges.AddRange(graph.NeighborIds(i).Select(j => generateEdge($"e{edgeId++})", $"n{i}", $"n{j}")));
+                edges.AddRange(graph.NeighborIds(i).Select(j => generateEdge($"e{edgeId++}", $"n{i}", $"n{j}", "AnEdgeLabel")));
             }
 
             foreach (var edge in edges)
@@ -337,38 +337,85 @@ namespace Craft.DataStructures.IO
         private static edge generateEdge(
             string edgeId,
             string source,
-            string target)
+            string target,
+            string? label = null)
         {
-            return new edge
+            var edge = new edge
             {
                 id = edgeId,
                 source = source,
                 target = target,
                 sourceport = "p0",
                 targetport = "p0",
-                edgeElements = new ArrayList
+                edgeElements = new ArrayList()
+            };
+
+            if (label != null)
+            {
+                edge.edgeElements.Add(
+                new data
                 {
-                    new data
+                    key = "d11",
+                    List = new List
                     {
-                        key = "d13",
-                        PolylineEdgeStyle = new PolylineEdgeStyle
+                        Label = new Label
                         {
-                            stroke = "#FF663800",
-                            PolylineEdgeStyleTargetArrow = new PolylineEdgeStyleTargetArrow
+                            LabelText = label,
+                            LayoutParameter = new LayoutParameter
                             {
-                                Arrow = new Arrow
+                                SmartEdgeLabelModelParameter = new SmartEdgeLabelModelParameter
                                 {
-                                    type = "TRIANGLE",
-                                    scale = 0.75,
-                                    stroke = "#FF663800",
-                                    fill = "#FF663800",
-                                    cropLength = 1
+                                    Distance = 5,
+                                    SmartEdgeLabelModelParameterModel = new SmartEdgeLabelModelParameterModel
+                                    {
+                                        SmartEdgeLabelModel = new SmartEdgeLabelModel()
+                                    }
+                                }
+                            },
+                            Style = new Style
+                            {
+                                DefaultLabelStyle = new DefaultLabelStyle
+                                {
+                                    verticalTextAlignment = "CENTER",
+                                    horizontalTextAlignment = "CENTER",
+                                    textFill = "BLACK",
+                                    DefaultLabelStyleFont = new DefaultLabelStyleFont
+                                    {
+                                        Font = new Font
+                                        {
+                                            fontSize = 12,
+                                            fontFamily = "'Arial'"
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
+                });
+            }
+
+            edge.edgeElements.Add(
+            new data
+            {
+                key = "d13",
+                PolylineEdgeStyle = new PolylineEdgeStyle
+                {
+                    stroke = "#FF663800",
+                    PolylineEdgeStyleTargetArrow = new PolylineEdgeStyleTargetArrow
+                    {
+                        Arrow = new Arrow
+                        {
+                            type = "TRIANGLE",
+                            scale = 0.75,
+                            stroke = "#FF663800",
+                            fill = "#FF663800",
+                            cropLength = 1
+                        }
+                    }
                 }
-            };
+            });
+
+            return edge;
         }
     }
 }
