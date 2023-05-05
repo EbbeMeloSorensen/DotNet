@@ -85,12 +85,16 @@ namespace Craft.DataStructures.Graph
         }
 
         public void AddEdge(
-            int vertexId1,
-            int vertexId2,
             TE edge)
         {
             Edges.Add(edge);
-            _adjacencyList[vertexId1].Add(new Tuple<int, TE>(vertexId2, edge));
+
+            if (_adjacencyList[edge.VertexId1] == null)
+            {
+                _adjacencyList[edge.VertexId1] = new List<Tuple<int, TE>>();
+            }
+
+            _adjacencyList[edge.VertexId1].Add(new Tuple<int, TE>(edge.VertexId2, edge));
         }
 
         // Det her er ikke særligt pænt... Du skal kunne opdatere en vertex i grafen uden at fucke vertex id'er op

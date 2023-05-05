@@ -162,6 +162,30 @@ namespace Craft.DataStructures.IO.UnitTest
             graph.WriteToFile(outputFile, Format.GraphML);
         }
 
+        [Fact]
+        public void WriteGraphAdjacencyListToGraphMLFile_LabelledVertexAndLabelledEdge()
+        {
+            // Arrange
+            var vertices = new List<LabelledVertex>
+            {
+                new LabelledVertex("Ebbe"),   //  0
+                new LabelledVertex("Ana"),    //  1
+                new LabelledVertex("Anton"),  //  2
+                new LabelledVertex("Cecilie") //  3
+            };
+
+            var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, false);
+            graph.AddEdge(new LabelledEdge(2, 0, "parent"));
+            graph.AddEdge(new LabelledEdge(2, 1, "parent"));
+            graph.AddEdge(new LabelledEdge(3, 0, "parent"));
+            graph.AddEdge(new LabelledEdge(3, 1, "parent"));
+
+            var outputFile = @"C:\Temp\GraphAdjacencyList_labelledVertices_2.graphml";
+
+            // Act
+            graph.WriteToFile(outputFile, Format.GraphML);
+        }
+
         // Eksperimenteren med deserialisering af en graphml fil
         [Fact]
         public void ReadGraphAdjacencyListFromGraphMLFile()

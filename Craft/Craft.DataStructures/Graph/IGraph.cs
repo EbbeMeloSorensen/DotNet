@@ -35,8 +35,6 @@ namespace Craft.DataStructures.Graph
             int vertexId2);
 
         void AddEdge(
-            int vertexId1,
-            int vertexId2,
             TE edge);
     }
 }
