@@ -48,10 +48,14 @@ namespace Craft.DataStructures.IO
                 attrs3.XmlElements.Add(new XmlElementAttribute { ElementName = "data", Type = typeof(data) });
                 attrs3.XmlElements.Add(new XmlElementAttribute { ElementName = "port", Type = typeof(port) });
 
+                var attrs4 = new XmlAttributes();
+                attrs4.XmlElements.Add(new XmlElementAttribute { ElementName = "data", Type = typeof(data) });
+
                 var attrOverrides = new XmlAttributeOverrides();
                 attrOverrides.Add(typeof(graphml.graphml), "graphmlElements", attrs1);
                 attrOverrides.Add(typeof(graph), "graphElements", attrs2);
                 attrOverrides.Add(typeof(node), "nodeElements", attrs3);
+                attrOverrides.Add(typeof(edge), "edgeElements", attrs4);
 
                 _xmlSerializer = new XmlSerializer(typeof(graphml.graphml), attrOverrides);
 
@@ -288,7 +292,7 @@ namespace Craft.DataStructures.IO
 
             for (var i = 0; i < graph.VertexCount; i++)
             {
-                g.graphElements.Add(generateNode($"n{i}", -40, -163.5, graph.GetLabel(i)));
+                g.graphElements.Add(generateNode($"n{i}", -40, -163.5, null, graph.GetLabel(i)));
 
                 edges.AddRange(graph.NeighborIds(i).Select(j => generateEdge($"e{edgeId++})", $"n{i}", $"n{j}")));
             }
@@ -308,105 +312,26 @@ namespace Craft.DataStructures.IO
             string nodeId,
             double X,
             double Y,
-            string label)
+            int? zOrder = null,
+            string? label = null)
         {
-            return new node
+            var node = new node(nodeId);
+
+            if (zOrder.HasValue)
             {
-                id = nodeId,
-                nodeElements = new ArrayList
-                {
-                    new data
-                    {
-                        key = "d0",
-                        value = "1"
-                    },
-                    new data
-                    {
-                        key = "d4",
-                        List = new List
-                        {
-                            Label = new Label
-                            {
-                                LabelText = label,
-                                LayoutParameter = new LayoutParameter
-                                {
-                                    CompositeLabelModelParameter = new CompositeLabelModelParameter
-                                    {
-                                        CompositeLabelModelParameterParameter =
-                                            new CompositeLabelModelParameterParameter
-                                            {
-                                                InteriorLabelModelParameter = new InteriorLabelModelParameter
-                                                {
-                                                    Position = "Center",
-                                                    Model = "{y:GraphMLReference 1}"
-                                                }
-                                            },
-                                        CompositeLabelModelParameterModel = new CompositeLabelModelParameterModel
-                                        {
-                                            CompositeLabelModel = new CompositeLabelModel
-                                            {
-                                                CompositeLabelModelLabelModels = new CompositeLabelModelLabelModels
-                                                {
-                                                    ExteriorLabelModel = new ExteriorLabelModel
-                                                    {
-                                                        Insets = "5"
-                                                    },
-                                                    GraphMLReference = new GraphMLReference
-                                                    {
-                                                        ResourceKey = "1"
-                                                    },
-                                                    FreeNodeLabelModel = new FreeNodeLabelModel()
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                Style = new Style
-                                {
-                                    DefaultLabelStyle = new DefaultLabelStyle
-                                    {
-                                        verticalTextAlignment = "CENTER",
-                                        horizontalTextAlignment = "CENTER",
-                                        textFill = "BLACK",
-                                        DefaultLabelStyleFont = new DefaultLabelStyleFont
-                                        {
-                                            Font = new Font
-                                            {
-                                                fontSize = 12,
-                                                fontFamily = "'Arial'"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    new data
-                    {
-                        key = "d5",
-                        RectD = new RectD
-                        {
-                            X = X,
-                            Y = Y,
-                            Width = 30,
-                            Height = 30
-                        }
-                    },
-                    new data
-                    {
-                        key = "d7",
-                        ShapeNodeStyle = new ShapeNodeStyle
-                        {
-                            stroke = "#FF663800",
-                            fill = "#FFFF8C00"
-                        }
-                    },
-                    new port
-                    {
-                        name = "p0"
-                    }
-                }
-            };
+                node.AddZOrder(zOrder.Value);
+            }
+
+            if (label != null)
+            {
+                node.AddLabel(label);
+            }
+
+            node.AddGeometry(new RectD{ X = X, Y = Y, Width = 30, Height = 30});
+            node.AddStyle("#FF663800", "#FFFF8C00");
+            node.AddPort();
+
+            return node;
         }
 
         private static edge generateEdge(
@@ -421,21 +346,24 @@ namespace Craft.DataStructures.IO
                 target = target,
                 sourceport = "p0",
                 targetport = "p0",
-                data = new data
+                edgeElements = new ArrayList
                 {
-                    key = "d13",
-                    PolylineEdgeStyle = new PolylineEdgeStyle
+                    new data
                     {
-                        stroke = "#FF663800",
-                        PolylineEdgeStyleTargetArrow = new PolylineEdgeStyleTargetArrow
+                        key = "d13",
+                        PolylineEdgeStyle = new PolylineEdgeStyle
                         {
-                            Arrow = new Arrow
+                            stroke = "#FF663800",
+                            PolylineEdgeStyleTargetArrow = new PolylineEdgeStyleTargetArrow
                             {
-                                type = "TRIANGLE",
-                                scale = 0.75,
-                                stroke = "#FF663800",
-                                fill = "#FF663800",
-                                cropLength = 1
+                                Arrow = new Arrow
+                                {
+                                    type = "TRIANGLE",
+                                    scale = 0.75,
+                                    stroke = "#FF663800",
+                                    fill = "#FF663800",
+                                    cropLength = 1
+                                }
                             }
                         }
                     }

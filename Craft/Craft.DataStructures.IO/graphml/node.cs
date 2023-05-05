@@ -11,5 +11,14 @@ namespace Craft.DataStructures.IO.graphml
         [XmlElement(Type = typeof(data)),
          XmlElement(Type = typeof(port))]
         public ArrayList nodeElements { get; set; }
+
+        public node()
+        {}
+
+        public node(string id)
+        {
+            this.id = id;
+            nodeElements = new ArrayList();
+        }
     }
 }

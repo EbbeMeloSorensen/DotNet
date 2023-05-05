@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections;
+using System.Xml.Serialization;
 
 namespace Craft.DataStructures.IO.graphml
 {
@@ -19,6 +20,7 @@ namespace Craft.DataStructures.IO.graphml
         [XmlAttribute]
         public string targetport { get; set; }
 
-        public data data { get; set; }
+        [XmlElement(Type = typeof(data))]
+        public ArrayList edgeElements { get; set; }
     }
 }
