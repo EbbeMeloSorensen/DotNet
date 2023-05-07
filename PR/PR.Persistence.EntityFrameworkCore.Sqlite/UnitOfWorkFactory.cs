@@ -32,19 +32,24 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
 
         private static void SeedDatabase(DbContext context)
         {
+            var now = DateTime.UtcNow;
+
             var people = new List<Person>
             {
                 new Person
                 {
-                    FirstName = "Kasper"
+                    FirstName = "Kasper",
+                    Created = now,
                 },
                 new Person
                 {
-                    FirstName = "Jesper"
+                    FirstName = "Jesper",
+                    Created = now + new TimeSpan(1),
                 },
                 new Person
                 {
-                    FirstName = "Jonathan"
+                    FirstName = "Jonathan",
+                    Created = now + new TimeSpan(2),
                 }
             };
 

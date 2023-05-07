@@ -38,5 +38,10 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public override void Clear()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

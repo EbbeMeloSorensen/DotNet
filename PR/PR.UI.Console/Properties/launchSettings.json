@@ -1,7 +1,8 @@
 {
   "profiles": {
     "PR.UI.Console": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "export -f kardemommeby.json -h bamse -u bamse -p bamse"
     }
   }
 }

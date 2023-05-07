@@ -20,7 +20,8 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Export" Command="{Binding ExportPeopleCommand}"/>
+                <MenuItem Header="_Export Entire Dataset" Command="{Binding ExportPeopleCommand}"/>
+                <MenuItem Header="Export Selection as graphml" Command="{Binding ExportSelectionToGraphmlCommand}"/>
                 <MenuItem Header="_Import" Command="{Binding ImportPeopleCommand}" />
                 <Separator />
                 <MenuItem Header="_Options" Command="{Binding ShowOptionsDialogCommand}" />

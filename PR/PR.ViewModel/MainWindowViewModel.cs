@@ -41,6 +41,7 @@ namespace PR.ViewModel
         private RelayCommand<object> _showOptionsDialogCommand;
         private RelayCommand _deleteSelectedPeopleCommand;
         private RelayCommand _exportPeopleCommand;
+        private RelayCommand _exportSelectionToGraphmlCommand;
         private RelayCommand _importPeopleCommand;
         private RelayCommand _exitCommand;
 
@@ -62,6 +63,12 @@ namespace PR.ViewModel
         public RelayCommand ExportPeopleCommand
         {
             get { return _exportPeopleCommand ?? (_exportPeopleCommand = new RelayCommand(ExportPeople, CanExportPeople)); }
+        }
+
+        public RelayCommand ExportSelectionToGraphmlCommand
+        {
+            get { return _exportSelectionToGraphmlCommand ?? (_exportSelectionToGraphmlCommand = new RelayCommand(
+                ExportSelectionToGraphml, CanExportSelectionToGraphml)); }
         }
 
         public RelayCommand ImportPeopleCommand
@@ -103,6 +110,7 @@ namespace PR.ViewModel
         private void HandlePeopleSelectionChanged(object sender, PropertyChangedEventArgs e)
         {
             DeleteSelectedPeopleCommand.RaiseCanExecuteChanged();
+            ExportSelectionToGraphmlCommand.RaiseCanExecuteChanged();
         }
 
         private void CreatePerson(object owner)
@@ -171,6 +179,20 @@ namespace PR.ViewModel
         private bool CanExportPeople()
         {
             return true;
+        }
+
+        private void ExportSelectionToGraphml()
+        {
+            foreach (var person in PersonListViewModel.SelectedPeople.Objects)
+            {
+                Console.WriteLine($"{person.FirstName}");
+            }
+        }
+
+        private bool CanExportSelectionToGraphml()
+        {
+            return PersonListViewModel.SelectedPeople.Objects != null &&
+                   PersonListViewModel.SelectedPeople.Objects.Any();
         }
 
         private void ImportPeople()

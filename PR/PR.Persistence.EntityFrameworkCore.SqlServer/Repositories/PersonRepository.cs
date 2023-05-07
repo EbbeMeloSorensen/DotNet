@@ -40,5 +40,10 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public override void Clear()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -38,5 +38,10 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public override void Clear()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

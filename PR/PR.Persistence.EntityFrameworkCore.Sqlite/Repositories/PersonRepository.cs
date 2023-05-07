@@ -52,5 +52,10 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
                 .Where(predicate)
                 .ToList();
         }
+
+        public override void Clear()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

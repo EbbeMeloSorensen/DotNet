@@ -12,7 +12,12 @@ Done:
 * Porter wpf brugergrænsefladen
 * Implementer en måde at konvertere fra det gamle sæt til det nye
 
-
+Todo:
+* Mulighed for at eksportere selection til en graphml fil
+  - hvor kendes selection? Den bor i PersonListViewModel
+  - Du skal nok bruge Repository.GetPeopleIncludingAssociations, som tilsyneladende allerede er lavet - men hvad bruges den til pt?
+  - ER det i øvrigt selection, du bør tage? eller bør du tage dem, der vises i listen? nok selection, hva? det giver den største versatilitet - hvad gør du i øvrigt for DMI.Data.Studio?
+* Mulighed for at se selection i et graph view
 
 Procedure for at tilføje attribut:
 1) Tilføj property i Person-klassen

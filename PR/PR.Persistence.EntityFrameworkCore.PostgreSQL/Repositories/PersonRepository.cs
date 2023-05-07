@@ -71,5 +71,10 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
                 .Where(predicate)
                 .ToList();
         }
+
+        public override void Clear()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
