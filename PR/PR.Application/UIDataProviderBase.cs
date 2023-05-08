@@ -62,6 +62,12 @@ namespace PR.Application
         public abstract IList<Person> FindPeople(
             IList<Expression<Func<Person, bool>>> predicates);
 
+        public abstract IList<PersonAssociation> FindPersonAssociations(
+            Expression<Func<PersonAssociation, bool>> predicate);
+
+        public abstract IList<PersonAssociation> FindPersonAssociations(
+            IList<Expression<Func<PersonAssociation, bool>>> predicates);
+
         public abstract void UpdatePerson(Person person);
 
         public abstract void UpdatePeople(IList<Person> people);

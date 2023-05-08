@@ -183,10 +183,11 @@ namespace PR.ViewModel
 
         private void ExportSelectionToGraphml()
         {
-            foreach (var person in PersonListViewModel.SelectedPeople.Objects)
-            {
-                Console.WriteLine($"{person.FirstName}");
-            }
+            var personIds = PersonListViewModel.SelectedPeople.Objects
+                .Select(p => p.Id)
+                .ToList();
+
+            var personAssociations = _dataProvider.FindPersonAssociations(p => personIds.Contains(p.SubjectPersonId));
         }
 
         private bool CanExportSelectionToGraphml()

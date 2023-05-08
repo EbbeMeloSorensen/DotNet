@@ -204,6 +204,31 @@ namespace PR.UIDataProvider.Persistence
             return stationInformations;
         }
 
+        public override IList<PersonAssociation> FindPersonAssociations(
+            Expression<Func<PersonAssociation, bool>> predicate)
+        {
+            var personAssociations = new List<PersonAssociation>();
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var personAssociationsFromRepository = unitOfWork.PersonAssociations.Find(predicate).ToList();
+
+                personAssociationsFromRepository.ForEach(pa =>
+                {
+                    var cachePersonAssociation = IncludeInCache(pa);
+                    personAssociations.Add(cachePersonAssociation);
+                });
+            }
+
+            return personAssociations;
+        }
+
+        public override IList<PersonAssociation> FindPersonAssociations(
+            IList<Expression<Func<PersonAssociation, bool>>> predicates)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void UpdatePerson(
             Person person)
         {
@@ -355,6 +380,8 @@ namespace PR.UIDataProvider.Persistence
             }
 
             var personAssociation = personAssociationFromRepository.Clone();
+
+            //var subjectPerson = 
 
             personAssociation.LinkToPeople(
                 IncludeInCache(personAssociationFromRepository.SubjectPerson),
