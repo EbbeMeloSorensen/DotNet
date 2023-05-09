@@ -381,6 +381,8 @@ namespace PR.UIDataProvider.Persistence
 
             var personAssociation = personAssociationFromRepository.Clone();
 
+            // Her kan du ikke tage for givet, at personerne er der, da der nu også er mulighed for at spørge
+            // direkte efter person associations.
             //var subjectPerson = 
 
             personAssociation.LinkToPeople(
