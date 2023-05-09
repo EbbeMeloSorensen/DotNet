@@ -1,6 +1,8 @@
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Windows;
 using Craft.Logging;
 using Craft.ViewModel.Utils;
@@ -183,11 +185,19 @@ namespace PR.ViewModel
 
         private void ExportSelectionToGraphml()
         {
-            var personIds = PersonListViewModel.SelectedPeople.Objects
+            var people = PersonListViewModel.SelectedPeople.Objects.ToList();
+
+            var personIds = people
                 .Select(p => p.Id)
                 .ToList();
 
-            var personAssociations = _dataProvider.FindPersonAssociations(p => personIds.Contains(p.SubjectPersonId));
+            var predicates = new List<Expression<Func<PersonAssociation, bool>>>();
+            predicates.Add(p => personIds.Contains(p.SubjectPersonId));
+            predicates.Add(p => personIds.Contains(p.ObjectPersonId));
+
+            var personAssociations = _dataProvider.FindPersonAssociations(predicates);
+
+            _dataProvider.ExportDataToGraphML(people, personAssociations);
         }
 
         private bool CanExportSelectionToGraphml()

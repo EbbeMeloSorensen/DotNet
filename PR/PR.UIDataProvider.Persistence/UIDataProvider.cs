@@ -186,22 +186,22 @@ namespace PR.UIDataProvider.Persistence
         {
             //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
 
-            var stationInformations = new List<Person>();
+            var people = new List<Person>();
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var stationInformationsFromRepository = unitOfWork.People.Find(predicates).ToList();
+                var peopleFromRepository = unitOfWork.People.Find(predicates).ToList();
 
-                stationInformationsFromRepository.ForEach(s =>
+                peopleFromRepository.ForEach(s =>
                 {
-                    var cacheStationInformation = IncludeInCache(s);
-                    stationInformations.Add(cacheStationInformation);
+                    var cachePerson = IncludeInCache(s);
+                    people.Add(cachePerson);
                 });
             }
 
             //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
 
-            return stationInformations;
+            return people;
         }
 
         public override IList<PersonAssociation> FindPersonAssociations(
@@ -226,7 +226,20 @@ namespace PR.UIDataProvider.Persistence
         public override IList<PersonAssociation> FindPersonAssociations(
             IList<Expression<Func<PersonAssociation, bool>>> predicates)
         {
-            throw new NotImplementedException();
+            var personAssociations = new List<PersonAssociation>();
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var personAssociationsFromRepository = unitOfWork.PersonAssociations.Find(predicates).ToList();
+
+                personAssociationsFromRepository.ForEach(pa =>
+                {
+                    var cachePersonAssociation = IncludeInCache(pa);
+                    personAssociations.Add(cachePersonAssociation);
+                });
+            }
+
+            return personAssociations;
         }
 
         public override void UpdatePerson(
@@ -381,17 +394,35 @@ namespace PR.UIDataProvider.Persistence
 
             var personAssociation = personAssociationFromRepository.Clone();
 
-            // Her kan du ikke tage for givet, at personerne er der, da der nu også er mulighed for at spørge
-            // direkte efter person associations.
-            //var subjectPerson = 
+            var subjectPersonFromCache = personAssociationFromRepository.SubjectPerson != null
+                ? IncludeInCache(personAssociationFromRepository.SubjectPerson)
+                : TryGetFromPersonCache(personAssociationFromRepository.SubjectPersonId);
 
-            personAssociation.LinkToPeople(
-                IncludeInCache(personAssociationFromRepository.SubjectPerson),
-                IncludeInCache(personAssociationFromRepository.ObjectPerson));
+            var objectPersonFromCache = personAssociationFromRepository.ObjectPerson != null
+                ? IncludeInCache(personAssociationFromRepository.ObjectPerson)
+                : TryGetFromPersonCache(personAssociationFromRepository.ObjectPersonId);
+
+            if (subjectPersonFromCache != null)
+            {
+                personAssociation.LinkToSubjectPerson(subjectPersonFromCache);
+            }
+
+            if (objectPersonFromCache != null)
+            {
+                personAssociation.LinkToObjectPerson(objectPersonFromCache);
+            }
 
             _personAssociationCache[personAssociation.Id] = personAssociation;
 
             return personAssociation;
+        }
+
+        private Person TryGetFromPersonCache(
+            Guid id)
+        {
+            if (!_personCache.ContainsKey(id)) return null;
+
+            return _personCache[id];
         }
 
         private void RemoveFromCache(

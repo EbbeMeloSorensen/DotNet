@@ -201,6 +201,21 @@ namespace PR.Application
             }
         }
 
+        public void ExportDataToGraphML(
+            IList<Person> people,
+            IList<PersonAssociation> personAssociations)
+        {
+            var prData = new PRData
+            {
+                People = people.ToList(),
+                PersonAssociations = personAssociations.ToList()
+            };
+
+            _dataIOHandler.ExportDataToGraphML(
+                prData,
+                @"C:\Temp\People.graphml");
+        }
+
         public void ImportData(
             string fileName,
             bool legacy)

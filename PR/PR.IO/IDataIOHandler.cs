@@ -13,6 +13,10 @@ namespace PR.IO
             PRData prData,
             string fileName);
 
+        void ExportDataToGraphML(
+            PRData prData,
+            string fileName);
+
         void ImportDataFromXML(
             string fileName,
             out PRData prData);

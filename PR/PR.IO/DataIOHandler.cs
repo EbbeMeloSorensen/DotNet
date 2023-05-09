@@ -69,6 +69,16 @@ namespace PR.IO
             streamWriter.WriteLine(json);
         }
 
+        public void ExportDataToGraphML(
+            PRData prData,
+            string fileName)
+        {
+
+
+
+            throw new NotImplementedException();
+        }
+
         public void ImportDataFromXML(
             string fileName, 
             out PRData prData)
