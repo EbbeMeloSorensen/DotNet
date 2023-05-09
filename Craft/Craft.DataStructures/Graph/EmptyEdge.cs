@@ -2,6 +2,7 @@
 {
     public class EmptyEdge : IEdge
     {
+        public int Id { get; set; }
         public int VertexId1 { get; }
         public int VertexId2 { get; }
 
@@ -16,6 +17,11 @@
         public int GetOppositeVertexId(int vertexId)
         {
             return vertexId == VertexId1 ? VertexId2 : VertexId1;
+        }
+
+        public override string ToString()
+        {
+            return null;
         }
     }
 }

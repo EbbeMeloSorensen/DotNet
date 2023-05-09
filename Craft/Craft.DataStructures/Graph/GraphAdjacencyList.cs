@@ -16,10 +16,16 @@ namespace Craft.DataStructures.Graph
         private static readonly ConstructorInfo _edgeConstructorInfo;
         private List<Tuple<int, TE>>[] _adjacencyList;
 
-        public string GetLabel(
+        public string GetNodeLabel(
             int vertexId)
         {
             return Vertices[vertexId].ToString();
+        }
+
+        public string GetEdgeLabel(
+            int edgeId)
+        {
+            return Edges[edgeId].ToString();
         }
 
         public bool IsDirected { get; }

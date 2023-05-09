@@ -9,7 +9,14 @@ namespace Craft.DataStructures.Graph
 
         public int VertexCount { get; }
 
-        public string GetLabel(int vertexId)
+        public string GetNodeLabel(
+            int vertexId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string GetEdgeLabel(
+            int vertexId)
         {
             throw new System.NotImplementedException();
         }

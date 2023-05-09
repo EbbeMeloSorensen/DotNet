@@ -17,10 +17,16 @@ namespace Craft.DataStructures.Graph
             get { return _vertexCount; }
         }
 
-        public string GetLabel(
+        public string GetNodeLabel(
             int vertexId)
         {
             return $"n{vertexId}";
+        }
+
+        public string GetEdgeLabel(
+            int edgeId)
+        {
+            return $"n{edgeId}";
         }
 
         public bool IsDirected => _directed;

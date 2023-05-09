@@ -13,8 +13,11 @@ namespace Craft.DataStructures.Graph
         IEnumerable<int> NeighborIds(
             int vertexId);
 
-        string GetLabel(
+        string GetNodeLabel(
             int vertexId);
+
+        string GetEdgeLabel(
+            int edgeId);
 
         bool IsDirected { get; }
     }
