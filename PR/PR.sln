@@ -62,6 +62,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Web.API", "PR.Web.API\PR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.Helper", "PR.Persistence.EntityFrameworkCore.Helper\PR.Persistence.EntityFrameworkCore.Helper.csproj", "{CE629DE2-1ED7-4E84-A7C7-7910D72734E6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{589E7933-51BE-4499-9640-EE389E1E78C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO", "..\Craft\Craft.DataStructures.IO\Craft.DataStructures.IO.csproj", "{7BB6054B-772C-4BC6-A915-817F73109E99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -176,6 +180,14 @@ Global
 		{CE629DE2-1ED7-4E84-A7C7-7910D72734E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE629DE2-1ED7-4E84-A7C7-7910D72734E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE629DE2-1ED7-4E84-A7C7-7910D72734E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{589E7933-51BE-4499-9640-EE389E1E78C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{589E7933-51BE-4499-9640-EE389E1E78C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{589E7933-51BE-4499-9640-EE389E1E78C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{589E7933-51BE-4499-9640-EE389E1E78C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BB6054B-772C-4BC6-A915-817F73109E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BB6054B-772C-4BC6-A915-817F73109E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BB6054B-772C-4BC6-A915-817F73109E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BB6054B-772C-4BC6-A915-817F73109E99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

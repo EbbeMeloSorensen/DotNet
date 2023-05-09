@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.IO;
 using System.Xml.Serialization;
-using Craft.IO.Utils;
 using Newtonsoft.Json;
+using Craft.IO.Utils;
+using Craft.DataStructures.Graph;
+using Craft.DataStructures.IO;
 using PR.Domain.Foreign;
 using Person = PR.Domain.Entities.Person;
 
@@ -73,10 +74,22 @@ namespace PR.IO
             PRData prData,
             string fileName)
         {
+            var vertices = prData.People.Select(p => new LabelledVertex(p.FirstName));
+            var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, false);
 
+            var vertexIndexMap = prData.People
+                .Select((p, i) => new { PersonID = p.Id, Index = i })
+                .ToDictionary(_ => _.PersonID, _ => _.Index);
 
+            foreach (var pa in prData.PersonAssociations)
+            {
+                graph.AddEdge(new LabelledEdge(
+                    vertexIndexMap[pa.SubjectPersonId], 
+                    vertexIndexMap[pa.ObjectPersonId], 
+                    pa.Description == null ? "" : pa.Description));
+            }
 
-            throw new NotImplementedException();
+            graph.WriteToFile(fileName, Format.GraphML);
         }
 
         public void ImportDataFromXML(

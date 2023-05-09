@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.DataStructures.IO\Craft.DataStructures.IO.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.IO.Utils\Craft.IO.Utils.csproj" />
     <ProjectReference Include="..\PR.Domain\PR.Domain.csproj" />
   </ItemGroup>
