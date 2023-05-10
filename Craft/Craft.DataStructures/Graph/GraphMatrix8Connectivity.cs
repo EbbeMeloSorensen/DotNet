@@ -15,12 +15,6 @@ namespace Craft.DataStructures.Graph
             throw new System.NotImplementedException();
         }
 
-        public string GetEdgeLabel(
-            int vertexId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public bool IsDirected => false;
 
         public GraphMatrix8Connectivity(

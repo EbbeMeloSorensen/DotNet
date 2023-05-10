@@ -22,12 +22,6 @@ namespace Craft.DataStructures.Graph
             return Vertices[vertexId].ToString();
         }
 
-        public string GetEdgeLabel(
-            int edgeId)
-        {
-            return Edges[edgeId].ToString();
-        }
-
         public bool IsDirected { get; }
 
         public int VertexCount => Vertices.Count;

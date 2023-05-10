@@ -2,7 +2,6 @@
 {
     public class EmptyEdge : IEdge
     {
-        public int Id { get; set; }
         public int VertexId1 { get; }
         public int VertexId2 { get; }
 

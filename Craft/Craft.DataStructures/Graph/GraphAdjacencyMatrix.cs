@@ -23,12 +23,6 @@ namespace Craft.DataStructures.Graph
             return $"n{vertexId}";
         }
 
-        public string GetEdgeLabel(
-            int edgeId)
-        {
-            return $"n{edgeId}";
-        }
-
         public bool IsDirected => _directed;
 
         public GraphAdjacencyMatrix(

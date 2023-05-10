@@ -9,4 +9,10 @@ Todo:
   Edges og nodes bør ikke nødvendigvis have ids.. eller hvad..
   Når du skriver en graf til fil, så traverserer du nodes, og for hver node traverserer du Neighbor ids. Så var det nok bedre at traversere
   "outgoing edges"
+  o Etabler i et alternativ til IGraph.GetNodeLabel, så man kan få fat i noden og spørge DEN om dens label
+  o Sikr at du kan eksportere til graphml med den nye mekanisme
+  o Fjern GetNodeLabel fra IGraph. 
+  o ~Tilføj en mulighed for at hive outgoing edges for en node
+  o Fjern GetCost fra IGraph
+
   

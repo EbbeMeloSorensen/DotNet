@@ -16,9 +16,6 @@ namespace Craft.DataStructures.Graph
         string GetNodeLabel(
             int vertexId);
 
-        string GetEdgeLabel(
-            int edgeId);
-
         bool IsDirected { get; }
     }
 
