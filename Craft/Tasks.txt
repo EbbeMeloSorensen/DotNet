@@ -2,3 +2,11 @@ Todo:
 * Når man exporterer grafer, så skal der kun en label på noder, der faktisk har en label
 * Få gjort det færdigt med at have en label på en edge
   o en edge skal ikke bare have en data property - den skal have en ArrayList property ligesom node allerede har (OK)
+* IGraph er lidt for bloated - det er f.eks. ikke hensigtsmæssigt, at den har metoderne GetNodeLabel og GetEdgeLabel. Det er sådan set heller ikke
+  optimalt, at den har metoden GetCost, da edges i en graf jo altså ikke behøver at have en cost.
+  Måske burde man konsekvent operere med, at f.eks. cost og labels hører til de nodes og edges, som kan hives ud af en graf.
+  Der skal i øvrigt gælde, at der kan være mere end 1 edge fra en node til en anden, f.eks. med forskellige labels.
+  Edges og nodes bør ikke nødvendigvis have ids.. eller hvad..
+  Når du skriver en graf til fil, så traverserer du nodes, og for hver node traverserer du Neighbor ids. Så var det nok bedre at traversere
+  "outgoing edges"
+  

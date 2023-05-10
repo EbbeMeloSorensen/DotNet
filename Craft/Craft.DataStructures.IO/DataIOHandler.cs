@@ -294,7 +294,7 @@ namespace Craft.DataStructures.IO
             {
                 g.graphElements.Add(generateNode($"n{i}", -40, -163.5, null, graph.GetNodeLabel(i)));
 
-                edges.AddRange(graph.NeighborIds(i).Select(j => generateEdge($"e{edgeId++}", $"n{i}", $"n{j}", "AnEdgeLabel")));
+                edges.AddRange(graph.NeighborIds(i).Select(j => generateEdge($"e{edgeId++}", $"n{i}", $"n{j}", "x")));
             }
 
             foreach (var edge in edges)
