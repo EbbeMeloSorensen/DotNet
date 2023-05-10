@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Craft.DataStructures.Graph
 {
@@ -64,6 +65,12 @@ namespace Craft.DataStructures.Graph
                     yield return i;
                 }
             }
+        }
+
+        public IEnumerable<IEdge> OutgoingEdges(
+            int vertexId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

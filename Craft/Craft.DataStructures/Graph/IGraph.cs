@@ -13,6 +13,9 @@ namespace Craft.DataStructures.Graph
         IEnumerable<int> NeighborIds(
             int vertexId);
 
+        IEnumerable<IEdge> OutgoingEdges(
+            int vertexId);
+
         string GetNodeLabel(
             int vertexId);
 

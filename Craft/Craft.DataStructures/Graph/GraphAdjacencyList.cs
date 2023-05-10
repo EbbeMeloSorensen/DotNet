@@ -131,5 +131,11 @@ namespace Craft.DataStructures.Graph
 
             return _adjacencyList[vertexId].Select(_ => _.Item1);
         }
+
+        public IEnumerable<IEdge> OutgoingEdges(
+            int vertexId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

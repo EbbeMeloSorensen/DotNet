@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Craft.DataStructures.Graph
 {
@@ -58,6 +59,33 @@ namespace Craft.DataStructures.Graph
             if (rowIndex < _rows - 1)
             {
                 yield return vertexId + _cols;
+            }
+        }
+
+        public IEnumerable<IEdge> OutgoingEdges(
+            int vertexId)
+        {
+            var rowIndex = vertexId / _cols;
+            var colIndex = vertexId % _cols;
+
+            if (colIndex > 0)
+            {
+                yield return new EdgeWithCost(vertexId, vertexId - 1, 1);
+            }
+
+            if (colIndex < _cols - 1)
+            {
+                yield return new EdgeWithCost(vertexId, vertexId + 1, 1);
+            }
+
+            if (rowIndex > 0)
+            {
+                yield return new EdgeWithCost(vertexId, vertexId - _cols, 1);
+            }
+
+            if (rowIndex < _rows - 1)
+            {
+                yield return new EdgeWithCost(vertexId, vertexId + _cols, 1);
             }
         }
     }
