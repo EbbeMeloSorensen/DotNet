@@ -120,7 +120,12 @@ namespace Craft.DataStructures.Graph
         public IEnumerable<IEdge> OutgoingEdges(
             int vertexId)
         {
-            throw new NotImplementedException();
+            if (_adjacencyList[vertexId] == null)
+            {
+                return new List<IEdge>();
+            }
+
+            return (IEnumerable<IEdge>)_adjacencyList[vertexId].Select(_ => _.Item2);
         }
     }
 }

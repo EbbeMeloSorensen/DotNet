@@ -18,7 +18,7 @@ namespace Craft.DataStructures.Graph.UnitTest
 
             // Assert
             graph.VertexCount.Should().Be(3);
-            graph.NeighborIds(0).SequenceEqual(new[] { 1, 2 }).Should().BeTrue();
+            graph.OutgoingEdges(0).Select(_ => _.VertexId2).SequenceEqual(new[] { 1, 2 }).Should().BeTrue();
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Craft.DataStructures.Graph.UnitTest
 
             // Assert
             graph.VertexCount.Should().Be(3);
-            graph.NeighborIds(0).SequenceEqual(new[] { 1, 2 }).Should().BeTrue();
+            graph.OutgoingEdges(0).Select(_ => _.VertexId2).SequenceEqual(new[] { 1, 2 }).Should().BeTrue();
         }
 
         [Fact]
@@ -57,28 +57,8 @@ namespace Craft.DataStructures.Graph.UnitTest
 
             // Assert
             graph.VertexCount.Should().Be(3);
-            graph.NeighborIds(0).SequenceEqual(new[] { 1, 2 }).Should().BeTrue();
+            graph.OutgoingEdges(0).Select(_ => _.VertexId2).SequenceEqual(new[] { 1, 2 }).Should().BeTrue();
         }
-
-        //[Fact]
-        //public void TraverseAllVerticesOfAGraph()
-        //{
-        //    // Arrange
-        //    var vertices = new List<Point2DVertex>
-        //    {
-        //        new Point2DVertex(0, 0),
-        //        new Point2DVertex(4, 0),
-        //        new Point2DVertex(4, 3),
-        //    };
-
-        //    var graph = new GraphAdjacencyMatrixDecoupled<Point2DVertex, EmptyEdge>(vertices, false);
-        //    graph.AddEdge(0, 1, 5);
-        //    graph.AddEdge(0, 2, 10);
-        //    graph.AddEdge(1, 2, 3);
-
-        //    // Act/Assert
-        //    graph.Vertices.Count().Should().Be(3);
-        //}
 
         [Fact]
         public void ChangeAVertexInAGraph()

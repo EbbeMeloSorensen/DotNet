@@ -66,11 +66,9 @@ namespace Craft.DataStructures.IO
 
                             for (var vertexId1 = 0; vertexId1 < graph.VertexCount; vertexId1++)
                             {
-                                var neighborIds = graph.NeighborIds(vertexId1).ToArray();
-
-                                foreach (var vertexId2 in neighborIds)
+                                foreach (var edge in graph.OutgoingEdges(vertexId1))
                                 {
-                                    streamWriter.WriteLine($"   {_letterMap[vertexId1]} -> {_letterMap[vertexId2]};");
+                                    streamWriter.WriteLine($"   {_letterMap[vertexId1]} -> {_letterMap[edge.VertexId2]};");
                                 }
                             }
                         }
@@ -80,13 +78,11 @@ namespace Craft.DataStructures.IO
 
                             for (var vertexId1 = 0; vertexId1 < graph.VertexCount; vertexId1++)
                             {
-                                var neighborIds = graph.NeighborIds(vertexId1).ToArray();
-
-                                foreach (var vertexId2 in neighborIds)
+                                foreach (var edge in graph.OutgoingEdges(vertexId1))
                                 {
-                                    if (vertexId1 < vertexId2)
+                                    if (vertexId1 < edge.VertexId2)
                                     {
-                                        streamWriter.WriteLine($"   {_letterMap[vertexId1]} -- {_letterMap[vertexId2]};");
+                                        streamWriter.WriteLine($"   {_letterMap[vertexId1]} -- {_letterMap[edge.VertexId2]};");
                                     }
                                 }
                             }
