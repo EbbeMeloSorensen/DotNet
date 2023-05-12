@@ -48,25 +48,6 @@ namespace Craft.DataStructures.Graph
             }
         }
 
-        public double GetCost(
-            int vertexId1, 
-            int vertexId2)
-        {
-            return _adjacencyMatrix[vertexId1, vertexId2];
-        }
-
-        public IEnumerable<int> NeighborIds(
-            int vertexId)
-        {
-            for (var i = 0; i < VertexCount; i++)
-            {
-                if (_adjacencyMatrix[vertexId, i] > 0)
-                {
-                    yield return i;
-                }
-            }
-        }
-
         public IEnumerable<IEdge> OutgoingEdges(
             int vertexId)
         {

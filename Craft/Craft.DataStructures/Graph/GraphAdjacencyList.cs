@@ -117,21 +117,6 @@ namespace Craft.DataStructures.Graph
             return _adjacencyList[vertexId].Select(_ => _.Item2);
         }
         
-        public double GetCost(int vertexId1, int vertexId2)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<int> NeighborIds(int vertexId)
-        {
-            if (_adjacencyList[vertexId] == null)
-            {
-                return new List<int>();
-            }
-
-            return _adjacencyList[vertexId].Select(_ => _.Item1);
-        }
-
         public IEnumerable<IEdge> OutgoingEdges(
             int vertexId)
         {

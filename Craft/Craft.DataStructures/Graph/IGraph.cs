@@ -6,13 +6,6 @@ namespace Craft.DataStructures.Graph
     {
         int VertexCount { get; }
 
-        double GetCost(
-            int vertexId1,
-            int vertexId2);
-
-        IEnumerable<int> NeighborIds(
-            int vertexId);
-
         IEnumerable<IEdge> OutgoingEdges(
             int vertexId);
 
