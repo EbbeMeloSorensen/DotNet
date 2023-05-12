@@ -70,7 +70,15 @@ namespace Craft.DataStructures.Graph
         public IEnumerable<IEdge> OutgoingEdges(
             int vertexId)
         {
-            throw new NotImplementedException();
+            for (var i = 0; i < VertexCount; i++)
+            {
+                var cost = _adjacencyMatrix[vertexId, i];
+
+                if (cost > 0)
+                {
+                    yield return new EdgeWithCost(vertexId, i, cost);
+                }
+            }
         }
     }
 }

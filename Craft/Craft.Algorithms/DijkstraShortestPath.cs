@@ -42,34 +42,63 @@ namespace Craft.Algorithms
                 distancesResult[primary.Id] = primary.Key;
                 shortestPathTreeSet[primary.Id] = true;
 
-                graph.NeighborIds(primary.Id).ToList().ForEach(neigborId =>
+                graph.OutgoingEdges(primary.Id).ToList().ForEach(edge =>
                 {
-                    if (forbiddenIndexes != null && forbiddenIndexes.Contains(neigborId))
+                    if (forbiddenIndexes != null && forbiddenIndexes.Contains(edge.VertexId2))
                     {
                         return;
                     }
 
-                    if (shortestPathTreeSet[neigborId])
+                    if (shortestPathTreeSet[edge.VertexId2])
                     {
                         return; // The final distance has already been calculated for this vertex
                     }
 
                     // Calculate the (added) cost of going along the edge
-                    var incrementalDistance = graph.GetCost(primary.Id, neigborId);
+                    var incrementalDistance = ((EdgeWithCost)edge).Cost;
                     var totalDistanceViaCurrentNode = distancesResult[primary.Id] + incrementalDistance;
 
-                    if (!(distancesResult[neigborId] > 9999999) &&
-                        !(distancesResult[neigborId] > totalDistanceViaCurrentNode))
+                    if (!(distancesResult[edge.VertexId2] > 9999999) &&
+                        !(distancesResult[edge.VertexId2] > totalDistanceViaCurrentNode))
                     {
                         return;
                     }
 
                     // We haven't visited this vertex yet, so insert it into the priority queue and proceed
-                    heap.Insert(new HeapElement(totalDistanceViaCurrentNode, neigborId));
+                    heap.Insert(new HeapElement(totalDistanceViaCurrentNode, edge.VertexId2));
 
                     // Update the distance map
-                    distancesResult[neigborId] = totalDistanceViaCurrentNode;
+                    distancesResult[edge.VertexId2] = totalDistanceViaCurrentNode;
                 });
+
+                //graph.NeighborIds(primary.Id).ToList().ForEach(neigborId =>
+                //{
+                //    if (forbiddenIndexes != null && forbiddenIndexes.Contains(neigborId))
+                //    {
+                //        return;
+                //    }
+
+                //    if (shortestPathTreeSet[neigborId])
+                //    {
+                //        return; // The final distance has already been calculated for this vertex
+                //    }
+
+                //    // Calculate the (added) cost of going along the edge
+                //    var incrementalDistance = graph.GetCost(primary.Id, neigborId);
+                //    var totalDistanceViaCurrentNode = distancesResult[primary.Id] + incrementalDistance;
+
+                //    if (!(distancesResult[neigborId] > 9999999) &&
+                //        !(distancesResult[neigborId] > totalDistanceViaCurrentNode))
+                //    {
+                //        return;
+                //    }
+
+                //    // We haven't visited this vertex yet, so insert it into the priority queue and proceed
+                //    heap.Insert(new HeapElement(totalDistanceViaCurrentNode, neigborId));
+
+                //    // Update the distance map
+                //    distancesResult[neigborId] = totalDistanceViaCurrentNode;
+                //});
             }
 
             // Make sure no cost exceeds max cost
@@ -120,34 +149,64 @@ namespace Craft.Algorithms
                 distancesResult[primary.Id] = primary.Key;
                 shortestPathTreeSet[primary.Id] = true;
 
-                graph.NeighborIds(primary.Id).ToList().ForEach(neigborId =>
+                //graph.NeighborIds(primary.Id).ToList().ForEach(neigborId =>
+                //{
+                //    if (forbiddenIndexes != null && forbiddenIndexes.Contains(neigborId))
+                //    {
+                //        return;
+                //    }
+
+                //    if (shortestPathTreeSet[neigborId])
+                //    {
+                //        return; // The final distance has already been calculated for this vertex
+                //    }
+
+                //    // Calculate the (added) cost of going along the edge
+                //    var incrementalDistance = graph.GetCost(primary.Id, neigborId);
+                //    var totalDistanceViaCurrentNode = distancesResult[primary.Id] + incrementalDistance;
+
+                //    if (!(distancesResult[neigborId] > 9999999) &&
+                //        !(distancesResult[neigborId] > totalDistanceViaCurrentNode))
+                //    {
+                //        return;
+                //    }
+
+                //    // We haven't visited this vertex yet, so insert it into the priority queue and proceed
+                //    heap.Insert(new HeapElement(totalDistanceViaCurrentNode, neigborId));
+
+                //    // Update the distance map and prevoious map
+                //    distancesResult[neigborId] = totalDistanceViaCurrentNode;
+                //    previousResult[neigborId] = primary.Id;
+                //});
+
+                graph.OutgoingEdges(primary.Id).ToList().ForEach(edge =>
                 {
-                    if (forbiddenIndexes != null && forbiddenIndexes.Contains(neigborId))
+                    if (forbiddenIndexes != null && forbiddenIndexes.Contains(edge.VertexId2))
                     {
                         return;
                     }
 
-                    if (shortestPathTreeSet[neigborId])
+                    if (shortestPathTreeSet[edge.VertexId2])
                     {
                         return; // The final distance has already been calculated for this vertex
                     }
 
                     // Calculate the (added) cost of going along the edge
-                    var incrementalDistance = graph.GetCost(primary.Id, neigborId);
+                    var incrementalDistance = ((EdgeWithCost)edge).Cost;
                     var totalDistanceViaCurrentNode = distancesResult[primary.Id] + incrementalDistance;
 
-                    if (!(distancesResult[neigborId] > 9999999) &&
-                        !(distancesResult[neigborId] > totalDistanceViaCurrentNode))
+                    if (!(distancesResult[edge.VertexId2] > 9999999) &&
+                        !(distancesResult[edge.VertexId2] > totalDistanceViaCurrentNode))
                     {
                         return;
                     }
 
                     // We haven't visited this vertex yet, so insert it into the priority queue and proceed
-                    heap.Insert(new HeapElement(totalDistanceViaCurrentNode, neigborId));
+                    heap.Insert(new HeapElement(totalDistanceViaCurrentNode, edge.VertexId2));
 
                     // Update the distance map and prevoious map
-                    distancesResult[neigborId] = totalDistanceViaCurrentNode;
-                    previousResult[neigborId] = primary.Id;
+                    distancesResult[edge.VertexId2] = totalDistanceViaCurrentNode;
+                    previousResult[edge.VertexId2] = primary.Id;
                 });
             }
 

@@ -99,7 +99,56 @@ namespace Craft.DataStructures.Graph
         public IEnumerable<IEdge> OutgoingEdges(
             int vertexId)
         {
-            throw new NotImplementedException();
+            var rowIndex = vertexId / _cols;
+            var colIndex = vertexId % _cols;
+
+            if (colIndex > 0)
+            {
+                //yield return vertexId - 1;
+                yield return new EdgeWithCost(vertexId, vertexId - 1, 1);
+
+                if (rowIndex > 0)
+                {
+                    //yield return vertexId - _cols - 1;
+                    yield return new EdgeWithCost(vertexId, vertexId - _cols - 1, Math.Sqrt(2.0));
+                }
+
+                if (rowIndex < _rows - 1)
+                {
+                    //yield return vertexId + _cols - 1;
+                    yield return new EdgeWithCost(vertexId, vertexId + _cols - 1, Math.Sqrt(2.0));
+                }
+            }
+
+            if (rowIndex > 0)
+            {
+                //yield return vertexId - _cols;
+                yield return new EdgeWithCost(vertexId, vertexId - _cols, 1);
+
+                if (colIndex < _cols - 1)
+                {
+                    //yield return vertexId - _cols + 1;
+                    yield return new EdgeWithCost(vertexId, vertexId - _cols + 1, Math.Sqrt(2.0));
+                }
+            }
+
+            if (colIndex < _cols - 1)
+            {
+                //yield return vertexId + 1;
+                yield return new EdgeWithCost(vertexId, vertexId + 1, 1);
+
+                if (rowIndex < _rows - 1)
+                {
+                    //yield return vertexId + _cols + 1;
+                    yield return new EdgeWithCost(vertexId, vertexId + _cols + 1, Math.Sqrt(2));
+                }
+            }
+
+            if (rowIndex < _rows - 1)
+            {
+                //yield return vertexId + _cols;
+                yield return new EdgeWithCost(vertexId, vertexId + _cols, 1);
+            }
         }
     }
 }
