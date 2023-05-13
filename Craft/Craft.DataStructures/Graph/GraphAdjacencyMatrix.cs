@@ -48,6 +48,12 @@ namespace Craft.DataStructures.Graph
             }
         }
 
+        public IVertex GetVertex(
+            int vertexId)
+        {
+            return new EmptyVertex();
+        }
+
         public IEnumerable<IEdge> OutgoingEdges(
             int vertexId)
         {

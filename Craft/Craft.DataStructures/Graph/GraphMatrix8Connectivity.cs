@@ -27,6 +27,12 @@ namespace Craft.DataStructures.Graph
             VertexCount = rows * columns;
         }
 
+        public IVertex GetVertex(
+            int vertexId)
+        {
+            return new EmptyVertex();
+        }
+
         public IEnumerable<IEdge> OutgoingEdges(
             int vertexId)
         {

@@ -292,7 +292,9 @@ namespace Craft.DataStructures.IO
 
             for (var i = 0; i < graph.VertexCount; i++)
             {
-                g.graphElements.Add(generateNode($"n{i}", -40, -163.5, null, graph.GetNodeLabel(i)));
+                var vertex = graph.GetVertex(i);
+
+                g.graphElements.Add(generateNode($"n{i}", -40, -163.5, null, vertex is LabelledVertex labelledVertex ? labelledVertex.Label : null));
 
                 edges.AddRange(graph.OutgoingEdges(i)
                     .Select(edge => generateEdge($"e{edgeId++}", $"n{i}", $"n{edge.VertexId2}", graph.IsDirected, "x")));

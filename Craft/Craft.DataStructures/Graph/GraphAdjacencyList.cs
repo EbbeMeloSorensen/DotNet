@@ -107,7 +107,13 @@ namespace Craft.DataStructures.Graph
             vertex.Id = vertexId;
             Vertices[vertexId] = vertex;
         }
-        
+
+        public IVertex GetVertex(
+            int vertexId)
+        {
+            return Vertices[vertexId];
+        }
+
         public IEnumerable<IEdge> OutgoingEdges(
             int vertexId)
         {

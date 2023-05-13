@@ -6,6 +6,9 @@ namespace Craft.DataStructures.Graph
     {
         int VertexCount { get; }
 
+        IVertex GetVertex(
+            int vertexId);
+
         IEnumerable<IEdge> OutgoingEdges(
             int vertexId);
 
