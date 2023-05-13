@@ -75,7 +75,7 @@ namespace PR.IO
             string fileName)
         {
             var vertices = prData.People.Select(p => new LabelledVertex(p.FirstName));
-            var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, false);
+            var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, true);
 
             var vertexIndexMap = prData.People
                 .Select((p, i) => new { PersonID = p.Id, Index = i })
