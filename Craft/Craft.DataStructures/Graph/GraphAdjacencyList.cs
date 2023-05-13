@@ -71,17 +71,17 @@ namespace Craft.DataStructures.Graph
 
             _adjacencyList[vertexId1].Add(new Tuple<int, TE>(vertexId2, edge));
 
-            if (IsDirected)
-            {
-                return;
-            }
+            //if (IsDirected)
+            //{
+            //    return;
+            //}
 
-            if (_adjacencyList[vertexId2] == null)
-            {
-                _adjacencyList[vertexId2] = new List<Tuple<int, TE>>();
-            }
+            //if (_adjacencyList[vertexId2] == null)
+            //{
+            //    _adjacencyList[vertexId2] = new List<Tuple<int, TE>>();
+            //}
 
-            _adjacencyList[vertexId2].Add(new Tuple<int, TE>(vertexId1, edge));
+            //_adjacencyList[vertexId2].Add(new Tuple<int, TE>(vertexId1, edge));
         }
 
         public void AddEdge(
