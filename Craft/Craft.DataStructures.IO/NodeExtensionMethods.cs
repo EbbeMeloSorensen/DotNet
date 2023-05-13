@@ -1,10 +1,18 @@
-﻿using Craft.DataStructures.IO.graphml;
+﻿using System;
+using Craft.DataStructures.IO.graphml;
 using Craft.DataStructures.IO.graphml.x;
 using Craft.DataStructures.IO.graphml.y;
 using Craft.DataStructures.IO.graphml.yjs;
 
 namespace Craft.DataStructures.IO
 {
+    public enum NodeStyle
+    {
+        Ellipse,
+        Rectangle,
+        RoundRectangle
+    }
+
     public static class NodeExtensionMethods
     {
         public static void AddZOrder(
@@ -98,18 +106,45 @@ namespace Craft.DataStructures.IO
 
         public static void AddStyle(
             this node node,
+            NodeStyle nodeStyle,
             string stroke,
-            string fill)
+            string fill,
+            string shape = "ELLIPSE")
         {
-            node.nodeElements.Add(new data
+            var data = new data
             {
-                key = "d7",
-                ShapeNodeStyle = new ShapeNodeStyle
-                {
-                    stroke = stroke,
-                    fill = fill
-                }
-            });
+                key = "d7"
+            };
+
+            switch (nodeStyle)
+            {
+                case NodeStyle.Ellipse:
+                    data.ShapeNodeStyle = new ShapeNodeStyle
+                    {
+                        stroke = stroke,
+                        fill = fill,
+                        shape = shape
+                    };
+                    break;
+                case NodeStyle.Rectangle:
+                    data.ShapeNodeStyle = new ShapeNodeStyle
+                    {
+                        stroke = stroke,
+                        fill = fill
+                    };
+                    break;
+                case NodeStyle.RoundRectangle:
+                    data.RectangleNodeStyle = new RectangleNodeStyle
+                    {
+                        stroke = stroke,
+                        fill = fill
+                    };
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(nodeStyle), nodeStyle, null);
+            }
+
+            node.nodeElements.Add(data);
         }
 
         public static void AddPort(

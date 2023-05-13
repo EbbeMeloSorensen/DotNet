@@ -86,15 +86,14 @@ namespace Craft.DataStructures.IO.UnitTest
         public void WriteGraphAdjacencyListToGraphMLFile_EmptyVertexAndEmptyEdgeUndirected()
         {
             // Arrange
-            //var vertices = Enumerable.Repeat(0, 5).Select(_ => new EmptyVertex());
-            var vertices = Enumerable.Repeat(0, 2).Select(_ => new EmptyVertex());
+            var vertices = Enumerable.Repeat(0, 5).Select(_ => new EmptyVertex());
 
             var graph = new GraphAdjacencyList<EmptyVertex, EmptyEdge>(vertices, false);
             graph.AddEdge(0, 1);
-            //graph.AddEdge(1, 2);
-            //graph.AddEdge(2, 3);
-            //graph.AddEdge(3, 4);
-            //graph.AddEdge(4, 0);
+            graph.AddEdge(1, 2);
+            graph.AddEdge(2, 3);
+            graph.AddEdge(3, 4);
+            graph.AddEdge(4, 0);
 
             var outputFile = @"C:\Temp\GraphAdjacencyList_undirected.graphml";
 
@@ -175,7 +174,7 @@ namespace Craft.DataStructures.IO.UnitTest
                 new LabelledVertex("Cecilie") //  3
             };
 
-            var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, false);
+            var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, true);
             graph.AddEdge(new LabelledEdge(0, 1, "spouse"));
             graph.AddEdge(new LabelledEdge(2, 0, "parent"));
             graph.AddEdge(new LabelledEdge(2, 1, "parent"));

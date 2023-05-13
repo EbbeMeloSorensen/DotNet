@@ -295,7 +295,7 @@ namespace Craft.DataStructures.IO
                 g.graphElements.Add(generateNode($"n{i}", -40, -163.5, null, graph.GetNodeLabel(i)));
 
                 edges.AddRange(graph.OutgoingEdges(i)
-                    .Select(edge => generateEdge($"e{edgeId++}", $"n{i}", $"n{edge.VertexId2}", "x")));
+                    .Select(edge => generateEdge($"e{edgeId++}", $"n{i}", $"n{edge.VertexId2}", graph.IsDirected, "x")));
             }
 
             foreach (var edge in edges)
@@ -329,7 +329,7 @@ namespace Craft.DataStructures.IO
             }
 
             node.AddGeometry(new RectD{ X = X, Y = Y, Width = 30, Height = 30});
-            node.AddStyle("#FF663800", "#FFFF8C00");
+            node.AddStyle(NodeStyle.RoundRectangle, "#FF663800", "#FFFF8C00");
             node.AddPort();
 
             return node;
@@ -339,6 +339,7 @@ namespace Craft.DataStructures.IO
             string edgeId,
             string source,
             string target,
+            bool directed,
             string? label = null)
         {
             var edge = new edge
@@ -395,26 +396,46 @@ namespace Craft.DataStructures.IO
                 });
             }
 
-            edge.edgeElements.Add(
-            new data
+            if (directed)
             {
-                key = "d13",
-                PolylineEdgeStyle = new PolylineEdgeStyle
+                edge.edgeElements.Add(new data
                 {
-                    stroke = "#FF663800",
-                    PolylineEdgeStyleTargetArrow = new PolylineEdgeStyleTargetArrow
+                    key = "d13",
+                    PolylineEdgeStyle = new PolylineEdgeStyle
                     {
-                        Arrow = new Arrow
+                        stroke = "#FF663800",
+                        PolylineEdgeStyleTargetArrow = new PolylineEdgeStyleTargetArrow
                         {
-                            type = "TRIANGLE",
-                            scale = 0.75,
-                            stroke = "#FF663800",
-                            fill = "#FF663800",
-                            cropLength = 1
+                            Arrow = new Arrow
+                            {
+                                type = "TRIANGLE",
+                                scale = 0.75,
+                                stroke = "#FF663800",
+                                fill = "#FF663800",
+                                cropLength = 1
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+            else
+            {
+                edge.edgeElements.Add(new data
+                {
+                    key = "d13",
+                    PolylineEdgeStyle = new PolylineEdgeStyle
+                    {
+                        PolylineEdgeStyleStroke = new PolylineEdgeStyleStroke
+                        {
+                            Stroke = new Stroke
+                            {
+                                fill = "#FF000000",
+                                thickness = 0.75
+                            }
+                        }
+                    }
+                });
+            }
 
             return edge;
         }

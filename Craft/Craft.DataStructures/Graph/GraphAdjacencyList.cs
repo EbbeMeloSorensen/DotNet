@@ -71,17 +71,17 @@ namespace Craft.DataStructures.Graph
 
             _adjacencyList[vertexId1].Add(new Tuple<int, TE>(vertexId2, edge));
 
-            //if (IsDirected)
-            //{
-            //    return;
-            //}
+            if (IsDirected)
+            {
+                return;
+            }
 
-            //if (_adjacencyList[vertexId2] == null)
-            //{
-            //    _adjacencyList[vertexId2] = new List<Tuple<int, TE>>();
-            //}
+            if (_adjacencyList[vertexId2] == null)
+            {
+                _adjacencyList[vertexId2] = new List<Tuple<int, TE>>();
+            }
 
-            //_adjacencyList[vertexId2].Add(new Tuple<int, TE>(vertexId1, edge));
+            _adjacencyList[vertexId2].Add(new Tuple<int, TE>(vertexId1, edge));
         }
 
         public void AddEdge(
@@ -100,21 +100,12 @@ namespace Craft.DataStructures.Graph
         // Det her er ikke særligt pænt... Du skal kunne opdatere en vertex i grafen uden at fucke vertex id'er op
         // Husk de tildeles i constructoren
         // Hvad bruger vi overhovedet den her til? -> Den kaldes af MovePoint i en gui test.. så den bør nok fjernes og erstattes med noget andet
-        public void UpdateVertex(int vertexId, TV vertex)
+        public void UpdateVertex(
+            int vertexId, 
+            TV vertex)
         {
             vertex.Id = vertexId;
             Vertices[vertexId] = vertex;
-        }
-
-        // Returns the edges that go to or from a given vertex
-        public IEnumerable<TE> GetAdjacentEdges(int vertexId)
-        {
-            if (_adjacencyList[vertexId] == null)
-            {
-                return new List<TE>();
-            }
-
-            return _adjacencyList[vertexId].Select(_ => _.Item2);
         }
         
         public IEnumerable<IEdge> OutgoingEdges(
@@ -125,7 +116,19 @@ namespace Craft.DataStructures.Graph
                 return new List<IEdge>();
             }
 
-            return (IEnumerable<IEdge>)_adjacencyList[vertexId].Select(_ => _.Item2);
+            return (IEnumerable<IEdge>)_adjacencyList[vertexId].Select(_ => _.Item2).Where(_ => _.VertexId1 == vertexId);
+        }
+
+        // Returns the edges that go to or from a given vertex
+        public IEnumerable<TE> GetAdjacentEdges(
+            int vertexId)
+        {
+            if (_adjacencyList[vertexId] == null)
+            {
+                return new List<TE>();
+            }
+
+            return _adjacencyList[vertexId].Select(_ => _.Item2);
         }
     }
 }

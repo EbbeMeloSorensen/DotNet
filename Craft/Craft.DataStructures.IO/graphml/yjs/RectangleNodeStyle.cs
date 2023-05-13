@@ -2,15 +2,12 @@
 
 namespace Craft.DataStructures.IO.graphml.yjs
 {
-    public class ShapeNodeStyle
+    public class RectangleNodeStyle
     {
         [XmlAttribute]
         public string stroke { get; set; }
 
         [XmlAttribute]
         public string fill { get; set; }
-
-        [XmlAttribute]
-        public string shape { get; set; }
     }
 }

@@ -23,6 +23,9 @@ namespace Craft.DataStructures.IO.graphml
         public ShapeNodeStyle ShapeNodeStyle { get; set; }
 
         [XmlElement(Namespace = "http://www.yworks.com/xml/yfiles-for-html/2.0/xaml")]
+        public RectangleNodeStyle RectangleNodeStyle { get; set; }
+
+        [XmlElement(Namespace = "http://www.yworks.com/xml/yfiles-for-html/2.0/xaml")]
         public PolylineEdgeStyle PolylineEdgeStyle { get; set; }
 
         [XmlAttribute]

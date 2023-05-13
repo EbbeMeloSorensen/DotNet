@@ -9,5 +9,9 @@ namespace Craft.DataStructures.IO.graphml.yjs
 
         [XmlElement(ElementName = "PolylineEdgeStyle.targetArrow")]
         public PolylineEdgeStyleTargetArrow PolylineEdgeStyleTargetArrow { get; set; }
+
+        [XmlElement(ElementName = "PolylineEdgeStyle.stroke")]
+        public PolylineEdgeStyleStroke PolylineEdgeStyleStroke { get; set; }
+
     }
 }
