@@ -297,7 +297,12 @@ namespace Craft.DataStructures.IO
                 g.graphElements.Add(generateNode($"n{i}", -40, -163.5, null, vertex is LabelledVertex labelledVertex ? labelledVertex.Label : null));
 
                 edges.AddRange(graph.OutgoingEdges(i)
-                    .Select(edge => generateEdge($"e{edgeId++}", $"n{i}", $"n{edge.VertexId2}", graph.IsDirected, "x")));
+                    .Select(edge => generateEdge(
+                        $"e{edgeId++}",
+                        $"n{i}",
+                        $"n{edge.VertexId2}",
+                        graph.IsDirected,
+                        edge is LabelledEdge edge1 ? edge1.Label : null)));
             }
 
             foreach (var edge in edges)
