@@ -214,7 +214,7 @@ namespace Craft.DataStructures.IO.UnitTest
 
             var serializer = new XmlSerializer(typeof(graphml.graphml), attrOverrides);
 
-            var inputFileName = @"C:\Temp\GraphAdjacencyList.graphml";
+            var inputFileName = @"C:\Temp\GraphAdjacencyList_labelledVertices.graphml";
 
             var fs = new FileStream(inputFileName, FileMode.Open);
             var g = (graphml.graphml)serializer.Deserialize(fs);

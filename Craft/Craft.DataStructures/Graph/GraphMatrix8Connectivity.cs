@@ -10,12 +10,6 @@ namespace Craft.DataStructures.Graph
 
         public int VertexCount { get; }
 
-        public string GetNodeLabel(
-            int vertexId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public bool IsDirected => false;
 
         public GraphMatrix8Connectivity(

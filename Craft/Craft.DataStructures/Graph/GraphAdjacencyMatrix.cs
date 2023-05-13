@@ -18,12 +18,6 @@ namespace Craft.DataStructures.Graph
             get { return _vertexCount; }
         }
 
-        public string GetNodeLabel(
-            int vertexId)
-        {
-            return $"n{vertexId}";
-        }
-
         public bool IsDirected => _directed;
 
         public GraphAdjacencyMatrix(
