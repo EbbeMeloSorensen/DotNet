@@ -2,5 +2,6 @@
 {
     public class FeatureMember
     {
+        public Dummy Dummy { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace Craft.DataStructures.IO.ogr
         [XmlAttribute(AttributeName = "schemaLocation", Namespace = "http://www.w3.org/2001/XMLSchema-instance")]
         public string SchemaLocation { get; set; }
 
-        [XmlElement(Type = typeof(BoundedBy), Namespace = "http://www.opengis.net/gml/3.2"),
+        [XmlElement(Type = typeof(BoundedBy), Namespace = "http://www.opengis.net/gml/3.2", ElementName = "boundedBy"),
          XmlElement(Type = typeof(FeatureMember))]
         public ArrayList FeatureCollectionElements { get; set; }
     }

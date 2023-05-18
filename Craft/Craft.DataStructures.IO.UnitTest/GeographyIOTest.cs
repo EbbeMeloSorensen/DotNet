@@ -24,8 +24,31 @@ namespace Craft.DataStructures.IO.UnitTest
                             UpperCorner = "55.75411 139.749462"
                         }
                     },
-                    new FeatureMember(),
-                    new FeatureMember()
+                    new FeatureMember
+                    {
+                        Dummy = new Dummy
+                        {
+                            Id = "Dummy.0",
+                            BoundedBy = new BoundedBy
+                            {
+                                Envelope = new Envelope
+                                {
+                                    SrsName = "urn:ogc:def:crs:EPSG::4326",
+                                    LowerCorner = "24.871938 66.988063",
+                                    UpperCorner = "24.871938 66.988063"
+                                }
+                            },
+                            GeometryProperty = new GeometryProperty
+                            {
+                                Point = new Point
+                                {
+                                    Id = "Dummy.geom.0",
+                                    Position = "24.871938 66.988063"
+                                }
+                            },
+                            Name = "Karachi"
+                        }
+                    }
                 }
             };
 
