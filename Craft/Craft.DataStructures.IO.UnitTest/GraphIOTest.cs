@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Craft.DataStructures.IO.UnitTest
 {
-    public class FileIOTest
+    public class GraphIOTest
     {
         [Fact]
         public void WriteASimpleUndirectedGraphToDotFile()

@@ -4,17 +4,22 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using Craft.DataStructures.Graph;
+using Craft.DataStructures.IO.gml;
 using Craft.DataStructures.IO.graphml;
 using Craft.DataStructures.IO.graphml.x;
 using Craft.DataStructures.IO.graphml.y;
 using Craft.DataStructures.IO.graphml.yjs;
+using Craft.DataStructures.IO.ogr;
 
 namespace Craft.DataStructures.IO
 {
     public static class DataIOHandler
     {
-        private static XmlSerializer _xmlSerializer;
-        private static XmlSerializerNamespaces _xmlSerializerNamespaces;
+        private static XmlSerializer _graphmlSerializer;
+        private static XmlSerializerNamespaces _graphmlSerializerNamespaces;
+
+        private static XmlSerializer _gmlSerializer;
+        private static XmlSerializerNamespaces _gmlSerializerNamespaces;
 
         public static void SerializeGraphML(
             IGraph graph,
@@ -23,16 +28,25 @@ namespace Craft.DataStructures.IO
             var graphml = ConvertGraphToGraphML(graph);
 
             using var writer = new StreamWriter(fileName);
-            XmlSerializer.Serialize(writer, graphml, XmlSerializerNamespaces);
+            GraphmlSerializer.Serialize(writer, graphml, GraphMLSerializerNamespaces);
             writer.Close();
         }
 
-        private static XmlSerializer XmlSerializer
+        public static void SerializeGMLFeature(
+            FeatureCollection featureCollection,
+            string fileName)
+        {
+            using var writer = new StreamWriter(fileName);
+            GmlSerializer.Serialize(writer, featureCollection, GMLSerializerNamespaces);
+            writer.Close();
+        }
+
+        private static XmlSerializer GraphmlSerializer
         {
             get
             {
-                if (_xmlSerializer != null)
-                    return _xmlSerializer;
+                if (_graphmlSerializer != null)
+                    return _graphmlSerializer;
 
                 var attrs1 = new XmlAttributes();
                 attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "key", Type = typeof(key) });
@@ -57,35 +71,72 @@ namespace Craft.DataStructures.IO
                 attrOverrides.Add(typeof(node), "nodeElements", attrs3);
                 attrOverrides.Add(typeof(edge), "edgeElements", attrs4);
 
-                _xmlSerializer = new XmlSerializer(typeof(graphml.graphml), attrOverrides);
+                _graphmlSerializer = new XmlSerializer(typeof(graphml.graphml), attrOverrides);
 
-                return _xmlSerializer;
+                return _graphmlSerializer;
             }
         }
 
-        private static XmlSerializerNamespaces XmlSerializerNamespaces
+        private static XmlSerializerNamespaces GraphMLSerializerNamespaces
         {
             get
             {
-                if (_xmlSerializerNamespaces != null)
-                    return _xmlSerializerNamespaces;
+                if (_graphmlSerializerNamespaces != null)
+                    return _graphmlSerializerNamespaces;
 
-                _xmlSerializerNamespaces = new XmlSerializerNamespaces();
-                _xmlSerializerNamespaces.Add("demostyle2", "http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/2.0");
-                _xmlSerializerNamespaces.Add("demostyle", "http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/1.0");
-                _xmlSerializerNamespaces.Add("icon-style", "http://www.yworks.com/yed-live/icon-style/1.0");
-                _xmlSerializerNamespaces.Add("bpmn", "http://www.yworks.com/xml/yfiles-bpmn/2.0");
-                _xmlSerializerNamespaces.Add("demotablestyle", "http://www.yworks.com/yFilesHTML/demos/FlatDemoTableStyle/1.0");
-                _xmlSerializerNamespaces.Add("uml", "http://www.yworks.com/yFilesHTML/demos/UMLDemoStyle/1.0");
-                _xmlSerializerNamespaces.Add("GraphvizNodeStyle", "http://www.yworks.com/yFilesHTML/graphviz-node-style/1.0");
-                _xmlSerializerNamespaces.Add("VuejsNodeStyle", "http://www.yworks.com/demos/yfiles-vuejs-node-style/1.0");
-                _xmlSerializerNamespaces.Add("explorer-style", "http://www.yworks.com/data-explorer/1.0");
-                _xmlSerializerNamespaces.Add("y", "http://www.yworks.com/xml/yfiles-common/3.0");
-                _xmlSerializerNamespaces.Add("x", "http://www.yworks.com/xml/yfiles-common/markup/3.0");
-                _xmlSerializerNamespaces.Add("yjs", "http://www.yworks.com/xml/yfiles-for-html/2.0/xaml");
-                _xmlSerializerNamespaces.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+                _graphmlSerializerNamespaces = new XmlSerializerNamespaces();
+                _graphmlSerializerNamespaces.Add("demostyle2", "http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/2.0");
+                _graphmlSerializerNamespaces.Add("demostyle", "http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/1.0");
+                _graphmlSerializerNamespaces.Add("icon-style", "http://www.yworks.com/yed-live/icon-style/1.0");
+                _graphmlSerializerNamespaces.Add("bpmn", "http://www.yworks.com/xml/yfiles-bpmn/2.0");
+                _graphmlSerializerNamespaces.Add("demotablestyle", "http://www.yworks.com/yFilesHTML/demos/FlatDemoTableStyle/1.0");
+                _graphmlSerializerNamespaces.Add("uml", "http://www.yworks.com/yFilesHTML/demos/UMLDemoStyle/1.0");
+                _graphmlSerializerNamespaces.Add("GraphvizNodeStyle", "http://www.yworks.com/yFilesHTML/graphviz-node-style/1.0");
+                _graphmlSerializerNamespaces.Add("VuejsNodeStyle", "http://www.yworks.com/demos/yfiles-vuejs-node-style/1.0");
+                _graphmlSerializerNamespaces.Add("explorer-style", "http://www.yworks.com/data-explorer/1.0");
+                _graphmlSerializerNamespaces.Add("y", "http://www.yworks.com/xml/yfiles-common/3.0");
+                _graphmlSerializerNamespaces.Add("x", "http://www.yworks.com/xml/yfiles-common/markup/3.0");
+                _graphmlSerializerNamespaces.Add("yjs", "http://www.yworks.com/xml/yfiles-for-html/2.0/xaml");
+                _graphmlSerializerNamespaces.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
-                return _xmlSerializerNamespaces;
+                return _graphmlSerializerNamespaces;
+            }
+        }
+
+        private static XmlSerializer GmlSerializer
+        {
+            get
+            {
+                if (_gmlSerializer != null)
+                    return _gmlSerializer;
+
+                // Namespace her gør åbenbart ingen forskel - den fortsætter med at sige, at BoundedBy ligger i ogr ligesom dens parent
+                var attrs1 = new XmlAttributes();
+                attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "BoundedBy", Type = typeof(BoundedBy), Namespace = "http://www.opengis.net/gml/3.2" });
+                attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "FeatureMember", Type = typeof(FeatureMember) });
+
+                var attrOverrides = new XmlAttributeOverrides();
+                attrOverrides.Add(typeof(graphml.graphml), "FeatureCollectionElements", attrs1);
+
+                _gmlSerializer = new XmlSerializer(typeof(FeatureCollection), attrOverrides);
+
+                return _gmlSerializer;
+            }
+        }
+
+        private static XmlSerializerNamespaces GMLSerializerNamespaces
+        {
+            get
+            {
+                if (_gmlSerializerNamespaces != null)
+                    return _gmlSerializerNamespaces;
+
+                _gmlSerializerNamespaces = new XmlSerializerNamespaces();
+                _gmlSerializerNamespaces.Add("gml", "http://www.opengis.net/gml/3.2");
+                _gmlSerializerNamespaces.Add("ogr", "http://ogr.maptools.org/");
+                _gmlSerializerNamespaces.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
+                return _gmlSerializerNamespaces;
             }
         }
 
