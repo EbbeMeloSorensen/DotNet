@@ -15,7 +15,15 @@ namespace Craft.DataStructures.IO.UnitTest
             {
                 FeatureCollectionElements = new ArrayList
                 {
-                    new BoundedBy(),
+                    new BoundedBy
+                    {
+                        Envelope = new Envelope
+                        {
+                            SrsName = "urn:ogc:def:crs:EPSG::4326",
+                            LowerCorner = "-34.600556 -118.181926",
+                            UpperCorner = "55.75411 139.749462"
+                        }
+                    },
                     new FeatureMember(),
                     new FeatureMember()
                 }

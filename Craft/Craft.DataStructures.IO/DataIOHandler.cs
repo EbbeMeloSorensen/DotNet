@@ -110,9 +110,8 @@ namespace Craft.DataStructures.IO
                 if (_gmlSerializer != null)
                     return _gmlSerializer;
 
-                // Namespace her gør åbenbart ingen forskel - den fortsætter med at sige, at BoundedBy ligger i ogr ligesom dens parent
                 var attrs1 = new XmlAttributes();
-                attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "BoundedBy", Type = typeof(BoundedBy), Namespace = "http://www.opengis.net/gml/3.2" });
+                attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "BoundedBy", Type = typeof(BoundedBy) });
                 attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "FeatureMember", Type = typeof(FeatureMember) });
 
                 var attrOverrides = new XmlAttributeOverrides();
