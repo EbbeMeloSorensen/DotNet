@@ -16,4 +16,4 @@ Todo:
   o Sikr at du kan eksportere til graphml med den nye mekanisme
   o Fjern GetNodeLabel fra IGraph. 
 
-  
+...  
