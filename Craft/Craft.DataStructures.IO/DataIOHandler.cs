@@ -129,8 +129,17 @@ namespace Craft.DataStructures.IO
                 attrs.XmlElements.Add(attr1);
                 attrs.XmlElements.Add(attr2);
 
+                var attrs2 = new XmlAttributes();
+                var attr22 = new XmlElementAttribute
+                {
+                    ElementName = "surfaceMember",
+                    Type = typeof(SurfaceMember)
+                };
+                attrs2.XmlElements.Add(attr22);
+
                 var attrOverrides = new XmlAttributeOverrides();
-                attrOverrides.Add(typeof(GeometryProperty), "Geometry", attrs);
+                attrOverrides.Add(typeof(GeometryProperty), "AbstractGeometricPrimitive", attrs);
+                attrOverrides.Add(typeof(MultiSurface), "SurfaceMembers", attrs2);
 
                 _gmlSerializer = new XmlSerializer(typeof(FeatureCollection), attrOverrides);
 

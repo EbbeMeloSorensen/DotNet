@@ -2,7 +2,7 @@
 
 namespace Craft.DataStructures.IO.gml
 {
-    public class MultiSurface : Geometry
+    public class MultiSurface : AbstractGeometricPrimitive
     {
         public List<SurfaceMember> SurfaceMembers { get; set; }
     }

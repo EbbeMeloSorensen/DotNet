@@ -41,7 +41,7 @@ namespace Craft.DataStructures.IO.UnitTest
                             },
                             GeometryProperty = new GeometryProperty
                             {
-                                Geometry = new Point
+                                AbstractGeometricPrimitive = new Point
                                 {
                                     Id = "Dummy.geom.0",
                                     Position = "24.871938 66.988063"
@@ -66,7 +66,7 @@ namespace Craft.DataStructures.IO.UnitTest
                             },
                             GeometryProperty = new GeometryProperty
                             {
-                                Geometry = new Point
+                                AbstractGeometricPrimitive = new Point
                                 {
                                     Id = "Dummy.geom.1",
                                     Position = "28.671939 77.228058"
@@ -91,7 +91,7 @@ namespace Craft.DataStructures.IO.UnitTest
                             },
                             GeometryProperty = new GeometryProperty
                             {
-                                Geometry = new Point
+                                AbstractGeometricPrimitive = new Point
                                 {
                                     Id = "Dummy.geom.2",
                                     Position = "23.725006 90.406634"
@@ -116,7 +116,7 @@ namespace Craft.DataStructures.IO.UnitTest
                             },
                             GeometryProperty = new GeometryProperty
                             {
-                                Geometry = new Point
+                                AbstractGeometricPrimitive = new Point
                                 {
                                     Id = "Dummy.geom.3",
                                     Position = "40.751925 -73.981963"
@@ -141,7 +141,7 @@ namespace Craft.DataStructures.IO.UnitTest
                             },
                             GeometryProperty = new GeometryProperty
                             {
-                                Geometry = new Point
+                                AbstractGeometricPrimitive = new Point
                                 {
                                     Id = "Dummy.geom.4",
                                     Position = "30.051906 31.248022"
@@ -192,15 +192,11 @@ namespace Craft.DataStructures.IO.UnitTest
                             },
                             GeometryProperty = new GeometryProperty
                             {
-                                Geometry = new MultiSurface
+                                AbstractGeometricPrimitive = new MultiSurface
                                 {
                                     Id = "Dummy.geom.0",
                                     SurfaceMembers = new List<SurfaceMember>
                                     {
-                                        new SurfaceMember
-                                        {
-
-                                        },
                                         new SurfaceMember
                                         {
 

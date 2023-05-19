@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Xml.Serialization;
 
 namespace Craft.DataStructures.IO.gml
 {
     public class SurfaceMember
     {
+        [XmlElement(Namespace = "http://www.opengis.net/gml/3.2")]
+        public AbstractGeometricPrimitive AbstractGeometricPrimitive { get; set; }
     }
 }

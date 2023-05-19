@@ -2,7 +2,7 @@
 
 namespace Craft.DataStructures.IO.gml
 {
-    public class Point : Geometry
+    public class Point : AbstractGeometricPrimitive
     {
         [XmlElement(ElementName = "pos")] 
         public string Position { get; set; }

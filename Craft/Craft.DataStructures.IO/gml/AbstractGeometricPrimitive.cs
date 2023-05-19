@@ -2,7 +2,7 @@
 
 namespace Craft.DataStructures.IO.gml
 {
-    public abstract class Geometry
+    public abstract class AbstractGeometricPrimitive
     {
         [XmlAttribute(AttributeName = "srsName")]
         public string SrsName { get; set; }
