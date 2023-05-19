@@ -16,12 +16,6 @@ namespace Craft.DataStructures.Graph
         private static readonly ConstructorInfo _edgeConstructorInfo;
         private List<Tuple<int, TE>>[] _adjacencyList;
 
-        public string GetNodeLabel(
-            int vertexId)
-        {
-            return Vertices[vertexId].ToString();
-        }
-
         public bool IsDirected { get; }
 
         public int VertexCount => Vertices.Count;

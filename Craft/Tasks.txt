@@ -12,8 +12,8 @@ Todo:
   o Tilføj en mulighed for at hive outgoing edges for en node (OK)
   o Lav Dijkstra-algoritmen om så den bruger den nye konstruktion (OK)
   o Fjern GetCost fra IGraph (OK)
-  o Etabler et alternativ til IGraph.GetNodeLabel, så man kan få fat i noden og spørge DEN om dens label
-  o Sikr at du kan eksportere til graphml med den nye mekanisme
-  o Fjern GetNodeLabel fra IGraph. 
+  o Etabler et alternativ til IGraph.GetNodeLabel, så man kan få fat i noden og spørge DEN om dens label (OK)
+  o Sikr at du kan eksportere til graphml med den nye mekanisme (OK)
+  o Fjern GetNodeLabel fra IGraph.  (OK)
 
-...  
+Ser
