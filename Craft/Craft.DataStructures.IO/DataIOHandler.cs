@@ -110,7 +110,7 @@ namespace Craft.DataStructures.IO
                 if (_gmlSerializer != null)
                     return _gmlSerializer;
 
-                var attrs = new XmlAttributes();
+                var attrs1 = new XmlAttributes();
 
                 var attr1 = new XmlElementAttribute
                 {
@@ -126,8 +126,8 @@ namespace Craft.DataStructures.IO
                     Namespace = "http://www.opengis.net/gml/3.2"
                 };
 
-                attrs.XmlElements.Add(attr1);
-                attrs.XmlElements.Add(attr2);
+                attrs1.XmlElements.Add(attr1);
+                attrs1.XmlElements.Add(attr2);
 
                 var attrs2 = new XmlAttributes();
                 var attr22 = new XmlElementAttribute
@@ -137,9 +137,19 @@ namespace Craft.DataStructures.IO
                 };
                 attrs2.XmlElements.Add(attr22);
 
+                var attrs3 = new XmlAttributes();
+                var attr33 = new XmlElementAttribute
+                {
+                    ElementName = "Polygon",
+                    Type = typeof(Polygon),
+                    Namespace = "http://www.opengis.net/gml/3.2"
+                };
+                attrs3.XmlElements.Add(attr33);
+
                 var attrOverrides = new XmlAttributeOverrides();
-                attrOverrides.Add(typeof(GeometryProperty), "AbstractGeometricPrimitive", attrs);
+                attrOverrides.Add(typeof(GeometryProperty), "AbstractGeometricPrimitive", attrs1);
                 attrOverrides.Add(typeof(MultiSurface), "SurfaceMembers", attrs2);
+                attrOverrides.Add(typeof(SurfaceMember), "AbstractSurface", attrs3);
 
                 _gmlSerializer = new XmlSerializer(typeof(FeatureCollection), attrOverrides);
 
