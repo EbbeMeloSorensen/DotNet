@@ -110,12 +110,19 @@ namespace Craft.DataStructures.IO
                 if (_gmlSerializer != null)
                     return _gmlSerializer;
 
-                var attrs1 = new XmlAttributes();
-                attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "BoundedBy", Type = typeof(BoundedBy) });
-                attrs1.XmlElements.Add(new XmlElementAttribute { ElementName = "FeatureMember", Type = typeof(FeatureMember) });
+                var attrs = new XmlAttributes();
+
+                var attr1 = new XmlElementAttribute
+                {
+                    ElementName = "Point",
+                    Type = typeof(Point),
+                    Namespace = "http://www.opengis.net/gml/3.2"
+                };
+
+                attrs.XmlElements.Add(attr1);
 
                 var attrOverrides = new XmlAttributeOverrides();
-                attrOverrides.Add(typeof(graphml.graphml), "FeatureCollectionElements", attrs1);
+                attrOverrides.Add(typeof(GeometryProperty), "Geometry", attrs);
 
                 _gmlSerializer = new XmlSerializer(typeof(FeatureCollection), attrOverrides);
 

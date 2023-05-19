@@ -6,6 +6,6 @@ namespace Craft.DataStructures.IO.ogr
     public class GeometryProperty
     {
         [XmlElement(Namespace = "http://www.opengis.net/gml/3.2")]
-        public Point Point { get; set; }
+        public Geometry Geometry { get; set; }
     }
 }

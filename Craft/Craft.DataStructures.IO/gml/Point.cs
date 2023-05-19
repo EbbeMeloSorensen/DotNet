@@ -2,7 +2,7 @@
 
 namespace Craft.DataStructures.IO.gml
 {
-    public class Point
+    public class Point : Geometry
     {
         [XmlAttribute(AttributeName = "srsName")]
         public string SrsName { get; set; }
