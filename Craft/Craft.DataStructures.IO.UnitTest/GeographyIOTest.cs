@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Craft.DataStructures.IO.gml;
 using Craft.DataStructures.IO.ogr;
 using Xunit;
@@ -8,7 +9,7 @@ namespace Craft.DataStructures.IO.UnitTest
     public class GeographyIOTest
     {
         [Fact]
-        public void WriteDataToGMLFile()
+        public void WriteDataToGMLFile_BigCities()
         {
             // Arrange
             var featureCollection = new FeatureCollection
@@ -152,7 +153,68 @@ namespace Craft.DataStructures.IO.UnitTest
                 }
             };
 
-            var outputFile = @"C:\Temp\myfeatures.gml";
+            var outputFile = @"C:\Temp\WorldsBiggestCities.gml";
+
+            // Act
+            DataIOHandler.SerializeGMLFeature(featureCollection, outputFile);
+        }
+
+        [Fact]
+        public void WriteDataToGMLFile_Luxembourg()
+        {
+            // Arrange
+            var featureCollection = new FeatureCollection
+            {
+                FeatureCollectionElements = new ArrayList
+                {
+                    new BoundedBy
+                    {
+                        Envelope = new Envelope
+                        {
+                            SrsName = "urn:ogc:def:crs:EPSG::4326",
+                            LowerCorner = "-34.600556 -118.181926",
+                            UpperCorner = "55.75411 139.749462"
+                        }
+                    },
+                    new FeatureMember
+                    {
+                        Dummy = new Dummy
+                        {
+                            Id = "Dummy.0",
+                            BoundedBy = new BoundedBy
+                            {
+                                Envelope = new Envelope
+                                {
+                                    SrsName = "urn:ogc:def:crs:EPSG::4326",
+                                    LowerCorner = "49.445458984375 5.72500000000002",
+                                    UpperCorner = "50.1671875 6.49375000000001"
+                                }
+                            },
+                            GeometryProperty = new GeometryProperty
+                            {
+                                Geometry = new MultiSurface
+                                {
+                                    Id = "Dummy.geom.0",
+                                    SurfaceMembers = new List<SurfaceMember>
+                                    {
+                                        new SurfaceMember
+                                        {
+
+                                        },
+                                        new SurfaceMember
+                                        {
+
+                                        }
+                                    }
+                                }
+                            },
+                            Name = "Luxembourg"
+                        }
+                    }
+                }
+            };
+
+            var outputFile = @"C:\Temp\Luxembourg.gml";
 
             // Act
             DataIOHandler.SerializeGMLFeature(featureCollection, outputFile);

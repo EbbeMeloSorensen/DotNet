@@ -119,7 +119,15 @@ namespace Craft.DataStructures.IO
                     Namespace = "http://www.opengis.net/gml/3.2"
                 };
 
+                var attr2 = new XmlElementAttribute
+                {
+                    ElementName = "MultiSurface",
+                    Type = typeof(MultiSurface),
+                    Namespace = "http://www.opengis.net/gml/3.2"
+                };
+
                 attrs.XmlElements.Add(attr1);
+                attrs.XmlElements.Add(attr2);
 
                 var attrOverrides = new XmlAttributeOverrides();
                 attrOverrides.Add(typeof(GeometryProperty), "Geometry", attrs);
