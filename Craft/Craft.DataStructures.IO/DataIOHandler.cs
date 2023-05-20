@@ -126,8 +126,16 @@ namespace Craft.DataStructures.IO
                     Namespace = "http://www.opengis.net/gml/3.2"
                 };
 
+                var attr2b = new XmlElementAttribute
+                {
+                    ElementName = "MultiLineString",
+                    Type = typeof(MultiLineString),
+                    Namespace = "http://www.opengis.net/gml/3.2"
+                };
+
                 attrs1.XmlElements.Add(attr1);
                 attrs1.XmlElements.Add(attr2);
+                attrs1.XmlElements.Add(attr2b);
 
                 var attrs2 = new XmlAttributes();
                 var attr22 = new XmlElementAttribute
@@ -146,10 +154,20 @@ namespace Craft.DataStructures.IO
                 };
                 attrs3.XmlElements.Add(attr33);
 
+                var attrs4 = new XmlAttributes();
+                var attr44 = new XmlElementAttribute
+                {
+                    ElementName = "lineStringMember",
+                    Type = typeof(LineStringMember)
+                };
+                attrs4.XmlElements.Add(attr44);
+
                 var attrOverrides = new XmlAttributeOverrides();
                 attrOverrides.Add(typeof(GeometryProperty), "AbstractGeometricPrimitive", attrs1);
                 attrOverrides.Add(typeof(MultiSurface), "SurfaceMembers", attrs2);
                 attrOverrides.Add(typeof(SurfaceMember), "AbstractSurface", attrs3);
+                attrOverrides.Add(typeof(MultiLineString), "LineStringMembers", attrs4);
+                //attrOverrides.Add(typeof(LineStringMember), "AbstractSurface", attrs3);
 
                 _gmlSerializer = new XmlSerializer(typeof(FeatureCollection), attrOverrides);
 

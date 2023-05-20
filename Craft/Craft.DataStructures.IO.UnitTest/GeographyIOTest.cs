@@ -334,5 +334,73 @@ namespace Craft.DataStructures.IO.UnitTest
             // Act
             DataIOHandler.SerializeGMLFeature(featureCollection, outputFile);
         }
+
+
+        [Fact]
+        public void WriteDataToGMLFile_Line()
+        {
+            // Arrange
+            var featureCollection = new FeatureCollection
+            {
+                FeatureCollectionElements = new ArrayList
+                {
+                    new BoundedBy
+                    {
+                        Envelope = new Envelope
+                        {
+                            SrsName = "urn:ogc:def:crs:EPSG::4326",
+                            LowerCorner = "54.5685897308149 8.09522545663074",
+                            UpperCorner = "57.7475040838931 15.1513777996996"
+                        }
+                    },
+                    new FeatureMember
+                    {
+                        Dummy = new Dummy
+                        {
+                            Id = "Dummy.0",
+                            BoundedBy = new BoundedBy
+                            {
+                                Envelope = new Envelope
+                                {
+                                    SrsName = "urn:ogc:def:crs:EPSG::4326",
+                                    LowerCorner = "54.5685897308149 8.09522545663074",
+                                    UpperCorner = "57.7475040838931 15.1513777996996"
+                                }
+                            },
+                            GeometryProperty = new GeometryProperty
+                            {
+                                AbstractGeometricPrimitive = new MultiLineString()
+                                {
+                                    Id = "Dummy.geom.0",
+                                    SrsName = "urn:ogc:def:crs:EPSG::4326",
+                                    LineStringMembers = new List<LineStringMember>
+                                    {
+                                        new LineStringMember()
+                                        {
+                                            LineString = new LineString
+                                            {
+                                                Coordinates = new Coordinates
+                                                {
+                                                    Decimal = ".",
+                                                    CS = ",",
+                                                    TS = " ",
+                                                    value = "11.147183400895441,54.83951415907992 9.143183536750055,54.978208965541306 11.643183536750055,54.978208965541306"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            Name = "Line"
+                        }
+                    }
+                }
+            };
+
+            var outputFile = @"C:\Temp\Line.gml";
+
+            // Act
+            DataIOHandler.SerializeGMLFeature(featureCollection, outputFile);
+        }
     }
 }
