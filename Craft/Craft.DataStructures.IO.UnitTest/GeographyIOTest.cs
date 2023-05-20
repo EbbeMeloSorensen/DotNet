@@ -349,8 +349,8 @@ namespace Craft.DataStructures.IO.UnitTest
                         Envelope = new Envelope
                         {
                             SrsName = "urn:ogc:def:crs:EPSG::4326",
-                            LowerCorner = "54.5685897308149 8.09522545663074",
-                            UpperCorner = "57.7475040838931 15.1513777996996"
+                            LowerCorner = "54.816337 9.995348",
+                            UpperCorner = "54.971677 10.422617"
                         }
                     },
                     new FeatureMember
@@ -363,8 +363,8 @@ namespace Craft.DataStructures.IO.UnitTest
                                 Envelope = new Envelope
                                 {
                                     SrsName = "urn:ogc:def:crs:EPSG::4326",
-                                    LowerCorner = "54.5685897308149 8.09522545663074",
-                                    UpperCorner = "57.7475040838931 15.1513777996996"
+                                    LowerCorner = "54.816337 9.995348",
+                                    UpperCorner = "54.971677 10.422617"
                                 }
                             },
                             GeometryProperty = new GeometryProperty
@@ -384,7 +384,7 @@ namespace Craft.DataStructures.IO.UnitTest
                                                     Decimal = ".",
                                                     CS = ",",
                                                     TS = " ",
-                                                    value = "11.147183400895441,54.83951415907992 9.143183536750055,54.978208965541306 11.643183536750055,54.978208965541306"
+                                                    value = "54.857424,9.995348 54.971677,10.205530 54.816337,10.422617"
                                                 }
                                             }
                                         }
