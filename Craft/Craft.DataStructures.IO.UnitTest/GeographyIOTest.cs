@@ -335,7 +335,6 @@ namespace Craft.DataStructures.IO.UnitTest
             DataIOHandler.SerializeGMLFeature(featureCollection, outputFile);
         }
 
-
         [Fact]
         public void WriteDataToGMLFile_Line()
         {

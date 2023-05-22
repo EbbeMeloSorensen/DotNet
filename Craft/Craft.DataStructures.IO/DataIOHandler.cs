@@ -167,7 +167,6 @@ namespace Craft.DataStructures.IO
                 attrOverrides.Add(typeof(MultiSurface), "SurfaceMembers", attrs2);
                 attrOverrides.Add(typeof(SurfaceMember), "AbstractSurface", attrs3);
                 attrOverrides.Add(typeof(MultiLineString), "LineStringMembers", attrs4);
-                //attrOverrides.Add(typeof(LineStringMember), "AbstractSurface", attrs3);
 
                 _gmlSerializer = new XmlSerializer(typeof(FeatureCollection), attrOverrides);
 
