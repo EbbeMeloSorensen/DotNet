@@ -32,13 +32,31 @@ namespace Craft.DataStructures.IO
             writer.Close();
         }
 
-        public static void SerializeGMLFeature(
+        public static void SerializeGMLFeatureCollection(
             FeatureCollection featureCollection,
             string fileName)
         {
             using var writer = new StreamWriter(fileName);
             GmlSerializer.Serialize(writer, featureCollection, GMLSerializerNamespaces);
             writer.Close();
+        }
+
+        public static FeatureCollection DeserializeGMLFile(
+            string fileName)
+        {
+            FeatureCollection? result;
+
+            using (var streamReader = new StreamReader(fileName))
+            {
+                result = GmlSerializer.Deserialize(streamReader) as FeatureCollection;
+            }
+
+            if (result == null)
+            {
+                throw new InvalidDataException();
+            }
+
+            return result;
         }
 
         private static XmlSerializer GraphmlSerializer

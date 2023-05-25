@@ -1,7 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 using Craft.DataStructures.IO.gml;
 using Craft.DataStructures.IO.ogr;
+using FluentAssertions;
 using Xunit;
 
 namespace Craft.DataStructures.IO.UnitTest
@@ -156,7 +161,7 @@ namespace Craft.DataStructures.IO.UnitTest
             var outputFile = @"C:\Temp\WorldsBiggestCities.gml";
 
             // Act
-            DataIOHandler.SerializeGMLFeature(featureCollection, outputFile);
+            DataIOHandler.SerializeGMLFeatureCollection(featureCollection, outputFile);
         }
 
         [Fact]
@@ -227,7 +232,7 @@ namespace Craft.DataStructures.IO.UnitTest
             var outputFile = @"C:\Temp\Luxembourg.gml";
 
             // Act
-            DataIOHandler.SerializeGMLFeature(featureCollection, outputFile);
+            DataIOHandler.SerializeGMLFeatureCollection(featureCollection, outputFile);
         }
 
         [Fact]
@@ -332,7 +337,7 @@ namespace Craft.DataStructures.IO.UnitTest
             var outputFile = @"C:\Temp\Denmark.gml";
 
             // Act
-            DataIOHandler.SerializeGMLFeature(featureCollection, outputFile);
+            DataIOHandler.SerializeGMLFeatureCollection(featureCollection, outputFile);
         }
 
         [Fact]
@@ -399,7 +404,62 @@ namespace Craft.DataStructures.IO.UnitTest
             var outputFile = @"C:\Temp\Line.gml";
 
             // Act
-            DataIOHandler.SerializeGMLFeature(featureCollection, outputFile);
+            DataIOHandler.SerializeGMLFeatureCollection(featureCollection, outputFile);
+        }
+
+        [Fact]
+        public void Given_GmlFileExportedFromQGIS_When_DeserializingFile_Then_ItSucceeds()
+        {
+            var inputFile = @".\Data\From QGIS\Dummy.gml";
+            //var inputFile = @".\Data\Serialized\Denmark.gml";
+
+            var featureCollection = DataIOHandler.DeserializeGMLFile(inputFile);
+
+            featureCollection.FeatureCollectionElements.Count.Should().Be(2);
+
+            (featureCollection.FeatureCollectionElements[1] is FeatureMember).Should().BeTrue();
+
+            var featureMember = featureCollection.FeatureCollectionElements[1] as FeatureMember;
+            (featureMember.Dummy.GeometryProperty.AbstractGeometricPrimitive is MultiSurface).Should().BeTrue();
+
+            var multiSurface = featureMember.Dummy.GeometryProperty.AbstractGeometricPrimitive as MultiSurface;
+            multiSurface.SurfaceMembers.Count.Should().Be(15);
+
+            (multiSurface.SurfaceMembers[0].AbstractSurface is Polygon).Should().BeTrue();
+
+            var polygon = multiSurface.SurfaceMembers[0].AbstractSurface as Polygon;
+            polygon.Exterior.LinearRing.PosList.value.Substring(0, 10).Should().Be("55.1332054");
+        }
+
+        [Fact]
+        public void Given_GmlFileSerializedFromCode_When_DeserializingFile_Then_ItSucceeds()
+        {
+            var inputFile = @".\Data\Serialized\Denmark.gml";
+
+            var featureCollection = DataIOHandler.DeserializeGMLFile(inputFile);
+
+            featureCollection.FeatureCollectionElements.Count.Should().Be(2);
+
+            (featureCollection.FeatureCollectionElements[1] is FeatureMember).Should().BeTrue();
+
+            var featureMember = featureCollection.FeatureCollectionElements[1] as FeatureMember;
+            (featureMember.Dummy.GeometryProperty.AbstractGeometricPrimitive is MultiSurface).Should().BeTrue();
+
+            var multiSurface = featureMember.Dummy.GeometryProperty.AbstractGeometricPrimitive as MultiSurface;
+            multiSurface.SurfaceMembers.Count.Should().Be(3);
+
+            (multiSurface.SurfaceMembers[0].AbstractSurface is Polygon).Should().BeTrue();
+
+            var polygon = multiSurface.SurfaceMembers[0].AbstractSurface as Polygon;
+            polygon.Exterior.LinearRing.PosList.value.Substring(0, 10).Should().Be("55.1332054");
+        }
+
+        [Fact]
+        public void ReadDataFromGMLFileIntoXmlDocument()
+        {
+            // Det kan man godt - så vil vi bagefter prøve at deserialisere med udgangspunkt i en node UNDER 
+            var xmlDoc = new XmlDocument();
+            xmlDoc.Load(@".\Data\From QGIS\Dummy.gml");
         }
     }
 }

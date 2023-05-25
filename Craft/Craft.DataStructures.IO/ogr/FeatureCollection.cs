@@ -11,7 +11,7 @@ namespace Craft.DataStructures.IO.ogr
         public string SchemaLocation { get; set; }
 
         [XmlElement(Type = typeof(BoundedBy), Namespace = "http://www.opengis.net/gml/3.2", ElementName = "boundedBy"),
-         XmlElement(Type = typeof(FeatureMember))]
+         XmlElement(Type = typeof(FeatureMember), ElementName = "featureMember")]
         public ArrayList FeatureCollectionElements { get; set; }
     }
 }
