@@ -407,11 +407,11 @@ namespace Craft.DataStructures.IO.UnitTest
             DataIOHandler.SerializeGMLFeatureCollection(featureCollection, outputFile);
         }
 
+        // This only works when deserializing a gml file that was named "Dummy" when exported from QGIS
         [Fact]
         public void Given_GmlFileExportedFromQGIS_When_DeserializingFile_Then_ItSucceeds()
         {
             var inputFile = @".\Data\From QGIS\Dummy.gml";
-            //var inputFile = @".\Data\Serialized\Denmark.gml";
 
             var featureCollection = DataIOHandler.DeserializeGMLFile(inputFile);
 
@@ -457,9 +457,41 @@ namespace Craft.DataStructures.IO.UnitTest
         [Fact]
         public void ReadDataFromGMLFileIntoXmlDocument()
         {
-            // Det kan man godt - så vil vi bagefter prøve at deserialisere med udgangspunkt i en node UNDER 
             var xmlDoc = new XmlDocument();
             xmlDoc.Load(@".\Data\From QGIS\Dummy.gml");
+
+            var nodeList = xmlDoc.GetElementsByTagName("ogr:FeatureCollection");
+
+            foreach (var node in nodeList[0].ChildNodes)
+            {
+                if (node is not XmlElement xmlElement ||
+                    xmlElement.LocalName != "featureMember") continue;
+
+                var geometryProperties = xmlElement.GetElementsByTagName("ogr:geometryProperty");
+
+                if (geometryProperties.Count != 1)
+                {
+                    throw new InvalidOperationException("Unexpected situation occurred");
+                }
+
+                //var dummy= xmlElement.GetElementsByTagName("gml:posList");
+                var dummy= xmlElement.GetElementsByTagName("gml:LinearRing");
+
+                var node1 = dummy[0];
+
+                var xRoot = new XmlRootAttribute();
+                //xRoot.ElementName = "posList";
+                xRoot.ElementName = "LinearRing";
+                xRoot.Namespace = "http://www.opengis.net/gml/3.2";
+                xRoot.IsNullable = true;
+
+                var serializer = new XmlSerializer(typeof(LinearRing), xRoot);
+
+                using (var xmlNodeReader = new XmlNodeReader(node1))
+                {
+                    var temp = serializer.Deserialize(xmlNodeReader);
+                }
+            }
         }
     }
 }
