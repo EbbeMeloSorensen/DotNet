@@ -460,36 +460,42 @@ namespace Craft.DataStructures.IO.UnitTest
             var xmlDoc = new XmlDocument();
             xmlDoc.Load(@".\Data\From QGIS\Dummy.gml");
 
+            var xRoot = new XmlRootAttribute
+            {
+                ElementName = "geometryProperty",
+                Namespace = "http://ogr.maptools.org/",
+                IsNullable = true
+            };
+
+            var serializer = DataIOHandler.GenerateGmlSerializer(typeof(GeometryProperty), xRoot);
+
             var nodeList = xmlDoc.GetElementsByTagName("ogr:FeatureCollection");
 
             foreach (var node in nodeList[0].ChildNodes)
             {
+                // We're only interested in the feature members, i.e. not the boundedBy member
                 if (node is not XmlElement xmlElement ||
                     xmlElement.LocalName != "featureMember") continue;
 
                 var geometryProperties = xmlElement.GetElementsByTagName("ogr:geometryProperty");
 
-                if (geometryProperties.Count != 1)
+                foreach (var temp in geometryProperties)
                 {
-                    throw new InvalidOperationException("Unexpected situation occurred");
-                }
+                    using var xmlNodeReader = new XmlNodeReader(temp as XmlNode);
 
-                //var dummy= xmlElement.GetElementsByTagName("gml:posList");
-                var dummy= xmlElement.GetElementsByTagName("gml:LinearRing");
+                    // Act
+                    var geometryProperty = serializer.Deserialize(xmlNodeReader) as GeometryProperty;
 
-                var node1 = dummy[0];
+                    // Assert
+                    (geometryProperty.AbstractGeometricPrimitive is MultiSurface).Should().BeTrue();
 
-                var xRoot = new XmlRootAttribute();
-                //xRoot.ElementName = "posList";
-                xRoot.ElementName = "LinearRing";
-                xRoot.Namespace = "http://www.opengis.net/gml/3.2";
-                xRoot.IsNullable = true;
+                    var multiSurface = geometryProperty.AbstractGeometricPrimitive as MultiSurface;
+                    multiSurface.SurfaceMembers.Count.Should().Be(15);
 
-                var serializer = new XmlSerializer(typeof(LinearRing), xRoot);
+                    (multiSurface.SurfaceMembers[0].AbstractSurface is Polygon).Should().BeTrue();
 
-                using (var xmlNodeReader = new XmlNodeReader(node1))
-                {
-                    var temp = serializer.Deserialize(xmlNodeReader);
+                    var polygon = multiSurface.SurfaceMembers[0].AbstractSurface as Polygon;
+                    polygon.Exterior.LinearRing.PosList.value.Substring(0, 10).Should().Be("55.1332054");
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Craft.DataStructures.IO
         private static XmlSerializer _graphmlSerializer;
         private static XmlSerializerNamespaces _graphmlSerializerNamespaces;
 
-        private static XmlSerializer _gmlSerializer;
+        private static XmlAttributeOverrides _gmlAttributeOverrides;
         private static XmlSerializerNamespaces _gmlSerializerNamespaces;
 
         public static void SerializeGraphML(
@@ -37,7 +38,7 @@ namespace Craft.DataStructures.IO
             string fileName)
         {
             using var writer = new StreamWriter(fileName);
-            GmlSerializer.Serialize(writer, featureCollection, GMLSerializerNamespaces);
+            GenerateGmlSerializer().Serialize(writer, featureCollection, GMLSerializerNamespaces);
             writer.Close();
         }
 
@@ -48,7 +49,7 @@ namespace Craft.DataStructures.IO
 
             using (var streamReader = new StreamReader(fileName))
             {
-                result = GmlSerializer.Deserialize(streamReader) as FeatureCollection;
+                result = GenerateGmlSerializer().Deserialize(streamReader) as FeatureCollection;
             }
 
             if (result == null)
@@ -121,75 +122,80 @@ namespace Craft.DataStructures.IO
             }
         }
 
-        private static XmlSerializer GmlSerializer
+        private static XmlAttributeOverrides GmlAttributeOverrides
         {
             get
             {
-                if (_gmlSerializer != null)
-                    return _gmlSerializer;
+                if (_gmlAttributeOverrides != null)
+                {
+                    return _gmlAttributeOverrides;
+                }
 
                 var attrs1 = new XmlAttributes();
 
-                var attr1 = new XmlElementAttribute
+                attrs1.XmlElements.Add(new XmlElementAttribute
                 {
                     ElementName = "Point",
                     Type = typeof(Point),
                     Namespace = "http://www.opengis.net/gml/3.2"
-                };
+                });
 
-                var attr2 = new XmlElementAttribute
+                attrs1.XmlElements.Add(new XmlElementAttribute
                 {
                     ElementName = "MultiSurface",
                     Type = typeof(MultiSurface),
                     Namespace = "http://www.opengis.net/gml/3.2"
-                };
+                });
 
-                var attr2b = new XmlElementAttribute
+                attrs1.XmlElements.Add(new XmlElementAttribute
                 {
                     ElementName = "MultiLineString",
                     Type = typeof(MultiLineString),
                     Namespace = "http://www.opengis.net/gml/3.2"
-                };
-
-                attrs1.XmlElements.Add(attr1);
-                attrs1.XmlElements.Add(attr2);
-                attrs1.XmlElements.Add(attr2b);
+                });
 
                 var attrs2 = new XmlAttributes();
-                var attr22 = new XmlElementAttribute
+                attrs2.XmlElements.Add(new XmlElementAttribute
                 {
                     ElementName = "surfaceMember",
                     Type = typeof(SurfaceMember)
-                };
-                attrs2.XmlElements.Add(attr22);
+                });
 
                 var attrs3 = new XmlAttributes();
-                var attr33 = new XmlElementAttribute
+                attrs3.XmlElements.Add(new XmlElementAttribute
                 {
                     ElementName = "Polygon",
                     Type = typeof(Polygon),
                     Namespace = "http://www.opengis.net/gml/3.2"
-                };
-                attrs3.XmlElements.Add(attr33);
-                 
+                });
+
                 var attrs4 = new XmlAttributes();
-                var attr44 = new XmlElementAttribute
+                attrs4.XmlElements.Add(new XmlElementAttribute
                 {
                     ElementName = "lineStringMember",
                     Type = typeof(LineStringMember)
-                };
-                attrs4.XmlElements.Add(attr44);
+                });
 
-                var attrOverrides = new XmlAttributeOverrides();
-                attrOverrides.Add(typeof(GeometryProperty), "AbstractGeometricPrimitive", attrs1);
-                attrOverrides.Add(typeof(MultiSurface), "SurfaceMembers", attrs2);
-                attrOverrides.Add(typeof(SurfaceMember), "AbstractSurface", attrs3);
-                attrOverrides.Add(typeof(MultiLineString), "LineStringMembers", attrs4);
+                _gmlAttributeOverrides = new XmlAttributeOverrides();
+                _gmlAttributeOverrides.Add(typeof(GeometryProperty), "AbstractGeometricPrimitive", attrs1);
+                _gmlAttributeOverrides.Add(typeof(MultiSurface), "SurfaceMembers", attrs2);
+                _gmlAttributeOverrides.Add(typeof(SurfaceMember), "AbstractSurface", attrs3);
+                _gmlAttributeOverrides.Add(typeof(MultiLineString), "LineStringMembers", attrs4);
 
-                _gmlSerializer = new XmlSerializer(typeof(FeatureCollection), attrOverrides);
-
-                return _gmlSerializer;
+                return _gmlAttributeOverrides;
             }
+        }
+
+        private static XmlSerializer GenerateGmlSerializer()
+        {
+            return new XmlSerializer(typeof(FeatureCollection), GmlAttributeOverrides);
+        }
+
+        public static XmlSerializer GenerateGmlSerializer(
+            Type type,
+            XmlRootAttribute xRoot)
+        {
+            return new XmlSerializer(type, GmlAttributeOverrides, null, xRoot, null);
         }
 
         private static XmlSerializerNamespaces GMLSerializerNamespaces
