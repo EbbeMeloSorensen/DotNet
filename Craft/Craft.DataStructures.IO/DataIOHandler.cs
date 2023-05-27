@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Serialization;
 using Craft.DataStructures.Graph;
 using Craft.DataStructures.IO.gml;
@@ -11,6 +13,7 @@ using Craft.DataStructures.IO.graphml.x;
 using Craft.DataStructures.IO.graphml.y;
 using Craft.DataStructures.IO.graphml.yjs;
 using Craft.DataStructures.IO.ogr;
+using Craft.Utils.Linq;
 
 namespace Craft.DataStructures.IO
 {
@@ -58,6 +61,92 @@ namespace Craft.DataStructures.IO
             }
 
             return result;
+        }
+
+        public static void ExtractGeometricPrimitivesFromGMLFile(
+            string fileName,
+            out List<List<double[]>> polygons)
+        {
+            var xmlDoc = new XmlDocument();
+            xmlDoc.Load(fileName);
+
+            var xRoot = new XmlRootAttribute
+            {
+                ElementName = "geometryProperty",
+                Namespace = "http://ogr.maptools.org/",
+                IsNullable = true
+            };
+
+            var serializer = GenerateGmlSerializer(typeof(GeometryProperty), xRoot);
+
+            var nodeList = xmlDoc.GetElementsByTagName("ogr:FeatureCollection");
+
+            polygons = new List<List<double[]>>();
+
+            foreach (var node in nodeList[0].ChildNodes)
+            {
+                // We're only interested in the feature members, i.e. not the boundedBy member
+                if (!(node is XmlElement xmlElement) ||
+                    xmlElement.LocalName != "featureMember")
+                {
+                    continue;
+                }
+
+                var geometryProperties = xmlElement.GetElementsByTagName("ogr:geometryProperty");
+
+                foreach (var temp in geometryProperties)
+                {
+                    using var xmlNodeReader = new XmlNodeReader(temp as XmlNode);
+
+                    var geometryProperty = serializer.Deserialize(xmlNodeReader) as GeometryProperty;
+
+                    switch (geometryProperty.AbstractGeometricPrimitive)
+                    {
+                        case Point point:
+                        {
+                            throw new NotImplementedException();
+                        }
+                        case MultiLineString multiLineString:
+                        {
+                            throw new NotImplementedException();
+                        }
+                        case MultiSurface multiSurface:
+                        {
+                            foreach (var surfaceMember in multiSurface.SurfaceMembers)
+                            {
+                                switch (surfaceMember.AbstractSurface)
+                                {
+                                    case Polygon polygon:
+                                    {
+                                        polygons.Add(polygon.Exterior.LinearRing.PosList.value
+                                            .Split(' ')
+                                            .Select(number => double.Parse(
+                                                number, CultureInfo.InvariantCulture))
+                                            .Partition(2)
+                                            .ToList());
+
+                                        break;
+                                    }
+                                }
+                            }
+
+                            break;
+                        }
+                        case AbstractCurve abstractCurve:
+                        {
+                            throw new NotImplementedException();
+                        }
+                        case AbstractSurface abstractSurface:
+                        {
+                            throw new NotImplementedException();
+                        }
+                        case AbstractSolid abstractSolid:
+                        {
+                            throw new NotImplementedException();
+                        }
+                    }
+                }
+            }
         }
 
         private static XmlSerializer GraphmlSerializer

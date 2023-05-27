@@ -6,8 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Craft.DataStructures\Craft.DataStructures.csproj" />
-    <ProjectReference Include="..\Craft.Utils\Craft.Utils.csproj" />
+    <Folder Include="Linq\" />
   </ItemGroup>
 
 </Project>

@@ -26,6 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Data\From QGIS\MultipleCountries.gml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Data\From QGIS\Denmark.gml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
