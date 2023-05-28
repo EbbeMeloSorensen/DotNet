@@ -949,7 +949,8 @@ namespace DMI.Data.Studio.ViewModel
         private void DrawMapOfDenmark()
         {
             // Load GML file of Denmark
-            var fileName = @".\Data\Denmark.gml";
+            //var fileName = @".\Data\Denmark.gml";
+            var fileName = @".\Data\DenmarkAndGreenland.gml";
             Craft.DataStructures.IO.DataIOHandler.ExtractGeometricPrimitivesFromGMLFile(fileName, out var polygons);
 
             // Add the regions of Denmark to the map as polygons
