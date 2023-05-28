@@ -24,4 +24,10 @@
     <ProjectReference Include="..\DMI.Data.Studio.ViewModel\DMI.Data.Studio.ViewModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\Denmark.gml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

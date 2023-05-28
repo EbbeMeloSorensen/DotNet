@@ -298,7 +298,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{46828317-388D-4C22-ACBB-B46F850655F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.Data.Studio.Application", "DMI.Data.Studio.Application\DMI.Data.Studio.Application.csproj", "{06E404B4-7B99-43C8-A66B-3B0DA5D03728}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.Data.Studio.Application", "DMI.Data.Studio.Application\DMI.Data.Studio.Application.csproj", "{06E404B4-7B99-43C8-A66B-3B0DA5D03728}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{B62390A8-C48B-4B99-B2F1-BBA115E4F322}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO", "..\..\Craft\Craft.DataStructures.IO\Craft.DataStructures.IO.csproj", "{EC934E99-AFA0-4AF0-85D5-CE7FEE55264A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -454,6 +458,14 @@ Global
 		{06E404B4-7B99-43C8-A66B-3B0DA5D03728}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06E404B4-7B99-43C8-A66B-3B0DA5D03728}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06E404B4-7B99-43C8-A66B-3B0DA5D03728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B62390A8-C48B-4B99-B2F1-BBA115E4F322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B62390A8-C48B-4B99-B2F1-BBA115E4F322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B62390A8-C48B-4B99-B2F1-BBA115E4F322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B62390A8-C48B-4B99-B2F1-BBA115E4F322}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC934E99-AFA0-4AF0-85D5-CE7FEE55264A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC934E99-AFA0-4AF0-85D5-CE7FEE55264A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC934E99-AFA0-4AF0-85D5-CE7FEE55264A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC934E99-AFA0-4AF0-85D5-CE7FEE55264A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

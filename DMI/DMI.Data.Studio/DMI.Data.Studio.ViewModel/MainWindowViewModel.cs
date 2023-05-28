@@ -211,7 +211,6 @@ namespace DMI.Data.Studio.ViewModel
                 StationInformationListViewModel.RowCharacteristicsMap);
 
             GeometryEditorViewModel = new MathematicalGeometryEditorViewModel(100, 7.92, 54.82);
-            DrawRoughOutlineOfDenmarkOnMap();
             
             ChronologyViewModel = new ChronologyViewModel(new DateTime(2015, 1, 1), DateTime.UtcNow.TruncateToMilliseconds(), 50, 240);
 
@@ -233,6 +232,9 @@ namespace DMI.Data.Studio.ViewModel
             _includeOperationIntervalBars = true;
             _includeObservationIntervalBars = false;
             _includeTransactionTimeIntervalBars = true;
+
+            //DrawRoughOutlineOfDenmarkOnMap();
+            DrawMapOfDenmark();
         }
 
         private void StationInformationDetailsViewModel_RepositoryOperationPerformed(
@@ -942,6 +944,22 @@ namespace DMI.Data.Studio.ViewModel
             GeometryEditorViewModel.AddLine(gronland_p6, gronland_p7, lineThickness, brush);
             GeometryEditorViewModel.AddLine(gronland_p7, gronland_p8, lineThickness, brush);
             GeometryEditorViewModel.AddLine(gronland_p8, gronland_p1, lineThickness, brush);
+        }
+
+        private void DrawMapOfDenmark()
+        {
+            // Load GML file of Denmark
+            var fileName = @".\Data\Denmark.gml";
+            Craft.DataStructures.IO.DataIOHandler.ExtractGeometricPrimitivesFromGMLFile(fileName, out var polygons);
+
+            // Add the regions of Denmark to the map as polygons
+            var lineThickness = 0.005;
+            var brush = new SolidColorBrush(new Color { R = 150, G = 255, B = 150, A = 127});
+
+            foreach (var polygon in polygons)
+            {
+                GeometryEditorViewModel.AddPolygon(polygon.Select(p => new PointD(p[1], p[0])), lineThickness, brush);
+            }
         }
     }
 }

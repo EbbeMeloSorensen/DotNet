@@ -572,7 +572,8 @@ namespace DMI.SMS.ViewModel
         private void DrawMapOfDenmark()
         {
             // Load GML file of Denmark
-            Craft.DataStructures.IO.DataIOHandler.ExtractGeometricPrimitivesFromGMLFile(@"C:\Temp\Denmark.gml", out var polygons);
+            var fileName = @".\Data\Denmark.gml";
+            Craft.DataStructures.IO.DataIOHandler.ExtractGeometricPrimitivesFromGMLFile(fileName, out var polygons);
 
             // Add the regions of Denmark to the map as polygons
             var lineThickness = 0.005;
