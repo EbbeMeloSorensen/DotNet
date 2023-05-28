@@ -34,8 +34,11 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Polygon Stroke="Black" Fill="Purple" StrokeThickness="1" 
-                          Points="{Binding Points}">
+                    <Polygon
+                        Stroke="Black" 
+                        Fill="{Binding Brush}"
+                        StrokeThickness="{Binding Thickness}"
+                        Points="{Binding Points}">
                         <Polygon.RenderTransform>
                             <MatrixTransform Matrix="{Binding 
                                 Path=DataContext.TransformationMatrix, 

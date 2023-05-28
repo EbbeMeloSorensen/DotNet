@@ -204,9 +204,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         }
 
         public virtual void AddPolygon(
-            IEnumerable<PointD> points)
+            IEnumerable<PointD> points,
+            double thickness,
+            Brush brush)
         {
-            PolygonViewModels.Add(new PolygonViewModel(points));
+            PolygonViewModels.Add(new PolygonViewModel(points, thickness, brush));
         }
 
         public void ClearPoints()

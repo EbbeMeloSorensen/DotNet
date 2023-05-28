@@ -27,14 +27,19 @@ namespace Craft.UIElements.GuiTest.Tab3
             GeometryEditorViewModel geometryEditorViewModel)
         {
             // Frame
+            var frameBrush = new SolidColorBrush(Colors.DarkRed);
+            var frameThickness = 3.0;
+
             geometryEditorViewModel.AddPolygon(new List<PointD>
-            {
-                new PointD(0, 0),
-                new PointD(0, 200),
-                new PointD(200, 300),
-                new PointD(400, 200),
-                new PointD(400, 0)
-            });
+                {
+                    new PointD(0, 0),
+                    new PointD(0, 200),
+                    new PointD(200, 300),
+                    new PointD(400, 200),
+                    new PointD(400, 0)
+                },
+                frameThickness,
+                frameBrush);
 
             // Door
             var doorAndWindowFrameBrush = new SolidColorBrush(Colors.GhostWhite);
