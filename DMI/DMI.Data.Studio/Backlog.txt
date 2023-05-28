@@ -7,6 +7,9 @@ Done:
 * Man skal kunne køre stationfetcher fra DMI.Data.Studio og ikke bare fra DMI.SMS
 
 Todo:
+* Lav en feature, hvor man for de valgte stationer kan generere datafiler over de rå observationer samt filer over tidsintervaller
+  - det må meget gerne ligge tilgængeligt i konsol-applikationen, så det kan køres fra Linux
+* Gør det muligt at eksportere en tidsserie til WMDR-format
 * Undersøg, om man kan refaktorere station fetcheren, så den også virker selv om man ændrer brugen
   - pt hiver du alle stationer op, som har det rigtige stationsid og den rigtige stationstype, og så sorterer du på
     gdb_from_date. Hvis du så laver nye data, så tolkes de som nye stationer, og så kommer der jo altså flere stationer med samme navn osv i listen
