@@ -123,15 +123,16 @@ namespace DMI.SMS.ViewModel
             OpenSettingsDialogCommand = new RelayCommand<object>(OpenSettingsDialog);
 
             var lineThickness = 0.02;
+            var brush = new SolidColorBrush(Colors.Black);
 
             var fyn_p1 = new PointD(9.8, 55.36);
             var fyn_p2 = new PointD(10.31, 55.62);
             var fyn_p3 = new PointD(10.83, 55.23);
             var fyn_p4 = new PointD(10.3, 55.05);
-            GeometryEditorViewModel.AddLine(fyn_p1, fyn_p2, lineThickness);
-            GeometryEditorViewModel.AddLine(fyn_p2, fyn_p3, lineThickness);
-            GeometryEditorViewModel.AddLine(fyn_p3, fyn_p4, lineThickness);
-            GeometryEditorViewModel.AddLine(fyn_p4, fyn_p1, lineThickness);
+            GeometryEditorViewModel.AddLine(fyn_p1, fyn_p2, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(fyn_p2, fyn_p3, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(fyn_p3, fyn_p4, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(fyn_p4, fyn_p1, lineThickness, brush);
 
             var jylland_p1 = new PointD(8.65, 54.92);
             var jylland_p2 = new PointD(8.08, 55.57);
@@ -146,30 +147,30 @@ namespace DMI.SMS.ViewModel
             var jylland_p11 = new PointD(10.2, 55.83);
             var jylland_p12 = new PointD(9.6, 55.42);
             var jylland_p13 = new PointD(9.46, 54.84);
-            GeometryEditorViewModel.AddLine(jylland_p1, jylland_p2, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p2, jylland_p3, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p3, jylland_p4, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p4, jylland_p5, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p5, jylland_p6, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p6, jylland_p7, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p7, jylland_p8, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p8, jylland_p9, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p9, jylland_p10, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p10, jylland_p11, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p11, jylland_p12, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p12, jylland_p13, lineThickness);
-            GeometryEditorViewModel.AddLine(jylland_p13, jylland_p1, lineThickness);
+            GeometryEditorViewModel.AddLine(jylland_p1, jylland_p2, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p2, jylland_p3, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p3, jylland_p4, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p4, jylland_p5, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p5, jylland_p6, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p6, jylland_p7, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p7, jylland_p8, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p8, jylland_p9, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p9, jylland_p10, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p10, jylland_p11, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p11, jylland_p12, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p12, jylland_p13, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(jylland_p13, jylland_p1, lineThickness, brush);
 
             var sjalland_p1 = new PointD(10.98, 55.74);
             var sjalland_p2 = new PointD(12.26, 56.14);
             var sjalland_p3 = new PointD(12.67, 55.6);
             var sjalland_p4 = new PointD(12.05, 54.98);
             var sjalland_p5 = new PointD(11.22, 55.2);
-            GeometryEditorViewModel.AddLine(sjalland_p1, sjalland_p2, lineThickness);
-            GeometryEditorViewModel.AddLine(sjalland_p2, sjalland_p3, lineThickness);
-            GeometryEditorViewModel.AddLine(sjalland_p3, sjalland_p4, lineThickness);
-            GeometryEditorViewModel.AddLine(sjalland_p4, sjalland_p5, lineThickness);
-            GeometryEditorViewModel.AddLine(sjalland_p5, sjalland_p1, lineThickness);
+            GeometryEditorViewModel.AddLine(sjalland_p1, sjalland_p2, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(sjalland_p2, sjalland_p3, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(sjalland_p3, sjalland_p4, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(sjalland_p4, sjalland_p5, lineThickness, brush);
+            GeometryEditorViewModel.AddLine(sjalland_p5, sjalland_p1, lineThickness, brush);
         }
 
         private void CreateStationInformation(
