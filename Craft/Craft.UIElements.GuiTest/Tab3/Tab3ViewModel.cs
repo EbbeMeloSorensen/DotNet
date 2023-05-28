@@ -1,4 +1,5 @@
-﻿using Craft.Utils;
+﻿using System.Collections.Generic;
+using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Geometry2D.Scrolling;
 using GalaSoft.MvvmLight;
@@ -17,7 +18,6 @@ namespace Craft.UIElements.GuiTest.Tab3
             GeometryEditorViewModel2 = new MathematicalGeometryEditorViewModel(1, 250, 75);
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
-            //LineViewModel.Thickness = 0.5;
             DrawAHouse(GeometryEditorViewModel1);
             DrawAHouse(GeometryEditorViewModel2);
         }
@@ -26,11 +26,14 @@ namespace Craft.UIElements.GuiTest.Tab3
             GeometryEditorViewModel geometryEditorViewModel)
         {
             // Frame
-            geometryEditorViewModel.AddLine(new PointD(0, 0), new PointD(0, 200), 1);
-            geometryEditorViewModel.AddLine(new PointD(0, 200), new PointD(200, 300), 1);
-            geometryEditorViewModel.AddLine(new PointD(200, 300), new PointD(400, 200), 1);
-            geometryEditorViewModel.AddLine(new PointD(400, 200), new PointD(400, 0), 1);
-            geometryEditorViewModel.AddLine(new PointD(400, 0), new PointD(0, 0), 1);
+            geometryEditorViewModel.AddPolygon(new List<PointD>
+            {
+                new PointD(0, 0),
+                new PointD(0, 200),
+                new PointD(200, 300),
+                new PointD(400, 200),
+                new PointD(400, 0)
+            });
 
             // Door
             geometryEditorViewModel.AddLine(new PointD(50, 0), new PointD(50, 150), 0.5);

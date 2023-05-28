@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
@@ -58,6 +61,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 new PointD(point1.X, -point1.Y),
                 new PointD(point2.X, -point2.Y),
                 thickness));
+        }
+
+        public override void AddPolygon(
+            IEnumerable<PointD> points)
+        {
+            PolygonViewModels.Add(new PolygonViewModel(points.Select(p => new PointD(p.X, -p.Y))));
         }
     }
 }

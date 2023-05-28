@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Craft.Utils;
 using GalaSoft.MvvmLight;
+using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
@@ -120,7 +120,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        public System.Windows.Media.Matrix TransformationMatrix
+        public Matrix TransformationMatrix
         {
             get { return _transformationMatrix; }
             set
@@ -129,6 +129,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 RaisePropertyChanged();
             }
         }
+
+        public ObservableCollection<PolygonViewModel> PolygonViewModels { get; }
 
         public ObservableCollection<PointViewModel> PointViewModels { get; }
 
@@ -156,6 +158,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _worldWindowUpperLeft = new Point(initialWorldWindowUpperLeftX, initialWorldWindowUpperLeftY);
             _defaultBrush = new SolidColorBrush(Colors.Black);
 
+            PolygonViewModels = new ObservableCollection<PolygonViewModel>();
             PointViewModels = new ObservableCollection<PointViewModel>();
             ShapeViewModels = new ObservableCollection<ShapeViewModel>();
             LineViewModels = new ObservableCollection<LineViewModel>();
@@ -197,6 +200,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double thickness)
         {
             LineViewModels.Add(new LineViewModel(point1, point2, thickness));
+        }
+
+        public virtual void AddPolygon(
+            IEnumerable<PointD> points)
+        {
+            PolygonViewModels.Add(new PolygonViewModel(points));
         }
 
         public void ClearPoints()
@@ -315,7 +324,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         protected void UpdateTransformationMatrix()
         {
-            TransformationMatrix = new System.Windows.Media.Matrix(
+            TransformationMatrix = new Matrix(
                 _magnification,
                 0,
                 0,

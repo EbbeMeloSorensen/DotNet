@@ -26,6 +26,26 @@
             </Image.RenderTransform>
         </Image>
 
+        <ItemsControl ItemsSource="{Binding PolygonViewModels}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Polygon Stroke="Black" Fill="Purple" StrokeThickness="1" 
+                          Points="{Binding Points}">
+                        <Polygon.RenderTransform>
+                            <MatrixTransform Matrix="{Binding 
+                                Path=DataContext.TransformationMatrix, 
+                                RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </Polygon.RenderTransform>
+                    </Polygon>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
         <ItemsControl ItemsSource="{Binding LineViewModels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -34,7 +54,8 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Line Stroke="Black" StrokeThickness="{Binding Thickness}" 
+                    <Line Stroke="Black" 
+                          StrokeThickness="{Binding Thickness}" 
                           X1="{Binding Point1.X}" 
                           Y1="{Binding Point1.Y}" 
                           X2="{Binding Point2.X}" 
