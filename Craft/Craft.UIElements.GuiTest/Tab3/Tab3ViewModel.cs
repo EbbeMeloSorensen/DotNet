@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Geometry2D.Scrolling;
@@ -36,9 +37,12 @@ namespace Craft.UIElements.GuiTest.Tab3
             });
 
             // Door
-            geometryEditorViewModel.AddLine(new PointD(50, 0), new PointD(50, 150), 0.5);
-            geometryEditorViewModel.AddLine(new PointD(50, 150), new PointD(150, 150), 0.5);
-            geometryEditorViewModel.AddLine(new PointD(150, 150), new PointD(150, 0), 0.5);
+            var doorAndWindowFrameBrush = new SolidColorBrush(Colors.GhostWhite);
+            var doorAndWindowFrameThickness = 2;
+
+            geometryEditorViewModel.AddLine(new PointD(50, 0), new PointD(50, 150), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
+            geometryEditorViewModel.AddLine(new PointD(50, 150), new PointD(150, 150), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
+            geometryEditorViewModel.AddLine(new PointD(150, 150), new PointD(150, 0), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
             geometryEditorViewModel.AddShape(1, new RectangleViewModel
             {
                 Point = new PointD(100, 75),
@@ -47,10 +51,10 @@ namespace Craft.UIElements.GuiTest.Tab3
             });
 
             // Window
-            geometryEditorViewModel.AddLine(new PointD(250, 75), new PointD(250, 150), 0.5);
-            geometryEditorViewModel.AddLine(new PointD(250, 150), new PointD(350, 150), 0.5);
-            geometryEditorViewModel.AddLine(new PointD(350, 150), new PointD(350, 75), 0.5);
-            geometryEditorViewModel.AddLine(new PointD(350, 75), new PointD(250, 75), 0.5);
+            geometryEditorViewModel.AddLine(new PointD(250, 75), new PointD(250, 150), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
+            geometryEditorViewModel.AddLine(new PointD(250, 150), new PointD(350, 150), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
+            geometryEditorViewModel.AddLine(new PointD(350, 150), new PointD(350, 75), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
+            geometryEditorViewModel.AddLine(new PointD(350, 75), new PointD(250, 75), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
             geometryEditorViewModel.AddShape(2, new RectangleViewModel
             {
                 Point = new PointD(300, 112.5),
@@ -59,6 +63,8 @@ namespace Craft.UIElements.GuiTest.Tab3
             });
 
             // Sun
+            var sunRayBrush = new SolidColorBrush(Colors.DarkOrange);
+
             geometryEditorViewModel.AddPoint(new PointD(385, 415), 10);
             geometryEditorViewModel.AddPoint(new PointD(415, 415), 10);
             geometryEditorViewModel.AddShape(3, new EllipseViewModel
@@ -68,10 +74,10 @@ namespace Craft.UIElements.GuiTest.Tab3
                 Height = 80
             });
 
-            geometryEditorViewModel.AddLine(new PointD(300, 400), new PointD(500, 400), 2);
-            geometryEditorViewModel.AddLine(new PointD(400, 300), new PointD(400, 500), 2);
-            geometryEditorViewModel.AddLine(new PointD(330, 330), new PointD(470, 470), 2);
-            geometryEditorViewModel.AddLine(new PointD(330, 470), new PointD(470, 330), 2);
+            geometryEditorViewModel.AddLine(new PointD(300, 400), new PointD(500, 400), 2, sunRayBrush);
+            geometryEditorViewModel.AddLine(new PointD(400, 300), new PointD(400, 500), 2, sunRayBrush);
+            geometryEditorViewModel.AddLine(new PointD(330, 330), new PointD(470, 470), 2, sunRayBrush);
+            geometryEditorViewModel.AddLine(new PointD(330, 470), new PointD(470, 330), 2, sunRayBrush);
         }
     }
 }

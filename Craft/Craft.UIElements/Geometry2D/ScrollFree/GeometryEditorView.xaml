@@ -54,7 +54,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Line Stroke="Black" 
+                    <Line Stroke="{Binding Brush}"
                           StrokeThickness="{Binding Thickness}" 
                           X1="{Binding Point1.X}" 
                           Y1="{Binding Point1.Y}" 

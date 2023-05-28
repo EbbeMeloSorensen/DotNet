@@ -29,7 +29,7 @@
 
     <DataTemplate x:Key="DoorAndWindow">
         <Canvas>
-            <Rectangle Fill="DarkRed" 
+            <Rectangle Fill="LightGray" 
                        Width="{Binding Width}" 
                        Height="{Binding Height}">
                 <Rectangle.RenderTransform>

@@ -197,9 +197,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public virtual void AddLine(
             PointD point1,
             PointD point2,
-            double thickness)
+            double thickness,
+            Brush brush)
         {
-            LineViewModels.Add(new LineViewModel(point1, point2, thickness));
+            LineViewModels.Add(new LineViewModel(point1, point2, thickness, brush));
         }
 
         public virtual void AddPolygon(

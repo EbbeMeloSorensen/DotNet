@@ -55,12 +55,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public override void AddLine(
             PointD point1,
             PointD point2,
-            double thickness)
+            double thickness,
+            Brush brush)
         {
             LineViewModels.Add(new LineViewModel(
                 new PointD(point1.X, -point1.Y),
                 new PointD(point2.X, -point2.Y),
-                thickness));
+                thickness,
+                brush));
         }
 
         public override void AddPolygon(
