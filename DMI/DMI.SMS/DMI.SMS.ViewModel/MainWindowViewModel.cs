@@ -3,16 +3,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows;
+using System.Globalization;
+using Microsoft.Win32;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Tasks;
 using DMI.SMS.Domain.Entities;
-using System.Globalization;
 
 namespace DMI.SMS.ViewModel
 {
@@ -120,7 +120,8 @@ namespace DMI.SMS.ViewModel
             ExtractOceanographicalStationsCommand = new AsyncCommand<object>(ExtractOceanographicalStations, CanExtractOceanographicalStations);
             OpenSettingsDialogCommand = new RelayCommand<object>(OpenSettingsDialog);
 
-            DrawRoughOutlineOfDenmarkOnMap();
+            DrawMapOfDenmark();
+            //DrawRoughOutlineOfDenmarkOnMap();
         }
 
         private void CreateStationInformation(
@@ -566,6 +567,21 @@ namespace DMI.SMS.ViewModel
             GeometryEditorViewModel.AddLine(gronland_p6, gronland_p7, lineThickness, brush);
             GeometryEditorViewModel.AddLine(gronland_p7, gronland_p8, lineThickness, brush);
             GeometryEditorViewModel.AddLine(gronland_p8, gronland_p1, lineThickness, brush);
+        }
+
+        private void DrawMapOfDenmark()
+        {
+            // Load GML file of Denmark
+            Craft.DataStructures.IO.DataIOHandler.ExtractGeometricPrimitivesFromGMLFile(@"C:\Temp\Denmark.gml", out var polygons);
+
+            // Add the regions of Denmark to the map as polygons
+            var lineThickness = 0.005;
+            var brush = new SolidColorBrush(Colors.DimGray);
+
+            foreach (var polygon in polygons)
+            {
+                GeometryEditorViewModel.AddPolygon(polygon.Select(p => new PointD(p[1], p[0])), lineThickness, brush);
+            }
         }
     }
 }

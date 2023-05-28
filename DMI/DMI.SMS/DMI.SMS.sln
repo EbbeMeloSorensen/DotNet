@@ -282,9 +282,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityFrameworkCore.Helper", "DMI.SMS.Persistence.EntityFrameworkCore.Helper\DMI.SMS.Persistence.EntityFrameworkCore.Helper.csproj", "{42A5B9BB-ADC6-41C0-B659-7E1969E16DEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL", "DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL\DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{438C2C02-1736-4097-965F-64C1E86824BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL", "DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL\DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{438C2C02-1736-4097-965F-64C1E86824BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.EntityFrameworkCore.Sqlite", "DMI.SMS.Persistence.EntityFrameworkCore.Sqlite\DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.csproj", "{EB6CDA0F-A136-456F-BAE9-913A15326697}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityFrameworkCore.Sqlite", "DMI.SMS.Persistence.EntityFrameworkCore.Sqlite\DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.csproj", "{EB6CDA0F-A136-456F-BAE9-913A15326697}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO", "..\..\Craft\Craft.DataStructures.IO\Craft.DataStructures.IO.csproj", "{910456A4-5AC0-4ADE-B03E-CBCB6CDFCF59}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{9A9715A0-9240-4EFD-8172-33C485E161A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -412,6 +416,14 @@ Global
 		{EB6CDA0F-A136-456F-BAE9-913A15326697}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB6CDA0F-A136-456F-BAE9-913A15326697}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB6CDA0F-A136-456F-BAE9-913A15326697}.Release|Any CPU.Build.0 = Release|Any CPU
+		{910456A4-5AC0-4ADE-B03E-CBCB6CDFCF59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910456A4-5AC0-4ADE-B03E-CBCB6CDFCF59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910456A4-5AC0-4ADE-B03E-CBCB6CDFCF59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910456A4-5AC0-4ADE-B03E-CBCB6CDFCF59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A9715A0-9240-4EFD-8172-33C485E161A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A9715A0-9240-4EFD-8172-33C485E161A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A9715A0-9240-4EFD-8172-33C485E161A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A9715A0-9240-4EFD-8172-33C485E161A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
