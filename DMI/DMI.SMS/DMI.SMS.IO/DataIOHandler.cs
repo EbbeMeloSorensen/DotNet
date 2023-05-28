@@ -191,6 +191,11 @@ namespace DMI.SMS.IO
             return result;
         }
 
+        // Først leder den efter en fil ved navn intervals.txt i den folder, der svarer til stationen.
+        // Hvis ikke den er der, så leder den i samme folder efter de rå observationer. Der skulle gerne ligge en fil pr år.
+        // Disse filer skal vel at mærke være genereret af et andet program, hvis det skal virke. Hvis ikke det er gjort, så
+        // får man bare ikke noget tilbage.
+        // Det kunne være en fin opgave at lade den GENERERE de filer, hvis den har adgang til databasen
         public List<Tuple<DateTime, DateTime>> ReadObservationIntervalsForStation(
             string directoryName,
             string searchPattern,
