@@ -19,8 +19,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Point _mousePositionViewport;
         private Point _mousePositionWorld;
         protected Point _worldWindowUpperLeft;
-        private double _magnification_x;
-        private double _magnification_y;
+        private Size _scaling;
         private Matrix _transformationMatrix;
         private Brush _defaultBrush;
         private Dictionary<PointD, Tuple<double, Brush>> _pointToDiameterMap;
@@ -68,8 +67,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 RaisePropertyChanged();
 
                 MousePositionWorld = new Point(
-                    _worldWindowUpperLeft.X + _mousePositionViewport.X / _magnification_x,
-                    _worldWindowUpperLeft.Y + _mousePositionViewport.Y / _magnification_y);
+                    _worldWindowUpperLeft.X + _mousePositionViewport.X / _scaling.Width,
+                    _worldWindowUpperLeft.Y + _mousePositionViewport.Y / _scaling.Height);
             }
         }
 
@@ -102,12 +101,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        public double MagnificationX
+        public Size Scaling
         {
-            get { return _magnification_x; }
+            get
+            {
+                return _scaling;
+            }
             set
             {
-                _magnification_x = value;
+                _scaling = value;
 
                 // Set the Size of the World Window, i.e. not its position. The World Window size only depends on magnification and viewport size
                 UpdateWorldWindowSize();
@@ -121,12 +123,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 RaisePropertyChanged();
             }
         }
-
-        public double MagnificationY
-        {
-            get { return _magnification_y; }
-        }
-
 
         public Matrix TransformationMatrix
         {
@@ -163,8 +159,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
             WorldWindowBottomRightLimit = new Point(double.MaxValue, double.MaxValue);
-            _magnification_x = initialMagnificationX;
-            _magnification_y = initialMagnificationY;
+            _scaling = new Size(initialMagnificationX, initialMagnificationY);
             _worldWindowUpperLeft = new Point(initialWorldWindowUpperLeftX, initialWorldWindowUpperLeftY);
             _defaultBrush = new SolidColorBrush(Colors.Black);
 
@@ -338,12 +333,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected void UpdateTransformationMatrix()
         {
             TransformationMatrix = new Matrix(
-                _magnification_x,
+                _scaling.Width,
                 0,
                 0,
-                _magnification_y,
-                -_worldWindowUpperLeft.X * _magnification_x,
-                -_worldWindowUpperLeft.Y * _magnification_y);
+                _scaling.Height,
+                -_worldWindowUpperLeft.X * _scaling.Width,
+                -_worldWindowUpperLeft.Y * _scaling.Height);
 
             UpdatePointViewModels();
         }
@@ -351,8 +346,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected void UpdateWorldWindowSize()
         {
             _worldWindowSize = new Size(
-                _viewPortSize.Width / _magnification_x,
-                _viewPortSize.Height / _magnification_y);
+                _viewPortSize.Width / _scaling.Width,
+                _viewPortSize.Height / _scaling.Height);
         }
 
         private void UpdatePointViewModels()
@@ -380,8 +375,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private PointD TransformPoint(PointD point)
         {
             return new PointD(
-                _magnification_x * point.X - _worldWindowUpperLeft.X * _magnification_x,
-                _magnification_y * point.Y - _worldWindowUpperLeft.Y * _magnification_y);
+                _scaling.Width * point.X - _worldWindowUpperLeft.X * _scaling.Width,
+                _scaling.Height * point.Y - _worldWindowUpperLeft.Y * _scaling.Height);
         }
     }
 }

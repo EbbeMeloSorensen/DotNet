@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree

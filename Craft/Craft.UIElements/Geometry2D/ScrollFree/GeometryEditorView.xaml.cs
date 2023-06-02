@@ -88,7 +88,9 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             }
             else if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
-                ViewModel.MagnificationX *= 2;
+                ViewModel.Scaling = new Size(
+                    ViewModel.Scaling.Width * 2,
+                    ViewModel.Scaling.Height * 2);
             }
             else
             {
@@ -116,7 +118,9 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
             if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
-                ViewModel.MagnificationX /= 2;
+                ViewModel.Scaling = new Size(
+                    ViewModel.Scaling.Width / 2,
+                    ViewModel.Scaling.Height / 2);
             }
         }
 
@@ -140,8 +144,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                 );
 
                 ViewModel.WorldWindowUpperLeft = new Point(
-                    _worldWindowUpperLeftInitial.X - mouseOffsetViewPort.X / ViewModel.MagnificationX,
-                    _worldWindowUpperLeftInitial.Y - mouseOffsetViewPort.Y / ViewModel.MagnificationY);
+                    _worldWindowUpperLeftInitial.X - mouseOffsetViewPort.X / ViewModel.Scaling.Width,
+                    _worldWindowUpperLeftInitial.Y - mouseOffsetViewPort.Y / ViewModel.Scaling.Height);
             }
         }
 
@@ -154,11 +158,15 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
             if (e.Delta > 0)
             {
-                ViewModel.MagnificationX *= 1.2;
+                ViewModel.Scaling = new Size(
+                    ViewModel.Scaling.Width * 1.2,
+                    ViewModel.Scaling.Height * 1.2);
             }
             else
             {
-                ViewModel.MagnificationX /= 1.2;
+                ViewModel.Scaling = new Size(
+                    ViewModel.Scaling.Width / 1.2,
+                    ViewModel.Scaling.Height / 1.2);
             }
         }
 
