@@ -11,7 +11,15 @@
         <TabItem Header="ScrollFree">
             <TabControl SelectedIndex="0">
                 <TabItem Header="Basic">
-                    <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel1}"/>
+                    <Grid>
+                        <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel1}"/>
+                        <StackPanel Margin="10">
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" 
+                                    Command="{Binding ZoomInForGeometryEditor1Command}" >Zoom In</Button>
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" 
+                                    Command="{Binding ZoomOutForGeometryEditor1Command}" >Zoom Out</Button>
+                        </StackPanel>
+                    </Grid>
                 </TabItem>
                 <TabItem Header="Mathematical">
                     <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel2}"/>

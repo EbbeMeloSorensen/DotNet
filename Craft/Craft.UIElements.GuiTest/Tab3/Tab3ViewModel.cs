@@ -4,11 +4,31 @@ using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Geometry2D.Scrolling;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 
 namespace Craft.UIElements.GuiTest.Tab3
 {
     public class Tab3ViewModel : ViewModelBase
     {
+        private RelayCommand _zoomInForGeometryEditor1Command;
+        private RelayCommand _zoomOutForGeometryEditor1Command;
+
+        public RelayCommand ZoomInForGeometryEditor1Command
+        {
+            get
+            {
+                return _zoomInForGeometryEditor1Command ?? (_zoomInForGeometryEditor1Command = new RelayCommand(ZoomInForGeometryEditor1));
+            }
+        }
+
+        public RelayCommand ZoomOutForGeometryEditor1Command
+        {
+            get
+            {
+                return _zoomOutForGeometryEditor1Command ?? (_zoomOutForGeometryEditor1Command = new RelayCommand(ZoomOutForGeometryEditor1));
+            }
+        }
+
         public GeometryEditorViewModel GeometryEditorViewModel1 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
@@ -83,6 +103,16 @@ namespace Craft.UIElements.GuiTest.Tab3
             geometryEditorViewModel.AddLine(new PointD(400, 300), new PointD(400, 500), 2, sunRayBrush);
             geometryEditorViewModel.AddLine(new PointD(330, 330), new PointD(470, 470), 2, sunRayBrush);
             geometryEditorViewModel.AddLine(new PointD(330, 470), new PointD(470, 330), 2, sunRayBrush);
+        }
+
+        private void ZoomInForGeometryEditor1()
+        {
+            GeometryEditorViewModel1.Magnification *= 1.1;
+        }
+
+        private void ZoomOutForGeometryEditor1()
+        {
+            GeometryEditorViewModel1.Magnification /= 1.1;
         }
     }
 }
