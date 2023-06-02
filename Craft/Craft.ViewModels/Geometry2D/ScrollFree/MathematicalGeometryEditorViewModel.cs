@@ -25,9 +25,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         }
 
         public MathematicalGeometryEditorViewModel(
-            double initialMagnification = 1,
+            double initialMagnificationX = 1,
+            double initialMagnificationY = 1,
             double initialWorldWindowUpperLeftX = 0,
-            double initialWorldWindowUpperLeftY = 0) : base(initialMagnification, 
+            double initialWorldWindowUpperLeftY = 0) : base(initialMagnificationX,
+                                                        initialMagnificationY,
                                                         initialWorldWindowUpperLeftX, 
                                                         initialWorldWindowUpperLeftY)
         {

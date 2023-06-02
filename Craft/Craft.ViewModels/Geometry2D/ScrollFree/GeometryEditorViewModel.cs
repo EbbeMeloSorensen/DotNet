@@ -20,7 +20,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Point _mousePositionWorld;
         protected Point _worldWindowUpperLeft;
         private double _magnification_x;
-        private double _magnification_y = 1;
+        private double _magnification_y;
         private Matrix _transformationMatrix;
         private Brush _defaultBrush;
         private Dictionary<PointD, Tuple<double, Brush>> _pointToDiameterMap;
@@ -156,13 +156,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // A callback delegate passed to the constructor will be kept by the view model and
         // invoked each time a frame refresh is needed
         public GeometryEditorViewModel(
-            double initialMagnification = 1,
+            double initialMagnificationX = 1,
+            double initialMagnificationY = 1,
             double initialWorldWindowUpperLeftX = 0,
             double initialWorldWindowUpperLeftY = 0)
         {
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
             WorldWindowBottomRightLimit = new Point(double.MaxValue, double.MaxValue);
-            _magnification_x = initialMagnification;
+            _magnification_x = initialMagnificationX;
+            _magnification_y = initialMagnificationY;
             _worldWindowUpperLeft = new Point(initialWorldWindowUpperLeftX, initialWorldWindowUpperLeftY);
             _defaultBrush = new SolidColorBrush(Colors.Black);
 

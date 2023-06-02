@@ -36,8 +36,8 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         public Tab3ViewModel()
         {
-            GeometryEditorViewModel1 = new GeometryEditorViewModel(1, 250, 75);
-            GeometryEditorViewModel2 = new MathematicalGeometryEditorViewModel(1, 250, 75);
+            GeometryEditorViewModel1 = new GeometryEditorViewModel(1, 1, 250, 75);
+            GeometryEditorViewModel2 = new MathematicalGeometryEditorViewModel(1, 1, 250, 75);
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
             DrawAHouse(GeometryEditorViewModel1);
