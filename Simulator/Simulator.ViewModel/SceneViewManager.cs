@@ -24,6 +24,7 @@ namespace Simulator.ViewModel
         private Scene _activeScene;
         private GeometryEditorViewModel _geometryEditorViewModel;
         private int[] _propIds;
+        private Brush brush;
 
         public Scene ActiveScene
         {
@@ -67,6 +68,8 @@ namespace Simulator.ViewModel
             {
                 SetShapeUpdateCallbackToDefault();
             }
+
+            brush = new SolidColorBrush(Colors.Black);
         }
 
         public void SetShapeSelectorCallbackToDefault()
@@ -115,7 +118,9 @@ namespace Simulator.ViewModel
 
         private void PrepareAnimation()
         {
-            _geometryEditorViewModel.Magnification = _application.Engine.Scene.InitialMagnification;
+            _geometryEditorViewModel.Scaling = new Size(
+                _application.Engine.Scene.InitialMagnification,
+                _application.Engine.Scene.InitialMagnification);
 
             _geometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(
                 _application.Engine.Scene.WorldWindowUpperLeftLimit.X,
@@ -143,49 +148,57 @@ namespace Simulator.ViewModel
                         _geometryEditorViewModel.AddLine(
                             new PointD(halfPlane.Point.X - 500 * v.X, halfPlane.Point.Y - 500 * v.Y),
                             new PointD(halfPlane.Point.X + 500 * v.X, halfPlane.Point.Y + 500 * v.Y),
-                            lineThickness);
+                            lineThickness,
+                            brush);
                         break;
                     case LeftFacingHalfPlane halfPlane:
                         _geometryEditorViewModel.AddLine(
                             new PointD(halfPlane.X, -500),
                             new PointD(halfPlane.X, 500),
-                            lineThickness);
+                            lineThickness,
+                            brush);
                         break;
                     case RightFacingHalfPlane halfPlane:
                         _geometryEditorViewModel.AddLine(
                             new PointD(halfPlane.X, -500),
                             new PointD(halfPlane.X, 500),
-                            lineThickness);
+                            lineThickness,
+                            brush);
                         break;
                     case UpFacingHalfPlane halfPlane:
                         _geometryEditorViewModel.AddLine(
                             new PointD(-500, halfPlane.Y),
                             new PointD(500, halfPlane.Y),
-                            lineThickness);
+                            lineThickness,
+                            brush);
                         break;
                     case DownFacingHalfPlane halfPlane:
                         _geometryEditorViewModel.AddLine(
                             new PointD(-500, halfPlane.Y),
                             new PointD(500, halfPlane.Y),
-                            lineThickness);
+                            lineThickness,
+                            brush);
                         break;
                     case LineSegment lineSegment:
                         _geometryEditorViewModel.AddLine(
                             lineSegment.Point1.AsPointD(),
                             lineSegment.Point2.AsPointD(),
-                            lineThickness);
+                            lineThickness,
+                            brush);
                         break;
                     case VerticalLineSegment lineSegment:
                         _geometryEditorViewModel.AddLine(
                             lineSegment.Point1.AsPointD(),
                             lineSegment.Point2.AsPointD(),
-                            lineThickness);
+                            lineThickness,
+                            brush);
                         break;
                     case HorizontalLineSegment lineSegment:
                         _geometryEditorViewModel.AddLine(
                             lineSegment.Point1.AsPointD(),
                             lineSegment.Point2.AsPointD(),
-                            lineThickness);
+                            lineThickness,
+                            brush);
                         break;
                     case BoundaryPoint boundaryPoint:
                         _geometryEditorViewModel.AddPoint(boundaryPoint.Point.AsPointD(), 3, new SolidColorBrush(Colors.Black));
