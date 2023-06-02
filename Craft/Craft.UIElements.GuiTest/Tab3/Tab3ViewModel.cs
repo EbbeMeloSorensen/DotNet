@@ -108,13 +108,12 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void ZoomInForGeometryEditor1()
         {
-            throw new NotImplementedException();
-
+            GeometryEditorViewModel1.ChangeScaling(1.2);
         }
 
         private void ZoomOutForGeometryEditor1()
         {
-            throw new NotImplementedException();
+            GeometryEditorViewModel1.ChangeScaling(1 / 1.2);
         }
     }
 }

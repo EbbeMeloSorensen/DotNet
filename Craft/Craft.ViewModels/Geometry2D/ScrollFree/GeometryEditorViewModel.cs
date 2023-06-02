@@ -174,6 +174,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             UpdateTransformationMatrix();
         }
 
+        // For zooming in and out
+        public void ChangeScaling(
+            double factor)
+        {
+            FocusInCenterOfViewPort();
+            Scaling = new Size(
+                Scaling.Width * factor,
+                Scaling.Height * factor);
+        }
+
         public virtual void AddPoint(
             PointD point,
             double diameter,
