@@ -156,17 +156,29 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                 return;
             }
 
+            var x_factor = 1.2;
+            var y_factor = 1.2;
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                y_factor = 1.0;
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftAlt))
+            {
+                x_factor = 1.0;
+            }
+
             if (e.Delta > 0)
             {
                 ViewModel.Scaling = new Size(
-                    ViewModel.Scaling.Width * 1.2,
-                    ViewModel.Scaling.Height * 1.2);
+                    ViewModel.Scaling.Width * x_factor,
+                    ViewModel.Scaling.Height * y_factor);
             }
             else
             {
                 ViewModel.Scaling = new Size(
-                    ViewModel.Scaling.Width / 1.2,
-                    ViewModel.Scaling.Height / 1.2);
+                    ViewModel.Scaling.Width / x_factor,
+                    ViewModel.Scaling.Height / y_factor);
             }
         }
 
