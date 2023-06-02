@@ -87,7 +87,7 @@
                             <MultiBinding Converter="{StaticResource CoordinateToMagnifiableCanvasPositionConverter}">
                                 <Binding Path="Point.X"/>
                                 <Binding Path="Width"/>
-                                <Binding Path="DataContext.Magnification" 
+                                <Binding Path="DataContext.MagnificationX" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                             </MultiBinding>
                         </Setter.Value>
@@ -97,7 +97,7 @@
                             <MultiBinding Converter="{StaticResource CoordinateToMagnifiableCanvasPositionConverter}">
                                 <Binding Path="Point.Y"/>
                                 <Binding Path="Height"/>
-                                <Binding Path="DataContext.Magnification" 
+                                <Binding Path="DataContext.MagnificationY" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                             </MultiBinding>
                         </Setter.Value>

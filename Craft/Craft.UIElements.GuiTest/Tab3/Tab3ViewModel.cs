@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
@@ -107,12 +108,13 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void ZoomInForGeometryEditor1()
         {
-            GeometryEditorViewModel1.Magnification *= 1.1;
+            throw new NotImplementedException();
+
         }
 
         private void ZoomOutForGeometryEditor1()
         {
-            GeometryEditorViewModel1.Magnification /= 1.1;
+            throw new NotImplementedException();
         }
     }
 }
