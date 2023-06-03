@@ -126,9 +126,10 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             PointD formerPoint = null;
 
-            for (var x = 0.0; x < Math.PI * 4; x += 0.1)
+            for (var x = 0.0; x < Math.PI * 2.5; x += 0.1)
             {
-                var point = new PointD(x, Math.Sin(x));
+                //var point = new PointD(x, Math.Sin(x));
+                var point = new PointD(x, Math.Pow(x - 2, 2) - 3);
 
                 if (formerPoint != null)
                 {
