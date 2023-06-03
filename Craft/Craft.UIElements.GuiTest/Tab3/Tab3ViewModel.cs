@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
@@ -30,18 +31,23 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
         }
 
-        public GeometryEditorViewModel GeometryEditorViewModel1 { get; }
-        public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
+        public GeometryEditorViewModel GeometryEditorViewModel { get; }
+        public MathematicalGeometryEditorViewModel MathematicalGeometryEditorViewModel { get; }
+        public ScatterChartViewModel ScatterChartViewModel { get; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
 
         public Tab3ViewModel()
         {
-            GeometryEditorViewModel1 = new GeometryEditorViewModel(1, 1, 250, 75);
-            GeometryEditorViewModel2 = new MathematicalGeometryEditorViewModel(1, 1, 250, 75);
+            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 250, 75);
+            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, 250, 75);
+            ScatterChartViewModel = new ScatterChartViewModel(38, 38, -2.5, -13);
+
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
-            DrawAHouse(GeometryEditorViewModel1);
-            DrawAHouse(GeometryEditorViewModel2);
+            DrawAHouse(GeometryEditorViewModel);
+            DrawAHouse(MathematicalGeometryEditorViewModel);
+
+            DrawACurve(ScatterChartViewModel);
         }
 
         private void DrawAHouse(
@@ -106,14 +112,41 @@ namespace Craft.UIElements.GuiTest.Tab3
             geometryEditorViewModel.AddLine(new PointD(330, 470), new PointD(470, 330), 2, sunRayBrush);
         }
 
+        private void DrawACurve(
+            GeometryEditorViewModel geometryEditorViewModel)
+        {
+            // Coordinate System
+            var coordinateSystemBrush = new SolidColorBrush(Colors.Gray);
+            var coordinateSystemThickness = 0.05;
+            geometryEditorViewModel.AddLine(new PointD(-1, 0), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(0, -1.5), new PointD(0, 1.5), coordinateSystemThickness, coordinateSystemBrush);
+
+            var curveBrush = new SolidColorBrush(Colors.Black);
+            var curveThickness = 0.05;
+
+            PointD formerPoint = null;
+
+            for (var x = 0.0; x < Math.PI * 4; x += 0.1)
+            {
+                var point = new PointD(x, Math.Sin(x));
+
+                if (formerPoint != null)
+                {
+                    geometryEditorViewModel.AddLine(formerPoint, point, curveThickness, curveBrush);
+                }
+
+                formerPoint = point;
+            }
+        }
+
         private void ZoomInForGeometryEditor1()
         {
-            GeometryEditorViewModel1.ChangeScaling(1.2);
+            GeometryEditorViewModel.ChangeScaling(1.2);
         }
 
         private void ZoomOutForGeometryEditor1()
         {
-            GeometryEditorViewModel1.ChangeScaling(1 / 1.2);
+            MathematicalGeometryEditorViewModel.ChangeScaling(1 / 1.2);
         }
     }
 }

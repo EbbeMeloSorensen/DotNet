@@ -12,7 +12,7 @@
             <TabControl SelectedIndex="0">
                 <TabItem Header="Basic">
                     <Grid>
-                        <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel1}"/>
+                        <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
                         <StackPanel Margin="10">
                             <Button VerticalAlignment="Top" HorizontalAlignment="Right" 
                                     Command="{Binding ZoomInForGeometryEditor1Command}" >Zoom In</Button>
@@ -22,7 +22,10 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Mathematical">
-                    <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel2}"/>
+                    <scrollFree:GeometryEditorView DataContext="{Binding MathematicalGeometryEditorViewModel}"/>
+                </TabItem>
+                <TabItem Header="ScatterPlot">
+                    <scrollFree:GeometryEditorView DataContext="{Binding ScatterChartViewModel}"/>
                 </TabItem>
             </TabControl>
         </TabItem>

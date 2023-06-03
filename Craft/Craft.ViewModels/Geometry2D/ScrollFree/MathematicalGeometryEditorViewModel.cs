@@ -8,7 +8,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class MathematicalGeometryEditorViewModel : GeometryEditorViewModel
     {
-        private Point _worldWindowLowerLeft;
+        protected Point _worldWindowLowerLeft;
 
         public override Size ViewPortSize
         {
