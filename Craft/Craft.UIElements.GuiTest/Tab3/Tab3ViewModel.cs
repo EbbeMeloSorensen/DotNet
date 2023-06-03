@@ -147,7 +147,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 //var point = new PointD(x, 0.5 * x - 1);
                 //var point = new PointD(x, Math.Pow(x - 2, 2) - 3);
                 //var point = new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2);
-                var point = new PointD(x, Math.Sin(x) + 2);
+                var point = new PointD(x, Math.Sin(x));
 
                 if (formerPoint != null)
                 {
