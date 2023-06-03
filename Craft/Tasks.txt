@@ -1,6 +1,8 @@
 Todo:
 * Gør det muligt at tegne et koordinatsystem i MathematicalGeometryEditorViewModel
-* 
+* Gør det muligt at tegne polylines lige som polygon
+* Prøv at lave det sådan, at ScatterChartViewModel abonnerer på at world window ændrer sig, og når det sker,
+  så opdaterer den de punkter, der tegnes
 * Når man exporterer grafer, så skal der kun en label på noder, der faktisk har en label
 * Få gjort det færdigt med at have en label på en edge
   o en edge skal ikke bare have en data property - den skal have en ArrayList property ligesom node allerede har (OK)

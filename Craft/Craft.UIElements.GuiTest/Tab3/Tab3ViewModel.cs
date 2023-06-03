@@ -40,7 +40,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         {
             GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 250, 75);
             MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, 250, 75);
-            ScatterChartViewModel = new ScatterChartViewModel(38, 38, -2.5, -13);
+            ScatterChartViewModel = new ScatterChartViewModel(38, 38, -7, -4);
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
@@ -120,9 +120,9 @@ namespace Craft.UIElements.GuiTest.Tab3
             var coordinateSystemThickness = 0.05;
 
             // X Axis
-            geometryEditorViewModel.AddLine(new PointD(-1, 0), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(9.7, -0.2), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(9.7, 0.2), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(-4, 0), new PointD(4, 0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(3.7, -0.2), new PointD(4, 0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(3.7, 0.2), new PointD(4, 0), coordinateSystemThickness, coordinateSystemBrush);
 
             // Y Axis
             geometryEditorViewModel.AddLine(new PointD(0, -3), new PointD(0, 3), coordinateSystemThickness, coordinateSystemBrush);
@@ -135,11 +135,19 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             PointD formerPoint = null;
 
-            for (var x = 0.0; x < Math.PI * 2.5; x += 0.1)
+            for (var x = -5.0; x <= 5.0; x += 0.1)
             {
+                //var point = new PointD(x, x);
+                //var point = new PointD(x, 0.5 * x);
+                //var point = new PointD(x, -x);
+                //var point = new PointD(x, 0);
+                //var point = new PointD(x, 2);
+                //var point = new PointD(x, x * x);
+                //var point = new PointD(x, -x * x);
                 //var point = new PointD(x, 0.5 * x - 1);
-                var point = new PointD(x, Math.Pow(x - 2, 2) - 3);
-                //var point = new PointD(x, Math.Sin(x));
+                //var point = new PointD(x, Math.Pow(x - 2, 2) - 3);
+                //var point = new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2);
+                var point = new PointD(x, Math.Sin(x) + 2);
 
                 if (formerPoint != null)
                 {

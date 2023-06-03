@@ -25,7 +25,39 @@
                     <scrollFree:GeometryEditorView DataContext="{Binding MathematicalGeometryEditorViewModel}"/>
                 </TabItem>
                 <TabItem Header="ScatterPlot">
-                    <scrollFree:GeometryEditorView DataContext="{Binding ScatterChartViewModel}"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding ScatterChartViewModel}"/>
+                        <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"></GridSplitter>
+                        <Grid Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" Grid.Row="0" Margin="3" Text="Scaling, X:"/>
+                            <TextBox Grid.Column="1" Grid.Row="0" Margin="1" 
+                                     Text="{Binding ScatterChartViewModel.Scaling.Width, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Margin="3" Text="Scaling, Y:"/>
+                            <TextBox Grid.Column="1" Grid.Row="1" Margin="1"
+                                     Text="{Binding ScatterChartViewModel.Scaling.Height, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="2" Margin="3" Text="World Window Upper Left, X:"/>
+                            <TextBox Grid.Column="1" Grid.Row="2" Margin="1"
+                                     Text="{Binding ScatterChartViewModel.WorldWindowUpperLeft.X, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="3" Margin="3" Text="World Window Upper Left, Y:"/>
+                            <TextBox Grid.Column="1" Grid.Row="3" Margin="1"
+                                     Text="{Binding ScatterChartViewModel.WorldWindowUpperLeft.Y, Mode=OneWay, StringFormat=N3}"/>
+                        </Grid>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </TabItem>
