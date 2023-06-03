@@ -118,9 +118,18 @@ namespace Craft.UIElements.GuiTest.Tab3
             // Coordinate System
             var coordinateSystemBrush = new SolidColorBrush(Colors.Gray);
             var coordinateSystemThickness = 0.05;
-            geometryEditorViewModel.AddLine(new PointD(-1, 0), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(0, -1.5), new PointD(0, 1.5), coordinateSystemThickness, coordinateSystemBrush);
 
+            // X Axis
+            geometryEditorViewModel.AddLine(new PointD(-1, 0), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(9.7, -0.2), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(9.7, 0.2), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
+
+            // Y Axis
+            geometryEditorViewModel.AddLine(new PointD(0, -3), new PointD(0, 3), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(-0.2, 2.7), new PointD(0, 3), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(0, 3), new PointD(0.2, 2.7), coordinateSystemThickness, coordinateSystemBrush);
+
+            // Curve
             var curveBrush = new SolidColorBrush(Colors.Black);
             var curveThickness = 0.05;
 
@@ -128,8 +137,9 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             for (var x = 0.0; x < Math.PI * 2.5; x += 0.1)
             {
-                //var point = new PointD(x, Math.Sin(x));
+                //var point = new PointD(x, 0.5 * x - 1);
                 var point = new PointD(x, Math.Pow(x - 2, 2) - 3);
+                //var point = new PointD(x, Math.Sin(x));
 
                 if (formerPoint != null)
                 {
@@ -147,7 +157,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void ZoomOutForGeometryEditor1()
         {
-            MathematicalGeometryEditorViewModel.ChangeScaling(1 / 1.2);
+            GeometryEditorViewModel.ChangeScaling(1 / 1.2);
         }
     }
 }
