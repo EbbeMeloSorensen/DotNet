@@ -114,11 +114,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 // Set the Size of the World Window, i.e. not its position. The World Window size only depends on magnification and viewport size
                 UpdateWorldWindowSize();
 
-                _worldWindowUpperLeft = new Point(
+                // Set the position of the World Window. Notice that this also affects the Transformation Matrix
+                WorldWindowUpperLeft = new Point(
                     _mousePositionWorld.X - _mousePositionViewport.X * _worldWindowSize.Width / _viewPortSize.Width,
                     _mousePositionWorld.Y - _mousePositionViewport.Y * _worldWindowSize.Height / _viewPortSize.Height);
-
-                UpdateTransformationMatrix();
 
                 RaisePropertyChanged();
             }
@@ -355,7 +354,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         protected void UpdateWorldWindowSize()
         {
-            _worldWindowSize = new Size(
+            WorldWindowSize = new Size(
                 _viewPortSize.Width / _scaling.Width,
                 _viewPortSize.Height / _scaling.Height);
         }

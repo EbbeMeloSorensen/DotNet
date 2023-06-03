@@ -1,4 +1,5 @@
 Todo:
+* Der er en lille fejl, når man resizer Viewporten - så hopper World Window
 * Gør det muligt at tegne et koordinatsystem i MathematicalGeometryEditorViewModel
 * Gør det muligt at tegne polylines lige som polygon
 * Prøv at lave det sådan, at ScatterChartViewModel abonnerer på at world window ændrer sig, og når det sker,
