@@ -74,5 +74,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             PolygonViewModels.Add(
                 new PolygonViewModel(points.Select(p => new PointD(p.X, -p.Y)), thickness, brush));
         }
+
+        public override void AddPolyline(
+            IEnumerable<PointD> points,
+            double thickness,
+            Brush brush)
+        {
+            PolylineViewModels.Add(
+                new PolylineViewModel(points.Select(p => new PointD(p.X, -p.Y)), thickness, brush));
+        }
     }
 }

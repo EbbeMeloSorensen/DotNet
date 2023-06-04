@@ -38,4 +38,4 @@ Todo:
   o Sikr at du kan eksportere til graphml med den nye mekanisme (OK)
   o Fjern GetNodeLabel fra IGraph.  (OK)
 
-Ser
+Da du skiftede fra at tegne et antal liniestykker og til at tegne en polyline, vendte den tingene på hovedet uden at du lagde mærke til det
