@@ -135,6 +135,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public ObservableCollection<PolygonViewModel> PolygonViewModels { get; }
 
+        public ObservableCollection<PolylineViewModel> PolylineViewModels { get; }
+
         public ObservableCollection<PointViewModel> PointViewModels { get; }
 
         public ObservableCollection<ShapeViewModel> ShapeViewModels { get; }
@@ -163,6 +165,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _defaultBrush = new SolidColorBrush(Colors.Black);
 
             PolygonViewModels = new ObservableCollection<PolygonViewModel>();
+            PolylineViewModels = new ObservableCollection<PolylineViewModel>();
             PointViewModels = new ObservableCollection<PointViewModel>();
             ShapeViewModels = new ObservableCollection<ShapeViewModel>();
             LineViewModels = new ObservableCollection<LineViewModel>();
@@ -223,6 +226,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             Brush brush)
         {
             PolygonViewModels.Add(new PolygonViewModel(points, thickness, brush));
+        }
+
+        public virtual void AddPolyline(
+            IEnumerable<PointD> points,
+            double thickness,
+            Brush brush)
+        {
+            PolylineViewModels.Add(new PolylineViewModel(points, thickness, brush));
         }
 
         public void ClearPoints()

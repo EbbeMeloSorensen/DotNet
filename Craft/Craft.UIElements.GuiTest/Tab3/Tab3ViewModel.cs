@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using Craft.Utils;
+using Craft.Utils.Linq;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Geometry2D.Scrolling;
 using GalaSoft.MvvmLight;
@@ -72,9 +73,16 @@ namespace Craft.UIElements.GuiTest.Tab3
             var doorAndWindowFrameBrush = new SolidColorBrush(Colors.GhostWhite);
             var doorAndWindowFrameThickness = 2;
 
-            geometryEditorViewModel.AddLine(new PointD(50, 0), new PointD(50, 150), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
-            geometryEditorViewModel.AddLine(new PointD(50, 150), new PointD(150, 150), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
-            geometryEditorViewModel.AddLine(new PointD(150, 150), new PointD(150, 0), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
+            geometryEditorViewModel.AddPolyline(new List<PointD>
+                {
+                    new PointD(50, 0),
+                    new PointD(50, 150),
+                    new PointD(150, 150),
+                    new PointD(150, 0)
+                },
+                doorAndWindowFrameThickness,
+                doorAndWindowFrameBrush);
+
             geometryEditorViewModel.AddShape(1, new RectangleViewModel
             {
                 Point = new PointD(100, 75),
@@ -133,10 +141,11 @@ namespace Craft.UIElements.GuiTest.Tab3
             var curveBrush = new SolidColorBrush(Colors.Black);
             var curveThickness = 0.05;
 
-            PointD formerPoint = null;
+            var points = new List<PointD>();
 
             for (var x = -5.0; x <= 5.0; x += 0.1)
             {
+                // Hjemmeskole for Anton
                 //var point = new PointD(x, x);
                 //var point = new PointD(x, 0.5 * x);
                 //var point = new PointD(x, -x);
@@ -147,15 +156,16 @@ namespace Craft.UIElements.GuiTest.Tab3
                 //var point = new PointD(x, 0.5 * x - 1);
                 //var point = new PointD(x, Math.Pow(x - 2, 2) - 3);
                 //var point = new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2);
-                var point = new PointD(x, Math.Sin(x));
-
-                if (formerPoint != null)
-                {
-                    geometryEditorViewModel.AddLine(formerPoint, point, curveThickness, curveBrush);
-                }
-
-                formerPoint = point;
+                points.Add(new PointD(x, Math.Sin(x)));
             }
+
+            // If we draw a bunch of lines (presumably quite heavy if we have many points)
+            //points.AdjacenPairs().ToList().ForEach(pair =>
+            //{
+            //    geometryEditorViewModel.AddLine(pair.Item1, pair.Item2, curveThickness, curveBrush);
+            //});
+
+            geometryEditorViewModel.AddPolyline(points, curveThickness, curveBrush);
         }
 
         private void ZoomInForGeometryEditor1()

@@ -1,15 +1,15 @@
 Done:
+* Gør det muligt at tegne polylines lige som polygon
 
 In progress:
-* Gør det muligt at tegne polylines lige som polygon
+* Prøv at lave det sådan, at ScatterChartViewModel abonnerer på at world window ændrer sig, og når det sker,
+  så opdaterer den de punkter, der tegnes
 
 Todo:
 * Der er en lille fejl, når man resizer Viewporten - så hopper World Window
 * Gør det muligt at tegne et koordinatsystem i MathematicalGeometryEditorViewModel
   - Det må gerne udfylde den tilgængelige plads
   - Hvis World Window ikke intersecter en akse, er det fint, hvis man somehow kan se den alligevel
-* Prøv at lave det sådan, at ScatterChartViewModel abonnerer på at world window ændrer sig, og når det sker,
-  så opdaterer den de punkter, der tegnes
 * Når man exporterer grafer, så skal der kun en label på noder, der faktisk har en label
 * Få gjort det færdigt med at have en label på en edge
   o en edge skal ikke bare have en data property - den skal have en ArrayList property ligesom node allerede har (OK)

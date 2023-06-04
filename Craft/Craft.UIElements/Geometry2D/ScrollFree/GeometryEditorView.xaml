@@ -49,6 +49,28 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
+        <ItemsControl ItemsSource="{Binding PolylineViewModels}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Polyline
+                        Stroke="{Binding Brush}"
+                        StrokeThickness="{Binding Thickness}"
+                        Points="{Binding Points}">
+                        <Polyline.RenderTransform>
+                            <MatrixTransform Matrix="{Binding 
+                                Path=DataContext.TransformationMatrix, 
+                                RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </Polyline.RenderTransform>
+                    </Polyline>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
         <ItemsControl ItemsSource="{Binding LineViewModels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
