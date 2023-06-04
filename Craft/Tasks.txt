@@ -2,11 +2,15 @@ Done:
 * Gør det muligt at tegne polylines lige som polygon
 * Lav det sådan, at ScatterChartViewModel abonnerer på at world window ændrer sig, og når det sker,
   så opdaterer den de punkter, der tegnes
-
-In progress:
 * ScatterChartViewModel skal ikke selv lave punkter men gøre brug af en callback
 
+In progress:
+* Der skal skelnes mellem minor og major updates af World Window. Minor haves for hver mouse move under panorering.
+  Major haves når man zommer ind eller ud eller slipper museknappen under panorering. Det er kun i forbindelse med
+  major updates, at man vil skulle hente data fra en datakilde.
+
 Todo:
+* Der skal være et mode, hvor man kontinuert opdaterer zoom, som du har kunnet før og formentlig stadig kan med nogle kontroller
 * Leg med tegning af parameterfremstillinger
 * Leg med tegning af splines af forskellig art
 * Brug dte til et shoot em up spil
