@@ -6,6 +6,11 @@ using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
+    // Todo: Erstat med en bounding box
+    public delegate List<PointD> UpdatePointsCallback(
+        double x0, 
+        double y0);
+
     public class ScatterChartViewModel : MathematicalGeometryEditorViewModel
     {
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
@@ -23,7 +28,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public UpdatePointsCallback UpdatePointsCallback { get; set; }
+
         public ScatterChartViewModel(
+            UpdatePointsCallback updatePointsCallback,
             double initialMagnificationX = 1,
             double initialMagnificationY = 1,
             double initialWorldWindowUpperLeftX = 0,
@@ -32,6 +40,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                                                         initialWorldWindowUpperLeftX,
                                                         initialWorldWindowUpperLeftY)
         {
+            UpdatePointsCallback = updatePointsCallback;
+
             _worldWindowLowerLeft = new Point(
                 initialWorldWindowUpperLeftX,
                 initialWorldWindowUpperLeftY);
@@ -55,23 +65,18 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         private void UpdateCurve()
         {
-            // Todo: Find ud af hvilke X-værdier vi skal bruge
-
             var x0 = Math.Floor(WorldWindowUpperLeft.X);
             var x1 = Math.Ceiling(WorldWindowUpperLeft.X + WorldWindowSize.Width);
 
-            var points = new List<PointD>();
-
-            for (var x = x0; x <= x1; x += 0.1)
+            if (UpdatePointsCallback != null)
             {
-                points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2));
-                //points.Add(new PointD(x, Math.Sin(x)));
-            }
+                var points = UpdatePointsCallback(x0, x1);
 
-            // Der er noget flicker. Man kunne måske forbedre det ved at tilføje polylines for de segmenter, der kommer ind
-            // .. men det er lidt luksus, ok?
-            PolylineViewModels.Clear();
-            AddPolyline(points, _curveThickness, _curveBrush);
+                // Der er noget flicker. Man kunne måske forbedre det ved at tilføje polylines for de segmenter, der kommer ind
+                // .. men det er lidt luksus, ok?
+                PolylineViewModels.Clear();
+                AddPolyline(points, _curveThickness, _curveBrush);
+            }
         }
     }
 }

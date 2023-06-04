@@ -341,19 +341,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             return result;
         }
 
-        //public void UpdateShape(
-        //    int id,
-        //    Point2D point,
-        //    double orientation,
-        //    string text)
-        //{
-        //    var shapeViewModel = _shapeViewModelMap[id];
-
-        //    shapeViewModel.Point = point;
-        //    shapeViewModel.Orientation = orientation;
-        //    shapeViewModel.Text = text;
-        //}
-
         // This method is called from the View class when it handles the CompositionTarget.Rendering event
         public void UpdateModel()
         {

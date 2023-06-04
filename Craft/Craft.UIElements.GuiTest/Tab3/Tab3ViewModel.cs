@@ -41,14 +41,15 @@ namespace Craft.UIElements.GuiTest.Tab3
         {
             GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 250, 75);
             MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, 250, 75);
-            ScatterChartViewModel = new ScatterChartViewModel(38, 38, -7, -4);
+
+            ScatterChartViewModel = new ScatterChartViewModel((x0, x1) => GeneratePoints(x0, x1), 38, 38, -7, -4);
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
             DrawAHouse(GeometryEditorViewModel);
             DrawAHouse(MathematicalGeometryEditorViewModel);
 
-            DrawACurve(ScatterChartViewModel);
+            DrawACoordinateSystem(ScatterChartViewModel);
         }
 
         private void DrawAHouse(
@@ -120,7 +121,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             geometryEditorViewModel.AddLine(new PointD(330, 470), new PointD(470, 330), 2, sunRayBrush);
         }
 
-        private void DrawACurve(
+        private void DrawACoordinateSystem(
             GeometryEditorViewModel geometryEditorViewModel)
         {
             // Coordinate System
@@ -136,36 +137,30 @@ namespace Craft.UIElements.GuiTest.Tab3
             geometryEditorViewModel.AddLine(new PointD(0, -3), new PointD(0, 3), coordinateSystemThickness, coordinateSystemBrush);
             geometryEditorViewModel.AddLine(new PointD(-0.2, 2.7), new PointD(0, 3), coordinateSystemThickness, coordinateSystemBrush);
             geometryEditorViewModel.AddLine(new PointD(0, 3), new PointD(0.2, 2.7), coordinateSystemThickness, coordinateSystemBrush);
+        }
 
-            // Curve
-            var curveBrush = new SolidColorBrush(Colors.Black);
-            var curveThickness = 0.05;
-
+        private List<PointD> GeneratePoints(
+            double x0, 
+            double x1)
+        {
             var points = new List<PointD>();
 
-            for (var x = -5.0; x <= 5.0; x += 0.1)
+            for (var x = x0; x <= x1; x += 0.1)
             {
-                // Hjemmeskole for Anton
-                //var point = new PointD(x, x);
-                //var point = new PointD(x, 0.5 * x);
-                //var point = new PointD(x, -x);
-                //var point = new PointD(x, 0);
-                //var point = new PointD(x, 2);
-                //var point = new PointD(x, x * x);
-                //var point = new PointD(x, -x * x);
-                //var point = new PointD(x, 0.5 * x - 1);
-                //var point = new PointD(x, Math.Pow(x - 2, 2) - 3);
-                //var point = new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2);
-                //points.Add(new PointD(x, Math.Sin(x)));
+                //points.Add(new PointD(x, x));                                                          // y = x
+                //points.Add(new PointD(x, 0.5 * x));                                                    // y = 0.5x
+                //points.Add(new PointD(x, 0.5 * x - 1));                                                // y = 0.5x - 1
+                //points.Add(new PointD(x, -x));                                                         // y = -x
+                //points.Add(new PointD(x, 0));                                                          // y = 0
+                //points.Add(new PointD(x, 2));                                                          // y = 2
+                //points.Add(new PointD(x, x * x));                                                      // y = x^2
+                //points.Add(new PointD(x, -x * x));                                                     // y = -x^2
+                //points.Add(new PointD(x, Math.Pow(x - 2, 2) - 3));                                     // y = (x - 2)^2 - 3 = x^2 - 4x + 1
+                //points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2)); // y = x
+                points.Add(new PointD(x, Math.Sin(x)));                                                // y = sin(x)
             }
 
-            // If we draw a bunch of lines (presumably quite heavy if we have many points)
-            //points.AdjacenPairs().ToList().ForEach(pair =>
-            //{
-            //    geometryEditorViewModel.AddLine(pair.Item1, pair.Item2, curveThickness, curveBrush);
-            //});
-
-            geometryEditorViewModel.AddPolyline(points, curveThickness, curveBrush);
+            return points;
         }
 
         private void ZoomInForGeometryEditor1()

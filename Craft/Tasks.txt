@@ -1,11 +1,17 @@
 Done:
 * Gør det muligt at tegne polylines lige som polygon
-
-In progress:
-* Prøv at lave det sådan, at ScatterChartViewModel abonnerer på at world window ændrer sig, og når det sker,
+* Lav det sådan, at ScatterChartViewModel abonnerer på at world window ændrer sig, og når det sker,
   så opdaterer den de punkter, der tegnes
 
+In progress:
+* ScatterChartViewModel skal ikke selv lave punkter men gøre brug af en callback
+
 Todo:
+* Leg med tegning af parameterfremstillinger
+* Leg med tegning af splines af forskellig art
+* Brug dte til et shoot em up spil
+* Saml WorldWindowSize og WorldWindowUpperLeft i en BoundingBox - så sker der ikke lige så mange opdateringer
+* Undgå at tegne ting, der ligger uden for World Window
 * Det kunne være fint, hvis man kunne bede GeometryEditorViewModellen om at beregne en bounding box og så sætte WorldWindow til det.
 * Der er en lille fejl, når man resizer Viewporten - så hopper World Window
 * Gør det muligt at tegne et koordinatsystem i MathematicalGeometryEditorViewModel
