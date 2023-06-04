@@ -6,6 +6,7 @@ In progress:
   så opdaterer den de punkter, der tegnes
 
 Todo:
+* Det kunne være fint, hvis man kunne bede GeometryEditorViewModellen om at beregne en bounding box og så sætte WorldWindow til det.
 * Der er en lille fejl, når man resizer Viewporten - så hopper World Window
 * Gør det muligt at tegne et koordinatsystem i MathematicalGeometryEditorViewModel
   - Det må gerne udfylde den tilgængelige plads

@@ -236,6 +236,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             PolylineViewModels.Add(new PolylineViewModel(points, thickness, brush));
         }
 
+        public void ClearPolygons()
+        {
+            PolygonViewModels.Clear();
+        }
+
+        public void ClearPolylines()
+        {
+            PolylineViewModels.Clear();
+        }
+
         public void ClearPoints()
         {
             _pointToDiameterMap.Clear();

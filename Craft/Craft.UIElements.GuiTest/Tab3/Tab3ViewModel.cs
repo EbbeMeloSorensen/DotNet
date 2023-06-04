@@ -156,7 +156,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 //var point = new PointD(x, 0.5 * x - 1);
                 //var point = new PointD(x, Math.Pow(x - 2, 2) - 3);
                 //var point = new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2);
-                points.Add(new PointD(x, Math.Sin(x)));
+                //points.Add(new PointD(x, Math.Sin(x)));
             }
 
             // If we draw a bunch of lines (presumably quite heavy if we have many points)
