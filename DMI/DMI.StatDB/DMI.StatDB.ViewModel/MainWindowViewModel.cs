@@ -50,9 +50,7 @@ namespace DMI.StatDB.ViewModel
 
             ChronologyViewModel = new ChronologyViewModel(new DateTime(2015, 1, 1), DateTime.UtcNow.TruncateToMilliseconds(), 50, 240);
 
-            GeometryEditorViewModel = new GeometryEditorViewModel();
-            GeometryEditorViewModel.Magnification = 240;
-            GeometryEditorViewModel.WorldWindowUpperLeft = new System.Windows.Point(7.4, 53.9);
+            GeometryEditorViewModel = new GeometryEditorViewModel(240, 240, 7.4, 53.9);
 
             var lineThickness = 0.02;
             var brush = new SolidColorBrush(Colors.Black);

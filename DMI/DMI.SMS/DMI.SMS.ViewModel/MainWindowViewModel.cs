@@ -106,7 +106,7 @@ namespace DMI.SMS.ViewModel
 
             StationInformationListViewModel.SelectedStationInformations.PropertyChanged += SelectedStationInformations_PropertyChanged;
 
-            GeometryEditorViewModel = new MathematicalGeometryEditorViewModel(120, 7.92, 54.82);
+            GeometryEditorViewModel = new MathematicalGeometryEditorViewModel(120, 120, 7.92, 54.82);
 
             TaskViewModel = new TaskViewModel();
 

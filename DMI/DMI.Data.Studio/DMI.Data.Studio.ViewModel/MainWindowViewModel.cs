@@ -210,7 +210,7 @@ namespace DMI.Data.Studio.ViewModel
                 StationInformationListViewModel.StationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
 
-            GeometryEditorViewModel = new MathematicalGeometryEditorViewModel(100, 7.92, 54.82);
+            GeometryEditorViewModel = new MathematicalGeometryEditorViewModel(100, 100, 7.92, 54.82);
             
             ChronologyViewModel = new ChronologyViewModel(new DateTime(2015, 1, 1), DateTime.UtcNow.TruncateToMilliseconds(), 50, 240);
 
