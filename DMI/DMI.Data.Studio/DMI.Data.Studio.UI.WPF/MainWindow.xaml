@@ -82,6 +82,9 @@
                             <TabItem Header="Temporal">
                                 <chronology:ChronologyView DataContext="{Binding ChronologyViewModel}"/>
                             </TabItem>
+                            <TabItem Header="Temp (TimeSeries)">
+                                <local:TimeSeriesView DataContext="{Binding TimeSeriesViewModel}" />
+                            </TabItem>
                         </TabControl>
 
                         <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Margin="2" HorizontalAlignment="Stretch" Height="2" Background="Gray"/>

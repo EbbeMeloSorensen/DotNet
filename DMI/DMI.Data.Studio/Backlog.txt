@@ -7,6 +7,8 @@ Done:
 * Man skal kunne køre stationfetcher fra DMI.Data.Studio og ikke bare fra DMI.SMS
 
 Todo:
+* Lav en viewmodel med tilhørende view, der viser en TIDSSERIE for en valgt station
+  - Den skal have et  
 * Lav en feature, hvor man for de valgte stationer kan generere datafiler over de rå observationer samt filer over tidsintervaller
   - det må meget gerne ligge tilgængeligt i konsol-applikationen, så det kan køres fra Linux
 * Gør det muligt at eksportere en tidsserie til WMDR-format

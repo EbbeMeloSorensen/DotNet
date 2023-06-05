@@ -7,9 +7,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using Craft.Logging;
+using Microsoft.Win32;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
@@ -19,8 +20,6 @@ using DMI.SMS.ViewModel;
 using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
-using Microsoft.Win32;
-using Craft.ViewModels.Tasks;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -92,6 +91,8 @@ namespace DMI.Data.Studio.ViewModel
         public MathematicalGeometryEditorViewModel GeometryEditorViewModel { get; private set; }
         public ChronologyViewModel ChronologyViewModel { get; private set; }
         public StatisticsViewModel StatisticsViewModel { get; private set; }
+
+        public TimeSeriesViewModel TimeSeriesViewModel { get; private set; }
 
         public bool IncludeOperationIntervalBars
         {
@@ -219,6 +220,8 @@ namespace DMI.Data.Studio.ViewModel
                 applicationDialogService,
                 StationInformationListViewModel.SelectedStationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
+
+            TimeSeriesViewModel = new TimeSeriesViewModel();
 
             StationListViewModel.SelectedStations.PropertyChanged += 
                 SelectedStations_PropertyChanged;
