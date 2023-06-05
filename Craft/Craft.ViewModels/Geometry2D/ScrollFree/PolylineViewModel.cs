@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Media;
 using Craft.Utils;
@@ -16,7 +17,8 @@ public class PolylineViewModel
         double thickness,
         Brush brush)
     {
-        Points = string.Join(" ", points.Select(point => $"{point.X},{point.Y}"));
+        Points = string.Join(" ", points.Select(
+            point => $"{string.Format(CultureInfo.InvariantCulture, "{0}", point.X)},{string.Format(CultureInfo.InvariantCulture, "{0}", point.Y)}"));
         Thickness = thickness;
         Brush = brush;
     }
