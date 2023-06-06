@@ -14,6 +14,9 @@ namespace DMI.Data.Studio.ViewModel
     //   Når der sker en "major" opdatering af World Window, så hentes nye tidsseriedata fra datakilden
     public class TimeSeriesViewModel : ViewModelBase
     {
+        private DateTime _dateTimeAtOrigo;
+        private TimeSpan _timeSpanForXUnit;
+
         public string Greeting { get; set; }
 
         public ScatterChartViewModel ScatterChartViewModel { get; set; }
@@ -21,6 +24,9 @@ namespace DMI.Data.Studio.ViewModel
         public TimeSeriesViewModel()
         {
             Greeting = "Greetings from TimeSeriesViewModel";
+
+            _dateTimeAtOrigo = DateTime.UtcNow - TimeSpan.FromDays(7);
+            _timeSpanForXUnit = TimeSpan.FromDays(1);
 
             ScatterChartViewModel = new ScatterChartViewModel(
                 (x0, x1) => GeneratePoints(x0, x1), 38, 38, -7, -4);
