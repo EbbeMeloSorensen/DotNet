@@ -7,6 +7,11 @@ using GalaSoft.MvvmLight;
 
 namespace DMI.Data.Studio.ViewModel
 {
+    // Denne klasse:
+    //   HAR en ScatterChartViewModel
+    //   BESTEMMER, hvad tidspunkt origo (x = 0) svarer til, samt hvad x = 1 svarer til
+    //   BESTEMMER initiel position af World Window (efterfølgende kommunikeres brugerens justeringer af WorldWindow fra ScatterChartViewModel)
+    //   Når der sker en "major" opdatering af World Window, så hentes nye tidsseriedata fra datakilden
     public class TimeSeriesViewModel : ViewModelBase
     {
         public string Greeting { get; set; }
