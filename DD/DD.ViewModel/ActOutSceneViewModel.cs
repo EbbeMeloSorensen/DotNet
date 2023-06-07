@@ -202,31 +202,31 @@ namespace DD.ViewModel
                             break;
                         case CreatureAction.FailedMeleeAttack:
                             _rangedAttackSucceeded = false;
-                            _boardViewModel.AnimateAttack(
-                                _engine.CurrentCreature,
-                                _engine.TargetCreature,
-                                false);
+                            //_boardViewModel.AnimateAttack(
+                            //    _engine.CurrentCreature,
+                            //    _engine.TargetCreature,
+                            //    false);
                             break;
                         case CreatureAction.FailedRangedAttack:
                             _rangedAttackSucceeded = false;
-                            _boardViewModel.AnimateAttack(
-                                _engine.CurrentCreature,
-                                _engine.TargetCreature,
-                                true);
+                            //_boardViewModel.AnimateAttack(
+                            //    _engine.CurrentCreature,
+                            //    _engine.TargetCreature,
+                            //    true);
                             break;
                         case CreatureAction.SuccessfulMeleeAttack:
                             _rangedAttackSucceeded = true;
-                            _boardViewModel.AnimateAttack(
-                                _engine.CurrentCreature,
-                                _engine.TargetCreature,
-                                false);
+                            //_boardViewModel.AnimateAttack(
+                            //    _engine.CurrentCreature,
+                            //    _engine.TargetCreature,
+                            //    false);
                             break;
                         case CreatureAction.SuccessfulRangedAttack:
                             _rangedAttackSucceeded = true;
-                            _boardViewModel.AnimateAttack(
-                                _engine.CurrentCreature,
-                                _engine.TargetCreature,
-                                true);
+                            //_boardViewModel.AnimateAttack(
+                            //    _engine.CurrentCreature,
+                            //    _engine.TargetCreature,
+                            //    true);
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
