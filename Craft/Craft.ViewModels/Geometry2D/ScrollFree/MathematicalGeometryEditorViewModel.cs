@@ -6,35 +6,22 @@ using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
+    // En variant af GeometryEditorViewModel, hvor figurer spejles i x-aksen, før de sættes ind, således at det fremstår korrekt
+    // i henhold til et matematisk 2-dimensionalt koordinatsystem, hvor y-aksen peger opad
     public class MathematicalGeometryEditorViewModel : GeometryEditorViewModel
     {
-        protected Point _worldWindowLowerLeft;
-
-        public override Size ViewPortSize
-        {
-            get { return _viewPortSize; }
-            set
-            {
-                _viewPortSize = value;
-                UpdateWorldWindowSize();
-                _worldWindowUpperLeft = new Point(_worldWindowLowerLeft.X, -_worldWindowLowerLeft.Y - _worldWindowSize.Height);
-                UpdateTransformationMatrix();
-                RaisePropertyChanged();
-            }
-        }
+        private bool _initialized = false;
 
         public MathematicalGeometryEditorViewModel(
-            double initialMagnificationX = 1,
-            double initialMagnificationY = 1,
-            double initialWorldWindowUpperLeftX = 0,
-            double initialWorldWindowUpperLeftY = 0) : base(initialMagnificationX,
+            double initialMagnificationX,
+            double initialMagnificationY,
+            double initialWorldWindowUpperLeftX,
+            double initialWorldWindowUpperLeftY) : base(initialMagnificationX,
                                                         initialMagnificationY,
                                                         initialWorldWindowUpperLeftX, 
                                                         initialWorldWindowUpperLeftY)
         {
-            _worldWindowLowerLeft = new Point(
-                initialWorldWindowUpperLeftX, 
-                initialWorldWindowUpperLeftY);
+            PropertyChanged += MathematicalGeometryEditorViewModel_PropertyChanged;
         }
 
         public override void AddPoint(
@@ -82,6 +69,24 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
             PolylineViewModels.Add(
                 new PolylineViewModel(points.Select(p => new PointD(p.X, -p.Y)), thickness, brush));
+        }
+
+        private void MathematicalGeometryEditorViewModel_PropertyChanged(
+            object? sender,
+            System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "ViewPortSize":
+                    if (!_initialized &&
+                        ViewPortSize.Width != 0 &&
+                        ViewPortSize.Height != 0)
+                    {
+                        _initialized = true;
+                        WorldWindowUpperLeft = new Point(0, -ViewPortSize.Height / Scaling.Height);
+                    }
+                    break;
+            }
         }
     }
 }

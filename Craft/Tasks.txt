@@ -5,6 +5,9 @@ Done:
 * ScatterChartViewModel skal ikke selv lave punkter men gøre brug af en callback
 
 In progress:
+* Der er en problematik i at ViewportSize først kendes et stykke inde i runtime, og det gør, at man ikke umiddelbart kan 
+  placere Uppef Left Corner for World Window, når man har at gøre med en matematisk view model.
+  Man kunne måske abonnere på ViewPortSize, og når så den skifter første gang og vel at mærke ikke er 0, 0
 * Der skal skelnes mellem minor og major updates af World Window. Minor haves for hver mouse move under panorering.
   Major haves når man zommer ind eller ud eller slipper museknappen under panorering. Det er kun i forbindelse med
   major updates, at man vil skulle hente data fra en datakilde.

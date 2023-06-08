@@ -153,10 +153,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // A callback delegate passed to the constructor will be kept by the view model and
         // invoked each time a frame refresh is needed
         public GeometryEditorViewModel(
-            double initialMagnificationX = 1,
-            double initialMagnificationY = 1,
-            double initialWorldWindowUpperLeftX = 0,
-            double initialWorldWindowUpperLeftY = 0)
+            double initialMagnificationX,
+            double initialMagnificationY,
+            double initialWorldWindowUpperLeftX,
+            double initialWorldWindowUpperLeftY)
         {
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
             WorldWindowBottomRightLimit = new Point(double.MaxValue, double.MaxValue);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Media;
 using Craft.Utils;
 
@@ -32,19 +31,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public ScatterChartViewModel(
             UpdatePointsCallback updatePointsCallback,
-            double initialMagnificationX = 1,
-            double initialMagnificationY = 1,
-            double initialWorldWindowUpperLeftX = 0,
-            double initialWorldWindowUpperLeftY = 0) : base(initialMagnificationX,
+            double initialMagnificationX,
+            double initialMagnificationY,
+            double initialWorldWindowUpperLeftX,
+            double initialWorldWindowUpperLeftY) : base(initialMagnificationX,
                                                         initialMagnificationY,
                                                         initialWorldWindowUpperLeftX,
                                                         initialWorldWindowUpperLeftY)
         {
             UpdatePointsCallback = updatePointsCallback;
-
-            _worldWindowLowerLeft = new Point(
-                initialWorldWindowUpperLeftX,
-                initialWorldWindowUpperLeftY);
 
             PropertyChanged += ScatterChartViewModel_PropertyChanged;
         }

@@ -39,8 +39,8 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         public Tab3ViewModel()
         {
-            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 250, 75);
-            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, 250, 75);
+            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 0, 0);
+            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, 0, 0);
 
             ScatterChartViewModel = new ScatterChartViewModel((x0, x1) => GeneratePoints(x0, x1), 38, 38, -7, -4);
 
@@ -129,14 +129,34 @@ namespace Craft.UIElements.GuiTest.Tab3
             var coordinateSystemThickness = 0.05;
 
             // X Axis
-            geometryEditorViewModel.AddLine(new PointD(-4, 0), new PointD(4, 0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(3.7, -0.2), new PointD(4, 0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(3.7, 0.2), new PointD(4, 0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(-6, 0), new PointD(6, 0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(5.7, -0.2), new PointD(6, 0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(5.7, 0.2), new PointD(6, 0), coordinateSystemThickness, coordinateSystemBrush);
 
             // Y Axis
-            geometryEditorViewModel.AddLine(new PointD(0, -3), new PointD(0, 3), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(-0.2, 2.7), new PointD(0, 3), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(0, 3), new PointD(0.2, 2.7), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(0, -6), new PointD(0, 6), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(-0.2, 5.7), new PointD(0, 6), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(0, 6), new PointD(0.2, 5.7), coordinateSystemThickness, coordinateSystemBrush);
+
+            // Axis ticks
+            for (var n = 1; n <= 5; n++)
+            {
+                geometryEditorViewModel.AddLine(new PointD(n, -0.1), new PointD(n, 0.1), coordinateSystemThickness, coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(-n, -0.1), new PointD(-n, 0.1), coordinateSystemThickness, coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(-0.1, n), new PointD(0.1, n), coordinateSystemThickness, coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(-0.1, -n), new PointD(0.1, -n), coordinateSystemThickness, coordinateSystemBrush);
+            }
+
+            // Target World Window for development
+            var x0 = -2;
+            var x1 = 3;
+            var y0 = -0.5;
+            var y1 = 0.5;
+
+            geometryEditorViewModel.AddLine(new PointD(x0, y0), new PointD(x0, y1), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(x0, y1), new PointD(x1, y1), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(x1, y1), new PointD(x1, y0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(x1, y0), new PointD(x0, y0), coordinateSystemThickness, coordinateSystemBrush);
         }
 
         private List<PointD> GeneratePoints(
