@@ -33,11 +33,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             UpdatePointsCallback updatePointsCallback,
             double initialMagnificationX,
             double initialMagnificationY,
-            double initialWorldWindowUpperLeftX,
-            double initialWorldWindowUpperLeftY) : base(initialMagnificationX,
-                                                        initialMagnificationY,
-                                                        initialWorldWindowUpperLeftX,
-                                                        initialWorldWindowUpperLeftY)
+            int yAxisFactor) : base(initialMagnificationX,
+                                    initialMagnificationY,
+                                    yAxisFactor)
         {
             UpdatePointsCallback = updatePointsCallback;
 

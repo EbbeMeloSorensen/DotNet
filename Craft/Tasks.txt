@@ -7,7 +7,18 @@ Done:
 In progress:
 * Der er en problematik i at ViewportSize først kendes et stykke inde i runtime, og det gør, at man ikke umiddelbart kan 
   placere Uppef Left Corner for World Window, når man har at gøre med en matematisk view model.
-  Man kunne måske abonnere på ViewPortSize, og når så den skifter første gang og vel at mærke ikke er 0, 0
+  Man kunne måske abonnere på ViewPortSize, og når så den skifter første gang og vel at mærke ikke er 0, 0, så
+  sætter man WorldWindow Size samt x- og y-skalering.
+  I øjeblikket så sætter du skalering samt initiel position af upper left corner of World Window i constructoren for view modellen.
+  Var det mon ikke lige så naturligt at sætte det VINDUE, som du gerne ville operere med i World Window...
+  .. Det burde i hvert fald være sådan at du sætter noget, der er uafhængigt af viewport size, som du jo principielt ikke kender.
+  For et ALMINDELIGT view, er det naturligt at sige, at origo skal være i øverste venstre hjørne, og for et MATEMATISK er det naturligt
+  at sige, at det skal være i NEDERSTE venstre hjørne.
+  Det er vel også naturligt at sætte magnification til 1, men det er vel LIGE så naturligt at sætte den ønskede World Window Placering
+  og så lade computeren beregne den skalering, der så passer...
+  I øvrigt - du kunne helt droppe at have en "matematisk" variant af viewet. I stedet kunne du give den et sæt af basisvektorer for 
+  koordinatsystemet, som pr default er (1, 0) og (0, 1). For det matematiske skulle basisvektorerne så være (1, 0) og (0, -1). På den måde 
+  kunne du også lade f.eks. 4. kvadrant være den, du tegnede ting i, selv om det sjældent vil være relevant i praksis
 * Der skal skelnes mellem minor og major updates af World Window. Minor haves for hver mouse move under panorering.
   Major haves når man zommer ind eller ud eller slipper museknappen under panorering. Det er kun i forbindelse med
   major updates, at man vil skulle hente data fra en datakilde.

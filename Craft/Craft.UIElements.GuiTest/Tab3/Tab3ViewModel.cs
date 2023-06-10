@@ -39,10 +39,10 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         public Tab3ViewModel()
         {
-            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 0, 0);
-            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, 0, 0);
+            GeometryEditorViewModel = new GeometryEditorViewModel(1);
+            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, -1);
 
-            ScatterChartViewModel = new ScatterChartViewModel((x0, x1) => GeneratePoints(x0, x1), 38, 38, -7, -4);
+            ScatterChartViewModel = new ScatterChartViewModel((x0, x1) => GeneratePoints(x0, x1), 38, 38, -1);
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
@@ -148,6 +148,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
 
             // Target World Window for development
+            // Hvis man skal ramme denne kasse, skal den selv sætte magnification
             var x0 = -2;
             var x1 = 3;
             var y0 = -0.5;

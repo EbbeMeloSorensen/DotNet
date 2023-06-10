@@ -13,6 +13,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
     public class GeometryEditorViewModel : ViewModelBase
     {
+        private int _yAxisFactor;
+        private double _initialScalingX;
+        private double _initialScalingY;
+        protected bool _initialized;
         private string _imagePath;
         protected Size _viewPortSize;
         protected Size _worldWindowSize;
@@ -40,6 +44,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             get { return _viewPortSize; }
             set
             {
+                if (!(value.Width > 0) ||
+                    !(value.Height > 0)) return;
+
                 _viewPortSize = value;
                 UpdateWorldWindowSize();
                 UpdateTransformationMatrix();
@@ -148,20 +155,29 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             get { return _shapeViewModelMap.Keys; }
         }
 
+        // A callback delegate passed to the view model will be kept and
+        // invoked each time a frame refresh is needed
         public UpdateModelCallBack UpdateModelCallBack { get; set; }
 
-        // A callback delegate passed to the constructor will be kept by the view model and
-        // invoked each time a frame refresh is needed
+        // Denne constructor kalder en anden constructor
+        // Ideen er, at man NOGLE gange er interesseret i at angive magnification og ANDRE gange vil angive et ønsket World Window..
         public GeometryEditorViewModel(
-            double initialMagnificationX,
-            double initialMagnificationY,
-            double initialWorldWindowUpperLeftX,
-            double initialWorldWindowUpperLeftY)
+            int yAxisFactor) : this(1, 1, yAxisFactor)
+        {
+        }
+
+        // Det kunne være fint at operere med, at man simpelthen giver constructoren 2 basisvektorer for det koordinatsysten,
+        // man ønsker at bruge - så slipper du for at have en matematisk variant
+        public GeometryEditorViewModel(
+            double initialScalingX,
+            double initialScalingY,
+            int yAxisFactor)
         {
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
             WorldWindowBottomRightLimit = new Point(double.MaxValue, double.MaxValue);
-            _scaling = new Size(initialMagnificationX, initialMagnificationY);
-            _worldWindowUpperLeft = new Point(initialWorldWindowUpperLeftX, initialWorldWindowUpperLeftY);
+            _initialScalingX = initialScalingX;
+            _initialScalingY = initialScalingY;
+            _yAxisFactor = yAxisFactor;
             _defaultBrush = new SolidColorBrush(Colors.Black);
 
             PolygonViewModels = new ObservableCollection<PolygonViewModel>();
@@ -173,7 +189,45 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _pointToDiameterMap = new Dictionary<PointD, Tuple<double, Brush>>();
             _shapeViewModelMap = new Dictionary<int, ShapeViewModel>();
 
-            UpdateTransformationMatrix();
+            PropertyChanged += GeometryEditorViewModel_PropertyChanged;
+        }
+
+        private void GeometryEditorViewModel_PropertyChanged(
+            object? sender, 
+            System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "ViewPortSize":
+                    if (!_initialized &&
+                        ViewPortSize.Width != 0 &&
+                        ViewPortSize.Height != 0)
+                    {
+                        _initialized = true;
+
+                        if (_yAxisFactor == 1)
+                        {
+                            // Dette er passende for et almindeligt view
+                            Scaling = new Size(_initialScalingX, _initialScalingY);
+                            WorldWindowUpperLeft = new Point(0, 0);
+                        }
+                        else
+                        {
+                            // Dette er en passende default for et MATEMATISK view, men ikke for et almindeligt
+                            // Det her kan vi gøre, hvis man ønsker at sætte magnification
+                            Scaling = new Size(_initialScalingX, _initialScalingY);
+                            WorldWindowUpperLeft = new Point(0, -ViewPortSize.Height / Scaling.Height);
+
+                            // Det her er bedre, hvis man i stedet ønsker at sætte et interval
+                            //var x0 = -2.0;
+                            //var x1 = 3.0;
+                            //var scaling = ViewPortSize.Width / (x1 - x0);
+                            //Scaling = new Size(scaling, scaling);
+                            //WorldWindowUpperLeft = new Point(x0, -ViewPortSize.Height / Scaling.Height);
+                        }
+                    }
+                    break;
+            }
         }
 
         // For zooming in and out
@@ -362,6 +416,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         protected void UpdateWorldWindowSize()
         {
+            if (_scaling.Width <= 0 ||
+                _scaling.Height <= 0) return;
+
             WorldWindowSize = new Size(
                 _viewPortSize.Width / _scaling.Width,
                 _viewPortSize.Height / _scaling.Height);
