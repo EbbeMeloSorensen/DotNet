@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using Craft.Utils;
 using Craft.Utils.Linq;
@@ -39,10 +40,16 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         public Tab3ViewModel()
         {
-            GeometryEditorViewModel = new GeometryEditorViewModel(1);
-            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, -1);
+            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, null, null, 1);
+            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, null, null, -1);
 
-            ScatterChartViewModel = new ScatterChartViewModel((x0, x1) => GeneratePoints(x0, x1), 38, 38, -1);
+            ScatterChartViewModel = new ScatterChartViewModel(
+                (x0, x1) => GeneratePoints(x0, x1), 
+                null, 
+                null, 
+                new Point(-2, -0.5),
+                new Size(5, 2),
+                -1);
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
@@ -152,7 +159,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             var x0 = -2;
             var x1 = 3;
             var y0 = -0.5;
-            var y1 = 0.5;
+            var y1 = 1.5;
 
             geometryEditorViewModel.AddLine(new PointD(x0, y0), new PointD(x0, y1), coordinateSystemThickness, coordinateSystemBrush);
             geometryEditorViewModel.AddLine(new PointD(x0, y1), new PointD(x1, y1), coordinateSystemThickness, coordinateSystemBrush);

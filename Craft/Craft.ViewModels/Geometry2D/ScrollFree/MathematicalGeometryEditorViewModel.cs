@@ -11,10 +11,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     public class MathematicalGeometryEditorViewModel : GeometryEditorViewModel
     {
         public MathematicalGeometryEditorViewModel(
-            double initialMagnificationX,
-            double initialMagnificationY,
+            double? initialMagnificationX,
+            double? initialMagnificationY,
+            Point? initialWorldWindowUpperLeft,
+            Size? initialWorldWindowSize,
             int yAxisFactor) : base(initialMagnificationX,
                                     initialMagnificationY,
+                                    initialWorldWindowUpperLeft,
+                                    initialWorldWindowSize,
                                     yAxisFactor)
         {
         }

@@ -14,8 +14,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     public class GeometryEditorViewModel : ViewModelBase
     {
         private int _yAxisFactor;
-        private double _initialScalingX;
-        private double _initialScalingY;
+        private double? _initialScalingX;
+        private double? _initialScalingY;
+        private Point? _initialWorldWindowUpperLeft;
+        private Size? _initialWorldWindowSize;
         protected bool _initialized;
         private string _imagePath;
         protected Size _viewPortSize;
@@ -161,22 +163,26 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         // Denne constructor kalder en anden constructor
         // Ideen er, at man NOGLE gange er interesseret i at angive magnification og ANDRE gange vil angive et ønsket World Window..
-        public GeometryEditorViewModel(
-            int yAxisFactor) : this(1, 1, yAxisFactor)
-        {
-        }
+        //public GeometryEditorViewModel(
+        //    int yAxisFactor) : this(1, 1, yAxisFactor)
+        //{
+        //}
 
         // Det kunne være fint at operere med, at man simpelthen giver constructoren 2 basisvektorer for det koordinatsysten,
         // man ønsker at bruge - så slipper du for at have en matematisk variant
         public GeometryEditorViewModel(
-            double initialScalingX,
-            double initialScalingY,
+            double? initialScalingX,
+            double? initialScalingY,
+            Point? initialWorldWindowUpperLeft,
+            Size? initialWorldWindowSize,
             int yAxisFactor)
         {
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
             WorldWindowBottomRightLimit = new Point(double.MaxValue, double.MaxValue);
             _initialScalingX = initialScalingX;
             _initialScalingY = initialScalingY;
+            _initialWorldWindowUpperLeft = initialWorldWindowUpperLeft;
+            _initialWorldWindowSize = initialWorldWindowSize;
             _yAxisFactor = yAxisFactor;
             _defaultBrush = new SolidColorBrush(Colors.Black);
 
@@ -208,22 +214,68 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         if (_yAxisFactor == 1)
                         {
                             // Dette er passende for et almindeligt view
-                            Scaling = new Size(_initialScalingX, _initialScalingY);
-                            WorldWindowUpperLeft = new Point(0, 0);
+
+                            if (_initialScalingX.HasValue && 
+                                _initialScalingY.HasValue)
+                            {
+                                Scaling = new Size(_initialScalingX.Value, _initialScalingY.Value);
+                                WorldWindowUpperLeft = new Point(0, 0);
+                            }
+                            else
+                            {
+                                throw new NotImplementedException();
+                            }
                         }
                         else
                         {
-                            // Dette er en passende default for et MATEMATISK view, men ikke for et almindeligt
-                            // Det her kan vi gøre, hvis man ønsker at sætte magnification
-                            Scaling = new Size(_initialScalingX, _initialScalingY);
-                            WorldWindowUpperLeft = new Point(0, -ViewPortSize.Height / Scaling.Height);
+                            // Dette er passende for et MATEMATISK view
 
-                            // Det her er bedre, hvis man i stedet ønsker at sætte et interval
-                            //var x0 = -2.0;
-                            //var x1 = 3.0;
-                            //var scaling = ViewPortSize.Width / (x1 - x0);
-                            //Scaling = new Size(scaling, scaling);
-                            //WorldWindowUpperLeft = new Point(x0, -ViewPortSize.Height / Scaling.Height);
+                            if (_initialScalingX.HasValue &&
+                                _initialScalingY.HasValue)
+                            {
+                                Scaling = new Size(_initialScalingX.Value, _initialScalingY.Value);
+                                WorldWindowUpperLeft = new Point(0, -ViewPortSize.Height / Scaling.Height);
+                            }
+                            else if (_initialWorldWindowUpperLeft.HasValue &&
+                                     _initialWorldWindowSize.HasValue)
+                            {
+                                // Dette er hvis World Window skal afgrænses af Viewportens HØJRE og VENSTRE side
+
+                                var scaling = ViewPortSize.Width / (_initialWorldWindowSize.Value.Width);
+                                Scaling = new Size(scaling, scaling);
+
+
+                                // Her flugter bunden af view porten med x-aksen
+                                //WorldWindowUpperLeft = new Point(
+                                //    _initialWorldWindowUpperLeft.Value.X, 
+                                //    -ViewPortSize.Height / Scaling.Height);
+
+                                //// Her flugter bunden af view porten NEDERSTE kant a World Window
+                                //WorldWindowUpperLeft = new Point(
+                                //    _initialWorldWindowUpperLeft.Value.X,
+                                //    -ViewPortSize.Height / Scaling.Height + 0.5);
+
+                                // Hvad er "World" afstanden mellem top og bund af ViewPorten
+                                var temp = ViewPortSize.Height / scaling;
+
+                                // Her flugter bunden af view porten ØVERSTE kant a World Window
+                                //WorldWindowUpperLeft = new Point(
+                                //    _initialWorldWindowUpperLeft.Value.X,
+                                //    -ViewPortSize.Height / Scaling.Height + 0.5 + temp - _initialWorldWindowSize.Value.Height);
+
+                                var offset1 = 0.5;
+                                var offset2 = 0.5 + temp - _initialWorldWindowSize.Value.Height;
+                                var offset = (offset1 + offset2) / 2;
+
+                                // Her er World Window i MIDTEN af View porten
+                                WorldWindowUpperLeft = new Point(
+                                    _initialWorldWindowUpperLeft.Value.X,
+                                    -ViewPortSize.Height / Scaling.Height + offset);
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Invalid specification of World Window");
+                            }
                         }
                     }
                     break;
