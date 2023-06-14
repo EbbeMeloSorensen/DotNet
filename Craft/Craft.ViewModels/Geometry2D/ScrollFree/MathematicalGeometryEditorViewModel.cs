@@ -10,18 +10,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     // i henhold til et matematisk 2-dimensionalt koordinatsystem, hvor y-aksen peger opad
     public class MathematicalGeometryEditorViewModel : GeometryEditorViewModel
     {
-        public MathematicalGeometryEditorViewModel(
-            double? initialMagnificationX,
-            double? initialMagnificationY,
-            Point? initialWorldWindowUpperLeft,
-            Size? initialWorldWindowSize,
-            int yAxisFactor) : base(initialMagnificationX,
-                                    initialMagnificationY,
-                                    initialWorldWindowUpperLeft,
-                                    initialWorldWindowSize,
-                                    yAxisFactor)
-        {
-        }
 
         public override void AddPoint(
             PointD point,
@@ -68,6 +56,24 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
             PolylineViewModels.Add(
                 new PolylineViewModel(points.Select(p => new PointD(p.X, -p.Y)), thickness, brush));
+        }
+
+        public MathematicalGeometryEditorViewModel(
+            int yAxisFactor, 
+            double scalingX, 
+            double scalingY) : base(yAxisFactor, scalingX, scalingY)
+        {
+        }
+
+        public MathematicalGeometryEditorViewModel(
+            int yAxisFactor, 
+            Point worldWindowUpperLeft, 
+            Size worldWindowSize) : base(yAxisFactor, worldWindowUpperLeft, worldWindowSize)
+        {
+        }
+
+        protected MathematicalGeometryEditorViewModel(int yAxisFactor) : base(yAxisFactor)
+        {
         }
     }
 }

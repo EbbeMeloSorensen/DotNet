@@ -30,17 +30,48 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public UpdatePointsCallback UpdatePointsCallback { get; set; }
 
+        //public ScatterChartViewModel(
+        //    UpdatePointsCallback updatePointsCallback,
+        //    double? initialMagnificationX,
+        //    double? initialMagnificationY,
+        //    Point? initialWorldWindowUpperLeft,
+        //    Size? initialWorldWindowSize,
+        //    int yAxisFactor) : base(initialMagnificationX,
+        //                            initialMagnificationY,
+        //                            initialWorldWindowUpperLeft,
+        //                            initialWorldWindowSize,
+        //                            yAxisFactor)
+        //{
+        //    UpdatePointsCallback = updatePointsCallback;
+
+        //    PropertyChanged += ScatterChartViewModel_PropertyChanged;
+        //}
+
         public ScatterChartViewModel(
             UpdatePointsCallback updatePointsCallback,
-            double? initialMagnificationX,
-            double? initialMagnificationY,
-            Point? initialWorldWindowUpperLeft,
-            Size? initialWorldWindowSize,
-            int yAxisFactor) : base(initialMagnificationX,
-                                    initialMagnificationY,
-                                    initialWorldWindowUpperLeft,
-                                    initialWorldWindowSize,
-                                    yAxisFactor)
+            int yAxisFactor,
+            double scalingX,
+            double scalingY) : base(yAxisFactor, scalingX, scalingY)
+        {
+            UpdatePointsCallback = updatePointsCallback;
+
+            PropertyChanged += ScatterChartViewModel_PropertyChanged;
+        }
+
+        public ScatterChartViewModel(
+            UpdatePointsCallback updatePointsCallback,
+            int yAxisFactor,
+            Point worldWindowUpperLeft,
+            Size worldWindowSize) : base(yAxisFactor, worldWindowUpperLeft, worldWindowSize)
+        {
+            UpdatePointsCallback = updatePointsCallback;
+
+            PropertyChanged += ScatterChartViewModel_PropertyChanged;
+        }
+
+        protected ScatterChartViewModel(
+            UpdatePointsCallback updatePointsCallback,
+            int yAxisFactor) : base(yAxisFactor)
         {
             UpdatePointsCallback = updatePointsCallback;
 

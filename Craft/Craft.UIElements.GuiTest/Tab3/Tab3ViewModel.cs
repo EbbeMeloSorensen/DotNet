@@ -40,16 +40,14 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         public Tab3ViewModel()
         {
-            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, null, null, 1);
-            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(1, 1, null, null, -1);
+            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 1);
+            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(-1, 1, 1);
 
             ScatterChartViewModel = new ScatterChartViewModel(
-                (x0, x1) => GeneratePoints(x0, x1), 
-                null, 
-                null,
+                (x0, x1) => GeneratePoints(x0, x1),
+                -1,
                 new Point(-2, -1.5),
-                new Size(5, 2),
-                -1);
+                new Size(5, 2));
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 

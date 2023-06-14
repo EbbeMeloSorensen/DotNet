@@ -18,7 +18,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private double? _initialScalingY;
         private Point? _initialWorldWindowUpperLeft;
         private Size? _initialWorldWindowSize;
-        protected bool _initialized;
         private string _imagePath;
         protected Size _viewPortSize;
         protected Size _worldWindowSize;
@@ -168,21 +167,37 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         //{
         //}
 
-        // Det kunne være fint at operere med, at man simpelthen giver constructoren 2 basisvektorer for det koordinatsysten,
-        // man ønsker at bruge - så slipper du for at have en matematisk variant
         public GeometryEditorViewModel(
-            double? initialScalingX,
-            double? initialScalingY,
-            Point? initialWorldWindowUpperLeft,
-            Size? initialWorldWindowSize,
+            int yAxisFactor,
+            double scalingX,
+            double scalingY) : this(yAxisFactor)
+        {
+            _initialScalingX = scalingX;
+            _initialScalingY = scalingY;
+        }
+
+        public GeometryEditorViewModel(
+            int yAxisFactor,
+            Point worldWindowUpperLeft,
+            Size worldWindowSize) : this(yAxisFactor)
+        {
+            _initialWorldWindowUpperLeft = worldWindowUpperLeft;
+            _initialWorldWindowSize = worldWindowSize;
+        }
+
+        protected GeometryEditorViewModel(
+            //double? initialScalingX,
+            //double? initialScalingY,
+            //Point? initialWorldWindowUpperLeft,
+            //Size? initialWorldWindowSize,
             int yAxisFactor)
         {
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
             WorldWindowBottomRightLimit = new Point(double.MaxValue, double.MaxValue);
-            _initialScalingX = initialScalingX;
-            _initialScalingY = initialScalingY;
-            _initialWorldWindowUpperLeft = initialWorldWindowUpperLeft;
-            _initialWorldWindowSize = initialWorldWindowSize;
+            //_initialScalingX = initialScalingX;
+            //_initialScalingY = initialScalingY;
+            //_initialWorldWindowUpperLeft = initialWorldWindowUpperLeft;
+            //_initialWorldWindowSize = initialWorldWindowSize;
             _yAxisFactor = yAxisFactor;
             _defaultBrush = new SolidColorBrush(Colors.Black);
 
@@ -205,11 +220,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             switch (e.PropertyName)
             {
                 case "ViewPortSize":
-                    if (!_initialized &&
+                    if (WorldWindowSize.Width < 0.000000001 &&
+                        WorldWindowSize.Height < 0.000000001 &&
                         ViewPortSize.Width != 0 &&
                         ViewPortSize.Height != 0)
                     {
-                        _initialized = true;
+                        // Her er viewporten initialiseret for første gang, og så kan vi sætte World Window og skalering
 
                         if (_yAxisFactor == 1)
                         {
