@@ -46,8 +46,8 @@ namespace Craft.UIElements.GuiTest.Tab3
             ScatterChartViewModel = new ScatterChartViewModel(
                 (x0, x1) => GeneratePoints(x0, x1), 
                 null, 
-                null, 
-                new Point(-2, -0.5),
+                null,
+                new Point(-2, -1.5),
                 new Size(5, 2),
                 -1);
 
@@ -153,18 +153,6 @@ namespace Craft.UIElements.GuiTest.Tab3
                 geometryEditorViewModel.AddLine(new PointD(-0.1, n), new PointD(0.1, n), coordinateSystemThickness, coordinateSystemBrush);
                 geometryEditorViewModel.AddLine(new PointD(-0.1, -n), new PointD(0.1, -n), coordinateSystemThickness, coordinateSystemBrush);
             }
-
-            // Target World Window for development
-            // Hvis man skal ramme denne kasse, skal den selv sætte magnification
-            var x0 = -2;
-            var x1 = 3;
-            var y0 = -0.5;
-            var y1 = 1.5;
-
-            geometryEditorViewModel.AddLine(new PointD(x0, y0), new PointD(x0, y1), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(x0, y1), new PointD(x1, y1), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(x1, y1), new PointD(x1, y0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(x1, y0), new PointD(x0, y0), coordinateSystemThickness, coordinateSystemBrush);
         }
 
         private List<PointD> GeneratePoints(
@@ -184,8 +172,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 //points.Add(new PointD(x, x * x));                                                      // y = x^2
                 //points.Add(new PointD(x, -x * x));                                                     // y = -x^2
                 //points.Add(new PointD(x, Math.Pow(x - 2, 2) - 3));                                     // y = (x - 2)^2 - 3 = x^2 - 4x + 1
-                //points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2)); // y = x
-                points.Add(new PointD(x, Math.Sin(x)));                                                // y = sin(x)
+                points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2)); // y = x
+                //points.Add(new PointD(x, Math.Sin(x)));                                                // y = sin(x)
             }
 
             return points;

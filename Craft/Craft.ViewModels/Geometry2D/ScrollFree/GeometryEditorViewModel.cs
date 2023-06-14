@@ -239,38 +239,37 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             else if (_initialWorldWindowUpperLeft.HasValue &&
                                      _initialWorldWindowSize.HasValue)
                             {
-                                // Dette er hvis World Window skal afgrænses af Viewportens HØJRE og VENSTRE side
+                                if (ViewPortSize.Width / ViewPortSize.Height <=
+                                    _initialWorldWindowSize.Value.Width / _initialWorldWindowSize.Value.Height)
+                                {
+                                    // Dette er hvis World Window skal afgrænses af Viewportens HØJRE og VENSTRE side
 
-                                var scaling = ViewPortSize.Width / (_initialWorldWindowSize.Value.Width);
-                                Scaling = new Size(scaling, scaling);
+                                    var scaling = ViewPortSize.Width / (_initialWorldWindowSize.Value.Width);
+                                    Scaling = new Size(scaling, scaling);
 
+                                    var yOffset = (
+                                        ViewPortSize.Height / scaling
+                                        - _initialWorldWindowSize.Value.Height
+                                        - 2 * _initialWorldWindowUpperLeft.Value.Y) / 2;
 
-                                // Her flugter bunden af view porten med x-aksen
-                                //WorldWindowUpperLeft = new Point(
-                                //    _initialWorldWindowUpperLeft.Value.X, 
-                                //    -ViewPortSize.Height / Scaling.Height);
+                                    WorldWindowUpperLeft = new Point(
+                                        _initialWorldWindowUpperLeft.Value.X,
+                                        yOffset - ViewPortSize.Height / Scaling.Height);
+                                }
+                                else
+                                {
+                                    var scaling = ViewPortSize.Height / (_initialWorldWindowSize.Value.Height);
+                                    Scaling = new Size(scaling, scaling);
 
-                                //// Her flugter bunden af view porten NEDERSTE kant a World Window
-                                //WorldWindowUpperLeft = new Point(
-                                //    _initialWorldWindowUpperLeft.Value.X,
-                                //    -ViewPortSize.Height / Scaling.Height + 0.5);
+                                    var offsetX = (
+                                        2 * _initialWorldWindowUpperLeft.Value.X 
+                                        + _initialWorldWindowSize.Value.Width
+                                        - ViewPortSize.Width / scaling) / 2;
 
-                                // Hvad er "World" afstanden mellem top og bund af ViewPorten
-                                var temp = ViewPortSize.Height / scaling;
-
-                                // Her flugter bunden af view porten ØVERSTE kant a World Window
-                                //WorldWindowUpperLeft = new Point(
-                                //    _initialWorldWindowUpperLeft.Value.X,
-                                //    -ViewPortSize.Height / Scaling.Height + 0.5 + temp - _initialWorldWindowSize.Value.Height);
-
-                                var offset1 = 0.5;
-                                var offset2 = 0.5 + temp - _initialWorldWindowSize.Value.Height;
-                                var offset = (offset1 + offset2) / 2;
-
-                                // Her er World Window i MIDTEN af View porten
-                                WorldWindowUpperLeft = new Point(
-                                    _initialWorldWindowUpperLeft.Value.X,
-                                    -ViewPortSize.Height / Scaling.Height + offset);
+                                    WorldWindowUpperLeft = new Point(
+                                        offsetX,
+                                        -_initialWorldWindowUpperLeft.Value.Y - ViewPortSize.Height / scaling);
+                                }
                             }
                             else
                             {
