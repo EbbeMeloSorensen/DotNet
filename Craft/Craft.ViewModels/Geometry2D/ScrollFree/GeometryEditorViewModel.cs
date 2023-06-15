@@ -16,7 +16,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private int _yAxisFactor;
         private double? _initialScalingX;
         private double? _initialScalingY;
-        private Point? _initialWorldWindowUpperLeft;
+        private Point? _initialWorldWindowFocus;
         private Size? _initialWorldWindowSize;
         private string _imagePath;
         protected Size _viewPortSize;
@@ -178,37 +178,41 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public GeometryEditorViewModel(
             int yAxisFactor,
-            Point worldWindowUpperLeft,
+            double scalingX,
+            double scalingY,
+            Point worldWindowFocus) : this(yAxisFactor)
+        {
+            _initialScalingX = scalingX;
+            _initialScalingY = scalingY;
+            _initialWorldWindowFocus = worldWindowFocus;
+        }
+
+        public GeometryEditorViewModel(
+            int yAxisFactor,
+            Point worldWindowFocus,
             Size worldWindowSize) : this(yAxisFactor)
         {
-            _initialWorldWindowUpperLeft = worldWindowUpperLeft;
+            _initialWorldWindowFocus = worldWindowFocus;
             _initialWorldWindowSize = worldWindowSize;
         }
 
         protected GeometryEditorViewModel(
-            //double? initialScalingX,
-            //double? initialScalingY,
-            //Point? initialWorldWindowUpperLeft,
-            //Size? initialWorldWindowSize,
             int yAxisFactor)
         {
+            _yAxisFactor = yAxisFactor;
+
+            _defaultBrush = new SolidColorBrush(Colors.Black);
+            _pointToDiameterMap = new Dictionary<PointD, Tuple<double, Brush>>();
+            _shapeViewModelMap = new Dictionary<int, ShapeViewModel>();
+
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
             WorldWindowBottomRightLimit = new Point(double.MaxValue, double.MaxValue);
-            //_initialScalingX = initialScalingX;
-            //_initialScalingY = initialScalingY;
-            //_initialWorldWindowUpperLeft = initialWorldWindowUpperLeft;
-            //_initialWorldWindowSize = initialWorldWindowSize;
-            _yAxisFactor = yAxisFactor;
-            _defaultBrush = new SolidColorBrush(Colors.Black);
 
             PolygonViewModels = new ObservableCollection<PolygonViewModel>();
             PolylineViewModels = new ObservableCollection<PolylineViewModel>();
             PointViewModels = new ObservableCollection<PointViewModel>();
             ShapeViewModels = new ObservableCollection<ShapeViewModel>();
             LineViewModels = new ObservableCollection<LineViewModel>();
-
-            _pointToDiameterMap = new Dictionary<PointD, Tuple<double, Brush>>();
-            _shapeViewModelMap = new Dictionary<int, ShapeViewModel>();
 
             PropertyChanged += GeometryEditorViewModel_PropertyChanged;
         }
@@ -229,13 +233,21 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                         if (_yAxisFactor == 1)
                         {
-                            // Dette er passende for et almindeligt view
+                            // Dette er passende for et ALMINDELIGT view
 
                             if (_initialScalingX.HasValue && 
                                 _initialScalingY.HasValue)
                             {
                                 Scaling = new Size(_initialScalingX.Value, _initialScalingY.Value);
-                                WorldWindowUpperLeft = new Point(0, 0);
+
+                                if (_initialWorldWindowFocus.HasValue)
+                                {
+                                    throw new NotImplementedException();
+                                }
+                                else
+                                {
+                                    WorldWindowUpperLeft = new Point(0, 0);
+                                }
                             }
                             else
                             {
@@ -250,41 +262,70 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                                 _initialScalingY.HasValue)
                             {
                                 Scaling = new Size(_initialScalingX.Value, _initialScalingY.Value);
-                                WorldWindowUpperLeft = new Point(0, -ViewPortSize.Height / Scaling.Height);
+
+                                if (_initialWorldWindowFocus.HasValue)
+                                {
+                                    WorldWindowUpperLeft = new Point(
+                                        _initialWorldWindowFocus.Value.X - WorldWindowSize.Width / 2, 
+                                        -ViewPortSize.Height / Scaling.Height - _initialWorldWindowFocus.Value.Y + WorldWindowSize.Height / 2);
+                                }
+                                else
+                                {
+                                    WorldWindowUpperLeft = new Point(0, -ViewPortSize.Height / Scaling.Height);
+                                }
                             }
-                            else if (_initialWorldWindowUpperLeft.HasValue &&
+                            else if (_initialWorldWindowFocus.HasValue &&
                                      _initialWorldWindowSize.HasValue)
                             {
                                 if (ViewPortSize.Width / ViewPortSize.Height <=
                                     _initialWorldWindowSize.Value.Width / _initialWorldWindowSize.Value.Height)
                                 {
-                                    // Dette er hvis World Window skal afgrænses af Viewportens HØJRE og VENSTRE side
+                                    // Dette er hvis World Window skal afgrænses af Viewportens VENSTRE og HØJRE side
 
                                     var scaling = ViewPortSize.Width / (_initialWorldWindowSize.Value.Width);
                                     Scaling = new Size(scaling, scaling);
 
+                                    // Under construction
+                                    var initialWorldWindowUpperLeft = new Point(
+                                        _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
+                                        _initialWorldWindowFocus.Value.Y + _initialWorldWindowSize.Value.Height / 2);
+
                                     var yOffset = (
                                         ViewPortSize.Height / scaling
                                         - _initialWorldWindowSize.Value.Height
-                                        - 2 * _initialWorldWindowUpperLeft.Value.Y) / 2;
+                                        - 2 * initialWorldWindowUpperLeft.Y) / 2;
 
                                     WorldWindowUpperLeft = new Point(
-                                        _initialWorldWindowUpperLeft.Value.X,
+                                        initialWorldWindowUpperLeft.X,
                                         yOffset - ViewPortSize.Height / Scaling.Height);
                                 }
                                 else
                                 {
+                                    // Dette er hvis World Window skal afgrænses af Viewportens NEDERSTE OG ØVERSTE side
+
                                     var scaling = ViewPortSize.Height / (_initialWorldWindowSize.Value.Height);
                                     Scaling = new Size(scaling, scaling);
 
-                                    var offsetX = (
-                                        2 * _initialWorldWindowUpperLeft.Value.X 
-                                        + _initialWorldWindowSize.Value.Width
-                                        - ViewPortSize.Width / scaling) / 2;
+                                    // Under construction..
+                                    //var initialWorldWindowUpperLeft = new Point(
+                                    //    _initialWorldWindowSize.Value.Width / 2 - _initialWorldWindowFocus.Value.X,
+                                    //    _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y);
+
+                                    //var offsetX = (
+                                    //    2 * initialWorldWindowUpperLeft.X 
+                                    //    + _initialWorldWindowSize.Value.Width
+                                    //    - ViewPortSize.Width / scaling) / 2;
+
+                                    //WorldWindowUpperLeft = new Point(
+                                    //    offsetX,
+                                    //    initialWorldWindowUpperLeft.Y - ViewPortSize.Height / scaling);
+
+                                    var wwx1 = _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2;
+                                    var wwx2 = wwx1 - WorldWindowSize.Width + _initialWorldWindowSize.Value.Width;
 
                                     WorldWindowUpperLeft = new Point(
-                                        offsetX,
-                                        -_initialWorldWindowUpperLeft.Value.Y - ViewPortSize.Height / scaling);
+                                        (wwx1 + wwx2) / 2,
+                                         _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y - ViewPortSize.Height / scaling);
                                 }
                             }
                             else

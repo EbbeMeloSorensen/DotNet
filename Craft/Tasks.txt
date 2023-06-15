@@ -53,3 +53,15 @@ Todo:
   o Fjern GetNodeLabel fra IGraph.  (OK)
 
 Da du skiftede fra at tegne et antal liniestykker og til at tegne en polyline, vendte den tingene på hovedet uden at du lagde mærke til det
+
+Pt er der 2 måder at initializere sin GeometryEditor på:
+1) Man angiver x skalering og y-skalering 
+   (OG SÅ PLACERER DEN ORIGO I ENTEN NEDERSTE ELLER ØVERSTE VENSTRE HJØRNE)
+2) Man angiver et ønsket world window
+   (OG SÅ PLACERER DEN WORLD WINDOW SÅLEDES, AT DEN PASSER TIL DET, BORTSET FRA AT DET
+   I REGLEN ER LIDT STØRRE, FORDI ASPECT RATIO FOR VIEW PORTEN ER ANDERLEDES OG DER DERFOR ER PLADS TIL OVERS)
+
+Hvad er du i gang med nu?
+.. at erstatte initialWorldWindowUpperLeft med initialWorldWindowFOCUS - den skulle fint kunne bruges i forbindelse med
+   placering af et view på den måde, hvor man gerne vil SLIPPE for at angive skalering. Og derudover er det en fin
+   parameter, når man GERNE vil angive skalering

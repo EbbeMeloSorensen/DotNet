@@ -64,15 +64,23 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double scalingY) : base(yAxisFactor, scalingX, scalingY)
         {
         }
-
         public MathematicalGeometryEditorViewModel(
-            int yAxisFactor, 
-            Point worldWindowUpperLeft, 
-            Size worldWindowSize) : base(yAxisFactor, worldWindowUpperLeft, worldWindowSize)
+            int yAxisFactor,
+            double scalingX,
+            double scalingY,
+            Point worldWindowFocus) : base(yAxisFactor, scalingX, scalingY, worldWindowFocus)
         {
         }
 
-        protected MathematicalGeometryEditorViewModel(int yAxisFactor) : base(yAxisFactor)
+        public MathematicalGeometryEditorViewModel(
+            int yAxisFactor, 
+            Point worldWindowFocus, 
+            Size worldWindowSize) : base(yAxisFactor, worldWindowFocus, worldWindowSize)
+        {
+        }
+
+        protected MathematicalGeometryEditorViewModel(
+            int yAxisFactor) : base(yAxisFactor)
         {
         }
     }

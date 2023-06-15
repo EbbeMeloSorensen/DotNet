@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Craft.Utils;
-using Craft.Utils.Linq;
-using Craft.ViewModels.Geometry2D.ScrollFree;
-using Craft.ViewModels.Geometry2D.Scrolling;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Craft.Utils;
+using Craft.ViewModels.Geometry2D.ScrollFree;
+using Craft.ViewModels.Geometry2D.Scrolling;
 
 namespace Craft.UIElements.GuiTest.Tab3
 {
@@ -41,13 +39,25 @@ namespace Craft.UIElements.GuiTest.Tab3
         public Tab3ViewModel()
         {
             GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 1);
-            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(-1, 1, 1);
+
+            // Denne bruger vi, hvis vi er ok med at koordinatsystemets origo er sammenfaldende med viewets nederste venstre hjørne
+            //MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(
+            //    -1, 
+            //    1, 
+            //    1);
+
+            // Denne bruger vi, hvis vi gerne vil specificere, hvilket World punkt man skal fokusere på
+            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(
+                -1,
+                1,
+                1,
+                new Point(300, 112.5));
 
             ScatterChartViewModel = new ScatterChartViewModel(
                 (x0, x1) => GeneratePoints(x0, x1),
                 -1,
-                new Point(-2, -1.5),
-                new Size(5, 2));
+                new Point(0.5, -0.5),
+                new Size(3, 5));
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
@@ -151,6 +161,16 @@ namespace Craft.UIElements.GuiTest.Tab3
                 geometryEditorViewModel.AddLine(new PointD(-0.1, n), new PointD(0.1, n), coordinateSystemThickness, coordinateSystemBrush);
                 geometryEditorViewModel.AddLine(new PointD(-0.1, -n), new PointD(0.1, -n), coordinateSystemThickness, coordinateSystemBrush);
             }
+
+            // Draw a window for diagnostics
+            var x0 = -1.0;
+            var x1 = 2.0;
+            var y0 = -3.0;
+            var y1 = 2.0;
+            geometryEditorViewModel.AddLine(new PointD(x0, y0), new PointD(x1, y0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(x1, y0), new PointD(x1, y1), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(x1, y1), new PointD(x0, y1), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(x0, y1), new PointD(x0, y0), coordinateSystemThickness, coordinateSystemBrush);
         }
 
         private List<PointD> GeneratePoints(
