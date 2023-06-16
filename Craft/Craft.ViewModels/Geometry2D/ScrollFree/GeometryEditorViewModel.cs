@@ -285,23 +285,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                                     var scaling = ViewPortSize.Width / (_initialWorldWindowSize.Value.Width);
                                     Scaling = new Size(scaling, scaling);
 
-                                    throw new NotImplementedException();
-
-                                    // Under construction
-
-                                    // Old
-                                    //var initialWorldWindowUpperLeft = new Point(
-                                    //    _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
-                                    //    _initialWorldWindowFocus.Value.Y + _initialWorldWindowSize.Value.Height / 2);
-
-                                    //var yOffset = (
-                                    //    ViewPortSize.Height / scaling
-                                    //    - _initialWorldWindowSize.Value.Height
-                                    //    - 2 * initialWorldWindowUpperLeft.Y) / 2;
-
-                                    //WorldWindowUpperLeft = new Point(
-                                    //    initialWorldWindowUpperLeft.X,
-                                    //    yOffset - ViewPortSize.Height / Scaling.Height);
+                                    WorldWindowUpperLeft = new Point(
+                                        _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
+                                        (2 * _initialWorldWindowFocus.Value.X - WorldWindowSize.Height) / 2);
                                 }
                                 else
                                 {
@@ -310,12 +296,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                                     var scaling = ViewPortSize.Height / (_initialWorldWindowSize.Value.Height);
                                     Scaling = new Size(scaling, scaling);
 
-                                    var wwx1 = _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2;
-                                    var wwx2 = wwx1 - WorldWindowSize.Width + _initialWorldWindowSize.Value.Width;
-
                                     WorldWindowUpperLeft = new Point(
-                                        (wwx1 + wwx2) / 2,
-                                         _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y - ViewPortSize.Height / scaling);
+                                        (2 * _initialWorldWindowFocus.Value.X - WorldWindowSize.Width) / 2,
+                                        _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y - ViewPortSize.Height / scaling);
                                 }
                             }
                             else

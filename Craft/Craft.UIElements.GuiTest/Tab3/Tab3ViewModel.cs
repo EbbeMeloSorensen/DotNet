@@ -57,11 +57,11 @@ namespace Craft.UIElements.GuiTest.Tab3
                 (x0, x1) => GeneratePoints(x0, x1),
                 -1,
                 // Afgrænset øverst og nederst
-                //new Point(0.5, -0.5),
-                //new Size(3, 5));
-                // Afgrænset højre og venstre
                 new Point(0.5, -0.5),
-                new Size(7, 3));
+                new Size(3, 5));
+                // Afgrænset højre og venstre
+                //new Point(0.5, -0.5),
+                //new Size(7, 3));
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
@@ -169,16 +169,16 @@ namespace Craft.UIElements.GuiTest.Tab3
             // Draw a window for diagnostics
 
             // Afgrænset øverst og nederst
-            //var x0 = -1.0;
-            //var x1 = 2.0;
-            //var y0 = -3.0;
-            //var y1 = 2.0;
+            var x0 = -1.0;
+            var x1 = 2.0;
+            var y0 = -3.0;
+            var y1 = 2.0;
 
             // Afgrænset højre og venstre
-            var x0 = -3.0;
-            var x1 = 4.0;
-            var y0 = -2.0;
-            var y1 = 1.0;
+            //var x0 = -3.0;
+            //var x1 = 4.0;
+            //var y0 = -2.0;
+            //var y1 = 1.0;
 
             geometryEditorViewModel.AddLine(new PointD(x0, y0), new PointD(x1, y0), coordinateSystemThickness, coordinateSystemBrush);
             geometryEditorViewModel.AddLine(new PointD(x1, y0), new PointD(x1, y1), coordinateSystemThickness, coordinateSystemBrush);
