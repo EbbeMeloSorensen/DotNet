@@ -12,28 +12,43 @@
             <TabControl SelectedIndex="0">
                 <TabItem Header="Basic">
                     <Grid>
-                        <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
-                        <StackPanel Margin="10">
-                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" 
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <scrollFree:GeometryEditorView
+                            Grid.Row="0" DataContext="{Binding GeometryEditorViewModel1}"/>
+                        <StackPanel Grid.Row="1" Margin="10">
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"
                                     Command="{Binding ZoomInForGeometryEditor1Command}" >Zoom In</Button>
-                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" 
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" 
                                     Command="{Binding ZoomOutForGeometryEditor1Command}" >Zoom Out</Button>
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Mathematical">
-                    <scrollFree:GeometryEditorView DataContext="{Binding MathematicalGeometryEditorViewModel}"/>
+                <TabItem Header="Inverted">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding GeometryEditorViewModel2}"/>
+                        <StackPanel Grid.Row="1" Margin="10">
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"
+                                    Command="{Binding ZoomInForGeometryEditor2Command}" >Zoom In</Button>
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" 
+                                    Command="{Binding ZoomOutForGeometryEditor2Command}" >Zoom Out</Button>
+                        </StackPanel>
+                    </Grid>
                 </TabItem>
                 <TabItem Header="ScatterPlot">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="5"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding ScatterChartViewModel}"/>
-                        <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"></GridSplitter>
-                        <Grid Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Grid Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="50"/>

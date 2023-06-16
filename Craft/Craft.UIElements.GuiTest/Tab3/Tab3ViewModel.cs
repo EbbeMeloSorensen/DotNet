@@ -12,8 +12,22 @@ namespace Craft.UIElements.GuiTest.Tab3
 {
     public class Tab3ViewModel : ViewModelBase
     {
+        // Afgrænset øverst og nederst
+        //private double _x0 = -1.0;
+        //private double _x1 = 2.0;
+        //private double _y0 = -3.0;
+        //private double _y1 = 4.0;
+
+        // Afgrænset højre og venstre
+        private double _x0 = -3.0;
+        private double _x1 = 4.0;
+        private double _y0 = -2.0;
+        private double _y1 = 1.0;
+
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
+        private RelayCommand _zoomInForGeometryEditor2Command;
+        private RelayCommand _zoomOutForGeometryEditor2Command;
 
         public RelayCommand ZoomInForGeometryEditor1Command
         {
@@ -31,42 +45,62 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
         }
 
-        public GeometryEditorViewModel GeometryEditorViewModel { get; }
-        public MathematicalGeometryEditorViewModel MathematicalGeometryEditorViewModel { get; }
+        public RelayCommand ZoomInForGeometryEditor2Command
+        {
+            get
+            {
+                return _zoomInForGeometryEditor2Command ?? (_zoomInForGeometryEditor2Command = new RelayCommand(ZoomInForGeometryEditor2));
+            }
+        }
+
+        public RelayCommand ZoomOutForGeometryEditor2Command
+        {
+            get
+            {
+                return _zoomOutForGeometryEditor2Command ?? (_zoomOutForGeometryEditor2Command = new RelayCommand(ZoomOutForGeometryEditor2));
+            }
+        }
+
+        public GeometryEditorViewModel GeometryEditorViewModel1 { get; }
+        public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
         public ScatterChartViewModel ScatterChartViewModel { get; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
 
         public Tab3ViewModel()
         {
-            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 1);
+            GeometryEditorViewModel1 = new GeometryEditorViewModel(1, 1, 1);
 
             // Denne bruger vi, hvis vi er ok med at koordinatsystemets origo er sammenfaldende med viewets nederste venstre hjørne
-            //MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(
+            //GeometryEditorViewModel2 = new GeometryEditorViewModel(
             //    -1, 
             //    1, 
             //    1);
 
             // Denne bruger vi, hvis vi gerne vil specificere, hvilket World punkt man skal fokusere på
-            MathematicalGeometryEditorViewModel = new MathematicalGeometryEditorViewModel(
+            GeometryEditorViewModel2 = new GeometryEditorViewModel(
                 -1,
                 1,
                 1,
                 new Point(300, 112.5));
 
+            var worldWindowFocus = new Point(
+                (_x1 + _x0) / 2,
+                (_y1 + _y0) / 2);
+
+            var worldWindowSize = new Size(
+                _x1 - _x0,
+                _y1 - _y0);
+
             ScatterChartViewModel = new ScatterChartViewModel(
                 (x0, x1) => GeneratePoints(x0, x1),
                 -1,
-                // Afgrænset øverst og nederst
-                new Point(0.5, -0.5),
-                new Size(3, 5));
-                // Afgrænset højre og venstre
-                //new Point(0.5, -0.5),
-                //new Size(7, 3));
+                worldWindowFocus,
+                worldWindowSize);
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
-            DrawAHouse(GeometryEditorViewModel);
-            DrawAHouse(MathematicalGeometryEditorViewModel);
+            DrawAHouse(GeometryEditorViewModel1);
+            DrawAHouse(GeometryEditorViewModel2);
 
             DrawACoordinateSystem(ScatterChartViewModel);
         }
@@ -167,23 +201,10 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
 
             // Draw a window for diagnostics
-
-            // Afgrænset øverst og nederst
-            var x0 = -1.0;
-            var x1 = 2.0;
-            var y0 = -3.0;
-            var y1 = 2.0;
-
-            // Afgrænset højre og venstre
-            //var x0 = -3.0;
-            //var x1 = 4.0;
-            //var y0 = -2.0;
-            //var y1 = 1.0;
-
-            geometryEditorViewModel.AddLine(new PointD(x0, y0), new PointD(x1, y0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(x1, y0), new PointD(x1, y1), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(x1, y1), new PointD(x0, y1), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(x0, y1), new PointD(x0, y0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(_x0, _y0), new PointD(_x1, _y0), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(_x1, _y0), new PointD(_x1, _y1), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(_x1, _y1), new PointD(_x0, _y1), coordinateSystemThickness, coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(_x0, _y1), new PointD(_x0, _y0), coordinateSystemThickness, coordinateSystemBrush);
         }
 
         private List<PointD> GeneratePoints(
@@ -194,17 +215,17 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             for (var x = x0; x <= x1; x += 0.1)
             {
-                //points.Add(new PointD(x, x));                                                          // y = x
-                //points.Add(new PointD(x, 0.5 * x));                                                    // y = 0.5x
-                //points.Add(new PointD(x, 0.5 * x - 1));                                                // y = 0.5x - 1
-                //points.Add(new PointD(x, -x));                                                         // y = -x
-                //points.Add(new PointD(x, 0));                                                          // y = 0
-                //points.Add(new PointD(x, 2));                                                          // y = 2
-                //points.Add(new PointD(x, x * x));                                                      // y = x^2
-                //points.Add(new PointD(x, -x * x));                                                     // y = -x^2
-                //points.Add(new PointD(x, Math.Pow(x - 2, 2) - 3));                                     // y = (x - 2)^2 - 3 = x^2 - 4x + 1
-                points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2)); // y = x
-                //points.Add(new PointD(x, Math.Sin(x)));                                                // y = sin(x)
+                //points.Add(new PointD(x, x));                                                        // y = x
+                //points.Add(new PointD(x, 0.5 * x));                                                  // y = 0.5x
+                //points.Add(new PointD(x, 0.5 * x - 1));                                              // y = 0.5x - 1
+                //points.Add(new PointD(x, -x));                                                       // y = -x
+                //points.Add(new PointD(x, 0));                                                        // y = 0
+                //points.Add(new PointD(x, 2));                                                        // y = 2
+                //points.Add(new PointD(x, x * x));                                                    // y = x^2
+                //points.Add(new PointD(x, -x * x));                                                   // y = -x^2
+                //points.Add(new PointD(x, Math.Pow(x - 2, 2) - 3));                                   // y = (x - 2)^2 - 3 = x^2 - 4x + 1
+                points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
+                //points.Add(new PointD(x, Math.Sin(x)));                                              // y = sin(x)
             }
 
             return points;
@@ -212,12 +233,22 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void ZoomInForGeometryEditor1()
         {
-            GeometryEditorViewModel.ChangeScaling(1.2);
+            GeometryEditorViewModel1.ChangeScaling(1.2);
         }
 
         private void ZoomOutForGeometryEditor1()
         {
-            GeometryEditorViewModel.ChangeScaling(1 / 1.2);
+            GeometryEditorViewModel1.ChangeScaling(1 / 1.2);
+        }
+
+        private void ZoomInForGeometryEditor2()
+        {
+            GeometryEditorViewModel2.ChangeScaling(1.2);
+        }
+
+        private void ZoomOutForGeometryEditor2()
+        {
+            GeometryEditorViewModel2.ChangeScaling(1 / 1.2);
         }
     }
 }

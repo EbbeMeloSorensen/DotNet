@@ -11,7 +11,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         double x0, 
         double y0);
 
-    public class ScatterChartViewModel : MathematicalGeometryEditorViewModel
+    public class ScatterChartViewModel : GeometryEditorViewModel
     {
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
         private double _curveThickness = 0.05;
@@ -29,23 +29,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         }
 
         public UpdatePointsCallback UpdatePointsCallback { get; set; }
-
-        //public ScatterChartViewModel(
-        //    UpdatePointsCallback updatePointsCallback,
-        //    double? initialMagnificationX,
-        //    double? initialMagnificationY,
-        //    Point? initialWorldWindowUpperLeft,
-        //    Size? initialWorldWindowSize,
-        //    int yAxisFactor) : base(initialMagnificationX,
-        //                            initialMagnificationY,
-        //                            initialWorldWindowUpperLeft,
-        //                            initialWorldWindowSize,
-        //                            yAxisFactor)
-        //{
-        //    UpdatePointsCallback = updatePointsCallback;
-
-        //    PropertyChanged += ScatterChartViewModel_PropertyChanged;
-        //}
 
         public ScatterChartViewModel(
             UpdatePointsCallback updatePointsCallback,

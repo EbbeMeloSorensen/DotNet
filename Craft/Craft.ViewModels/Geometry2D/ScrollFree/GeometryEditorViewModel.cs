@@ -321,23 +321,28 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 Scaling.Height * factor);
         }
 
-        public virtual void AddPoint(
+        public void AddPoint(
             PointD point,
             double diameter,
             Brush brush = null)
         {
             // Here, we use a so-called null-coalescing expression for setting using the default brush unless one is provided
-            _pointToDiameterMap[point] = new Tuple<double, Brush>(diameter, brush ?? _defaultBrush);
+            _pointToDiameterMap[new PointD(point.X, _yAxisFactor * point.Y)] = new Tuple<double, Brush>(diameter, brush ?? _defaultBrush);
             UpdatePointViewModels();
         }
 
-        public virtual void AddShape(
+        public void AddShape(
             int id,
             ShapeViewModel shapeViewModel)
         {
+            shapeViewModel.Point = new PointD(
+                shapeViewModel.Point.X, 
+                shapeViewModel.Point.Y * _yAxisFactor);
+
             _shapeViewModelMap[id] = shapeViewModel;
             ShapeViewModels.Add(shapeViewModel);
         }
+
         public void RemoveShape(
             int id)
         {
@@ -346,29 +351,34 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _shapeViewModelMap.Remove(id);
         }
 
-        public virtual void AddLine(
+        public void AddLine(
             PointD point1,
             PointD point2,
             double thickness,
             Brush brush)
         {
-            LineViewModels.Add(new LineViewModel(point1, point2, thickness, brush));
+            LineViewModels.Add(new LineViewModel(
+                new PointD(point1.X, _yAxisFactor * point1.Y), 
+                new PointD(point2.X, _yAxisFactor * point2.Y), 
+                thickness, brush));
         }
 
-        public virtual void AddPolygon(
+        public void AddPolygon(
             IEnumerable<PointD> points,
             double thickness,
             Brush brush)
         {
-            PolygonViewModels.Add(new PolygonViewModel(points, thickness, brush));
+            PolygonViewModels.Add(new PolygonViewModel(
+                points.Select(p => new PointD(p.X, _yAxisFactor * p.Y)), thickness, brush));
         }
 
-        public virtual void AddPolyline(
+        public void AddPolyline(
             IEnumerable<PointD> points,
             double thickness,
             Brush brush)
         {
-            PolylineViewModels.Add(new PolylineViewModel(points, thickness, brush));
+            PolylineViewModels.Add(new PolylineViewModel(
+                points.Select(p => new PointD(p.X, _yAxisFactor * p.Y)), thickness, brush));
         }
 
         public void ClearPolygons()
