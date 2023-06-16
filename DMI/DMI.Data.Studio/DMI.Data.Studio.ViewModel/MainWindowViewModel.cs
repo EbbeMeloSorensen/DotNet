@@ -88,7 +88,7 @@ namespace DMI.Data.Studio.ViewModel
         public StationInformationListViewModel StationInformationListViewModel { get; private set; }
         public StationInformationDetailsViewModel StationInformationDetailsViewModel { get; private set; }
         public StationListViewModel StationListViewModel { get; private set; }
-        public MathematicalGeometryEditorViewModel GeometryEditorViewModel { get; private set; }
+        public GeometryEditorViewModel GeometryEditorViewModel { get; private set; }
         public ChronologyViewModel ChronologyViewModel { get; private set; }
         public StatisticsViewModel StatisticsViewModel { get; private set; }
 
@@ -211,8 +211,8 @@ namespace DMI.Data.Studio.ViewModel
                 StationInformationListViewModel.StationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
 
-            GeometryEditorViewModel = new MathematicalGeometryEditorViewModel(100, 100, 7.92, 54.82);
-            
+            GeometryEditorViewModel = new GeometryEditorViewModel(-1, 120, 120, new Point(11, 55));
+
             ChronologyViewModel = new ChronologyViewModel(new DateTime(2015, 1, 1), DateTime.UtcNow.TruncateToMilliseconds(), 50, 240);
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(

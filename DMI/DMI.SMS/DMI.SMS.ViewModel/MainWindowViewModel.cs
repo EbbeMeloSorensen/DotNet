@@ -60,7 +60,7 @@ namespace DMI.SMS.ViewModel
         public StationInformationListViewModel StationInformationListViewModel { get; }
         public StationInformationDetailsViewModel StationInformationDetailsViewModel { get; }
         public StationInformationCollectionViewModel StationInformationCollectionViewModel { get; }
-        public MathematicalGeometryEditorViewModel GeometryEditorViewModel { get; }
+        public GeometryEditorViewModel GeometryEditorViewModel { get; }
         public TaskViewModel TaskViewModel { get; }
         public LogViewModel LogViewModel { get; }
 
@@ -106,7 +106,8 @@ namespace DMI.SMS.ViewModel
 
             StationInformationListViewModel.SelectedStationInformations.PropertyChanged += SelectedStationInformations_PropertyChanged;
 
-            GeometryEditorViewModel = new MathematicalGeometryEditorViewModel(120, 120, 7.92, 54.82);
+            //GeometryEditorViewModel = new MathematicalGeometryEditorViewModel(120, 120, 7.92, 54.82);
+            GeometryEditorViewModel = new GeometryEditorViewModel(-1, 120, 120, new Point(11, 55));
 
             TaskViewModel = new TaskViewModel();
 

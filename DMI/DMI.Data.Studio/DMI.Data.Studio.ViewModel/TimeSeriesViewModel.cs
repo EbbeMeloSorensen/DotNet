@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
@@ -14,6 +15,12 @@ namespace DMI.Data.Studio.ViewModel
     //   Når der sker en "major" opdatering af World Window, så hentes nye tidsseriedata fra datakilden
     public class TimeSeriesViewModel : ViewModelBase
     {
+        // Afgrænset højre og venstre
+        private double _x0 = -3.0;
+        private double _x1 = 4.0;
+        private double _y0 = -2.0;
+        private double _y1 = 1.0;
+
         private DateTime _dateTimeAtOrigo;
         private TimeSpan _timeSpanForXUnit;
 
@@ -32,8 +39,16 @@ namespace DMI.Data.Studio.ViewModel
 
             var xRight  = (dateTimeAtRightSideOfView - _dateTimeAtOrigo) / _timeSpanForXUnit;
 
-            ScatterChartViewModel = new ScatterChartViewModel(
-                (x0, x1) => GeneratePoints(x0, x1), 38, 38, 0, 1);
+            var worldWindowFocus = new Point(
+                (_x1 + _x0) / 2,
+                (_y1 + _y0) / 2);
+
+            var worldWindowSize = new Size(
+                _x1 - _x0,
+                _y1 - _y0);
+
+            ScatterChartViewModel = new ScatterChartViewModel( 
+                (x0, x1) => GeneratePoints(x0, x1), -1, worldWindowFocus, worldWindowSize);
 
             // Todo: Man skal kunne sætte WorldWindow, så det initielt starter med at dække 7 hele dage, inkl hele den igangværende dag
             // - Det er nok nødvendigt at tage udgangspukt i den første reelle viewport, der kommer ind..
