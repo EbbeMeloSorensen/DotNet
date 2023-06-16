@@ -285,19 +285,23 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                                     var scaling = ViewPortSize.Width / (_initialWorldWindowSize.Value.Width);
                                     Scaling = new Size(scaling, scaling);
 
+                                    throw new NotImplementedException();
+
                                     // Under construction
-                                    var initialWorldWindowUpperLeft = new Point(
-                                        _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
-                                        _initialWorldWindowFocus.Value.Y + _initialWorldWindowSize.Value.Height / 2);
 
-                                    var yOffset = (
-                                        ViewPortSize.Height / scaling
-                                        - _initialWorldWindowSize.Value.Height
-                                        - 2 * initialWorldWindowUpperLeft.Y) / 2;
+                                    // Old
+                                    //var initialWorldWindowUpperLeft = new Point(
+                                    //    _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
+                                    //    _initialWorldWindowFocus.Value.Y + _initialWorldWindowSize.Value.Height / 2);
 
-                                    WorldWindowUpperLeft = new Point(
-                                        initialWorldWindowUpperLeft.X,
-                                        yOffset - ViewPortSize.Height / Scaling.Height);
+                                    //var yOffset = (
+                                    //    ViewPortSize.Height / scaling
+                                    //    - _initialWorldWindowSize.Value.Height
+                                    //    - 2 * initialWorldWindowUpperLeft.Y) / 2;
+
+                                    //WorldWindowUpperLeft = new Point(
+                                    //    initialWorldWindowUpperLeft.X,
+                                    //    yOffset - ViewPortSize.Height / Scaling.Height);
                                 }
                                 else
                                 {
@@ -305,20 +309,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                                     var scaling = ViewPortSize.Height / (_initialWorldWindowSize.Value.Height);
                                     Scaling = new Size(scaling, scaling);
-
-                                    // Under construction..
-                                    //var initialWorldWindowUpperLeft = new Point(
-                                    //    _initialWorldWindowSize.Value.Width / 2 - _initialWorldWindowFocus.Value.X,
-                                    //    _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y);
-
-                                    //var offsetX = (
-                                    //    2 * initialWorldWindowUpperLeft.X 
-                                    //    + _initialWorldWindowSize.Value.Width
-                                    //    - ViewPortSize.Width / scaling) / 2;
-
-                                    //WorldWindowUpperLeft = new Point(
-                                    //    offsetX,
-                                    //    initialWorldWindowUpperLeft.Y - ViewPortSize.Height / scaling);
 
                                     var wwx1 = _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2;
                                     var wwx2 = wwx1 - WorldWindowSize.Width + _initialWorldWindowSize.Value.Width;
