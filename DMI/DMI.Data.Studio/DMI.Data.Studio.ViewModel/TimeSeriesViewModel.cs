@@ -15,12 +15,15 @@ namespace DMI.Data.Studio.ViewModel
     //   Når der sker en "major" opdatering af World Window, så hentes nye tidsseriedata fra datakilden
     public class TimeSeriesViewModel : ViewModelBase
     {
+        private Brush _curveBrush = new SolidColorBrush(Colors.Black);
+        private double _curveThickness = 0.05;
+
         private DateTime _dateTimeAtOrigo;
         private TimeSpan _timeSpanForXUnit;
 
         public string Greeting { get; set; }
 
-        public ScatterChartViewModel ScatterChartViewModel { get; set; }
+        public GeometryEditorViewModel ScatterChartViewModel { get; set; }
 
         public TimeSeriesViewModel()
         {
@@ -44,15 +47,37 @@ namespace DMI.Data.Studio.ViewModel
                 x1 - x0,
                 y1 - y0);
 
-            ScatterChartViewModel = new ScatterChartViewModel( 
-                (x0, x1) => GeneratePoints(x0, x1), worldWindowFocus, worldWindowSize);
+            ScatterChartViewModel = new GeometryEditorViewModel(
+                -1, worldWindowFocus, worldWindowSize);
 
-            // Todo: Man skal kunne sætte WorldWindow, så det initielt starter med at dække 7 hele dage, inkl hele den igangværende dag
-            // - Det er nok nødvendigt at tage udgangspukt i den første reelle viewport, der kommer ind..
-            // Man kunne f.eks. fodre den et "foretrukkent" WorldWindow, som den så vil tilstræbe, når der lander en viewport.
-            // Det kunne også passende være et centerpunkt og en bredde, og så skulle den selv beregne WorldWindow samt magnification ud fra det.
+            ScatterChartViewModel.WorldWindowMajorUpdateOccured += ScatterChartViewModel_WorldWindowMajorUpdateOccured;
 
             DrawACoordinateSystem(ScatterChartViewModel);
+        }
+
+        private void ScatterChartViewModel_WorldWindowMajorUpdateOccured(
+            object? sender, 
+            WorldWindowUpdatedEventArgs e)
+        {
+            var points = new List<PointD>();
+
+            // Find the time interval that corresponds to the World Window
+            var x0 = e.WorldWindowUpperLeft.X;
+            var x1 = x0 + e.WorldWindowSize.Width;
+            var t0 = _dateTimeAtOrigo + x0 * (_timeSpanForXUnit);
+            var t1 = _dateTimeAtOrigo + x1 * (_timeSpanForXUnit);
+
+            for (var t = t0; t <= t1; t += new TimeSpan(0, 15, 0))
+            {
+                // Find the x coordinate that corresponds to the current time
+                var x = (t - _dateTimeAtOrigo) / _timeSpanForXUnit;
+
+                // Vi viser bare en værdi der svarer til timetallet for det pågældende tidspunkt delt med 24
+                points.Add(new PointD(x, 1.0 * t.Hour / 24));
+            }
+
+            ScatterChartViewModel.ClearPolylines();
+            ScatterChartViewModel.AddPolyline(points, _curveThickness, _curveBrush);
         }
 
         private void DrawACoordinateSystem(
@@ -77,33 +102,6 @@ namespace DMI.Data.Studio.ViewModel
             {
                 geometryEditorViewModel.AddLine(new PointD(x, -0.2), new PointD(x, 0.2), coordinateSystemThickness, coordinateSystemBrush);
             }
-        }
-
-        private List<PointD> GeneratePoints(
-            double x0, 
-            double x1)
-        {
-            var points = new List<PointD>();
-
-            if (x1 <= x0)
-            {
-                return points;
-            }
-
-            // Find det time interval that corresponds to the World Window
-            var t0 = _dateTimeAtOrigo + x0 * (_timeSpanForXUnit);
-            var t1 = _dateTimeAtOrigo + x1 * (_timeSpanForXUnit);
-
-            for (var t = t0; t <= t1; t += new TimeSpan(0, 15, 0))
-            {
-                // Find the x coordinate that corresponds to the current time
-                var x = (t - _dateTimeAtOrigo) / _timeSpanForXUnit;
-
-                // Vi viser bare en værdi der svarer til timetallet for det pågældende tidspunkt delt med 24
-                points.Add(new PointD(x, 1.0 * t.Hour / 24));
-            }
-
-            return points;
         }
     }
 }
