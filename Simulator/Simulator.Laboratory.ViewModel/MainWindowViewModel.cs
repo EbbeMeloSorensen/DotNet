@@ -83,7 +83,8 @@ namespace Simulator.Laboratory.ViewModel
                 RefreshButtons();
             };
 
-            GeometryEditorViewModel = new GeometryEditorViewModel
+            // Bemærk: Det er et ALMINDELIGT view og altså ikke et "matematisk"
+            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 1)
             {
                 UpdateModelCallBack = Application.UpdateModel
             };
