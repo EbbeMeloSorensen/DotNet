@@ -48,7 +48,7 @@ namespace DMI.Data.Studio.ViewModel
                 _y1 - _y0);
 
             ScatterChartViewModel = new ScatterChartViewModel( 
-                (x0, x1) => GeneratePoints(x0, x1), -1, worldWindowFocus, worldWindowSize);
+                (x0, x1) => GeneratePoints(x0, x1), worldWindowFocus, worldWindowSize);
 
             // Todo: Man skal kunne sætte WorldWindow, så det initielt starter med at dække 7 hele dage, inkl hele den igangværende dag
             // - Det er nok nødvendigt at tage udgangspukt i den første reelle viewport, der kommer ind..
