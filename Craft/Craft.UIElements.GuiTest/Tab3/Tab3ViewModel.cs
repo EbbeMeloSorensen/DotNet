@@ -93,7 +93,6 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             ScatterChartViewModel = new ScatterChartViewModel(
                 (x0, x1) => GeneratePoints(x0, x1),
-                -1,
                 worldWindowFocus,
                 worldWindowSize);
 

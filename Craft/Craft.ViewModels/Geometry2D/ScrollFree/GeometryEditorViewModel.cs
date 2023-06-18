@@ -160,18 +160,17 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // invoked each time a frame refresh is needed
         public UpdateModelCallBack UpdateModelCallBack { get; set; }
 
-        // Denne constructor kalder en anden constructor
-        // Ideen er, at man NOGLE gange er interesseret i at angive magnification og ANDRE gange vil angive et ønsket World Window..
-        //public GeometryEditorViewModel(
-        //    int yAxisFactor) : this(1, 1, yAxisFactor)
-        //{
-        //}
+        public GeometryEditorViewModel(
+            int yAxisFactor) : this(yAxisFactor, 1, 1)
+        {
+        }
 
         public GeometryEditorViewModel(
             int yAxisFactor,
             double scalingX,
-            double scalingY) : this(yAxisFactor)
+            double scalingY) : this()
         {
+            _yAxisFactor = yAxisFactor;
             _initialScalingX = scalingX;
             _initialScalingY = scalingY;
         }
@@ -180,8 +179,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             int yAxisFactor,
             double scalingX,
             double scalingY,
-            Point worldWindowFocus) : this(yAxisFactor)
+            Point worldWindowFocus) : this()
         {
+            _yAxisFactor = yAxisFactor;
             _initialScalingX = scalingX;
             _initialScalingY = scalingY;
             _initialWorldWindowFocus = worldWindowFocus;
@@ -190,17 +190,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public GeometryEditorViewModel(
             int yAxisFactor,
             Point worldWindowFocus,
-            Size worldWindowSize) : this(yAxisFactor)
+            Size worldWindowSize) : this()
         {
+            _yAxisFactor = yAxisFactor;
             _initialWorldWindowFocus = worldWindowFocus;
             _initialWorldWindowSize = worldWindowSize;
         }
 
-        protected GeometryEditorViewModel(
-            int yAxisFactor)
+        protected GeometryEditorViewModel()
         {
-            _yAxisFactor = yAxisFactor;
-
             _defaultBrush = new SolidColorBrush(Colors.Black);
             _pointToDiameterMap = new Dictionary<PointD, Tuple<double, Brush>>();
             _shapeViewModelMap = new Dictionary<int, ShapeViewModel>();

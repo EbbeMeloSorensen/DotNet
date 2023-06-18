@@ -55,7 +55,7 @@ namespace Game.FlappyBird.ViewModel
             };
 
             // Bemærk: Det er et ALMINDELIGT view og altså ikke et "matematisk"
-            GeometryEditorViewModel = new GeometryEditorViewModel(1, 1, 1)
+            GeometryEditorViewModel = new GeometryEditorViewModel(1)
             {
                 UpdateModelCallBack = Application.UpdateModel
             };

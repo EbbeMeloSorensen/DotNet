@@ -32,37 +32,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public ScatterChartViewModel(
             UpdatePointsCallback updatePointsCallback,
-            int yAxisFactor,
-            double scalingX,
-            double scalingY) : base(yAxisFactor, scalingX, scalingY)
-        {
-            UpdatePointsCallback = updatePointsCallback;
-
-            PropertyChanged += ScatterChartViewModel_PropertyChanged;
-        }
-
-        public ScatterChartViewModel(
-            int yAxisFactor,
-            double scalingX,
-            double scalingY,
-            Point worldWindowFocus) : base(yAxisFactor, scalingX, scalingY, worldWindowFocus)
-        {
-        }
-
-        public ScatterChartViewModel(
-            UpdatePointsCallback updatePointsCallback,
-            int yAxisFactor,
             Point worldWindowFocus,
-            Size worldWindowSize) : base(yAxisFactor, worldWindowFocus, worldWindowSize)
-        {
-            UpdatePointsCallback = updatePointsCallback;
-
-            PropertyChanged += ScatterChartViewModel_PropertyChanged;
-        }
-
-        protected ScatterChartViewModel(
-            UpdatePointsCallback updatePointsCallback,
-            int yAxisFactor) : base(yAxisFactor)
+            Size worldWindowSize) : base(-1, worldWindowFocus, worldWindowSize)
         {
             UpdatePointsCallback = updatePointsCallback;
 
