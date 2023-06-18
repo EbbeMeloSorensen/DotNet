@@ -9,18 +9,12 @@ using GalaSoft.MvvmLight;
 namespace DMI.Data.Studio.ViewModel
 {
     // Denne klasse:
-    //   HAR en ScatterChartViewModel
-    //   BESTEMMER, hvad tidspunkt origo (x = 0) svarer til, samt hvad x = 1 svarer til
-    //   BESTEMMER initiel position af World Window (efterfølgende kommunikeres brugerens justeringer af WorldWindow fra ScatterChartViewModel)
+    //   - HAR en ScatterChartViewModel
+    //   - BESTEMMER, hvad tidspunkt origo (x = 0) svarer til, samt hvad x = 1 svarer til
+    //   - BESTEMMER initiel position af World Window (efterfølgende kommunikeres brugerens justeringer af WorldWindow fra ScatterChartViewModel)
     //   Når der sker en "major" opdatering af World Window, så hentes nye tidsseriedata fra datakilden
     public class TimeSeriesViewModel : ViewModelBase
     {
-        // Afgrænset højre og venstre
-        private double _x0 = -3.0;
-        private double _x1 = 4.0;
-        private double _y0 = -2.0;
-        private double _y1 = 1.0;
-
         private DateTime _dateTimeAtOrigo;
         private TimeSpan _timeSpanForXUnit;
 
@@ -37,15 +31,18 @@ namespace DMI.Data.Studio.ViewModel
 
             var dateTimeAtRightSideOfView = (DateTime.UtcNow.Date + TimeSpan.FromDays(1)).Date;
 
-            var xRight  = (dateTimeAtRightSideOfView - _dateTimeAtOrigo) / _timeSpanForXUnit;
+            var x0 = 0;
+            var x1 = (dateTimeAtRightSideOfView - _dateTimeAtOrigo) / _timeSpanForXUnit;
+            var y0 = 0.0;
+            var y1 = 2.0;
 
             var worldWindowFocus = new Point(
-                (_x1 + _x0) / 2,
-                (_y1 + _y0) / 2);
+                (x0 + x1) / 2,
+                (y0 + y1) / 2);
 
             var worldWindowSize = new Size(
-                _x1 - _x0,
-                _y1 - _y0);
+                x1 - x0,
+                y1 - y0);
 
             ScatterChartViewModel = new ScatterChartViewModel( 
                 (x0, x1) => GeneratePoints(x0, x1), worldWindowFocus, worldWindowSize);

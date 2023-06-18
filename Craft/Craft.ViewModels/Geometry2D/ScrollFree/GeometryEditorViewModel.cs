@@ -282,10 +282,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                                     var scaling = ViewPortSize.Width / (_initialWorldWindowSize.Value.Width);
                                     Scaling = new Size(scaling, scaling);
-
+      
                                     WorldWindowUpperLeft = new Point(
                                         _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
-                                        (2 * _initialWorldWindowFocus.Value.X - WorldWindowSize.Height) / 2);
+                                        -_initialWorldWindowFocus.Value.Y - WorldWindowSize.Height / 2);
                                 }
                                 else
                                 {
@@ -295,7 +295,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                                     Scaling = new Size(scaling, scaling);
 
                                     WorldWindowUpperLeft = new Point(
-                                        (2 * _initialWorldWindowFocus.Value.X - WorldWindowSize.Width) / 2,
+                                        _initialWorldWindowFocus.Value.X - WorldWindowSize.Width / 2,
                                         _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y - ViewPortSize.Height / scaling);
                                 }
                             }
