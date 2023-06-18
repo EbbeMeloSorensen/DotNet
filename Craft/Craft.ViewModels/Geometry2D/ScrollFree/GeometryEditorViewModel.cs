@@ -307,6 +307,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                                 throw new ArgumentException("Invalid specification of World Window");
                             }
                         }
+
+                        OnWorldWindowMajorUpdateOccured();
                     }
                     break;
             }

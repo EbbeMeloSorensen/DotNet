@@ -41,13 +41,13 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="ScatterPlot">
+                <TabItem Header="Function Curve">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding ScatterChartViewModel}"/>
+                        <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding GeometryEditorViewModel3}"/>
                         <Grid Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -65,22 +65,22 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Column="0" Grid.Row="0" Margin="3" Text="Scaling, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="0" Margin="1" 
-                                     Text="{Binding ScatterChartViewModel.Scaling.Width, Mode=OneWay, StringFormat=N3}"/>
+                                     Text="{Binding GeometryEditorViewModel3.Scaling.Width, Mode=OneWay, StringFormat=N3}"/>
                             <TextBlock Grid.Column="0" Grid.Row="1" Margin="3" Text="Scaling, Y:"/>
                             <TextBox Grid.Column="1" Grid.Row="1" Margin="1"
-                                     Text="{Binding ScatterChartViewModel.Scaling.Height, Mode=OneWay, StringFormat=N3}"/>
+                                     Text="{Binding GeometryEditorViewModel3.Scaling.Height, Mode=OneWay, StringFormat=N3}"/>
                             <TextBlock Grid.Column="0" Grid.Row="2" Margin="3" Text="World Window Upper Left, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="2" Margin="1"
-                                     Text="{Binding ScatterChartViewModel.WorldWindowUpperLeft.X, Mode=OneWay, StringFormat=N3}"/>
+                                     Text="{Binding GeometryEditorViewModel3.WorldWindowUpperLeft.X, Mode=OneWay, StringFormat=N3}"/>
                             <TextBlock Grid.Column="0" Grid.Row="3" Margin="3" Text="World Window Upper Left, Y:"/>
                             <TextBox Grid.Column="1" Grid.Row="3" Margin="1"
-                                     Text="{Binding ScatterChartViewModel.WorldWindowUpperLeft.Y, Mode=OneWay, StringFormat=N3}"/>
+                                     Text="{Binding GeometryEditorViewModel3.WorldWindowUpperLeft.Y, Mode=OneWay, StringFormat=N3}"/>
                             <TextBlock Grid.Column="0" Grid.Row="4" Margin="3" Text="World Window Width, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="4" Margin="1"
-                                     Text="{Binding ScatterChartViewModel.WorldWindowSize.Width, Mode=OneWay, StringFormat=N3}"/>
+                                     Text="{Binding GeometryEditorViewModel3.WorldWindowSize.Width, Mode=OneWay, StringFormat=N3}"/>
                             <TextBlock Grid.Column="0" Grid.Row="5" Margin="3" Text="World Window Height, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="5" Margin="1"
-                                     Text="{Binding ScatterChartViewModel.WorldWindowSize.Height, Mode=OneWay, StringFormat=N3}"/>
+                                     Text="{Binding GeometryEditorViewModel3.WorldWindowSize.Height, Mode=OneWay, StringFormat=N3}"/>
                             <TextBlock Grid.Column="0" Grid.Row="6" Margin="3" Text="World Window Updates:"/>
                             <TextBox Grid.Column="1" Grid.Row="6" Margin="1"
                                      Text="{Binding WorldWindowUpdateCount, Mode=OneWay}"/>

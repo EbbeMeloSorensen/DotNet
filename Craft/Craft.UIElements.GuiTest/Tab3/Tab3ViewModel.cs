@@ -12,6 +12,9 @@ namespace Craft.UIElements.GuiTest.Tab3
 {
     public class Tab3ViewModel : ViewModelBase
     {
+        private Brush _curveBrush = new SolidColorBrush(Colors.Black);
+        private double _curveThickness = 0.05;
+
         // Afgrænset øverst og nederst
         //private double _x0 = -1.0;
         //private double _x1 = 2.0;
@@ -86,7 +89,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         public GeometryEditorViewModel GeometryEditorViewModel1 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
-        public ScatterChartViewModel ScatterChartViewModel { get; }
+        public GeometryEditorViewModel GeometryEditorViewModel3 { get; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
 
         public Tab3ViewModel()
@@ -114,8 +117,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 _x1 - _x0,
                 _y1 - _y0);
 
-            ScatterChartViewModel = new ScatterChartViewModel(
-                (x0, x1) => GeneratePoints(x0, x1),
+            GeometryEditorViewModel3 = new GeometryEditorViewModel(
+                -1,
                 worldWindowFocus,
                 worldWindowSize);
 
@@ -124,24 +127,46 @@ namespace Craft.UIElements.GuiTest.Tab3
             DrawAHouse(GeometryEditorViewModel1);
             DrawAHouse(GeometryEditorViewModel2);
 
-            DrawACoordinateSystem(ScatterChartViewModel);
+            DrawACoordinateSystem(GeometryEditorViewModel3);
 
-            ScatterChartViewModel.WorldWindowUpdateOccured += ScatterChartViewModel_WorldWindowUpdateOccured;
-            ScatterChartViewModel.WorldWindowMajorUpdateOccured += ScatterChartViewModel_WorldWindowMajorUpdateOccured;
+            GeometryEditorViewModel3.WorldWindowUpdateOccured += GeometryEditorViewModel3_WorldWindowUpdateOccured;
+            GeometryEditorViewModel3.WorldWindowMajorUpdateOccured += GeometryEditorViewModel3_WorldWindowMajorUpdateOccured;
         }
 
-        private void ScatterChartViewModel_WorldWindowUpdateOccured(
+        private void GeometryEditorViewModel3_WorldWindowUpdateOccured(
             object? sender, 
             WorldWindowUpdatedEventArgs e)
         {
             WorldWindowUpdateCount++;
         }
 
-        private void ScatterChartViewModel_WorldWindowMajorUpdateOccured(
+        private void GeometryEditorViewModel3_WorldWindowMajorUpdateOccured(
             object? sender,
             WorldWindowUpdatedEventArgs e)
         {
             WorldWindowMajorUpdateCount++;
+
+            var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
+            var x1 = Math.Ceiling(x0 + e.WorldWindowSize.Width);
+
+            var points = new List<PointD>();
+            for (var x = x0; x <= x1; x += 0.1)
+            {
+                //points.Add(new PointD(x, x));                                                         // y = x
+                //points.Add(new PointD(x, 0.5 * x));                                                   // y = 0.5x
+                //points.Add(new PointD(x, 0.5 * x - 1));                                               // y = 0.5x - 1
+                //points.Add(new PointD(x, -x));                                                        // y = -x
+                //points.Add(new PointD(x, 0));                                                         // y = 0
+                //points.Add(new PointD(x, 2));                                                         // y = 2
+                //points.Add(new PointD(x, x * x));                                                     // y = x^2
+                //points.Add(new PointD(x, -x * x));                                                    // y = -x^2
+                //points.Add(new PointD(x, Math.Pow(x - 2, 2) - 3));                                    // y = (x - 2)^2 - 3 = x^2 - 4x + 1
+                points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) / 4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
+                //points.Add(new PointD(x, Math.Sin(x)));                                               // y = sin(x)
+            }
+
+            GeometryEditorViewModel3.ClearPolylines();
+            GeometryEditorViewModel3.AddPolyline(points, _curveThickness, _curveBrush);
         }
 
         private void DrawAHouse(
@@ -248,31 +273,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 geometryEditorViewModel.AddLine(new PointD(_x0, _y1), new PointD(_x0, _y0), coordinateSystemThickness, coordinateSystemBrush);
             }
         }
-
-        private List<PointD> GeneratePoints(
-            double x0, 
-            double x1)
-        {
-            var points = new List<PointD>();
-
-            for (var x = x0; x <= x1; x += 0.1)
-            {
-                //points.Add(new PointD(x, x));                                                        // y = x
-                //points.Add(new PointD(x, 0.5 * x));                                                  // y = 0.5x
-                //points.Add(new PointD(x, 0.5 * x - 1));                                              // y = 0.5x - 1
-                //points.Add(new PointD(x, -x));                                                       // y = -x
-                //points.Add(new PointD(x, 0));                                                        // y = 0
-                //points.Add(new PointD(x, 2));                                                        // y = 2
-                //points.Add(new PointD(x, x * x));                                                    // y = x^2
-                //points.Add(new PointD(x, -x * x));                                                   // y = -x^2
-                //points.Add(new PointD(x, Math.Pow(x - 2, 2) - 3));                                   // y = (x - 2)^2 - 3 = x^2 - 4x + 1
-                points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) /4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
-                //points.Add(new PointD(x, Math.Sin(x)));                                              // y = sin(x)
-            }
-
-            return points;
-        }
-
+        
         private void ZoomInForGeometryEditor1()
         {
             GeometryEditorViewModel1.ChangeScaling(1.2);
