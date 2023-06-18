@@ -91,7 +91,6 @@ namespace DMI.Data.Studio.ViewModel
         public GeometryEditorViewModel GeometryEditorViewModel { get; private set; }
         public ChronologyViewModel ChronologyViewModel { get; private set; }
         public StatisticsViewModel StatisticsViewModel { get; private set; }
-
         public TimeSeriesViewModel TimeSeriesViewModel { get; private set; }
 
         public bool IncludeOperationIntervalBars
