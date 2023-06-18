@@ -85,12 +85,15 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             {
                 _dragging = false;
                 Canvas.ReleaseMouseCapture();
+                ViewModel.OnWorldWindowMajorUpdateOccured();
             }
             else if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
                 ViewModel.Scaling = new Size(
                     ViewModel.Scaling.Width * 2,
                     ViewModel.Scaling.Height * 2);
+
+                ViewModel.OnWorldWindowMajorUpdateOccured();
             }
             else
             {
@@ -146,6 +149,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                 ViewModel.WorldWindowUpperLeft = new Point(
                     _worldWindowUpperLeftInitial.X - mouseOffsetViewPort.X / ViewModel.Scaling.Width,
                     _worldWindowUpperLeftInitial.Y - mouseOffsetViewPort.Y / ViewModel.Scaling.Height);
+
+                ViewModel.OnWorldWindowUpdateOccured();
             }
         }
 
@@ -180,6 +185,9 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                     ViewModel.Scaling.Width / x_factor,
                     ViewModel.Scaling.Height / y_factor);
             }
+
+            ViewModel.OnWorldWindowUpdateOccured();
+            ViewModel.OnWorldWindowMajorUpdateOccured();
         }
 
         private void UpdateModel(object sender, EventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Media;
 using Craft.Utils;
@@ -15,18 +16,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     {
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
         private double _curveThickness = 0.05;
-
-        private int _worldWindowUpdateCount;
-
-        public int WorldWindowUpdateCount
-        {
-            get { return _worldWindowUpdateCount; }
-            set
-            {
-                _worldWindowUpdateCount = value;
-                RaisePropertyChanged();
-            }
-        }
 
         public UpdatePointsCallback UpdatePointsCallback { get; set; }
 
@@ -49,7 +38,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 case "WorldWindowUpperLeft":
                 case "WorldWindowSize":
                     UpdateCurve();
-                    WorldWindowUpdateCount++;
                     break;
             }
         }

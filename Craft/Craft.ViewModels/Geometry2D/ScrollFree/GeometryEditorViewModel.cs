@@ -156,6 +156,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             get { return _shapeViewModelMap.Keys; }
         }
 
+        public event EventHandler<WorldWindowUpdatedEventArgs> WorldWindowUpdateOccured;
+        public event EventHandler<WorldWindowUpdatedEventArgs> WorldWindowMajorUpdateOccured;
+
         // A callback delegate passed to the view model will be kept and
         // invoked each time a frame refresh is needed
         public UpdateModelCallBack UpdateModelCallBack { get; set; }
@@ -540,6 +543,32 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             return new PointD(
                 _scaling.Width * point.X - _worldWindowUpperLeft.X * _scaling.Width,
                 _scaling.Height * point.Y - _worldWindowUpperLeft.Y * _scaling.Height);
+        }
+
+        // This method is called from the View class
+        public void OnWorldWindowUpdateOccured()
+        {
+            var handler = WorldWindowUpdateOccured;
+
+            if (handler != null)
+            {
+                handler(this, new WorldWindowUpdatedEventArgs(
+                    WorldWindowUpperLeft,
+                    WorldWindowSize));
+            }
+        }
+
+        // This method is called from the View class
+        public void OnWorldWindowMajorUpdateOccured()
+        {
+            var handler = WorldWindowMajorUpdateOccured;
+
+            if (handler != null)
+            {
+                handler(this, new WorldWindowUpdatedEventArgs(
+                    WorldWindowUpperLeft,
+                    WorldWindowSize));
+            }
         }
     }
 }

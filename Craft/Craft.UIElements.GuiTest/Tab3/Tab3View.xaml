@@ -61,6 +61,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Column="0" Grid.Row="0" Margin="3" Text="Scaling, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="0" Margin="1" 
@@ -80,9 +81,12 @@
                             <TextBlock Grid.Column="0" Grid.Row="5" Margin="3" Text="World Window Height, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="5" Margin="1"
                                      Text="{Binding ScatterChartViewModel.WorldWindowSize.Height, Mode=OneWay, StringFormat=N3}"/>
-                            <TextBlock Grid.Column="0" Grid.Row="6" Margin="3" Text="World Window Upper Left Changes:"/>
+                            <TextBlock Grid.Column="0" Grid.Row="6" Margin="3" Text="World Window Updates:"/>
                             <TextBox Grid.Column="1" Grid.Row="6" Margin="1"
-                                     Text="{Binding ScatterChartViewModel.WorldWindowUpdateCount, Mode=OneWay}"/>
+                                     Text="{Binding WorldWindowUpdateCount, Mode=OneWay}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="7" Margin="3" Text="World Window Major Updates:"/>
+                            <TextBox Grid.Column="1" Grid.Row="7" Margin="1"
+                                     Text="{Binding WorldWindowMajorUpdateCount, Mode=OneWay}"/>
                         </Grid>
                     </Grid>
                 </TabItem>

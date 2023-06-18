@@ -24,10 +24,33 @@ namespace Craft.UIElements.GuiTest.Tab3
         private double _y0 = -2.0;
         private double _y1 = 1.0;
 
+        private int _worldWindowUpdateCount;
+        private int _worldWindowMajorUpdateCount;
+
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
         private RelayCommand _zoomInForGeometryEditor2Command;
         private RelayCommand _zoomOutForGeometryEditor2Command;
+
+        public int WorldWindowUpdateCount
+        {
+            get { return _worldWindowUpdateCount; }
+            set
+            {
+                _worldWindowUpdateCount = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int WorldWindowMajorUpdateCount
+        {
+            get { return _worldWindowMajorUpdateCount; }
+            set
+            {
+                _worldWindowMajorUpdateCount = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public RelayCommand ZoomInForGeometryEditor1Command
         {
@@ -102,6 +125,23 @@ namespace Craft.UIElements.GuiTest.Tab3
             DrawAHouse(GeometryEditorViewModel2);
 
             DrawACoordinateSystem(ScatterChartViewModel);
+
+            ScatterChartViewModel.WorldWindowUpdateOccured += ScatterChartViewModel_WorldWindowUpdateOccured;
+            ScatterChartViewModel.WorldWindowMajorUpdateOccured += ScatterChartViewModel_WorldWindowMajorUpdateOccured;
+        }
+
+        private void ScatterChartViewModel_WorldWindowUpdateOccured(
+            object? sender, 
+            WorldWindowUpdatedEventArgs e)
+        {
+            WorldWindowUpdateCount++;
+        }
+
+        private void ScatterChartViewModel_WorldWindowMajorUpdateOccured(
+            object? sender,
+            WorldWindowUpdatedEventArgs e)
+        {
+            WorldWindowMajorUpdateCount++;
         }
 
         private void DrawAHouse(
@@ -200,10 +240,13 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
 
             // Draw a window for diagnostics
-            geometryEditorViewModel.AddLine(new PointD(_x0, _y0), new PointD(_x1, _y0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(_x1, _y0), new PointD(_x1, _y1), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(_x1, _y1), new PointD(_x0, _y1), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(_x0, _y1), new PointD(_x0, _y0), coordinateSystemThickness, coordinateSystemBrush);
+            if (false)
+            {
+                geometryEditorViewModel.AddLine(new PointD(_x0, _y0), new PointD(_x1, _y0), coordinateSystemThickness, coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(_x1, _y0), new PointD(_x1, _y1), coordinateSystemThickness, coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(_x1, _y1), new PointD(_x0, _y1), coordinateSystemThickness, coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(_x0, _y1), new PointD(_x0, _y0), coordinateSystemThickness, coordinateSystemBrush);
+            }
         }
 
         private List<PointD> GeneratePoints(
