@@ -211,22 +211,18 @@ namespace DMI.Data.Studio.ViewModel
                 StationInformationListViewModel.StationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
 
-            var worldWindowUpperLeft = new Point(10.58, 56);
-            var worldWindowBottomRight = new Point(15.68, 54.5);
+            var worldWindowBoundingBoxNorthWest = new Point(10.25, 57.95);
+            var worldWindowBoundingBoxSouthEast = new Point(13.75, 54.45);
 
             var worldWindowFocus = new Point(
-                (worldWindowUpperLeft.X + worldWindowBottomRight.X) / 2,
-                (worldWindowUpperLeft.Y + worldWindowBottomRight.Y) / 2);
+                (worldWindowBoundingBoxNorthWest.X + worldWindowBoundingBoxSouthEast.X) / 2,
+                (worldWindowBoundingBoxNorthWest.Y + worldWindowBoundingBoxSouthEast.Y) / 2);
 
             var worldWindowSize = new Size(
-                Math.Abs(worldWindowUpperLeft.X - worldWindowBottomRight.X),
-                Math.Abs(worldWindowUpperLeft.Y - worldWindowBottomRight.Y));
+                Math.Abs(worldWindowBoundingBoxNorthWest.X - worldWindowBoundingBoxSouthEast.X),
+                Math.Abs(worldWindowBoundingBoxNorthWest.Y - worldWindowBoundingBoxSouthEast.Y));
 
-            GeometryEditorViewModel = new GeometryEditorViewModel(-1, 120, 120, new Point(11, 55));
-
-            // Hvorfor virker det her ikke?
-            //GeometryEditorViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize);
-            //GeometryEditorViewModel = new GeometryEditorViewModel(-1, new Point(11, 55), worldWindowSize);
+            GeometryEditorViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize);
 
             ChronologyViewModel = new ChronologyViewModel(new DateTime(2015, 1, 1), DateTime.UtcNow.TruncateToMilliseconds(), 50, 240);
 
