@@ -21,8 +21,8 @@ namespace ElevationAngleInspector
         public override string ToString()
         {
             return
-                $"{stationid_dmi, -10}, {stationname, -40}, {wgs_lat, -12}, {wgs_long, -12}, {datefrom.ToShortDateString(), -10}, " + 
-                $"{angle_n, 5}, {angle_ne, 5}, {angle_e, 5}, {angle_se, 5}, {angle_s, 5}, {angle_sw, 5}, {angle_w, 5}, {angle_nw, 5}" +
+                $"{stationid_dmi, -10}, {stationname, -40}, {wgs_lat, -12}, {wgs_long, -12}, {datefrom.AsShortDateString(), -10}, " + 
+                $"{angle_n, 5}, {angle_ne, 5}, {angle_e, 5}, {angle_se, 5}, {angle_s, 5}, {angle_sw, 5}, {angle_w, 5}, {angle_nw, 5}, " +
                 $"{angleindex, 5}";
         }
 
@@ -31,7 +31,19 @@ namespace ElevationAngleInspector
             var year = datefrom.Year.ToString().PadLeft(2, '0');
             var month = datefrom.Month.ToString().PadLeft(2, '0');
             var day = datefrom.Day.ToString().PadLeft(2, '0');
-            return $"{year}-{month}-{day} 00:00:00";
+            return $"{year}-{month}-{day}";
+        }
+    }
+
+    public static class Helpers
+    {
+        public static string AsShortDateString(this DateTime dateTime)
+        {
+            var day = dateTime.Day;
+            var month = dateTime.Month;
+            var year = dateTime.Year;
+
+            return $"{day}-{month}-{year}";
         }
     }
 }

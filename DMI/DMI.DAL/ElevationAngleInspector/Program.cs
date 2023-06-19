@@ -35,6 +35,7 @@ try
         "INNER JOIN sde.elevationangles ON sde.sensorlocation.globalid=sde.elevationangles.parentguid " + 
         "WHERE sde.stationinformation.gdb_to_date = '9999-12-31 23:59:59' " + 
         "AND sde.elevationangles.gdb_to_date = '9999-12-31 23:59:59' " + 
+        "AND sde.stationinformation.stationid_dmi = 5560 " + 
         "ORDER BY sde.stationinformation.stationid_dmi, sde.elevationangles.datefrom " +
         "--LIMIT 10";
 
@@ -71,13 +72,13 @@ catch (PostgresException excp)
     throw excp;
 }
 
-var statdb_host = "nanoq.dmi.dk";
+var statdb_host = "nanoqt.dmi.dk";
 var statdb_user = "ebs";
-var statdb_password = "secret";
+var statdb_password = "Vm6PAkPh";
 var statdb_database = "statdb";
 var statdb_connectionString = $"Host={statdb_host};Username={statdb_user};Password={statdb_password};Database={statdb_database}";
 
-using (var streamWriter = new StreamWriter("ElevationAngles_nanoq3.txt"))
+using (var streamWriter = new StreamWriter("ElevationAngles_nanoqt.txt"))
 {
     foreach(var sms_station in sms_stations)
     {
@@ -102,7 +103,7 @@ using (var streamWriter = new StreamWriter("ElevationAngles_nanoq3.txt"))
             "FROM station " +
             "INNER JOIN leeindex ON station.statid=leeindex.statid " +
             $"WHERE CAST(station.statid as VARCHAR) LIKE '{sms_station.stationid_dmi}%' " +
-            $"AND leeindex.start_time = '{datefrom}'";
+            $"AND CAST(leeindex.start_time AS VARCHAR) LIKE '{datefrom}%'";
 
         var line = sms_station.ToString();
 
@@ -152,7 +153,7 @@ using (var streamWriter = new StreamWriter("ElevationAngles_nanoq3.txt"))
             }
         }
 
-        line += $"  {compareResult}";
+        line += $",  {compareResult}";
 
         if (compareResult == "MISMATCH BETWEEN SMS AND STATDB!!")
         {
