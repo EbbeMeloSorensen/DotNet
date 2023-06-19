@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Linq;
+using CommandLine;
 using Craft.Logging;
 using DMI.DAL.ObsDB.UI.Console.Verbs;
 
@@ -124,34 +125,83 @@ namespace DMI.DAL.ObsDB.UI.Console
                 var dataProvider = new DataProvider(null);
                 dataProvider.Initialize(new[] { parameter });
 
-                //connectionOK = await dataProvider.CheckConnection(host, database, user, password);
+                //var years = new List<int>{1953, 1954, 1955};
+                var years = Enumerable.Range(1953, 2023 - 1953 + 1);
 
-                var startTime = new DateTime(1953, 1, 1);
-                var endTime = new DateTime(1954, 1, 1);
+                foreach (var year in years)
+                {
+                    var fileName = $"temp_dry_{stationId}_{year}.txt";
+                    var file = new FileInfo(fileName);
 
-                observationCount = dataProvider.CountObservationsOfIndividualParameterForStation(
-                    host,
-                    database,
-                    user,
-                    password,
-                    parameter,
-                    stationId,
-                    startTime,
-                    endTime);
+                    if (file.Exists)
+                    {
+                        continue;
+                    }
 
-                //var currentActivity = "Making mohitos";
-                //var count = 0;
-                //var total = 317;
+                    using (var streamWriter = new StreamWriter(fileName))
+                    {
+                        Dictionary<string, List<Tuple<DateTime, float>>> observations = null;
+                        var failedAttempts = 0;
 
-                //while (count < total)
-                //{
-                //    count++;
+                        while (failedAttempts < 10)
+                        {
+                            try
+                            {
+                                observations = dataProvider.RetrieveObservationsCoveredByBasisTableForStationInGivenYear(
+                                    host,
+                                    database,
+                                    user,
+                                    password,
+                                    "temp_wind_radiation",
+                                    stationId,
+                                    year);
 
-                //    if (progressCallback?.Invoke(100.0 * count / total, currentActivity) is true)
-                //    {
-                //        break;
-                //    }
-                //}
+                                break;
+                            }
+                            catch (Exception)
+                            {
+                                failedAttempts++;
+                                Thread.Sleep(2000);
+                            }
+                        }
+
+                        if (failedAttempts == 10)
+                        {
+                            throw new InvalidDataException();
+                        }
+
+                        var currentDayOfYear = 0;
+
+                        if (observations == null || observations.First().Value.Count == 0)
+                        {
+                            streamWriter.WriteLine($"No observations");
+                            continue;
+                        }
+
+                        foreach (var kvp in observations)
+                        {
+                            foreach (var observation in kvp.Value)
+                            {
+                                var time = observation.Item1;
+                                var value = observation.Item2;
+
+                                if (currentDayOfYear != time.DayOfYear)
+                                {
+                                    currentDayOfYear = time.DayOfYear;
+                                    streamWriter.WriteLine($"{time.Year}-{time.Month}-{time.Day}");
+                                }
+
+                                var hour = time.Hour.ToString().PadLeft(2, '0');
+                                var minute = time.Minute.ToString().PadLeft(2, '0');
+                                var second = time.Second.ToString().PadLeft(2, '0');
+
+                                streamWriter.WriteLine($" {hour}:{minute}:{second} {value}");
+                            }
+                        }
+
+                        streamWriter.Close();
+                    }
+                }
             });
 
             return observationCount;
