@@ -865,7 +865,8 @@ namespace DMI.Data.Studio.ViewModel
                 return null;
             }
 
-            var directoryName = Path.Combine(@".\Data", $"{stationId}");
+            //var directoryName = Path.Combine(@".\Data", $"{stationId}");
+            var directoryName = Path.Combine(@"C:\Data\Observations", $"{stationId}");
             var searchPattern = "temp_dry*.*";
             var maxTolerableDifferenceBetweenTwoObservationsInDays = 20.0;
 

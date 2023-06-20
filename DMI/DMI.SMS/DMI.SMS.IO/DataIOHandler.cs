@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -84,10 +85,10 @@ namespace DMI.SMS.IO
             }
         }
 
-        public List<DateTime> ReadObservationsForStationFromFile(
+        public List<Tuple<DateTime, double>> ReadObservationsForStationFromFile(
             string fileName)
         {
-            var result = new List<DateTime>();
+            var result = new List<Tuple<DateTime, double>>();
 
             using (var streamReader = new StreamReader(fileName))
             {
@@ -114,29 +115,34 @@ namespace DMI.SMS.IO
                         continue;
                     }
 
-                    var observationTimeAsString = line.Split()[1];
+                    var lineElements = line.Split();
+                    var observationTimeAsString = lineElements[1];
+                    var observationValueAsString = lineElements[2];
                     var hour = int.Parse(observationTimeAsString.Substring(0, 2));
                     var minute = int.Parse(observationTimeAsString.Substring(3, 2));
                     var second = int.Parse(observationTimeAsString.Substring(6, 2));
+                    var value = double.Parse(observationValueAsString, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
 
-                    result.Add(new DateTime(
+                    result.Add(new Tuple<DateTime, double>(
+                        new DateTime(
                         dateOfObservation.Year, 
                         dateOfObservation.Month,
                         dateOfObservation.Day,
                         hour,
                         minute,
-                        second));
+                        second),
+                        value));
                 }
             }
 
             return result;
         }
 
-        public List<DateTime> ReadObservationsForStationFromDirectory(
+        public List<Tuple<DateTime, double>> ReadObservationsForStationFromDirectory(
             string directoryName,
             string searchPattern)
         {
-            var result = new List<DateTime>();
+            var result = new List<Tuple<DateTime, double>>();
 
             var directory = new DirectoryInfo(directoryName);
 
@@ -246,12 +252,12 @@ namespace DMI.SMS.IO
                 return result;
             }
 
-            var observationTimes = ReadObservationsForStationFromDirectory(
+            var observations = ReadObservationsForStationFromDirectory(
                 directoryName,
                 searchPattern);
 
             result = ConvertToIntervals(
-                observationTimes,
+                observations.Select(_ => _.Item1).ToList(),
                 maxTolerableDifferenceBetweenTwoObservationsInDays);
 
             using (var streamWriter = new StreamWriter(fileName))

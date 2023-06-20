@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using Craft.Utils;
@@ -64,8 +65,12 @@ namespace DMI.Data.Studio.ViewModel
             // Find the time interval that corresponds to the World Window
             var x0 = e.WorldWindowUpperLeft.X;
             var x1 = x0 + e.WorldWindowSize.Width;
-            var t0 = _dateTimeAtOrigo + x0 * (_timeSpanForXUnit);
-            var t1 = _dateTimeAtOrigo + x1 * (_timeSpanForXUnit);
+            var t0 = _dateTimeAtOrigo + x0 * (_timeSpanForXUnit); // Midnight 8 days ago
+            var t1 = _dateTimeAtOrigo + x1 * (_timeSpanForXUnit); // Midnight at the end of today
+
+            var fileName = @"C:\Data\ObservationIntervals\06041temp_dry_06041_2023.txt";
+            var file = new FileInfo(fileName);
+
 
             for (var t = t0; t <= t1; t += new TimeSpan(0, 15, 0))
             {
