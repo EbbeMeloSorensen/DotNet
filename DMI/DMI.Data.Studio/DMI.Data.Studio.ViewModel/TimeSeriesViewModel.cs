@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
+using DMI.SMS.Application;
 using GalaSoft.MvvmLight;
 
 namespace DMI.Data.Studio.ViewModel
@@ -16,8 +17,9 @@ namespace DMI.Data.Studio.ViewModel
     //   Når der sker en "major" opdatering af World Window, så hentes nye tidsseriedata fra datakilden
     public class TimeSeriesViewModel : ViewModelBase
     {
+        private readonly IUIDataProvider _smsDataProvider;
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
-        private double _curveThickness = 0.05;
+        private double _curveThickness = 0.01;
 
         private DateTime _dateTimeAtOrigo;
         private TimeSpan _timeSpanForXUnit;
@@ -26,8 +28,11 @@ namespace DMI.Data.Studio.ViewModel
 
         public GeometryEditorViewModel ScatterChartViewModel { get; set; }
 
-        public TimeSeriesViewModel()
+        public TimeSeriesViewModel(
+            IUIDataProvider smsDataProvider)
         {
+            _smsDataProvider = smsDataProvider;
+
             Greeting = "Greetings from TimeSeriesViewModel";
 
             _dateTimeAtOrigo = DateTime.UtcNow.Date - TimeSpan.FromDays(7);
@@ -60,25 +65,40 @@ namespace DMI.Data.Studio.ViewModel
             object? sender, 
             WorldWindowUpdatedEventArgs e)
         {
-            var points = new List<PointD>();
-
             // Find the time interval that corresponds to the World Window
             var x0 = e.WorldWindowUpperLeft.X;
             var x1 = x0 + e.WorldWindowSize.Width;
             var t0 = _dateTimeAtOrigo + x0 * (_timeSpanForXUnit); // Midnight 8 days ago
             var t1 = _dateTimeAtOrigo + x1 * (_timeSpanForXUnit); // Midnight at the end of today
 
-            var fileName = @"C:\Data\ObservationIntervals\06041temp_dry_06041_2023.txt";
-            var file = new FileInfo(fileName);
+            var points = new List<PointD>();
 
+            //for (var t = t0; t <= t1; t += new TimeSpan(0, 15, 0))
+            //{
+            //    // Find the x coordinate that corresponds to the current time
+            //    var x = (t - _dateTimeAtOrigo) / _timeSpanForXUnit;
 
-            for (var t = t0; t <= t1; t += new TimeSpan(0, 15, 0))
+            //    // Vi viser bare en værdi der svarer til timetallet for det pågældende tidspunkt delt med 24
+            //    points.Add(new PointD(x, 1.0 * t.Hour / 24));
+            //}
+
+            var directoryName = @"C:\\Data\\Observations\\06041";
+            var searchPattern = "temp_dry_06041_2023.txt";
+            var observations = _smsDataProvider.ReadObservationsForStation(directoryName, searchPattern);
+
+            foreach (var observation in observations)
             {
+                var t = observation.Item1;
+                if (t < t0 || t > t1)
+                {
+                    continue;
+                }
+
                 // Find the x coordinate that corresponds to the current time
                 var x = (t - _dateTimeAtOrigo) / _timeSpanForXUnit;
 
-                // Vi viser bare en værdi der svarer til timetallet for det pågældende tidspunkt delt med 24
-                points.Add(new PointD(x, 1.0 * t.Hour / 24));
+                // Add the point to the polyline
+                points.Add(new PointD(x, observation.Item2));
             }
 
             ScatterChartViewModel.ClearPolylines();

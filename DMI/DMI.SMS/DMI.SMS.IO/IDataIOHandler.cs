@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using DMI.SMS.Domain.Entities;
 
 namespace DMI.SMS.IO
@@ -21,6 +22,10 @@ namespace DMI.SMS.IO
         void ImportDataFromJson(
             string fileName,
             out IList<StationInformation> stationInformations);
+
+        List<Tuple<DateTime, double>> ReadObservationsForStation(
+            string directoryName,
+            string searchPattern);
 
         List<Tuple<DateTime, DateTime>> ReadObservationIntervalsForStation(
             string directoryName,

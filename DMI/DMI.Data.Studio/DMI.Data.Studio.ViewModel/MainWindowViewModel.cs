@@ -231,7 +231,8 @@ namespace DMI.Data.Studio.ViewModel
                 StationInformationListViewModel.SelectedStationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
 
-            TimeSeriesViewModel = new TimeSeriesViewModel();
+            TimeSeriesViewModel = new TimeSeriesViewModel(
+                smsDataProvider);
 
             StationListViewModel.SelectedStations.PropertyChanged += 
                 SelectedStations_PropertyChanged;

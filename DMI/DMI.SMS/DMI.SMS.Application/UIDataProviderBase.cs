@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +7,6 @@ using System.Threading.Tasks;
 using Craft.Logging;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.IO;
-using DMI.SMS.Domain;
 
 namespace DMI.SMS.Application
 {
@@ -220,6 +218,13 @@ namespace DMI.SMS.Application
                 directoryName,
                 searchPattern,
                 maxTolerableDifferenceBetweenTwoObservationsInDays);
+        }
+
+        public List<Tuple<DateTime, double>> ReadObservationsForStation(
+            string directoryName, 
+            string searchPattern)
+        {
+            return _dataIOHandler.ReadObservationsForStation(directoryName, searchPattern);
         }
 
         public event EventHandler<StationInformationEventArgs> StationInformationCreated;

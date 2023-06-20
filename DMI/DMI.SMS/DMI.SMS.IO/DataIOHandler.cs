@@ -121,7 +121,7 @@ namespace DMI.SMS.IO
                     var hour = int.Parse(observationTimeAsString.Substring(0, 2));
                     var minute = int.Parse(observationTimeAsString.Substring(3, 2));
                     var second = int.Parse(observationTimeAsString.Substring(6, 2));
-                    var value = double.Parse(observationValueAsString, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                    var value = double.Parse(observationValueAsString, NumberStyles.Number, CultureInfo.InvariantCulture);
 
                     result.Add(new Tuple<DateTime, double>(
                         new DateTime(
@@ -138,7 +138,7 @@ namespace DMI.SMS.IO
             return result;
         }
 
-        public List<Tuple<DateTime, double>> ReadObservationsForStationFromDirectory(
+        public List<Tuple<DateTime, double>> ReadObservationsForStation(
             string directoryName,
             string searchPattern)
         {
@@ -252,7 +252,7 @@ namespace DMI.SMS.IO
                 return result;
             }
 
-            var observations = ReadObservationsForStationFromDirectory(
+            var observations = ReadObservationsForStation(
                 directoryName,
                 searchPattern);
 

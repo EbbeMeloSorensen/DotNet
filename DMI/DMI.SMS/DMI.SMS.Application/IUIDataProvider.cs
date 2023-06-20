@@ -63,6 +63,10 @@ namespace DMI.SMS.Application
             string searchPattern,
             double maxTolerableDifferenceBetweenTwoObservationsInDays);
 
+        List<Tuple<DateTime, double>> ReadObservationsForStation(
+            string directoryName,
+            string searchPattern);
+
         event EventHandler<StationInformationEventArgs> StationInformationCreated;
         event EventHandler<StationInformationsEventArgs> StationInformationsUpdated;
         event EventHandler<StationInformationsEventArgs> StationInformationsDeleted;
