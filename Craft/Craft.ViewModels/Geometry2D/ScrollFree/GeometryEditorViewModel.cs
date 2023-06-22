@@ -151,6 +151,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public ObservableCollection<LineViewModel> LineViewModels { get; }
 
+        public ObservableCollection<LabelViewModel> LabelViewModels { get; }
+
         public IEnumerable<int> AllShapeIds
         {
             get { return _shapeViewModelMap.Keys; }
@@ -214,6 +216,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             PointViewModels = new ObservableCollection<PointViewModel>();
             ShapeViewModels = new ObservableCollection<ShapeViewModel>();
             LineViewModels = new ObservableCollection<LineViewModel>();
+            LabelViewModels = new ObservableCollection<LabelViewModel>();
 
             PropertyChanged += GeometryEditorViewModel_PropertyChanged;
         }
@@ -382,6 +385,13 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
             PolylineViewModels.Add(new PolylineViewModel(
                 points.Select(p => new PointD(p.X, _yAxisFactor * p.Y)), thickness, brush));
+        }
+
+        public void AddLabel(
+            PointD point,
+            double diameter)
+        {
+            LabelViewModels.Add(new LabelViewModel { Point = new PointD(0, 0), Diameter = diameter});
         }
 
         public void ClearPolygons()
