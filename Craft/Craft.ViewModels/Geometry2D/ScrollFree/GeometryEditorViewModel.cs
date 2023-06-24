@@ -385,9 +385,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public void AddLabel(
             PointD point,
-            double diameter)
+            double width,
+            double height)
         {
-            LabelViewModels.Add(new LabelViewModel { Point = new PointD(0, 0), Diameter = diameter});
+            LabelViewModels.Add(new LabelViewModel { Point = point, Width = width, Height = height});
         }
 
         public void ClearPolygons()

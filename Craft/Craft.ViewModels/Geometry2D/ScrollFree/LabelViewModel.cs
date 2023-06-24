@@ -6,7 +6,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     public class LabelViewModel : ViewModelBase
     {
         private PointD _point;
-        private double _diameter;
+        private double _width;
+        private double _height;
 
         public PointD Point
         {
@@ -18,12 +19,22 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        public double Diameter
+        public double Width
         {
-            get => _diameter;
+            get => _width;
             set
             {
-                _diameter = value;
+                _width = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double Height
+        {
+            get => _height;
+            set
+            {
+                _height = value;
                 RaisePropertyChanged();
             }
         }

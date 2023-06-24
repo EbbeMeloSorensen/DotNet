@@ -13,11 +13,11 @@ namespace Craft.UI.Utils.ValueConverters
             CultureInfo culture)
         {
             var coordinate = (double)values[0];
-            var diameter = (double)values[1];
-            var upperLeft = (double)values[2];
-            var scale = (double)values[3];
+            var upperLeft = (double)values[1];
+            var scale = (double)values[2];
+            var extent = (double)values[3];
 
-            return (coordinate - upperLeft) * scale - diameter / 2;
+            return (coordinate - upperLeft) * scale - extent / 2;
         }
 
         public object[] ConvertBack(

@@ -140,11 +140,11 @@
                         <Setter.Value>
                             <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
                                 <Binding Path="Point.X"/>
-                                <Binding Path="Diameter"/>
                                 <Binding Path="DataContext.WorldWindowUpperLeft.X" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                                 <Binding Path="DataContext.Scaling.Width" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                <Binding Path="Diameter"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -152,11 +152,11 @@
                         <Setter.Value>
                             <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
                                 <Binding Path="Point.Y"/>
-                                <Binding Path="Diameter"/>
                                 <Binding Path="DataContext.WorldWindowUpperLeft.Y" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                                 <Binding Path="DataContext.Scaling.Height" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                <Binding Path="Diameter"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -171,7 +171,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!--<ItemsControl ItemsSource="{Binding LabelViewModels}">
+        <ItemsControl ItemsSource="{Binding LabelViewModels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -183,7 +183,11 @@
                         <Setter.Value>
                             <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
                                 <Binding Path="Point.X"/>
-                                <Binding Path="Diameter"/>
+                                <Binding Path="DataContext.WorldWindowUpperLeft.X" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                <Binding Path="DataContext.Scaling.Width" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                <Binding Path="Width"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -191,7 +195,11 @@
                         <Setter.Value>
                             <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
                                 <Binding Path="Point.Y"/>
-                                <Binding Path="Diameter"/>
+                                <Binding Path="DataContext.WorldWindowUpperLeft.Y" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                <Binding Path="DataContext.Scaling.Height" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                <Binding Path="Height"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -199,12 +207,15 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Ellipse Fill="BlueViolet"
-                             Width="{Binding Diameter}" 
-                             Height="{Binding Diameter}"/>
+                    <Grid>
+                        <Rectangle Fill="SandyBrown"
+                                   Width="80" 
+                                   Height="30"/>
+                        <TextBlock Text="Bamse"/>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
+        </ItemsControl>
 
     </Canvas>
 </UserControl>

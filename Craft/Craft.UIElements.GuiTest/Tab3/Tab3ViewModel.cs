@@ -241,10 +241,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             geometryEditorViewModel.AddLine(new PointD(330, 470), new PointD(470, 330), 2, sunRayBrush);
 
             // House number
-            //geometryEditorViewModel.AddLabel(new PointD(0, 0), 100);
-
-            // Point at origo
-            //geometryEditorViewModel.AddPoint(new PointD(0, 0), 100);
+            geometryEditorViewModel.AddLabel(new PointD(0, 0), 0, 0);
         }
 
         private void DrawACoordinateSystem(
