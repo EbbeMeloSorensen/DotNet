@@ -3,8 +3,6 @@ Done:
 * Lav det sådan, at ScatterChartViewModel abonnerer på at world window ændrer sig, og når det sker,
   så opdaterer den de punkter, der tegnes
 * ScatterChartViewModel skal ikke selv lave punkter men gøre brug af en callback
-
-In progress:
 * Der er en problematik i at ViewportSize først kendes et stykke inde i runtime, og det gør, at man ikke umiddelbart kan 
   placere Uppef Left Corner for World Window, når man har at gøre med en matematisk view model.
   Man kunne måske abonnere på ViewPortSize, og når så den skifter første gang og vel at mærke ikke er 0, 0, så
@@ -22,6 +20,16 @@ In progress:
 * Der skal skelnes mellem minor og major updates af World Window. Minor haves for hver mouse move under panorering.
   Major haves når man zommer ind eller ud eller slipper museknappen under panorering. Det er kun i forbindelse med
   major updates, at man vil skulle hente data fra en datakilde.
+
+In progress:
+* Find ud af hvorfor du opdaterer PointViewModels hele tiden fremfor at transformere med magnification
+  - det sidste burde kunne lade sig gøre
+  -> Der burde jo ikke være stor forskel på ShapeViewModel og PointViewModel. Brugeroplevelsesmæssigt, så ændrer punkternes størrelse sig ikke
+     uanset scaling. Bemærk, at du bruger et væld af forskellige teknikker til positionering af forskellige ting:
+     - RenderTransform (med transformations-matricen) for polygoner, polylines, lines
+     - CoordinateToMagnifiableCanvasPositionConverter for shapes (du vil gerne sætte Canvas.Left og Canvas.Top)
+     - CoordinateToCanvasPositionConverter for points
+ -- Øøh der er noget text i DataTemplatesene for Sun og DoorAndWindow
 
 Todo:
 * Der skal være et mode, hvor man kontinuert opdaterer zoom, som du har kunnet før og formentlig stadig kan med nogle kontroller

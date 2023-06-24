@@ -14,8 +14,10 @@ namespace Craft.UI.Utils.ValueConverters
         {
             var coordinate = (double)values[0];
             var diameter = (double)values[1];
+            var upperLeft = (double)values[2];
+            var scale = (double)values[3];
 
-            return coordinate - diameter / 2;
+            return (coordinate - upperLeft) * scale - diameter / 2;
         }
 
         public object[] ConvertBack(

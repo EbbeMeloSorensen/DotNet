@@ -205,7 +205,8 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 Point = new PointD(100, 75),
                 Width = 95,
-                Height = 145
+                Height = 145,
+                Text = "Door"
             });
 
             // Window
@@ -217,7 +218,8 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 Point = new PointD(300, 112.5),
                 Width = 95,
-                Height = 70
+                Height = 70,
+                Text = "Window"
             });
 
             // Sun
@@ -229,7 +231,8 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 Point = new PointD(400, 400),
                 Width = 80,
-                Height = 80
+                Height = 80,
+                Text = "Sun"
             });
 
             geometryEditorViewModel.AddLine(new PointD(300, 400), new PointD(500, 400), 2, sunRayBrush);
@@ -238,7 +241,10 @@ namespace Craft.UIElements.GuiTest.Tab3
             geometryEditorViewModel.AddLine(new PointD(330, 470), new PointD(470, 330), 2, sunRayBrush);
 
             // House number
-            geometryEditorViewModel.AddLabel(new PointD(0, 0), 100);
+            //geometryEditorViewModel.AddLabel(new PointD(0, 0), 100);
+
+            // Point at origo
+            //geometryEditorViewModel.AddPoint(new PointD(0, 0), 100);
         }
 
         private void DrawACoordinateSystem(

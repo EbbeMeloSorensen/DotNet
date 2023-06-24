@@ -27,7 +27,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Size _scaling;
         private Matrix _transformationMatrix;
         private Brush _defaultBrush;
-        private Dictionary<PointD, Tuple<double, Brush>> _pointToDiameterMap;
         private Dictionary<int, ShapeViewModel> _shapeViewModelMap;
 
         public string ImagePath
@@ -205,7 +204,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected GeometryEditorViewModel()
         {
             _defaultBrush = new SolidColorBrush(Colors.Black);
-            _pointToDiameterMap = new Dictionary<PointD, Tuple<double, Brush>>();
             _shapeViewModelMap = new Dictionary<int, ShapeViewModel>();
 
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
@@ -332,9 +330,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double diameter,
             Brush brush = null)
         {
-            // Here, we use a so-called null-coalescing expression for setting using the default brush unless one is provided
-            _pointToDiameterMap[new PointD(point.X, _yAxisFactor * point.Y)] = new Tuple<double, Brush>(diameter, brush ?? _defaultBrush);
-            UpdatePointViewModels();
+            PointViewModels.Add(new PointViewModel(new PointD(point.X, _yAxisFactor * point.Y), diameter, brush ?? _defaultBrush));
         }
 
         public void AddShape(
@@ -406,7 +402,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public void ClearPoints()
         {
-            _pointToDiameterMap.Clear();
             PointViewModels.Clear();
         }
 
@@ -514,8 +509,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 _scaling.Height,
                 -_worldWindowUpperLeft.X * _scaling.Width,
                 -_worldWindowUpperLeft.Y * _scaling.Height);
-
-            UpdatePointViewModels();
         }
 
         protected void UpdateWorldWindowSize()
@@ -526,35 +519,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             WorldWindowSize = new Size(
                 _viewPortSize.Width / _scaling.Width,
                 _viewPortSize.Height / _scaling.Height);
-        }
-
-        private void UpdatePointViewModels()
-        {
-            PointViewModels.Clear();
-
-            var temp = new List<PointViewModel>();
-
-            foreach (var kvp in _pointToDiameterMap)
-            {
-                var diameter = kvp.Value.Item1;
-                var brush = kvp.Value.Item2;
-
-                temp.Add(new PointViewModel(TransformPoint(kvp.Key), diameter, brush));
-            }
-
-            temp = temp.OrderByDescending(pvm => pvm.Diameter).ToList();
-
-            foreach (var pointViewModel in temp)
-            {
-                PointViewModels.Add(pointViewModel);
-            }
-        }
-
-        private PointD TransformPoint(PointD point)
-        {
-            return new PointD(
-                _scaling.Width * point.X - _worldWindowUpperLeft.X * _scaling.Width,
-                _scaling.Height * point.Y - _worldWindowUpperLeft.Y * _scaling.Height);
         }
 
         // This method is called from the View class

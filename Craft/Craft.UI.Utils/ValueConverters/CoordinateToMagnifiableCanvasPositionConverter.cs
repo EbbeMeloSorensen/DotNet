@@ -4,6 +4,7 @@ using System.Windows.Data;
 
 namespace Craft.UI.Utils.ValueConverters
 {
+    // Denne bruger vi til placering af Shapes, som er en fællesbetegnelse for Ellipses og Rectangles.
     public class CoordinateToMagnifiableCanvasPositionConverter : IMultiValueConverter
     {
         public object Convert(

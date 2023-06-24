@@ -16,7 +16,7 @@
                             RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <TextBlock Foreground="GhostWhite" Text="{Binding Text}" TextAlignment="Center" 
+            <TextBlock Foreground="Yellow" Text="{Binding Text}" TextAlignment="Center" 
                        Width="{Binding Width}">
                 <TextBlock.RenderTransform>
                     <MatrixTransform Matrix="{Binding 
@@ -38,7 +38,7 @@
                             RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <TextBlock Foreground="GhostWhite" Text="{Binding Text}" TextAlignment="Center" 
+            <TextBlock Foreground="Green" Text="{Binding Text}" TextAlignment="Center" 
                        Width="{Binding Width}">
                 <TextBlock.RenderTransform>
                     <MatrixTransform Matrix="{Binding 

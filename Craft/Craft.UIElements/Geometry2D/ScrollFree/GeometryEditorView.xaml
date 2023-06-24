@@ -141,6 +141,10 @@
                             <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
                                 <Binding Path="Point.X"/>
                                 <Binding Path="Diameter"/>
+                                <Binding Path="DataContext.WorldWindowUpperLeft.X" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                <Binding Path="DataContext.Scaling.Width" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -149,6 +153,10 @@
                             <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
                                 <Binding Path="Point.Y"/>
                                 <Binding Path="Diameter"/>
+                                <Binding Path="DataContext.WorldWindowUpperLeft.Y" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                <Binding Path="DataContext.Scaling.Height" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -163,7 +171,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <ItemsControl ItemsSource="{Binding LabelViewModels}">
+        <!--<ItemsControl ItemsSource="{Binding LabelViewModels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -196,8 +204,7 @@
                              Height="{Binding Diameter}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-
-        </ItemsControl>
+        </ItemsControl>-->
 
     </Canvas>
 </UserControl>
