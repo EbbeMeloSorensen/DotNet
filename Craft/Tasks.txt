@@ -30,6 +30,8 @@ Done:
 * Labels på plads - dvs noget tekst, der lige som points bibeholder størrelse uanset skalering
 
 In progress:
+* Lav det sådan at koordinatsystemet gentegnes ved hver minor opdatering
+  - lav et fjerde Geometry view
 
 Todo:
 * Der skal være et mode, hvor man kontinuert opdaterer zoom, som du har kunnet før og formentlig stadig kan med nogle kontroller

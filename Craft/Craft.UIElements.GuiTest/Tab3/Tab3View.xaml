@@ -60,8 +60,6 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Column="0" Grid.Row="0" Margin="3" Text="Scaling, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="0" Margin="1" 
@@ -81,6 +79,49 @@
                             <TextBlock Grid.Column="0" Grid.Row="5" Margin="3" Text="World Window Height, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="5" Margin="1"
                                      Text="{Binding GeometryEditorViewModel3.WorldWindowSize.Height, Mode=OneWay, StringFormat=N3}"/>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Function Curve II">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding GeometryEditorViewModel4}"/>
+                        <Grid Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" Grid.Row="0" Margin="3" Text="Scaling, X:"/>
+                            <TextBox Grid.Column="1" Grid.Row="0" Margin="1" 
+                                     Text="{Binding GeometryEditorViewModel4.Scaling.Width, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Margin="3" Text="Scaling, Y:"/>
+                            <TextBox Grid.Column="1" Grid.Row="1" Margin="1"
+                                     Text="{Binding GeometryEditorViewModel4.Scaling.Height, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="2" Margin="3" Text="World Window Upper Left, X:"/>
+                            <TextBox Grid.Column="1" Grid.Row="2" Margin="1"
+                                     Text="{Binding GeometryEditorViewModel4.WorldWindowUpperLeft.X, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="3" Margin="3" Text="World Window Upper Left, Y:"/>
+                            <TextBox Grid.Column="1" Grid.Row="3" Margin="1"
+                                     Text="{Binding GeometryEditorViewModel4.WorldWindowUpperLeft.Y, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="4" Margin="3" Text="World Window Width, X:"/>
+                            <TextBox Grid.Column="1" Grid.Row="4" Margin="1"
+                                     Text="{Binding GeometryEditorViewModel4.WorldWindowSize.Width, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="5" Margin="3" Text="World Window Height, X:"/>
+                            <TextBox Grid.Column="1" Grid.Row="5" Margin="1"
+                                     Text="{Binding GeometryEditorViewModel4.WorldWindowSize.Height, Mode=OneWay, StringFormat=N3}"/>
                             <TextBlock Grid.Column="0" Grid.Row="6" Margin="3" Text="World Window Updates:"/>
                             <TextBox Grid.Column="1" Grid.Row="6" Margin="1"
                                      Text="{Binding WorldWindowUpdateCount, Mode=OneWay}"/>

@@ -90,6 +90,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         public GeometryEditorViewModel GeometryEditorViewModel1 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel3 { get; }
+        public GeometryEditorViewModel GeometryEditorViewModel4 { get; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
 
         public Tab3ViewModel()
@@ -122,6 +123,11 @@ namespace Craft.UIElements.GuiTest.Tab3
                 worldWindowFocus,
                 worldWindowSize);
 
+            GeometryEditorViewModel4 = new GeometryEditorViewModel(
+                -1,
+                worldWindowFocus,
+                worldWindowSize);
+
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
             DrawAHouse(GeometryEditorViewModel1);
@@ -129,23 +135,16 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             DrawACoordinateSystem(GeometryEditorViewModel3);
 
-            GeometryEditorViewModel3.WorldWindowUpdateOccured += GeometryEditorViewModel3_WorldWindowUpdateOccured;
             GeometryEditorViewModel3.WorldWindowMajorUpdateOccured += GeometryEditorViewModel3_WorldWindowMajorUpdateOccured;
-        }
 
-        private void GeometryEditorViewModel3_WorldWindowUpdateOccured(
-            object? sender, 
-            WorldWindowUpdatedEventArgs e)
-        {
-            WorldWindowUpdateCount++;
+            GeometryEditorViewModel4.WorldWindowUpdateOccured += GeometryEditorViewModel4_WorldWindowUpdateOccured1;
+            GeometryEditorViewModel4.WorldWindowMajorUpdateOccured += GeometryEditorViewModel4_WorldWindowMajorUpdateOccured;
         }
 
         private void GeometryEditorViewModel3_WorldWindowMajorUpdateOccured(
             object? sender,
             WorldWindowUpdatedEventArgs e)
         {
-            WorldWindowMajorUpdateCount++;
-
             var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
             var x1 = Math.Ceiling(x0 + e.WorldWindowSize.Width);
 
@@ -305,6 +304,41 @@ namespace Craft.UIElements.GuiTest.Tab3
         private void ZoomOutForGeometryEditor2()
         {
             GeometryEditorViewModel2.ChangeScaling(1 / 1.2);
+        }
+
+        private void GeometryEditorViewModel4_WorldWindowMajorUpdateOccured(
+            object? sender,
+            WorldWindowUpdatedEventArgs e)
+        {
+            WorldWindowMajorUpdateCount++;
+
+            UpdateCoordinateSystemForGeometryEditorViewModel4(
+                e.WorldWindowUpperLeft.X,
+                e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width,
+                e.WorldWindowUpperLeft.Y,
+                e.WorldWindowUpperLeft.Y + e.WorldWindowSize.Height);
+        }
+
+        private void GeometryEditorViewModel4_WorldWindowUpdateOccured1(
+            object? sender,
+            WorldWindowUpdatedEventArgs e)
+        {
+            WorldWindowUpdateCount++;
+
+            UpdateCoordinateSystemForGeometryEditorViewModel4(
+                e.WorldWindowUpperLeft.X,
+                e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width,
+                e.WorldWindowUpperLeft.Y,
+                e.WorldWindowUpperLeft.Y + e.WorldWindowSize.Height);
+        }
+
+        private void UpdateCoordinateSystemForGeometryEditorViewModel4(
+            double worldWindowX0,
+            double worldWindowX1,
+            double worldWindowY0,
+            double worldWindowY1)
+        {
+            //GeometryEditorViewModel4.
         }
     }
 }
