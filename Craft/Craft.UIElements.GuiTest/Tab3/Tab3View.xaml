@@ -5,8 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
              xmlns:scrolling="clr-namespace:Craft.UIElements.Geometry2D.Scrolling;assembly=Craft.UIElements"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:valueConverters="clr-namespace:Craft.UI.Utils.ValueConverters;assembly=Craft.UI.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <valueConverters:DoubleAdder x:Key="DoubleAdder"/>
+    </UserControl.Resources>
+
     <TabControl SelectedIndex="0">
         <TabItem Header="ScrollFree">
             <TabControl SelectedIndex="3">
@@ -41,7 +48,7 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Function Curve">
+                <TabItem Header="Function Curve I">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -88,7 +95,46 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding GeometryEditorViewModel4}"/>
+                        <Grid Grid.Row="0">
+                            <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel4}"/>
+                            <Canvas>
+                                <Line Stroke="Black"
+                                      StrokeThickness="1"
+                                      X1="20"
+                                      X2="20"
+                                      Y1="0">
+                                    <Line.Y2>
+                                        <Binding Path="GeometryEditorViewModel4.ViewPortSize.Height"
+                                                 Converter="{StaticResource DoubleAdder}">
+                                            <Binding.ConverterParameter>
+                                                <system:Double>-20</system:Double>
+                                            </Binding.ConverterParameter>
+                                        </Binding>
+                                    </Line.Y2>
+                                </Line>
+                                <Line Stroke="Black"
+                                      StrokeThickness="1"
+                                      X1="20"
+                                      X2="{Binding GeometryEditorViewModel4.ViewPortSize.Width}">
+                                    <Line.Y1>
+                                        <Binding Path="GeometryEditorViewModel4.ViewPortSize.Height"
+                                                 Converter="{StaticResource DoubleAdder}">
+                                            <Binding.ConverterParameter>
+                                                <system:Double>-20</system:Double>
+                                            </Binding.ConverterParameter>
+                                        </Binding>
+                                    </Line.Y1>
+                                    <Line.Y2>
+                                        <Binding Path="GeometryEditorViewModel4.ViewPortSize.Height"
+                                                 Converter="{StaticResource DoubleAdder}">
+                                            <Binding.ConverterParameter>
+                                                <system:Double>-20</system:Double>
+                                            </Binding.ConverterParameter>
+                                        </Binding>
+                                    </Line.Y2>
+                                </Line>
+                            </Canvas>
+                        </Grid>
                         <Grid Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>

@@ -14,6 +14,7 @@ namespace Craft.UIElements.GuiTest.Tab3
     public class Tab3ViewModel : ViewModelBase
     {
         private bool _includeGrid = true;
+        private bool _includeTicks = false;
         private Brush _coordinateSystemBrush = new SolidColorBrush(Colors.Gray);
         private Brush _gridBrush = new SolidColorBrush(Colors.Gray) {Opacity = 0.25};
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
@@ -344,11 +345,13 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             // Notice that world window coordinates are always given in "non-inverted" coordinates,
             // so we need to invert the y coordinate
-            UpdateCoordinateSystemForGeometryEditorViewModel4(
-                e.WorldWindowUpperLeft.X,
-                e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width,
-                -e.WorldWindowUpperLeft.Y - e.WorldWindowSize.Height,
-                -e.WorldWindowUpperLeft.Y);
+            //UpdateCoordinateSystemForGeometryEditorViewModel4(
+            //    e.WorldWindowUpperLeft.X,
+            //    e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width,
+            //    -e.WorldWindowUpperLeft.Y - e.WorldWindowSize.Height,
+            //    -e.WorldWindowUpperLeft.Y);
+
+            GeometryEditorViewModel4.ClearLabels();
         }
 
         private void UpdateCoordinateSystemForGeometryEditorViewModel4(
@@ -365,18 +368,10 @@ namespace Craft.UIElements.GuiTest.Tab3
             GeometryEditorViewModel4.ClearLines();
             GeometryEditorViewModel4.ClearLabels();
 
-            GeometryEditorViewModel4.AddLine(
-                new PointD(x0 + dx, y0 + dy),
-                new PointD(x1, y0 + dy),
-                thickness, _curveBrush);
-
-            GeometryEditorViewModel4.AddLine(
-                new PointD(x0 + dx, y0 + dy),
-                new PointD(x0 + dx, y1),
-                thickness, _curveBrush);
-
             // 1: Find ud af spacing af ticks for x-aksen
             var spacingX = 1.0;
+            var labelWidth = spacingX * GeometryEditorViewModel4.Scaling.Width;
+            var labelHeight = 20.0;
 
             // Find ud af første x-værdi
             var x = Math.Floor(x0 / spacingX) * spacingX;
@@ -393,7 +388,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                             thickness,
                             _gridBrush);
                     }
-                    else
+                    
+                    if(_includeTicks)
                     {
                         GeometryEditorViewModel4.AddLine(
                             new PointD(x, y0 + dy * 0.8),
@@ -406,10 +402,10 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                     GeometryEditorViewModel4.AddLabel(
                         text,
-                        new PointD(x, y0 + dy * 0.8),
-                        20, 
-                        20,
-                        new PointD(0, 10),
+                        new PointD(x, y0 + dy),
+                        labelWidth,
+                        labelHeight,
+                        new PointD(0, labelHeight / 2),
                         0.0);
                 }
 
@@ -434,7 +430,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                             thickness,
                             _gridBrush);
                     }
-                    else
+
+                    if (_includeTicks)
                     {
                         GeometryEditorViewModel4.AddLine(
                             new PointD(x0 + dx * 0.8, y),

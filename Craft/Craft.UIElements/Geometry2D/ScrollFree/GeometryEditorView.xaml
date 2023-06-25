@@ -213,6 +213,7 @@
                 <DataTemplate>
                     <Grid>
                         <Rectangle Fill="DarkSeaGreen"
+                                   Stroke="Black"
                                    Opacity="{Binding Opacity}"
                                    Width="{Binding Width}" 
                                    Height="{Binding Height}"/>
