@@ -8,6 +8,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private PointD _point;
         private double _width;
         private double _height;
+        private PointD _shift;
+        private string _text;
+        private double _opacity;
 
         public PointD Point
         {
@@ -35,6 +38,36 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _height = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public PointD Shift
+        {
+            get => _shift;
+            set
+            {
+                _shift = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Text
+        {
+            get => _text;
+            set
+            {
+                _text = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double Opacity
+        {
+            get => _opacity;
+            set
+            {
+                _opacity = value;
                 RaisePropertyChanged();
             }
         }

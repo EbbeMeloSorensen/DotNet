@@ -383,12 +383,27 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 points.Select(p => new PointD(p.X, _yAxisFactor * p.Y)), thickness, brush));
         }
 
+        // Argumenter
+        // point: angiver positionen af labelens centrum
+        // width og height: angiver, hvor stor den skal være
+        // shift: en forskydning af centeret, så det ikke nødvendigvis er labellens centrum men f.eks. dens øverste venstre hjørne, der positioneres
         public void AddLabel(
+            string text,
             PointD point,
             double width,
-            double height)
+            double height,
+            PointD shift,
+            double opacity)
         {
-            LabelViewModels.Add(new LabelViewModel { Point = point, Width = width, Height = height});
+            LabelViewModels.Add(new LabelViewModel
+            {
+                Text = text,
+                Point = new PointD(point.X, _yAxisFactor * point.Y), 
+                Width = width, 
+                Height = height,
+                Shift = shift,
+                Opacity = opacity
+            });
         }
 
         public void ClearPolygons()

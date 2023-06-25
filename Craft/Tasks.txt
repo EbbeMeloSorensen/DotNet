@@ -20,8 +20,6 @@ Done:
 * Der skal skelnes mellem minor og major updates af World Window. Minor haves for hver mouse move under panorering.
   Major haves når man zommer ind eller ud eller slipper museknappen under panorering. Det er kun i forbindelse med
   major updates, at man vil skulle hente data fra en datakilde.
-
-In progress:
 * Find ud af hvorfor du opdaterer PointViewModels hele tiden fremfor at transformere med magnification
   - det sidste burde kunne lade sig gøre
   -> Der burde jo ikke være stor forskel på ShapeViewModel og PointViewModel. Brugeroplevelsesmæssigt, så ændrer punkternes størrelse sig ikke
@@ -29,7 +27,9 @@ In progress:
      - RenderTransform (med transformations-matricen) for polygoner, polylines, lines
      - CoordinateToMagnifiableCanvasPositionConverter for shapes (du vil gerne sætte Canvas.Left og Canvas.Top)
      - CoordinateToCanvasPositionConverter for points
- -- Øøh der er noget text i DataTemplatesene for Sun og DoorAndWindow
+* Labels på plads - dvs noget tekst, der lige som points bibeholder størrelse uanset skalering
+
+In progress:
 
 Todo:
 * Der skal være et mode, hvor man kontinuert opdaterer zoom, som du har kunnet før og formentlig stadig kan med nogle kontroller

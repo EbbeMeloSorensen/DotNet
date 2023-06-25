@@ -145,6 +145,7 @@
                                 <Binding Path="DataContext.Scaling.Width" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                                 <Binding Path="Diameter"/>
+                                <Binding Path="Shift.X"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -157,6 +158,7 @@
                                 <Binding Path="DataContext.Scaling.Height" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                                 <Binding Path="Diameter"/>
+                                <Binding Path="Shift.Y"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -188,6 +190,7 @@
                                 <Binding Path="DataContext.Scaling.Width" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                                 <Binding Path="Width"/>
+                                <Binding Path="Shift.X"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -200,6 +203,7 @@
                                 <Binding Path="DataContext.Scaling.Height" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                                 <Binding Path="Height"/>
+                                <Binding Path="Shift.Y"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -208,10 +212,15 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Rectangle Fill="SandyBrown"
-                                   Width="80" 
-                                   Height="30"/>
-                        <TextBlock Text="Bamse"/>
+                        <Rectangle Fill="DarkSeaGreen"
+                                   Opacity="{Binding Opacity}"
+                                   Width="{Binding Width}" 
+                                   Height="{Binding Height}"/>
+                        <TextBlock Text="{Binding Text}" 
+                                   FontFamily="Segoe UI"
+                                   FontSize="12.3"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

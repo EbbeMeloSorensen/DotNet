@@ -8,6 +8,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     {
         private PointD _point;
         private double _diameter;
+        private PointD _shift;
         private Brush _brush;
 
         public PointD Point
@@ -30,6 +31,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public PointD Shift
+        {
+            get => _shift;
+            set
+            {
+                _shift = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public Brush Brush
         {
             get { return _brush; }
@@ -48,6 +59,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             Point = point;
             Diameter = diameter;
             Brush = brush;
+            Shift = new PointD(0, 0);
         }
     }
 }
