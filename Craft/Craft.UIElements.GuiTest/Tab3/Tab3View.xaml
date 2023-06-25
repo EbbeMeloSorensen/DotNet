@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <TabControl SelectedIndex="0">
         <TabItem Header="ScrollFree">
-            <TabControl SelectedIndex="0">
+            <TabControl SelectedIndex="3">
                 <TabItem Header="Basic">
                     <Grid>
                         <Grid.RowDefinitions>

@@ -12,6 +12,12 @@ namespace Craft.UI.Utils.ValueConverters
             object parameter, 
             CultureInfo culture)
         {
+            // Hvis den her ikke er der, kan det åbenbart gå i kuk, hvor den prøver at caste et "unset" objekt
+            if (!(values[1] is double))
+            {
+                return 0;
+            }
+
             var coordinate = (double)values[0];
             var upperLeft = (double)values[1];
             var scale = (double)values[2];

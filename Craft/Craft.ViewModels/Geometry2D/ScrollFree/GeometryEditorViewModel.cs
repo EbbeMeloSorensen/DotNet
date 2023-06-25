@@ -51,6 +51,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 UpdateWorldWindowSize();
                 UpdateTransformationMatrix();
                 RaisePropertyChanged();
+
+                OnWorldWindowMajorUpdateOccured();
             }
         }
 
@@ -430,6 +432,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public void ClearLines()
         {
             LineViewModels.Clear();
+        }
+
+        public void ClearLabels()
+        {
+            LabelViewModels.Clear();
         }
 
         public void FocusInCenterOfViewPort()
