@@ -388,7 +388,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                     if (_includeGrid)
                     {
                         GeometryEditorViewModel4.AddLine(
-                            new PointD(x, y0 + dy * 1.2),
+                            new PointD(x, y0 + dy),
                             new PointD(x, y1),
                             thickness,
                             _gridBrush);
@@ -429,7 +429,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                     if (_includeGrid)
                     {
                         GeometryEditorViewModel4.AddLine(
-                            new PointD(x0 + dx * 1.2, y),
+                            new PointD(x0 + dx, y),
                             new PointD(x1, y),
                             thickness,
                             _gridBrush);
