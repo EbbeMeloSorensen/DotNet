@@ -159,6 +159,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 //points.Add(new PointD(x, 0));                                                         // y = 0
                 //points.Add(new PointD(x, 2));                                                         // y = 2
                 //points.Add(new PointD(x, x * x));                                                     // y = x^2
+                //points.Add(new PointD(x, x * x * x));                                                 // y = x^3
+                //points.Add(new PointD(x, Math.Abs(x)));                                               // y = |x|
                 //points.Add(new PointD(x, -x * x));                                                    // y = -x^2
                 //points.Add(new PointD(x, Math.Pow(x - 2, 2) - 3));                                    // y = (x - 2)^2 - 3 = x^2 - 4x + 1
                 points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) / 4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
