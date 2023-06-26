@@ -20,7 +20,13 @@ namespace Craft.UIElements.GuiTest.Tab3
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
         private double _curveThickness = 0.05;
 
-        // Initiel afgrænsning (højre og venstre kant af WorldWindow)
+        // Afgrænset øverst og nederst
+        //private double _x0 = -1.0;
+        //private double _x1 = 2.0;
+        //private double _y0 = -3.0;
+        //private double _y1 = 4.0;
+
+        // Afgrænset højre og venstre
         private double _x0 = -3.0;
         private double _x1 = 4.0;
         private double _y0 = -2.0;
@@ -89,7 +95,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         public GeometryEditorViewModel GeometryEditorViewModel1 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel3 { get; }
-        public CoordinateSystemViewModel CoordinateSystemViewModel { get; }
+        public GeometryEditorViewModel GeometryEditorViewModel4 { get; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
 
         public Tab3ViewModel()
@@ -122,7 +128,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 worldWindowFocus,
                 worldWindowSize);
 
-            CoordinateSystemViewModel = new CoordinateSystemViewModel(
+            GeometryEditorViewModel4 = new GeometryEditorViewModel(
+                -1,
                 worldWindowFocus,
                 worldWindowSize);
 
@@ -135,8 +142,8 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             GeometryEditorViewModel3.WorldWindowMajorUpdateOccured += GeometryEditorViewModel3_WorldWindowMajorUpdateOccured;
 
-            CoordinateSystemViewModel.WorldWindowUpdateOccured += GeometryEditorViewModel4_WorldWindowUpdateOccured1;
-            CoordinateSystemViewModel.WorldWindowMajorUpdateOccured += GeometryEditorViewModel4_WorldWindowMajorUpdateOccured;
+            GeometryEditorViewModel4.WorldWindowUpdateOccured += GeometryEditorViewModel4_WorldWindowUpdateOccured1;
+            GeometryEditorViewModel4.WorldWindowMajorUpdateOccured += GeometryEditorViewModel4_WorldWindowMajorUpdateOccured;
         }
 
         private void GeometryEditorViewModel3_WorldWindowMajorUpdateOccured(
@@ -318,17 +325,17 @@ namespace Craft.UIElements.GuiTest.Tab3
                 -e.WorldWindowUpperLeft.Y);
 
             var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
-            var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
+            var x1 = Math.Ceiling(x0 + e.WorldWindowSize.Width);
 
             var points = new List<PointD>();
             for (var x = x0; x <= x1; x += 0.1)
             {
                 //points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) / 4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
-                points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (sinus enveloped by gaussian)
+                points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
             }
 
-            CoordinateSystemViewModel.ClearPolylines();
-            CoordinateSystemViewModel.AddPolyline(points, _curveThickness, _curveBrush);
+            GeometryEditorViewModel4.ClearPolylines();
+            GeometryEditorViewModel4.AddPolyline(points, _curveThickness, _curveBrush);
         }
 
         private void GeometryEditorViewModel4_WorldWindowUpdateOccured1(
@@ -345,7 +352,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             //    -e.WorldWindowUpperLeft.Y - e.WorldWindowSize.Height,
             //    -e.WorldWindowUpperLeft.Y);
 
-            CoordinateSystemViewModel.ClearLabels();
+            GeometryEditorViewModel4.ClearLabels();
         }
 
         private void UpdateCoordinateSystemForGeometryEditorViewModel4(
@@ -355,16 +362,16 @@ namespace Craft.UIElements.GuiTest.Tab3
             double y1)
         {
             // We want thickness to be independent on scaling
-            var dx = 20 / CoordinateSystemViewModel.Scaling.Width;
-            var dy = 20 / CoordinateSystemViewModel.Scaling.Height;
-            var thickness = 1 / CoordinateSystemViewModel.Scaling.Width;
+            var dx = 20 / GeometryEditorViewModel4.Scaling.Width;
+            var dy = 20 / GeometryEditorViewModel4.Scaling.Height;
+            var thickness = 1 / GeometryEditorViewModel4.Scaling.Width;
 
-            CoordinateSystemViewModel.ClearLines();
-            CoordinateSystemViewModel.ClearLabels();
+            GeometryEditorViewModel4.ClearLines();
+            GeometryEditorViewModel4.ClearLabels();
 
             // 1: Find ud af spacing af ticks for x-aksen
             var spacingX = 1.0;
-            var labelWidth = spacingX * CoordinateSystemViewModel.Scaling.Width;
+            var labelWidth = spacingX * GeometryEditorViewModel4.Scaling.Width;
             var labelHeight = 20.0;
 
             // Find ud af første x-værdi
@@ -376,7 +383,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 {
                     if (_includeGrid)
                     {
-                        CoordinateSystemViewModel.AddLine(
+                        GeometryEditorViewModel4.AddLine(
                             new PointD(x, y0 + dy),
                             new PointD(x, y1),
                             thickness,
@@ -385,7 +392,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                     
                     if(_includeTicks)
                     {
-                        CoordinateSystemViewModel.AddLine(
+                        GeometryEditorViewModel4.AddLine(
                             new PointD(x, y0 + dy * 0.8),
                             new PointD(x, y0 + dy * 1.2),
                             thickness,
@@ -394,7 +401,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                     var text = x.ToString(CultureInfo.InvariantCulture);
 
-                    CoordinateSystemViewModel.AddLabel(
+                    GeometryEditorViewModel4.AddLabel(
                         text,
                         new PointD(x, y0 + dy),
                         labelWidth,
@@ -418,7 +425,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 {
                     if (_includeGrid)
                     {
-                        CoordinateSystemViewModel.AddLine(
+                        GeometryEditorViewModel4.AddLine(
                             new PointD(x0 + dx, y),
                             new PointD(x1, y),
                             thickness,
@@ -427,7 +434,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                     if (_includeTicks)
                     {
-                        CoordinateSystemViewModel.AddLine(
+                        GeometryEditorViewModel4.AddLine(
                             new PointD(x0 + dx * 0.8, y),
                             new PointD(x0 + dx * 1.2, y),
                             thickness,
@@ -436,7 +443,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                     var text = y.ToString(CultureInfo.InvariantCulture);
 
-                    CoordinateSystemViewModel.AddLabel(
+                    GeometryEditorViewModel4.AddLabel(
                         text,
                         new PointD(x0 + dx * 0.8, y),
                         20,
