@@ -325,7 +325,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 -e.WorldWindowUpperLeft.Y);
 
             var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
-            var x1 = Math.Ceiling(x0 + e.WorldWindowSize.Width);
+            var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
 
             var points = new List<PointD>();
             for (var x = x0; x <= x1; x += 0.1)
