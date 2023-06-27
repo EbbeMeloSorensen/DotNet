@@ -30,8 +30,8 @@ Done:
 * Labels på plads - dvs noget tekst, der lige som points bibeholder størrelse uanset skalering
 
 In progress:
-* Lav det sådan at koordinatsystemet gentegnes ved hver minor opdatering
-  - lav et fjerde Geometry view
+* Lav et mode, hvor man opererer med, at origo svarer til midnat en eller anden dag. Så angiver man datoen MELLEM ticks
+  - skriv 23 mellem hvert tick
 
 Todo:
 * Der skal være et mode, hvor man kontinuert opdaterer zoom, som du har kunnet før og formentlig stadig kan med nogle kontroller

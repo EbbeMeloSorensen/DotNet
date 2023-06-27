@@ -3,18 +3,41 @@ using System.Globalization;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
+using GalaSoft.MvvmLight;
 using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
-    public class CoordinateSystemViewModel
+    public class CoordinateSystemViewModel : ViewModelBase
     {
-        private bool _includeGrid = true;
-        private bool _includeTicks = false;
-        private Brush _coordinateSystemBrush = new SolidColorBrush(Colors.Gray);
-        private Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.25 };
-        private Brush _curveBrush = new SolidColorBrush(Colors.Black);
-        private double _curveThickness = 0.05;
+        protected double _marginX;
+        protected double _marginY;
+        protected double _Y2;
+        protected bool _includeGrid = true;
+        protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.25 };
+        protected Brush _curveBrush = new SolidColorBrush(Colors.Black);
+        protected double _curveThickness = 0.05;
+
+        public double MarginX
+        {
+            get
+            {
+                return _marginX;
+            }
+        }
+
+        public double Y2 
+        { 
+            get
+            {
+                return _Y2;
+            }
+            set
+            {
+                _Y2 = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
 
@@ -22,14 +45,33 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             Point worldWindowFocus,
             Size worldWindowSize)
         {
+            _marginX = 25;
+            _marginY = 25;
+
             GeometryEditorViewModel = 
                 new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize);
+
+            GeometryEditorViewModel.PropertyChanged += GeometryEditorViewModel_PropertyChanged;
 
             GeometryEditorViewModel.WorldWindowMajorUpdateOccured += 
                 GeometryEditorViewModel_WorldWindowMajorUpdateOccured;
 
             GeometryEditorViewModel.WorldWindowUpdateOccured += 
                 GeometryEditorViewModel_WorldWindowUpdateOccured;
+        }
+
+        private void GeometryEditorViewModel_PropertyChanged(
+            object? sender, 
+            System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch(e.PropertyName)
+            {
+                case "ViewPortSize":
+                {
+                    Y2 = GeometryEditorViewModel.ViewPortSize.Height - _marginY;
+                    break;
+                }
+            }
         }
 
         private void GeometryEditorViewModel_WorldWindowUpdateOccured(
@@ -63,15 +105,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
         }
 
-        private void UpdateCoordinateSystemForGeometryEditorViewModel(
+        protected virtual void UpdateCoordinateSystemForGeometryEditorViewModel(
             double x0,
             double x1,
             double y0,
             double y1)
         {
             // We want thickness to be independent on scaling
-            var dx = 20 / GeometryEditorViewModel.Scaling.Width;
-            var dy = 20 / GeometryEditorViewModel.Scaling.Height;
+            var dx = _marginX / GeometryEditorViewModel.Scaling.Width;
+            var dy = _marginY / GeometryEditorViewModel.Scaling.Height;
             var thickness = 1 / GeometryEditorViewModel.Scaling.Width;
 
             GeometryEditorViewModel.ClearLines();
@@ -98,15 +140,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             _gridBrush);
                     }
 
-                    if (_includeTicks)
-                    {
-                        GeometryEditorViewModel.AddLine(
-                            new PointD(x, y0 + dy * 0.8),
-                            new PointD(x, y0 + dy * 1.2),
-                            thickness,
-                            _coordinateSystemBrush);
-                    }
-
                     var text = x.ToString(CultureInfo.InvariantCulture);
 
                     GeometryEditorViewModel.AddLabel(
@@ -116,6 +149,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         labelHeight,
                         new PointD(0, labelHeight / 2),
                         0.0);
+
+                    // Place label between ticks
+                    //GeometryEditorViewModel.AddLabel(
+                    //    text,
+                    //    new PointD(x, y0 + dy),
+                    //    labelWidth,
+                    //    labelHeight,
+                    //    new PointD(labelWidth / 2, labelHeight / 2),
+                    //    0.333);
                 }
 
                 x += spacingX;
@@ -138,15 +180,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             new PointD(x1, y),
                             thickness,
                             _gridBrush);
-                    }
-
-                    if (_includeTicks)
-                    {
-                        GeometryEditorViewModel.AddLine(
-                            new PointD(x0 + dx * 0.8, y),
-                            new PointD(x0 + dx * 1.2, y),
-                            thickness,
-                            _coordinateSystemBrush);
                     }
 
                     var text = y.ToString(CultureInfo.InvariantCulture);

@@ -18,38 +18,17 @@
         <Canvas>
             <Line Stroke="Black"
                 StrokeThickness="1"
-                X1="20"
-                X2="20"
-                Y1="0">
-                <Line.Y2>
-                    <Binding Path="GeometryEditorViewModel.ViewPortSize.Height"
-                             Converter="{StaticResource DoubleAdder}">
-                        <Binding.ConverterParameter>
-                            <system:Double>-20</system:Double>
-                        </Binding.ConverterParameter>
-                    </Binding>
-                </Line.Y2>
+                X1="{Binding MarginX}"
+                X2="{Binding MarginX}"
+                Y1="0"
+                Y2="{Binding Y2}">
             </Line>
             <Line Stroke="Black"
                 StrokeThickness="1"
-                X1="20"
-                X2="{Binding GeometryEditorViewModel.ViewPortSize.Width}">
-                <Line.Y1>
-                    <Binding Path="GeometryEditorViewModel.ViewPortSize.Height"
-                             Converter="{StaticResource DoubleAdder}">
-                        <Binding.ConverterParameter>
-                            <system:Double>-20</system:Double>
-                        </Binding.ConverterParameter>
-                    </Binding>
-                </Line.Y1>
-                <Line.Y2>
-                    <Binding Path="GeometryEditorViewModel.ViewPortSize.Height"
-                             Converter="{StaticResource DoubleAdder}">
-                        <Binding.ConverterParameter>
-                            <system:Double>-20</system:Double>
-                        </Binding.ConverterParameter>
-                    </Binding>
-                </Line.Y2>
+                X1="{Binding MarginX}"
+                X2="{Binding GeometryEditorViewModel.ViewPortSize.Width}"
+                Y1="{Binding Y2}"
+                Y2="{Binding Y2}">
             </Line>
         </Canvas>
     </Grid>

@@ -178,7 +178,10 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Function Curve III">
-                    <scrollFree:CoordinateSystemView DataContext="{Binding CoordinateSystemViewModel1}" />
+                    <scrollFree:CoordinateSystemView DataContext="{Binding CoordinateSystemViewModel}" />
+                </TabItem>
+                <TabItem Header="Time Series">
+                    <scrollFree:CoordinateSystemView DataContext="{Binding TimeSeriesViewModel}" />
                 </TabItem>
             </TabControl>
         </TabItem>
