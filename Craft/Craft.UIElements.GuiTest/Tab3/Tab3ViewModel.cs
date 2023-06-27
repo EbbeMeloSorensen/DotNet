@@ -96,6 +96,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel3 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel4 { get; }
+        public CoordinateSystemViewModel CoordinateSystemViewModel1 { get; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
 
         public Tab3ViewModel()
@@ -130,6 +131,10 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             GeometryEditorViewModel4 = new GeometryEditorViewModel(
                 -1,
+                worldWindowFocus,
+                worldWindowSize);
+
+            CoordinateSystemViewModel1 = new CoordinateSystemViewModel(
                 worldWindowFocus,
                 worldWindowSize);
 

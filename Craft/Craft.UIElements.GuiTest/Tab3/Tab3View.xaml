@@ -16,7 +16,7 @@
 
     <TabControl SelectedIndex="0">
         <TabItem Header="ScrollFree">
-            <TabControl SelectedIndex="3">
+            <TabControl SelectedIndex="4">
                 <TabItem Header="Basic">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -176,6 +176,9 @@
                                      Text="{Binding WorldWindowMajorUpdateCount, Mode=OneWay}"/>
                         </Grid>
                     </Grid>
+                </TabItem>
+                <TabItem Header="Function Curve III">
+                    <scrollFree:CoordinateSystemView DataContext="{Binding CoordinateSystemViewModel1}" />
                 </TabItem>
             </TabControl>
         </TabItem>
