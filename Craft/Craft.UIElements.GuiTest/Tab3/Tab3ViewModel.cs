@@ -20,16 +20,10 @@ namespace Craft.UIElements.GuiTest.Tab3
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
         private double _curveThickness = 0.05;
 
-        // Afgrænset øverst og nederst
-        //private double _x0 = -1.0;
-        //private double _x1 = 2.0;
-        //private double _y0 = -3.0;
-        //private double _y1 = 4.0;
-
-        // Afgrænset højre og venstre
+        // Initielt World Window (afgrænset højre og venstre)
         private double _x0 = -3.0;
         private double _x1 = 4.0;
-        private double _y0 = -2.0;
+        private double _y0 = -1.0;
         private double _y1 = 1.0;
 
         private int _worldWindowUpdateCount;
@@ -137,11 +131,22 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             CoordinateSystemViewModel = new CoordinateSystemViewModel(
                 worldWindowFocus,
-                worldWindowSize);
+                worldWindowSize,
+                25,
+                25);
+
+            var timeWindow = TimeSpan.FromDays(7);
+            var utcNow = DateTime.UtcNow;
+            var timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
+            var tFocus = utcNow - timeWindow / 2;
+            var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
 
             TimeSeriesViewModel = new TimeSeriesViewModel(
-                new Point(3.5, 0),
-                new Size(7, 0.001));
+                new Point(xFocus, 0),
+                new Size(7, 0.001),
+                25,
+                60,
+                timeAtOrigo);
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 

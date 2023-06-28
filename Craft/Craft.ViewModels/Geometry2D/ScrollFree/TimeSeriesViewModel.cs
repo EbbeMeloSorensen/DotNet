@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Globalization;
-using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Media;
 using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class TimeSeriesViewModel : CoordinateSystemViewModel
     {
+        private DateTime _timeAtOrigo;
+
         public TimeSeriesViewModel(
             Point worldWindowFocus,
-            Size worldWindowSize) : base(worldWindowFocus, worldWindowSize)
+            Size worldWindowSize,
+            double marginX,
+            double marginY,
+            DateTime timeAtOrigo) : base(worldWindowFocus, worldWindowSize, marginX, marginY)
         {
-            _marginX = 25;
-            _marginY = 50;
+            _marginX = marginX;
+            _marginY = marginY;
+            _timeAtOrigo = timeAtOrigo;
         }
 
         protected override void UpdateCoordinateSystemForGeometryEditorViewModel(
@@ -44,12 +48,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double dy,
             double thickness)
         {
-            // 1: Find ud af spacing af ticks for x-aksen
+            // 1: Find ud af spacing af linier for x-aksen
             var spacingX = 1.0;
             var labelWidth = spacingX * GeometryEditorViewModel.Scaling.Width;
             var labelHeight = 20.0;
 
-            // Find ud af første x-værdi
+            // Find ud af første x-værdi (for en linie)
             var x = Math.Floor(x0 / spacingX) * spacingX;
 
             while (x < x1)
@@ -65,16 +69,40 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             _gridBrush);
                     }
 
-                    var text = x.ToString(CultureInfo.InvariantCulture);
+                    var t = _timeAtOrigo + TimeSpan.FromDays(x);
+                    var day = t.Date.Day;
+                    var dateText = day.ToString();
 
-                    // Place DATE label (between ticks)
                     GeometryEditorViewModel.AddLabel(
-                        text,
+                        dateText,
                         new PointD(x, y0 + dy),
                         labelWidth,
                         labelHeight,
-                        new PointD(labelWidth / 2, labelHeight / 2),
-                        0.333);
+                        new PointD(0, labelHeight / 2),
+                        0.0);
+
+                    if (day == 1)
+                    {
+                        var monthText = t.Date.ToString("MMM", CultureInfo.InvariantCulture);
+
+                        GeometryEditorViewModel.AddLabel(
+                            monthText,
+                            new PointD(x, y0 + dy),
+                            labelWidth,
+                            labelHeight,
+                            new PointD(0, 1.5 * labelHeight),
+                            0.25);
+
+                        var yearText = t.Year.ToString();
+
+                        GeometryEditorViewModel.AddLabel(
+                            yearText,
+                            new PointD(x, y0 + dy),
+                            labelWidth,
+                            labelHeight,
+                            new PointD(0, 2.5 * labelHeight),
+                            0.25);
+                    }
                 }
 
                 x += spacingX;

@@ -43,10 +43,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public CoordinateSystemViewModel(
             Point worldWindowFocus,
-            Size worldWindowSize)
+            Size worldWindowSize,
+            double marginX,
+            double marginY)
         {
-            _marginX = 25;
-            _marginY = 25;
+            _marginX = marginX;
+            _marginY = marginY;
 
             GeometryEditorViewModel = 
                 new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize);
