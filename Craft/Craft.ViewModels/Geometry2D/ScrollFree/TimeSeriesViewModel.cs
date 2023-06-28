@@ -31,6 +31,19 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             GeometryEditorViewModel.ClearLines();
             GeometryEditorViewModel.ClearLabels();
 
+            DrawHorizontalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+            DrawVerticalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+        }
+
+        protected virtual void DrawVerticalGridLines(
+            double x0,
+            double y0,
+            double x1,
+            double y1,
+            double dx,
+            double dy,
+            double thickness)
+        {
             // 1: Find ud af spacing af ticks for x-aksen
             var spacingX = 1.0;
             var labelWidth = spacingX * GeometryEditorViewModel.Scaling.Width;
@@ -54,15 +67,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                     var text = x.ToString(CultureInfo.InvariantCulture);
 
-                    //GeometryEditorViewModel.AddLabel(
-                    //    text,
-                    //    new PointD(x, y0 + dy),
-                    //    labelWidth,
-                    //    labelHeight,
-                    //    new PointD(0, labelHeight / 2),
-                    //    0.0);
-
-                    // Place label between ticks
+                    // Place DATE label (between ticks)
                     GeometryEditorViewModel.AddLabel(
                         text,
                         new PointD(x, y0 + dy),
@@ -73,39 +78,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 }
 
                 x += spacingX;
-            }
-
-            // 1: Find ud af spacing af ticks for y-aksen
-            var spacingY = 1.0;
-
-            // Find ud af første y-værdi
-            var y = Math.Floor(y0 / spacingY) * spacingY;
-
-            while (y < y1)
-            {
-                if (y > y0 + dy)
-                {
-                    if (_includeGrid)
-                    {
-                        GeometryEditorViewModel.AddLine(
-                            new PointD(x0 + dx, y),
-                            new PointD(x1, y),
-                            thickness,
-                            _gridBrush);
-                    }
-
-                    var text = y.ToString(CultureInfo.InvariantCulture);
-
-                    GeometryEditorViewModel.AddLabel(
-                        text,
-                        new PointD(x0 + dx * 0.8, y),
-                        20,
-                        20,
-                        new PointD(-10, 0),
-                        0.0);
-                }
-
-                y += spacingY;
             }
         }
     }
