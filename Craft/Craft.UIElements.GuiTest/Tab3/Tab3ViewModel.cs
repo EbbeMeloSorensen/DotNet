@@ -159,6 +159,44 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             GeometryEditorViewModel4.WorldWindowUpdateOccured += GeometryEditorViewModel4_WorldWindowUpdateOccured1;
             GeometryEditorViewModel4.WorldWindowMajorUpdateOccured += GeometryEditorViewModel4_WorldWindowMajorUpdateOccured;
+
+            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += 
+                GeometryEditorViewModel_WorldWindowMajorUpdateOccured;
+
+            TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += 
+                GeometryEditorViewModel_WorldWindowMajorUpdateOccured1;
+        }
+
+        private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured1(object? sender, WorldWindowUpdatedEventArgs e)
+        {
+            var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
+            var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
+
+            var points = new List<PointD>();
+            for (var x = x0; x <= x1; x += 0.1)
+            {
+                points.Add(new PointD(x, Math.Sin(3 * x))); // (sinus)
+            }
+
+            TimeSeriesViewModel.GeometryEditorViewModel.ClearPolylines();
+            TimeSeriesViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
+        }
+
+        private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured(
+            object? sender, 
+            WorldWindowUpdatedEventArgs e)
+        {
+            var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
+            var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
+
+            var points = new List<PointD>();
+            for (var x = x0; x <= x1; x += 0.1)
+            {
+                points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
+            }
+
+            CoordinateSystemViewModel.GeometryEditorViewModel.ClearPolylines();
+            CoordinateSystemViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
         }
 
         private void GeometryEditorViewModel3_WorldWindowMajorUpdateOccured(

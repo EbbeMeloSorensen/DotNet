@@ -93,18 +93,17 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 -e.WorldWindowUpperLeft.Y - e.WorldWindowSize.Height,
                 -e.WorldWindowUpperLeft.Y);
 
-            var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
-            var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
+            //var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
+            //var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
 
-            var points = new List<PointD>();
-            for (var x = x0; x <= x1; x += 0.1)
-            {
-                //points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) / 4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
-                points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
-            }
+            //var points = new List<PointD>();
+            //for (var x = x0; x <= x1; x += 0.1)
+            //{
+            //    points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
+            //}
 
-            GeometryEditorViewModel.ClearPolylines();
-            GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
+            //GeometryEditorViewModel.ClearPolylines();
+            //GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
         }
 
         protected virtual void UpdateCoordinateSystemForGeometryEditorViewModel(

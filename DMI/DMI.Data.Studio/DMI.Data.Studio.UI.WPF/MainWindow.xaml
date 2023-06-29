@@ -83,7 +83,7 @@
                                 <chronology:ChronologyView DataContext="{Binding ChronologyViewModel}"/>
                             </TabItem>
                             <TabItem Header="Temp (TimeSeries)">
-                                <local:TimeSeriesView DataContext="{Binding TimeSeriesViewModel}" />
+                                <scrollFree:CoordinateSystemView DataContext="{Binding TimeSeriesViewModel.ScatterChartViewModel}" />
                             </TabItem>
                         </TabControl>
 

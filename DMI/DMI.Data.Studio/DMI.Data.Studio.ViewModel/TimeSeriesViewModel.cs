@@ -1,132 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows;
 using System.Windows.Media;
-using Craft.Utils;
-using Craft.ViewModels.Geometry2D.ScrollFree;
 using DMI.SMS.Application;
 using GalaSoft.MvvmLight;
+using Craft.Utils;
 
 namespace DMI.Data.Studio.ViewModel
 {
     // Denne klasse:
-    //   - HAR en ScatterChartViewModel
+    //   - HAR en TimeSeriesViewModel - ja det hedder det samme for now
     //   - BESTEMMER, hvad tidspunkt origo (x = 0) svarer til, samt hvad x = 1 svarer til
     //   - BESTEMMER initiel position af World Window (efterfølgende kommunikeres brugerens justeringer af WorldWindow fra ScatterChartViewModel)
     //   Når der sker en "major" opdatering af World Window, så hentes nye tidsseriedata fra datakilden
     public class TimeSeriesViewModel : ViewModelBase
     {
-        private readonly IUIDataProvider _smsDataProvider;
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
-        private double _curveThickness = 0.01;
+        private double _curveThickness = 0.05;
+        private readonly IUIDataProvider _smsDataProvider;
+        private DateTime _timeAtOrigo;
+        private TimeSpan _timeSpanForXUnit = TimeSpan.FromDays(1);
 
-        private DateTime _dateTimeAtOrigo;
-        private TimeSpan _timeSpanForXUnit;
-
-        public string Greeting { get; set; }
-
-        public GeometryEditorViewModel ScatterChartViewModel { get; set; }
+        public Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel ScatterChartViewModel { get; set; }
 
         public TimeSeriesViewModel(
             IUIDataProvider smsDataProvider)
         {
             _smsDataProvider = smsDataProvider;
 
-            Greeting = "Greetings from TimeSeriesViewModel";
+            var timeWindow = TimeSpan.FromDays(7);
+            var utcNow = DateTime.UtcNow;
+            _timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
+            var tFocus = utcNow - timeWindow / 2;
+            var xFocus = (tFocus - _timeAtOrigo) / TimeSpan.FromDays(1.0);
 
-            _dateTimeAtOrigo = DateTime.UtcNow.Date - TimeSpan.FromDays(7);
-            _timeSpanForXUnit = TimeSpan.FromDays(1);
+            ScatterChartViewModel = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
+                new Point(xFocus, 0),
+                new Size(7, 0.001),
+                25,
+                60,
+                _timeAtOrigo);
 
-            var dateTimeAtRightSideOfView = (DateTime.UtcNow.Date + TimeSpan.FromDays(1)).Date;
-
-            var x0 = 0;
-            var x1 = (dateTimeAtRightSideOfView - _dateTimeAtOrigo) / _timeSpanForXUnit;
-            var y0 = 0.0;
-            var y1 = 2.0;
-
-            var worldWindowFocus = new Point(
-                (x0 + x1) / 2,
-                (y0 + y1) / 2);
-
-            var worldWindowSize = new Size(
-                x1 - x0,
-                y1 - y0);
-
-            ScatterChartViewModel = new GeometryEditorViewModel(
-                -1, worldWindowFocus, worldWindowSize);
-
-            ScatterChartViewModel.WorldWindowMajorUpdateOccured += ScatterChartViewModel_WorldWindowMajorUpdateOccured;
-
-            DrawACoordinateSystem(ScatterChartViewModel);
+            ScatterChartViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured +=
+                GeometryEditorViewModel_WorldWindowMajorUpdateOccured;
         }
 
-        private void ScatterChartViewModel_WorldWindowMajorUpdateOccured(
+        private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured(
             object? sender, 
-            WorldWindowUpdatedEventArgs e)
+            Craft.ViewModels.Geometry2D.ScrollFree.WorldWindowUpdatedEventArgs e)
         {
-            // Find the time interval that corresponds to the World Window
-            var x0 = e.WorldWindowUpperLeft.X;
-            var x1 = x0 + e.WorldWindowSize.Width;
-            var t0 = _dateTimeAtOrigo + x0 * (_timeSpanForXUnit); // Midnight 8 days ago
-            var t1 = _dateTimeAtOrigo + x1 * (_timeSpanForXUnit); // Midnight at the end of today
-
-            var points = new List<PointD>();
-
-            //for (var t = t0; t <= t1; t += new TimeSpan(0, 15, 0))
-            //{
-            //    // Find the x coordinate that corresponds to the current time
-            //    var x = (t - _dateTimeAtOrigo) / _timeSpanForXUnit;
-
-            //    // Vi viser bare en værdi der svarer til timetallet for det pågældende tidspunkt delt med 24
-            //    points.Add(new PointD(x, 1.0 * t.Hour / 24));
-            //}
+            var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
+            var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
 
             var directoryName = @"C:\\Data\\Observations\\06041";
             var searchPattern = "temp_dry_06041_2023.txt";
             var observations = _smsDataProvider.ReadObservationsForStation(directoryName, searchPattern);
 
+            var t0 = _timeAtOrigo + x0 * (_timeSpanForXUnit);
+            var t1 = _timeAtOrigo + x1 * (_timeSpanForXUnit);
+
+            var points = new List<PointD>();
+
             foreach (var observation in observations)
             {
                 var t = observation.Item1;
+
                 if (t < t0 || t > t1)
                 {
                     continue;
                 }
 
                 // Find the x coordinate that corresponds to the current time
-                var x = (t - _dateTimeAtOrigo) / _timeSpanForXUnit;
+                var x = (t - _timeAtOrigo) / _timeSpanForXUnit;
 
                 // Add the point to the polyline
                 points.Add(new PointD(x, observation.Item2));
             }
 
-            ScatterChartViewModel.ClearPolylines();
-            ScatterChartViewModel.AddPolyline(points, _curveThickness, _curveBrush);
-        }
-
-        private void DrawACoordinateSystem(
-            GeometryEditorViewModel geometryEditorViewModel)
-        {
-            // Coordinate System
-            var coordinateSystemBrush = new SolidColorBrush(Colors.Gray);
-            var coordinateSystemThickness = 0.05;
-
-            // X Axis
-            geometryEditorViewModel.AddLine(new PointD(-10, 0), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(9.7, -0.2), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(9.7, 0.2), new PointD(10, 0), coordinateSystemThickness, coordinateSystemBrush);
-
-            // Y Axis
-            geometryEditorViewModel.AddLine(new PointD(0, -3), new PointD(0, 3), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(-0.2, 2.7), new PointD(0, 3), coordinateSystemThickness, coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(0, 3), new PointD(0.2, 2.7), coordinateSystemThickness, coordinateSystemBrush);
-
-            // X Axis ticks
-            for (var x = -9; x <= 9; x++)
-            {
-                geometryEditorViewModel.AddLine(new PointD(x, -0.2), new PointD(x, 0.2), coordinateSystemThickness, coordinateSystemBrush);
-            }
+            ScatterChartViewModel.GeometryEditorViewModel.ClearPolylines();
+            ScatterChartViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
         }
     }
 }
