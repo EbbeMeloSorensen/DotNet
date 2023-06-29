@@ -52,8 +52,8 @@ namespace DMI.Data.Studio.ViewModel
             var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
             var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
 
-            var directoryName = @"C:\\Data\\Observations\\06041";
-            var searchPattern = "temp_dry_06041_2023.txt";
+            var directoryName = @"C:\\Data\\Observations\\06041\\temp_dry";
+            var searchPattern = "06041_temp_dry_2023.txt";
             var observations = _smsDataProvider.ReadObservationsForStation(directoryName, searchPattern);
 
             var t0 = _timeAtOrigo + x0 * (_timeSpanForXUnit);
