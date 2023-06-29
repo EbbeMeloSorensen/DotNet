@@ -114,7 +114,7 @@ namespace DMI.DAL.ObsDB.UI.Console
             string database,
             string user,
             string password,
-            string stationId,
+            string stationId_forget,
             string parameter,
             ProgressCallback progressCallback = null)
         {
@@ -125,81 +125,103 @@ namespace DMI.DAL.ObsDB.UI.Console
                 var dataProvider = new DataProvider(null);
                 dataProvider.Initialize(new[] { parameter });
 
-                //var years = new List<int>{1953, 1954, 1955};
-                var years = Enumerable.Range(1953, 2023 - 1953 + 1);
+                var stationIds = new List<string>{
+                    "06011",
+                    "06030",
+                    "06041",
+                    "06060",
+                    "06071",
+                    "06081",
+                    "06110",
+                    "06180"
+                };
 
-                foreach (var year in years)
+                var lastYear = 2023;
+                var years = Enumerable.Range(1953, lastYear - 1953 + 1);
+
+                foreach(var stationId in stationIds)
                 {
-                    var fileName = $"temp_dry_{stationId}_{year}.txt";
-                    var file = new FileInfo(fileName);
-
-                    if (file.Exists)
+                    foreach (var year in years)
                     {
-                        continue;
-                    }
+                        var directoryInfo = new DirectoryInfo(Path.Combine($"{stationId}/{parameter}"));
 
-                    using (var streamWriter = new StreamWriter(fileName))
-                    {
-                        Dictionary<string, List<Tuple<DateTime, float>>> observations = null;
-                        var failedAttempts = 0;
-
-                        while (failedAttempts < 10)
+                        if (!directoryInfo.Exists)
                         {
-                            try
-                            {
-                                observations = dataProvider.RetrieveObservationsCoveredByBasisTableForStationInGivenYear(
-                                    host,
-                                    database,
-                                    user,
-                                    password,
-                                    "temp_wind_radiation",
-                                    stationId,
-                                    year);
-
-                                break;
-                            }
-                            catch (Exception)
-                            {
-                                failedAttempts++;
-                                Thread.Sleep(2000);
-                            }
+                            directoryInfo.Create();
                         }
 
-                        if (failedAttempts == 10)
-                        {
-                            throw new InvalidDataException();
-                        }
+                        var fileName = Path.Combine($"{stationId}/{parameter}", $"{stationId}_{parameter}_{year}.txt");
+                        var file = new FileInfo(fileName);
 
-                        var currentDayOfYear = 0;
-
-                        if (observations == null || observations.First().Value.Count == 0)
+                        if (file.Exists)
                         {
-                            streamWriter.WriteLine($"No observations");
                             continue;
                         }
 
-                        foreach (var kvp in observations)
+                        System.Console.WriteLine($"{stationId} - {year}");
+                        using (var streamWriter = new StreamWriter(file.FullName))
                         {
-                            foreach (var observation in kvp.Value)
+                            Dictionary<string, List<Tuple<DateTime, float>>> observations = null;
+                            var failedAttempts = 0;
+
+                            while (failedAttempts < 10)
                             {
-                                var time = observation.Item1;
-                                var value = observation.Item2;
-
-                                if (currentDayOfYear != time.DayOfYear)
+                                try
                                 {
-                                    currentDayOfYear = time.DayOfYear;
-                                    streamWriter.WriteLine($"{time.Year}-{time.Month}-{time.Day}");
+                                    observations = dataProvider.RetrieveObservationsCoveredByBasisTableForStationInGivenYear(
+                                        host,
+                                        database,
+                                        user,
+                                        password,
+                                        "temp_wind_radiation",
+                                        stationId,
+                                        year);
+
+                                    break;
                                 }
-
-                                var hour = time.Hour.ToString().PadLeft(2, '0');
-                                var minute = time.Minute.ToString().PadLeft(2, '0');
-                                var second = time.Second.ToString().PadLeft(2, '0');
-
-                                streamWriter.WriteLine($" {hour}:{minute}:{second} {value}");
+                                catch (Exception)
+                                {
+                                    failedAttempts++;
+                                    Thread.Sleep(2000);
+                                }
                             }
-                        }
 
-                        streamWriter.Close();
+                            if (failedAttempts == 10)
+                            {
+                                throw new InvalidDataException();
+                            }
+
+                            var currentDayOfYear = 0;
+
+                            if (observations == null || observations.First().Value.Count == 0)
+                            {
+                                streamWriter.WriteLine($"No observations");
+                                continue;
+                            }
+
+                            foreach (var kvp in observations)
+                            {
+                                foreach (var observation in kvp.Value)
+                                {
+                                    var time = observation.Item1;
+                                    var value = observation.Item2;
+
+                                    if (currentDayOfYear != time.DayOfYear)
+                                    {
+                                        currentDayOfYear = time.DayOfYear;
+                                        streamWriter.WriteLine($"{time.Year}-{time.Month}-{time.Day}");
+                                    }
+
+                                    var hour = time.Hour.ToString().PadLeft(2, '0');
+                                    var minute = time.Minute.ToString().PadLeft(2, '0');
+                                    var second = time.Second.ToString().PadLeft(2, '0');
+
+                                    streamWriter.WriteLine($" {hour}:{minute}:{second} {value}");
+                                }
+                            }
+
+                            streamWriter.Close();
+                        }
                     }
                 }
             });
