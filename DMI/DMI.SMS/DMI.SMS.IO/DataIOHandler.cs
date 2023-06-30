@@ -143,8 +143,13 @@ namespace DMI.SMS.IO
             string searchPattern)
         {
             var result = new List<Tuple<DateTime, double>>();
-
+            
             var directory = new DirectoryInfo(directoryName);
+
+            if (!directory.Exists)
+            {
+                return result;
+            }
 
             var files = directory.GetFiles(searchPattern);
 
