@@ -45,10 +45,6 @@
                 <MenuItem Header="Observation Time Intervals" IsCheckable="True"
                           IsChecked="{Binding IncludeObservationIntervalBars}"/>
             </MenuItem>
-            <!--<MenuItem Header="_Tools">
-                <MenuItem Header="Restore Test Database" 
-                          Command="{Binding RestoreTestDatabaseCommand}"/>
-            </MenuItem>-->
             <MenuItem Header="_Help">
                 <MenuItem Header="About" 
                           Command="{Binding OpenAboutDialogCommand}"
@@ -65,7 +61,7 @@
 
             <uiElementsSMS:StationInformationListView Grid.Column="0" DataContext="{Binding StationInformationListViewModel}"/>
 
-            <uiElementsStatDB:StationListView Grid.Column="1" DataContext="{Binding StationListViewModel}"/>
+            <uiElementsStatDB:StationListView Grid.Column="1" DataContext="{Binding StationListViewModel}" Visibility="Collapsed"/>
 
             <TabControl Grid.Column="2" SelectedIndex="{Binding SelectedOveralTabIndex}">
                 <TabItem Header="Selected Records">
@@ -82,14 +78,19 @@
                             <TabItem Header="Temporal">
                                 <chronology:ChronologyView DataContext="{Binding ChronologyViewModel}"/>
                             </TabItem>
-                            <TabItem Header="Temp (TimeSeries)">
-                                <scrollFree:CoordinateSystemView DataContext="{Binding TimeSeriesViewModel.ScatterChartViewModel}" />
-                            </TabItem>
                         </TabControl>
 
                         <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Margin="2" HorizontalAlignment="Stretch" Height="2" Background="Gray"/>
 
-                        <uiElementsSMS:StationInformationDetailsView Grid.Row="1" DataContext="{Binding StationInformationDetailsViewModel}"/>
+                        <TabControl Grid.Row="1">
+                            <TabItem Header="Station Properties">
+                                <uiElementsSMS:StationInformationDetailsView DataContext="{Binding StationInformationDetailsViewModel}"/>
+                            </TabItem>
+                            <TabItem Header="Time Series">
+                                <scrollFree:CoordinateSystemView DataContext="{Binding TimeSeriesViewModel.ScatterChartViewModel}" />
+                            </TabItem>
+                        </TabControl>
+
                     </Grid>
                 </TabItem>
                 <TabItem Header="Statistics (Entire Dataset)">

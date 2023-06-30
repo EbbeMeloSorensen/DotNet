@@ -46,8 +46,8 @@ namespace DMI.Data.Studio.ViewModel
             var xFocus = (tFocus - _timeAtOrigo) / TimeSpan.FromDays(1.0);
 
             ScatterChartViewModel = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
-                new Point(xFocus, 0),
-                new Size(7, 0.001),
+                new Point(xFocus, 15),
+                new Size(7, 30),
                 25,
                 60,
                 _timeAtOrigo);
