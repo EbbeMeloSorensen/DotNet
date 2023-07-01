@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
@@ -15,8 +14,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected double _Y2;
         protected bool _includeGrid = true;
         protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.25 };
-        protected Brush _curveBrush = new SolidColorBrush(Colors.Black);
-        protected double _curveThickness = 0.05;
 
         public double MarginX
         {
@@ -121,11 +118,32 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double dy,
             double thickness)
         {
-            // 1: Find ud af spacing af ticks for y-aksen
-            var spacingY = 1.0;
+            // 1: Find ud af spacing af horisontale grid lines
+            var lineSpacingY_ViewPort_Min = 75.0;
+            var lineSpacingY_World_Min = lineSpacingY_ViewPort_Min / GeometryEditorViewModel.Scaling.Height;
+            var lineSpacingY_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingY_World_Min)));
+
+            // Her er lineSpacingX_World f.eks. 0.01, 0.1, 1, 10, 100 eller 1000
+
+            if (lineSpacingY_World / 5 >= lineSpacingY_World_Min)
+            {
+                // Hvis den landede på f.eks. 10, så er der plads til at have en grid line for hver 2, dvs ved 0, 2, 4, 6, 8, 10 osv
+                lineSpacingY_World /= 5;
+            }
+            else if (lineSpacingY_World / 2 >= lineSpacingY_World_Min)
+            {
+                // Hvis den landede på f.eks. 10, så er der plads til at have en grid line for hver 5, dvs ved 0, 5, 10, 15 osv
+                lineSpacingY_World /= 2;
+            }
+
+            var lineSpacingY_ViewPort = lineSpacingY_World * GeometryEditorViewModel.Scaling.Height;
+
+            // Hvor mange decimaler er der generelt på et tick?
+            // (Det skal vi bruge for at kompensere for afrundingsfejl, så der ikke f.eks. kommer til at stå 0.60000000000012)
+            var labelDecimals = (int)Math.Max(0, Math.Ceiling(-Math.Log10(lineSpacingY_World)));
 
             // Find ud af første y-værdi
-            var y = Math.Floor(y0 / spacingY) * spacingY;
+            var y = Math.Floor(y0 / lineSpacingY_World) * lineSpacingY_World;
 
             while (y < y1)
             {
@@ -140,7 +158,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             _gridBrush);
                     }
 
-                    var text = y.ToString(CultureInfo.InvariantCulture);
+                    //var text = y.ToString(CultureInfo.InvariantCulture);
+                    var text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture);
 
                     GeometryEditorViewModel.AddLabel(
                         text,
@@ -151,7 +170,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         0.0);
                 }
 
-                y += spacingY;
+                y += lineSpacingY_World;
             }
         }
 
@@ -169,12 +188,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var lineSpacingX_World_Min = lineSpacingX_ViewPort_Min / GeometryEditorViewModel.Scaling.Width;
             var lineSpacingX_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingX_World_Min)));
 
+            // Her er lineSpacingX_World f.eks. 0.01, 0.1, 1, 10, 100 eller 1000
+
             if (lineSpacingX_World / 5 >= lineSpacingX_World_Min)
             {
+                // Hvis den landede på f.eks. 10, så er der plads til at have en grid line for hver 2, dvs ved 0, 2, 4, 6, 8, 10 osv
                 lineSpacingX_World /= 5;
             }
-            else if(lineSpacingX_World / 2 >= lineSpacingX_World_Min)
+            else if (lineSpacingX_World / 2 >= lineSpacingX_World_Min)
             {
+                // Hvis den landede på f.eks. 10, så er der plads til at have en grid line for hver 5, dvs ved 0, 5, 10, 15 osv
                 lineSpacingX_World /= 2;
             }
 
@@ -182,6 +205,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             var labelWidth = lineSpacingX_ViewPort;
             var labelHeight = 20.0;
+
+            // Hvor mange decimaler er der generelt på et tick?
+            // (Det skal vi bruge for at kompensere for afrundingsfejl, så der ikke f.eks. kommer til at stå 0.60000000000012)
+            var labelDecimals = (int) Math.Max(0, Math.Ceiling(-Math.Log10(lineSpacingX_World)));
 
             // Find ud af første x-værdi
             var x = Math.Floor(x0 / lineSpacingX_World) * lineSpacingX_World;
@@ -199,7 +226,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             _gridBrush);
                     }
 
-                    var text = x.ToString(CultureInfo.InvariantCulture);
+                    var text = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture);
 
                     // Place label at ticks
                     GeometryEditorViewModel.AddLabel(
