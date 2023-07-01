@@ -92,18 +92,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width,
                 -e.WorldWindowUpperLeft.Y - e.WorldWindowSize.Height,
                 -e.WorldWindowUpperLeft.Y);
-
-            //var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
-            //var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
-
-            //var points = new List<PointD>();
-            //for (var x = x0; x <= x1; x += 0.1)
-            //{
-            //    points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
-            //}
-
-            //GeometryEditorViewModel.ClearPolylines();
-            //GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
         }
 
         protected virtual void UpdateCoordinateSystemForGeometryEditorViewModel(
@@ -177,6 +165,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double thickness)
         {
             // 1: Find ud af spacing af ticks for x-aksen
+            // det må gerne afhænge af, hvor meget plads, der er, dvs hvad scaling er
             var spacingX = 1.0;
             var labelWidth = spacingX * GeometryEditorViewModel.Scaling.Width;
             var labelHeight = 20.0;
