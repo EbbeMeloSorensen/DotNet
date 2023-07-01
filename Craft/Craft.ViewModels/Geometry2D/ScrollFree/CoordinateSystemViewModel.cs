@@ -164,14 +164,27 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double dy,
             double thickness)
         {
-            // 1: Find ud af spacing af ticks for x-aksen
-            // det må gerne afhænge af, hvor meget plads, der er, dvs hvad scaling er
-            var spacingX = 1.0;
-            var labelWidth = spacingX * GeometryEditorViewModel.Scaling.Width;
+            // 1: Find ud af spacing af vertikale grid lines
+            var lineSpacingX_ViewPort_Min = 75.0;
+            var lineSpacingX_World_Min = lineSpacingX_ViewPort_Min / GeometryEditorViewModel.Scaling.Width;
+            var lineSpacingX_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingX_World_Min)));
+
+            if (lineSpacingX_World / 5 >= lineSpacingX_World_Min)
+            {
+                lineSpacingX_World /= 5;
+            }
+            else if(lineSpacingX_World / 2 >= lineSpacingX_World_Min)
+            {
+                lineSpacingX_World /= 2;
+            }
+
+            var lineSpacingX_ViewPort = lineSpacingX_World * GeometryEditorViewModel.Scaling.Width;
+
+            var labelWidth = lineSpacingX_ViewPort;
             var labelHeight = 20.0;
 
             // Find ud af første x-værdi
-            var x = Math.Floor(x0 / spacingX) * spacingX;
+            var x = Math.Floor(x0 / lineSpacingX_World) * lineSpacingX_World;
 
             while (x < x1)
             {
@@ -198,7 +211,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         0.0);
                 }
 
-                x += spacingX;
+                x += lineSpacingX_World;
             }
         }
     }
