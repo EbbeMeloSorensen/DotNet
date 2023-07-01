@@ -119,7 +119,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double thickness)
         {
             // 1: Find ud af spacing af horisontale grid lines
-            var lineSpacingY_ViewPort_Min = 75.0;
+            var lineSpacingY_ViewPort_Min = 50.0;
             var lineSpacingY_World_Min = lineSpacingY_ViewPort_Min / GeometryEditorViewModel.Scaling.Height;
             var lineSpacingY_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingY_World_Min)));
 
