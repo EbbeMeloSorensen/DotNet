@@ -868,7 +868,6 @@ namespace DMI.Data.Studio.ViewModel
                 return null;
             }
 
-            var directoryName = Path.Combine(@"C:\Data\Observations", $"{stationId}");
             var nanoqStationId = StringExtensions.AsNanoqStationId(stationId);
             var parameter = "temp_dry";
             var maxTolerableDifferenceBetweenTwoObservationsInDays = 20.0;
@@ -879,7 +878,6 @@ namespace DMI.Data.Studio.ViewModel
             }
 
             return _smsDataProvider.ReadObservationIntervalsForStation(
-                directoryName,
                 nanoqStationId,
                 parameter,
                 maxTolerableDifferenceBetweenTwoObservationsInDays);

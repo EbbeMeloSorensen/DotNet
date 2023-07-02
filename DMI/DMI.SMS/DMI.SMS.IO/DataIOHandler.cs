@@ -139,25 +139,23 @@ namespace DMI.SMS.IO
         }
 
         public List<Tuple<DateTime, double>> ReadObservationsForStation(
-            string directoryName,
             string nanoqStationId,
             string parameter,
             int firstYear,
             int lastYear)
         {
             var result = new List<Tuple<DateTime, double>>();
-            
-            var directory = new DirectoryInfo(directoryName);
-
-            if (!directory.Exists)
-            {
-                return result;
-            }
-
             var years = Enumerable.Range(firstYear, lastYear - firstYear + 1);
 
             foreach (var year in years)
             {
+                var directory = new DirectoryInfo(Path.Combine(@"C:\Data\Observations", $"{year}", $"{nanoqStationId}", $"{parameter}"));
+
+                if (!directory.Exists)
+                {
+                    continue;
+                }
+
                 var fileName = $"{nanoqStationId}_{parameter}_{year}.txt";
                 var file = directory.GetFiles(fileName).SingleOrDefault();
 
@@ -219,12 +217,11 @@ namespace DMI.SMS.IO
         // får man bare ikke noget tilbage.
         // Det kunne være en fin opgave at lade den GENERERE de filer, hvis den har adgang til databasen
         public List<Tuple<DateTime, DateTime>> ReadObservationIntervalsForStation(
-            string directoryName,
             string nanoqStationId,
             string parameter,
             double maxTolerableDifferenceBetweenTwoObservationsInDays)
         {
-            var fileName = Path.Combine(directoryName, "intervals.txt");
+            var fileName = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}", "intervals.txt");
             var file = new FileInfo(fileName);
 
             List<Tuple<DateTime, DateTime>> result = null;
@@ -262,15 +259,7 @@ namespace DMI.SMS.IO
                 }
             }
 
-            var directory = new DirectoryInfo(directoryName);
-
-            if (!directory.Exists)
-            {
-                return result;
-            }
-
             var observations = ReadObservationsForStation(
-                directoryName,
                 nanoqStationId,
                 parameter,
                 1953,

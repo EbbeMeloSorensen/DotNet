@@ -59,13 +59,11 @@ namespace DMI.SMS.Application
         void ImportData(string fileName);
 
         List<Tuple<DateTime, DateTime>> ReadObservationIntervalsForStation(
-            string directoryName,
             string nanoqStationId,
             string parameter,
             double maxTolerableDifferenceBetweenTwoObservationsInDays);
 
         List<Tuple<DateTime, double>> ReadObservationsForStation(
-            string directoryName,
             string nanoqStationId,
             string parameter,
             int firstYear,

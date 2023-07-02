@@ -210,27 +210,24 @@ namespace DMI.SMS.Application
         }
 
         public List<Tuple<DateTime, DateTime>> ReadObservationIntervalsForStation(
-            string directoryName,
             string nanoqStationId,
             string parameter,
             double maxTolerableDifferenceBetweenTwoObservationsInDays)
         {
             return _dataIOHandler.ReadObservationIntervalsForStation(
-                directoryName,
                 nanoqStationId,
                 parameter,
                 maxTolerableDifferenceBetweenTwoObservationsInDays);
         }
 
         public List<Tuple<DateTime, double>> ReadObservationsForStation(
-            string directoryName,
             string nanoqStationId,
             string parameter,
             int firstYear,
             int lastYear)
         {
             return _dataIOHandler.ReadObservationsForStation(
-                directoryName, nanoqStationId, parameter, firstYear, lastYear);
+                nanoqStationId, parameter, firstYear, lastYear);
         }
 
         public event EventHandler<StationInformationEventArgs> StationInformationCreated;

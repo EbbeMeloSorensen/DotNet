@@ -24,7 +24,6 @@ namespace DMI.Data.Studio.ViewModel
         private readonly ObjectCollection<StationInformation> _selectedStationInformations;
         private DateTime _timeAtOrigo;
         private TimeSpan _timeSpanForXUnit = TimeSpan.FromDays(1);
-        private string _directoryName;
         private string _nanoqStationId;
         private string _parameter;
         private DateTime _t0;
@@ -42,7 +41,7 @@ namespace DMI.Data.Studio.ViewModel
             var timeWindow = TimeSpan.FromDays(7);
             var utcNow = DateTime.UtcNow;
             _timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
-            _timeAtOrigo = new DateTime(2014, _timeAtOrigo.Month, _timeAtOrigo.Day);
+            _timeAtOrigo = new DateTime(1990, _timeAtOrigo.Month, _timeAtOrigo.Day);
             var tFocus = _timeAtOrigo + timeWindow / 2;
             var xFocus = (tFocus - _timeAtOrigo) / TimeSpan.FromDays(1.0);
 
@@ -72,13 +71,11 @@ namespace DMI.Data.Studio.ViewModel
             {
                 _nanoqStationId = null;
                 _parameter = null;
-                _directoryName = null;
             }
             else if (stationInformations.Objects.Count() == 1)
             {
                 _nanoqStationId = $"{stationInformations.Objects.Single().StationIDDMI}00";
                 _parameter = "temp_dry";
-                _directoryName = Path.Combine(@"C:\\Data\\Observations", _nanoqStationId, "temp_dry");
             }
 
             UpdateCurve();
@@ -107,7 +104,7 @@ namespace DMI.Data.Studio.ViewModel
             }
 
             var observations = _smsDataProvider
-                .ReadObservationsForStation(_directoryName, _nanoqStationId, _parameter, _t0.Year, _t1.Year)
+                .ReadObservationsForStation(_nanoqStationId, _parameter, _t0.Year, _t1.Year)
                 .Where(o => o.Item1 >= _t0)
                 .Where(o => o.Item1 <= _t1)
                 .OrderBy(o => o.Item1);
