@@ -221,7 +221,7 @@ namespace DMI.Data.Studio.ViewModel
                 Math.Abs(worldWindowBoundingBoxNorthWest.X - worldWindowBoundingBoxSouthEast.X),
                 Math.Abs(worldWindowBoundingBoxNorthWest.Y - worldWindowBoundingBoxSouthEast.Y));
 
-            GeometryEditorViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize);
+            GeometryEditorViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, false);
 
             ChronologyViewModel = new ChronologyViewModel(new DateTime(2015, 1, 1), DateTime.UtcNow.TruncateToMilliseconds(), 50, 240);
 

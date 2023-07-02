@@ -47,7 +47,8 @@ namespace DMI.Data.Studio.ViewModel
 
             ScatterChartViewModel = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
                 new Point(xFocus, 15),
-                new Size(7, 30),
+                new Size(7, 20),
+                true,
                 25,
                 60,
                 _timeAtOrigo);
@@ -74,9 +75,9 @@ namespace DMI.Data.Studio.ViewModel
             }
             else if (stationInformations.Objects.Count() == 1)
             {
-                _stationId = stationInformations.Objects.Single().StationIDDMI.ToString();
-                _directoryName = Path.Combine(@"C:\\Data\\Observations", $"0{_stationId}", "temp_dry");
-                _searchPattern = $"0{_stationId}_temp_dry_2023.txt";
+                _stationId = $"0{stationInformations.Objects.Single().StationIDDMI}";
+                _directoryName = Path.Combine(@"C:\\Data\\Observations", $"{_stationId}", "temp_dry");
+                _searchPattern = $"{_stationId}_temp_dry_2023.txt";
             }
 
             UpdateCurve();

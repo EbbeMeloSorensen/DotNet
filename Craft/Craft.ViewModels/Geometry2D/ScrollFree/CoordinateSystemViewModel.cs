@@ -41,6 +41,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public CoordinateSystemViewModel(
             Point worldWindowFocus,
             Size worldWindowSize,
+            bool fitAspectRatio,
             double marginX,
             double marginY)
         {
@@ -48,7 +49,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _marginY = marginY;
 
             GeometryEditorViewModel = 
-                new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize);
+                new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, fitAspectRatio);
 
             GeometryEditorViewModel.PropertyChanged += GeometryEditorViewModel_PropertyChanged;
 
@@ -158,7 +159,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             _gridBrush);
                     }
 
-                    //var text = y.ToString(CultureInfo.InvariantCulture);
                     var text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture);
 
                     GeometryEditorViewModel.AddLabel(

@@ -122,16 +122,19 @@ namespace Craft.UIElements.GuiTest.Tab3
             GeometryEditorViewModel3 = new GeometryEditorViewModel(
                 -1,
                 worldWindowFocus,
-                worldWindowSize);
+                worldWindowSize,
+                false);
 
             GeometryEditorViewModel4 = new GeometryEditorViewModel(
                 -1,
                 worldWindowFocus,
-                worldWindowSize);
+                worldWindowSize,
+                false);
 
             CoordinateSystemViewModel = new CoordinateSystemViewModel(
                 worldWindowFocus,
                 worldWindowSize,
+                false,
                 25,
                 25);
 
@@ -143,7 +146,8 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             TimeSeriesViewModel = new TimeSeriesViewModel(
                 new Point(xFocus, 0),
-                new Size(7, 0.001),
+                new Size(7, 3),
+                true,
                 25,
                 60,
                 timeAtOrigo);

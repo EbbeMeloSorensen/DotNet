@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
+using System.Printing;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
@@ -18,6 +19,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private double? _initialScalingY;
         private Point? _initialWorldWindowFocus;
         private Size? _initialWorldWindowSize;
+        private bool _fitAspectRatio;
         private string _imagePath;
         protected Size _viewPortSize;
         protected Size _worldWindowSize;
@@ -196,11 +198,13 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public GeometryEditorViewModel(
             int yAxisFactor,
             Point worldWindowFocus,
-            Size worldWindowSize) : this()
+            Size worldWindowSize,
+            bool fitAspectRatio) : this()
         {
             _yAxisFactor = yAxisFactor;
             _initialWorldWindowFocus = worldWindowFocus;
             _initialWorldWindowSize = worldWindowSize;
+            _fitAspectRatio = fitAspectRatio;
         }
 
         protected GeometryEditorViewModel()
@@ -281,28 +285,43 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             else if (_initialWorldWindowFocus.HasValue &&
                                      _initialWorldWindowSize.HasValue)
                             {
-                                if (ViewPortSize.Width / ViewPortSize.Height <=
-                                    _initialWorldWindowSize.Value.Width / _initialWorldWindowSize.Value.Height)
+                                if (_fitAspectRatio)
                                 {
-                                    // Dette er hvis World Window skal afgrænses af Viewportens VENSTRE og HØJRE side
+                                    // Her skal World Window fylde hele viewporten ud
 
-                                    var scaling = ViewPortSize.Width / (_initialWorldWindowSize.Value.Width);
-                                    Scaling = new Size(scaling, scaling);
-      
+                                    Scaling = new Size(
+                                        ViewPortSize.Width / (_initialWorldWindowSize.Value.Width),
+                                        ViewPortSize.Height / _initialWorldWindowSize.Value.Height);
+
                                     WorldWindowUpperLeft = new Point(
                                         _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
-                                        -_initialWorldWindowFocus.Value.Y - WorldWindowSize.Height / 2);
+                                        _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y - ViewPortSize.Height / Scaling.Height);
                                 }
                                 else
                                 {
-                                    // Dette er hvis World Window skal afgrænses af Viewportens NEDERSTE OG ØVERSTE side
+                                    if (ViewPortSize.Width / ViewPortSize.Height <=
+                                        _initialWorldWindowSize.Value.Width / _initialWorldWindowSize.Value.Height)
+                                    {
+                                        // Dette er hvis World Window skal afgrænses af Viewportens VENSTRE og HØJRE side
 
-                                    var scaling = ViewPortSize.Height / (_initialWorldWindowSize.Value.Height);
-                                    Scaling = new Size(scaling, scaling);
+                                        var scaling = ViewPortSize.Width / _initialWorldWindowSize.Value.Width;
+                                        Scaling = new Size(scaling, scaling);
 
-                                    WorldWindowUpperLeft = new Point(
-                                        _initialWorldWindowFocus.Value.X - WorldWindowSize.Width / 2,
-                                        _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y - ViewPortSize.Height / scaling);
+                                        WorldWindowUpperLeft = new Point(
+                                            _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
+                                            -_initialWorldWindowFocus.Value.Y - WorldWindowSize.Height / 2);
+                                    }
+                                    else
+                                    {
+                                        // Dette er hvis World Window skal afgrænses af Viewportens NEDERSTE OG ØVERSTE side
+
+                                        var scaling = ViewPortSize.Height / _initialWorldWindowSize.Value.Height;
+                                        Scaling = new Size(scaling, scaling);
+
+                                        WorldWindowUpperLeft = new Point(
+                                            _initialWorldWindowFocus.Value.X - WorldWindowSize.Width / 2,
+                                            _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y - ViewPortSize.Height / scaling);
+                                    }
                                 }
                             }
                             else

@@ -12,9 +12,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public TimeSeriesViewModel(
             Point worldWindowFocus,
             Size worldWindowSize,
+            bool fitAspectRatio,
             double marginX,
             double marginY,
-            DateTime timeAtOrigo) : base(worldWindowFocus, worldWindowSize, marginX, marginY)
+            DateTime timeAtOrigo) : base(worldWindowFocus, worldWindowSize, fitAspectRatio, marginX, marginY)
         {
             _marginX = marginX;
             _marginY = marginY;
