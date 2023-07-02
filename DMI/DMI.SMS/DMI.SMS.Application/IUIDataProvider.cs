@@ -60,12 +60,16 @@ namespace DMI.SMS.Application
 
         List<Tuple<DateTime, DateTime>> ReadObservationIntervalsForStation(
             string directoryName,
-            string searchPattern,
+            string nanoqStationId,
+            string parameter,
             double maxTolerableDifferenceBetweenTwoObservationsInDays);
 
         List<Tuple<DateTime, double>> ReadObservationsForStation(
             string directoryName,
-            string searchPattern);
+            string nanoqStationId,
+            string parameter,
+            int firstYear,
+            int lastYear);
 
         event EventHandler<StationInformationEventArgs> StationInformationCreated;
         event EventHandler<StationInformationsEventArgs> StationInformationsUpdated;

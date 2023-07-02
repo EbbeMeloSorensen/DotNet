@@ -24,9 +24,9 @@ namespace DMI.Data.Studio.ViewModel
         private readonly ObjectCollection<StationInformation> _selectedStationInformations;
         private DateTime _timeAtOrigo;
         private TimeSpan _timeSpanForXUnit = TimeSpan.FromDays(1);
-        private string _stationId;
         private string _directoryName;
-        private string _searchPattern;
+        private string _nanoqStationId;
+        private string _parameter;
         private DateTime _t0;
         private DateTime _t1;
 
@@ -70,15 +70,15 @@ namespace DMI.Data.Studio.ViewModel
 
             if (stationInformations == null || stationInformations.Objects.Count() == 0)
             {
-                _stationId = null;
+                _nanoqStationId = null;
+                _parameter = null;
                 _directoryName = null;
-                _searchPattern = null;
             }
             else if (stationInformations.Objects.Count() == 1)
             {
-                _stationId = $"{stationInformations.Objects.Single().StationIDDMI}00";
-                _directoryName = Path.Combine(@"C:\\Data\\Observations", $"{_stationId}", "temp_dry");
-                _searchPattern = $"{_stationId}_temp_dry_2014.txt";
+                _nanoqStationId = $"{stationInformations.Objects.Single().StationIDDMI}00";
+                _parameter = "temp_dry";
+                _directoryName = Path.Combine(@"C:\\Data\\Observations", _nanoqStationId, "temp_dry");
             }
 
             UpdateCurve();
@@ -101,13 +101,13 @@ namespace DMI.Data.Studio.ViewModel
 
         private void UpdateCurve()
         {
-            if (_stationId == null)
+            if (_nanoqStationId == null)
             {
                 return;
             }
 
             var observations = _smsDataProvider
-                .ReadObservationsForStation(_directoryName, _searchPattern)
+                .ReadObservationsForStation(_directoryName, _nanoqStationId, _parameter, _t0.Year, _t1.Year)
                 .Where(o => o.Item1 >= _t0)
                 .Where(o => o.Item1 <= _t1)
                 .OrderBy(o => o.Item1);

@@ -9,6 +9,7 @@ using Craft.Utils;
 using Craft.ViewModels.Geometry2D.Scrolling;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Application;
+using DMI.Utils;
 
 namespace DMI.SMS.ViewModel
 {
@@ -300,18 +301,20 @@ namespace DMI.SMS.ViewModel
         {
             var stationId = $"{stationInformation.StationIDDMI}".PadLeft(5, '0');
             var directoryName = Path.Combine(@"C:\Data\Observations", $"{stationId}");
-            var searchPattern = "temp_dry*.*";
+            var nanoqStationId = stationId.AsNanoqStationId();
+            var parameter = "temp_dry";
             var maxTolerableDifferenceBetweenTwoObservationsInDays = 20.0;
 
             if (stationInformation.StationIDDMI.HasValue &&
                 stationInformation.StationIDDMI.Value.ToString().Substring(0, 1) == "5")
             {
-                searchPattern = "precip_past6h*.*";
+                parameter = "precip_past6h";
             }
 
             return _dataProvider.ReadObservationIntervalsForStation(
                 directoryName,
-                searchPattern,
+                nanoqStationId,
+                parameter,
                 maxTolerableDifferenceBetweenTwoObservationsInDays);
         }
     }

@@ -140,7 +140,10 @@ namespace DMI.SMS.IO
 
         public List<Tuple<DateTime, double>> ReadObservationsForStation(
             string directoryName,
-            string searchPattern)
+            string nanoqStationId,
+            string parameter,
+            int firstYear,
+            int lastYear)
         {
             var result = new List<Tuple<DateTime, double>>();
             
@@ -151,10 +154,18 @@ namespace DMI.SMS.IO
                 return result;
             }
 
-            var files = directory.GetFiles(searchPattern);
+            var years = Enumerable.Range(firstYear, lastYear - firstYear + 1);
 
-            foreach (var file in files)
+            foreach (var year in years)
             {
+                var fileName = $"{nanoqStationId}_{parameter}_{year}.txt";
+                var file = directory.GetFiles(fileName).SingleOrDefault();
+
+                if (file == null)
+                {
+                    continue;
+                }
+
                 var observationTimesForCurrentYear = 
                     ReadObservationsForStationFromFile(file.FullName);
 
@@ -209,7 +220,8 @@ namespace DMI.SMS.IO
         // Det kunne være en fin opgave at lade den GENERERE de filer, hvis den har adgang til databasen
         public List<Tuple<DateTime, DateTime>> ReadObservationIntervalsForStation(
             string directoryName,
-            string searchPattern,
+            string nanoqStationId,
+            string parameter,
             double maxTolerableDifferenceBetweenTwoObservationsInDays)
         {
             var fileName = Path.Combine(directoryName, "intervals.txt");
@@ -259,7 +271,10 @@ namespace DMI.SMS.IO
 
             var observations = ReadObservationsForStation(
                 directoryName,
-                searchPattern);
+                nanoqStationId,
+                parameter,
+                1953,
+                DateTime.UtcNow.Year);
 
             result = ConvertToIntervals(
                 observations.Select(_ => _.Item1).ToList(),

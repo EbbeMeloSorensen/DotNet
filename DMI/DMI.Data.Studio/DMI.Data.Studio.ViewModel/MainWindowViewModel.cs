@@ -20,6 +20,7 @@ using DMI.SMS.ViewModel;
 using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
+using StringExtensions = DMI.Utils.StringExtensions;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -867,19 +868,20 @@ namespace DMI.Data.Studio.ViewModel
                 return null;
             }
 
-            //var directoryName = Path.Combine(@".\Data", $"{stationId}");
             var directoryName = Path.Combine(@"C:\Data\Observations", $"{stationId}");
-            var searchPattern = "temp_dry*.*";
+            var nanoqStationId = StringExtensions.AsNanoqStationId(stationId);
+            var parameter = "temp_dry";
             var maxTolerableDifferenceBetweenTwoObservationsInDays = 20.0;
 
             if (stationId.Substring(0, 2) == "05")
             {
-                searchPattern = "precip_past6h*.*";
+                parameter = "precip_past6h";
             }
 
             return _smsDataProvider.ReadObservationIntervalsForStation(
                 directoryName,
-                searchPattern,
+                nanoqStationId,
+                parameter,
                 maxTolerableDifferenceBetweenTwoObservationsInDays);
         }
 
