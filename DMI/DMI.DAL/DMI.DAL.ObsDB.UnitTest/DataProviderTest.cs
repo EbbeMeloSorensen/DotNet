@@ -665,5 +665,28 @@ namespace DMI.DAL.ObsDB.UnitTest
             time.HasValue.Should().BeTrue();
             time.Value.Year.Should().BeGreaterOrEqualTo(2019); // It is 2019 for nanoq4
         }
+
+        [Fact]
+        public void RetrieveStationIds_ReturnsCorrectResult()
+        {
+            // Arrange
+            var dataProvider = new DataProvider(null);
+            var paramId = "temp_dry";
+            var year = 1953;
+
+            dataProvider.Initialize(new[] { paramId });
+
+            // Act
+            var stationIds = dataProvider.RetrieveStationIds(
+                _host,
+                _database,
+                _obsDBUser,
+                _obsDBPassword,
+                paramId,
+                year);
+
+            // Assert
+            stationIds.Count.Should().Be(8);
+        }
     }
 }

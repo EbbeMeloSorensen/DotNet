@@ -268,6 +268,52 @@ namespace DMI.DAL.ObsDB
             return result;
         }
 
+        public List<int> RetrieveStationIds(
+            string host,
+            string database,
+            string obsDBUser,
+            string obsDBPassword,
+            string paramId,
+            int year)
+        {
+            var result = new List<int>();
+
+            using (var conn = new NpgsqlConnection(ConnectionString(host, database, obsDBUser, obsDBPassword)))
+            {
+                conn.Open();
+
+                try
+                {
+                    var query =
+                        $"SELECT DISTINCT(statid) " +
+                        $"FROM {GetBasisTableName(paramId)}_{year} ";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var stationId = reader.GetInt32(0);
+
+                            result.Add(stationId);
+                        }
+
+                        reader.Close();
+                    }
+
+                }
+                catch (PostgresException excp)
+                {
+                    if (!excp.Message.Contains("does not exist"))
+                    {
+                        throw excp;
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public Dictionary<string, List<Tuple<DateTime, float>>> RetrieveObservationsForStationInGivenYear(
             string host,
             string database,
