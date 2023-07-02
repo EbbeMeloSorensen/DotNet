@@ -332,7 +332,7 @@ namespace DMI.DAL.ObsDB
             _basis_table_names.Keys.ToList().ForEach(btn =>
             {
                 var temp = RetrieveObservationsCoveredByBasisTableForStationInGivenYear(
-                    host, database, obsDBUser, obsDBPassword, btn, stationId, year);
+                    host, database, obsDBUser, obsDBPassword, btn, int.Parse(stationId.AsNanoqStationId()), year);
             });
 
             return result;
@@ -344,7 +344,7 @@ namespace DMI.DAL.ObsDB
             string obsDBUser,
             string obsDBPassword,
             string baseTableName,
-            string stationId,
+            int nanoqStationId,
             int year)
         {
             if (_columnNameMap == null)
@@ -370,7 +370,8 @@ namespace DMI.DAL.ObsDB
                         $"SELECT timeobs, {columnNames.Aggregate((current, next) => current + ", " + next)} " +
                         $"FROM {baseTableName}_{year} " +
                         $"WHERE best = true " +
-                        $"AND statid = {stationId.AsNanoqStationId()} " +
+                        //$"AND statid = {stationId.AsNanoqStationId()} " +
+                        $"AND statid = {nanoqStationId} " +
                         $"ORDER BY timeobs";
 
                     using (var cmd = new NpgsqlCommand(query, conn))

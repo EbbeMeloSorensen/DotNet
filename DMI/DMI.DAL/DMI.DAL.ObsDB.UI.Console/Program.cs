@@ -125,23 +125,20 @@ namespace DMI.DAL.ObsDB.UI.Console
                 var dataProvider = new DataProvider(null);
                 dataProvider.Initialize(new[] { parameter });
 
-                var stationIds = new List<string>{
-                    "06011",
-                    "06030",
-                    "06041",
-                    "06060",
-                    "06071",
-                    "06081",
-                    "06110",
-                    "06180"
-                };
-
                 var lastYear = 2023;
                 var years = Enumerable.Range(1953, lastYear - 1953 + 1);
 
-                foreach(var stationId in stationIds)
+                foreach(var year in years)
                 {
-                    foreach (var year in years)
+                    var stationIds = dataProvider.RetrieveStationIds(
+                                    host,
+                                    database,
+                                    user,
+                                    password,
+                                    "temp_dry",
+                                    year);
+
+                    foreach (var stationId in stationIds)
                     {
                         var directoryInfo = new DirectoryInfo(Path.Combine($"{stationId}/{parameter}"));
 

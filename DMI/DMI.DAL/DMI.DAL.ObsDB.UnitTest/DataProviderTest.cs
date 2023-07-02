@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
+using DMI.Utils;
 
 namespace DMI.DAL.ObsDB.UnitTest
 {
@@ -308,7 +309,7 @@ namespace DMI.DAL.ObsDB.UnitTest
                 _obsDBUser,
                 _obsDBPassword,
                 baseTableName,
-                stationId,
+                int.Parse(stationId.AsNanoqStationId()),
                 year);
 
             // Assert
@@ -417,7 +418,7 @@ namespace DMI.DAL.ObsDB.UnitTest
                                         _obsDBUser,
                                         _obsDBPassword,
                                         baseTableName,
-                                        stationId,
+                                        int.Parse(stationId.AsNanoqStationId()),
                                         year);
 
                                     break;
