@@ -42,7 +42,8 @@ namespace DMI.Data.Studio.ViewModel
             var timeWindow = TimeSpan.FromDays(7);
             var utcNow = DateTime.UtcNow;
             _timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
-            var tFocus = utcNow - timeWindow / 2;
+            _timeAtOrigo = new DateTime(2014, _timeAtOrigo.Month, _timeAtOrigo.Day);
+            var tFocus = _timeAtOrigo + timeWindow / 2;
             var xFocus = (tFocus - _timeAtOrigo) / TimeSpan.FromDays(1.0);
 
             ScatterChartViewModel = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
@@ -75,9 +76,9 @@ namespace DMI.Data.Studio.ViewModel
             }
             else if (stationInformations.Objects.Count() == 1)
             {
-                _stationId = $"0{stationInformations.Objects.Single().StationIDDMI}";
+                _stationId = $"{stationInformations.Objects.Single().StationIDDMI}00";
                 _directoryName = Path.Combine(@"C:\\Data\\Observations", $"{_stationId}", "temp_dry");
-                _searchPattern = $"{_stationId}_temp_dry_2023.txt";
+                _searchPattern = $"{_stationId}_temp_dry_2014.txt";
             }
 
             UpdateCurve();

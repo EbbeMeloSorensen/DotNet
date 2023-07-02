@@ -49,6 +49,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double dy,
             double thickness)
         {
+            var lineSpacingX_ViewPort_Min = 75.0;
+            var lineSpacingX_World_Min = lineSpacingX_ViewPort_Min / GeometryEditorViewModel.Scaling.Width;
+            var lineSpacingX_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingX_World_Min)));
+
+            // Her er lineSpacingX_World f.eks. 0.01, 0.1, 1, 10, 100 eller 1000
+
             // 1: Find ud af spacing af linier for x-aksen
             var spacingX = 1.0;
             var labelWidth = spacingX * GeometryEditorViewModel.Scaling.Width;
@@ -61,6 +67,20 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 if (x > x0 + dx)
                 {
+                    var t = _timeAtOrigo + TimeSpan.FromDays(x);
+                    var day = t.Date.Day;
+
+                    if (lineSpacingX_World > 10.1 && day != 1)
+                    {
+                        x += spacingX;
+                        continue;
+                    }
+                    else if (lineSpacingX_World > 1.1 && (day != 1 && day % 5 != 0 || day > 25))
+                    {
+                        x += spacingX;
+                        continue;
+                    }
+
                     if (_includeGrid)
                     {
                         GeometryEditorViewModel.AddLine(
@@ -70,8 +90,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             _gridBrush);
                     }
 
-                    var t = _timeAtOrigo + TimeSpan.FromDays(x);
-                    var day = t.Date.Day;
                     var dateText = day.ToString();
 
                     GeometryEditorViewModel.AddLabel(
@@ -92,7 +110,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             labelWidth,
                             labelHeight,
                             new PointD(0, 1.5 * labelHeight),
-                            0.25);
+                            0.0);
 
                         var yearText = t.Year.ToString();
 
@@ -102,7 +120,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             labelWidth,
                             labelHeight,
                             new PointD(0, 2.5 * labelHeight),
-                            0.25);
+                            0.0);
                     }
                 }
 
