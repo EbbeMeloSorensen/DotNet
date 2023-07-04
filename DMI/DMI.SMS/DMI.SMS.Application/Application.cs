@@ -432,11 +432,6 @@ namespace DMI.SMS.Application
                 // Traverse all stations and add details for them
                 foreach (var station in stations)
                 {
-                    if (station.stationId == "04220")
-                    {
-                        var a = 0;
-                    }
-
                     Logger?.WriteLine(LogMessageCategory.Information, $"  processing station {station.stationId} ({station.name})..");
 
                     List<StationInformation> smsStationHistory = null;
@@ -483,9 +478,8 @@ namespace DMI.SMS.Application
                             smsStationHistory = stationDataRaw
                                 .Where(row => row.StationIDDMI == station.stationId.ConvertFromKDIStationIdToSMSStationId())
                                 .Where(row => row.Stationtype == station.type.ConvertToStationType())
-                                //.OrderBy(row => row.GdbFromDate) // Denne sortering virker ikke, hvis man har tilføjet data i henhold til nye brugsregler -
+                                .OrderBy(row => row.GdbFromDate) // Denne sortering virker ikke, hvis man har tilføjet data i henhold til nye brugsregler -
                                 // og hvad er det lige at de "nye brugsregler" er, Ebbe?? ffs mand!
-                                .OrderBy(row => row.DateFrom).ThenBy(row => row.GdbFromDate) // Dette er et bud på noget, der også kan håndtere de nye brugsregler
                                 .ToList();
 
                             var dataIOHandler = new DataIOHandler();

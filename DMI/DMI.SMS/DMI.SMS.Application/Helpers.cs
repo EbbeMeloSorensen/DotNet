@@ -948,18 +948,25 @@ namespace DMI.SMS.Application
                         // De 2 rækker er tilsyneladende forskellige - nu finder vi så lige ud af, om de også er det i Frie Data perspektiv
 
                         // Når der sker en opdatering af en station, som allerede var i databasen, da man startede, så passer gdb_date_from generelt ikke med gdb_date_to
-                        // (det er de tidspunkter, der er fremhævet med rødt i viewet)
+                        // (det er de tidspunkter, der blev fremhævet med rødt i tabelviewet fra den gamle applikation)
                         // Når det sker, så "lukker vi hullet" ved at overskrive gdb_date_from i den senest tilføjede række med 
-                        // den dato, som vi læser i dateto-feltet (i praksis skulle der gerne gælde, at denne dato altid er der. hvis denne antagelse viser sig
-                        // ikke at holde, skal vi havbe kigget på det, og så er det måske en mulighed at bruge værdien fra gdb_to_date-feltet, som altid er der)
+                        // den dato, som vi læser i dateto-feltet (i praksis gælder der som regel, at denne dato er der).
+                        // Når antagelsem ikke holder, bruger vi værdien fra gdb_from_date-feltet for den seneste række)
                         if (rowAfter.GdbFromDate != rowBefore.GdbToDate)
                         {
-                            if (!rowBefore.DateTo.HasValue)
+                            if (rowBefore.DateTo.HasValue)
                             {
-                                throw new NotImplementedException("We don't expect this to occur");
+                                result.Last().timeValidFrom = rowBefore.DateTo.Value.AsEpochInMicroSeconds();
                             }
-
-                            result.Last().timeValidFrom = rowBefore.DateTo.Value.AsEpochInMicroSeconds();
+                            else
+                            {
+                                // Her holder antagelsen ikke.
+                                // Det gælder konkret for snestationen Borris, som skifter til Tarm
+                                // og også for snestationen Roskilde
+                                var time = rowAfter.GdbFromDate.AsEpochInMicroSeconds();
+                                result.Last().timeValidFrom = time;
+                                newEarliestFrieDataStationRowCandidate.timeValidTo = time;
+                            }
                         }
                     }
 
