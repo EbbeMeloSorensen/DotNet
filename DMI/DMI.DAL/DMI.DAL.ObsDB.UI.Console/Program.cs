@@ -125,8 +125,9 @@ namespace DMI.DAL.ObsDB.UI.Console
                 var dataProvider = new DataProvider(null);
                 dataProvider.Initialize(new[] { parameter });
 
+                var firstYear = 2010;
                 var lastYear = 2023;
-                var years = Enumerable.Range(1953, lastYear - 1953 + 1);
+                var years = Enumerable.Range(firstYear, lastYear - firstYear + 1);
 
                 foreach(var year in years)
                 {
@@ -135,19 +136,19 @@ namespace DMI.DAL.ObsDB.UI.Console
                                     database,
                                     user,
                                     password,
-                                    "temp_dry",
+                                    parameter,
                                     year);
 
                     foreach (var stationId in stationIds)
                     {
-                        var directoryInfo = new DirectoryInfo(Path.Combine($"{stationId}/{parameter}"));
+                        var directoryInfo = new DirectoryInfo(Path.Combine($"{year}/{stationId}/{parameter}"));
 
                         if (!directoryInfo.Exists)
                         {
                             directoryInfo.Create();
                         }
 
-                        var fileName = Path.Combine($"{stationId}/{parameter}", $"{stationId}_{parameter}_{year}.txt");
+                        var fileName = Path.Combine($"{year}/{stationId}/{parameter}", $"{stationId}_{parameter}_{year}.txt");
                         var file = new FileInfo(fileName);
 
                         if (file.Exists)
