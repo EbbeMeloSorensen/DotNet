@@ -85,20 +85,33 @@
                 </Grid.RowDefinitions>
 
                 <TabControl Grid.Row="0">
-                    <TabItem Header="Temporal">
-                        <uiElements:StationInformationCollectionView DataContext="{Binding StationInformationCollectionViewModel}"/>
-                    </TabItem>
                     <TabItem Header="Geospatial">
-                        <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
+                        <scrollFree:GeometryEditorView 
+                            DataContext="{Binding GeometryEditorViewModel}"/>
+                    </TabItem>
+                    <TabItem Header="Temporal">
+                        <uiElements:StationInformationCollectionView 
+                            DataContext="{Binding StationInformationCollectionViewModel}"/>
                     </TabItem>
                 </TabControl>
 
-                <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Margin="2" HorizontalAlignment="Stretch" Height="2" Background="Gray"/>
+                <GridSplitter Grid.Row="0" 
+                              VerticalAlignment="Bottom" 
+                              Margin="2" 
+                              HorizontalAlignment="Stretch" 
+                              Height="2" 
+                              Background="Gray"/>
 
-                <uiElements:StationInformationDetailsView Grid.Row="1" DataContext="{Binding StationInformationDetailsViewModel}"/>
+                <uiElements:StationInformationDetailsView
+                    Grid.Row="1" 
+                    DataContext="{Binding StationInformationDetailsViewModel}"/>
             </Grid>
 
-            <Expander Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" IsExpanded="False" ExpandDirection="Left">
+            <Expander Grid.Row="0" 
+                      Grid.Column="2" 
+                      Grid.RowSpan="2" 
+                      IsExpanded="False" 
+                      ExpandDirection="Left">
                 <Expander.Header>
                     <TextBlock Text="Log">
                         <TextBlock.LayoutTransform>
@@ -109,7 +122,7 @@
                 <logging:LogView Width="400" DataContext="{Binding LogViewModel}"/>
             </Expander>
 
-            <tasks:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3"
+            <tasks:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3"
                             Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}"
                             DataContext="{Binding TaskViewModel}"/>
         </Grid>

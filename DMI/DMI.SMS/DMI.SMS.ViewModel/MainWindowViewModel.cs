@@ -13,6 +13,8 @@ using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Tasks;
 using DMI.SMS.Domain.Entities;
+using System.Diagnostics;
+using Craft.Logging;
 
 namespace DMI.SMS.ViewModel
 {
@@ -202,10 +204,7 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            TaskViewModel.NameOfTask = "Exporting data";
-            TaskViewModel.Abort = false;
-            TaskViewModel.AbortPossible = false;
-            TaskViewModel.Busy = true;
+            TaskViewModel.Show("Exporting data", false);
             RefreshCommandAvailability();
 
             await _application.ExportData(
@@ -223,7 +222,7 @@ namespace DMI.SMS.ViewModel
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
 
-            TaskViewModel.Busy = false;
+            TaskViewModel.Hide();
             RefreshCommandAvailability();
         }
 
@@ -246,11 +245,11 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            TaskViewModel.NameOfTask = "Importing data";
-            TaskViewModel.Abort = false;
-            TaskViewModel.AbortPossible = false;
-            TaskViewModel.Busy = true;
+            TaskViewModel.Show("Importing data", false);
             RefreshCommandAvailability();
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             await _application.ImportData(
                 dialog.FileName,
@@ -261,14 +260,15 @@ namespace DMI.SMS.ViewModel
                     return TaskViewModel.Abort;
                 });
 
-            // NB: Denne kan ikke aborteres
-            if (!TaskViewModel.Abort)
-            {
-                var messageBoxDialog = new MessageBoxDialogViewModel("Completed importing data", false);
-                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
-            }
+            stopwatch.Stop();
 
-            TaskViewModel.Busy = false;
+            var message = "Completed importing data";
+            _application.Logger.WriteLine(LogMessageCategory.Information, $"{message} (Time elapsed: {stopwatch.Elapsed})");
+
+            var messageBoxDialog = new MessageBoxDialogViewModel(message, false);
+            _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
+
+            TaskViewModel.Hide();
             RefreshCommandAvailability();
         }
 
@@ -288,10 +288,7 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            TaskViewModel.NameOfTask = "Clearing Repository";
-            TaskViewModel.Abort = false;
-            TaskViewModel.AbortPossible = false;
-            TaskViewModel.Busy = true;
+            TaskViewModel.Show("Clearing Repository", false);
             RefreshCommandAvailability();
 
             await _application.ClearRepository(
@@ -308,7 +305,7 @@ namespace DMI.SMS.ViewModel
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
 
-            TaskViewModel.Busy = false;
+            TaskViewModel.Hide();
             RefreshCommandAvailability();
         }
 
@@ -329,10 +326,7 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            TaskViewModel.NameOfTask = "Making breakfast";
-            TaskViewModel.Abort = false;
-            TaskViewModel.AbortPossible = true;
-            TaskViewModel.Busy = true;
+            TaskViewModel.Show("Making breakfast", true);
             RefreshCommandAvailability();
 
             await _application.MakeBreakfast(
@@ -349,7 +343,7 @@ namespace DMI.SMS.ViewModel
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
 
-            TaskViewModel.Busy = false;
+            TaskViewModel.Hide();
             RefreshCommandAvailability();
         }
 
@@ -378,10 +372,7 @@ namespace DMI.SMS.ViewModel
                 rollBackDate = temp;
             }
 
-            TaskViewModel.NameOfTask = "Extracting Meteorological Stations";
-            TaskViewModel.Abort = false;
-            TaskViewModel.AbortPossible = false;
-            TaskViewModel.Busy = true;
+            TaskViewModel.Show("Extracting Meteorological Stations", false);
             RefreshCommandAvailability();
 
             await _application.ExtractMeteorologicalStations(
@@ -399,7 +390,7 @@ namespace DMI.SMS.ViewModel
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
 
-            TaskViewModel.Busy = false;
+            TaskViewModel.Hide();
             RefreshCommandAvailability();
         }
 
@@ -428,10 +419,7 @@ namespace DMI.SMS.ViewModel
                 rollBackDate = temp;
             }
 
-            TaskViewModel.NameOfTask = "Extracting Oceanographical Stations";
-            TaskViewModel.Abort = false;
-            TaskViewModel.AbortPossible = false;
-            TaskViewModel.Busy = true;
+            TaskViewModel.Show("Extracting Oceanographical Stations", false);
             RefreshCommandAvailability();
 
             await _application.ExtractOceanographicalStations(
@@ -449,7 +437,7 @@ namespace DMI.SMS.ViewModel
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
 
-            TaskViewModel.Busy = false;
+            TaskViewModel.Hide();
             RefreshCommandAvailability();
         }
 

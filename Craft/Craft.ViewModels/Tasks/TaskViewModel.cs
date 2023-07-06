@@ -79,5 +79,20 @@ namespace Craft.ViewModels.Tasks
                 Abort = true;
             });
         }
+
+        public void Show(
+            string nameOfTask,
+            bool abortPossible)
+        {
+            NameOfTask = nameOfTask;
+            AbortPossible = abortPossible;
+            Abort = false;
+            Busy = true;
+        }
+
+        public void Hide()
+        {
+            Busy = false;
+        }
     }
 }
