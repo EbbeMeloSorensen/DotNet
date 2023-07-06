@@ -254,8 +254,7 @@ namespace DMI.SMS.Application
                 var status = new List<Status> { Status.Active };
                 int? limit = null;
 
-                // ...
-
+                // Work in progress... du har vist ikke fået flyttet det hele over, du... (kommentart fra 7. juli 2023)
 
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed extracting oceanographical stations");
             });

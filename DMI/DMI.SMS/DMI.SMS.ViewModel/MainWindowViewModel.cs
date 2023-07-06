@@ -370,12 +370,12 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            DateTime? dateTime = null;
+            DateTime? rollBackDate = null;
 
             if (!string.IsNullOrEmpty(dialogViewModel.Date))
             {
                 dialogViewModel.Date.TryParsingAsDateTime(out var temp);
-                dateTime = temp;
+                rollBackDate = temp;
             }
 
             TaskViewModel.NameOfTask = "Extracting Meteorological Stations";
@@ -385,8 +385,7 @@ namespace DMI.SMS.ViewModel
             RefreshCommandAvailability();
 
             await _application.ExtractMeteorologicalStations(
-                dateTime,
-                
+                rollBackDate,
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;
@@ -421,12 +420,22 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
+            DateTime? rollBackDate = null;
+
+            if (!string.IsNullOrEmpty(dialogViewModel.Date))
+            {
+                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
+                rollBackDate = temp;
+            }
+
             TaskViewModel.NameOfTask = "Extracting Oceanographical Stations";
             TaskViewModel.Abort = false;
+            TaskViewModel.AbortPossible = false;
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
-            await _application.MakeBreakfast(
+            await _application.ExtractOceanographicalStations(
+                rollBackDate,
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;
@@ -434,14 +443,14 @@ namespace DMI.SMS.ViewModel
                     return TaskViewModel.Abort;
                 });
 
-            TaskViewModel.Busy = false;
-            RefreshCommandAvailability();
-
             if (!TaskViewModel.Abort)
             {
                 var messageBoxDialog = new MessageBoxDialogViewModel("Completed Extraction of Oceanographical Stations", false);
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
         }
 
         private bool CanExtractOceanographicalStations(
