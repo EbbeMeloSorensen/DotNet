@@ -204,6 +204,7 @@ namespace DMI.SMS.ViewModel
 
             TaskViewModel.NameOfTask = "Exporting data";
             TaskViewModel.Abort = false;
+            TaskViewModel.AbortPossible = false;
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
@@ -216,14 +217,14 @@ namespace DMI.SMS.ViewModel
                     return TaskViewModel.Abort;
                 });
 
-            TaskViewModel.Busy = false;
-            RefreshCommandAvailability();
-
             if (!TaskViewModel.Abort)
             {
                 var messageBoxDialog = new MessageBoxDialogViewModel($"Exported data to {dialog.FileName}", false);
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
         }
 
         private bool CanExportData(
@@ -247,6 +248,7 @@ namespace DMI.SMS.ViewModel
 
             TaskViewModel.NameOfTask = "Importing data";
             TaskViewModel.Abort = false;
+            TaskViewModel.AbortPossible = false;
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
@@ -259,14 +261,15 @@ namespace DMI.SMS.ViewModel
                     return TaskViewModel.Abort;
                 });
 
-            TaskViewModel.Busy = false;
-            RefreshCommandAvailability();
-
+            // NB: Denne kan ikke aborteres
             if (!TaskViewModel.Abort)
             {
                 var messageBoxDialog = new MessageBoxDialogViewModel("Completed importing data", false);
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
         }
 
         private bool CanImportData(
@@ -287,6 +290,7 @@ namespace DMI.SMS.ViewModel
 
             TaskViewModel.NameOfTask = "Clearing Repository";
             TaskViewModel.Abort = false;
+            TaskViewModel.AbortPossible = false;
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
@@ -298,14 +302,14 @@ namespace DMI.SMS.ViewModel
                     return TaskViewModel.Abort;
                 });
 
-            TaskViewModel.Busy = false;
-            RefreshCommandAvailability();
-
             if (!TaskViewModel.Abort)
             {
                 var messageBoxDialog = new MessageBoxDialogViewModel("Completed clearing repository", false);
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
         }
 
         private bool CanClearRepository(
@@ -327,6 +331,7 @@ namespace DMI.SMS.ViewModel
 
             TaskViewModel.NameOfTask = "Making breakfast";
             TaskViewModel.Abort = false;
+            TaskViewModel.AbortPossible = true;
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
@@ -338,14 +343,14 @@ namespace DMI.SMS.ViewModel
                     return TaskViewModel.Abort;
                 });
 
-            TaskViewModel.Busy = false;
-            RefreshCommandAvailability();
-
             if (!TaskViewModel.Abort)
             {
                 var messageBoxDialog = new MessageBoxDialogViewModel("Completed breakfast", false);
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
         }
 
         private bool CanMakeBreakfast(

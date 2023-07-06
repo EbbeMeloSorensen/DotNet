@@ -29,6 +29,7 @@
                 <ResourceDictionary Source="/Craft.UIElements;component/Charts/Resources.xaml" />
                 <ResourceDictionary Source="/Craft.UIElements;component/Chronology/Resources.xaml" />
                 <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Tasks/Resources.xaml" />
                 <ResourceDictionary Source="/Craft.UIElements;component/Geometry2D/ScrollFree/Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 

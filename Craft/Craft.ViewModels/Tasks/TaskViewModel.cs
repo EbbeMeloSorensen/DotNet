@@ -6,6 +6,7 @@ namespace Craft.ViewModels.Tasks
     public class TaskViewModel : ViewModelBase
     {
         private bool _busy;
+        private bool _abortPossible;
         private double _progress;
         private string _nameOfTask;
         private string _nameOfCurrentSubtask;
@@ -16,6 +17,16 @@ namespace Craft.ViewModels.Tasks
             set
             {
                 _busy = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool AbortPossible
+        {
+            get => _abortPossible;
+            set
+            {
+                _abortPossible = value;
                 RaisePropertyChanged();
             }
         }

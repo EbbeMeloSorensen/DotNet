@@ -131,6 +131,8 @@ namespace DMI.SMS.Application
 
                     count++;
 
+                    // Hvis brugeren har trykket på Abort knappen, vil dette kald returnere true,
+                    // og så skal vi breake
                     if (progressCallback?.Invoke(100.0 * count / total, currentActivity) is true)
                     {
                         break;
@@ -148,7 +150,7 @@ namespace DMI.SMS.Application
             await Task.Run(() =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
-                progressCallback?.Invoke(0.0, "Exporting data");
+                progressCallback?.Invoke(2.0, "Exporting data");
 
                 UIDataProvider.ExportData(fileName, null);
 
@@ -164,7 +166,7 @@ namespace DMI.SMS.Application
             await Task.Run(() =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
-                progressCallback?.Invoke(0.0, "Importing data");
+                progressCallback?.Invoke(2.0, "Importing data");
 
                 UIDataProvider.ImportData(fileName);
 
@@ -179,7 +181,7 @@ namespace DMI.SMS.Application
             await Task.Run(() =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Clearing Repository..");
-                progressCallback?.Invoke(0.0, "Clearing Repository");
+                progressCallback?.Invoke(2.0, "Clearing Repository");
 
                 UIDataProvider.DeleteAllStationInformations();
 
