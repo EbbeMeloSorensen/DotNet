@@ -8,6 +8,8 @@
         xmlns:uiElementsStatDB="clr-namespace:DMI.StatDB.UIElements;assembly=DMI.StatDB.UIElements"
         xmlns:chronology="clr-namespace:Craft.UIElements.Chronology;assembly=Craft.UIElements"
         xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
+        xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
+        xmlns:tasks="clr-namespace:Craft.UIElements.Tasks;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="{Binding MainWindowTitle}" 
         Height="450" 
@@ -53,19 +55,27 @@
         </Menu>
 
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <uiElementsSMS:StationInformationListView Grid.Column="0" DataContext="{Binding StationInformationListViewModel}"/>
+            <uiElementsSMS:StationInformationListView Grid.Row="0" Grid.Column="0" 
+                                                      DataContext="{Binding StationInformationListViewModel}"/>
 
-            <uiElementsStatDB:StationListView Grid.Column="1" DataContext="{Binding StationListViewModel}" Visibility="Collapsed"/>
+            <uiElementsStatDB:StationListView Grid.Row="0" Grid.Column="1" 
+                                              DataContext="{Binding StationListViewModel}" Visibility="Collapsed"/>
 
-            <TabControl Grid.Column="2" SelectedIndex="{Binding SelectedOveralTabIndex}">
+            <TabControl Grid.Row="0" Grid.Column="2" SelectedIndex="{Binding SelectedOveralTabIndex}">
                 <TabItem Header="Selected Records">
-                    <Grid Grid.Column="2">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
@@ -80,14 +90,17 @@
                             </TabItem>
                         </TabControl>
 
-                        <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Margin="2" HorizontalAlignment="Stretch" Height="2" Background="Gray"/>
+                        <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Margin="2" 
+                                      HorizontalAlignment="Stretch" Height="2" Background="Gray"/>
 
                         <TabControl Grid.Row="1">
                             <TabItem Header="Station Properties">
-                                <uiElementsSMS:StationInformationDetailsView DataContext="{Binding StationInformationDetailsViewModel}"/>
+                                <uiElementsSMS:StationInformationDetailsView 
+                                    DataContext="{Binding StationInformationDetailsViewModel}"/>
                             </TabItem>
                             <TabItem Header="Time Series">
-                                <scrollFree:CoordinateSystemView DataContext="{Binding TimeSeriesViewModel.ScatterChartViewModel}" />
+                                <scrollFree:CoordinateSystemView 
+                                    DataContext="{Binding TimeSeriesViewModel.ScatterChartViewModel}" />
                             </TabItem>
                         </TabControl>
 
@@ -97,6 +110,21 @@
                     <uiElementsSMS:StatisticsView DataContext="{Binding StatisticsViewModel}"/>
                 </TabItem>
             </TabControl>
+
+            <Expander Grid.Row="0" Grid.Column="3" IsExpanded="True" ExpandDirection="Left">
+                <Expander.Header>
+                    <TextBlock Text="Log">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="90"/>
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <logging:LogView Width="400" DataContext="{Binding LogViewModel}"/>
+            </Expander>
+
+            <tasks:TaskView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="3"
+                            Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            DataContext="{Binding TaskViewModel}"/>
         </Grid>
     </DockPanel>
 </Window>

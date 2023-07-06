@@ -75,6 +75,11 @@ namespace DMI.Data.Studio.Application
             set => _logger = value;
         }
 
+        public Application(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public async Task ExtractOceanographicalStations(
             DateTime? cutDate,
             ProgressCallback progressCallback = null)

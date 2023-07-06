@@ -1,9 +1,8 @@
 ﻿using System;
-using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -16,11 +15,11 @@ using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Chronology;
 using Craft.ViewModels.Geometry2D.ScrollFree;
+using Craft.ViewModels.Tasks;
 using DMI.SMS.ViewModel;
 using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
-using StringExtensions = DMI.Utils.StringExtensions;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -60,6 +59,7 @@ namespace DMI.Data.Studio.ViewModel
         private readonly ObservableObject<bool> _observableForClassifyRecordsWithCondition;
         private int _selectedOveralTabIndex;
 
+        private Application.Application _application;
         private SMS.Application.Application _smsApplication;
 
         private string _mainWindowTitle;
@@ -86,6 +86,8 @@ namespace DMI.Data.Studio.ViewModel
             }
         }
 
+        public LogViewModel LogViewModel { get; }
+        public TaskViewModel TaskViewModel { get; }
         public StationInformationListViewModel StationInformationListViewModel { get; private set; }
         public StationInformationDetailsViewModel StationInformationDetailsViewModel { get; private set; }
         public StationListViewModel StationListViewModel { get; private set; }
@@ -156,7 +158,7 @@ namespace DMI.Data.Studio.ViewModel
 
         public AsyncCommand<object> ExportDataCommand
         {
-            get { return _exportDataCommand ?? (_exportDataCommand = new AsyncCommand<object>(ExportData)); }
+            get { return _exportDataCommand ?? (_exportDataCommand = new AsyncCommand<object>(ExportData, CanExportData)); }
         }
 
         public AsyncCommand<object> GenerateMeteorologicalStationListCommand
@@ -175,6 +177,7 @@ namespace DMI.Data.Studio.ViewModel
             get { return _clearRepositoryCommand ?? (_clearRepositoryCommand = new AsyncCommand<object>(ClearRepository)); }
         }
 
+        // Parametrene her fås ved dependency injection
         public MainWindowViewModel(
             SMS.Application.IUIDataProvider smsDataProvider,
             StatDB.Application.IUIDataProvider statDBDataProvider,
@@ -189,6 +192,9 @@ namespace DMI.Data.Studio.ViewModel
             _smsDataProvider.Initialize(logger);
             _statDBDataProvider.Initialize(logger);
 
+            _application = new Application.Application(
+                _logger);
+
             _smsApplication = new SMS.Application.Application(
                 _smsDataProvider, _logger);
 
@@ -197,6 +203,10 @@ namespace DMI.Data.Studio.ViewModel
             _observableForClassifyRecordsWithCondition = new ObservableObject<bool>();
             _observableForClassifyRecordsWithCondition.Object = true;
             _selectedOveralTabIndex = 0;
+
+            LogViewModel = new LogViewModel();
+
+            TaskViewModel = new TaskViewModel();
 
             StationInformationListViewModel = new StationInformationListViewModel(
                 smsDataProvider, 
@@ -245,12 +255,17 @@ namespace DMI.Data.Studio.ViewModel
             StationInformationDetailsViewModel.RepositoryOperationPerformed += 
                 StationInformationDetailsViewModel_RepositoryOperationPerformed;
 
+            _application.Logger = new ViewModelLogger(_application.Logger, LogViewModel);
+            //_application.Logger = null; // Set to null to disable logging
+
             _includeOperationIntervalBars = true;
             _includeObservationIntervalBars = false;
             _includeTransactionTimeIntervalBars = true;
 
             //DrawRoughOutlineOfDenmarkOnMap();
             DrawMapOfDenmark();
+
+            _application.Logger?.WriteLine(LogMessageCategory.Information, "DMI.Data.Studio.UI.WPF started up");
         }
 
         private void StationInformationDetailsViewModel_RepositoryOperationPerformed(
@@ -784,14 +799,37 @@ namespace DMI.Data.Studio.ViewModel
                 return;
             }
 
-            await _smsApplication.ExportData(dialog.FileName);
+            TaskViewModel.NameOfTask = "Exporting data";
+            TaskViewModel.Abort = false;
+            TaskViewModel.AbortPossible = false;
+            TaskViewModel.Busy = true;
+            RefreshCommandAvailability();
 
-            //_smsDataProvider.ExportData(
-            //    dialog.FileName,
-            //    StationInformationListViewModel.FindStationInformationsViewModel.FilterAsExpressionCollection());
+            await _smsApplication.ExportData(
+                dialog.FileName,
+                (progress, currentActivity) =>
+                {
+                    TaskViewModel.Progress = progress;
+                    TaskViewModel.NameOfCurrentSubtask = currentActivity;
+                    return TaskViewModel.Abort;
+                });
 
-            var dialogViewModel = new MessageBoxDialogViewModel($"Exported data succesfully to {dialog.FileName}", false);
-            _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            if (!TaskViewModel.Abort)
+            {
+                var dialogViewModel =
+                    new MessageBoxDialogViewModel($"Exported data succesfully to {dialog.FileName}", false);
+
+                _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            }
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
+        }
+
+        private bool CanExportData(
+            object owner)
+        {
+            return !TaskViewModel.Busy;
         }
 
         private async Task GenerateMeteorologicalStationList(
@@ -818,11 +856,25 @@ namespace DMI.Data.Studio.ViewModel
                 return;
             }
 
+            TaskViewModel.NameOfTask = "Importing Data";
+            TaskViewModel.Abort = false;
+            TaskViewModel.AbortPossible = false;
+            TaskViewModel.Busy = true;
+            RefreshCommandAvailability();
+
             await _smsApplication.ImportData(
                 dialog.FileName);
 
-            var dialogViewModel = new MessageBoxDialogViewModel($"{dialog.FileName} was imported succesfully", false);
-            _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            if (!TaskViewModel.Abort)
+            {
+                var dialogViewModel =
+                    new MessageBoxDialogViewModel($"{dialog.FileName} was imported succesfully", false);
+
+                _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            }
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
         }
 
         private async Task ClearRepository(
@@ -860,6 +912,15 @@ namespace DMI.Data.Studio.ViewModel
             //}
         }
 
+        private void RefreshCommandAvailability()
+        {
+            ExportDataCommand.RaiseCanExecuteChanged();
+            ImportDataCommand.RaiseCanExecuteChanged();
+            //MakeBreakfastCommand.RaiseCanExecuteChanged();
+            //ExtractMeteorologicalStationsCommand.RaiseCanExecuteChanged();
+            //ExtractOceanographicalStationsCommand.RaiseCanExecuteChanged();
+        }
+
         private List<Tuple<DateTime, DateTime>> GetObservationIntervalsForStation(
             string stationId)
         {
@@ -868,7 +929,7 @@ namespace DMI.Data.Studio.ViewModel
                 return null;
             }
 
-            var nanoqStationId = StringExtensions.AsNanoqStationId(stationId);
+            var nanoqStationId = Utils.StringExtensions.AsNanoqStationId(stationId);
             var parameter = "temp_dry";
             var maxTolerableDifferenceBetweenTwoObservationsInDays = 20.0;
 

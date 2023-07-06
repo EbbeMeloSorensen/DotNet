@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.Application\DMI.SMS.Application.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.ViewModel\DMI.SMS.ViewModel.csproj" />
     <ProjectReference Include="..\..\DMI.StatDB\DMI.StatDB.ViewModel\DMI.StatDB.ViewModel.csproj" />
+    <ProjectReference Include="..\DMI.Data.Studio.Application\DMI.Data.Studio.Application.csproj" />
   </ItemGroup>
 
 </Project>
