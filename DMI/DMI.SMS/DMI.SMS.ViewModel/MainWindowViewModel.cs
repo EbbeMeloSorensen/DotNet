@@ -380,6 +380,7 @@ namespace DMI.SMS.ViewModel
 
             TaskViewModel.NameOfTask = "Extracting Meteorological Stations";
             TaskViewModel.Abort = false;
+            TaskViewModel.AbortPossible = false;
             TaskViewModel.Busy = true;
             RefreshCommandAvailability();
 
@@ -393,14 +394,14 @@ namespace DMI.SMS.ViewModel
                     return TaskViewModel.Abort;
                 });
 
-            TaskViewModel.Busy = false;
-            RefreshCommandAvailability();
-
             if (!TaskViewModel.Abort)
             {
                 var messageBoxDialog = new MessageBoxDialogViewModel("Completed Extraction of Meteorological Stations", false);
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
+
+            TaskViewModel.Busy = false;
+            RefreshCommandAvailability();
         }
 
         private bool CanExtractMeteorologicalStations(
