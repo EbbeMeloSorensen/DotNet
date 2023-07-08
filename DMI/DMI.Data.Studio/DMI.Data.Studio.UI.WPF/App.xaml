@@ -24,6 +24,9 @@
             <DataTemplate DataType="{x:Type viewmodelsms:MergeStationInformationRecordsDialogViewModel}">
                 <smsdialogs:MergeStationInformationRecordsDialogView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodeldmidatastudio:ExtractFrieDataStationListDialogViewModel}">
+                <local:ExtractFrieDataStationListDialogView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodeldmidatastudio:SettingsDialogViewModel}">
                 <local:SettingsDialogView/>
             </DataTemplate>

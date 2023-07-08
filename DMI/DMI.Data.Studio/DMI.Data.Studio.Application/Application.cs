@@ -63,10 +63,10 @@ namespace DMI.Data.Studio.Application
             { 32175, new List<int>{ 53361, 53362, 53365 } },                                           // Østerlars
         };
 
-        private SMS.Application.IUIDataProvider _uiDataProvider;
+        private SMS.Application.IUIDataProvider _smsUiDataProvider;
         private ILogger _logger;
 
-        public SMS.Application.IUIDataProvider UIDataProvider => _uiDataProvider;
+        public SMS.Application.IUIDataProvider SMSUIDataProvider => _smsUiDataProvider;
 
         // It must be possible for an external component to set the Logger, e.g. in order to override with a decorator
         public ILogger Logger
@@ -75,8 +75,11 @@ namespace DMI.Data.Studio.Application
             set => _logger = value;
         }
 
-        public Application(ILogger logger)
+        public Application(
+            SMS.Application.IUIDataProvider smsUIDataProvider,
+            ILogger logger)
         {
+            _smsUiDataProvider = smsUIDataProvider;
             _logger = logger;
         }
 
@@ -465,7 +468,7 @@ namespace DMI.Data.Studio.Application
             DateTime? rollBackDate)
         {
             // Fetch all rows
-            var stationDataRaw = UIDataProvider.GetAllStationInformations();
+            var stationDataRaw = SMSUIDataProvider.GetAllStationInformations();
 
             if (rollBackDate.HasValue)
             {

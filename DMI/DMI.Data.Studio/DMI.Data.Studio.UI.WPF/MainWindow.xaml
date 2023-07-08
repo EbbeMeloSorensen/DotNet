@@ -28,10 +28,14 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New Station Information" Command="{Binding CreateStationInformationCommand}"/>
                 <Separator/>
-                <MenuItem Header="Export Data" Command="{Binding ExportDataCommand}"/>
-                <!--<MenuItem Header="Fetch Stations" Command="{Binding GenerateMeteorologicalStationListCommand}"/>-->
-                <MenuItem Header="Import Data" Command="{Binding ImportDataCommand}"/>
-                <MenuItem Header="Clear Repository" Command="{Binding ClearRepositoryCommand}"/>
+                <MenuItem Header="Export Data" 
+                          Command="{Binding ExportDataCommand}"/>
+                <MenuItem Header="Extract Meteorological Station List" 
+                          Command="{Binding ExtractMeteorologicalStationListCommand}"/>
+                <MenuItem Header="Import Data" 
+                          Command="{Binding ImportDataCommand}"/>
+                <MenuItem Header="Clear Repository" 
+                          Command="{Binding ClearRepositoryCommand}"/>
                 <Separator/>
                 <MenuItem Header="Settings" 
                           Command="{Binding OpenSettingsDialogCommand}"

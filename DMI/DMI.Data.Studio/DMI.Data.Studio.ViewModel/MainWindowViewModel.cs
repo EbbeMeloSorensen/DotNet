@@ -48,7 +48,7 @@ namespace DMI.Data.Studio.ViewModel
         private AsyncCommand<object> _exportDataCommand;
         private AsyncCommand<object> _importDataCommand;
         private AsyncCommand<object> _clearRepositoryCommand;
-        private AsyncCommand<object> _generateMeteorologicalStationListCommand;
+        private AsyncCommand<object> _extractMeteorologicalStationListCommand;
         private Brush _stationInformationBrush = new SolidColorBrush(Colors.DarkRed);
         private Brush _stationBrush = new SolidColorBrush(Colors.DarkOrange);
         private Brush _StatDBTimeIntervalBrush = new SolidColorBrush(Colors.DarkSlateGray);
@@ -161,10 +161,10 @@ namespace DMI.Data.Studio.ViewModel
             get { return _exportDataCommand ?? (_exportDataCommand = new AsyncCommand<object>(ExportData, CanExportData)); }
         }
 
-        public AsyncCommand<object> GenerateMeteorologicalStationListCommand
+        public AsyncCommand<object> ExtractMeteorologicalStationListCommand
         {
-            get { return _generateMeteorologicalStationListCommand ?? (
-                    _generateMeteorologicalStationListCommand = new AsyncCommand<object>(GenerateMeteorologicalStationList)); }
+            get { return _extractMeteorologicalStationListCommand ?? (
+                    _extractMeteorologicalStationListCommand = new AsyncCommand<object>(ExtractMeteorologicalStationList)); }
         }
 
         public AsyncCommand<object> ImportDataCommand
@@ -193,6 +193,7 @@ namespace DMI.Data.Studio.ViewModel
             _statDBDataProvider.Initialize(logger);
 
             _application = new Application.Application(
+                _smsDataProvider,
                 _logger);
 
             _smsApplication = new SMS.Application.Application(
@@ -832,15 +833,45 @@ namespace DMI.Data.Studio.ViewModel
             return !TaskViewModel.Busy;
         }
 
-        private async Task GenerateMeteorologicalStationList(
+        private async Task ExtractMeteorologicalStationList(
             object owner)
         {
-            // Todo: Show a dialog where the user can enter a rollback date
-            // For now, we don't use a rollback date
-            // Bemærk lige, at du altså har sådan en dialog i SMS-applikationen
-            DateTime? rollbackDate = null;
+            var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
+                "Extract Meteorological Stations");
 
-            await _smsApplication.ExtractMeteorologicalStations(rollbackDate);
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            DateTime? rollBackDate = null;
+
+            if (!string.IsNullOrEmpty(dialogViewModel.Date))
+            {
+                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
+                rollBackDate = temp;
+            }
+
+            TaskViewModel.Show("Extracting Meteorological Stations", false);
+            RefreshCommandAvailability();
+
+            await _application.ExtractMeteorologicalStations(
+                rollBackDate,
+                (progress, currentActivity) =>
+                {
+                    TaskViewModel.Progress = progress;
+                    TaskViewModel.NameOfCurrentSubtask = currentActivity;
+                    return TaskViewModel.Abort;
+                });
+
+            if (!TaskViewModel.Abort)
+            {
+                var messageBoxDialog = new MessageBoxDialogViewModel("Completed Extraction of Meteorological Stations", false);
+                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
+            }
+
+            TaskViewModel.Hide();
+            RefreshCommandAvailability();
         }
 
         private async Task ImportData(
@@ -856,10 +887,7 @@ namespace DMI.Data.Studio.ViewModel
                 return;
             }
 
-            TaskViewModel.NameOfTask = "Importing Data";
-            TaskViewModel.Abort = false;
-            TaskViewModel.AbortPossible = false;
-            TaskViewModel.Busy = true;
+            TaskViewModel.Show("Importing Data", false);
             RefreshCommandAvailability();
 
             await _smsApplication.ImportData(
@@ -873,7 +901,7 @@ namespace DMI.Data.Studio.ViewModel
                 _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
             }
 
-            TaskViewModel.Busy = false;
+            TaskViewModel.Hide();
             RefreshCommandAvailability();
         }
 
