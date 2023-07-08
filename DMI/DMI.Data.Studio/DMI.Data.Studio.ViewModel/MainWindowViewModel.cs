@@ -49,6 +49,7 @@ namespace DMI.Data.Studio.ViewModel
         private AsyncCommand<object> _importDataCommand;
         private AsyncCommand<object> _clearRepositoryCommand;
         private AsyncCommand<object> _extractMeteorologicalStationListCommand;
+        private AsyncCommand<object> _extractOceanographicalStationListCommand;
         private Brush _stationInformationBrush = new SolidColorBrush(Colors.DarkRed);
         private Brush _stationBrush = new SolidColorBrush(Colors.DarkOrange);
         private Brush _StatDBTimeIntervalBrush = new SolidColorBrush(Colors.DarkSlateGray);
@@ -165,6 +166,15 @@ namespace DMI.Data.Studio.ViewModel
         {
             get { return _extractMeteorologicalStationListCommand ?? (
                     _extractMeteorologicalStationListCommand = new AsyncCommand<object>(ExtractMeteorologicalStationList)); }
+        }
+
+        public AsyncCommand<object> ExtractOceanographicalStationListCommand
+        {
+            get
+            {
+                return _extractOceanographicalStationListCommand ?? (
+                  _extractOceanographicalStationListCommand = new AsyncCommand<object>(ExtractOceanographicalStationList));
+            }
         }
 
         public AsyncCommand<object> ImportDataCommand
@@ -867,6 +877,47 @@ namespace DMI.Data.Studio.ViewModel
             if (!TaskViewModel.Abort)
             {
                 var messageBoxDialog = new MessageBoxDialogViewModel("Completed Extraction of Meteorological Stations", false);
+                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
+            }
+
+            TaskViewModel.Hide();
+            RefreshCommandAvailability();
+        }
+
+        private async Task ExtractOceanographicalStationList(
+            object owner)
+        {
+            var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
+                "Extract Oceanographical Stations");
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            DateTime? rollBackDate = null;
+
+            if (!string.IsNullOrEmpty(dialogViewModel.Date))
+            {
+                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
+                rollBackDate = temp;
+            }
+
+            TaskViewModel.Show("Extracting Oceanographical Stations", false);
+            RefreshCommandAvailability();
+
+            await _application.ExtractOceanographicalStations(
+                rollBackDate,
+                (progress, currentActivity) =>
+                {
+                    TaskViewModel.Progress = progress;
+                    TaskViewModel.NameOfCurrentSubtask = currentActivity;
+                    return TaskViewModel.Abort;
+                });
+
+            if (!TaskViewModel.Abort)
+            {
+                var messageBoxDialog = new MessageBoxDialogViewModel("Completed Extraction of Oceanographical Stations", false);
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
             }
 

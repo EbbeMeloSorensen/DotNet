@@ -32,6 +32,8 @@
                           Command="{Binding ExportDataCommand}"/>
                 <MenuItem Header="Extract Meteorological Station List" 
                           Command="{Binding ExtractMeteorologicalStationListCommand}"/>
+                <MenuItem Header="Extract Oceanographical Station List" 
+                          Command="{Binding ExtractOceanographicalStationListCommand}"/>
                 <MenuItem Header="Import Data" 
                           Command="{Binding ImportDataCommand}"/>
                 <MenuItem Header="Clear Repository" 

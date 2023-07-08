@@ -132,10 +132,9 @@ namespace DMI.Data.Studio.Application
                 var status = new List<Status> { Status.Active };
                 int? limit = null;
 
-                // ...
+                Logger?.WriteLine(LogMessageCategory.Information, "Work in progress..");
 
-
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed extracting oceanographical stations");
+                //Logger?.WriteLine(LogMessageCategory.Information, "Completed extracting oceanographical stations");
             });
         }
 
