@@ -38,6 +38,25 @@ namespace DMI.Data.Studio.Application
             { StationType.Snestation, "Manual snow"}
         };
 
+        private static Dictionary<int, string> _stationTypeCodeMap = new Dictionary<int, string>
+        {
+            {0, "Synop"},
+            {1, "Strømstation"},
+            {2, "SVK gprs"},
+            {3, "Tide Gauge"},
+            {4, "GIWS"},
+            {5, "Pluvio"},
+            {6, "SHIP AWS"},
+            {7, "Temp ship"},
+            {8, "Lynpejlestation"},
+            {9, "Radar"},
+            {10, "Radiosonde"},
+            {11, "Historisk stationstype"},
+            {12, "Manual precipitation"},
+            {13, "Bølgestation"},
+            {14, "Manual snow"}
+        };
+
         private static Dictionary<StationOwner, string> _stationOwnerNameMap = new Dictionary<StationOwner, string>
         {
             { StationOwner.DMI, "DMI" },
@@ -78,6 +97,7 @@ namespace DMI.Data.Studio.Application
             { "26137", "9006802" },
             { "26143", "9006901" },
             { "26144", "9006902" },
+            { "26362", "1111111" },
             { "25346", "9007101" },
             { "25347", "9007102" },
             { "26088", "9010101" },
@@ -386,6 +406,17 @@ namespace DMI.Data.Studio.Application
             return station;
         }
 
+        public static int ConvertToSMSStationId(
+            this string s)
+        {
+            if (_kdiStationIdMap.Values.Contains(s))
+            {
+                s = _kdiStationIdMap.Single(kvp => kvp.Value == s).Key;
+            }
+
+            return int.Parse(s);
+        }
+
         public static int ConvertFromKDIStationIdToSMSStationId(
             this string kdiStationId)
         {
@@ -406,6 +437,17 @@ namespace DMI.Data.Studio.Application
             }
 
             return _stationTypeMap.Single(kvp => kvp.Value == stationType).Key;
+        }
+
+        public static int ConvertToStationTypeCode(
+            this string stationType)
+        {
+            if (stationType.Contains("Tide-gauge"))
+            {
+                return _stationTypeCodeMap.Single(kvp => kvp.Value == "Tide Gauge").Key;
+            }
+
+            return _stationTypeCodeMap.Single(kvp => kvp.Value == stationType).Key;
         }
 
         public static List<Station> AsFrieDataStationHistory(

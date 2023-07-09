@@ -145,7 +145,7 @@ namespace DMI.Data.Studio.Application
         }
 
         public async Task ExtractOceanographicalStations(
-            DateTime? cutDate,
+            DateTime? rollBackDate,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(async () =>
@@ -185,7 +185,7 @@ namespace DMI.Data.Studio.Application
                 var outputOGCJsonFileName = "ogcoceanObs_station.json";
 
                 // Fetch all rows
-                var stationDataRaw = RetrieveAllRows(new DateTime(2021, 4, 28));
+                var stationDataRaw = RetrieveAllRows(rollBackDate);
 
                 // Configure filters
                 var stationTypes = new List<StationType> { StationType.Vandstandsstation };
@@ -193,7 +193,94 @@ namespace DMI.Data.Studio.Application
                 var status = new List<Status> { Status.Active };
                 int? limit = null;
 
-                Logger?.WriteLine(LogMessageCategory.Information, "Work in progress..");
+                // Filter out everything that is not current
+                var stationData = stationDataRaw
+                    .Where(row => row.GdbToDate.Year == 9999)
+                    .ToList();
+
+                // Experiment: Filter out all stations that were added according to new usage rules (this should not affect the stationfetcher)
+                stationData = stationData
+                    .Where(row => !(row.DateTo.HasValue && row.Status == Status.Active))
+                    .ToList();
+
+                // Det giver åbenbart problemer, når denne er sat til true
+                //var convertFromDMIStationIdToKDIStationId = true;
+                var convertFromDMIStationIdToKDIStationId = true;
+
+                // Filter out everything that doesn't match criteria, and convert to Frie Data stations
+                var stations = stationData
+                    .Where(row => row.StationOwner.HasValue && stationOwners.Contains(row.StationOwner.Value))
+                    .Where(row => row.Status.HasValue && status.Contains(row.Status.Value))
+                    .Where(row => row.Stationtype.HasValue && stationTypes.Contains(row.Stationtype.Value))
+                    .Select(s => s.ConvertToFrieDataStation(convertFromDMIStationIdToKDIStationId))
+                    .ToList();
+
+                // Add historical Tide Gauge stations
+                var historicalTideGaugeStationIds = new List<int>
+                {
+                    20002, // Skagen Havn, som blev nedlagt januar 2021
+                    20048,
+                    20098,
+                    21008,
+                    22332,
+                    23292,
+                    25148,
+                    26458,
+                    28232,
+                    28233,
+                    29392,
+                    30018,
+                    30337,
+                    30338,
+                    30339,
+                    31572,
+                    31618
+                };
+
+                foreach (var historicalTideGaugeStationId in historicalTideGaugeStationIds)
+                {
+                    var smsStation = SMSUIDataProvider.FindStationInformations(
+                        s => s.StationIDDMI.HasValue && 
+                        s.StationIDDMI.Value == historicalTideGaugeStationId &&
+                        s.GdbToDate.Year == 9999);
+
+                    var frieDataStation = smsStation.Single().ConvertToFrieDataStation(convertFromDMIStationIdToKDIStationId);
+
+                    stations.Add(frieDataStation);
+                }
+
+                stations = stations.OrderBy(s => s.stationId).ToList();
+
+                // Traverse the list of stations in order to retrieve details for each of them
+                foreach (var station in stations)
+                {
+                    var message = $"Inspecting history for station {station.stationId} ({station.name})..";
+                    Logger?.WriteLine(LogMessageCategory.Information, message);
+
+                    List<StationInformation> smsStationHistory = null;
+
+                    var smsStationId = station.stationId.ConvertToSMSStationId();
+
+                    if (historicalTideGaugeStationIds
+                        .Except(new int[] { 20002 })
+                        .Contains(smsStationId))
+                    {
+                        // Vi har at gøre med en freak of nature gammel station, som skal rekonstrueres
+                        Logger?.WriteLine(LogMessageCategory.Information, $"(skipping {smsStationId} for now)");
+                    }
+                    else
+                    {
+                        smsStationHistory = stationDataRaw
+                            .Where(row => row.StationIDDMI == smsStationId)
+                            .Where(row => row.Stationtype == StationType.Vandstandsstation)
+                            .ToList();
+                    }
+
+                    // Work in progress
+                }
+
+                // Work in progress
+                Logger?.WriteLine(LogMessageCategory.Information, "So far so good.. (work in progress)");
 
                 //Logger?.WriteLine(LogMessageCategory.Information, "Completed extracting oceanographical stations");
             });

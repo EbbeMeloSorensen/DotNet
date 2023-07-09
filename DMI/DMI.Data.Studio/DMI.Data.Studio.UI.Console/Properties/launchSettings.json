@@ -2,7 +2,7 @@
   "profiles": {
     "DMI.Data.Studio.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "extract -c m"
+      "commandLineArgs": "extract -c o"
     }
   }
 }
