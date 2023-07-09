@@ -810,10 +810,7 @@ namespace DMI.Data.Studio.ViewModel
                 return;
             }
 
-            TaskViewModel.NameOfTask = "Exporting data";
-            TaskViewModel.Abort = false;
-            TaskViewModel.AbortPossible = false;
-            TaskViewModel.Busy = true;
+            TaskViewModel.Show("Exporting data", false);
             RefreshCommandAvailability();
 
             await _smsApplication.ExportData(
@@ -833,7 +830,7 @@ namespace DMI.Data.Studio.ViewModel
                 _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
             }
 
-            TaskViewModel.Busy = false;
+            TaskViewModel.Hide();
             RefreshCommandAvailability();
         }
 
@@ -966,29 +963,15 @@ namespace DMI.Data.Studio.ViewModel
                 return;
             }
 
-            //TaskViewModel.NameOfTask = "Clearing Repository";
-            //TaskViewModel.Abort = false;
-            //TaskViewModel.Busy = true;
-            //RefreshCommandAvailability();
+            TaskViewModel.Show("Clearing Repository", false);
 
             await _smsApplication.ClearRepository();
 
-            //await _application.ClearRepository(
-            //    (progress, currentActivity) =>
-            //    {
-            //        TaskViewModel.Progress = progress;
-            //        TaskViewModel.NameOfCurrentSubtask = currentActivity;
-            //        return TaskViewModel.Abort;
-            //    });
-
-            //TaskViewModel.Busy = false;
-            //RefreshCommandAvailability();
-
-            //if (!TaskViewModel.Abort)
-            //{
             var messageBoxDialog = new MessageBoxDialogViewModel("Completed clearing repository", false);
                 _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
-            //}
+
+            TaskViewModel.Hide();
+            RefreshCommandAvailability();
         }
 
         private void RefreshCommandAvailability()

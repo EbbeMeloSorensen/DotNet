@@ -1,6 +1,6 @@
 ﻿using StructureMap;
 
-namespace DMI.SMS.UI.Console
+namespace DMI.Data.Studio.UI.Console
 {
     internal class InstanceScanner : Registry
     {

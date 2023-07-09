@@ -83,6 +83,67 @@ namespace DMI.Data.Studio.Application
             _logger = logger;
         }
 
+        public void Initialize()
+        {
+            Logger?.WriteLine(LogMessageCategory.Debug, "DMI.SMS.UI.WPF - initializing application");
+
+            _smsUiDataProvider.Initialize(_logger);
+        }
+
+        public async Task MakeBreakfast(
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Making breakfast..");
+
+                var result = 0.0;
+                var currentActivity = "Baking bread";
+                var count = 0;
+                var total = 317;
+
+                Logger?.WriteLine(LogMessageCategory.Information, $"  {currentActivity}");
+
+                while (count < total)
+                {
+                    if (count >= 160)
+                    {
+                        currentActivity = "Poring Milk";
+
+                        if (count == 160)
+                        {
+                            Logger?.WriteLine(LogMessageCategory.Information, $"  {currentActivity}");
+                        }
+                    }
+                    else if (count >= 80)
+                    {
+                        currentActivity = "Frying eggs";
+
+                        if (count == 80)
+                        {
+                            Logger?.WriteLine(LogMessageCategory.Information, $"  {currentActivity}");
+                        }
+                    }
+
+                    for (var j = 0; j < 499999999 / 100; j++)
+                    {
+                        result += 1.0;
+                    }
+
+                    count++;
+
+                    // Hvis brugeren har trykket på Abort knappen, vil dette kald returnere true,
+                    // og så skal vi breake
+                    if (progressCallback?.Invoke(100.0 * count / total, currentActivity) is true)
+                    {
+                        break;
+                    }
+                }
+
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed breakfast");
+            });
+        }
+
         public async Task ExtractOceanographicalStations(
             DateTime? cutDate,
             ProgressCallback progressCallback = null)

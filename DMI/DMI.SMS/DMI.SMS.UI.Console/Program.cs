@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using CommandLine;
 using DMI.SMS.UI.Console.Verbs;
-using Container = StructureMap.Container;
 
 namespace DMI.SMS.UI.Console
 {
@@ -121,7 +119,7 @@ namespace DMI.SMS.UI.Console
         // Helper
         private static Application.Application GetApplication()
         {
-            var container = Container.For<InstanceScanner>();
+            var container = StructureMap.Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();
             //application.Initialize(_host, _port, _database, _schema, _user, _password);
             application.Initialize();
