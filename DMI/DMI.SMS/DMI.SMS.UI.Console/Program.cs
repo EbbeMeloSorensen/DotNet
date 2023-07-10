@@ -20,23 +20,19 @@ namespace DMI.SMS.UI.Console
             System.Console.WriteLine("DMI.SMS.UI.Console");
 
             // Works
-            //await ExtractMeteorologicalStations(application);
-            //await ExtractOceanographicalStations(application);
             //await GenerateSQLScriptForTurningElevationAngles(application);
 
+            // Override arguments
             //args = new string[3] {"export", "-f", "test.json"};
-
 
             await Parser.Default.ParseArguments<
                     Lunch,
                     Export,
-                    Script,
-                    Extract>(args)
+                    Script>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
                     (Script options) => Script(options),
-                    (Extract options) => Extract(options),
                     errs => Task.FromResult(0));
         }
 
@@ -76,44 +72,6 @@ namespace DMI.SMS.UI.Console
                 return false;
             });
             System.Console.WriteLine("\nDone");
-        }
-
-        private static async Task Extract(Extract options)
-        {
-            var dateTime = new DateTime(2021, 5, 1);
-
-            switch (options.Category)
-            {
-                case "m":
-                {
-                    System.Console.Write("Extracting meteorological stations...\nProgress: ");
-                    await GetApplication().ExtractMeteorologicalStations(dateTime, (progress, nameOfSubtask) =>
-                    {
-                        System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                        System.Console.Write($"{progress:F2} %");
-                        return false;
-                    });
-
-                    break;
-                }
-                case "o":
-                {
-                    System.Console.Write("Extracting oceanographical stations...\nProgress: ");
-                    await GetApplication().ExtractOceanographicalStations(dateTime, (progress, nameOfSubtask) =>
-                    {
-                        System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                        System.Console.Write($"{progress:F2} %");
-                        return false;
-                    });
-
-                    break;
-                }
-                default:
-                {
-                    System.Console.Write("Invalid argument. Please choose m or o");
-                    break;
-                }
-            }
         }
 
         // Helper

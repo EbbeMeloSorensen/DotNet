@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
-    <ProjectReference Include="..\..\DMI.FD\DMI.FD.Domain.IO\DMI.FD.Domain.IO.csproj" />
     <ProjectReference Include="..\DMI.SMS.IO\DMI.SMS.IO.csproj" />
   </ItemGroup>
 

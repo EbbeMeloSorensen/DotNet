@@ -55,8 +55,6 @@ namespace DMI.SMS.ViewModel
         public AsyncCommand<object> ImportDataCommand { get; }
         public AsyncCommand<object> ClearRepositoryCommand { get; }
         public AsyncCommand<object> MakeBreakfastCommand { get; }
-        public AsyncCommand<object> ExtractMeteorologicalStationsCommand { get; }
-        public AsyncCommand<object> ExtractOceanographicalStationsCommand { get; }
         public RelayCommand<object> OpenSettingsDialogCommand { get; }
 
         public StationInformationListViewModel StationInformationListViewModel { get; }
@@ -119,8 +117,6 @@ namespace DMI.SMS.ViewModel
             ImportDataCommand = new AsyncCommand<object>(ImportData, CanImportData);
             ClearRepositoryCommand = new AsyncCommand<object>(ClearRepository, CanClearRepository);
             MakeBreakfastCommand = new AsyncCommand<object>(MakeBreakfast, CanMakeBreakfast);
-            ExtractMeteorologicalStationsCommand = new AsyncCommand<object>(ExtractMeteorologicalStations, CanExtractMeteorologicalStations);
-            ExtractOceanographicalStationsCommand = new AsyncCommand<object>(ExtractOceanographicalStations, CanExtractOceanographicalStations);
             OpenSettingsDialogCommand = new RelayCommand<object>(OpenSettingsDialog);
 
             DrawMapOfDenmark();
@@ -353,100 +349,6 @@ namespace DMI.SMS.ViewModel
             return !TaskViewModel.Busy;
         }
 
-        private async Task ExtractMeteorologicalStations(
-            object owner)
-        {
-            var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
-                "Extract Meteorological Stations");
-
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-            {
-                return;
-            }
-
-            DateTime? rollBackDate = null;
-
-            if (!string.IsNullOrEmpty(dialogViewModel.Date))
-            {
-                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
-                rollBackDate = temp;
-            }
-
-            TaskViewModel.Show("Extracting Meteorological Stations", false);
-            RefreshCommandAvailability();
-
-            await _application.ExtractMeteorologicalStations(
-                rollBackDate,
-                (progress, currentActivity) =>
-                {
-                    TaskViewModel.Progress = progress;
-                    TaskViewModel.NameOfCurrentSubtask = currentActivity;
-                    return TaskViewModel.Abort;
-                });
-
-            if (!TaskViewModel.Abort)
-            {
-                var messageBoxDialog = new MessageBoxDialogViewModel("Completed Extraction of Meteorological Stations", false);
-                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
-            }
-
-            TaskViewModel.Hide();
-            RefreshCommandAvailability();
-        }
-
-        private bool CanExtractMeteorologicalStations(
-            object owner)
-        {
-            return !TaskViewModel.Busy;
-        }
-
-        private async Task ExtractOceanographicalStations(
-            object owner)
-        {
-            var dialogViewModel = new ExtractFrieDataStationListDialogViewModel(
-                "Extract Oceanographical Stations");
-
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-            {
-                return;
-            }
-
-            DateTime? rollBackDate = null;
-
-            if (!string.IsNullOrEmpty(dialogViewModel.Date))
-            {
-                dialogViewModel.Date.TryParsingAsDateTime(out var temp);
-                rollBackDate = temp;
-            }
-
-            TaskViewModel.Show("Extracting Oceanographical Stations", false);
-            RefreshCommandAvailability();
-
-            await _application.ExtractOceanographicalStations(
-                rollBackDate,
-                (progress, currentActivity) =>
-                {
-                    TaskViewModel.Progress = progress;
-                    TaskViewModel.NameOfCurrentSubtask = currentActivity;
-                    return TaskViewModel.Abort;
-                });
-
-            if (!TaskViewModel.Abort)
-            {
-                var messageBoxDialog = new MessageBoxDialogViewModel("Completed Extraction of Oceanographical Stations", false);
-                _applicationDialogService.ShowDialog(messageBoxDialog, owner as Window);
-            }
-
-            TaskViewModel.Hide();
-            RefreshCommandAvailability();
-        }
-
-        private bool CanExtractOceanographicalStations(
-            object owner)
-        {
-            return !TaskViewModel.Busy;
-        }
-
         private void OpenSettingsDialog(
             object owner)
         {
@@ -490,8 +392,6 @@ namespace DMI.SMS.ViewModel
             ExportDataCommand.RaiseCanExecuteChanged();
             ImportDataCommand.RaiseCanExecuteChanged();
             MakeBreakfastCommand.RaiseCanExecuteChanged();
-            ExtractMeteorologicalStationsCommand.RaiseCanExecuteChanged();
-            ExtractOceanographicalStationsCommand.RaiseCanExecuteChanged();
         }
 
         private void DrawRoughOutlineOfDenmarkOnMap()
