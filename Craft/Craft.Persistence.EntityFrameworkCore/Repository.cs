@@ -31,12 +31,6 @@ namespace Craft.Persistence.EntityFrameworkCore
             return Context.Set<TEntity>().Count(predicate);
         }
 
-        //public TEntity Get(
-        //    decimal id)
-        //{
-        //    return Context.Set<TEntity>().Find(id);
-        //}
-
         public IEnumerable<TEntity> GetAll()
         {
             return Context.Set<TEntity>().ToList();

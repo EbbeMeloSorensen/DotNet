@@ -6,8 +6,6 @@ namespace Craft.Persistence
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        //TEntity Get(decimal id);
-
         int CountAll();
         int Count(Expression<Func<TEntity, bool>> predicate);
         int Count(IList<Expression<Func<TEntity, bool>>> predicates);
@@ -30,7 +28,7 @@ namespace Craft.Persistence
         void Clear();
 
         // This is not part of the original pattern, but I made it in order to support bulk insert,
-        // where we, rather than the database dictate the ids
+        // where we (rather than the database) dictate the ids
         void Load(IEnumerable<TEntity> entities);
     }
 }
