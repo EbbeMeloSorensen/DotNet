@@ -84,6 +84,7 @@ namespace Craft.ViewModels.Tasks
             string nameOfTask,
             bool abortPossible)
         {
+            Progress = 1;
             NameOfTask = nameOfTask;
             AbortPossible = abortPossible;
             Abort = false;

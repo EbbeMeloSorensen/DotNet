@@ -150,6 +150,11 @@ namespace DMI.Data.Studio.Application
         {
             await Task.Run(async () =>
             {
+                if (progressCallback != null && progressCallback.Invoke(1, ""))
+                {
+                    return;
+                }
+
                 Logger?.WriteLine(LogMessageCategory.Information, "Extracting oceanographical stations..");
                 var dataFolder = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..//..//..//..", "Data"));
                 var oceanParameterListFileName = Path.Combine(dataFolder, "oceanObs_parameter.json");
@@ -251,11 +256,14 @@ namespace DMI.Data.Studio.Application
 
                 stations = stations.OrderBy(s => s.stationId).ToList();
 
+                var stationsWithHistory = new List<Station>();
+                var nStations = stations.Count;
+                var stationCount = 0;
+
                 // Traverse the list of stations in order to retrieve details for each of them
                 foreach (var station in stations)
                 {
-                    var message = $"Inspecting history for station {station.stationId} ({station.name})..";
-                    Logger?.WriteLine(LogMessageCategory.Information, message);
+                    Logger?.WriteLine(LogMessageCategory.Information, $"  processing station {station.stationId} ({station.name})..");
 
                     List<StationInformation> smsStationHistory = null;
 
@@ -267,22 +275,46 @@ namespace DMI.Data.Studio.Application
                     {
                         // Vi har at gøre med en freak of nature gammel station, som skal rekonstrueres
                         Logger?.WriteLine(LogMessageCategory.Information, $"(skipping {smsStationId} for now)");
+
+                        // Ikke sikker på at dette er rigtigt
+                        smsStationHistory = stationDataRaw
+                            .Where(row => row.StationIDDMI == smsStationId)
+                            .OrderBy(row => row.GdbFromDate)
+                            .ToList();
                     }
                     else
                     {
                         smsStationHistory = stationDataRaw
                             .Where(row => row.StationIDDMI == smsStationId)
                             .Where(row => row.Stationtype == StationType.Vandstandsstation)
+                            .OrderBy(row => row.GdbFromDate)
                             .ToList();
                     }
 
+                    var dataIOHandler = new DataIOHandler();
+                    dataIOHandler.WriteStationHistoryToFile(
+                            smsStationHistory,
+                            $"{station.stationId}_{station.type}_History_SMS.txt");
+
                     // Work in progress
+
+                    stationCount++;
+
+                    if (progressCallback != null &&
+                        progressCallback.Invoke(2.0 + 96.0 * stationCount / nStations, ""))
+                    {
+                        return;
+                    }
                 }
 
                 // Work in progress
                 Logger?.WriteLine(LogMessageCategory.Information, "So far so good.. (work in progress)");
-
                 //Logger?.WriteLine(LogMessageCategory.Information, "Completed extracting oceanographical stations");
+
+                if (progressCallback != null && progressCallback.Invoke(100, ""))
+                {
+                    return;
+                }
             });
         }
 
@@ -292,6 +324,12 @@ namespace DMI.Data.Studio.Application
         {
             await Task.Run(async () =>
             {
+                // Mærkeligt nok så kan man stadig se en fuldt grøn bar, hvis man kører den 
+                if (progressCallback != null && progressCallback.Invoke(1, ""))
+                {
+                    return;
+                }
+
                 Logger?.WriteLine(LogMessageCategory.Information, "Extracting meteorological stations..");
                 var dataFolder = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..//..//..//..", "Data"));
                 var metParameterListFileName = Path.Combine(dataFolder, "metObs_parameter.json");
@@ -357,7 +395,7 @@ namespace DMI.Data.Studio.Application
                         throw new ArgumentOutOfRangeException("Invalid mode for station list generation");
                 }
 
-                if (progressCallback != null && progressCallback.Invoke(2, ""))
+                if (progressCallback != null && progressCallback.Invoke(1, ""))
                 {
                     return;
                 }
