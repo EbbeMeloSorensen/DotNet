@@ -1,0 +1,5 @@
+Dette er en generel solution med ObsDB som omdrejningspunkt. Det er bl.a. meningen at den skal
+bruges af projektet DMI.Data.Studio for at udtrække tidsseriedata fra ObsDB, så SMS-projektet kan
+fritages for dette ansvar. Det er også intentionen at projektet her kan udgøre grundlaget for
+et projekt, der baserer sig på f.eks. timescale eller på anden vis faciliterer hurtig fremsøgning
+af data.
