@@ -89,9 +89,8 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             result = result
                 .Where(o => o.Time >= t1)
                 .Where(o => o.Time <= t2)
+                .OrderBy(o => o.Time)
                 .ToList();
-
-            //result.Sort();
 
             return result;
         }

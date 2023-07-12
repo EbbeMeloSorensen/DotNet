@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Xunit;
+using FluentAssertions;
 using DMI.ObsDB.Domain.Entities;
 
 namespace DMI.ObsDB.Persistence.File.UnitTest
@@ -55,7 +57,7 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
         }
 
         [Fact]
-        public void Test_MultiplePredicates()
+        public void Test_MultiplePredicates_OneDayOfATimeSeries()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
@@ -64,7 +66,7 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
                 var predicates = new List<Expression<Func<Observation, bool>>>();
 
                 var t1 = new DateTime(1953, 1, 1, 0, 0, 0);
-                var t2 = new DateTime(1953, 1, 2, 0, 0, 0);
+                var t2 = new DateTime(1953, 1, 1, 23, 59, 59);
 
                 predicates.Add(o => o.StatId == 601100);
                 predicates.Add(o => o.ParamId == "temp_dry");
@@ -72,7 +74,33 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
                 predicates.Add(o => o.Time <= t2);
 
                 var observations = unitOfWork.Observations.Find(predicates);
+                observations.Count().Should().Be(6);
+                observations.First().Time.Should().Be(new DateTime(1953, 1, 1, 6, 0, 0));
             }
         }
+
+        [Fact]
+        public void Test_MultiplePredicates_AnEntireTimeSeries()
+        {
+            var unitOfWorkFactory = new UnitOfWorkFactory();
+
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var predicates = new List<Expression<Func<Observation, bool>>>();
+
+                var t1 = new DateTime(1953, 1, 1, 0, 0, 0);
+                var t2 = new DateTime(2023, 12, 31, 23, 59, 59);
+
+                predicates.Add(o => o.StatId == 601100);
+                predicates.Add(o => o.ParamId == "temp_dry");
+                predicates.Add(o => o.Time >= t1);
+                predicates.Add(o => o.Time <= t2);
+
+                var observations = unitOfWork.Observations.Find(predicates);
+                observations.Count().Should().Be(392755);
+                observations.First().Time.Should().Be(new DateTime(1953, 1, 1, 6, 0, 0));
+            }
+        }
+
     }
 }
