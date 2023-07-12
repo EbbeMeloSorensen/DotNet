@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using DMI.ObsDB.Domain.Entities;
 using DMI.ObsDB.Persistence.Repositories;
+using DMI.ObsDB.Persistence.File;
 
 namespace DMI.ObsDB.Persistence.File.Repositories
 {
@@ -40,11 +42,17 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
         public IEnumerable<Observation> Find(Expression<Func<Observation, bool>> predicate)
         {
-            throw new NotImplementedException();
+            var result = predicate.Analyze();
+
+            return null;
         }
 
         public IEnumerable<Observation> Find(IList<Expression<Func<Observation, bool>>> predicates)
         {
+            var temp = predicates
+                .Select(p => p.Analyze())
+                .ToList();
+
             throw new NotImplementedException();
         }
 

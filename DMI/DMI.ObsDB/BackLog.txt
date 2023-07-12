@@ -3,3 +3,7 @@ bruges af projektet DMI.Data.Studio for at udtrække tidsseriedata fra ObsDB, så 
 fritages for dette ansvar. Det er også intentionen at projektet her kan udgøre grundlaget for
 et projekt, der baserer sig på f.eks. timescale eller på anden vis faciliterer hurtig fremsøgning
 af data.
+
+Todo:
+* Gør det muligt at tolke et sæt af predicates
+  - Analyze skal ikke returnere en sql string, men man skal stadig plukke det ud, man skal bruge

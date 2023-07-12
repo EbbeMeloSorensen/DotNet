@@ -6,7 +6,7 @@ namespace DMI.ObsDB.Domain.Entities
     {
         private int _id;
         private int _statId;
-        private int _paramId;
+        private string _paramId;
         private DateTime _time;
         private double _value;
 
@@ -22,7 +22,7 @@ namespace DMI.ObsDB.Domain.Entities
             set { _statId = value; }
         }
 
-        public int ParamId
+        public string ParamId
         {
             get { return _paramId; }
             set { _paramId = value; }
