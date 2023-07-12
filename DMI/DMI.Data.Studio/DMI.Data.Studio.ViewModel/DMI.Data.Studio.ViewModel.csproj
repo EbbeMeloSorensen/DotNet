@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
     <ProjectReference Include="..\..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj" />
+    <ProjectReference Include="..\..\DMI.ObsDB\DMI.ObsDB.Persistence\DMI.ObsDB.Persistence.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.Application\DMI.SMS.Application.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.ViewModel\DMI.SMS.ViewModel.csproj" />
     <ProjectReference Include="..\..\DMI.StatDB\DMI.StatDB.ViewModel\DMI.StatDB.ViewModel.csproj" />

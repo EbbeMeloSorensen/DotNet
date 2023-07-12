@@ -1,13 +1,13 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using DMI.SMS.Domain.Entities;
-using DMI.SMS.Application;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
+using DMI.ObsDB.Domain.Entities;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -20,7 +20,7 @@ namespace DMI.Data.Studio.ViewModel
     {
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
         private double _curveThickness = 0.05;
-        private readonly IUIDataProvider _smsDataProvider;
+        private readonly ObsDB.Persistence.IUnitOfWorkFactory _obsDBUnitOfWorkFactory;
         private readonly ObjectCollection<StationInformation> _selectedStationInformations;
         private DateTime _timeAtOrigo;
         private TimeSpan _timeSpanForXUnit = TimeSpan.FromDays(1);
@@ -32,10 +32,10 @@ namespace DMI.Data.Studio.ViewModel
         public Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel ScatterChartViewModel { get; set; }
 
         public TimeSeriesViewModel(
-            IUIDataProvider smsDataProvider,
+            ObsDB.Persistence.IUnitOfWorkFactory obsDBUnitOfWorkFactory,
             ObjectCollection<StationInformation> selectedStationInformations)
         {
-            _smsDataProvider = smsDataProvider;
+            _obsDBUnitOfWorkFactory = obsDBUnitOfWorkFactory;
             _selectedStationInformations = selectedStationInformations;
 
             var timeWindow = TimeSpan.FromDays(7);
@@ -103,26 +103,36 @@ namespace DMI.Data.Studio.ViewModel
                 return;
             }
 
-            var observations = _smsDataProvider
-                .ReadObservationsForStation(_nanoqStationId, _parameter, _t0.Year, _t1.Year)
-                .Where(o => o.Item1 >= _t0)
-                .Where(o => o.Item1 <= _t1)
-                .OrderBy(o => o.Item1);
-
-            var points = new List<PointD>();
-
-            foreach (var observation in observations)
+            using (var unitOfWork = _obsDBUnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var t = observation.Item1;
+                var predicates = new List<Expression<Func<Observation, bool>>>();
 
-                // Find the x coordinate that corresponds to the current time
-                var x = (t - _timeAtOrigo) / _timeSpanForXUnit;
+                var statId = int.Parse(_nanoqStationId);
+                var t1 = new DateTime(1953, 1, 1, 0, 0, 0);
+                var t2 = new DateTime(1953, 1, 1, 23, 59, 59);
 
-                // Add the point to the polyline
-                points.Add(new PointD(x, observation.Item2));
+                predicates.Add(o => o.StatId == statId);
+                predicates.Add(o => o.ParamId == "temp_dry");
+                predicates.Add(o => o.Time >= _t0);
+                predicates.Add(o => o.Time <= _t1);
+
+                var observations = unitOfWork.Observations.Find(predicates);
+
+                var points = new List<PointD>();
+
+                foreach (var observation in observations)
+                {
+                    var t = observation.Time;
+
+                    // Find the x coordinate that corresponds to the current time
+                    var x = (t - _timeAtOrigo) / _timeSpanForXUnit;
+
+                    // Add the point to the polyline
+                    points.Add(new PointD(x, observation.Value));
+                }
+
+                ScatterChartViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
             }
-
-            ScatterChartViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
         }
     }
 }

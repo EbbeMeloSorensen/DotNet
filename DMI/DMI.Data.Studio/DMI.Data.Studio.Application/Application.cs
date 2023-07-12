@@ -176,7 +176,8 @@ namespace DMI.Data.Studio.Application
 
                     foreach (var kvp in referenceMapForCurrentYear)
                     {
-                        referenceMapForCurrentYearWithKDIStationIds[kvp.Key.ConvertFromSMSStationIdToKDIStationId()] = kvp.Value;
+                        // wtf?! jeg var nødt til at udkommentere dette i Brasilien efter at have ryddet op i SMS...
+                        //referenceMapForCurrentYearWithKDIStationIds[kvp.Key.ConvertFromSMSStationIdToKDIStationId()] = kvp.Value;
                     }
 
                     referenceMapBasedOnSeaDB.Aggregate(referenceMapForCurrentYearWithKDIStationIds);

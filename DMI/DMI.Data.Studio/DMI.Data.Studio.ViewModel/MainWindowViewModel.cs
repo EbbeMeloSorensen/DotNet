@@ -35,6 +35,7 @@ namespace DMI.Data.Studio.ViewModel
 
         private readonly SMS.Application.IUIDataProvider _smsDataProvider;
         private readonly StatDB.Application.IUIDataProvider _statDBDataProvider;
+        private readonly ObsDB.Persistence.IUnitOfWorkFactory _obsDBUnitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private readonly ILogger _logger;
         private List<StationInformation> _selectedStationInformations;
@@ -191,11 +192,13 @@ namespace DMI.Data.Studio.ViewModel
         public MainWindowViewModel(
             SMS.Application.IUIDataProvider smsDataProvider,
             StatDB.Application.IUIDataProvider statDBDataProvider,
+            ObsDB.Persistence.IUnitOfWorkFactory obsDBUnitOfWorkFactory,
             IDialogService applicationDialogService,
             ILogger logger)
         {
             _smsDataProvider = smsDataProvider;
             _statDBDataProvider = statDBDataProvider;
+            _obsDBUnitOfWorkFactory = obsDBUnitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _logger = logger;
 
@@ -254,7 +257,7 @@ namespace DMI.Data.Studio.ViewModel
                 StationInformationListViewModel.RowCharacteristicsMap);
 
             TimeSeriesViewModel = new TimeSeriesViewModel(
-                smsDataProvider,
+                obsDBUnitOfWorkFactory,
                 StationInformationListViewModel.SelectedStationInformations);
 
             StationListViewModel.SelectedStations.PropertyChanged += 
