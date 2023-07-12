@@ -10,14 +10,6 @@ namespace DMI.ObsDB.Persistence.File
         {
             switch (expression.NodeType)
             {
-                case ExpressionType.Add:
-                    throw new NotImplementedException();
-                    //var add = expression as BinaryExpression;
-                    //return add.Left.ToMSSqlString() + " + " + add.Right.ToMSSqlString();
-                case ExpressionType.Parameter:
-                    throw new NotImplementedException();
-                    //var parameterExpression = expression as ParameterExpression;
-                    //return parameterExpression.Name;
                 case ExpressionType.Constant:
                     var constant = expression as ConstantExpression;
                     if (constant.Type == typeof(string))
@@ -29,24 +21,10 @@ namespace DMI.ObsDB.Persistence.File
 
                         return constant.Value;
                     }
-                    //else if (constant.Type == typeof(Boolean))
-                    //{
-                    //    // Crap
-                    //    return "NoFilter";
-                    //}
                     else if (constant.Type == typeof(int))
                     {
                         return constant;
                     }
-                    //else if (constant.Type == typeof(int?))
-                    //{
-                    //    if (constant.Value == null)
-                    //    {
-                    //        return "null";
-                    //    }
-
-                    //    return $"'{constant.Value.ToString()}'";
-                    //}
                     else
                     {
                         var b = (int)constant.Value;
@@ -54,39 +32,29 @@ namespace DMI.ObsDB.Persistence.File
                     }
                 case ExpressionType.Equal:
                     var equal = expression as BinaryExpression;
-                    var left = equal.Left.Analyze();
-                    var right = equal.Right.Analyze();
-                    return $"{left} = {right}";
-                case ExpressionType.NotEqual:
-                    throw new NotImplementedException();
-                    //var notEqual = expression as BinaryExpression;
-                    //return notEqual.Left.ToMSSqlString() + " is not " + // men hvad vælter vi så??
-                    //        notEqual.Right.ToMSSqlString();
-                case ExpressionType.Not:
-                    throw new NotImplementedException();
-                    //var not = expression as UnaryExpression;
-                    //var temp = not.Operand;
-                    //return "not " + temp.ToMSSqlString();
+                    var equalLeft = equal.Left.Analyze() as string;
+                    var equalRight = equal.Right.Analyze();
+                    return new Predicate(equalLeft, Operator.Equal, equalRight);
                 case ExpressionType.LessThan:
                     var lessThan = expression as BinaryExpression;
-                    var lessThanLeft = lessThan.Left.Analyze();
+                    var lessThanLeft = lessThan.Left.Analyze() as string;
                     var lessThanRight = lessThan.Right.Analyze();
-                    return $"{lessThanLeft} < {lessThanRight}";
+                    return new Predicate(lessThanLeft, Operator.LessThan, lessThanRight);
                 case ExpressionType.LessThanOrEqual:
                     var lessThanOrEqual = expression as BinaryExpression;
-                    var lessThanOrEqualLeft = lessThanOrEqual.Left.Analyze();
+                    var lessThanOrEqualLeft = lessThanOrEqual.Left.Analyze() as string;
                     var lessThanOrEqualRight = lessThanOrEqual.Right.Analyze();
-                    return $"{lessThanOrEqualLeft} <= {lessThanOrEqualRight}";
+                    return new Predicate(lessThanOrEqualLeft, Operator.LessThanOrEqual, lessThanOrEqualRight);
                 case ExpressionType.GreaterThan:
                     var greaterThan = expression as BinaryExpression;
-                    var greaterThanLeft = greaterThan.Left.Analyze();
+                    var greaterThanLeft = greaterThan.Left.Analyze() as string;
                     var greaterThanRight = greaterThan.Right.Analyze();
-                    return $"{greaterThanLeft} > {greaterThanRight}";
+                    return new Predicate(greaterThanLeft, Operator.GreaterThan, greaterThanRight);
                 case ExpressionType.GreaterThanOrEqual:
                     var greaterThanOrEqual = expression as BinaryExpression;
-                    var greaterThanOrEqualLeft = greaterThanOrEqual.Left.Analyze();
+                    var greaterThanOrEqualLeft = greaterThanOrEqual.Left.Analyze() as string;
                     var greaterThanOrEqualRight = greaterThanOrEqual.Right.Analyze();
-                    return $"{greaterThanOrEqualLeft} >= {greaterThanOrEqualRight}";
+                    return new Predicate(greaterThanOrEqualLeft, Operator.GreaterThanOrEqual, greaterThanOrEqualRight);
                 case ExpressionType.Lambda:
                     var l = expression as LambdaExpression;
                     return l.Body.Analyze();
@@ -103,24 +71,15 @@ namespace DMI.ObsDB.Persistence.File
                         default:
                             return GetValue(memberaccess);
                     }
+                case ExpressionType.NotEqual:
+                case ExpressionType.Not:
                 case ExpressionType.Call:
-                    throw new NotImplementedException();
-                    //var call = expression as MethodCallExpression;
-                    //return call.ConvertToMSSqlString();
                 case ExpressionType.Convert:
-                    throw new NotImplementedException();
-                    //var a = expression as UnaryExpression;
-                    //return a.Operand.ToMSSqlString();
                 case ExpressionType.AndAlso:
-                    throw new NotImplementedException();
-                    //var logicalAnd = expression as BinaryExpression;
-                    //return logicalAnd.Left.ToMSSqlString() + " AND " +
-                    //        logicalAnd.Right.ToMSSqlString();
                 case ExpressionType.OrElse:
+                case ExpressionType.Add:
+                case ExpressionType.Parameter:
                     throw new NotImplementedException();
-                    //var logicalOr = expression as BinaryExpression;
-                    //return logicalOr.Left.ToMSSqlString() + " OR " +
-                    //        logicalOr.Right.ToMSSqlString();
             }
 
             throw new NotImplementedException(

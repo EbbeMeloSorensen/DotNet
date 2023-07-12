@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.IO;
+using System.Globalization;
 using DMI.ObsDB.Domain.Entities;
 using DMI.ObsDB.Persistence.Repositories;
-using DMI.ObsDB.Persistence.File;
 
 namespace DMI.ObsDB.Persistence.File.Repositories
 {
@@ -42,18 +43,57 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
         public IEnumerable<Observation> Find(Expression<Func<Observation, bool>> predicate)
         {
-            var result = predicate.Analyze();
+            var temp = predicate.Analyze();
 
-            return null;
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Observation> Find(IList<Expression<Func<Observation, bool>>> predicates)
         {
             var temp = predicates
-                .Select(p => p.Analyze())
+                .Select(p => p.Analyze() as Predicate)
                 .ToList();
 
-            throw new NotImplementedException();
+            var statId = temp.Single(p => p.Field == "StatId").Value.ToString();
+            var paramId = (string)temp.Single(p => p.Field == "ParamId").Value;
+            var t1 = (DateTime)temp.Single(p => p.Field == "Time" && p.Operator == Operator.GreaterThanOrEqual).Value;
+            var t2 = (DateTime)temp.Single(p => p.Field == "Time" && p.Operator == Operator.LessThanOrEqual).Value;
+
+            var firstYear = t1.Year;
+            var lastYear = t2.Year;
+            var years = Enumerable.Range(firstYear, lastYear - firstYear + 1);
+
+            var result = new List<Observation>();
+
+            foreach (var year in years)
+            {
+                var directory = new DirectoryInfo(Path.Combine(@"C:\Data\Observations", $"{year}", $"{statId}", $"{paramId}"));
+
+                if (!directory.Exists)
+                {
+                    continue;
+                }
+
+                var fileName = $"{statId}_{paramId}_{year}.txt";
+                var file = directory.GetFiles(fileName).SingleOrDefault();
+
+                if (file == null)
+                {
+                    continue;
+                }
+
+                var observationTimesForCurrentYear = ReadObservationsForStationFromFile(file.FullName);
+                result.AddRange(observationTimesForCurrentYear);
+            }
+
+            result = result
+                .Where(o => o.Time >= t1)
+                .Where(o => o.Time <= t2)
+                .ToList();
+
+            //result.Sort();
+
+            return result;
         }
 
         public IEnumerable<Observation> GetAll()
@@ -89,6 +129,61 @@ namespace DMI.ObsDB.Persistence.File.Repositories
         public void UpdateRange(IEnumerable<Observation> entities)
         {
             throw new NotImplementedException();
+        }
+
+        private List<Observation> ReadObservationsForStationFromFile(
+            string fileName)
+        {
+            var result = new List<Observation>();
+
+            using (var streamReader = new StreamReader(fileName))
+            {
+                string line;
+
+                var dateOfObservation = DateTime.MinValue;
+
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    if (line == "No observations")
+                    {
+                        return result;
+                    }
+
+                    if (line.Length <= 10)
+                    {
+                        var elements = line.Split('-');
+                        var year = int.Parse(elements[0]);
+                        var month = int.Parse(elements[1]);
+                        var day = int.Parse(elements[2]);
+
+                        dateOfObservation = new DateTime(year, month, day);
+
+                        continue;
+                    }
+
+                    var lineElements = line.Split();
+                    var observationTimeAsString = lineElements[1];
+                    var observationValueAsString = lineElements[2];
+                    var hour = int.Parse(observationTimeAsString.Substring(0, 2));
+                    var minute = int.Parse(observationTimeAsString.Substring(3, 2));
+                    var second = int.Parse(observationTimeAsString.Substring(6, 2));
+                    var value = double.Parse(observationValueAsString, NumberStyles.Number, CultureInfo.InvariantCulture);
+
+                    result.Add(new Observation
+                    {
+                        Time = new DateTime(
+                            dateOfObservation.Year,
+                            dateOfObservation.Month,
+                            dateOfObservation.Day,
+                            hour,
+                            minute,
+                            second),
+                        Value = value
+                    });
+                }
+            }
+
+            return result;
         }
     }
 }

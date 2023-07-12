@@ -63,8 +63,8 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
             {
                 var predicates = new List<Expression<Func<Observation, bool>>>();
 
-                var t1 = new DateTime(1975, 7, 24, 7, 9, 13);
-                var t2 = new DateTime(1980, 6, 13, 7, 9, 13);
+                var t1 = new DateTime(1953, 1, 1, 0, 0, 0);
+                var t2 = new DateTime(1953, 1, 2, 0, 0, 0);
 
                 predicates.Add(o => o.StatId == 601100);
                 predicates.Add(o => o.ParamId == "temp_dry");

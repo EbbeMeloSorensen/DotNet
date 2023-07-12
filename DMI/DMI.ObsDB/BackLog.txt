@@ -6,4 +6,6 @@ af data.
 
 Todo:
 * Gør det muligt at tolke et sæt af predicates
-  - Analyze skal ikke returnere en sql string, men man skal stadig plukke det ud, man skal bruge
+  - Analyze skal ikke returnere en sql string, men man skal stadig plukke det ud, man skal bruge.
+    Så frem for at returnere en string, skal den returnere et objekt, der består af et navn, en operator
+    og en værdi
