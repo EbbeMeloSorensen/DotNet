@@ -23,6 +23,11 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite
             modelBuilder.ApplyConfiguration(new ObservingFacilityConfiguration());
             modelBuilder.ApplyConfiguration(new TimeSeriesConfiguration());
             modelBuilder.ApplyConfiguration(new ObservationConfiguration());
+
+            modelBuilder.Entity<TimeSeries>()
+                .HasOne(_ => _.ObservingFacility)
+                .WithMany(_ => _.TimeSeries)
+                .HasForeignKey(_ => _.ObservingFacilityId);
         }
     }
 }

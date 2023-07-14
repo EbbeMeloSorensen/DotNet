@@ -2,19 +2,11 @@
 {
     public class TimeSeries
     {
-        private int _id;
-        private string _paramId;
+        public int Id { get; set; }
 
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
+        public int ObservingFacilityId { get; set; }
+        public ObservingFacility ObservingFacility { get; set; }
 
-        public string ParamId
-        {
-            get { return _paramId; }
-            set { _paramId = value; }
-        }
+        public string ParamId { get; set; }
     }
 }

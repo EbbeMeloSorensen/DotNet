@@ -4,40 +4,14 @@ namespace DMI.ObsDB.Domain.Entities
 {
     public class Observation
     {
-        private int _id;
-        private int _statId;
-        private string _paramId;
-        private DateTime _time;
-        private double _value;
+        public int Id { get; set; }
 
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
+        public int StatId { get; set; }
 
-        public int StatId
-        {
-            get { return _statId; }
-            set { _statId = value; }
-        }
+        public string ParamId { get; set; }
 
-        public string ParamId
-        {
-            get { return _paramId; }
-            set { _paramId = value; }
-        }
+        public DateTime Time { get; set; }
 
-        public DateTime Time
-        {
-            get { return _time; }
-            set { _time = value; }
-        }
-
-        public double Value
-        {
-            get { return _value; }
-            set { _value = value; }
-        }
+        public double Value { get; set; }
     }
 }
