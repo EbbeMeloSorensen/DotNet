@@ -11,6 +11,25 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
         }
 
+        public TimeSeries Get(
+            int id)
+        {
+            var context = Context as ObsDBContext;
+
+            return context.TimeSeries
+                .SingleOrDefault(_ => _.Id == id) ?? throw new InvalidOperationException();
+        }
+
+        public TimeSeries GetTimeSeriesIncludingObservations(
+            int id)
+        {
+            var context = Context as ObsDBContext;
+
+            return context.TimeSeries
+                .Include(_ => _.Observations)
+                .SingleOrDefault(_ => _.Id == id) ?? throw new InvalidOperationException();
+        }
+
         public override void Clear()
         {
             var context = Context as ObsDBContext;

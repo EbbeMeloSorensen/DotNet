@@ -5,5 +5,10 @@ namespace DMI.ObsDB.Persistence.Repositories
 {
     public interface ITimeSeriesRepository : IRepository<TimeSeries>
     {
+        TimeSeries Get(
+            int id);
+
+        TimeSeries GetTimeSeriesIncludingObservations(
+            int id);
     }
 }

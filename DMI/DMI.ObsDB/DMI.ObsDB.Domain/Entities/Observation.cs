@@ -6,6 +6,9 @@ namespace DMI.ObsDB.Domain.Entities
     {
         public int Id { get; set; }
 
+        public int TimeSeriesId { get; set; }
+        public TimeSeries TimeSeries { get; set; }
+
         public int StatId { get; set; }
 
         public string ParamId { get; set; }

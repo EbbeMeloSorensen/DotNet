@@ -67,6 +67,18 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
         }
 
         [Fact]
+        public void Test_Delete_All_Observations()
+        {
+            var unitOfWorkFactory = new UnitOfWorkFactory();
+
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.Observations.Clear();
+                unitOfWork.Complete();
+            }
+        }
+
+        [Fact]
         public void Test_Delete_All()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
@@ -74,6 +86,8 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 unitOfWork.Observations.Clear();
+                unitOfWork.TimeSeries.Clear();
+                unitOfWork.ObservingFacilities.Clear();
                 unitOfWork.Complete();
             }
         }

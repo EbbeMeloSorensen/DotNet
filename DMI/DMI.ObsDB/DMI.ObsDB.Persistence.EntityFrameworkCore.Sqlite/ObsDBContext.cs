@@ -28,6 +28,11 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite
                 .HasOne(_ => _.ObservingFacility)
                 .WithMany(_ => _.TimeSeries)
                 .HasForeignKey(_ => _.ObservingFacilityId);
+
+            modelBuilder.Entity<Observation>()
+                .HasOne(_ => _.TimeSeries)
+                .WithMany(_ => _.Observations)
+                .HasForeignKey(_ => _.TimeSeriesId);
         }
     }
 }

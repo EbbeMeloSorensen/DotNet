@@ -1,4 +1,6 @@
-﻿namespace DMI.ObsDB.Domain.Entities
+﻿using System.Collections.Generic;
+
+namespace DMI.ObsDB.Domain.Entities
 {
     public class TimeSeries
     {
@@ -8,5 +10,7 @@
         public ObservingFacility ObservingFacility { get; set; }
 
         public string ParamId { get; set; }
+
+        public virtual ICollection<Observation>? Observations { get; set; }
     }
 }
