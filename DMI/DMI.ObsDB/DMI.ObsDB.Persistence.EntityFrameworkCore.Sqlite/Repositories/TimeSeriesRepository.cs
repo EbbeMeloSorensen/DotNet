@@ -20,7 +20,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
                 .SingleOrDefault(_ => _.Id == id) ?? throw new InvalidOperationException();
         }
 
-        public TimeSeries GetTimeSeriesIncludingObservations(
+        public TimeSeries GetIncludingObservations(
             int id)
         {
             var context = Context as ObsDBContext;
@@ -35,7 +35,6 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
             var context = Context as ObsDBContext;
 
             context.RemoveRange(context.TimeSeries);
-            context.SaveChanges();
         }
 
         public override void Update(TimeSeries entity)

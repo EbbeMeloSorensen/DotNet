@@ -8,7 +8,7 @@ namespace DMI.ObsDB.Persistence.Repositories
         ObservingFacility Get(
             int id);
 
-        ObservingFacility GetObservingFacilityIncludingTimeSeries(
+        ObservingFacility GetIncludingTimeSeries(
             int id);
     }
 }

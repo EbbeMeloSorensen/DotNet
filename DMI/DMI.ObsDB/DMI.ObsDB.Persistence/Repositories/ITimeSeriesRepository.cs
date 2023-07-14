@@ -8,7 +8,7 @@ namespace DMI.ObsDB.Persistence.Repositories
         TimeSeries Get(
             int id);
 
-        TimeSeries GetTimeSeriesIncludingObservations(
+        TimeSeries GetIncludingObservations(
             int id);
     }
 }
