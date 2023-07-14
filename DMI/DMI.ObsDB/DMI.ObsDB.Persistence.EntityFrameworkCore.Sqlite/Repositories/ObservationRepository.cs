@@ -13,7 +13,10 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
 
         public override void Clear()
         {
-            throw new NotImplementedException();
+            var context = Context as ObsDBContext;
+
+            context.RemoveRange(context.Observations);
+            context.SaveChanges();
         }
 
         public override void Update(Observation entity)

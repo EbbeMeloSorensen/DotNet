@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.Persistence.Entit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\..\Craft\Craft.Logging\Craft.Logging.csproj", "{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest", "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest.csproj", "{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
