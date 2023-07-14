@@ -3,20 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.Domain", "DMI.ObsDB.Domain\DMI.ObsDB.Domain.csproj", "{26CC518E-765F-4112-AE06-EF2DD27D1B2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Domain", "DMI.ObsDB.Domain\DMI.ObsDB.Domain.csproj", "{26CC518E-765F-4112-AE06-EF2DD27D1B2B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{A52DC726-40E1-45FB-BC87-45D33C79CFDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.Persistence.File", "DMI.ObsDB.Persistence.File\DMI.ObsDB.Persistence.File.csproj", "{093B9945-9AF4-4FEB-9331-E2D36BD9FD71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence.File", "DMI.ObsDB.Persistence.File\DMI.ObsDB.Persistence.File.csproj", "{093B9945-9AF4-4FEB-9331-E2D36BD9FD71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.Persistence", "DMI.ObsDB.Persistence\DMI.ObsDB.Persistence.csproj", "{D72CA0A9-7C55-4AF1-BDFB-0BD1B4A8BEB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence", "DMI.ObsDB.Persistence\DMI.ObsDB.Persistence.csproj", "{D72CA0A9-7C55-4AF1-BDFB-0BD1B4A8BEB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.Persistence.File.UnitTest", "DMI.ObsDB.Persistence.File.UnitTest\DMI.ObsDB.Persistence.File.UnitTest.csproj", "{B1441A33-082B-4D1C-A921-D7128729E793}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence.File.UnitTest", "DMI.ObsDB.Persistence.File.UnitTest\DMI.ObsDB.Persistence.File.UnitTest.csproj", "{B1441A33-082B-4D1C-A921-D7128729E793}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00ED27DC-ED94-4C4B-8ED1-F14E0F2D620D}"
 	ProjectSection(SolutionItems) = preProject
 		BackLog.txt = BackLog.txt
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{58C3DFC0-541C-4566-A769-F6DCCC33C9D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite", "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.csproj", "{4DD4E51E-23A8-417A-8EC9-0165534882C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\..\Craft\Craft.Logging\Craft.Logging.csproj", "{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +50,18 @@ Global
 		{B1441A33-082B-4D1C-A921-D7128729E793}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1441A33-082B-4D1C-A921-D7128729E793}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1441A33-082B-4D1C-A921-D7128729E793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C3DFC0-541C-4566-A769-F6DCCC33C9D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58C3DFC0-541C-4566-A769-F6DCCC33C9D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58C3DFC0-541C-4566-A769-F6DCCC33C9D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58C3DFC0-541C-4566-A769-F6DCCC33C9D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DD4E51E-23A8-417A-8EC9-0165534882C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DD4E51E-23A8-417A-8EC9-0165534882C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DD4E51E-23A8-417A-8EC9-0165534882C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DD4E51E-23A8-417A-8EC9-0165534882C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

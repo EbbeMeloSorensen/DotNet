@@ -4,8 +4,13 @@ fritages for dette ansvar. Det er også intentionen at projektet her kan udgøre g
 et projekt, der baserer sig på f.eks. timescale eller på anden vis faciliterer hurtig fremsøgning
 af data.
 
-Todo:
+Done:
 * Gør det muligt at tolke et sæt af predicates
   - Analyze skal ikke returnere en sql string, men man skal stadig plukke det ud, man skal bruge.
     Så frem for at returnere en string, skal den returnere et objekt, der består af et navn, en operator
     og en værdi
+
+Todo:
+Hvordan skal skemaet være, når vi gemmer observationer i en database fremfor at gøre det i en folderstruktur?
+Ud fra et normaliseringsperspektiv skal man nok ikke gemme paramid og statid i hver eneste række.
+Man kan passende have en foreign key til en tidsserie, som så igen kan have an foreign key til en station

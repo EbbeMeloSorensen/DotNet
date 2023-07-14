@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
     <ProjectReference Include="..\..\..\Craft\Craft.Persistence\Craft.Persistence.csproj" />
     <ProjectReference Include="..\DMI.ObsDB.Domain\DMI.ObsDB.Domain.csproj" />
   </ItemGroup>
