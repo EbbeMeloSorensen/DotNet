@@ -11,6 +11,19 @@ Done:
     og en værdi
 
 Todo:
+* Refaktorer obsdb domain, så der er 3 entities i stedet for 2. Når så man skal have en bestemt tidsserie,
+  så skal man først identificere id'et for den tidsserie, man er interesseret i, og så kalde datatabellen 
+  direkte. Det må vel være sådan at man er interesseret i at undgå at gøre brug af en join.
+  Det skal jo gerne være sådan, at man som bruger kan abstrahere fra hvilket repo, man bruger, så man skal 
+  kunne få fat i data fra fil-repoet uden at Observation har de 2 properties StatId og ParamId - de skal
+  bo på parent entities.
+  .. Prøv lige at køre det evolutionært, dvs introducer tidsserie-entiteten og så station-entiteten.
+  Derfra kan du så implementere support for at man kan trække en tidsserie, og bagefter kan du fjerne
+  attributterne.
+* Lav en metode i DMI.ObsDB.Persistence til at læse en tidsserie fra et file repo og lægge det ned i et 
+  EntityFrameworkCore-baseret repo.
+
+Q & A:
 Hvordan skal skemaet være, når vi gemmer observationer i en database fremfor at gøre det i en folderstruktur?
 Ud fra et normaliseringsperspektiv skal man nok ikke gemme paramid og statid i hver eneste række.
 Man kan passende have en foreign key til en tidsserie, som så igen kan have an foreign key til en station

@@ -10,7 +10,9 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite
             using var context = new ObsDBContext();
             context.Database.EnsureCreated();
 
-            if (context.Observations.Any()) return;
+            if (context.ObservingFacilities.Any() ||
+                context.TimeSeries.Any() ||
+                context.Observations.Any()) return;
 
             SeedDatabase(context);
         }

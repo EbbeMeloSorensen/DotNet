@@ -6,6 +6,8 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite
 {
     public class ObsDBContext : DbContext
     {
+        public DbSet<ObservingFacility> ObservingFacilities { get; set; }
+        public DbSet<TimeSeries> TimeSeries { get; set; }
         public DbSet<Observation> Observations { get; set; }
 
         protected override void OnConfiguring(
@@ -18,6 +20,8 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new ObservingFacilityConfiguration());
+            modelBuilder.ApplyConfiguration(new TimeSeriesConfiguration());
             modelBuilder.ApplyConfiguration(new ObservationConfiguration());
         }
     }
