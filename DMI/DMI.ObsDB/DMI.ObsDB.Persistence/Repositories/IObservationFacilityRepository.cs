@@ -5,5 +5,10 @@ namespace DMI.ObsDB.Persistence.Repositories
 {
     public interface IObservingFacilityRepository : IRepository<ObservingFacility>
     {
+        ObservingFacility Get(
+            int id);
+
+        ObservingFacility GetObservingFacilityIncludingTimeSeries(
+            int id);
     }
 }
