@@ -102,5 +102,41 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
             }
         }
 
+        [Fact]
+        public void Test_Read_All_ObservingFacilities()
+        {
+            var unitOfWorkFactory = new UnitOfWorkFactory();
+
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+                observingFacilities.Count().Should().Be(11177);
+                observingFacilities.First().Id.Should().Be(1);
+            }
+        }
+
+        [Fact]
+        public void Test_Read_ObservingFacility_With_TimeSeries()
+        {
+            var unitOfWorkFactory = new UnitOfWorkFactory();
+
+            IEnumerable<ObservingFacility> observingFacilities;
+
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+                observingFacilities.Count().Should().Be(11177);
+            }
+
+            var observingFacility1 = observingFacilities.First();
+
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var observingFacility = unitOfWork.ObservingFacilities.GetIncludingTimeSeries(observingFacility1.Id);
+                //observingFacility.TimeSeries.Count().Should().Be(2);
+                //observingFacility.TimeSeries.First().ParamId.Should().Be("temp_dry");
+                //observingFacility.TimeSeries.Skip(1).First().ParamId.Should().Be("wind_speed");
+            }
+        }
     }
 }

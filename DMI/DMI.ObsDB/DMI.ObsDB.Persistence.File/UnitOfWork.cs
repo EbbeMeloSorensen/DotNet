@@ -9,8 +9,12 @@ namespace DMI.ObsDB.Persistence.File
         public IObservationRepository Observations { get; }
 
         public UnitOfWork(
+            IObservingFacilityRepository observingFacilityRepository,
+            ITimeSeriesRepository timeSeriesRepository,
             IObservationRepository observationRepository)
         {
+            ObservingFacilities = observingFacilityRepository;
+            TimeSeries = timeSeriesRepository;
             Observations = observationRepository;
         }
 

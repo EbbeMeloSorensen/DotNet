@@ -58,7 +58,6 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             }
 
             var observingFacility1 = observingFacilities.First();
-            var observingFacility2 = observingFacilities.Skip(1).First();
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {

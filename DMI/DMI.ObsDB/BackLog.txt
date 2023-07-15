@@ -24,6 +24,14 @@ Todo:
   EntityFrameworkCore-baseret repo.
 
 Q & A:
-Hvordan skal skemaet være, når vi gemmer observationer i en database fremfor at gøre det i en folderstruktur?
-Ud fra et normaliseringsperspektiv skal man nok ikke gemme paramid og statid i hver eneste række.
-Man kan passende have en foreign key til en tidsserie, som så igen kan have an foreign key til en station
+- Hvordan skal skemaet være, når vi gemmer observationer i en database fremfor at gøre det i en folderstruktur?
+  Ud fra et normaliseringsperspektiv skal man nok ikke gemme paramid og statid i hver eneste række.
+  Man kan passende have en foreign key til en tidsserie, som så igen kan have an foreign key til en station
+- Pt er det for ObservationRepository (File) kun funktionen Find (med flere predicates), som kan kaldes,
+  og den kræver så, at man har nogle helt bestemte predicates med, nemlig for statId, paramId, starttid og
+  sluttid. Hvis det skal være persistent ignorant, skal det foregå på en anden måde, alla dette:
+  1) Kald Find for stationer, hvor man har et predicate om statId.
+
+- En mulighed er at lave en variant af GetIncludingTimeSeries, som ikke tager et id men derimod et predicate
+  (eller et antal predicates). En anden (knap så elegant) mulighed kunne være, at den returnerer et id, som
+  den selv har genereret og selv holder styr på, som man så efterfølgende kan bruge til at hente children med.
