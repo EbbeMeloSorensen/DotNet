@@ -129,13 +129,37 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
             }
 
             var observingFacility1 = observingFacilities.First();
+            TimeSeries timeSeries1;
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var observingFacility = unitOfWork.ObservingFacilities.GetIncludingTimeSeries(observingFacility1.Id);
                 observingFacility.TimeSeries.Count().Should().Be(1);
                 observingFacility.TimeSeries.Single().ParamId.Should().Be("temp_dry");
+                timeSeries1 = observingFacility.TimeSeries.Single();
             }
+
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var timeSeries = unitOfWork.TimeSeries.GetIncludingObservations(timeSeries1.Id);
+                timeSeries.Observations.Count().Should().Be(392755);
+            }
+        }
+
+        [Fact]
+        public void Test_Hashing()
+        {
+            var statId = 601100;
+            var paramId = "temp_dry";
+            var tuple1 = new Tuple<int, string>(statId, paramId);
+            var tuple2 = new Tuple<int, string>(601100, "temp_dry");
+
+            var hash1 = statId.GetHashCode();
+            var hash2 = tuple1.GetHashCode(); 
+            var hash3 = tuple2.GetHashCode();
+
+            // Bemærk at de altså er forskellige mellem forskellige kørsler af programmet
+            hash2.Should().Be(hash3);
         }
     }
 }

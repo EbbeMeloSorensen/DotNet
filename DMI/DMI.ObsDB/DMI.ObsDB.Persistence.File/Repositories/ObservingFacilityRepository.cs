@@ -91,10 +91,7 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
         public ObservingFacility GetIncludingTimeSeries(int id)
         {
-            // Todo: Læs tidsserier fra fil og tilføj til listen.
-            // De skal have et unikt id, som nok skal laves ud fra både statId og paramId, evt som hash værdi
-
-            if(!_stationIdMap.TryGetValue(id, out int statId))
+            if(!_stationIdMap.TryGetValue(id, out var statId))
             {
                 throw new InvalidOperationException();
             }
@@ -125,11 +122,12 @@ namespace DMI.ObsDB.Persistence.File.Repositories
                     }
                 }
 
-                result.TimeSeries = paramIds.Select(_ => new TimeSeries
+                result.TimeSeries = paramIds.Select(_ =>
                 {
-                    ObservingFacilityId = id,
-                    ObservingFacility = result,
-                    ParamId = _
+                    var timeSeries = TimeSeriesRepository.GenerateTimeSeries(statId, _);
+                    timeSeries.ObservingFacilityId = id;
+                    timeSeries.ObservingFacility = result;
+                    return timeSeries;
                 }).ToList();
             }
 
