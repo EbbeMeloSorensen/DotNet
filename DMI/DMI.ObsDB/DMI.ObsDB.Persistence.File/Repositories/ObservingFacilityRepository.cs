@@ -91,11 +91,47 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
         public ObservingFacility GetIncludingTimeSeries(int id)
         {
-            var result = GenerateObservingFacility(id);
+            // Todo: Læs tidsserier fra fil og tilføj til listen.
+            // De skal have et unikt id, som nok skal laves ud fra både statId og paramId, evt som hash værdi
 
-            result.TimeSeries = new List<TimeSeries>();
+            if(!_stationIdMap.TryGetValue(id, out int statId))
+            {
+                throw new InvalidOperationException();
+            }
 
-            // Todo: Læs tidsserier fra fil og tilføj til listen
+            var result = GenerateObservingFacility(statId);
+
+            var rootDirectory = new DirectoryInfo(@"C:\Data\Observations");
+
+            if (rootDirectory.Exists)
+            {
+                var paramIds = new HashSet<string>();
+                var yearDirectories = rootDirectory.GetDirectories();
+
+                foreach (var yearDirectory in yearDirectories)
+                {
+                    var stationDirectory = yearDirectory
+                        .GetDirectories(statId.ToString())
+                        .SingleOrDefault();
+
+                    if (stationDirectory != null)
+                    {
+                        var paramDirectories = stationDirectory.GetDirectories();
+
+                        foreach (var paramDirectory in paramDirectories)
+                        {
+                            paramIds.Add(paramDirectory.Name);
+                        }
+                    }
+                }
+
+                result.TimeSeries = paramIds.Select(_ => new TimeSeries
+                {
+                    ObservingFacilityId = id,
+                    ObservingFacility = result,
+                    ParamId = _
+                }).ToList();
+            }
 
             return result;
         }

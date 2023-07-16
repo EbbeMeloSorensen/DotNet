@@ -133,9 +133,8 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var observingFacility = unitOfWork.ObservingFacilities.GetIncludingTimeSeries(observingFacility1.Id);
-                //observingFacility.TimeSeries.Count().Should().Be(2);
-                //observingFacility.TimeSeries.First().ParamId.Should().Be("temp_dry");
-                //observingFacility.TimeSeries.Skip(1).First().ParamId.Should().Be("wind_speed");
+                observingFacility.TimeSeries.Count().Should().Be(1);
+                observingFacility.TimeSeries.Single().ParamId.Should().Be("temp_dry");
             }
         }
     }
