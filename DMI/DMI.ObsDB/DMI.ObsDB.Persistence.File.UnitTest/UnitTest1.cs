@@ -141,7 +141,9 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var timeSeries = unitOfWork.TimeSeries.GetIncludingObservations(timeSeries1.Id);
+                var timeSeries = unitOfWork.TimeSeries.GetIncludingObservations(
+                    timeSeries1.Id, new DateTime(1953, 1, 1), new DateTime(1954, 1, 1));
+
                 timeSeries.Observations.Count().Should().Be(392755);
             }
         }

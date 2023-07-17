@@ -1,4 +1,5 @@
-﻿using Craft.Persistence;
+﻿using System;
+using Craft.Persistence;
 using DMI.ObsDB.Domain.Entities;
 
 namespace DMI.ObsDB.Persistence.Repositories
@@ -10,5 +11,14 @@ namespace DMI.ObsDB.Persistence.Repositories
 
         TimeSeries GetIncludingObservations(
             int id);
+
+        TimeSeries GetIncludingObservations(
+            int id,
+            DateTime startTime);
+
+        TimeSeries GetIncludingObservations(
+            int id,
+            DateTime startTime,
+            DateTime endTime);
     }
 }

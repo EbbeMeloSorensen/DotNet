@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Collections.Generic;
 using Xunit;
 using FluentAssertions;
 using DMI.ObsDB.Domain.Entities;
@@ -82,11 +83,14 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             }
 
             var timeSeries1 = timeSeries.First();
-            var timeSeries2 = timeSeries.Skip(1).First();
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var ts = unitOfWork.TimeSeries.GetIncludingObservations(timeSeries1.Id);
+                var ts = unitOfWork.TimeSeries.GetIncludingObservations(
+                    timeSeries1.Id,
+                    new DateTime(1970, 7, 24, 0, 0, 0),
+                    new DateTime(1975, 7, 24, 7, 9, 20));
+
                 ts.Observations.Count().Should().Be(2);
                 ts.Observations.First().Value.Should().BeApproximately(32.4, 0.000000001);
                 ts.Observations.Skip(1).First().Value.Should().BeApproximately(34.5, 0.000000001);

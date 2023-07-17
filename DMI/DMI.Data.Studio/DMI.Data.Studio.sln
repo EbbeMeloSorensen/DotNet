@@ -314,6 +314,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence.File", "..\DMI.ObsDB\DMI.ObsDB.Persistence.File\DMI.ObsDB.Persistence.File.csproj", "{D7060F8C-54CB-42FA-BBC2-22EB33997C2E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite", "..\DMI.ObsDB\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.csproj", "{517E3EFD-B3C4-4FBE-8A67-ABE3554D091A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -496,6 +498,10 @@ Global
 		{D7060F8C-54CB-42FA-BBC2-22EB33997C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7060F8C-54CB-42FA-BBC2-22EB33997C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7060F8C-54CB-42FA-BBC2-22EB33997C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{517E3EFD-B3C4-4FBE-8A67-ABE3554D091A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{517E3EFD-B3C4-4FBE-8A67-ABE3554D091A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{517E3EFD-B3C4-4FBE-8A67-ABE3554D091A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{517E3EFD-B3C4-4FBE-8A67-ABE3554D091A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

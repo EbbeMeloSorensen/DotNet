@@ -116,7 +116,44 @@ namespace DMI.Data.Studio.ViewModel
                 predicates.Add(o => o.Time >= _t0);
                 predicates.Add(o => o.Time <= _t1);
 
-                var observations = unitOfWork.Observations.Find(predicates);
+                // New way
+                var observingFacility = unitOfWork.ObservingFacilities
+                    .Find(_ => _.StatId == statId)
+                    .SingleOrDefault();
+
+                if (observingFacility == null)
+                {
+                    return;
+                }
+
+                observingFacility = unitOfWork.ObservingFacilities
+                    .GetIncludingTimeSeries(observingFacility.Id);
+
+                if (observingFacility.TimeSeries == null)
+                {
+                    return;
+                }
+
+                var timeSeries = observingFacility.TimeSeries
+                    .Where(_ => _.ParamId == "temp_dry")
+                    .SingleOrDefault();
+
+                if (timeSeries == null)
+                {
+                    return;
+                }
+
+                timeSeries = unitOfWork.TimeSeries.GetIncludingObservations(
+                    timeSeries.Id, _t0, _t1);
+
+                if (timeSeries.Observations == null)
+                {
+                    return;
+                }
+
+                var observations = timeSeries.Observations
+                    .Where(_ => _.Time >= _t0)
+                    .Where(_ => _.Time <= _t1);
 
                 var points = new List<PointD>();
 

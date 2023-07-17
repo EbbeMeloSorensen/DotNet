@@ -72,7 +72,23 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public TimeSeries GetIncludingObservations(int id)
+        public TimeSeries GetIncludingObservations(
+            int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TimeSeries GetIncludingObservations(
+            int id,
+            DateTime startTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TimeSeries GetIncludingObservations(
+            int id,
+            DateTime startTime,
+            DateTime endTime)
         {
             if (!_stationIdAndParamIdMap.TryGetValue(id, out var statIdAndParamId))
             {
@@ -92,6 +108,14 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
                 foreach (var yearDirectory in yearDirectories)
                 {
+                    var year = int.Parse(yearDirectory.Name);
+                    
+                    if (year < startTime.Year ||
+                        year > endTime.Year)
+                    {
+                        continue;
+                    }
+
                     var stationDirectory = yearDirectory
                         .GetDirectories(statId.ToString())
                         .SingleOrDefault();
@@ -117,6 +141,22 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
                             var observationTimesForCurrentYear =
                                 ReadObservationsFromFile(file.FullName);
+
+                            if (year == startTime.Year)
+                            {
+                                observationTimesForCurrentYear =
+                                    observationTimesForCurrentYear
+                                        .Where(_ => _.Time >= startTime)
+                                        .ToList();
+                            }
+
+                            if (year == endTime.Year)
+                            {
+                                observationTimesForCurrentYear =
+                                    observationTimesForCurrentYear
+                                        .Where(_ => _.Time < endTime)
+                                        .ToList();
+                            }
 
                             observations.AddRange(observationTimesForCurrentYear);
                         }
