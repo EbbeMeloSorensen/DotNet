@@ -51,9 +51,42 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ObservingFacility> Find(Expression<Func<ObservingFacility, bool>> predicate)
+        public IEnumerable<ObservingFacility> Find(
+            Expression<Func<ObservingFacility, bool>> predicate)
         {
-            throw new NotImplementedException();
+            var temp = predicate.Analyze() as Predicate;
+
+            if (temp.Field == "StatId" &&
+                temp.Operator == Operator.Equal)
+            {
+                var statId = temp.Value.ToString();
+                var result = new List<ObservingFacility>();
+
+                var rootDirectory = new DirectoryInfo(@"C:\Data\Observations");
+
+                if (rootDirectory.Exists)
+                {
+                    var yearDirectories = rootDirectory.GetDirectories();
+
+                    foreach (var yearDirectory in yearDirectories)
+                    {
+                        var stationDirectories = yearDirectory.GetDirectories();
+
+                        if (stationDirectories
+                            .Select(_ => _.Name)
+                            .Contains(statId))
+                        {
+                            result.Add(GenerateObservingFacility(int.Parse(statId)));
+                            break;
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            // Todo: Denne skal kunne bruges, hvis man bruger et bestemt predicate
+            throw new InvalidOperationException();
         }
 
         public IEnumerable<ObservingFacility> Find(IList<Expression<Func<ObservingFacility, bool>>> predicates)

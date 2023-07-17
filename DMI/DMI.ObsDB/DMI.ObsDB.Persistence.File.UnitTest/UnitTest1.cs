@@ -147,19 +147,16 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
         }
 
         [Fact]
-        public void Test_Hashing()
+        public void Test_FindObservingFacility_WithSpecific_StatId()
         {
-            var statId = 601100;
-            var paramId = "temp_dry";
-            var tuple1 = new Tuple<int, string>(statId, paramId);
-            var tuple2 = new Tuple<int, string>(601100, "temp_dry");
+            var unitOfWorkFactory = new UnitOfWorkFactory();
 
-            var hash1 = statId.GetHashCode();
-            var hash2 = tuple1.GetHashCode(); 
-            var hash3 = tuple2.GetHashCode();
-
-            // Bemærk at de altså er forskellige mellem forskellige kørsler af programmet
-            hash2.Should().Be(hash3);
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var observingFacilities = unitOfWork.ObservingFacilities.Find(_ =>_.StatId == 601100);
+                observingFacilities.Count().Should().Be(1);
+                observingFacilities.Single().StatId.Should().Be(601100);
+            }
         }
     }
 }
