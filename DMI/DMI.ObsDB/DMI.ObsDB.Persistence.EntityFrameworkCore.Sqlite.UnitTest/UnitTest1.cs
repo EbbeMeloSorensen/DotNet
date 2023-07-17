@@ -98,30 +98,6 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
         }
 
         [Fact]
-        public void Test_Read_Observations_WithSpecific_StatId()
-        {
-            var unitOfWorkFactory = new UnitOfWorkFactory();
-
-            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var observations = unitOfWork.Observations.Find(o => o.StatId == 601100);
-                observations.Count().Should().Be(4);
-            }
-        }
-
-        [Fact]
-        public void Test_Read_Observations_WithSpecific_ParamId()
-        {
-            var unitOfWorkFactory = new UnitOfWorkFactory();
-
-            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var observations = unitOfWork.Observations.Find(o => o.ParamId == "temp_dry");
-                observations.Count().Should().Be(4);
-            }
-        }
-
-        [Fact]
         public void Test_Delete_All_Observations()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();

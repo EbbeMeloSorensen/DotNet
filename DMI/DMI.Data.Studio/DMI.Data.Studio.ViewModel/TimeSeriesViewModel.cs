@@ -105,18 +105,8 @@ namespace DMI.Data.Studio.ViewModel
 
             using (var unitOfWork = _obsDBUnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var predicates = new List<Expression<Func<Observation, bool>>>();
-
                 var statId = int.Parse(_nanoqStationId);
-                var t1 = new DateTime(1953, 1, 1, 0, 0, 0);
-                var t2 = new DateTime(1953, 1, 1, 23, 59, 59);
 
-                predicates.Add(o => o.StatId == statId);
-                predicates.Add(o => o.ParamId == "temp_dry");
-                predicates.Add(o => o.Time >= _t0);
-                predicates.Add(o => o.Time <= _t1);
-
-                // New way
                 var observingFacility = unitOfWork.ObservingFacilities
                     .Find(_ => _.StatId == statId)
                     .SingleOrDefault();

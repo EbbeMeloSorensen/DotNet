@@ -79,56 +79,42 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite
                 new Observation
                 {
                     TimeSeries = timeSeries1,
-                    StatId = 601100,
-                    ParamId = "temp_dry",
                     Time = new DateTime(1975, 7, 24, 7, 9, 0),
                     Value = 32.4
                 },
                 new Observation
                 {
                     TimeSeries = timeSeries1,
-                    StatId = 601100,
-                    ParamId = "temp_dry",
                     Time = new DateTime(1975, 7, 24, 7, 9, 15),
                     Value = 34.5
                 },
                 new Observation
                 {
                     TimeSeries = timeSeries1,
-                    StatId = 601100,
-                    ParamId = "temp_dry",
                     Time = new DateTime(1975, 7, 24, 7, 9, 30),
                     Value = 36.1
                 },
                 new Observation
                 {
                     TimeSeries = timeSeries2,
-                    StatId = 601100,
-                    ParamId = "wind_speed",
                     Time = new DateTime(1975, 7, 24, 7, 9, 0),
                     Value = 7.2
                 },
                 new Observation
                 {
                     TimeSeries = timeSeries2,
-                    StatId = 601100,
-                    ParamId = "wind_speed",
                     Time = new DateTime(1975, 7, 24, 7, 9, 15),
                     Value = 7.4
                 },
                 new Observation
                 {
                     TimeSeries = timeSeries3,
-                    StatId = 603000,
-                    ParamId = "temp_dry",
                     Time = new DateTime(1975, 7, 24, 7, 9, 0),
                     Value = 34.4
                 },
                 new Observation
                 {
                     TimeSeries = timeSeries3,
-                    StatId = 603000,
-                    ParamId = "temp_dry",
                     Time = new DateTime(1975, 7, 24, 7, 9, 15),
                     Value = 32.5
                 },
