@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using DMI.ObsDB.Domain.Entities;
 
-namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.EntityConfigurations
+namespace DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL.EntityConfigurations
 {
     public class ObservingFacilityConfiguration : IEntityTypeConfiguration<ObservingFacility>
     {

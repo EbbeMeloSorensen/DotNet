@@ -3,7 +3,7 @@ using Craft.Persistence.EntityFrameworkCore;
 using DMI.ObsDB.Domain.Entities;
 using DMI.ObsDB.Persistence.Repositories;
 
-namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
+namespace DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
 {
     public class ObservingFacilityRepository : Repository<ObservingFacility>, IObservingFacilityRepository
     {

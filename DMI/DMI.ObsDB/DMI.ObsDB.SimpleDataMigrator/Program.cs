@@ -16,11 +16,19 @@ namespace DMI.ObsDB.SimpleDataMigrator
 
             using (var unitOfWork_Sqlite = unitOfWorkFactory_Sqlite.GenerateUnitOfWork())
             {
-                var count = unitOfWork_Sqlite.ObservingFacilities.CountAll();
+                var observingFacilitCount = unitOfWork_Sqlite.ObservingFacilities.CountAll();
 
-                if (count > 0)
+                if (observingFacilitCount > 0)
                 {
                     Console.WriteLine("Repository exists and is non-empty - aborting");
+                    Console.WriteLine($"  Observing Facilities: {observingFacilitCount}");
+
+                    var timeSeriesCount = unitOfWork_Sqlite.TimeSeries.CountAll();
+                    Console.WriteLine($"  Timeseries: {timeSeriesCount}");
+
+                    var observationCount = unitOfWork_Sqlite.Observations.CountAll();
+                    Console.WriteLine($"  Observations: {observationCount}");
+
                     return;
                 }
             };
