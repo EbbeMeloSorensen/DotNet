@@ -14,7 +14,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite
                 context.TimeSeries.Any() ||
                 context.Observations.Any()) return;
 
-            SeedDatabase(context);
+            //SeedDatabase(context);
         }
 
         public override void Initialize(ILogger logger)
@@ -109,13 +109,13 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite
                 new Observation
                 {
                     TimeSeries = timeSeries3,
-                    Time = new DateTime(1975, 7, 24, 7, 9, 0),
+                    Time = new DateTime(1990, 7, 24, 7, 9, 0),
                     Value = 34.4
                 },
                 new Observation
                 {
                     TimeSeries = timeSeries3,
-                    Time = new DateTime(1975, 7, 24, 7, 9, 15),
+                    Time = new DateTime(1990, 7, 24, 7, 9, 15),
                     Value = 32.5
                 },
             };

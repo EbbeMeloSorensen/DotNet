@@ -75,7 +75,66 @@ namespace DMI.ObsDB.Persistence.File.Repositories
         public TimeSeries GetIncludingObservations(
             int id)
         {
-            throw new NotImplementedException();
+            if (!_stationIdAndParamIdMap.TryGetValue(id, out var statIdAndParamId))
+            {
+                throw new InvalidOperationException();
+            }
+
+            var statId = statIdAndParamId.Item1;
+            var paramId = statIdAndParamId.Item2;
+            var result = GenerateTimeSeries(statId, paramId);
+
+            var rootDirectory = new DirectoryInfo(@"C:\Data\Observations");
+
+            if (rootDirectory.Exists)
+            {
+                var observations = new List<Observation>();
+                var yearDirectories = rootDirectory.GetDirectories();
+
+                foreach (var yearDirectory in yearDirectories)
+                {
+                    var year = int.Parse(yearDirectory.Name);
+
+                    var stationDirectory = yearDirectory
+                        .GetDirectories(statId.ToString())
+                        .SingleOrDefault();
+
+                    if (stationDirectory != null)
+                    {
+                        var paramDirectory = stationDirectory
+                            .GetDirectories(paramId)
+                            .SingleOrDefault();
+
+                        if (paramDirectory != null)
+                        {
+                            var fileName = $"{statId}_{paramId}_{yearDirectory.Name}.txt";
+
+                            var file = paramDirectory
+                                .GetFiles(fileName)
+                                .SingleOrDefault();
+
+                            if (file == null)
+                            {
+                                continue;
+                            }
+
+                            var observationTimesForCurrentYear =
+                                ReadObservationsFromFile(file.FullName);
+
+                            observationTimesForCurrentYear.ForEach(_ =>
+                            {
+                                _.TimeSeriesId = id;
+                            });
+
+                            observations.AddRange(observationTimesForCurrentYear);
+                        }
+                    }
+                }
+
+                result.Observations = observations;
+            }
+
+            return result;
         }
 
         public TimeSeries GetIncludingObservations(
@@ -157,6 +216,11 @@ namespace DMI.ObsDB.Persistence.File.Repositories
                                         .Where(_ => _.Time < endTime)
                                         .ToList();
                             }
+
+                            observationTimesForCurrentYear.ForEach(_ =>
+                            {
+                                _.TimeSeriesId = id;
+                            });
 
                             observations.AddRange(observationTimesForCurrentYear);
                         }

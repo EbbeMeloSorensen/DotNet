@@ -20,11 +20,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{58C3DFC0-541C-4566-A769-F6DCCC33C9D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite", "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.csproj", "{4DD4E51E-23A8-417A-8EC9-0165534882C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite", "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.csproj", "{4DD4E51E-23A8-417A-8EC9-0165534882C5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\..\Craft\Craft.Logging\Craft.Logging.csproj", "{7CB19DDF-30DA-4AB6-87E6-9031B85959AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest", "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest.csproj", "{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest", "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest.csproj", "{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.ObsDB.SimpleDataMigrator", "DMI.ObsDB.SimpleDataMigrator\DMI.ObsDB.SimpleDataMigrator.csproj", "{36AB1063-CC93-4750-B18D-871FCC236320}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +70,10 @@ Global
 		{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69EFE61A-1DFB-4442-98D2-3DAC1FC40B1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36AB1063-CC93-4750-B18D-871FCC236320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36AB1063-CC93-4750-B18D-871FCC236320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36AB1063-CC93-4750-B18D-871FCC236320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36AB1063-CC93-4750-B18D-871FCC236320}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

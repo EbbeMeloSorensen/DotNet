@@ -15,7 +15,7 @@
     <ProjectReference Include="..\..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\..\..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj" />
     <ProjectReference Include="..\..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
-    <ProjectReference Include="..\..\DMI.ObsDB\DMI.ObsDB.Persistence.File\DMI.ObsDB.Persistence.File.csproj" />
+    <ProjectReference Include="..\..\DMI.ObsDB\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.Persistence.EntityFrameworkCore.Sqlite\DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.UIElements\DMI.SMS.UIElements.csproj" />
