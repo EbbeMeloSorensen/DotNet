@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using DMI.SMS.Domain.Entities;
 using GalaSoft.MvvmLight;
+using Craft.Logging;
 using Craft.Utils;
-using DMI.ObsDB.Domain.Entities;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -18,6 +17,7 @@ namespace DMI.Data.Studio.ViewModel
     //   Når der sker en "major" opdatering af World Window, så hentes nye tidsseriedata fra datakilden
     public class TimeSeriesViewModel : ViewModelBase
     {
+        private ILogger _logger;
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
         private double _curveThickness = 0.05;
         private readonly ObsDB.Persistence.IUnitOfWorkFactory _obsDBUnitOfWorkFactory;
@@ -25,9 +25,14 @@ namespace DMI.Data.Studio.ViewModel
         private DateTime _timeAtOrigo;
         private TimeSpan _timeSpanForXUnit = TimeSpan.FromDays(1);
         private string _nanoqStationId;
-        private string _parameter;
         private DateTime _t0;
         private DateTime _t1;
+
+        public ILogger Logger
+        {
+            get => _logger;
+            set => _logger = value;
+        }
 
         public Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel ScatterChartViewModel { get; set; }
 
@@ -70,12 +75,10 @@ namespace DMI.Data.Studio.ViewModel
             if (stationInformations == null || stationInformations.Objects.Count() == 0)
             {
                 _nanoqStationId = null;
-                _parameter = null;
             }
             else if (stationInformations.Objects.Count() == 1)
             {
                 _nanoqStationId = $"{stationInformations.Objects.Single().StationIDDMI}00";
-                _parameter = "temp_dry";
             }
 
             UpdateCurve();
@@ -98,6 +101,8 @@ namespace DMI.Data.Studio.ViewModel
 
         private void UpdateCurve()
         {
+            Logger?.WriteLine(LogMessageCategory.Information, "TimeSeries view:");
+
             if (_nanoqStationId == null)
             {
                 return;
@@ -107,14 +112,20 @@ namespace DMI.Data.Studio.ViewModel
             {
                 var statId = int.Parse(_nanoqStationId);
 
+                Logger?.WriteLine(LogMessageCategory.Information, "  Retrieving station..", "general", true);
+
                 var observingFacility = unitOfWork.ObservingFacilities
                     .Find(_ => _.StatId == statId)
                     .SingleOrDefault();
+
+                Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
 
                 if (observingFacility == null)
                 {
                     return;
                 }
+
+                Logger?.WriteLine(LogMessageCategory.Information, "  Retrieving timeseries..", "general", true);
 
                 observingFacility = unitOfWork.ObservingFacilities
                     .GetIncludingTimeSeries(observingFacility.Id);
@@ -128,26 +139,32 @@ namespace DMI.Data.Studio.ViewModel
                     .Where(_ => _.ParamId == "temp_dry")
                     .SingleOrDefault();
 
+                Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
+
                 if (timeSeries == null)
                 {
                     return;
                 }
 
+                Logger?.WriteLine(LogMessageCategory.Information, "  Retrieving observations..", "general", true);
+
                 timeSeries = unitOfWork.TimeSeries.GetIncludingObservations(
                     timeSeries.Id, _t0, _t1);
+
+                Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
 
                 if (timeSeries.Observations == null)
                 {
                     return;
                 }
 
-                var observations = timeSeries.Observations
-                    .Where(_ => _.Time >= _t0)
-                    .Where(_ => _.Time <= _t1);
+                //var observations = timeSeries.Observations
+                //    .Where(_ => _.Time >= _t0)
+                //    .Where(_ => _.Time <= _t1);
 
                 var points = new List<PointD>();
 
-                foreach (var observation in observations)
+                foreach (var observation in timeSeries.Observations)
                 {
                     var t = observation.Time;
 

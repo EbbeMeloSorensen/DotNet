@@ -269,8 +269,11 @@ namespace DMI.Data.Studio.ViewModel
             StationInformationDetailsViewModel.RepositoryOperationPerformed += 
                 StationInformationDetailsViewModel_RepositoryOperationPerformed;
 
-            _application.Logger = new ViewModelLogger(_application.Logger, LogViewModel);
-            //_application.Logger = null; // Set to null to disable logging
+            _logger = new ViewModelLogger(_application.Logger, LogViewModel);
+            //_logger = null; // Set to null to disable logging
+
+            _application.Logger = _logger;
+            TimeSeriesViewModel.Logger = _logger;
 
             _includeOperationIntervalBars = true;
             _includeObservationIntervalBars = false;

@@ -7,7 +7,7 @@ using log4net.Config;
 
 namespace Craft.Logging.Log4Net
 {
-    public class Logger : ILogger
+    public class Logger : LoggerBase
     {
         private Dictionary<string, ILog> _aspectToLoggerMap;
 
@@ -16,10 +16,11 @@ namespace Craft.Logging.Log4Net
             _aspectToLoggerMap = new Dictionary<string, ILog>();
         }
 
-        public void WriteLine(
+        public override void WriteLine(
             LogMessageCategory category,
             string message,
-            string aspect)
+            string aspect,
+            bool startStopWatch)
         {
             _aspectToLoggerMap.TryGetValue(aspect, out ILog log);
 
@@ -30,6 +31,17 @@ namespace Craft.Logging.Log4Net
 
                 log = LogManager.GetLogger(aspect);
                 _aspectToLoggerMap[aspect] = log;
+            }
+
+            if (_stopwatch.IsRunning)
+            {
+                _stopwatch.Stop();
+                message = $"{message} ({_stopwatch.Elapsed})";
+                _stopwatch.Reset();
+            }
+            else if (startStopWatch)
+            {
+                _stopwatch.Start();
             }
 
             switch (category)

@@ -2,7 +2,8 @@
 
 namespace Craft.ViewModel.Utils
 {
-    public class ViewModelLogger : ILogger
+    // This is a decorator class for writing messages in a wpf control as well as to file
+    public class ViewModelLogger : LoggerBase
     {
         private ILogger _logger;
         private LogViewModel _logViewModel;
@@ -15,12 +16,24 @@ namespace Craft.ViewModel.Utils
             _logViewModel = logViewModel;
         }
 
-        public void WriteLine(
+        public override void WriteLine(
             LogMessageCategory category,
             string message,
-            string aspect)
+            string aspect,
+            bool startStopWatch)
         {
-            _logger.WriteLine(category, message, aspect);
+            if (_stopwatch.IsRunning)
+            {
+                _stopwatch.Stop();
+                message = $"{message} ({_stopwatch.Elapsed})";
+                _stopwatch.Reset();
+            }
+            else if (startStopWatch)
+            {
+                _stopwatch.Start();
+            }
+
+            _logger.WriteLine(category, message, aspect, startStopWatch);
 
             _logViewModel.Log += $"{message}\n";
 

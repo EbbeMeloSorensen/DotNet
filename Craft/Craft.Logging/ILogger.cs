@@ -14,6 +14,7 @@
         void WriteLine(
             LogMessageCategory category,
             string message,
-            string aspect = "general");
+            string aspect = "general",
+            bool startStopwatch = false);
     }
 }
