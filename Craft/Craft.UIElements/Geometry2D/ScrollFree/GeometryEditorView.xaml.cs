@@ -124,6 +124,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                 ViewModel.Scaling = new Size(
                     ViewModel.Scaling.Width / 2,
                     ViewModel.Scaling.Height / 2);
+
+                ViewModel.OnWorldWindowMajorUpdateOccured();
             }
         }
 

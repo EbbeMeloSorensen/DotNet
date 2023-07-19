@@ -10,7 +10,7 @@ namespace DMI.ObsDB.SimpleDataMigrator
         {
             Console.WriteLine("DMI.ObsDB.SimpleDataMigrator");
 
-            var stationLimit = 1000;
+            var stationLimit = 999999;
             var unitOfWorkFactory_File = new Persistence.File.UnitOfWorkFactory();
             var unitOfWorkFactory_Sqlite = new Persistence.EntityFrameworkCore.Sqlite.UnitOfWorkFactory();
 
@@ -70,9 +70,12 @@ namespace DMI.ObsDB.SimpleDataMigrator
                     using (var unitOfWork_File = unitOfWorkFactory_File.GenerateUnitOfWork())
                     {
                         var ts = unitOfWork_File.TimeSeries.GetIncludingObservations(
-                            timeSeries.Id,
-                            new DateTime(1980, 1, 1),
-                            new DateTime(2000, 1, 1));
+                            timeSeries.Id);
+
+                        //var ts = unitOfWork_File.TimeSeries.GetIncludingObservations(
+                        //    timeSeries.Id,
+                        //    new DateTime(1953, 1, 1),
+                        //    new DateTime(2000, 1, 1));
 
                         if (ts.Observations == null)
                         {
