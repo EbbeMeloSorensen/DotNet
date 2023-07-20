@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
+    <ProjectReference Include="..\DMI.ObsDB.Application\DMI.ObsDB.Application.csproj" />
     <ProjectReference Include="..\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.csproj" />
     <ProjectReference Include="..\DMI.ObsDB.Persistence.File\DMI.ObsDB.Persistence.File.csproj" />
   </ItemGroup>

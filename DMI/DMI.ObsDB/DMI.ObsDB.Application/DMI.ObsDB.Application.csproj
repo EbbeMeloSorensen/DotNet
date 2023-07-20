@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DMI.ObsDB.Persistence.File\DMI.ObsDB.Persistence.File.csproj" />
+    <ProjectReference Include="..\DMI.ObsDB.Persistence\DMI.ObsDB.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

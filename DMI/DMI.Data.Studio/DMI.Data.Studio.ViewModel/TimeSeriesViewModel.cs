@@ -46,7 +46,7 @@ namespace DMI.Data.Studio.ViewModel
             var timeWindow = TimeSpan.FromDays(7);
             var utcNow = DateTime.UtcNow;
             _timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
-            _timeAtOrigo = new DateTime(1990, _timeAtOrigo.Month, _timeAtOrigo.Day);
+            _timeAtOrigo = new DateTime(2022, _timeAtOrigo.Month, _timeAtOrigo.Day);
             var tFocus = _timeAtOrigo + timeWindow / 2;
             var xFocus = (tFocus - _timeAtOrigo) / TimeSpan.FromDays(1.0);
 
@@ -153,14 +153,13 @@ namespace DMI.Data.Studio.ViewModel
 
                 Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
 
+                Logger?.WriteLine(LogMessageCategory.Information,
+                    $"    (retrieved {timeSeries.Observations.Count} observations)", "general", false);
+
                 if (timeSeries.Observations == null)
                 {
                     return;
                 }
-
-                //var observations = timeSeries.Observations
-                //    .Where(_ => _.Time >= _t0)
-                //    .Where(_ => _.Time <= _t1);
 
                 var points = new List<PointD>();
 
