@@ -7,13 +7,6 @@ namespace PR.UI.Console
 {
     class Program
     {
-        private static string _host;
-        private static string _port;
-        private static string _database;
-        private static string _schema;
-        private static string _user;
-        private static string _password;
-
         public static async Task CreatePerson(Create options)
         {
             System.Console.Write("Creating Person...\nProgress: ");
@@ -22,13 +15,6 @@ namespace PR.UI.Console
             {
                 FirstName = options.FirstName
             };
-
-            _host = "localhost";
-            _port = "5432";
-            _database = "People";
-            _schema = "public";
-            _user = options.User;
-            _password = options.Password;
 
             await GetApplication().CreatePerson(person, (progress, nameOfSubtask) =>
             {
@@ -51,13 +37,6 @@ namespace PR.UI.Console
 
         public static async Task ListPeople(List options)
         {
-            _host = options.Host;
-            _port = options.Port;
-            _database = options.Database;
-            _schema = options.Schema;
-            _user = options.User;
-            _password = options.Password;
-
             await GetApplication().ListPeople((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
@@ -74,13 +53,6 @@ namespace PR.UI.Console
 
         public static async Task ExportPeople(Export options)
         {
-            _host = options.Host;
-            _port = options.Port;
-            _database = options.Database;
-            _schema = options.Schema;
-            _user = options.User;
-            _password = options.Password;
-
             System.Console.Write("Exporting data...\nProgress: ");
             var dateTime = DateTime.Now;
             await GetApplication().ExportData(options.FileName, (progress, nameOfSubtask) =>
@@ -94,13 +66,6 @@ namespace PR.UI.Console
 
         public static async Task ImportPeople(Import options)
         {
-            _host = options.Host;
-            _port = options.Port;
-            _database = options.Database;
-            _schema = options.Schema;
-            _user = options.User;
-            _password = options.Password;
-
             System.Console.Write("Importing data...\nProgress: ");
             await GetApplication().ImportData(
                 options.FileName, options.Legacy, (progress, nameOfSubtask) =>
@@ -175,7 +140,6 @@ namespace PR.UI.Console
         {
             var container = Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();
-            application.Initialize(_host, _port, _database, _schema, _user, _password);
             return application;
         }
     }
