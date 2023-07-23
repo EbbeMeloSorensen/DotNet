@@ -52,7 +52,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
             {
                 FirstName = "Ebbe",
                 Surname = "Melo Sørensen",
-                Created = new DateTime(2022, 1, 1, 3, 3, 3).ToUniversalTime()
+                Created = new DateTime(2022, 1, 1, 3, 3, 4).ToUniversalTime()
             };
 
             var personAssociation = new PersonAssociation

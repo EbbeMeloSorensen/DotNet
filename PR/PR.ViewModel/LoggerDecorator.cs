@@ -64,7 +64,11 @@ namespace PR.ViewModel
             return $"{day}/{month}/{year} {hh}:{mm}:{ss}.{ms}";
         }
 
-        public void WriteLine(LogMessageCategory category, string message, string aspect = "general")
+        public void WriteLine(
+            LogMessageCategory category, 
+            string message, 
+            string aspect,
+            bool startStopwatch)
         {
             //throw new NotImplementedException();
         }
