@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -15,8 +15,14 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\DMI.ObsDB.Application\DMI.ObsDB.Application.csproj" />
-    <ProjectReference Include="..\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.csproj" />
+    <ProjectReference Include="..\DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL\DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL.csproj" />
     <ProjectReference Include="..\DMI.ObsDB.Persistence.File\DMI.ObsDB.Persistence.File.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

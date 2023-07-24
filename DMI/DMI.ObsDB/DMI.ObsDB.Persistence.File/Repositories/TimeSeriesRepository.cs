@@ -323,7 +323,8 @@ namespace DMI.ObsDB.Persistence.File.Repositories
                             dateOfObservation.Day,
                             hour,
                             minute,
-                            second),
+                            second,
+                            DateTimeKind.Utc),
                         Value = value
                     });
                 }

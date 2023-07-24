@@ -28,6 +28,7 @@ namespace DMI.ObsDB.Application
             ILogger logger,
             IUnitOfWorkFactory unitOfWorkFactoryTargetRepository)
         {
+            _logger = logger;
             _unitOfWorkFactoryTargetRepository = unitOfWorkFactoryTargetRepository;
         }
 
