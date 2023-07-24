@@ -16,7 +16,7 @@ namespace Craft.Logging.Log4Net
             _aspectToLoggerMap = new Dictionary<string, ILog>();
         }
 
-        public override void WriteLine(
+        public override string WriteLine(
             LogMessageCategory category,
             string message,
             string aspect,
@@ -33,16 +33,7 @@ namespace Craft.Logging.Log4Net
                 _aspectToLoggerMap[aspect] = log;
             }
 
-            if (_stopwatch.IsRunning)
-            {
-                _stopwatch.Stop();
-                message = $"{message} ({_stopwatch.Elapsed})";
-                _stopwatch.Reset();
-            }
-            else if (startStopWatch)
-            {
-                _stopwatch.Start();
-            }
+            message = base.WriteLine(category, message, aspect, startStopWatch);
 
             switch (category)
             {
@@ -64,6 +55,8 @@ namespace Craft.Logging.Log4Net
                 default:
                     throw new ArgumentException("Invalid Log message category");
             }
+
+            return message;
         }
     }
 }

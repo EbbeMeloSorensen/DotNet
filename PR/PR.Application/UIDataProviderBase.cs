@@ -85,6 +85,8 @@ namespace PR.Application
             string fileName,
             IList<Expression<Func<Person, bool>>> predicates)
         {
+            _logger?.WriteLine(LogMessageCategory.Information, $"Exporting data..");
+
             var extension = Path.GetExtension(fileName)?.ToLower();
 
             if (extension == null)
@@ -97,13 +99,13 @@ namespace PR.Application
 
             if (predicates == null || predicates.Count == 0)
             {
-                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all person records from repository..");
+                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all person records from repository..", "general", true);
                 people = GetAllPeople();
                 personAssociations = GetAllPersonAssociations();
             }
             else
             {
-                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving matching person records from repository..");
+                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving matching person records from repository..", "general", true);
                 people = FindPeople(predicates);
 
                 // Todo: Handle person associtations
@@ -124,26 +126,32 @@ namespace PR.Application
                 throw new InvalidDataException("created times not distinct");
             }
 
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Ordering records..", "general", true);
+
             var prData = new PRData
             {
                 People = people.OrderBy(p => p.Created).ToList(),
                 PersonAssociations = personAssociations.OrderBy(pa => pa.Created).ToList()
             };
 
+            _logger?.WriteLine(LogMessageCategory.Information, $"  Done..");
+
             switch (extension)
             {
                 case ".xml":
                     {
+                        _logger?.WriteLine(LogMessageCategory.Information, $"  Exporting as xml..", "general", true);
                         _dataIOHandler.ExportDataToXML(prData, fileName);
                         _logger?.WriteLine(LogMessageCategory.Information,
-                            $"  Exported {people.Count} person records to xml file");
+                            $"  Exported {people.Count} person records and {personAssociations.Count} person association records to xml file");
                         break;
                     }
                 case ".json":
                     {
+                        _logger?.WriteLine(LogMessageCategory.Information, $"  Exporting as json..", "general", true);
                         _dataIOHandler.ExportDataToJson(prData, fileName);
                         _logger?.WriteLine(LogMessageCategory.Information,
-                            $"  Exported {people.Count} person records to json file");
+                            $"  Exported {people.Count} person records and {personAssociations.Count} person association records to json file");
                         break;
                     }
                 default:

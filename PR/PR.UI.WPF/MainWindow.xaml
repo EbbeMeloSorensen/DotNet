@@ -62,7 +62,7 @@
             </Grid>
 
             <Expander Header="Log" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ExpandDirection="Up" IsExpanded="True">
-                <logging:LogView Height="80" DataContext="{Binding LogViewModel}"/>
+                <logging:LogView Height="200" DataContext="{Binding LogViewModel}"/>
             </Expander>
         </Grid>
     </DockPanel>

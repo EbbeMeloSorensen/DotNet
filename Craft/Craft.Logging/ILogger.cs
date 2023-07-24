@@ -1,4 +1,6 @@
-﻿namespace Craft.Logging
+﻿using System;
+
+namespace Craft.Logging
 {
     public enum LogMessageCategory
     {
@@ -11,7 +13,7 @@
 
     public interface ILogger
     {
-        void WriteLine(
+        string WriteLine(
             LogMessageCategory category,
             string message,
             string aspect = "general",

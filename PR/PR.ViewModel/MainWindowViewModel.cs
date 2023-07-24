@@ -92,7 +92,7 @@ namespace PR.ViewModel
             _applicationDialogService = applicationDialogService;
 
             LogViewModel = new LogViewModel();
-            _logger = new LoggerDecorator(logger, LogViewModel);
+            _logger = new ViewModelLogger(logger, LogViewModel);
             _dataProvider.Initialize(_logger);
 
             PersonListViewModel = new PersonListViewModel(dataProvider, applicationDialogService);
@@ -107,6 +107,8 @@ namespace PR.ViewModel
                 dataProvider,
                 applicationDialogService,
                 PersonListViewModel.SelectedPeople);
+
+            _logger.WriteLine(LogMessageCategory.Information, "Application started");
         }
 
         private void HandlePeopleSelectionChanged(object sender, PropertyChangedEventArgs e)

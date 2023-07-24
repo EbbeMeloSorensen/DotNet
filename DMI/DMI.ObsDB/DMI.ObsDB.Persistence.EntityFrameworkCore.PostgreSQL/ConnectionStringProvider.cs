@@ -33,10 +33,10 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL
                 // If we are here, it may be because we're attempting to generate a migration
                 host = "localhost";
                 port = "5432";
-                database = "PR";
+                database = "WigosII";
                 schema = "public";
-                user = "postgres";
-                password = "L1on8Zebra";
+                user = "root";
+                password = "root";
             }
 
             Initialize(host, string.IsNullOrEmpty(port) ? 5432 : int.Parse(port), database, schema, user, password);

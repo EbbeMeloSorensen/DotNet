@@ -1,4 +1,6 @@
 ﻿using Craft.Logging;
+using System;
+using System.Diagnostics;
 
 namespace Craft.ViewModel.Utils
 {
@@ -16,28 +18,31 @@ namespace Craft.ViewModel.Utils
             _logViewModel = logViewModel;
         }
 
-        public override void WriteLine(
+        public override string WriteLine(
             LogMessageCategory category,
             string message,
             string aspect,
             bool startStopWatch)
         {
-            if (_stopwatch.IsRunning)
-            {
-                _stopwatch.Stop();
-                message = $"{message} ({_stopwatch.Elapsed})";
-                _stopwatch.Reset();
-            }
-            else if (startStopWatch)
-            {
-                _stopwatch.Start();
-            }
-
-            _logger.WriteLine(category, message, aspect, startStopWatch);
-
-            _logViewModel.Log += $"{message}\n";
-
+            message = _logger.WriteLine(category, message, aspect, startStopWatch);
+            _logViewModel.Log += $"{GetCurrentTime()}: {message}\n";
             _logViewModel.LogUpdated = true;
+            return message;
+        }
+
+        private string GetCurrentTime()
+        {
+            var currentTime = DateTime.Now;
+
+            var year = $"{currentTime.Year}";
+            var month = $"{currentTime.Month}".PadLeft(2, '0');
+            var day = $"{currentTime.Day}".PadLeft(2, '0');
+            var hh = $"{currentTime.Hour}".PadLeft(2, '0');
+            var mm = $"{currentTime.Minute}".PadLeft(2, '0');
+            var ss = $"{currentTime.Second}".PadLeft(2, '0');
+            var ms = $"{currentTime.Millisecond}".PadLeft(3, '0');
+
+            return $"{day}/{month}/{year} {hh}:{mm}:{ss}.{ms}";
         }
     }
 }
