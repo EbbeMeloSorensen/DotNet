@@ -316,6 +316,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence.File"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite", "..\DMI.ObsDB\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite\DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.csproj", "{517E3EFD-B3C4-4FBE-8A67-ABE3554D091A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL", "..\DMI.ObsDB\DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL\DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{9B11B02A-11CA-4E9F-93F5-A2594D09039C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -502,6 +504,10 @@ Global
 		{517E3EFD-B3C4-4FBE-8A67-ABE3554D091A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{517E3EFD-B3C4-4FBE-8A67-ABE3554D091A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{517E3EFD-B3C4-4FBE-8A67-ABE3554D091A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B11B02A-11CA-4E9F-93F5-A2594D09039C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B11B02A-11CA-4E9F-93F5-A2594D09039C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B11B02A-11CA-4E9F-93F5-A2594D09039C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B11B02A-11CA-4E9F-93F5-A2594D09039C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
