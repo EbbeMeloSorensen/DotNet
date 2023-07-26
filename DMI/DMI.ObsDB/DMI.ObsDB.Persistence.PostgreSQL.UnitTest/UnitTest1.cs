@@ -11,6 +11,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.UnitTest
         [Fact]
         public void Test1()
         {
+            ConnectionStringProvider.Initialize("localhost", 5432, "statdb", "public", "postgres", "L1on8Zebra");
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
             IEnumerable<ObservingFacility> observingFacilities;
