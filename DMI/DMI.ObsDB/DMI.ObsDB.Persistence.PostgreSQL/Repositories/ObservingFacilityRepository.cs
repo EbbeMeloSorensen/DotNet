@@ -9,7 +9,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
 {
     public class ObservingFacilityRepository : IObservingFacilityRepository
     {
-        private const string _tableName = "ObservingFacilities";
+        private const string _tableName = "station";
 
         public void Add(ObservingFacility entity)
         {
@@ -106,8 +106,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                 conn.Open();
 
                 var query = $"SELECT " +
-                    "\"Id\", " +
-                    "\"StatId\" " +
+                    "\"statid\" " +
                     $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{_tableName}\"";
 
                 if (!string.IsNullOrEmpty(whereClause))
@@ -120,10 +119,12 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                 {
                     while (reader.Read())
                     {
+                        var statid = reader.GetInt32(0);
+
                         observingFacilities.Add(new ObservingFacility
                         {
-                            Id = reader.GetInt32(0),
-                            StatId = reader.GetInt32(1),
+                            Id = statid,
+                            StatId = statid,
                         });
                     }
 

@@ -11,7 +11,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.UnitTest
         [Fact]
         public void Test1()
         {
-            ConnectionStringProvider.Initialize("localhost", 5432, "WigosII", "public", "postgres", "L1on8Zebra");
+            ConnectionStringProvider.Initialize("nanoq.dmi.dk", 5432, "statdb", "public", "ebs", "Vm6PAkPh");
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
             IEnumerable<ObservingFacility> observingFacilities;
@@ -19,7 +19,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 observingFacilities = unitOfWork.ObservingFacilities.GetAll();
-                observingFacilities.Count().Should().Be(11177);
+                observingFacilities.Count().Should().Be(15920);
             }
         }
     }
