@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Npgsql;
@@ -9,8 +10,6 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
 {
     public class ObservingFacilityRepository : IObservingFacilityRepository
     {
-        private const string _tableName = "station";
-
         public void Add(ObservingFacility entity)
         {
             throw new NotImplementedException();
@@ -53,7 +52,40 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
 
         public ObservingFacility Get(int id)
         {
-            throw new NotImplementedException();
+            ObservingFacility result = null;
+
+            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            {
+                conn.Open();
+
+                var query = $"SELECT " +
+                    "\"statid\" " +
+                    $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"stations\" " +
+                    $"WHERE statid = {id}";
+
+                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        var statid = reader.GetInt32(0);
+
+                        result = new ObservingFacility
+                        {
+                            Id = statid,
+                            StatId = statid,
+                        };
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    reader.Close();
+                }
+            }
+
+            return result;
         }
 
         public IEnumerable<ObservingFacility> GetAll()
@@ -63,7 +95,45 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
 
         public ObservingFacility GetIncludingTimeSeries(int id)
         {
-            throw new NotImplementedException();
+            var observingFacility = Get(id);
+            observingFacility.TimeSeries = new List<TimeSeries>();
+
+            var firstYear = 1953;
+            var lastYear = DateTime.Now.Year;
+            var years = Enumerable.Range(firstYear, lastYear - firstYear + 1);
+
+            var parameters = new HashSet<string>();
+
+            foreach (var year in years)
+            {
+                using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+                {
+                    conn.Open();
+
+                    var query = $"SELECT DISTINCT(\"statid\") " +
+                        $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"temp_wind_radiation_{year}\" " +
+                        $"WHERE statid = {id} " +
+                        "AND temp_dry is not null";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            observingFacility.TimeSeries.Add(new TimeSeries{
+                                Id = -1, // Vi skal jo nok GENERERE et "virtuelt" id, ligesom for file repoet
+                                ParamId = "temp_dry"
+                            });
+
+                            break; // SIkr lige at du ikke forårsager et leak på denne måde
+                        }
+                            
+                        reader.Close();
+                    }
+                }
+            }
+
+            return observingFacility;
         }
 
         public void Load(IEnumerable<ObservingFacility> entities)
@@ -107,7 +177,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
 
                 var query = $"SELECT " +
                     "\"statid\" " +
-                    $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{_tableName}\"";
+                    $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"stations\"";
 
                 if (!string.IsNullOrEmpty(whereClause))
                 {
