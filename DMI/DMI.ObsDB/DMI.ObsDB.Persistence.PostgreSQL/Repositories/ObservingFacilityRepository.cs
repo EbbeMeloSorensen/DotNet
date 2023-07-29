@@ -120,10 +120,9 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                     {
                         if (reader.Read())
                         {
-                            observingFacility.TimeSeries.Add(new TimeSeries{
-                                Id = -1, // Vi skal jo nok GENERERE et "virtuelt" id, ligesom for file repoet
-                                ParamId = "temp_dry"
-                            });
+                            observingFacility.TimeSeries.Add(
+                                TimeSeriesRepository.GenerateTimeSeries(id, "temp_dry")
+                            );
 
                             break; // SIkr lige at du ikke forårsager et leak på denne måde
                         }

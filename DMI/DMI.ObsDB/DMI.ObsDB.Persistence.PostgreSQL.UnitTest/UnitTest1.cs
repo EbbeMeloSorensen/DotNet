@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Xunit;
@@ -64,8 +65,19 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 observingFacility = unitOfWork.ObservingFacilities.GetIncludingTimeSeries(601100);
-                observingFacility.StatId.Should().Be(601100);
-                observingFacility.TimeSeries.Single().ParamId.Should().Be("temp_dry");
+            }
+
+            observingFacility.StatId.Should().Be(601100);
+            observingFacility.TimeSeries.Single().ParamId.Should().Be("temp_dry");
+
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var timeSeries = unitOfWork.TimeSeries.GetIncludingObservations(
+                    observingFacility.TimeSeries.Single().Id, 
+                    new DateTime(1953, 1, 1, 0, 0, 0), 
+                    new DateTime(1953, 1, 2, 0, 0, 0));
+
+                timeSeries.Observations.Count().Should().Be(6);
             }
         }
     }
