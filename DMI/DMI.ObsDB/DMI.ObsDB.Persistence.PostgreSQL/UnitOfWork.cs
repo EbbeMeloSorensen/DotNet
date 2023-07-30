@@ -19,6 +19,14 @@ namespace DMI.ObsDB.Persistence.PostgreSQL
         {
             try
             {
+                // Dette har jeg været nødt til at udkommentere, da det giver andledning til flere problemer:
+                // 1: Man kan slet ikke læse fra nanoq-ro (nanoq4), fordi den er en "host standby", hvilket
+                //    ikke er kompatibelt med "serializable mode"...
+                // 2: Man kan godt læse fra nanoq3, men man kan så ikke skrive til en sqlite database, da
+                //    den så brokker sig over noget med "ambient transactions"... 
+                // NB: Konstruktionen er mindet på at sikre transaktionskontrol i forbindelse med skrivning
+                //     til databasen, så det burde ikke være noget problem, når man bare skal læse som her
+                //    
                 //_scope = new TransactionScope();
 
                 ObservingFacilities = new ObservingFacilityRepository();
