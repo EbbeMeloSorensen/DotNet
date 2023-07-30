@@ -7,7 +7,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private TransactionScope _scope;
+        //private TransactionScope _scope;
 
         public IObservingFacilityRepository ObservingFacilities { get; }
 
@@ -19,7 +19,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL
         {
             try
             {
-                _scope = new TransactionScope();
+                //_scope = new TransactionScope();
 
                 ObservingFacilities = new ObservingFacilityRepository();
                 TimeSeries = new TimeSeriesRepository();
@@ -27,20 +27,20 @@ namespace DMI.ObsDB.Persistence.PostgreSQL
             }
             catch (Exception e)
             {
-                _scope.Dispose();
+                //_scope.Dispose();
                 throw e;
             }
         }
 
         public int Complete()
         {
-            _scope.Complete();
+            //_scope.Complete();
             return 0;
         }
 
         public void Dispose()
         {
-            _scope.Dispose();
+            //_scope.Dispose();
         }
     }
 }

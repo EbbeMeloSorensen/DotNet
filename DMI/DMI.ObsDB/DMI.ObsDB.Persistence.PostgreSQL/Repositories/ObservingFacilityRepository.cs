@@ -174,7 +174,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
             {
                 conn.Open();
 
-                var query = $"SELECT " +
+                var query = $"SELECT DISTINCT " +
                     "\"statid\" " +
                     $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"stations\"";
 

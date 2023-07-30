@@ -16,12 +16,12 @@ namespace DMI.ObsDB.Persistence.PostgreSQL
         {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
-            var host = settings["Host"]?.Value;
-            var port = settings["Port"]?.Value;
-            var database = settings["Database"]?.Value;
-            var schema = settings["Schema"]?.Value;
-            var user = settings["User"]?.Value;
-            var password = settings["Password"]?.Value;
+            var host = settings["Host_Source"]?.Value;
+            var port = settings["Port_Source"]?.Value;
+            var database = settings["Database_Source"]?.Value;
+            var schema = settings["Schema_Source"]?.Value;
+            var user = settings["User_Source"]?.Value;
+            var password = settings["Password_Source"]?.Value;
 
             Initialize(host, string.IsNullOrEmpty(port) ? 5432 : int.Parse(port), database, schema, user, password);
         }

@@ -97,6 +97,16 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
 
             var firstYear = startTime.Year;
             var lastYear = endTime.Year;
+
+            if (endTime.Month == 1 &&
+                endTime.Day == 1 &&
+                endTime.Hour == 0 &&
+                endTime.Minute == 0 &&
+                endTime.Second == 0)
+            {
+                lastYear -= 1;
+            }
+
             var years = Enumerable.Range(firstYear, lastYear - firstYear + 1);
 
             var observations = new List<Observation>();
@@ -122,8 +132,14 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                             if (time >= startTime &&
                                 time < endTime)
                             {
+                                if (reader.IsDBNull(1))
+                                {
+                                    continue;
+                                }
+
                                 observations.Add(new Observation
                                 {
+                                    TimeSeriesId = result.Id,
                                     Time = time,
                                     Value = reader.GetDouble(1)
                                 });

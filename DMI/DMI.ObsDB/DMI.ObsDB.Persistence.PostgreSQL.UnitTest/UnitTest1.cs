@@ -21,7 +21,8 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.UnitTest
             {
                 observingFacilities = unitOfWork.ObservingFacilities.GetAll();
                 //observingFacilities.Count().Should().Be(15920); // (statdb)
-                observingFacilities.Count().Should().Be(37208); // Bemærk, at der tilsyneladende er væsentligt flere i obsdb end i statdb
+                //observingFacilities.Count().Should().Be(37208); // Bemærk, at der tilsyneladende er væsentligt flere i obsdb end i statdb - specielt hvis man tager alle rækker med (primærnøgle er en kombination af statid og _starttime)
+                observingFacilities.Count().Should().Be(15255); // Bemærk, at der tilsyneladende er væsentligt flere i obsdb end i statdb
             }
         }
 
