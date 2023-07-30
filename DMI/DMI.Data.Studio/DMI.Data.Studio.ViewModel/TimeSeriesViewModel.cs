@@ -45,8 +45,8 @@ namespace DMI.Data.Studio.ViewModel
 
             var timeWindow = TimeSpan.FromDays(7);
             var utcNow = DateTime.UtcNow;
-            _timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
-            _timeAtOrigo = new DateTime(2022, _timeAtOrigo.Month, _timeAtOrigo.Day);
+            //_timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
+            _timeAtOrigo = new DateTime(2022, _timeAtOrigo.Month, _timeAtOrigo.Day, 0, 0, 0, DateTimeKind.Utc);
             var tFocus = _timeAtOrigo + timeWindow / 2;
             var xFocus = (tFocus - _timeAtOrigo) / TimeSpan.FromDays(1.0);
 
@@ -101,6 +101,11 @@ namespace DMI.Data.Studio.ViewModel
 
         private void UpdateCurve()
         {
+            if (_t1 <= _t0)
+            {
+                return;
+            }
+
             Logger?.WriteLine(LogMessageCategory.Information, "TimeSeries view:");
 
             if (_nanoqStationId == null)
