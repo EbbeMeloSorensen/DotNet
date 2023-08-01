@@ -23,7 +23,6 @@ namespace DD.ViewModel
             { "Images/Sword.png", -56 },
         };
 
-        private static double _obstacleDiameter;
         private static double _creatureDiameter;
         private static double _weaponDiameter;
 
@@ -43,11 +42,12 @@ namespace DD.ViewModel
         private double _translationX;
         private double _translationY;
         private string _creaturePath;
-        private string _durationForMoveCurrentCreatureAnimation;
-        private bool _moveCurrentCreatureAnimationRunning;
-        private bool _performAttackAnimationRunning;
-        private RelayCommand _moveCurrentCreatureAnimationCompletedCommand;
-        private RelayCommand _performAttackAnimationCompletedCommand;
+        private string _durationForMoveCreatureAnimation;
+        private string _durationForAttackAnimation;
+        private bool _moveCreatureAnimationRunning;
+        private bool _attackAnimationRunning;
+        private RelayCommand _moveCreatureAnimationCompletedCommand;
+        private RelayCommand _attackAnimationCompletedCommand;
         private List<Creature> _creatures;
         private Creature _currentCreature;
         private string _weaponImagePath;
@@ -183,16 +183,16 @@ namespace DD.ViewModel
             }
         }
 
-        public RelayCommand AnimationCompletedCommand
+        public RelayCommand MoveCreatureAnimationCompletedCommand
         {
-            get { return _moveCurrentCreatureAnimationCompletedCommand ?? (_moveCurrentCreatureAnimationCompletedCommand = 
-                             new RelayCommand(AnimationCompletedHandler)); }
+            get { return _moveCreatureAnimationCompletedCommand ?? (_moveCreatureAnimationCompletedCommand = 
+                new RelayCommand(MoveCreatureAnimationCompletedHandler)); }
         }
 
-        public RelayCommand FireProjectileAnimationCompletedCommand
+        public RelayCommand AttackAnimationCompletedCommand
         {
-            get { return _performAttackAnimationCompletedCommand ?? (_performAttackAnimationCompletedCommand = 
-                             new RelayCommand(FireProjectileAnimationCompletedHandler)); }
+            get { return _attackAnimationCompletedCommand ?? (_attackAnimationCompletedCommand = 
+                new RelayCommand(AttackAnimationCompletedHandler)); }
         }
 
         public void MoveCurrentCreature(
@@ -215,11 +215,11 @@ namespace DD.ViewModel
             var ticksPrStep = 1000000;
             var timeSpan = new TimeSpan(ticksPrStep * path.Length);
 
-            DurationForMoveCurrentCreatureAnimation = $"0:0:{timeSpan.Seconds}.{timeSpan.Milliseconds.ToString().PadLeft(3, '0')}";
+            DurationForMoveCreatureAnimation = $"0:0:{timeSpan.Seconds}.{timeSpan.Milliseconds.ToString().PadLeft(3, '0')}";
             _currentCreaturePositionX = currentCreature.PositionX;
             _currentCreaturePositionY = currentCreature.PositionY;
 
-            MoveCurrentCreatureAnimationRunning = true;
+            MoveCreatureAnimationRunning = true;
         }
 
         public void AnimateAttack(
@@ -256,25 +256,25 @@ namespace DD.ViewModel
             WeaponViewModel.RotationAngle = polarVector.Angle * 180 / System.Math.PI;
 
             WeaponViewModel.IsVisible = true;
-            PerformAttackAnimationRunning = true;
+            AttackAnimationRunning = true;
         }
 
-        public bool MoveCurrentCreatureAnimationRunning
+        public bool MoveCreatureAnimationRunning
         {
-            get { return _moveCurrentCreatureAnimationRunning; }
+            get { return _moveCreatureAnimationRunning; }
             set
             {
-                _moveCurrentCreatureAnimationRunning = value;
+                _moveCreatureAnimationRunning = value;
                 RaisePropertyChanged();
             }
         }
 
-        public bool PerformAttackAnimationRunning
+        public bool AttackAnimationRunning
         {
-            get { return _performAttackAnimationRunning; }
+            get { return _attackAnimationRunning; }
             set
             {
-                _performAttackAnimationRunning = value;
+                _attackAnimationRunning = value;
                 RaisePropertyChanged();
             }
         }
@@ -309,12 +309,22 @@ namespace DD.ViewModel
             }
         }
 
-        public string DurationForMoveCurrentCreatureAnimation
+        public string DurationForMoveCreatureAnimation
         {
-            get { return _durationForMoveCurrentCreatureAnimation; }
+            get { return _durationForMoveCreatureAnimation; }
             set
             {
-                _durationForMoveCurrentCreatureAnimation = value;
+                _durationForMoveCreatureAnimation = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string DurationForAttackAnimation
+        {
+            get { return _durationForAttackAnimation; }
+            set
+            {
+                _durationForAttackAnimation = value;
                 RaisePropertyChanged();
             }
         }
@@ -331,9 +341,9 @@ namespace DD.ViewModel
 
         public event EventHandler<PlayerClickedSquareEventArgs> PlayerClickedSquare;
 
-        public event EventHandler AnimationCompleted;
+        public event EventHandler MoveCreatureAnimationCompleted;
 
-        public event EventHandler FireProjectileAnimationCompleted;
+        public event EventHandler AttackAnimationCompleted;
 
         /// <summary>
         /// Update the board with the remaining creatures and their current condition
@@ -386,12 +396,14 @@ namespace DD.ViewModel
             ScrollOffset = new PointD(0, 0);
 
             SquareLength = squareLength;
-            _obstacleDiameter = obstacleDiameter;
             _creatureDiameter = creatureDiameter;
             _weaponDiameter = weaponDiameter;
 
             CurrentCreatureViewModel = new CreatureViewModel(_creatureDiameter);
             WeaponViewModel = new WeaponViewModel(new Weapon(0, 0), _weaponDiameter) { IsVisible = false };
+
+            var timeSpanForAttackAnimation = new TimeSpan(2000000);
+            DurationForAttackAnimation = $"0:0:{timeSpanForAttackAnimation.Seconds}.{timeSpanForAttackAnimation.Milliseconds.ToString().PadLeft(3, '0')}";
 
             selectedScene.PropertyChanged += (s, e) =>
             {
@@ -504,21 +516,21 @@ namespace DD.ViewModel
             }
         }
 
-        private void AnimationCompletedHandler()
+        private void MoveCreatureAnimationCompletedHandler()
         {
-            MoveCurrentCreatureAnimationRunning = false;
+            MoveCreatureAnimationRunning = false;
 
             UpdateCreatureViewModels();
 
             OnAnimationCompleted();
         }
 
-        private void FireProjectileAnimationCompletedHandler()
+        private void AttackAnimationCompletedHandler()
         {
-            PerformAttackAnimationRunning = false;
+            AttackAnimationRunning = false;
             WeaponViewModel.IsVisible = false;
 
-            OnFireProjectileAnimationCompleted();
+            OnAttackAnimationCompleted();
         }
 
         private void OnAnimationCompleted()
@@ -526,7 +538,7 @@ namespace DD.ViewModel
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
             // immediately after the null check and before the event is raised.
-            var handler = AnimationCompleted;
+            var handler = MoveCreatureAnimationCompleted;
 
             // Event will be null if there are no subscribers
             if (handler != null)
@@ -535,12 +547,12 @@ namespace DD.ViewModel
             }
         }
 
-        private void OnFireProjectileAnimationCompleted()
+        private void OnAttackAnimationCompleted()
         {
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
             // immediately after the null check and before the event is raised.
-            var handler = FireProjectileAnimationCompleted;
+            var handler = AttackAnimationCompleted;
 
             // Event will be null if there are no subscribers
             if (handler != null)

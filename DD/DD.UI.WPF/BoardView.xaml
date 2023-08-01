@@ -158,14 +158,14 @@
                     <TranslateTransform X="0" Y="0"/>
                 </Grid.RenderTransform>
                 <b:Interaction.Triggers>
-                    <b:DataTrigger Binding="{Binding MoveCurrentCreatureAnimationRunning, Mode=OneWay}" 
+                    <b:DataTrigger Binding="{Binding MoveCreatureAnimationRunning, Mode=OneWay}" 
                                     Value="true">
                         <b:ControlStoryboardAction ControlStoryboardOption="Play">
                             <b:ControlStoryboardAction.Storyboard>
                                 <Storyboard Completed="Storyboard_Completed">
                                     <DoubleAnimationUsingPath Storyboard.TargetName="CurrentCreatureGrid"
                                                               Storyboard.TargetProperty="(RenderTransform).X"
-                                                              Duration="{Binding DurationForMoveCurrentCreatureAnimation}"
+                                                              Duration="{Binding DurationForMoveCreatureAnimation}"
                                                               Source="X">
                                         <DoubleAnimationUsingPath.PathGeometry>
                                             <PathGeometry Figures="{Binding CreaturePath}"/>
@@ -173,7 +173,7 @@
                                     </DoubleAnimationUsingPath>
                                     <DoubleAnimationUsingPath Storyboard.TargetName="CurrentCreatureGrid"
                                                               Storyboard.TargetProperty="(RenderTransform).Y"
-                                                              Duration="{Binding DurationForMoveCurrentCreatureAnimation}"
+                                                              Duration="{Binding DurationForMoveCreatureAnimation}"
                                                               Source="Y">
                                         <DoubleAnimationUsingPath.PathGeometry>
                                             <PathGeometry Figures="{Binding CreaturePath}"/>
@@ -213,7 +213,7 @@
                     <TranslateTransform X="0" Y="0"/>
                 </Grid.RenderTransform>
                 <b:Interaction.Triggers>
-                    <b:DataTrigger Binding="{Binding PerformAttackAnimationRunning, Mode=OneWay}" 
+                    <b:DataTrigger Binding="{Binding AttackAnimationRunning, Mode=OneWay}" 
                                    Value="true">
                         <b:ControlStoryboardAction ControlStoryboardOption="Play">
                             <b:ControlStoryboardAction.Storyboard>
@@ -222,12 +222,12 @@
                                                      Storyboard.TargetProperty="(RenderTransform).X"
                                                      To="{Binding TranslationX}"
                                                      AutoReverse="{Binding WeaponAutoReverse}"
-                                                     Duration="0:0:0.2"/>
+                                                     Duration="{Binding DurationForAttackAnimation}"/>
                                     <DoubleAnimation Storyboard.TargetName="ProjectileGrid"
                                                      Storyboard.TargetProperty="(RenderTransform).Y"
                                                      To="{Binding TranslationY}" 
                                                      AutoReverse="{Binding WeaponAutoReverse}"
-                                                     Duration="0:0:0.2"/>
+                                                     Duration="{Binding DurationForAttackAnimation}"/>
                                 </Storyboard>
                             </b:ControlStoryboardAction.Storyboard>
                         </b:ControlStoryboardAction>

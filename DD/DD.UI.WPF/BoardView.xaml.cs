@@ -116,7 +116,7 @@ namespace DD.UI.WPF
 
             CurrentCreatureGrid.RenderTransform = new TranslateTransform(0, 0);
 
-            ViewModel.AnimationCompletedCommand.Execute(null);
+            ViewModel.MoveCreatureAnimationCompletedCommand.Execute(null);
         }
 
         private void FireProjectileStoryboard_Completed(object sender, EventArgs e)
@@ -125,7 +125,7 @@ namespace DD.UI.WPF
 
             ProjectileGrid.RenderTransform = new TranslateTransform(0, 0);
 
-            ViewModel.FireProjectileAnimationCompletedCommand.Execute(null);
+            ViewModel.AttackAnimationCompletedCommand.Execute(null);
         }
     }
 }

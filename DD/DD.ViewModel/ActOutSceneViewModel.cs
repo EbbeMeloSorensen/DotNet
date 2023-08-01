@@ -113,9 +113,9 @@ namespace DD.ViewModel
                 }
             };
 
-            boardViewModel.AnimationCompleted += async (s, e) => await Proceed();
+            boardViewModel.MoveCreatureAnimationCompleted += async (s, e) => await Proceed();
 
-            boardViewModel.FireProjectileAnimationCompleted += async (s, e) =>
+            boardViewModel.AttackAnimationCompleted += async (s, e) =>
             {
                 if (_attackSucceeded)
                 {
