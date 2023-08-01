@@ -110,7 +110,7 @@ namespace DD.UI.WPF
             }
         }
 
-        private void Storyboard_Completed(object sender, EventArgs e)
+        private void MoveCreatureStoryboard_Completed(object sender, EventArgs e)
         {
             if (ViewModel == null) return;
 
@@ -119,11 +119,11 @@ namespace DD.UI.WPF
             ViewModel.MoveCreatureAnimationCompletedCommand.Execute(null);
         }
 
-        private void FireProjectileStoryboard_Completed(object sender, EventArgs e)
+        private void AttackStoryboard_Completed(object sender, EventArgs e)
         {
             if (ViewModel == null) return;
 
-            ProjectileGrid.RenderTransform = new TranslateTransform(0, 0);
+            WeaponGrid.RenderTransform = new TranslateTransform(0, 0);
 
             ViewModel.AttackAnimationCompletedCommand.Execute(null);
         }

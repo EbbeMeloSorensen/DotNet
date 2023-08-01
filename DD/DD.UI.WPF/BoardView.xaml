@@ -162,7 +162,7 @@
                                     Value="true">
                         <b:ControlStoryboardAction ControlStoryboardOption="Play">
                             <b:ControlStoryboardAction.Storyboard>
-                                <Storyboard Completed="Storyboard_Completed">
+                                <Storyboard Completed="MoveCreatureStoryboard_Completed">
                                     <DoubleAnimationUsingPath Storyboard.TargetName="CurrentCreatureGrid"
                                                               Storyboard.TargetProperty="(RenderTransform).X"
                                                               Duration="{Binding DurationForMoveCreatureAnimation}"
@@ -186,7 +186,7 @@
                 </b:Interaction.Triggers>
             </Grid>
 
-            <Grid x:Name="ProjectileGrid"
+            <Grid x:Name="WeaponGrid"
                   Canvas.Left="{Binding WeaponViewModel.Left}"
                   Canvas.Top="{Binding WeaponViewModel.Top}"
                   Visibility="{Binding WeaponViewModel.IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -217,13 +217,13 @@
                                    Value="true">
                         <b:ControlStoryboardAction ControlStoryboardOption="Play">
                             <b:ControlStoryboardAction.Storyboard>
-                                <Storyboard Completed="FireProjectileStoryboard_Completed">
-                                    <DoubleAnimation Storyboard.TargetName="ProjectileGrid"
+                                <Storyboard Completed="AttackStoryboard_Completed">
+                                    <DoubleAnimation Storyboard.TargetName="WeaponGrid"
                                                      Storyboard.TargetProperty="(RenderTransform).X"
                                                      To="{Binding TranslationX}"
                                                      AutoReverse="{Binding WeaponAutoReverse}"
                                                      Duration="{Binding DurationForAttackAnimation}"/>
-                                    <DoubleAnimation Storyboard.TargetName="ProjectileGrid"
+                                    <DoubleAnimation Storyboard.TargetName="WeaponGrid"
                                                      Storyboard.TargetProperty="(RenderTransform).Y"
                                                      To="{Binding TranslationY}" 
                                                      AutoReverse="{Binding WeaponAutoReverse}"
