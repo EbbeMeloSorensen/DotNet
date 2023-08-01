@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
@@ -20,7 +19,7 @@ namespace DD.ViewModel
         private AsyncCommand _startBattleCommand;
         private AsyncCommand _passCurrentCreatureCommand;
         private AsyncCommand _automateCurrentCreatureCommand;
-        private bool _rangedAttackSucceeded;
+        private bool _attackSucceeded;
 
         public RelayCommand ResetCreaturesCommand
         {
@@ -79,28 +78,28 @@ namespace DD.ViewModel
                         await Proceed();
                         break;
                     case CreatureAction.FailedMeleeAttack:
-                        _rangedAttackSucceeded = false;
+                        _attackSucceeded = false;
                         _boardViewModel.AnimateAttack(
                             _engine.CurrentCreature,
                             _engine.TargetCreature,
                             false);
                         break;
                     case CreatureAction.FailedRangedAttack:
-                        _rangedAttackSucceeded = false;
+                        _attackSucceeded = false;
                         _boardViewModel.AnimateAttack(
                             _engine.CurrentCreature,
                             _engine.TargetCreature,
                             true);
                         break;
                     case CreatureAction.SuccessfulMeleeAttack:
-                        _rangedAttackSucceeded = true;
+                        _attackSucceeded = true;
                         _boardViewModel.AnimateAttack(
                             _engine.CurrentCreature,
                             _engine.TargetCreature,
                             false);
                         break;
                     case CreatureAction.SuccessfulRangedAttack:
-                        _rangedAttackSucceeded = true;
+                        _attackSucceeded = true;
                         _boardViewModel.AnimateAttack(
                             _engine.CurrentCreature,
                             _engine.TargetCreature,
@@ -118,7 +117,7 @@ namespace DD.ViewModel
 
             boardViewModel.FireProjectileAnimationCompleted += async (s, e) =>
             {
-                if (_rangedAttackSucceeded)
+                if (_attackSucceeded)
                 {
                     _boardViewModel.UpdateCreatureViewModels(
                         _engine.Creatures,
@@ -201,28 +200,28 @@ namespace DD.ViewModel
                                 _engine.CurrentCreaturePath);
                             break;
                         case CreatureAction.FailedMeleeAttack:
-                            _rangedAttackSucceeded = false;
+                            _attackSucceeded = false;
                             _boardViewModel.AnimateAttack(
                                 _engine.CurrentCreature,
                                 _engine.TargetCreature,
                                 false);
                             break;
                         case CreatureAction.FailedRangedAttack:
-                            _rangedAttackSucceeded = false;
+                            _attackSucceeded = false;
                             _boardViewModel.AnimateAttack(
                                 _engine.CurrentCreature,
                                 _engine.TargetCreature,
                                 true);
                             break;
                         case CreatureAction.SuccessfulMeleeAttack:
-                            _rangedAttackSucceeded = true;
+                            _attackSucceeded = true;
                             _boardViewModel.AnimateAttack(
                                 _engine.CurrentCreature,
                                 _engine.TargetCreature,
                                 false);
                             break;
                         case CreatureAction.SuccessfulRangedAttack:
-                            _rangedAttackSucceeded = true;
+                            _attackSucceeded = true;
                             _boardViewModel.AnimateAttack(
                                 _engine.CurrentCreature,
                                 _engine.TargetCreature,
