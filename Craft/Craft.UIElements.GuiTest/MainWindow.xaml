@@ -8,6 +8,7 @@
         xmlns:tab2="clr-namespace:Craft.UIElements.GuiTest.Tab2"
         xmlns:tab3="clr-namespace:Craft.UIElements.GuiTest.Tab3"
         xmlns:tab4="clr-namespace:Craft.UIElements.GuiTest.Tab4"
+        xmlns:tab5="clr-namespace:Craft.UIElements.GuiTest.Tab5"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="700">
     <TabControl SelectedIndex="2">
@@ -22,6 +23,9 @@
         </TabItem>
         <TabItem Header="Chronology">
             <tab4:Tab4View DataContext="{Binding Tab4ViewModel}"/>
+        </TabItem>
+        <TabItem Header="Graph">
+            <tab5:Tab5View DataContext="{Binding Tab5ViewModel}"/>
         </TabItem>
     </TabControl>
 </Window>
