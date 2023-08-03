@@ -6,6 +6,7 @@ using Craft.Utils;
 
 namespace Craft.Algorithms.GuiTest.Tab7
 {
+    // Dilation
     public class Tab7ViewModel : ViewModelBase
     {
         private HashSet<int> _pixelIndexes;

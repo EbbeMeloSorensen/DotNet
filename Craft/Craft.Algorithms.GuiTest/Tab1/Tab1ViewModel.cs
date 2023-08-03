@@ -14,6 +14,7 @@ namespace Craft.Algorithms.GuiTest.Tab1
         Forbidden
     }
 
+    // Dijkstra Shortest Path
     public class Tab1ViewModel : ViewModelBase
     {
         private Mode _currentMode = Mode.Source;

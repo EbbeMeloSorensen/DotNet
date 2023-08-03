@@ -7,6 +7,7 @@ using Craft.ViewModels.Geometry2D.Scrolling;
 
 namespace Craft.Algorithms.GuiTest.Tab2
 {
+    // General Geometry Manipulation
     public class Tab2ViewModel : ImageEditorViewModel
     {
         private List<Point2D> _points;

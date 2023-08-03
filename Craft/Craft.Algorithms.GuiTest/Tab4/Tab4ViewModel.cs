@@ -7,6 +7,7 @@ using Craft.ViewModels.Geometry2D.Scrolling;
 
 namespace Craft.Algorithms.GuiTest.Tab4
 {
+    // Triangle Rasterization
     public class Tab4ViewModel : ImageEditorViewModel
     {
         private List<Point2D> _points;

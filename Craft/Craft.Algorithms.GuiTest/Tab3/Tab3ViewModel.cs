@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Command;
 
 namespace Craft.Algorithms.GuiTest.Tab3
 {
+    // Line of Sight
     public class Tab3ViewModel : ImageEditorViewModel
     {
         private Point2D _viewPoint;

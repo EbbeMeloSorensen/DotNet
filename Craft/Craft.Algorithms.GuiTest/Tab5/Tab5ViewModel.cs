@@ -6,6 +6,7 @@ using Craft.Utils;
 
 namespace Craft.Algorithms.GuiTest.Tab5
 {
+    // General Pixel Image Manipulation
     public class Tab5ViewModel : ViewModelBase
     {
         private HashSet<int> _pixelIndexes;

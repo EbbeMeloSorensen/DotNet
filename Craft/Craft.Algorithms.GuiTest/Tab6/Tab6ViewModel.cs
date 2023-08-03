@@ -6,6 +6,7 @@ using Craft.Utils;
 
 namespace Craft.Algorithms.GuiTest.Tab6
 {
+    // Euclidean Distance Transform
     public class Tab6ViewModel : ViewModelBase
     {
         private HashSet<int> _pixelIndexes;
