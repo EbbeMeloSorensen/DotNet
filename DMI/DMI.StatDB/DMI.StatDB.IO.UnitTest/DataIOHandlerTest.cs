@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using DMI.StatDB.Domain.Entities;
+using FluentAssertions;
 
 namespace DMI.StatDB.IO.UnitTest
 {
@@ -64,7 +65,7 @@ namespace DMI.StatDB.IO.UnitTest
             };
 
             var dataIOHandler = new DataIOHandler();
-            dataIOHandler.ExportDataToJson(stations, positions, @"C:\Temp\StatDBData.json");
+            dataIOHandler.ExportDataToJson(stations, positions, "Temp.json");
         }
 
         [Fact]
@@ -73,9 +74,12 @@ namespace DMI.StatDB.IO.UnitTest
             var dataIOHandler = new DataIOHandler();
 
             dataIOHandler.ImportDataFromJson(
-                @"C:\Temp\StatDBData.json",
+                @"Data/StatDBData.json",
                 out var stations,
                 out var positions);
+
+            stations.Count.Should().Be(2);
+            positions.Count.Should().Be(3);
         }
     }
 }

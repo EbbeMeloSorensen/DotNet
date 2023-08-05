@@ -1,0 +1,39 @@
+﻿{
+  "Stations": [
+    {
+      "StatID": 573520,
+      "IcaoId": "Bamse",
+      "Country": "Danmark",
+      "Source": "ing"
+    },
+    {
+      "StatID": 573620,
+      "IcaoId": "Kylling",
+      "Country": "Danmark",
+      "Source": "ing"
+    }
+  ],
+  "Positions": [
+    {
+      "StatID": 573520,
+      "StartTime": "1972-03-17T00:00:00",
+      "Lat": 5.5,
+      "Long": 10.2,
+      "Height": 15.0
+    },
+    {
+      "StatID": 573520,
+      "StartTime": "1975-07-24T00:00:00",
+      "Lat": 5.5,
+      "Long": 10.2,
+      "Height": 15.0
+    },
+    {
+      "StatID": 573620,
+      "StartTime": "1980-06-13T00:00:00",
+      "Lat": 5.5,
+      "Long": 10.2,
+      "Height": 15.0
+    }
+  ]
+}

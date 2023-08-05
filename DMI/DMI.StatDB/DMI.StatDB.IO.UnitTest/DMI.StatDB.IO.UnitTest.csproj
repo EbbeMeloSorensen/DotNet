@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -22,6 +23,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DMI.StatDB.IO\DMI.StatDB.IO.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\StatDBData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
