@@ -997,7 +997,7 @@ namespace DMI.Data.Studio.ViewModel
                 return null;
             }
 
-            var nanoqStationId = Utils.StringExtensions.AsNanoqStationId(stationId);
+            var nanoqStationId = SMS.ViewModel.StringExtensions.AsNanoqStationId(stationId);
             var parameter = "temp_dry";
             var maxTolerableDifferenceBetweenTwoObservationsInDays = 20.0;
 
