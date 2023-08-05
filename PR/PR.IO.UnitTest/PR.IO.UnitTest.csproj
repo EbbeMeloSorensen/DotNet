@@ -25,4 +25,16 @@
     <ProjectReference Include="..\PR.IO\PR.IO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\Contacts.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\People.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\People.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

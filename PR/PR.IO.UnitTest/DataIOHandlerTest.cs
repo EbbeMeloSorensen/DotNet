@@ -15,13 +15,13 @@ namespace PR.IO.UnitTest
         public void ExportDataToXML_Works()
         {
             new DataIOHandler()
-                .ExportDataToXML(GenerateDataSet(), @"C:/Temp/People.xml");
+                .ExportDataToXML(GenerateDataSet(), "Temp.xml");
         }
 
         [Fact]
         public void ImportDataFromXML_Works()
         {
-            new DataIOHandler().ImportDataFromXML(@"C:/Temp/People.xml", out PRData prData);
+            new DataIOHandler().ImportDataFromXML(@"Data/People.xml", out PRData prData);
 
             prData.People.Count.Should().Be(3);
             prData.People.Count(p => p.FirstName == "Ebbe").Should().Be(1);
@@ -31,14 +31,14 @@ namespace PR.IO.UnitTest
         [Fact]
         public void ExportDataToJson_Works()
         {
-            new DataIOHandler().ExportDataToJson(GenerateDataSet(), @"C:/Temp/People.json");
+            new DataIOHandler().ExportDataToJson(GenerateDataSet(), "Temp.json");
         }
 
         [Fact]
         public void ImportDataFromJson_Works()
         {
             var dataIOHandler = new DataIOHandler();
-            dataIOHandler.ImportDataFromJson(@"C:/Temp/People.json", out var prData);
+            dataIOHandler.ImportDataFromJson(@"Data/People.json", out var prData);
 
             prData.People.Count.Should().Be(3);
             prData.People.Count(p => p.FirstName == "Ebbe").Should().Be(1);
@@ -50,7 +50,7 @@ namespace PR.IO.UnitTest
         {
             var dataIOHandler = new DataIOHandler();
             ContactData contactData;
-            dataIOHandler.ImportForeignDataFromJson(@"C:/Temp/Contacts.json", out contactData);
+            dataIOHandler.ImportForeignDataFromJson(@"Data/Contacts.json", out contactData);
         }
 
         // Helper
