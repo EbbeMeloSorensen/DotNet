@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GlossaryData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Records>
+		<Record>
+			<Id>d9ac91d1-b895-4a48-b633-99c62d1c0acf</Id>
+			<Term>Kafka</Term>
+			<Source>Udemy</Source>
+			<Category>Programming</Category>
+			<Description>Message Switch</Description>
+			<Created>2022-01-01T02:03:06Z</Created>
+		</Record>
+		<Record>
+			<Id>f2d79cb0-53d5-47fc-9f4c-280604b41f3d</Id>
+			<Term>Python</Term>
+			<Created>2023-08-05T08:16:44.8895914Z</Created>
+		</Record>
+		<Record>
+			<Id>cc796c54-06dc-4398-bc88-2e9c65d29726</Id>
+			<Term>Javascript</Term>
+			<Created>2023-08-05T08:16:44.8895914Z</Created>
+		</Record>
+	</Records>
+	<RecordAssociations>
+		<RecordAssociation>
+			<Id>b37923d6-6b03-4b7b-bf01-0476e77375c3</Id>
+			<SubjectRecordId>cc796c54-06dc-4398-bc88-2e9c65d29726</SubjectRecordId>
+			<ObjectRecordId>d9ac91d1-b895-4a48-b633-99c62d1c0acf</ObjectRecordId>
+			<Description>is related to</Description>
+			<Created>2023-08-05T08:16:44.8895914Z</Created>
+		</RecordAssociation>
+		<RecordAssociation>
+			<Id>b3a74902-7769-4af4-936e-5ff38c7446d6</Id>
+			<SubjectRecordId>d9ac91d1-b895-4a48-b633-99c62d1c0acf</SubjectRecordId>
+			<ObjectRecordId>f2d79cb0-53d5-47fc-9f4c-280604b41f3d</ObjectRecordId>
+			<Description>is related to</Description>
+			<Created>2023-08-05T08:16:44.8895914Z</Created>
+		</RecordAssociation>
+	</RecordAssociations>
+</GlossaryData>

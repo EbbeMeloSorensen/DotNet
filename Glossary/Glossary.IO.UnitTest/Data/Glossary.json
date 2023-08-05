@@ -1,0 +1,38 @@
+﻿{
+  "Records": [
+    {
+      "Id": "a6f4034b-e2e1-4cd9-b7db-a542f3c1cebc",
+      "Term": "Kafka",
+      "Source": "Udemy",
+      "Category": "Programming",
+      "Description": "Message Switch",
+      "Created": "2022-01-01T02:03:06Z"
+    },
+    {
+      "Id": "5390a75f-bbfb-4626-b777-b3ee1dba5f91",
+      "Term": "Python",
+      "Created": "2023-08-05T08:16:44.714576Z"
+    },
+    {
+      "Id": "0e02595b-7703-456b-8cb7-bd748b468614",
+      "Term": "Javascript",
+      "Created": "2023-08-05T08:16:44.714576Z"
+    }
+  ],
+  "RecordAssociations": [
+    {
+      "Id": "6b267719-c4e9-4c6b-b346-cbd1b0691847",
+      "SubjectRecordId": "0e02595b-7703-456b-8cb7-bd748b468614",
+      "ObjectRecordId": "a6f4034b-e2e1-4cd9-b7db-a542f3c1cebc",
+      "Description": "is related to",
+      "Created": "2023-08-05T08:16:44.714576Z"
+    },
+    {
+      "Id": "9a37999d-f4ca-4510-8b4f-7efc24f6f159",
+      "SubjectRecordId": "a6f4034b-e2e1-4cd9-b7db-a542f3c1cebc",
+      "ObjectRecordId": "5390a75f-bbfb-4626-b777-b3ee1dba5f91",
+      "Description": "is related to",
+      "Created": "2023-08-05T08:16:44.714576Z"
+    }
+  ]
+}
