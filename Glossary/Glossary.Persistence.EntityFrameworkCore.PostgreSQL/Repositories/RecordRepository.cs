@@ -17,6 +17,11 @@ namespace Glossary.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
         {
         }
 
+        public override void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Update(
             Record entity)
         {

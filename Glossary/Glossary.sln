@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\Craft\Craft.Utils\Craft.Utils.csproj", "{EC939237-5C7E-4FF7-B1A4-DBC1F7FDD26C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ImageEditor.ViewModel", "..\Craft\Craft.ImageEditor.ViewModel\Craft.ImageEditor.ViewModel.csproj", "{DF0D3CBB-035A-48B8-94CC-771F6D7A726F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.IO.Utils", "..\Craft\Craft.IO.Utils\Craft.IO.Utils.csproj", "{B7DB84F0-D027-4FA4-A010-B3D6DD8FA5BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\Craft.Logging\Craft.Logging.csproj", "{0D7FA4D8-F0B8-4A39-97F5-344A95D010FA}"
@@ -67,10 +65,6 @@ Global
 		{EC939237-5C7E-4FF7-B1A4-DBC1F7FDD26C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC939237-5C7E-4FF7-B1A4-DBC1F7FDD26C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC939237-5C7E-4FF7-B1A4-DBC1F7FDD26C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF0D3CBB-035A-48B8-94CC-771F6D7A726F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF0D3CBB-035A-48B8-94CC-771F6D7A726F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF0D3CBB-035A-48B8-94CC-771F6D7A726F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF0D3CBB-035A-48B8-94CC-771F6D7A726F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7DB84F0-D027-4FA4-A010-B3D6DD8FA5BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7DB84F0-D027-4FA4-A010-B3D6DD8FA5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7DB84F0-D027-4FA4-A010-B3D6DD8FA5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -12,6 +12,11 @@ namespace Glossary.Persistence.EntityFrameworkCore.SqlServer.Repositories
         {
         }
 
+        public override void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Update(
             RecordAssociation entity)
         {

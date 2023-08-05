@@ -83,7 +83,7 @@ namespace Glossary.ViewModel
             _applicationDialogService = applicationDialogService;
 
             LogViewModel = new LogViewModel();
-            _logger = new LoggerDecorator(logger, LogViewModel);
+            _logger = new ViewModelLogger(logger, LogViewModel);
             _dataProvider.Initialize(_logger);
 
             RecordListViewModel = new RecordListViewModel(dataProvider, applicationDialogService);
