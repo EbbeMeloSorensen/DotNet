@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,7 +8,7 @@ using Craft.Utils;
 using Craft.ViewModels.Geometry2D.Scrolling;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Application;
-using DMI.Utils;
+//using DMI.Utils;
 
 namespace DMI.SMS.ViewModel
 {
