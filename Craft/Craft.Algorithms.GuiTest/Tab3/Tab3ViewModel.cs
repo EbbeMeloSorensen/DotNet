@@ -142,7 +142,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
             var vertexIndex = 0;
             foreach (var vertex in _graph.Vertices)
             {
-                var pointViewModel = new PointViewModel(vertex.AsPointF(), vertexIndex, 10);
+                var pointViewModel = new PointViewModel(vertex.AsPointD(), vertexIndex, 10);
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;
 
@@ -151,7 +151,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
                 vertexIndex++;
             }
 
-            var viewPointViewModel = new PointViewModel(_viewPoint.AsPointF(), vertexIndex, 20);
+            var viewPointViewModel = new PointViewModel(_viewPoint.AsPointD(), vertexIndex, 20);
 
             viewPointViewModel.ElementClicked += ElementViewModelElementClicked;
             _vertexViewModels.Add(viewPointViewModel);
@@ -166,7 +166,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
                 _initialVertex.X + offset.X,
                 _initialVertex.Y + offset.Y);
 
-            _activeViewModel.Point = point.AsPointF();
+            _activeViewModel.Point = point.AsPointD();
 
             if (_indexOfActiveVertex < _graph.VertexCount)
             {

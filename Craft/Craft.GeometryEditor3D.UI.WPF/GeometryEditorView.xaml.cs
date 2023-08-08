@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Craft.GeometryEditor3D.ViewModel;

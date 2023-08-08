@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
 using Craft.Math;

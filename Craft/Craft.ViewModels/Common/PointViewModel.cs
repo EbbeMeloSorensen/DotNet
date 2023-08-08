@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Drawing;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
+using Craft.Utils;
 
 namespace Craft.ViewModels.Common
 {
     public class PointViewModel : ViewModelBase
     {
         private int _index;
-        private PointF _point;
+        private PointD _point;
         private double _left;
         private double _top;
         private double _diameter;
         private double _radius;
         private RelayCommand _clickedCommand;
 
-        public PointF Point
+        public PointD Point
         {
             get { return _point; }
             set
@@ -66,7 +66,7 @@ namespace Craft.ViewModels.Common
         public event EventHandler<ElementClickedEventArgs> ElementClicked;
 
         public PointViewModel(
-            PointF point,
+            PointD point,
             int index,
             double diameter)
         {

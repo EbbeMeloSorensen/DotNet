@@ -1,6 +1,6 @@
-﻿using System.Drawing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Craft.Algorithms.GuiTest.Common;
 using Craft.Math;
 using Craft.Utils;
 using Craft.ViewModels.Common;
@@ -93,7 +93,7 @@ namespace Craft.Algorithms.GuiTest.Tab4
 
             _points.ForEach(p =>
             {
-                var pointViewModel = new PointViewModel(p.AsPointF(), pointIndex, 15);
+                var pointViewModel = new PointViewModel(p.AsPointD(), pointIndex, 15);
                 pointIndex++;
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;
@@ -114,7 +114,7 @@ namespace Craft.Algorithms.GuiTest.Tab4
                 _initialPoint.X + offset.X,
                 _initialPoint.Y + offset.Y);
 
-            _activeViewModel.Point = point.AsPointF();
+            _activeViewModel.Point = point.AsPointD();
 
             _points[_indexOfActivePoint] = new Point2D(point.X, point.Y);
 
@@ -176,9 +176,7 @@ namespace Craft.Algorithms.GuiTest.Tab4
 
                     RasterPointViewModels.Add(
                         new PointViewModel(
-                            new PointF(
-                                (float) (c * _magnification),
-                                (float) (r * _magnification)), 
+                            new PointD(c * _magnification, r * _magnification), 
                             0, 
                             5));
                 }
