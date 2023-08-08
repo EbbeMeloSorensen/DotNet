@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Craft.UIElements.Common
+namespace Craft.UIElements.TrafficLight
 {
     /// <summary>
     /// Interaction logic for TrafficLightView.xaml
