@@ -4,9 +4,68 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Craft.UIElements.Graph"
+             xmlns:utils="clr-namespace:Craft.UI.Utils;assembly=Craft.UI.Utils"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Button Content="{Binding Greeting}"/>
-    </Grid>
+    <ScrollViewer x:Name="ScrollViewer"
+                  HorizontalScrollBarVisibility="Auto" 
+                  VerticalScrollBarVisibility="Auto"
+                  utils:Helpers.ScrollOffset="{Binding ScrollOffset}"
+                  Loaded="ScrollViewer_OnLoaded"
+                  SizeChanged="ScrollViewer_OnSizeChanged"
+                  ScrollChanged="ScrollViewer_OnScrollChanged">
+        <Canvas x:Name="Canvas" 
+                Background="Linen"
+                Width="{Binding ImageWidth}" 
+                Height="{Binding ImageHeight}"
+                MouseLeftButtonDown="Canvas_OnMouseLeftButtonDown"
+                MouseLeftButtonUp="Canvas_OnMouseLeftButtonUp"
+                MouseMove="Canvas_OnMouseMove">
+
+            <ItemsControl ItemsSource="{Binding Lines}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Line Stroke="Black" 
+                              StrokeThickness="1" 
+                              X1="{Binding Point1.X}" 
+                              Y1="{Binding Point1.Y}" 
+                              X2="{Binding Point2.X}" 
+                              Y2="{Binding Point2.Y}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{Binding PointViewModels}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse Fill="Purple" Stroke="Black" Width="{Binding Diameter}" Height="{Binding Diameter}">
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="MouseDown">
+                                    <b:InvokeCommandAction Command="{Binding ClickedCommand}"/>
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
+                        </Ellipse>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </Canvas>
+    </ScrollViewer>
 </UserControl>

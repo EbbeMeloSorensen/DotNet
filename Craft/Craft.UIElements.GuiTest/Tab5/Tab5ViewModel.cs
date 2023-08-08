@@ -9,7 +9,7 @@ namespace Craft.UIElements.GuiTest.Tab5
 
         public Tab5ViewModel()
         {
-            GraphViewModel = new GraphViewModel();
+            GraphViewModel = new GraphViewModel(1200, 900);
         }
     }
 }
