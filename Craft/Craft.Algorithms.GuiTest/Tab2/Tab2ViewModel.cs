@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Craft.Algorithms.GuiTest.Common;
 using Craft.Utils;
-using Craft.Math;
 using Craft.ViewModels.Common;
 using Craft.ViewModels.Geometry2D.Scrolling;
 
@@ -11,15 +9,15 @@ namespace Craft.Algorithms.GuiTest.Tab2
     // General Geometry Manipulation
     public class Tab2ViewModel : ImageEditorViewModel
     {
-        private List<Point2D> _points;
-        private ObservableCollection<LineSegment2D> _lines;
+        private List<PointD> _points;
+        private ObservableCollection<LineSegmentD> _lines;
         private ObservableCollection<PointViewModel> _pointViewModels;
         private bool _pointWasClicked;
         private PointViewModel _activeViewModel;
         private int _indexOfActivePoint;
         private PointD _initialPoint; // At start of drag
 
-        public ObservableCollection<LineSegment2D> Lines
+        public ObservableCollection<LineSegmentD> Lines
         {
             get
             {
@@ -63,12 +61,12 @@ namespace Craft.Algorithms.GuiTest.Tab2
             ScrollableOffset = new PointD(0, 0);
             ScrollOffset = new PointD(0, 0);
 
-            _points = new List<Point2D>
+            _points = new List<PointD>
             {
-                new Point2D(300, 100),
-                new Point2D(350, 120),
-                new Point2D(250, 150),
-                new Point2D(320, 150)
+                new PointD(300, 100),
+                new PointD(350, 120),
+                new PointD(250, 150),
+                new PointD(320, 150)
             };
 
             var pointDiameters = new[] {15, 15, 15, 30};
@@ -79,7 +77,7 @@ namespace Craft.Algorithms.GuiTest.Tab2
 
             _points.ForEach(p =>
             {
-                var pointViewModel = new PointViewModel(p.AsPointD(), pointIndex, pointDiameters[pointIndex]);
+                var pointViewModel = new PointViewModel(p, pointIndex, pointDiameters[pointIndex]);
                 pointIndex++;
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;
@@ -92,13 +90,13 @@ namespace Craft.Algorithms.GuiTest.Tab2
 
         public void MovePoint(PointD offset)
         {
-            var point = new Point2D(
+            var point = new PointD(
                 _initialPoint.X + offset.X,
                 _initialPoint.Y + offset.Y);
 
-            _activeViewModel.Point = point.AsPointD();
+            _activeViewModel.Point = point;
 
-            _points[_indexOfActivePoint] = new Point2D(point.X, point.Y); 
+            _points[_indexOfActivePoint] = new PointD(point.X, point.Y); 
 
             UpdateLines();
         }
@@ -115,11 +113,11 @@ namespace Craft.Algorithms.GuiTest.Tab2
 
         private void UpdateLines()
         {
-            Lines = new ObservableCollection<LineSegment2D>
+            Lines = new ObservableCollection<LineSegmentD>
             {
-                new LineSegment2D(_points[0], _points[1]),
-                new LineSegment2D(_points[1], _points[2]),
-                new LineSegment2D(_points[2], _points[0])
+                new LineSegmentD(_points[0], _points[1]),
+                new LineSegmentD(_points[1], _points[2]),
+                new LineSegmentD(_points[2], _points[0])
             };
         }
     }

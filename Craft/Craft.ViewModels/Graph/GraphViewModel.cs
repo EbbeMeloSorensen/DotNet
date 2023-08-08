@@ -6,6 +6,8 @@ namespace Craft.ViewModels.Graph
     {
         private string _greeting = "Greetings from GraphViewModel";
 
+
+
         public string Greeting
         {
             get { return _greeting; }

@@ -1,10 +1,9 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight;
 using Craft.Utils;
-using Craft.ViewModels.Common;
 
-namespace Craft.Algorithms.GuiTest.Common
+namespace Craft.ViewModels.Common
 {
     public class PixelViewModel : ViewModelBase
     {
