@@ -1,4 +1,6 @@
-﻿namespace Craft.Math
+﻿using System.Drawing;
+
+namespace Craft.Math
 {
     public class Point2D
     {
@@ -16,6 +18,11 @@
         public Vector2D AsVector2D()
         {
             return new Vector2D(X, Y);
+        }
+
+        public PointF AsPointF()
+        {
+            return new PointF((float) X, (float) Y);
         }
 
         public static Point2D operator +(

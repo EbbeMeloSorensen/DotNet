@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Drawing;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Craft.Algorithms.GuiTest.Common;
 using Craft.Math;
@@ -92,7 +93,7 @@ namespace Craft.Algorithms.GuiTest.Tab4
 
             _points.ForEach(p =>
             {
-                var pointViewModel = new Point2DViewModel(p, pointIndex, 15);
+                var pointViewModel = new Point2DViewModel(p.AsPointF(), pointIndex, 15);
                 pointIndex++;
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;
@@ -113,7 +114,7 @@ namespace Craft.Algorithms.GuiTest.Tab4
                 _initialPoint.X + offset.X,
                 _initialPoint.Y + offset.Y);
 
-            _activeViewModel.Point = point;
+            _activeViewModel.Point = point.AsPointF();
 
             _points[_indexOfActivePoint] = new Point2D(point.X, point.Y);
 
@@ -133,7 +134,10 @@ namespace Craft.Algorithms.GuiTest.Tab4
             _pointWasClicked = true;
             _indexOfActivePoint = e.ElementId;
             _activeViewModel = PointViewModels[_indexOfActivePoint];
-            _initialPoint = _activeViewModel.Point;
+
+            _initialPoint = new Point2D(
+                _activeViewModel.Point.X,
+                _activeViewModel.Point.Y);
         }
 
         private void UpdateLines()
@@ -171,7 +175,12 @@ namespace Craft.Algorithms.GuiTest.Tab4
                     if (raster[r, c] == 0) continue;
 
                     RasterPointViewModels.Add(
-                        new Point2DViewModel(new Point2D(c * _magnification, r * _magnification), 0, 5));
+                        new Point2DViewModel(
+                            new PointF(
+                                (float) (c * _magnification),
+                                (float) (r * _magnification)), 
+                            0, 
+                            5));
                 }
             }
         }

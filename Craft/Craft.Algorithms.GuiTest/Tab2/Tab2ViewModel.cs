@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Drawing;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Craft.Algorithms.GuiTest.Common;
 using Craft.Utils;
@@ -16,7 +17,7 @@ namespace Craft.Algorithms.GuiTest.Tab2
         private bool _pointWasClicked;
         private Point2DViewModel _activeViewModel;
         private int _indexOfActivePoint;
-        private Point2D _initialPoint; // At start of drag
+        private PointF _initialPoint; // At start of drag
 
         public ObservableCollection<LineSegment2D> Lines
         {
@@ -78,7 +79,7 @@ namespace Craft.Algorithms.GuiTest.Tab2
 
             _points.ForEach(p =>
             {
-                var pointViewModel = new Point2DViewModel(p, pointIndex, pointDiameters[pointIndex]);
+                var pointViewModel = new Point2DViewModel(p.AsPointF(), pointIndex, pointDiameters[pointIndex]);
                 pointIndex++;
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;
@@ -95,7 +96,7 @@ namespace Craft.Algorithms.GuiTest.Tab2
                 _initialPoint.X + offset.X,
                 _initialPoint.Y + offset.Y);
 
-            _activeViewModel.Point = point;
+            _activeViewModel.Point = point.AsPointF();
 
             _points[_indexOfActivePoint] = new Point2D(point.X, point.Y); 
 

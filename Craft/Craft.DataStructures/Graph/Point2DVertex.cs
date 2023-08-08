@@ -1,4 +1,6 @@
-﻿namespace Craft.DataStructures.Graph
+﻿using System.Drawing;
+
+namespace Craft.DataStructures.Graph
 {
     public class Point2DVertex : IVertex
     {
@@ -19,6 +21,11 @@
         public override string ToString()
         {
             return $"({X}, {Y})";
+        }
+
+        public PointF AsPointF()
+        {
+            return new PointF((float)X, (float)Y);
         }
     }
 }

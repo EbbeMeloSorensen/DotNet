@@ -1,21 +1,21 @@
 ﻿using System;
+using System.Drawing;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Craft.Math;
 
 namespace Craft.Algorithms.GuiTest.Common
 {
     public class Point2DViewModel : ViewModelBase
     {
         private int _index;
-        private Point2D _point;
+        private PointF _point;
         private double _left;
         private double _top;
         private double _diameter;
         private double _radius;
         private RelayCommand _clickedCommand;
 
-        public Point2D Point
+        public PointF Point
         {
             get { return _point; }
             set
@@ -66,7 +66,7 @@ namespace Craft.Algorithms.GuiTest.Common
         public event EventHandler<ElementClickedEventArgs> ElementClicked;
 
         public Point2DViewModel(
-            Point2D point,
+            PointF point,
             int index,
             double diameter)
         {

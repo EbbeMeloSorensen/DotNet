@@ -141,7 +141,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
             var vertexIndex = 0;
             foreach (var vertex in _graph.Vertices)
             {
-                var pointViewModel = new Point2DViewModel(new Point2D(vertex.X, vertex.Y), vertexIndex, 10);
+                var pointViewModel = new Point2DViewModel(vertex.AsPointF(), vertexIndex, 10);
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;
 
@@ -150,8 +150,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
                 vertexIndex++;
             }
 
-            var viewPointViewModel = new Point2DViewModel(
-                new Point2D(_viewPoint.X, _viewPoint.Y), vertexIndex, 20);
+            var viewPointViewModel = new Point2DViewModel(_viewPoint.AsPointF(), vertexIndex, 20);
 
             viewPointViewModel.ElementClicked += ElementViewModelElementClicked;
             _vertexViewModels.Add(viewPointViewModel);
@@ -166,7 +165,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
                 _initialVertex.X + offset.X,
                 _initialVertex.Y + offset.Y);
 
-            _activeViewModel.Point = point;
+            _activeViewModel.Point = point.AsPointF();
 
             if (_indexOfActiveVertex < _graph.VertexCount)
             {
@@ -188,7 +187,10 @@ namespace Craft.Algorithms.GuiTest.Tab3
             _pointWasClicked = true;
             _indexOfActiveVertex = e.ElementId;
             _activeViewModel = VertexViewModels[_indexOfActiveVertex];
-            _initialVertex = _activeViewModel.Point;
+
+            _initialVertex = new Point2D(
+                _activeViewModel.Point.X,
+                _activeViewModel.Point.Y);
         }
 
         private void UpdateLines()
