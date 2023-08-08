@@ -13,10 +13,10 @@ namespace Craft.Algorithms.GuiTest.Tab4
     {
         private List<Point2D> _points;
         private ObservableCollection<LineSegment2D> _lines;
-        private ObservableCollection<Point2DViewModel> _pointViewModels;
-        private ObservableCollection<Point2DViewModel> _rasterPointViewModels;
+        private ObservableCollection<PointViewModel> _pointViewModels;
+        private ObservableCollection<PointViewModel> _rasterPointViewModels;
         private bool _pointWasClicked;
-        private Point2DViewModel _activeViewModel;
+        private PointViewModel _activeViewModel;
         private int _indexOfActivePoint;
         private Point2D _initialPoint; // At start of drag
         private Triangle2D _triangle;
@@ -35,7 +35,7 @@ namespace Craft.Algorithms.GuiTest.Tab4
             }
         }
 
-        public ObservableCollection<Point2DViewModel> PointViewModels
+        public ObservableCollection<PointViewModel> PointViewModels
         {
             get
             {
@@ -48,7 +48,7 @@ namespace Craft.Algorithms.GuiTest.Tab4
             }
         }
 
-        public ObservableCollection<Point2DViewModel> RasterPointViewModels
+        public ObservableCollection<PointViewModel> RasterPointViewModels
         {
             get
             {
@@ -86,14 +86,14 @@ namespace Craft.Algorithms.GuiTest.Tab4
                 new Point2D(200, 300)
             };
 
-            _pointViewModels = new ObservableCollection<Point2DViewModel>();
-            _rasterPointViewModels = new ObservableCollection<Point2DViewModel>();
+            _pointViewModels = new ObservableCollection<PointViewModel>();
+            _rasterPointViewModels = new ObservableCollection<PointViewModel>();
 
             var pointIndex = 0;
 
             _points.ForEach(p =>
             {
-                var pointViewModel = new Point2DViewModel(p.AsPointF(), pointIndex, 15);
+                var pointViewModel = new PointViewModel(p.AsPointF(), pointIndex, 15);
                 pointIndex++;
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;
@@ -166,7 +166,7 @@ namespace Craft.Algorithms.GuiTest.Tab4
 
             _triangle.Rasterize(raster, 0, 1);
 
-            RasterPointViewModels = new ObservableCollection<Point2DViewModel>();
+            RasterPointViewModels = new ObservableCollection<PointViewModel>();
 
             for (var r = 0; r < rows; r++)
             {
@@ -175,7 +175,7 @@ namespace Craft.Algorithms.GuiTest.Tab4
                     if (raster[r, c] == 0) continue;
 
                     RasterPointViewModels.Add(
-                        new Point2DViewModel(
+                        new PointViewModel(
                             new PointF(
                                 (float) (c * _magnification),
                                 (float) (r * _magnification)), 

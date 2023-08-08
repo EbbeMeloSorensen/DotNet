@@ -5,7 +5,7 @@ using GalaSoft.MvvmLight.Command;
 
 namespace Craft.Algorithms.GuiTest.Common
 {
-    public class Point2DViewModel : ViewModelBase
+    public class PointViewModel : ViewModelBase
     {
         private int _index;
         private PointF _point;
@@ -65,7 +65,7 @@ namespace Craft.Algorithms.GuiTest.Common
 
         public event EventHandler<ElementClickedEventArgs> ElementClicked;
 
-        public Point2DViewModel(
+        public PointViewModel(
             PointF point,
             int index,
             double diameter)

@@ -13,9 +13,9 @@ namespace Craft.Algorithms.GuiTest.Tab2
     {
         private List<Point2D> _points;
         private ObservableCollection<LineSegment2D> _lines;
-        private ObservableCollection<Point2DViewModel> _pointViewModels;
+        private ObservableCollection<PointViewModel> _pointViewModels;
         private bool _pointWasClicked;
-        private Point2DViewModel _activeViewModel;
+        private PointViewModel _activeViewModel;
         private int _indexOfActivePoint;
         private PointF _initialPoint; // At start of drag
 
@@ -32,7 +32,7 @@ namespace Craft.Algorithms.GuiTest.Tab2
             }
         }
 
-        public ObservableCollection<Point2DViewModel> PointViewModels
+        public ObservableCollection<PointViewModel> PointViewModels
         {
             get
             {
@@ -73,13 +73,13 @@ namespace Craft.Algorithms.GuiTest.Tab2
 
             var pointDiameters = new[] {15, 15, 15, 30};
 
-            _pointViewModels = new ObservableCollection<Point2DViewModel>();
+            _pointViewModels = new ObservableCollection<PointViewModel>();
 
             var pointIndex = 0;
 
             _points.ForEach(p =>
             {
-                var pointViewModel = new Point2DViewModel(p.AsPointF(), pointIndex, pointDiameters[pointIndex]);
+                var pointViewModel = new PointViewModel(p.AsPointF(), pointIndex, pointDiameters[pointIndex]);
                 pointIndex++;
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;

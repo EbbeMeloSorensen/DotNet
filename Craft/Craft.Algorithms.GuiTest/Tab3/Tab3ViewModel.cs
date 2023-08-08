@@ -18,9 +18,9 @@ namespace Craft.Algorithms.GuiTest.Tab3
         private ObservableCollection<LineSegment2D> _wallLines;
         private ObservableCollection<LineSegment2D> _triangleLines;
         private ObservableCollection<Triangle2DViewModel> _triangleViewModels;
-        private ObservableCollection<Point2DViewModel> _vertexViewModels;
+        private ObservableCollection<PointViewModel> _vertexViewModels;
         private bool _pointWasClicked;
-        private Point2DViewModel _activeViewModel;
+        private PointViewModel _activeViewModel;
         private int _indexOfActiveVertex;
         private Point2D _initialVertex;
         private RelayCommand _recalculateCommand;
@@ -51,7 +51,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
             }
         }
 
-        public ObservableCollection<Point2DViewModel> VertexViewModels
+        public ObservableCollection<PointViewModel> VertexViewModels
         {
             get
             {
@@ -136,12 +136,12 @@ namespace Craft.Algorithms.GuiTest.Tab3
             _graph.AddEdge(10, 11);
             _graph.AddEdge(11, 8);
 
-            _vertexViewModels = new ObservableCollection<Point2DViewModel>();
+            _vertexViewModels = new ObservableCollection<PointViewModel>();
 
             var vertexIndex = 0;
             foreach (var vertex in _graph.Vertices)
             {
-                var pointViewModel = new Point2DViewModel(vertex.AsPointF(), vertexIndex, 10);
+                var pointViewModel = new PointViewModel(vertex.AsPointF(), vertexIndex, 10);
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;
 
@@ -150,7 +150,7 @@ namespace Craft.Algorithms.GuiTest.Tab3
                 vertexIndex++;
             }
 
-            var viewPointViewModel = new Point2DViewModel(_viewPoint.AsPointF(), vertexIndex, 20);
+            var viewPointViewModel = new PointViewModel(_viewPoint.AsPointF(), vertexIndex, 20);
 
             viewPointViewModel.ElementClicked += ElementViewModelElementClicked;
             _vertexViewModels.Add(viewPointViewModel);
