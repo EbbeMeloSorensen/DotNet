@@ -1,5 +1,5 @@
-﻿using Craft.ViewModels.Common;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
+using Craft.ViewModels.TrafficLight;
 
 namespace Craft.UIElements.GuiTest.Tab1
 {

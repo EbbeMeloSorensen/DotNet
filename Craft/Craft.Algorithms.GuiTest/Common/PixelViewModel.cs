@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
+using Craft.ViewModels.Common;
 
 namespace Craft.Algorithms.GuiTest.Common
 {

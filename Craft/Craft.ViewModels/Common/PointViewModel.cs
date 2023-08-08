@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight;
 
-namespace Craft.Algorithms.GuiTest.Common
+namespace Craft.ViewModels.Common
 {
     public class PointViewModel : ViewModelBase
     {

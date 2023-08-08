@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using GalaSoft.MvvmLight;
 
-namespace Craft.ViewModels.Common
+namespace Craft.ViewModels.TrafficLight
 {
     public class TrafficLightViewModel : ViewModelBase
     {

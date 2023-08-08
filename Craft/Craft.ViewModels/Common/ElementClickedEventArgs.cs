@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Craft.Algorithms.GuiTest.Common
+namespace Craft.ViewModels.Common
 {
     public class ElementClickedEventArgs : EventArgs
     {

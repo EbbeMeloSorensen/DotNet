@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using GalaSoft.MvvmLight;
-using Craft.Algorithms.GuiTest.Common;
-using Craft.DataStructures.Graph;
 using Craft.Utils;
+using Craft.DataStructures.Graph;
+using Craft.ViewModels.Common;
+using Craft.Algorithms.GuiTest.Common;
 
 namespace Craft.Algorithms.GuiTest.Tab1
 {

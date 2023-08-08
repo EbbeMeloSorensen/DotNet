@@ -3,6 +3,7 @@ using System.Linq;
 using GalaSoft.MvvmLight;
 using Craft.Algorithms.GuiTest.Common;
 using Craft.Utils;
+using Craft.ViewModels.Common;
 
 namespace Craft.Algorithms.GuiTest.Tab7
 {

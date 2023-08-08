@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using Craft.Algorithms.GuiTest.Common;
 using Craft.Utils;
 using Craft.Math;
+using Craft.ViewModels.Common;
 using Craft.ViewModels.Geometry2D.Scrolling;
 
 namespace Craft.Algorithms.GuiTest.Tab2
