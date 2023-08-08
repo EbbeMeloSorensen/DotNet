@@ -5,7 +5,7 @@ using System.Windows.Media;
 using GalaSoft.MvvmLight.Command;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModel.Utils;
-using Craft.ViewModels.Common;
+using Craft.ViewModels.TrafficLight;
 using DMI.SMS.Application;
 
 namespace DMI.SMS.ViewModel
