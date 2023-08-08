@@ -3,9 +3,9 @@ using System.Configuration;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Command;
-using Craft.ViewModels.Common;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModel.Utils;
+using Craft.ViewModels.TrafficLight;
 
 namespace DMI.Data.Studio.ViewModel
 {

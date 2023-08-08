@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DMI.Data.Studio.UI.WPF"
              xmlns:uiutils="clr-namespace:Craft.UI.Utils;assembly=Craft.UI.Utils"
-             xmlns:uielements="clr-namespace:Craft.UIElements.Common;assembly=Craft.UIElements"
              xmlns:viewModel="clr-namespace:DMI.Data.Studio.ViewModel;assembly=DMI.Data.Studio.ViewModel"
+             xmlns:trafficLight="clr-namespace:Craft.UIElements.TrafficLight;assembly=Craft.UIElements"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance viewModel:SettingsDialogViewModel}">
@@ -41,7 +41,7 @@
                              uiutils:PasswordBoxAssistant.BindPassword="True"
                              uiutils:PasswordBoxAssistant.BoundPassword="{Binding Path=SmsDatabasePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="RightToLeft">
-                    <uielements:TrafficLightView HorizontalAlignment="Center" 
+                    <trafficLight:TrafficLightView HorizontalAlignment="Center" 
                                                  VerticalAlignment="Center"
                                                  DataContext="{Binding TrafficLightViewModel_SMSDatabase}"/>
                     <Button Margin="2" Content="Test Connection" Command="{Binding CheckSMSDatabaseConnectionCommand}"/>
@@ -73,7 +73,7 @@
                              uiutils:PasswordBoxAssistant.BindPassword="True"
                              uiutils:PasswordBoxAssistant.BoundPassword="{Binding Path=StatDBDatabasePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="RightToLeft">
-                    <uielements:TrafficLightView HorizontalAlignment="Center" 
+                    <trafficLight:TrafficLightView HorizontalAlignment="Center" 
                                                  VerticalAlignment="Center"
                                                  DataContext="{Binding TrafficLightViewModel_StatDBDatabase}"/>
                     <Button Margin="2" Content="Test Connection" 
