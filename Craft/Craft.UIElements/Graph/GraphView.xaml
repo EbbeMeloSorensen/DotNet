@@ -67,9 +67,9 @@
                                     </b:EventTrigger>
                                 </b:Interaction.Triggers>
                             </Ellipse>
-                            <TextBlock
+                            <!--<TextBlock
                                 IsHitTestVisible="False"
-                                Text="{Binding Label}"/>
+                                Text="{Binding Label}"/>-->
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

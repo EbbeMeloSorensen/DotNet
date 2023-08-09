@@ -55,6 +55,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.Web.Infrastructure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glossary.Web.API", "Glossary.Web.API\Glossary.Web.API.csproj", "{E78831D2-4A5F-4AA8-B3F9-C88E403C7E88}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{97AF53F5-E435-43F4-AC89-6C08A21BE625}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +167,10 @@ Global
 		{E78831D2-4A5F-4AA8-B3F9-C88E403C7E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E78831D2-4A5F-4AA8-B3F9-C88E403C7E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E78831D2-4A5F-4AA8-B3F9-C88E403C7E88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97AF53F5-E435-43F4-AC89-6C08A21BE625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97AF53F5-E435-43F4-AC89-6C08A21BE625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97AF53F5-E435-43F4-AC89-6C08A21BE625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97AF53F5-E435-43F4-AC89-6C08A21BE625}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

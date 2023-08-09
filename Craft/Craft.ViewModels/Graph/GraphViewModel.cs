@@ -64,7 +64,6 @@ namespace Craft.ViewModels.Graph
             ScrollableOffset = new PointD(0, 0);
             ScrollOffset = new PointD(0, 0);
 
-            // Senere vil vi gerne vise en graf, som man kan give til kontrollen
             _graph = GenerateAGraph();
 
             _points = new List<PointD>();
@@ -96,8 +95,7 @@ namespace Craft.ViewModels.Graph
                 _initialPoint.Y + offset.Y);
 
             _activeViewModel.Point = point;
-
-            _points[_indexOfActivePoint] = new PointD(point.X, point.Y);
+            _points[_indexOfActivePoint] = point;
 
             UpdateLines();
         }
@@ -114,17 +112,8 @@ namespace Craft.ViewModels.Graph
 
         private void UpdateLines()
         {
-            var temp1 = _graph.Edges.First().VertexId1;
-            var temp2 = _graph.Edges.First().VertexId2;
-
-            //Lines = new ObservableCollection<LineSegmentD>
-            //{
-            //    new LineSegmentD(_points[0], _points[1]),
-            //    new LineSegmentD(_points[1], _points[2]),
-            //    new LineSegmentD(_points[2], _points[0]),
-            //    new LineSegmentD(_points[2], _points[3]),
-            //    new LineSegmentD(_points[3], _points[4])
-            //};
+            Lines = new ObservableCollection<LineSegmentD>(
+                _graph.Edges.Select(_ => new LineSegmentD(_points[_.VertexId1], _points[_.VertexId2])));
         }
 
         private IGraph<LabelledVertex, EmptyEdge> GenerateAGraph()
