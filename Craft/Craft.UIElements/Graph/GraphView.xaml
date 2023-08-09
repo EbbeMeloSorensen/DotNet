@@ -55,13 +55,22 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Ellipse Fill="Purple" Stroke="Black" Width="{Binding Diameter}" Height="{Binding Diameter}">
-                            <b:Interaction.Triggers>
-                                <b:EventTrigger EventName="MouseDown">
-                                    <b:InvokeCommandAction Command="{Binding ClickedCommand}"/>
-                                </b:EventTrigger>
-                            </b:Interaction.Triggers>
-                        </Ellipse>
+                        <Grid>
+                            <Ellipse
+                                Fill="Orange" 
+                                Stroke="Black" 
+                                Width="{Binding Diameter}" 
+                                Height="{Binding Diameter}">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="MouseDown">
+                                        <b:InvokeCommandAction Command="{Binding ClickedCommand}"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </Ellipse>
+                            <TextBlock
+                                IsHitTestVisible="False"
+                                Text="{Binding Label}"/>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

@@ -12,7 +12,7 @@ namespace Craft.ViewModels.Common
         private double _left;
         private double _top;
         private double _diameter;
-        private double _radius;
+        private string _label;
         private RelayCommand _clickedCommand;
 
         public PointD Point
@@ -55,6 +55,16 @@ namespace Craft.ViewModels.Common
             }
         }
 
+        public string Label
+        {
+            get { return _label; }
+            set
+            {
+                _label = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public RelayCommand ClickedCommand
         {
             get
@@ -73,7 +83,6 @@ namespace Craft.ViewModels.Common
             Point = point;
             _index = index;
             _diameter = diameter;
-            _radius = _diameter / 2;
 
             UpdateTopLeft();
         }
@@ -95,8 +104,8 @@ namespace Craft.ViewModels.Common
 
         private void UpdateTopLeft()
         {
-            Left = Point.X - _radius;
-            Top = Point.Y - _radius;
+            Left = Point.X - _diameter / 2;
+            Top = Point.Y - _diameter / 2;
         }
     }
 }
