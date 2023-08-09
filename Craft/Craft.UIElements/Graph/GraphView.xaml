@@ -31,8 +31,8 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Line Stroke="Black" 
-                              StrokeThickness="1" 
+                        <Line Stroke="OrangeRed" 
+                              StrokeThickness="2" 
                               X1="{Binding Point1.X}" 
                               Y1="{Binding Point1.Y}" 
                               X2="{Binding Point2.X}" 
@@ -55,21 +55,28 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
+                        <Grid Width="400"
+                              Height="{Binding Diameter}">
                             <Ellipse
                                 Fill="Orange" 
-                                Stroke="Black" 
-                                Width="{Binding Diameter}" 
-                                Height="{Binding Diameter}">
+                                Stroke="OrangeRed"
+                                Width="{Binding Diameter}"
+                                HorizontalAlignment="Left">
                                 <b:Interaction.Triggers>
                                     <b:EventTrigger EventName="MouseDown">
                                         <b:InvokeCommandAction Command="{Binding ClickedCommand}"/>
                                     </b:EventTrigger>
                                 </b:Interaction.Triggers>
                             </Ellipse>
-                            <!--<TextBlock
+                            <TextBlock 
                                 IsHitTestVisible="False"
-                                Text="{Binding Label}"/>-->
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Text="{Binding Label}">
+                                <TextBlock.RenderTransform>
+                                    <TranslateTransform X="10" Y="0"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
