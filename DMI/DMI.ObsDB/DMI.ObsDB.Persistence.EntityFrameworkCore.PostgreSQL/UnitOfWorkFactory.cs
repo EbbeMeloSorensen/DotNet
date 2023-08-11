@@ -8,7 +8,15 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL
         static UnitOfWorkFactory()
         {
             using var context = new ObsDBContext();
-            context.Database.EnsureCreated();
+
+            try
+            {
+                context.Database.EnsureCreated();
+            }
+            catch (System.Exception e)
+            {
+                throw;
+            }
 
             if (context.ObservingFacilities.Any() ||
                 context.TimeSeries.Any() ||

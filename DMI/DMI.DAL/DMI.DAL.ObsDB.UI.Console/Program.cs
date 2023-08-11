@@ -125,8 +125,8 @@ namespace DMI.DAL.ObsDB.UI.Console
                 var dataProvider = new DataProvider(null);
                 dataProvider.Initialize(new[] { parameter });
 
-                var firstYear = 2010;
-                var lastYear = 2023;
+                var firstYear = 1953;
+                var lastYear = 1999;
                 var years = Enumerable.Range(firstYear, lastYear - firstYear + 1);
 
                 foreach(var year in years)

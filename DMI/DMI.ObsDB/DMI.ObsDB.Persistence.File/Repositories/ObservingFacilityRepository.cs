@@ -10,6 +10,9 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 {
     public class ObservingFacilityRepository : IObservingFacilityRepository
     {
+        private const string _rootDirectory = @"C:\Data\Observations";
+        //private const string _rootDirectory = "/Data";
+
         private static int _nextId;
         private static Dictionary<int, int> _idMap;
         private static Dictionary<int, int> _stationIdMap;
@@ -62,7 +65,7 @@ namespace DMI.ObsDB.Persistence.File.Repositories
                 var statId = temp.Value.ToString();
                 var result = new List<ObservingFacility>();
 
-                var rootDirectory = new DirectoryInfo(@"C:\Data\Observations");
+                var rootDirectory = new DirectoryInfo(_rootDirectory);
 
                 if (rootDirectory.Exists)
                 {
@@ -101,7 +104,7 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
         public IEnumerable<ObservingFacility> GetAll()
         {
-            var rootDirectory = new DirectoryInfo(@"C:\Data\Observations");
+            var rootDirectory = new DirectoryInfo(_rootDirectory);
             var stationIds = new HashSet<int>();
 
             if (rootDirectory.Exists)
@@ -131,7 +134,7 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
             var result = GenerateObservingFacility(statId);
 
-            var rootDirectory = new DirectoryInfo(@"C:\Data\Observations");
+            var rootDirectory = new DirectoryInfo(_rootDirectory);
 
             if (rootDirectory.Exists)
             {

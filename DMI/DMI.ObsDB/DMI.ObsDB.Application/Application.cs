@@ -98,8 +98,8 @@ namespace DMI.ObsDB.Application
                 progressCallback?.Invoke(0, currentActivity);
                 Logger?.WriteLine(LogMessageCategory.Information, currentActivity);
 
-                //var unitOfWorkFactorySourceRepository = new Persistence.File.UnitOfWorkFactory();
-                var unitOfWorkFactorySourceRepository = new Persistence.PostgreSQL.UnitOfWorkFactory();
+                var unitOfWorkFactorySourceRepository = new Persistence.File.UnitOfWorkFactory();
+                //var unitOfWorkFactorySourceRepository = new Persistence.PostgreSQL.UnitOfWorkFactory();
 
                 using (var unitOfWorkTargetRepository = _unitOfWorkFactoryTargetRepository.GenerateUnitOfWork())
                 {
@@ -131,12 +131,12 @@ namespace DMI.ObsDB.Application
                         "Reading all observing facilities..");
 
                     observingFacilities = unitOfWorkSourceRepository.ObservingFacilities.GetAll()
-                        .Where(_ =>
-                         _.StatId == 601100 || 
-                         _.StatId == 603000 || 
-                         _.StatId == 604100 || 
-                         _.StatId == 607100 || 
-                         _.StatId == 608100)
+                        // .Where(_ =>
+                        //  _.StatId == 601100 || 
+                        //  _.StatId == 603000 || 
+                        //  _.StatId == 604100 || 
+                        //  _.StatId == 607100 || 
+                        //  _.StatId == 608100)
                         .OrderBy(_ => _.StatId);
 
                     if (stationLimit.HasValue)
