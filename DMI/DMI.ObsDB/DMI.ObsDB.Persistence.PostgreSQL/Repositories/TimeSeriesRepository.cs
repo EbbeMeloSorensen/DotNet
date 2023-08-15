@@ -107,6 +107,8 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                 lastYear -= 1;
             }
 
+            lastYear = Math.Min(lastYear, DateTime.Now.Year);
+
             var years = Enumerable.Range(firstYear, lastYear - firstYear + 1);
 
             var observations = new List<Observation>();
@@ -128,6 +130,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                         while (reader.Read())
                         {
                             var time = reader.GetDateTime(0);
+                            time = time.ToUniversalTime();
 
                             if (time >= startTime &&
                                 time < endTime)

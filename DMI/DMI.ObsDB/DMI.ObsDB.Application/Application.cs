@@ -98,8 +98,8 @@ namespace DMI.ObsDB.Application
                 progressCallback?.Invoke(0, currentActivity);
                 Logger?.WriteLine(LogMessageCategory.Information, currentActivity);
 
-                var unitOfWorkFactorySourceRepository = new Persistence.File.UnitOfWorkFactory();
-                //var unitOfWorkFactorySourceRepository = new Persistence.PostgreSQL.UnitOfWorkFactory();
+                //var unitOfWorkFactorySourceRepository = new Persistence.File.UnitOfWorkFactory();
+                var unitOfWorkFactorySourceRepository = new Persistence.PostgreSQL.UnitOfWorkFactory();
 
                 using (var unitOfWorkTargetRepository = _unitOfWorkFactoryTargetRepository.GenerateUnitOfWork())
                 {
@@ -139,14 +139,16 @@ namespace DMI.ObsDB.Application
                         //  _.StatId == 608100)
                         .OrderBy(_ => _.StatId);
 
-                    if (stationLimit.HasValue)
-                    {
-                        observingFacilities = observingFacilities.Take(stationLimit.Value);
-                    }
+                    // if (stationLimit.HasValue)
+                    // {
+                    //     observingFacilities = observingFacilities.Take(stationLimit.Value);
+                    // }
                 }
 
                 var count = 0;
                 var total = observingFacilities.Count();
+                var timeSeriesRetrieved = 0;
+                var done = false;
 
                 foreach (var observingFacility in observingFacilities)
                 {
@@ -164,8 +166,9 @@ namespace DMI.ObsDB.Application
                         var of = unitOfWorkSourceRepository.ObservingFacilities.GetIncludingTimeSeries(
                             observingFacility.Id);
 
-                        if (of.TimeSeries == null)
+                        if (of.TimeSeries == null || of.TimeSeries.Count == 0)
                         {
+                            Logger?.WriteLine(LogMessageCategory.Information, $"..station {observingFacility.StatId} does not have a temp_dry timeseries");
                             continue;
                         }
 
@@ -190,8 +193,9 @@ namespace DMI.ObsDB.Application
                                 : unitOfWorkSourceRepository.TimeSeries.GetIncludingObservations(
                                     timeSeries.Id);
 
-                            if (ts.Observations == null)
+                            if (ts.Observations == null || ts.Observations.Count == 0)
                             {
+                                Logger?.WriteLine(LogMessageCategory.Information, $"..temp_dry timeseries of station {observingFacility.StatId} apparently has no observations");
                                 continue;
                             }
 
@@ -201,7 +205,22 @@ namespace DMI.ObsDB.Application
                                 unitOfWorkTargetRepository.Observations.AddRange(ts.Observations);
                                 unitOfWorkTargetRepository.Complete();
                             }
+
+                            Logger?.WriteLine(LogMessageCategory.Information, $"..temp_dry timeseries of station {observingFacility.StatId} includes {ts.Observations.Count} observations");
                         }
+
+                        timeSeriesRetrieved++;
+
+                        if (stationLimit.HasValue && timeSeriesRetrieved >= stationLimit.Value)
+                        {
+                            done = true;
+                            break;
+                        }
+                    }
+
+                    if (done)
+                    {
+                        break;
                     }
                 }
 
