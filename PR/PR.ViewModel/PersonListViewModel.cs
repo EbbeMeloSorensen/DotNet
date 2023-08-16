@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,10 +19,9 @@ namespace PR.ViewModel
         private IList<Person> _people;
         private Sorting _sorting;
 
-        public FindPeopleViewModel FindPeopleViewModel { get; private set; }
+        public FindPeopleViewModel FindPeopleViewModel { get; }
         private ObservableCollection<PersonViewModel> _peopleViewModels;
 
-        private RelayCommand<object> _selectionChangedCommand;
         private RelayCommand<object> _findPeopleCommand;
 
         public ObservableCollection<PersonViewModel> PersonViewModels
@@ -36,7 +34,9 @@ namespace PR.ViewModel
             }
         }
 
-        public ObjectCollection<Person> SelectedPeople { get; private set; }
+        public ObjectCollection<Person> SelectedPeople { get; }
+
+        public ObservableCollection<PersonViewModel> SelectedPersonViewModels { get; set; }
 
         public Sorting Sorting
         {
@@ -48,11 +48,6 @@ namespace PR.ViewModel
                 UpdateSorting();
                 UpdatePersonViewModels();
             }
-        }
-
-        public RelayCommand<object> SelectionChangedCommand
-        {
-            get { return _selectionChangedCommand ?? (_selectionChangedCommand = new RelayCommand<object>(SelectionChanged)); }
         }
 
         public RelayCommand<object> FindPeopleCommand
@@ -75,6 +70,7 @@ namespace PR.ViewModel
 
             _people = new List<Person>();
 
+            SelectedPersonViewModels = new ObservableCollection<PersonViewModel>();
             SelectedPeople = new ObjectCollection<Person>();
 
             dataProvider.PersonCreated += (s, e) =>
@@ -110,6 +106,11 @@ namespace PR.ViewModel
                 {
                     UpdatePersonViewModels();
                 }
+            };
+
+            SelectedPersonViewModels.CollectionChanged += (s, e) =>
+            {
+                SelectedPeople.Objects = SelectedPersonViewModels.Select(_ => _.Person);
             };
         }
 
@@ -169,19 +170,6 @@ namespace PR.ViewModel
                 //IsSelected = idsOfSelectedPersons.Contains(p.Id),
                 Person = p
             }));
-        }
-
-        private void SelectionChanged(object commandParameter)
-        {
-            IList temp = (IList)commandParameter;
-            var peopleViewModels = temp.Cast<PersonViewModel>();
-
-            UpdatePeopleSelection(peopleViewModels.Select(pvm => pvm.Person));
-        }
-
-        private void UpdatePeopleSelection(IEnumerable<Person> people)
-        {
-            SelectedPeople.Objects = people;
         }
 
         private void FindPeople(object owner)
