@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using PR.Application;
+using PR.Domain;
 using PR.Domain.Entities;
 
 namespace PR.ViewModel
@@ -86,14 +87,28 @@ namespace PR.ViewModel
 
             dataProvider.PeopleUpdated += (s, e) =>
             {
-                // Der vil nok i praksis som regel gælde, at de opdaterede personer, FØR opdateringen matchede
-                // filteret, dvs at der potentielt vil skulle FJERNES personer fra viewet, men ikke TILFØJES
-                // Som sådan burde det være muligt at undgå at skulle besøge repositoryet for at opdatere viewet
+                var idsOfUpdatedPeople = e.People.Select(_ => _.Id).ToList();
 
-                // .. men vi gør det lige alligevel indtil videre
-                // spørgsmålet er sgu egentlig også, om man overhovedet bør fjerne personer fra filteret - det er jo ikke sikkert at det virker super intuitivt
-                //RetrievePeopleMatchingFilterFromRepository();
-                UpdatePersonViewModels();
+                foreach (var person in _people)
+                {
+                    if (idsOfUpdatedPeople.Contains(person.Id))
+                    {
+                        person.CopyAttributes(e.People.Single(_ => _.Id == person.Id));
+                    }
+                }
+
+                PersonViewModels = new ObservableCollection<PersonViewModel>(_people.Select(
+                    p => new PersonViewModel { Person = p }));
+                
+                SelectedPersonViewModels.Clear();
+
+                foreach (var personViewModel in PersonViewModels)
+                {
+                    if (idsOfUpdatedPeople.Contains(personViewModel.Person.Id))
+                    {
+                        SelectedPersonViewModels.Add(personViewModel);
+                    }
+                }
             };
 
             dataProvider.PeopleDeleted += (s, e) =>
@@ -145,31 +160,10 @@ namespace PR.ViewModel
 
         private void UpdatePersonViewModels()
         {
-            // Selected people should stay selected - prøv lige at drop det indtil videre - hvornår er det overhovedet smart
-            // Du antog vist, at det var smart efter følgende hændelser:
-            // - Ændring af sortering
-            // - Oprettelse af ny person
-            // - Efter at have lavet bulk opdatering af en gruppe personer
-            // - Efter at have slettet en gruppe af personer
-            // - Efter at have fremsøgt personer
-
-            //var idsOfSelectedPersons = new int[] { };
-
-            //if (PersonViewModels != null)
-            //{
-            //    idsOfSelectedPersons = PersonViewModels
-            //        .Where(pvm => pvm.IsSelected)
-            //        .Select(pvm => pvm.Person.Id)
-            //        .ToArray();
-            //}
-
             UpdateSorting();
 
-            PersonViewModels = new ObservableCollection<PersonViewModel>(_people.Select(p => new PersonViewModel
-            {
-                //IsSelected = idsOfSelectedPersons.Contains(p.Id),
-                Person = p
-            }));
+            PersonViewModels = new ObservableCollection<PersonViewModel>(_people.Select(
+                p => new PersonViewModel { Person = p }));
         }
 
         private void FindPeople(object owner)

@@ -44,7 +44,7 @@
         <ListBox Grid.Row="3" Margin="1" x:Name="PeopleListBox" SelectionMode="Extended" DisplayMemberPath="DisplayText" 
                  ItemsSource="{Binding PersonViewModels}">
             <b:Interaction.Behaviors>
-                <local:ListBoxSelectedItemsBehavior SelectedItems="{Binding SelectedPersonViewModels, Mode=TwoWay}"/>
+                <local:MultiSelectionBehavior SelectedItems="{Binding SelectedPersonViewModels}"/>
             </b:Interaction.Behaviors>
         </ListBox>
     </Grid>
