@@ -76,13 +76,18 @@ namespace PR.ViewModel
 
             dataProvider.PersonCreated += (s, e) =>
             {
-                if (!FindPeopleViewModel.PersonPassesFilter(e.Person))
-                {
-                    return;
-                }
-
                 _people.Add(e.Person);
                 UpdatePersonViewModels();
+
+                SelectedPersonViewModels.Clear();
+
+                foreach (var personViewModel in PersonViewModels)
+                {
+                    if (personViewModel.Person.Id != e.Person.Id) continue;
+
+                    SelectedPersonViewModels.Add(personViewModel);
+                    break;
+                }
             };
 
             dataProvider.PeopleUpdated += (s, e) =>
@@ -117,10 +122,10 @@ namespace PR.ViewModel
                 _people = _people.Except(e.People).ToList();
                 var countAfter = _people.Count;
 
-                if (countAfter < countBefore)
-                {
-                    UpdatePersonViewModels();
-                }
+                if (countAfter == countBefore) return;
+
+                SelectedPersonViewModels.Clear();
+                UpdatePersonViewModels();
             };
 
             SelectedPersonViewModels.CollectionChanged += (s, e) =>
@@ -131,10 +136,6 @@ namespace PR.ViewModel
 
         private void RetrievePeopleMatchingFilterFromRepository()
         {
-            // Det her kan den ikke - det munder ud i følgende fejlbesked: "LINQ to Entities does not recognize the method ''
-            // and this method cannot be translated into a store expression"
-            //_people = _dataProvider.FindPeople(p => FindPeopleViewModel.PersonPassesFilter(p));
-
             _people = _dataProvider.FindPeople(FindPeopleViewModel.FilterAsExpression());
         }
 
