@@ -78,32 +78,6 @@ namespace PR.ViewModel
             SelectedPersonViewModels = new ObservableCollection<PersonViewModel>();
             SelectedPeople = new ObjectCollection<Person>();
 
-            dataProvider.PeopleUpdated += (s, e) =>
-            {
-                var idsOfUpdatedPeople = e.People.Select(_ => _.Id).ToList();
-
-                foreach (var person in _people)
-                {
-                    if (idsOfUpdatedPeople.Contains(person.Id))
-                    {
-                        person.CopyAttributes(e.People.Single(_ => _.Id == person.Id));
-                    }
-                }
-
-                PersonViewModels = new ObservableCollection<PersonViewModel>(_people.Select(
-                    p => new PersonViewModel { Person = p }));
-                
-                SelectedPersonViewModels.Clear();
-
-                foreach (var personViewModel in PersonViewModels)
-                {
-                    if (idsOfUpdatedPeople.Contains(personViewModel.Person.Id))
-                    {
-                        SelectedPersonViewModels.Add(personViewModel);
-                    }
-                }
-            };
-
             dataProvider.PeopleDeleted += (s, e) =>
             {
                 var countBefore = _people.Count;
@@ -136,6 +110,33 @@ namespace PR.ViewModel
 
                 SelectedPersonViewModels.Add(personViewModel);
                 break;
+            }
+        }
+
+        public void UpdatePeople(
+            IEnumerable<Person> people)
+        {
+            var idsOfUpdatedPeople = people.Select(_ => _.Id).ToList();
+
+            foreach (var person in _people)
+            {
+                if (idsOfUpdatedPeople.Contains(person.Id))
+                {
+                    person.CopyAttributes(people.Single(_ => _.Id == person.Id));
+                }
+            }
+
+            PersonViewModels = new ObservableCollection<PersonViewModel>(_people.Select(
+                p => new PersonViewModel { Person = p }));
+
+            SelectedPersonViewModels.Clear();
+
+            foreach (var personViewModel in PersonViewModels)
+            {
+                if (idsOfUpdatedPeople.Contains(personViewModel.Person.Id))
+                {
+                    SelectedPersonViewModels.Add(personViewModel);
+                }
             }
         }
 

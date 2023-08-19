@@ -25,8 +25,6 @@ namespace PR.Application
             _dataIOHandler = dataIOHandler;
         }
 
-        public abstract void UpdatePeople(IList<Person> people);
-
         public abstract void DeletePeople(IList<Person> people);
 
         public void ExportData(
@@ -199,23 +197,7 @@ namespace PR.Application
             }
         }
 
-        public event EventHandler<PeopleEventArgs> PeopleUpdated;
         public event EventHandler<PeopleEventArgs> PeopleDeleted;
-
-        protected virtual void OnPeopleUpdated(
-            IEnumerable<Person> people)
-        {
-            // Make a temporary copy of the event to avoid possibility of
-            // a race condition if the last subscriber unsubscribes
-            // immediately after the null check and before the event is raised.
-            var handler = PeopleUpdated;
-
-            // Event will be null if there are no subscribers
-            if (handler != null)
-            {
-                handler(this, new PeopleEventArgs(people));
-            }
-        }
 
         protected virtual void OnPeopleDeleted(
             IEnumerable<Person> people)

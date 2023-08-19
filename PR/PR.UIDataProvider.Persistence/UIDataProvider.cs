@@ -18,18 +18,6 @@ namespace PR.UIDataProvider.Persistence
             UnitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public override void UpdatePeople(
-            IList<Person> people)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                unitOfWork.People.UpdateRange(people);
-                unitOfWork.Complete();
-            }
-
-            OnPeopleUpdated(people);
-        }
-
         public override void DeletePeople(
             IList<Person> people)
         {

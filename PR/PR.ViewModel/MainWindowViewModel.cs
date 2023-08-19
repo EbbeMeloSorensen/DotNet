@@ -105,7 +105,10 @@ namespace PR.ViewModel
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
                 dataProvider,
+                unitOfWorkFactory,
                 PersonListViewModel.SelectedPeople);
+
+            PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
 
             PersonAssociationsViewModel = new PersonAssociationsViewModel(
                 dataProvider,
@@ -116,7 +119,16 @@ namespace PR.ViewModel
             _logger.WriteLine(LogMessageCategory.Information, "Application started");
         }
 
-        private void HandlePeopleSelectionChanged(object sender, PropertyChangedEventArgs e)
+        private void PeoplePropertiesViewModel_PeopleUpdated(
+            object? sender, 
+            PeopleEventArgs e)
+        {
+            PersonListViewModel.UpdatePeople(e.People);
+        }
+
+        private void HandlePeopleSelectionChanged(
+            object sender, 
+            PropertyChangedEventArgs e)
         {
             DeleteSelectedPeopleCommand.RaiseCanExecuteChanged();
             ExportSelectionToGraphmlCommand.RaiseCanExecuteChanged();

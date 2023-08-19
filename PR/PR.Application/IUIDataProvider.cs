@@ -10,9 +10,6 @@ namespace PR.Application
     {
         IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
-        void UpdatePeople(
-            IList<Person> people);
-
         void DeletePeople(
             IList<Person> people);
 
@@ -28,7 +25,6 @@ namespace PR.Application
             string fileName,
             bool legacy);
 
-        event EventHandler<PeopleEventArgs> PeopleUpdated;
         event EventHandler<PeopleEventArgs> PeopleDeleted;
     }
 }

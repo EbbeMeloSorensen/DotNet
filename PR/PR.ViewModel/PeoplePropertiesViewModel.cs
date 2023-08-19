@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -8,6 +9,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using PR.Application;
 using PR.Domain.Entities;
+using PR.Persistence;
 
 namespace PR.ViewModel;
 
@@ -18,6 +20,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private string _error = string.Empty;
 
     private readonly IUIDataProvider _dataProvider;
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private ObjectCollection<Person> _people;
 
     private string _originalSharedFirstName;
@@ -43,6 +46,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private bool _isVisible;
 
     private RelayCommand _applyChangesCommand;
+
+    public event EventHandler<PeopleEventArgs> PeopleUpdated;
 
     public string SharedFirstName
     {
@@ -160,9 +165,11 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public PeoplePropertiesViewModel(
         IUIDataProvider dataProvider,
+        IUnitOfWorkFactory unitOfWorkFactory,
         ObjectCollection<Person> people)
     {
         _dataProvider = dataProvider;
+        _unitOfWorkFactory = unitOfWorkFactory;
         _people = people;
 
         _people.PropertyChanged += Initialize;
@@ -265,7 +272,13 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             Created = p.Created
         }).ToList();
 
-        _dataProvider.UpdatePeople(updatedPeople);
+        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+        {
+            unitOfWork.People.UpdateRange(updatedPeople);
+            unitOfWork.Complete();
+        }
+
+        OnPeopleUpdated(updatedPeople);
     }
 
     private bool CanApplyChanges()
@@ -432,5 +445,20 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     {
         _state = state;
         RaisePropertyChanges();
+    }
+
+    private void OnPeopleUpdated(
+        IEnumerable<Person> people)
+    {
+        // Make a temporary copy of the event to avoid possibility of
+        // a race condition if the last subscriber unsubscribes
+        // immediately after the null check and before the event is raised.
+        var handler = PeopleUpdated;
+
+        // Event will be null if there are no subscribers
+        if (handler != null)
+        {
+            handler(this, new PeopleEventArgs(people));
+        }
     }
 }
