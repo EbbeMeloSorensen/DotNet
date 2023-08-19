@@ -53,7 +53,7 @@ namespace PR.Application
             _uiDataProvider.UnitOfWorkFactory.User = user;
             _uiDataProvider.UnitOfWorkFactory.Password = password;
 
-            _uiDataProvider.Initialize(_logger);
+            _uiDataProvider.UnitOfWorkFactory.Initialize(_logger);
         }
 
         public async Task MakeBreakfast(
@@ -117,7 +117,11 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
                 progressCallback?.Invoke(0.0, "Creating Person");
 
-                UIDataProvider.CreatePerson(person);
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    unitOfWork.People.Add(person);
+                    unitOfWork.Complete();
+                }
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");

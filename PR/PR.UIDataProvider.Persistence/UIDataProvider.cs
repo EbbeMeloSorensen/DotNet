@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Craft.Logging;
 using PR.Domain.Entities;
 using PR.Persistence;
 using PR.IO;
@@ -17,26 +16,6 @@ namespace PR.UIDataProvider.Persistence
             IDataIOHandler dataIOHandler) : base(dataIOHandler)
         {
             UnitOfWorkFactory = unitOfWorkFactory;
-        }
-
-        public override void Initialize(
-            ILogger logger)
-        {
-            base.Initialize(logger);
-
-            UnitOfWorkFactory.Initialize(logger);
-        }
-
-        public override void CreatePerson(
-            Person person)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                unitOfWork.People.Add(person);
-                unitOfWork.Complete();
-            }
-
-            OnPersonCreated(person);
         }
 
         public override void UpdatePeople(

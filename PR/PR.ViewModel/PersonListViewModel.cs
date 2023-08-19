@@ -78,22 +78,6 @@ namespace PR.ViewModel
             SelectedPersonViewModels = new ObservableCollection<PersonViewModel>();
             SelectedPeople = new ObjectCollection<Person>();
 
-            dataProvider.PersonCreated += (s, e) =>
-            {
-                _people.Add(e.Person);
-                UpdatePersonViewModels();
-
-                SelectedPersonViewModels.Clear();
-
-                foreach (var personViewModel in PersonViewModels)
-                {
-                    if (personViewModel.Person.Id != e.Person.Id) continue;
-
-                    SelectedPersonViewModels.Add(personViewModel);
-                    break;
-                }
-            };
-
             dataProvider.PeopleUpdated += (s, e) =>
             {
                 var idsOfUpdatedPeople = e.People.Select(_ => _.Id).ToList();
@@ -136,6 +120,23 @@ namespace PR.ViewModel
             {
                 SelectedPeople.Objects = SelectedPersonViewModels.Select(_ => _.Person);
             };
+        }
+
+        public void AddPerson(
+            Person person)
+        {
+            _people.Add(person);
+            UpdatePersonViewModels();
+
+            SelectedPersonViewModels.Clear();
+
+            foreach (var personViewModel in PersonViewModels)
+            {
+                if (personViewModel.Person.Id != person.Id) continue;
+
+                SelectedPersonViewModels.Add(personViewModel);
+                break;
+            }
         }
 
         private void RetrievePeopleMatchingFilterFromRepository()

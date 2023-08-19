@@ -6,15 +6,5 @@
              xmlns:local="clr-namespace:PR.UI.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-
-        <TextBlock Margin="5" Grid.Column="0" Text="Number of people:"/>
-        <TextBox Margin="5" Grid.Column="1" Text="{Binding NumberOfPeopleToCreate}"/>
-        <Button Margin="5" Grid.Column="2" Content="Create People" Command="{Binding CreatePeopleCommand}"/>
-    </Grid>
+    <Button Content="No options so far"/>
 </UserControl>

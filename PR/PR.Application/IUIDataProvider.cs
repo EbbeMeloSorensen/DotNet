@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Craft.Logging;
 using PR.Domain.Entities;
 using PR.Persistence;
 
@@ -10,11 +9,6 @@ namespace PR.Application
     public interface IUIDataProvider
     {
         IUnitOfWorkFactory UnitOfWorkFactory { get; }
-
-        void Initialize(ILogger logger);
-
-        void CreatePerson(
-            Person person);
 
         void UpdatePeople(
             IList<Person> people);
@@ -34,7 +28,6 @@ namespace PR.Application
             string fileName,
             bool legacy);
 
-        event EventHandler<PersonEventArgs> PersonCreated;
         event EventHandler<PeopleEventArgs> PeopleUpdated;
         event EventHandler<PeopleEventArgs> PeopleDeleted;
     }

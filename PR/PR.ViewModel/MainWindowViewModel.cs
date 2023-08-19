@@ -92,11 +92,12 @@ namespace PR.ViewModel
             ILogger logger)
         {
             _dataProvider = dataProvider;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
 
             LogViewModel = new LogViewModel();
             _logger = new ViewModelLogger(logger, LogViewModel);
-            _dataProvider.Initialize(_logger);
+            _unitOfWorkFactory.Initialize(_logger);
 
             PersonListViewModel = new PersonListViewModel(dataProvider, unitOfWorkFactory, applicationDialogService);
 
@@ -138,7 +139,7 @@ namespace PR.ViewModel
                     0, 0, 0, DateTimeKind.Utc)
                 : new DateTime?();
 
-            _dataProvider.CreatePerson(new Person
+            var person = new Person
             {
                 FirstName = dialogViewModel.FirstName,
                 Surname = dialogViewModel.Surname,
@@ -150,7 +151,15 @@ namespace PR.ViewModel
                 Category = dialogViewModel.Category,
                 Description = dialogViewModel.Comments,
                 Created = DateTime.UtcNow
-            });
+            };
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.People.Add(person);
+                unitOfWork.Complete();
+            }
+
+            PersonListViewModel.AddPerson(person);
         }
 
         private bool CanCreatePerson(object owner)
@@ -246,7 +255,7 @@ namespace PR.ViewModel
 
         private void ShowOptionsDialog(object owner)
         {
-            var dialogViewModel = new OptionsDialogViewModel(_dataProvider, _unitOfWorkFactory);
+            var dialogViewModel = new OptionsDialogViewModel();
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }
 

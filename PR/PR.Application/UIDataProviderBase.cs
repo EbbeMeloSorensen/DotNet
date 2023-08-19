@@ -25,14 +25,6 @@ namespace PR.Application
             _dataIOHandler = dataIOHandler;
         }
 
-        public virtual void Initialize(
-            ILogger logger)
-        {
-            _logger = logger;
-        }
-
-        public abstract void CreatePerson(Person person);
-
         public abstract void UpdatePeople(IList<Person> people);
 
         public abstract void DeletePeople(IList<Person> people);
@@ -207,21 +199,8 @@ namespace PR.Application
             }
         }
 
-        public event EventHandler<PersonEventArgs> PersonCreated;
         public event EventHandler<PeopleEventArgs> PeopleUpdated;
         public event EventHandler<PeopleEventArgs> PeopleDeleted;
-
-        protected virtual void OnPersonCreated(
-            Person person)
-        {
-            var handler = PersonCreated;
-
-            // Event will be null if there are no subscribers
-            if (handler != null)
-            {
-                handler(this, new PersonEventArgs(person));
-            }
-        }
 
         protected virtual void OnPeopleUpdated(
             IEnumerable<Person> people)
