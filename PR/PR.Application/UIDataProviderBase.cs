@@ -25,8 +25,6 @@ namespace PR.Application
             _dataIOHandler = dataIOHandler;
         }
 
-        public abstract void DeletePeople(IList<Person> people);
-
         public void ExportData(
             string fileName,
             IList<Expression<Func<Person, bool>>> predicates)
@@ -194,23 +192,6 @@ namespace PR.Application
                 unitOfWork.People.AddRange(prData.People);
                 unitOfWork.PersonAssociations.AddRange(prData.PersonAssociations);
                 unitOfWork.Complete();
-            }
-        }
-
-        public event EventHandler<PeopleEventArgs> PeopleDeleted;
-
-        protected virtual void OnPeopleDeleted(
-            IEnumerable<Person> people)
-        {
-            // Make a temporary copy of the event to avoid possibility of
-            // a race condition if the last subscriber unsubscribes
-            // immediately after the null check and before the event is raised.
-            var handler = PeopleDeleted;
-
-            // Event will be null if there are no subscribers
-            if (handler != null)
-            {
-                handler(this, new PeopleEventArgs(people));
             }
         }
     }

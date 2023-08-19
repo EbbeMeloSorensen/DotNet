@@ -10,9 +10,6 @@ namespace PR.Application
     {
         IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
-        void DeletePeople(
-            IList<Person> people);
-
         void ExportData(
             string fileName,
             IList<Expression<Func<Person, bool>>> predicates);
@@ -24,7 +21,5 @@ namespace PR.Application
         void ImportData(
             string fileName,
             bool legacy);
-
-        event EventHandler<PeopleEventArgs> PeopleDeleted;
     }
 }

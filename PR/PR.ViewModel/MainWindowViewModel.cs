@@ -179,9 +179,27 @@ namespace PR.ViewModel
             return true;
         }
 
-        public void DeleteSelectedPeople()
+        private void DeleteSelectedPeople()
         {
-            _dataProvider.DeletePeople(PersonListViewModel.SelectedPeople.Objects.ToList());
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.Id).ToList();
+
+                var peopleForDeletion = unitOfWork.People
+                    .GetPeopleIncludingAssociations(p => ids.Contains(p.Id))
+                    .ToList();
+
+                var personAssociationsForDeletion = peopleForDeletion
+                    .SelectMany(p => p.ObjectPeople)
+                    .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
+                    .ToList();
+
+                unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
+                unitOfWork.People.RemoveRange(peopleForDeletion);
+                unitOfWork.Complete();
+
+                PersonListViewModel.RemovePeople(peopleForDeletion);
+            }
         }
 
         private bool CanDeleteSelectedPeople()

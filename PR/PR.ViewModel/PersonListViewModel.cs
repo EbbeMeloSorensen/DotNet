@@ -78,18 +78,6 @@ namespace PR.ViewModel
             SelectedPersonViewModels = new ObservableCollection<PersonViewModel>();
             SelectedPeople = new ObjectCollection<Person>();
 
-            dataProvider.PeopleDeleted += (s, e) =>
-            {
-                var countBefore = _people.Count;
-                _people = _people.Except(e.People).ToList();
-                var countAfter = _people.Count;
-
-                if (countAfter == countBefore) return;
-
-                SelectedPersonViewModels.Clear();
-                UpdatePersonViewModels();
-            };
-
             SelectedPersonViewModels.CollectionChanged += (s, e) =>
             {
                 SelectedPeople.Objects = SelectedPersonViewModels.Select(_ => _.Person);
@@ -138,6 +126,19 @@ namespace PR.ViewModel
                     SelectedPersonViewModels.Add(personViewModel);
                 }
             }
+        }
+
+        public void RemovePeople(
+            IEnumerable<Person> people)
+        {
+            var idsOfDeletedPeople = people.Select(_ => _.Id);
+
+            _people = _people
+                .Where(_ => !idsOfDeletedPeople.Contains(_.Id))
+                .ToList();
+
+            SelectedPersonViewModels.Clear();
+            UpdatePersonViewModels();
         }
 
         private void RetrievePeopleMatchingFilterFromRepository()

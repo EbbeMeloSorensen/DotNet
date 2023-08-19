@@ -17,29 +17,5 @@ namespace PR.UIDataProvider.Persistence
         {
             UnitOfWorkFactory = unitOfWorkFactory;
         }
-
-        public override void DeletePeople(
-            IList<Person> people)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var ids = people.Select(p => p.Id).ToList();
-
-                var peopleForDeletion = unitOfWork.People
-                    .GetPeopleIncludingAssociations(p => ids.Contains(p.Id))
-                    .ToList();
-
-                var personAssociationsForDeletion = peopleForDeletion
-                    .SelectMany(p => p.ObjectPeople)
-                    .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
-                    .ToList();
-
-                unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
-                unitOfWork.People.RemoveRange(peopleForDeletion);
-                unitOfWork.Complete();
-            }
-
-            OnPeopleDeleted(people);
-        }
     }
 }
