@@ -19,6 +19,7 @@ namespace PR.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly IUIDataProvider _dataProvider;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private readonly ILogger _logger;
         private string _mainWindowTitle;
@@ -200,9 +201,11 @@ namespace PR.ViewModel
             predicates.Add(p => personIds.Contains(p.SubjectPersonId));
             predicates.Add(p => personIds.Contains(p.ObjectPersonId));
 
-            var personAssociations = _dataProvider.FindPersonAssociations(predicates);
-
-            _dataProvider.ExportDataToGraphML(people, personAssociations);
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var personAssociations = unitOfWork.PersonAssociations.Find(predicates).ToList();
+                _dataProvider.ExportDataToGraphML(people, personAssociations);
+            }
         }
 
         private bool CanExportSelectionToGraphml()

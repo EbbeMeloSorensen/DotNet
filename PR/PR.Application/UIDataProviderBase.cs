@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain;
 using PR.IO;
@@ -37,27 +36,14 @@ namespace PR.Application
         public abstract void CreatePersonAssociation(
             PersonAssociation personAssociation);
 
-        public abstract Person GetPerson(
-            Guid id);
-
         public abstract Person GetPersonWithAssociations(
             Guid id);
-
-        public abstract IList<Person> GetAllPeople();
-
-        public abstract IList<PersonAssociation> GetAllPersonAssociations();
 
         public abstract IList<Person> FindPeople(
             Expression<Func<Person, bool>> predicate);
 
         public abstract IList<Person> FindPeople(
             IList<Expression<Func<Person, bool>>> predicates);
-
-        public abstract IList<PersonAssociation> FindPersonAssociations(
-            Expression<Func<PersonAssociation, bool>> predicate);
-
-        public abstract IList<PersonAssociation> FindPersonAssociations(
-            IList<Expression<Func<PersonAssociation, bool>>> predicates);
 
         public abstract void UpdatePeople(IList<Person> people);
 
@@ -89,8 +75,18 @@ namespace PR.Application
             if (predicates == null || predicates.Count == 0)
             {
                 _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all person records from repository..", "general", true);
-                people = GetAllPeople();
-                personAssociations = GetAllPersonAssociations();
+
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    people = unitOfWork.People.GetAll().ToList();
+                }
+
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    personAssociations = unitOfWork.PersonAssociations.GetAll()
+                        .Select(pa => pa.Clone())
+                        .ToList();
+                }
             }
             else
             {

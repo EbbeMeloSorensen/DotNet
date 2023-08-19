@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities;
 using PR.Persistence;
@@ -20,23 +19,13 @@ namespace PR.Application
         void CreatePersonAssociation(
             PersonAssociation personAssociation);
 
-        Person GetPerson(Guid id);
-
         Person GetPersonWithAssociations(Guid id);
-
-        IList<Person> GetAllPeople();
 
         IList<Person> FindPeople(
             Expression<Func<Person, bool>> predicate);
 
         IList<Person> FindPeople(
             IList<Expression<Func<Person, bool>>> predicates);
-
-        IList<PersonAssociation> FindPersonAssociations(
-            Expression<Func<PersonAssociation, bool>> predicate);
-
-        IList<PersonAssociation> FindPersonAssociations(
-            IList<Expression<Func<PersonAssociation, bool>>> predicates);
 
         void UpdatePeople(
             IList<Person> people);

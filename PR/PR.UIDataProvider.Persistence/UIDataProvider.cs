@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Craft.Logging;
-using PR.Domain;
 using PR.Domain.Entities;
 using PR.Persistence;
 using PR.IO;
@@ -53,39 +51,12 @@ namespace PR.UIDataProvider.Persistence
             }
         }
 
-        public override Person GetPerson(
-            Guid id)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                return unitOfWork.People.Get(id).Clone();
-            }
-        }
-
         public override Person GetPersonWithAssociations(
             Guid id)
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
                 return unitOfWork.People.GetPersonIncludingAssociations(id);
-            }
-        }
-
-        public override IList<Person> GetAllPeople()
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                return unitOfWork.People.GetAll().ToList();
-            }
-        }
-
-        public override IList<PersonAssociation> GetAllPersonAssociations()
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                return unitOfWork.PersonAssociations.GetAll()
-                    .Select(pa => pa.Clone())
-                    .ToList();
             }
         }
 
@@ -104,24 +75,6 @@ namespace PR.UIDataProvider.Persistence
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
                 return unitOfWork.People.Find(predicates).ToList();
-            }
-        }
-
-        public override IList<PersonAssociation> FindPersonAssociations(
-            Expression<Func<PersonAssociation, bool>> predicate)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                return unitOfWork.PersonAssociations.Find(predicate).ToList();
-            }
-        }
-
-        public override IList<PersonAssociation> FindPersonAssociations(
-            IList<Expression<Func<PersonAssociation, bool>>> predicates)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                return unitOfWork.PersonAssociations.Find(predicates).ToList();
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities;
+using PR.Persistence;
 
 namespace PR.Application
 {
@@ -14,6 +15,7 @@ namespace PR.Application
     public class Application
     {
         private IUIDataProvider _uiDataProvider;
+        private IUnitOfWorkFactory _unitOfWorkFactory;
         private ILogger _logger;
 
         public IUIDataProvider UIDataProvider => _uiDataProvider;
@@ -26,9 +28,11 @@ namespace PR.Application
 
         public Application(
             IUIDataProvider uiDataProvider,
+            IUnitOfWorkFactory unitOfWorkFactory,
             ILogger logger)
         {
             _uiDataProvider = uiDataProvider;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _logger = logger;
         }
 
@@ -130,7 +134,11 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
                 progressCallback?.Invoke(0.0, "Retrieving people");
 
-                people = UIDataProvider.GetAllPeople();
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    people = unitOfWork.People.GetAll().ToList();
+                }
+
 
                 progressCallback?.Invoke(100, "");
             });
