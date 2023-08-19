@@ -14,9 +14,6 @@ namespace PR.UIDataProvider.Persistence
 {
     public class UIDataProvider : UIDataProviderBase
     {
-        private Dictionary<Guid, Person> _personCache;
-        private Dictionary<Guid, PersonAssociation> _personAssociationCache;
-
         public override IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
         public UIDataProvider(
@@ -24,9 +21,6 @@ namespace PR.UIDataProvider.Persistence
             IDataIOHandler dataIOHandler) : base(dataIOHandler)
         {
             UnitOfWorkFactory = unitOfWorkFactory;
-
-            _personCache = new Dictionary<Guid, Person>();
-            _personAssociationCache = new Dictionary<Guid, PersonAssociation>();
         }
 
         public override void Initialize(
@@ -51,10 +45,7 @@ namespace PR.UIDataProvider.Persistence
                 unitOfWork.Complete();
             }
 
-            var cacheObj = person.Clone();
-            _personCache[person.Id] = cacheObj;
-
-            OnPersonCreated(cacheObj);
+            OnPersonCreated(person);
         }
 
         public override void CreatePersonAssociation(
@@ -65,14 +56,6 @@ namespace PR.UIDataProvider.Persistence
                 unitOfWork.PersonAssociations.Add(personAssociation);
                 unitOfWork.Complete();
             }
-
-            var modelObjForCache = personAssociation.Clone();
-
-            var subjectPerson = GetPerson(personAssociation.SubjectPersonId);
-            var objectPerson = GetPerson(personAssociation.ObjectPersonId);
-
-            modelObjForCache.LinkToPeople(subjectPerson, objectPerson);
-            _personAssociationCache[modelObjForCache.Id] = modelObjForCache;
         }
 
         public override int CountPeople(
@@ -80,166 +63,80 @@ namespace PR.UIDataProvider.Persistence
         {
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var count = unitOfWork.People.Count(predicate);
-
-                //_logger.StopStopWatchAndWriteLine("Completed counting people");
-
-                return count;
+                return unitOfWork.People.Count(predicate);
             }
         }
 
         public override Person GetPerson(
             Guid id)
         {
-            if (_personCache.ContainsKey(id))
-            {
-                return _personCache[id];
-            }
-
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var person = unitOfWork.People.Get(id).Clone();
-                _personCache[id] = person;
-                return person;
+                return unitOfWork.People.Get(id).Clone();
             }
         }
 
         public override Person GetPersonWithAssociations(
             Guid id)
         {
-            Person personFromRepository;
-
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                personFromRepository = unitOfWork.People.GetPersonIncludingAssociations(id);
+                return unitOfWork.People.GetPersonIncludingAssociations(id);
             }
-
-            var person = IncludeInCache(personFromRepository);
-
-            person.ObjectPeople = personFromRepository.ObjectPeople?.Select(IncludeInCache).ToList();
-            person.SubjectPeople = personFromRepository.SubjectPeople?.Select(IncludeInCache).ToList();
-
-            return person;
         }
 
         public override IList<Person> GetAllPeople()
         {
-            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
-
-            var stationInformations = new List<Person>();
-
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var stationInformationsFromRepository = unitOfWork.People.GetAll().ToList();
-
-                stationInformationsFromRepository.ForEach(s =>
-                {
-                    var cacheStationInformation = IncludeInCache(s);
-                    stationInformations.Add(cacheStationInformation);
-                });
+                return unitOfWork.People.GetAll().ToList();
             }
-
-            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
-
-            return stationInformations;
         }
 
         public override IList<PersonAssociation> GetAllPersonAssociations()
         {
-            IList<PersonAssociation> personAssociations;
-
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                personAssociations = unitOfWork.PersonAssociations.GetAll()
+                return unitOfWork.PersonAssociations.GetAll()
                     .Select(pa => pa.Clone())
                     .ToList();
             }
-
-            return personAssociations;
         }
 
         public override IList<Person> FindPeople(
             Expression<Func<Person, bool>> predicate)
         {
-            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
-
-            var people = new List<Person>();
-
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var peopleFromRepository = unitOfWork.People.Find(predicate).ToList();
-
-                peopleFromRepository.ForEach(p =>
-                {
-                    var cachePerson = IncludeInCache(p);
-                    people.Add(cachePerson);
-                });
+                return unitOfWork.People.Find(predicate).ToList();
             }
-
-            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
-
-            return people;
         }
 
         public override IList<Person> FindPeople(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
-
-            var people = new List<Person>();
-
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var peopleFromRepository = unitOfWork.People.Find(predicates).ToList();
-
-                peopleFromRepository.ForEach(s =>
-                {
-                    var cachePerson = IncludeInCache(s);
-                    people.Add(cachePerson);
-                });
+                return unitOfWork.People.Find(predicates).ToList();
             }
-
-            //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
-
-            return people;
         }
 
         public override IList<PersonAssociation> FindPersonAssociations(
             Expression<Func<PersonAssociation, bool>> predicate)
         {
-            var personAssociations = new List<PersonAssociation>();
-
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var personAssociationsFromRepository = unitOfWork.PersonAssociations.Find(predicate).ToList();
-
-                personAssociationsFromRepository.ForEach(pa =>
-                {
-                    var cachePersonAssociation = IncludeInCache(pa);
-                    personAssociations.Add(cachePersonAssociation);
-                });
+                return unitOfWork.PersonAssociations.Find(predicate).ToList();
             }
-
-            return personAssociations;
         }
 
         public override IList<PersonAssociation> FindPersonAssociations(
             IList<Expression<Func<PersonAssociation, bool>>> predicates)
         {
-            var personAssociations = new List<PersonAssociation>();
-
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var personAssociationsFromRepository = unitOfWork.PersonAssociations.Find(predicates).ToList();
-
-                personAssociationsFromRepository.ForEach(pa =>
-                {
-                    var cachePersonAssociation = IncludeInCache(pa);
-                    personAssociations.Add(cachePersonAssociation);
-                });
+                return unitOfWork.PersonAssociations.Find(predicates).ToList();
             }
-
-            return personAssociations;
         }
 
         public override void UpdatePerson(
@@ -257,13 +154,6 @@ namespace PR.UIDataProvider.Persistence
                 unitOfWork.Complete();
             }
 
-            // Update the people of the cache too
-            foreach (var person in people)
-            {
-                var cacheObj = GetPerson(person.Id);
-                cacheObj.CopyAttributes(person);
-            }
-
             OnPeopleUpdated(people);
         }
 
@@ -274,19 +164,6 @@ namespace PR.UIDataProvider.Persistence
             {
                 unitOfWork.PersonAssociations.Update(personAssociation);
                 unitOfWork.Complete();
-            }
-
-            // Now update cache objs
-            if (personAssociation.SubjectPersonId != personAssociation.SubjectPerson.Id)
-            {
-                personAssociation.DecoupleFromSubjectPerson();
-                personAssociation.LinkToSubjectPerson(GetPerson(personAssociation.SubjectPersonId));
-            }
-
-            if (personAssociation.ObjectPersonId != personAssociation.ObjectPerson.Id)
-            {
-                personAssociation.DecoupleFromObjectPerson();
-                personAssociation.LinkToObjectPerson(GetPerson(personAssociation.ObjectPersonId));
             }
         }
 
@@ -315,9 +192,6 @@ namespace PR.UIDataProvider.Persistence
                 unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
                 unitOfWork.People.RemoveRange(peopleForDeletion);
                 unitOfWork.Complete();
-
-                personAssociationsForDeletion.ForEach(RemoveFromCache);
-                peopleForDeletion.ForEach(RemoveFromCache);
             }
 
             OnPeopleDeleted(people);
@@ -334,14 +208,6 @@ namespace PR.UIDataProvider.Persistence
                 unitOfWork.PersonAssociations.RemoveRange(forDeletion);
                 unitOfWork.Complete();
             }
-
-            // Update memory objects
-            personAssociations.ToList().ForEach(pa =>
-            {
-                pa.SubjectPerson?.ObjectPeople?.Remove(pa);
-                pa.ObjectPerson?.SubjectPeople?.Remove(pa);
-                _personAssociationCache.Remove(pa.Id);
-            });
         }
 
         protected override void LoadPeople(
@@ -352,10 +218,6 @@ namespace PR.UIDataProvider.Persistence
                 unitOfWork.People.AddRange(people);
                 unitOfWork.Complete();
             }
-
-            _personCache.Clear();
-            // We don't update the cache, because it might be a lot of data
-            // On the contrary, we clear the cache, so we're not looking at obsolete data
         }
 
         protected override void LoadPersonAssociations(
@@ -366,80 +228,6 @@ namespace PR.UIDataProvider.Persistence
                 unitOfWork.PersonAssociations.AddRange(personAssociations);
                 unitOfWork.Complete();
             }
-
-            _personAssociationCache.Clear();
-        }
-
-        private Person IncludeInCache(
-            Person personFromRepository)
-        {
-            if (_personCache.ContainsKey(personFromRepository.Id))
-            {
-                return _personCache[personFromRepository.Id];
-            }
-
-            var person = personFromRepository.Clone();
-            _personCache[person.Id] = person;
-
-            return person;
-        }
-
-        private PersonAssociation IncludeInCache(
-            PersonAssociation personAssociationFromRepository)
-        {
-            if (_personAssociationCache.ContainsKey(personAssociationFromRepository.Id))
-            {
-                return _personAssociationCache[personAssociationFromRepository.Id];
-            }
-
-            var personAssociation = personAssociationFromRepository.Clone();
-
-            var subjectPersonFromCache = personAssociationFromRepository.SubjectPerson != null
-                ? IncludeInCache(personAssociationFromRepository.SubjectPerson)
-                : TryGetFromPersonCache(personAssociationFromRepository.SubjectPersonId);
-
-            var objectPersonFromCache = personAssociationFromRepository.ObjectPerson != null
-                ? IncludeInCache(personAssociationFromRepository.ObjectPerson)
-                : TryGetFromPersonCache(personAssociationFromRepository.ObjectPersonId);
-
-            if (subjectPersonFromCache != null)
-            {
-                personAssociation.LinkToSubjectPerson(subjectPersonFromCache);
-            }
-
-            if (objectPersonFromCache != null)
-            {
-                personAssociation.LinkToObjectPerson(objectPersonFromCache);
-            }
-
-            _personAssociationCache[personAssociation.Id] = personAssociation;
-
-            return personAssociation;
-        }
-
-        private Person TryGetFromPersonCache(
-            Guid id)
-        {
-            if (!_personCache.ContainsKey(id)) return null;
-
-            return _personCache[id];
-        }
-
-        private void RemoveFromCache(
-            Person person)
-        {
-            if (!_personCache.ContainsKey(person.Id)) return;
-
-            _personCache.Remove(person.Id);
-        }
-
-        private void RemoveFromCache(
-            PersonAssociation personAssociation)
-        {
-            if (!_personAssociationCache.ContainsKey(personAssociation.Id)) return;
-
-            _personAssociationCache[personAssociation.Id].DecoupleFromPeople();
-            _personAssociationCache.Remove(personAssociation.Id);
         }
     }
 }
