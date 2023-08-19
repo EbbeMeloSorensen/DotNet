@@ -16,31 +16,11 @@ namespace PR.Application
         void CreatePerson(
             Person person);
 
-        void CreatePersonAssociation(
-            PersonAssociation personAssociation);
-
-        Person GetPersonWithAssociations(Guid id);
-
-        IList<Person> FindPeople(
-            Expression<Func<Person, bool>> predicate);
-
-        IList<Person> FindPeople(
-            IList<Expression<Func<Person, bool>>> predicates);
-
         void UpdatePeople(
             IList<Person> people);
 
-        void UpdatePersonAssociation(
-            PersonAssociation personAssociation);
-
-        void DeletePerson(
-            Person person);
-
         void DeletePeople(
             IList<Person> people);
-
-        void DeletePersonAssociations(
-            IList<PersonAssociation> personAssociations);
 
         void ExportData(
             string fileName,

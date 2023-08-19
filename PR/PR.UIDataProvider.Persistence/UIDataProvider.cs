@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Craft.Logging;
 using PR.Domain.Entities;
 using PR.Persistence;
@@ -41,43 +39,6 @@ namespace PR.UIDataProvider.Persistence
             OnPersonCreated(person);
         }
 
-        public override void CreatePersonAssociation(
-            PersonAssociation personAssociation)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                unitOfWork.PersonAssociations.Add(personAssociation);
-                unitOfWork.Complete();
-            }
-        }
-
-        public override Person GetPersonWithAssociations(
-            Guid id)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                return unitOfWork.People.GetPersonIncludingAssociations(id);
-            }
-        }
-
-        public override IList<Person> FindPeople(
-            Expression<Func<Person, bool>> predicate)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                return unitOfWork.People.Find(predicate).ToList();
-            }
-        }
-
-        public override IList<Person> FindPeople(
-            IList<Expression<Func<Person, bool>>> predicates)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                return unitOfWork.People.Find(predicates).ToList();
-            }
-        }
-
         public override void UpdatePeople(
             IList<Person> people)
         {
@@ -88,22 +49,6 @@ namespace PR.UIDataProvider.Persistence
             }
 
             OnPeopleUpdated(people);
-        }
-
-        public override void UpdatePersonAssociation(
-            PersonAssociation personAssociation)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                unitOfWork.PersonAssociations.Update(personAssociation);
-                unitOfWork.Complete();
-            }
-        }
-
-        public override void DeletePerson(
-            Person person)
-        {
-            throw new NotImplementedException();
         }
 
         public override void DeletePeople(
@@ -128,19 +73,6 @@ namespace PR.UIDataProvider.Persistence
             }
 
             OnPeopleDeleted(people);
-        }
-
-        public override void DeletePersonAssociations(
-            IList<PersonAssociation> personAssociations)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var ids = personAssociations.Select(p => p.Id).ToList();
-                var forDeletion = unitOfWork.PersonAssociations.Find(pa => ids.Contains(pa.Id));
-
-                unitOfWork.PersonAssociations.RemoveRange(forDeletion);
-                unitOfWork.Complete();
-            }
         }
 
         protected override void LoadPeople(

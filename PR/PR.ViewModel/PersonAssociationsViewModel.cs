@@ -123,18 +123,21 @@ namespace PR.ViewModel
                 return;
             }
 
-            var person = _dataProvider.GetPersonWithAssociations(_activePerson.Id);
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var person = unitOfWork.People.GetPersonIncludingAssociations(_activePerson.Id);
 
-            PersonAssociationViewModels = new ObservableCollection<PersonAssociationViewModel>(person.ObjectPeople
-                .Select(pa => new PersonAssociationViewModel
-                {
-                    PersonAssociation = pa
-                })
-                .Concat(person.SubjectPeople
+                PersonAssociationViewModels = new ObservableCollection<PersonAssociationViewModel>(person.ObjectPeople
                     .Select(pa => new PersonAssociationViewModel
                     {
                         PersonAssociation = pa
-                    })));
+                    })
+                    .Concat(person.SubjectPeople
+                        .Select(pa => new PersonAssociationViewModel
+                        {
+                            PersonAssociation = pa
+                        })));
+            }
         }
 
         private void SelectionChanged()
@@ -149,7 +152,14 @@ namespace PR.ViewModel
 
         public void DeleteSelectedPersonAssociations()
         {
-            _dataProvider.DeletePersonAssociations(SelectedPersonAssociations.Objects.ToList());
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var ids = SelectedPersonAssociations.Objects.Select(p => p.Id).ToList();
+                var forDeletion = unitOfWork.PersonAssociations.Find(pa => ids.Contains(pa.Id));
+
+                unitOfWork.PersonAssociations.RemoveRange(forDeletion);
+                unitOfWork.Complete();
+            }
 
             Populate();
         }
@@ -177,13 +187,18 @@ namespace PR.ViewModel
 
             if (_activePerson != null)
             {
-                _dataProvider.CreatePersonAssociation(new PersonAssociation
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                 {
-                    SubjectPersonId = dialogViewModel.SubjectPerson.Id,
-                    ObjectPersonId = dialogViewModel.ObjectPerson.Id,
-                    Description = dialogViewModel.Description,
-                    Created = DateTime.UtcNow
-                });
+                    unitOfWork.PersonAssociations.Add(new PersonAssociation
+                    {
+                        SubjectPersonId = dialogViewModel.SubjectPerson.Id,
+                        ObjectPersonId = dialogViewModel.ObjectPerson.Id,
+                        Description = dialogViewModel.Description,
+                        Created = DateTime.UtcNow
+                    });
+
+                    unitOfWork.Complete();
+                }
 
                 Populate();
             }
@@ -215,7 +230,11 @@ namespace PR.ViewModel
             personAssociation.SubjectPersonId = dialogViewModel.SubjectPerson.Id;
             personAssociation.ObjectPersonId = dialogViewModel.ObjectPerson.Id;
 
-            _dataProvider.UpdatePersonAssociation(personAssociation);
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.PersonAssociations.Update(personAssociation);
+                unitOfWork.Complete();
+            }
 
             Populate();
         }

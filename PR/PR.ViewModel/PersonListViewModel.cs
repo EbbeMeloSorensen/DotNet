@@ -140,7 +140,10 @@ namespace PR.ViewModel
 
         private void RetrievePeopleMatchingFilterFromRepository()
         {
-            _people = _dataProvider.FindPeople(FindPeopleViewModel.FilterAsExpression());
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                _people = unitOfWork.People.Find(FindPeopleViewModel.FilterAsExpression()).ToList();
+            }
         }
 
         private int CountPeopleMatchingFilterFromRepository()

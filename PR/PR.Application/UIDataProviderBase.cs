@@ -33,28 +33,9 @@ namespace PR.Application
 
         public abstract void CreatePerson(Person person);
 
-        public abstract void CreatePersonAssociation(
-            PersonAssociation personAssociation);
-
-        public abstract Person GetPersonWithAssociations(
-            Guid id);
-
-        public abstract IList<Person> FindPeople(
-            Expression<Func<Person, bool>> predicate);
-
-        public abstract IList<Person> FindPeople(
-            IList<Expression<Func<Person, bool>>> predicates);
-
         public abstract void UpdatePeople(IList<Person> people);
 
-        public abstract void UpdatePersonAssociation(PersonAssociation personAssociation);
-
-        public abstract void DeletePerson(Person person);
-
         public abstract void DeletePeople(IList<Person> people);
-
-        public abstract void DeletePersonAssociations(
-            IList<PersonAssociation> personAssociations);
 
         public void ExportData(
             string fileName,
@@ -91,7 +72,11 @@ namespace PR.Application
             else
             {
                 _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving matching person records from repository..", "general", true);
-                people = FindPeople(predicates);
+
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    people = unitOfWork.People.Find(predicates).ToList();
+                }
 
                 // Todo: Handle person associtations
                 throw new NotImplementedException();
