@@ -42,6 +42,8 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             {
                 FirstName = "Luke",
                 Surname = "Skywalker",
+                Category = "Jedi",
+                Address = "Tatooine",
                 Created = now + new TimeSpan(delay++)
             };
 
@@ -49,6 +51,8 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             {
                 FirstName = "Leia",
                 Surname = "Organa",
+                Description = "Princess",
+                Address = "Alderaan",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -57,13 +61,15 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                 FirstName = "Anakin",
                 Surname = "Skywalker",
                 Nickname = "Darth Vader",
+                Category = "Jedi, Sith",
                 Created = now + new TimeSpan(delay++),
             };
 
-            var obiVan = new Person
+            var obiWan = new Person
             {
-                FirstName = "Obi Van",
+                FirstName = "Obi-Wan",
                 Surname = "Kenobi",
+                Category = "Jedi",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -71,6 +77,8 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             {
                 FirstName = "Padme",
                 Surname = "Amidala",
+                Address = "Naboo",
+                Description = "Princess",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -79,6 +87,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                 FirstName = "Ben",
                 Surname = "Solo",
                 Nickname = "Kylo Ren",
+                Category = "Jedi/Sith",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -86,6 +95,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             {
                 FirstName = "Han",
                 Surname = "Solo",
+                Description = "Smuggler",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -93,6 +103,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             {
                 FirstName = "Qui-Gon",
                 Surname = "Jinn",
+                Category = "Jedi",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -100,6 +111,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             {
                 FirstName = "Count Dooku",
                 Nickname = "Darth Tyranus",
+                Category = "Sith",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -107,6 +119,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             {
                 FirstName = "Emperor Palpatine",
                 Nickname = "Darth Sidious",
+                Category = "Sith",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -114,6 +127,54 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             {
                 FirstName = "Rey",
                 Surname = "Skywalker",
+                Category = "Jedi",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var maul = new Person
+            {
+                FirstName = "Darth Maul",
+                Category = "Sith",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var plagueis = new Person
+            {
+                FirstName = "Darth Plagueis",
+                Category = "Sith",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var yoda = new Person
+            {
+                FirstName = "Yoda",
+                Category = "Jedi",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var lando = new Person
+            {
+                FirstName = "Lando",
+                Surname = "Calrissian",
+                Description = "Smuggler",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var chewbacca = new Person
+            {
+                FirstName = "Chewbacca",
+                Nickname = "Chewie",
+                Address = "Kashyyyk",
+                Description = "Wookie",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var bobaFett = new Person
+            {
+                FirstName = "Boba",
+                Surname = "Fett",
+                Address = "Mandalore",
+                Description = "Bounty Hunter",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -122,14 +183,20 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                 luke,
                 leia,
                 anakin,
-                obiVan,
+                obiWan,
                 padme,
                 benSolo,
                 hanSolo,
                 quiGon,
                 countDooku,
                 palpatine,
-                rey
+                rey,
+                maul,
+                plagueis,
+                yoda,
+                lando,
+                chewbacca,
+                bobaFett
             };
 
             var personAssociations = new List<PersonAssociation>
@@ -194,12 +261,12 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                 {
                     SubjectPerson = luke,
                     Description = "is an apprentice of",
-                    ObjectPerson = obiVan,
+                    ObjectPerson = obiWan,
                     Created = now + new TimeSpan(delay + 8),
                 },
                 new()
                 {
-                    SubjectPerson = obiVan,
+                    SubjectPerson = obiWan,
                     Description = "is an apprentice of",
                     ObjectPerson = quiGon,
                     Created = now + new TimeSpan(delay + 9),
@@ -245,6 +312,55 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                     Description = "is an apprentice of",
                     ObjectPerson = leia,
                     Created = now + new TimeSpan(delay + 15)
+                },
+                new()
+                {
+                    SubjectPerson = maul,
+                    Description = "is an apprentice of",
+                    ObjectPerson = palpatine,
+                    Created = now + new TimeSpan(delay + 16)
+                },
+                new()
+                {
+                    SubjectPerson = palpatine,
+                    Description = "is an apprentice of",
+                    ObjectPerson = plagueis,
+                    Created = now + new TimeSpan(delay + 17)
+                },
+                new()
+                {
+                    SubjectPerson = countDooku,
+                    Description = "is an apprentice of",
+                    ObjectPerson = yoda,
+                    Created = now + new TimeSpan(delay + 18)
+                },
+                new()
+                {
+                    SubjectPerson = luke,
+                    Description = "is an apprentice of",
+                    ObjectPerson = yoda,
+                    Created = now + new TimeSpan(delay + 19)
+                },
+                new()
+                {
+                    SubjectPerson = lando,
+                    Description = "is a friend of",
+                    ObjectPerson = hanSolo,
+                    Created = now + new TimeSpan(delay + 20)
+                },
+                new()
+                {
+                    SubjectPerson = chewbacca,
+                    Description = "is a friend of",
+                    ObjectPerson = hanSolo,
+                    Created = now + new TimeSpan(delay + 21)
+                },
+                new()
+                {
+                    SubjectPerson = bobaFett,
+                    Description = "is employed by",
+                    ObjectPerson = anakin,
+                    Created = now + new TimeSpan(delay + 22)
                 },
             };
 
