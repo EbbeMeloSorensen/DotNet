@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 using PR.Application;
 using PR.Domain.Entities;
+using PR.Persistence;
 
 namespace PR.ViewModel
 {
@@ -85,6 +86,7 @@ namespace PR.ViewModel
 
         public MainWindowViewModel(
             IUIDataProvider dataProvider,
+            IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
             ILogger logger)
         {
@@ -95,7 +97,7 @@ namespace PR.ViewModel
             _logger = new ViewModelLogger(logger, LogViewModel);
             _dataProvider.Initialize(_logger);
 
-            PersonListViewModel = new PersonListViewModel(dataProvider, applicationDialogService);
+            PersonListViewModel = new PersonListViewModel(dataProvider, unitOfWorkFactory, applicationDialogService);
 
             PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
 
@@ -105,6 +107,7 @@ namespace PR.ViewModel
 
             PersonAssociationsViewModel = new PersonAssociationsViewModel(
                 dataProvider,
+                unitOfWorkFactory,
                 applicationDialogService,
                 PersonListViewModel.SelectedPeople);
 

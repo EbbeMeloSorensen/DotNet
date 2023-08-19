@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
@@ -12,12 +9,14 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using PR.Application;
 using PR.Domain.Entities;
+using PR.Persistence;
 
 namespace PR.ViewModel
 {
     public class PersonAssociationsViewModel : ViewModelBase
     {
         private readonly IUIDataProvider _dataProvider;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
 
         private bool _isVisible;
@@ -85,10 +84,12 @@ namespace PR.ViewModel
 
         public PersonAssociationsViewModel(
             IUIDataProvider dataProvider,
+            IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
             ObjectCollection<Person> people)
         {
             _dataProvider = dataProvider;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _people = people;
             SelectedPersonAssociations = new ObjectCollection<PersonAssociation>();
@@ -163,6 +164,7 @@ namespace PR.ViewModel
         {
             var dialogViewModel = new DefinePersonAssociationDialogViewModel(
                 _dataProvider,
+                _unitOfWorkFactory,
                 _applicationDialogService,
                 _activePerson,
                 null,
@@ -198,6 +200,7 @@ namespace PR.ViewModel
 
             var dialogViewModel = new DefinePersonAssociationDialogViewModel(
                 _dataProvider,
+                _unitOfWorkFactory,
                 _applicationDialogService,
                 personAssociation.SubjectPerson,
                 personAssociation.ObjectPerson,

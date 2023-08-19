@@ -14,18 +14,11 @@ namespace PR.Application
 
         void Initialize(ILogger logger);
 
-        Task<bool> CheckConnection();
-
-        int CountAllPeople();
-
         void CreatePerson(
             Person person);
 
         void CreatePersonAssociation(
             PersonAssociation personAssociation);
-
-        int CountPeople(
-            Expression<Func<Person, bool>> predicate);
 
         Person GetPerson(Guid id);
 
@@ -44,9 +37,6 @@ namespace PR.Application
 
         IList<PersonAssociation> FindPersonAssociations(
             IList<Expression<Func<PersonAssociation, bool>>> predicates);
-
-        void UpdatePerson(
-            Person person);
 
         void UpdatePeople(
             IList<Person> people);

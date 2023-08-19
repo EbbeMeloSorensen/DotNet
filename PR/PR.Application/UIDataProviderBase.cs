@@ -32,19 +32,10 @@ namespace PR.Application
             _logger = logger;
         }
 
-        public abstract Task<bool> CheckConnection();
-        public int CountAllPeople()
-        {
-            throw new NotImplementedException();
-        }
-
         public abstract void CreatePerson(Person person);
 
         public abstract void CreatePersonAssociation(
             PersonAssociation personAssociation);
-
-        public abstract int CountPeople(
-            Expression<Func<Person, bool>> predicate);
 
         public abstract Person GetPerson(
             Guid id);
@@ -67,8 +58,6 @@ namespace PR.Application
 
         public abstract IList<PersonAssociation> FindPersonAssociations(
             IList<Expression<Func<PersonAssociation, bool>>> predicates);
-
-        public abstract void UpdatePerson(Person person);
 
         public abstract void UpdatePeople(IList<Person> people);
 

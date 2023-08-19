@@ -31,11 +31,6 @@ namespace PR.UIDataProvider.Persistence
             UnitOfWorkFactory.Initialize(logger);
         }
 
-        public override async Task<bool> CheckConnection()
-        {
-            return await UnitOfWorkFactory.CheckRepositoryConnection();
-        }
-
         public override void CreatePerson(
             Person person)
         {
@@ -55,15 +50,6 @@ namespace PR.UIDataProvider.Persistence
             {
                 unitOfWork.PersonAssociations.Add(personAssociation);
                 unitOfWork.Complete();
-            }
-        }
-
-        public override int CountPeople(
-            Expression<Func<Person, bool>> predicate)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                return unitOfWork.People.Count(predicate);
             }
         }
 
@@ -137,12 +123,6 @@ namespace PR.UIDataProvider.Persistence
             {
                 return unitOfWork.PersonAssociations.Find(predicates).ToList();
             }
-        }
-
-        public override void UpdatePerson(
-            Person person)
-        {
-            throw new NotImplementedException();
         }
 
         public override void UpdatePeople(

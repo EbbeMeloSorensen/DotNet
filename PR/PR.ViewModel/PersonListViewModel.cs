@@ -10,12 +10,14 @@ using Craft.ViewModels.Dialogs;
 using PR.Application;
 using PR.Domain;
 using PR.Domain.Entities;
+using PR.Persistence;
 
 namespace PR.ViewModel
 {
     public class PersonListViewModel : ViewModelBase
     {
         private readonly IUIDataProvider _dataProvider;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private IList<Person> _people;
         private Sorting _sorting;
@@ -61,9 +63,11 @@ namespace PR.ViewModel
 
         public PersonListViewModel(
             IUIDataProvider dataProvider,
+            IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService)
         {
             _dataProvider = dataProvider;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _sorting = Sorting.Name;
 
@@ -141,7 +145,10 @@ namespace PR.ViewModel
 
         private int CountPeopleMatchingFilterFromRepository()
         {
-            return _dataProvider.CountPeople(FindPeopleViewModel.FilterAsExpression());
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                return unitOfWork.People.Count(FindPeopleViewModel.FilterAsExpression());
+            }
         }
 
         private void UpdateSorting()

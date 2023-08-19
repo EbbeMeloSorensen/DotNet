@@ -8,6 +8,7 @@ using Craft.ViewModels.Dialogs;
 using GalaSoft.MvvmLight.Command;
 using PR.Application;
 using PR.Domain.Entities;
+using PR.Persistence;
 
 namespace PR.ViewModel;
 
@@ -75,6 +76,7 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
 
     public DefinePersonAssociationDialogViewModel(
         IUIDataProvider dataProvider,
+        IUnitOfWorkFactory unitOfWorkFactory,
         IDialogService applicationDialogService,
         Person subjectPerson,
         Person objectPerson,
@@ -84,8 +86,8 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
         _originalObjectPerson = ObjectPerson = objectPerson;
         _originalDescription = Description = description;
 
-        PersonListViewModelSubject = new PersonListViewModel(dataProvider, applicationDialogService);
-        PersonListViewModelObject = new PersonListViewModel(dataProvider, applicationDialogService);
+        PersonListViewModelSubject = new PersonListViewModel(dataProvider, unitOfWorkFactory, applicationDialogService);
+        PersonListViewModelObject = new PersonListViewModel(dataProvider, unitOfWorkFactory, applicationDialogService);
 
         PersonListViewModelSubject.SelectedPeople.PropertyChanged += (s, e) =>
         {
