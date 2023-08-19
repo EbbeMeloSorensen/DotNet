@@ -246,7 +246,7 @@ namespace PR.ViewModel
 
         private void ShowOptionsDialog(object owner)
         {
-            var dialogViewModel = new OptionsDialogViewModel(_dataProvider);
+            var dialogViewModel = new OptionsDialogViewModel(_dataProvider, _unitOfWorkFactory);
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }
 

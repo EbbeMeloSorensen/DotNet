@@ -199,8 +199,12 @@ namespace PR.Application
                 }
             }
 
-            LoadPeople(prData.People);
-            LoadPersonAssociations(prData.PersonAssociations);
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.People.AddRange(prData.People);
+                unitOfWork.PersonAssociations.AddRange(prData.PersonAssociations);
+                unitOfWork.Complete();
+            }
         }
 
         public event EventHandler<PersonEventArgs> PersonCreated;
@@ -248,11 +252,5 @@ namespace PR.Application
                 handler(this, new PeopleEventArgs(people));
             }
         }
-
-        protected abstract void LoadPeople(
-            IList<Person> people);
-
-        protected abstract void LoadPersonAssociations(
-            IList<PersonAssociation> personAssociations);
     }
 }

@@ -74,25 +74,5 @@ namespace PR.UIDataProvider.Persistence
 
             OnPeopleDeleted(people);
         }
-
-        protected override void LoadPeople(
-            IList<Person> people)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                unitOfWork.People.AddRange(people);
-                unitOfWork.Complete();
-            }
-        }
-
-        protected override void LoadPersonAssociations(
-            IList<PersonAssociation> personAssociations)
-        {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                unitOfWork.PersonAssociations.AddRange(personAssociations);
-                unitOfWork.Complete();
-            }
-        }
     }
 }
