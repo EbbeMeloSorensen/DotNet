@@ -186,6 +186,67 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                 Created = now + new TimeSpan(delay++),
             };
 
+            var maxRebo = new Person
+            {
+                FirstName = "Max",
+                Surname = "Rebo",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var nienNunb = new Person
+            {
+                FirstName = "Nien",
+                Surname = "Nunb",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var bibFortuna = new Person
+            {
+                FirstName = "Bib",
+                Surname = "Fortuna",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var admiralAckbar = new Person
+            {
+                FirstName = "Ackbar",
+                Nickname = "Admiral Ackbar",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var wicket = new Person
+            {
+                FirstName = "Wicket",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var oola = new Person
+            {
+                FirstName = "Oola",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var yarnaDalGargan = new Person
+            {
+                FirstName = "Yarna",
+                Surname = "d'al Gargan",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var dengar = new Person
+            {
+                FirstName = "Dengar",
+                Description = "Bounty hunter",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var bossk = new Person
+            {
+                FirstName = "Bossk",
+                Description = "Bounty hunter",
+                Created = now + new TimeSpan(delay++),
+            };
+
             var shmi = new Person
             {
                 FirstName = "Shmi",
@@ -225,6 +286,47 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             {
                 FirstName = "Mon",
                 Surname = "Mothma",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var jynErso = new Person
+            {
+                FirstName = "Jyn",
+                Surname = "Erso",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var galenErso = new Person
+            {
+                FirstName = "Galen",
+                Surname = "Erso",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var orsonKrennic = new Person
+            {
+                FirstName = "Orson",
+                Surname = "Krennic",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var chirrutImwe = new Person
+            {
+                FirstName = "Chirrut",
+                Surname = "Imwe",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var bazeMalbus = new Person
+            {
+                FirstName = "Baze",
+                Surname = "Malbus",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var k2so = new Person
+            {
+                FirstName = "K-2SO",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -341,12 +443,27 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                 chewbacca,
                 bobaFett,
                 tarkin,
+                maxRebo,
+                nienNunb,
+                bibFortuna,
+                admiralAckbar,
+                wicket,
+                oola,
+                yarnaDalGargan,
+                dengar,
+                bossk,
                 shmi,
                 c3po,
                 r2d2,
                 jarjar,
                 jabba,
                 monMothma,
+                jynErso,
+                galenErso,
+                orsonKrennic,
+                chirrutImwe,
+                bazeMalbus,
+                k2so,
                 cassian,
                 luthen,
                 sawGerrera,
