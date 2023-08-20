@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.IO;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Craft.IO.Utils;
 using Craft.DataStructures.Graph;
 using Craft.DataStructures.IO;
-using PR.Domain.Foreign;
-using Person = PR.Domain.Entities.Person;
+using PR.Domain.Entities;
 
 namespace PR.IO
 {
@@ -109,15 +107,6 @@ namespace PR.IO
 
             var json = streamReader.ReadToEnd();
             prData = JsonConvert.DeserializeObject<PRData>(json);
-        }
-
-        public void ImportForeignDataFromJson(
-            string fileName, 
-            out ContactData contactData)
-        {
-            using var streamReader = new StreamReader(fileName);
-            var json = streamReader.ReadToEnd();
-            contactData = JsonConvert.DeserializeObject<ContactData>(json);
         }
     }
 }

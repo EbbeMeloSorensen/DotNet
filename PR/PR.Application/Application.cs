@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities;
+using PR.IO;
 using PR.Persistence;
 
 namespace PR.Application
@@ -16,6 +18,7 @@ namespace PR.Application
     {
         private IUIDataProvider _uiDataProvider;
         private IUnitOfWorkFactory _unitOfWorkFactory;
+        private IDataIOHandler _dataIOHandler;
         private ILogger _logger;
 
         public IUIDataProvider UIDataProvider => _uiDataProvider;
@@ -29,10 +32,12 @@ namespace PR.Application
         public Application(
             IUIDataProvider uiDataProvider,
             IUnitOfWorkFactory unitOfWorkFactory,
+            IDataIOHandler dataIOHandler,
             ILogger logger)
         {
             _uiDataProvider = uiDataProvider;
             _unitOfWorkFactory = unitOfWorkFactory;
+            _dataIOHandler = dataIOHandler;
             _logger = logger;
         }
 
@@ -169,7 +174,6 @@ namespace PR.Application
 
         public async Task ImportData(
             string fileName,
-            bool legacy,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(() =>
@@ -177,12 +181,45 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
                 progressCallback?.Invoke(0.0, "Importing data");
 
-                UIDataProvider.ImportData(fileName, legacy);
+                var extension = Path.GetExtension(fileName)?.ToLower();
+
+                if (extension == null)
+                {
+                    throw new ArgumentException();
+                }
+
+                var prData = new PRData();
+
+                switch (extension)
+                {
+                    case ".xml":
+                        {
+                            _dataIOHandler.ImportDataFromXML(
+                                fileName, out prData);
+                            break;
+                        }
+                    case ".json":
+                        {
+                            _dataIOHandler.ImportDataFromJson(
+                                fileName, out prData);
+                            break;
+                        }
+                    default:
+                        {
+                            throw new ArgumentException();
+                        }
+                }
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    unitOfWork.People.AddRange(prData.People);
+                    unitOfWork.PersonAssociations.AddRange(prData.PersonAssociations);
+                    unitOfWork.Complete();
+                }
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
             });
         }
-
     }
 }

@@ -68,7 +68,7 @@ namespace PR.UI.Console
         {
             System.Console.Write("Importing data...\nProgress: ");
             await GetApplication().ImportData(
-                options.FileName, options.Legacy, (progress, nameOfSubtask) =>
+                options.FileName, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

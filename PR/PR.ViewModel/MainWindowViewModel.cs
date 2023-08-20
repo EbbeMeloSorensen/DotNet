@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Windows;
 using Craft.Logging;
 using Craft.ViewModel.Utils;
@@ -19,6 +20,7 @@ namespace PR.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private readonly Application.Application _application;
         private readonly IUIDataProvider _dataProvider;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDataIOHandler _dataIOHandler;
@@ -46,7 +48,7 @@ namespace PR.ViewModel
         private RelayCommand _deleteSelectedPeopleCommand;
         private RelayCommand _exportPeopleCommand;
         private RelayCommand _exportSelectionToGraphmlCommand;
-        private RelayCommand _importPeopleCommand;
+        private AsyncCommand _importPeopleCommand;
         private RelayCommand _exitCommand;
 
         public RelayCommand DeleteSelectedPeopleCommand
@@ -75,9 +77,9 @@ namespace PR.ViewModel
                 ExportSelectionToGraphml, CanExportSelectionToGraphml)); }
         }
 
-        public RelayCommand ImportPeopleCommand
+        public AsyncCommand ImportPeopleCommand
         {
-            get { return _importPeopleCommand ?? (_importPeopleCommand = new RelayCommand(ImportPeople, CanImportPeople)); }
+            get { return _importPeopleCommand ?? (_importPeopleCommand = new AsyncCommand(ImportPeople, CanImportPeople)); }
         }
 
         public RelayCommand ExitCommand
@@ -96,6 +98,12 @@ namespace PR.ViewModel
             _unitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
+
+            _application = new Application.Application(
+                dataProvider, 
+                unitOfWorkFactory, 
+                dataIOHandler, 
+                logger);
 
             LogViewModel = new LogViewModel();
             _logger = new ViewModelLogger(logger, LogViewModel);
@@ -266,7 +274,7 @@ namespace PR.ViewModel
                    PersonListViewModel.SelectedPeople.Objects.Any();
         }
 
-        private void ImportPeople()
+        private async Task ImportPeople()
         {
             var dialog = new OpenFileDialog
             {
@@ -278,7 +286,7 @@ namespace PR.ViewModel
                 return;
             }
 
-            _dataProvider.ImportData(dialog.FileName, false);
+            await _application.ImportData(dialog.FileName);
         }
 
         private bool CanImportPeople()

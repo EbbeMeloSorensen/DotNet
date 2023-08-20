@@ -178,6 +178,149 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                 Created = now + new TimeSpan(delay++),
             };
 
+            var tarkin = new Person
+            {
+                FirstName = "Wilhuff",
+                Surname = "Tarkin",
+                Nickname = "Grand Moff Tarkin",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var shmi = new Person
+            {
+                FirstName = "Shmi",
+                Surname = "Skywalker",
+                Address = "Tatooine",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var c3po = new Person
+            {
+                FirstName = "C-3PO",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var r2d2 = new Person
+            {
+                FirstName = "R2-D2",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var jarjar = new Person
+            {
+                FirstName = "Jar Jar",
+                Surname = "Binks",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var jabba = new Person
+            {
+                FirstName = "Jabba",
+                Surname = "Desilijic Tiure",
+                Nickname = "Jabba the Hutt",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var monMothma = new Person
+            {
+                FirstName = "Mon",
+                Surname = "Mothma",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var cassian = new Person
+            {
+                FirstName = "Cassian",
+                Surname = "Andor",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var sawGerrera = new Person
+            {
+                FirstName = "Saw",
+                Surname = "Gerrera",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var luthen = new Person
+            {
+                FirstName = "Luthen",
+                Surname = "Rael",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var maarva = new Person
+            {
+                FirstName = "Maarva",
+                Surname = "Andor",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var tobiasBeckett = new Person
+            {
+                FirstName = "Tobias",
+                Surname = "Beckett",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var qira = new Person
+            {
+                FirstName = "Qi´ra",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var l337 = new Person
+            {
+                FirstName = "L3-37",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var drydenVos = new Person
+            {
+                FirstName = "Dryden",
+                Surname = "Vos",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var bb8 = new Person
+            {
+                FirstName = "BB-8",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var poeDameron = new Person
+            {
+                FirstName = "Poe",
+                Surname = "Dameron",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var finn = new Person
+            {
+                FirstName = "Finn",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var mazKanata = new Person
+            {
+                FirstName = "Maz",
+                Surname = "Kanata",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var ahsoka = new Person
+            {
+                FirstName = "Ahsoka",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var lorSanTekka = new Person
+            {
+                FirstName = "Lor San",
+                Surname = "Tekka",
+                Created = now + new TimeSpan(delay++),
+            };
+
             var people = new List<Person>
             {
                 luke,
@@ -196,7 +339,28 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                 yoda,
                 lando,
                 chewbacca,
-                bobaFett
+                bobaFett,
+                tarkin,
+                shmi,
+                c3po,
+                r2d2,
+                jarjar,
+                jabba,
+                monMothma,
+                cassian,
+                luthen,
+                sawGerrera,
+                maarva,
+                tobiasBeckett,
+                qira,
+                l337,
+                drydenVos,
+                bb8,
+                poeDameron,
+                finn,
+                mazKanata,
+                ahsoka,
+                lorSanTekka
             };
 
             var personAssociations = new List<PersonAssociation>
@@ -362,6 +526,62 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
                     ObjectPerson = anakin,
                     Created = now + new TimeSpan(delay + 22)
                 },
+                new()
+                {
+                    SubjectPerson = anakin,
+                    Description = "is an apprentice of",
+                    ObjectPerson = obiWan,
+                    Created = now + new TimeSpan(delay + 23)
+                },
+                new()
+                {
+                    SubjectPerson = shmi,
+                    Description = "is a parent of",
+                    ObjectPerson = anakin,
+                    Created = now + new TimeSpan(delay + 24)
+                },
+                new()
+                {
+                    SubjectPerson = maarva,
+                    Description = "is an adoptive parent of",
+                    ObjectPerson = cassian,
+                    Created = now + new TimeSpan(delay + 25)
+                },
+                new()
+                {
+                    SubjectPerson = ahsoka,
+                    Description = "is an apprentice of",
+                    ObjectPerson = anakin,
+                    Created = now + new TimeSpan(delay + 26)
+                },
+                new()
+                {
+                    SubjectPerson = poeDameron,
+                    Description = "is a friend of",
+                    ObjectPerson = rey,
+                    Created = now + new TimeSpan(delay + 27)
+                },
+                new()
+                {
+                    SubjectPerson = finn,
+                    Description = "is a friend of",
+                    ObjectPerson = rey,
+                    Created = now + new TimeSpan(delay + 28)
+                },
+                new()
+                {
+                    SubjectPerson = tarkin,
+                    Description = "is a subordinate of",
+                    ObjectPerson = palpatine,
+                    Created = now + new TimeSpan(delay + 29)
+                },
+                new()
+                {
+                    SubjectPerson = anakin,
+                    Description = "is a subordinate of",
+                    ObjectPerson = tarkin,
+                    Created = now + new TimeSpan(delay + 30)
+                }
             };
 
             context.AddRange(people);

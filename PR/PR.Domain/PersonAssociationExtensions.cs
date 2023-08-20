@@ -18,21 +18,5 @@ namespace PR.Domain
                 Created = personAssociation.Created
             };
         }
-
-        public static PersonAssociation ConvertFromLegacyPersonAssociation(
-            this Foreign.PersonAssociation personAssociation,
-            Dictionary<int, Guid> personIdMap)
-        {
-            var result = new PersonAssociation
-            {
-                Id = Guid.NewGuid(),
-                Description = personAssociation.Description,
-                Created = personAssociation.Created.ToUniversalTime(),
-                SubjectPersonId = personIdMap[personAssociation.SubjectPersonId],
-                ObjectPersonId = personIdMap[personAssociation.ObjectPersonId]
-            };
-
-            return result;
-        }
     }
 }

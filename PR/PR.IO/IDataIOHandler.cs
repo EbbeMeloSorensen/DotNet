@@ -24,9 +24,5 @@ namespace PR.IO
         void ImportDataFromJson(
             string fileName,
             out PRData prData);
-
-        void ImportForeignDataFromJson(
-            string fileName,
-            out Domain.Foreign.ContactData contactData);
     }
 }
