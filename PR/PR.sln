@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.IO", "PR.IO\PR.IO.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Application", "PR.Application\PR.Application.csproj", "{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.UIDataProvider.Persistence", "PR.UIDataProvider.Persistence\PR.UIDataProvider.Persistence.csproj", "{6364B2A2-BA51-442D-AB7F-13867983BC10}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.UI.Console", "PR.UI.Console\PR.UI.Console.csproj", "{D329B3CB-CF03-4B26-81EF-3208C6DACB9D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{D30CA8E7-38E1-41A5-940D-680E7D46A306}"
@@ -100,10 +98,6 @@ Global
 		{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CC5B1D8-60D3-45DE-AE62-2FD0FBE6DC74}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6364B2A2-BA51-442D-AB7F-13867983BC10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6364B2A2-BA51-442D-AB7F-13867983BC10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6364B2A2-BA51-442D-AB7F-13867983BC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6364B2A2-BA51-442D-AB7F-13867983BC10}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D329B3CB-CF03-4B26-81EF-3208C6DACB9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D329B3CB-CF03-4B26-81EF-3208C6DACB9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D329B3CB-CF03-4B26-81EF-3208C6DACB9D}.Release|Any CPU.ActiveCfg = Release|Any CPU

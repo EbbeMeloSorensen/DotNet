@@ -19,7 +19,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private ObservableCollection<ValidationError> _validationMessages;
     private string _error = string.Empty;
 
-    private readonly IUIDataProvider _dataProvider;
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private ObjectCollection<Person> _people;
 
@@ -164,11 +163,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     }
 
     public PeoplePropertiesViewModel(
-        IUIDataProvider dataProvider,
         IUnitOfWorkFactory unitOfWorkFactory,
         ObjectCollection<Person> people)
     {
-        _dataProvider = dataProvider;
         _unitOfWorkFactory = unitOfWorkFactory;
         _people = people;
 

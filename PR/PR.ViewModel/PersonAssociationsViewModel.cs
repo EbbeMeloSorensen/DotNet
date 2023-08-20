@@ -7,7 +7,6 @@ using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using PR.Application;
 using PR.Domain.Entities;
 using PR.Persistence;
 
@@ -15,7 +14,6 @@ namespace PR.ViewModel
 {
     public class PersonAssociationsViewModel : ViewModelBase
     {
-        private readonly IUIDataProvider _dataProvider;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
 
@@ -83,18 +81,15 @@ namespace PR.ViewModel
         }
 
         public PersonAssociationsViewModel(
-            IUIDataProvider dataProvider,
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
             ObjectCollection<Person> people)
         {
-            _dataProvider = dataProvider;
             _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _people = people;
             SelectedPersonAssociations = new ObjectCollection<PersonAssociation>();
 
-            // Den her lader til at være tung..
             _people.PropertyChanged += Initialize;
         }
 
@@ -173,7 +168,6 @@ namespace PR.ViewModel
         private void CreatePersonAssociation(object owner)
         {
             var dialogViewModel = new DefinePersonAssociationDialogViewModel(
-                _dataProvider,
                 _unitOfWorkFactory,
                 _applicationDialogService,
                 _activePerson,
@@ -214,7 +208,6 @@ namespace PR.ViewModel
             var personAssociation = SelectedPersonAssociations.Objects.Single();
 
             var dialogViewModel = new DefinePersonAssociationDialogViewModel(
-                _dataProvider,
                 _unitOfWorkFactory,
                 _applicationDialogService,
                 personAssociation.SubjectPerson,

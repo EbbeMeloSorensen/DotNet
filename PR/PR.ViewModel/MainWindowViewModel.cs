@@ -21,7 +21,6 @@ namespace PR.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly Application.Application _application;
-        private readonly IUIDataProvider _dataProvider;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
@@ -88,19 +87,16 @@ namespace PR.ViewModel
         }
 
         public MainWindowViewModel(
-            IUIDataProvider dataProvider,
             IUnitOfWorkFactory unitOfWorkFactory,
             IDataIOHandler dataIOHandler,
             IDialogService applicationDialogService,
             ILogger logger)
         {
-            _dataProvider = dataProvider;
             _unitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
 
             _application = new Application.Application(
-                dataProvider, 
                 unitOfWorkFactory, 
                 dataIOHandler, 
                 logger);
@@ -109,19 +105,17 @@ namespace PR.ViewModel
             _logger = new ViewModelLogger(logger, LogViewModel);
             _unitOfWorkFactory.Initialize(_logger);
 
-            PersonListViewModel = new PersonListViewModel(dataProvider, unitOfWorkFactory, applicationDialogService);
+            PersonListViewModel = new PersonListViewModel(unitOfWorkFactory, applicationDialogService);
 
             PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
-                dataProvider,
                 unitOfWorkFactory,
                 PersonListViewModel.SelectedPeople);
 
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
 
             PersonAssociationsViewModel = new PersonAssociationsViewModel(
-                dataProvider,
                 unitOfWorkFactory,
                 applicationDialogService,
                 PersonListViewModel.SelectedPeople);

@@ -16,12 +16,9 @@ namespace PR.Application
 
     public class Application
     {
-        private IUIDataProvider _uiDataProvider;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IDataIOHandler _dataIOHandler;
         private ILogger _logger;
-
-        public IUIDataProvider UIDataProvider => _uiDataProvider;
 
         public ILogger Logger
         {
@@ -30,12 +27,10 @@ namespace PR.Application
         }
 
         public Application(
-            IUIDataProvider uiDataProvider,
             IUnitOfWorkFactory unitOfWorkFactory,
             IDataIOHandler dataIOHandler,
             ILogger logger)
         {
-            _uiDataProvider = uiDataProvider;
             _unitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _logger = logger;

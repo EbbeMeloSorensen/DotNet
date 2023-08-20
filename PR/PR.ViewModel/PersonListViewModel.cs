@@ -7,7 +7,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
-using PR.Application;
 using PR.Domain;
 using PR.Domain.Entities;
 using PR.Persistence;
@@ -16,7 +15,6 @@ namespace PR.ViewModel
 {
     public class PersonListViewModel : ViewModelBase
     {
-        private readonly IUIDataProvider _dataProvider;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private IList<Person> _people;
@@ -62,11 +60,9 @@ namespace PR.ViewModel
         }
 
         public PersonListViewModel(
-            IUIDataProvider dataProvider,
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService)
         {
-            _dataProvider = dataProvider;
             _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _sorting = Sorting.Name;

@@ -75,7 +75,6 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
     }
 
     public DefinePersonAssociationDialogViewModel(
-        IUIDataProvider dataProvider,
         IUnitOfWorkFactory unitOfWorkFactory,
         IDialogService applicationDialogService,
         Person subjectPerson,
@@ -86,8 +85,8 @@ public class DefinePersonAssociationDialogViewModel : DialogViewModelBase, IData
         _originalObjectPerson = ObjectPerson = objectPerson;
         _originalDescription = Description = description;
 
-        PersonListViewModelSubject = new PersonListViewModel(dataProvider, unitOfWorkFactory, applicationDialogService);
-        PersonListViewModelObject = new PersonListViewModel(dataProvider, unitOfWorkFactory, applicationDialogService);
+        PersonListViewModelSubject = new PersonListViewModel(unitOfWorkFactory, applicationDialogService);
+        PersonListViewModelObject = new PersonListViewModel(unitOfWorkFactory, applicationDialogService);
 
         PersonListViewModelSubject.SelectedPeople.PropertyChanged += (s, e) =>
         {
