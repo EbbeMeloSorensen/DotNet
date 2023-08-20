@@ -14,9 +14,9 @@ namespace PR.Application
             string fileName,
             IList<Expression<Func<Person, bool>>> predicates);
 
-        void ExportDataToGraphML(
-            IList<Person> people,
-            IList<PersonAssociation> personAssociations);
+        //void ExportDataToGraphML(
+        //    IList<Person> people,
+        //    IList<PersonAssociation> personAssociations);
 
         void ImportData(
             string fileName,

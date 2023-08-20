@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 using PR.Application;
 using PR.Domain.Entities;
+using PR.IO;
 using PR.Persistence;
 
 namespace PR.ViewModel
@@ -20,6 +21,7 @@ namespace PR.ViewModel
     {
         private readonly IUIDataProvider _dataProvider;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
         private readonly ILogger _logger;
         private string _mainWindowTitle;
@@ -35,10 +37,8 @@ namespace PR.ViewModel
         }
 
         public PersonListViewModel PersonListViewModel { get; private set; }
-
         public PeoplePropertiesViewModel PeoplePropertiesViewModel { get; private set; }
         public PersonAssociationsViewModel PersonAssociationsViewModel { get; private set; }
-
         public LogViewModel LogViewModel { get; private set; }
 
         private RelayCommand<object> _createPersonCommand;
@@ -88,11 +88,13 @@ namespace PR.ViewModel
         public MainWindowViewModel(
             IUIDataProvider dataProvider,
             IUnitOfWorkFactory unitOfWorkFactory,
+            IDataIOHandler dataIOHandler,
             IDialogService applicationDialogService,
             ILogger logger)
         {
             _dataProvider = dataProvider;
             _unitOfWorkFactory = unitOfWorkFactory;
+            _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
 
             LogViewModel = new LogViewModel();
@@ -242,8 +244,19 @@ namespace PR.ViewModel
 
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var personAssociations = unitOfWork.PersonAssociations.Find(predicates).ToList();
-                _dataProvider.ExportDataToGraphML(people, personAssociations);
+                var personAssociations = unitOfWork.PersonAssociations
+                    .Find(predicates)
+                    .ToList();
+
+                var prData = new PRData
+                {
+                    People = people,
+                    PersonAssociations = personAssociations
+                };
+
+                _dataIOHandler.ExportDataToGraphML(
+                    prData,
+                    @"C:\Temp\People.graphml");
             }
         }
 
