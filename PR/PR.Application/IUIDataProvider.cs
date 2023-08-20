@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using PR.Domain.Entities;
-using PR.Persistence;
+﻿using PR.Persistence;
 
 namespace PR.Application
 {
     public interface IUIDataProvider
     {
-        IUnitOfWorkFactory UnitOfWorkFactory { get; }
-
-        void ExportData(
-            string fileName,
-            IList<Expression<Func<Person, bool>>> predicates);
     }
 }

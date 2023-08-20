@@ -46,7 +46,7 @@ namespace PR.ViewModel
         private RelayCommand<object> _createPersonCommand;
         private RelayCommand<object> _showOptionsDialogCommand;
         private RelayCommand _deleteSelectedPeopleCommand;
-        private RelayCommand _exportPeopleCommand;
+        private AsyncCommand _exportPeopleCommand;
         private RelayCommand _exportSelectionToGraphmlCommand;
         private AsyncCommand _importPeopleCommand;
         private RelayCommand _exitCommand;
@@ -66,9 +66,9 @@ namespace PR.ViewModel
             get { return _showOptionsDialogCommand ?? (_showOptionsDialogCommand = new RelayCommand<object>(ShowOptionsDialog, CanShowOptionsDialog)); }
         }
 
-        public RelayCommand ExportPeopleCommand
+        public AsyncCommand ExportPeopleCommand
         {
-            get { return _exportPeopleCommand ?? (_exportPeopleCommand = new RelayCommand(ExportPeople, CanExportPeople)); }
+            get { return _exportPeopleCommand ?? (_exportPeopleCommand = new AsyncCommand(ExportPeople, CanExportPeople)); }
         }
 
         public RelayCommand ExportSelectionToGraphmlCommand
@@ -218,7 +218,7 @@ namespace PR.ViewModel
                    PersonListViewModel.SelectedPeople.Objects.Any();
         }
 
-        private void ExportPeople()
+        private async Task ExportPeople()
         {
             var dialog = new SaveFileDialog
             {
@@ -230,7 +230,7 @@ namespace PR.ViewModel
                 return;
             }
 
-            _dataProvider.ExportData(dialog.FileName, null);
+            await _application.ExportData(dialog.FileName);
         }
 
         private bool CanExportPeople()
