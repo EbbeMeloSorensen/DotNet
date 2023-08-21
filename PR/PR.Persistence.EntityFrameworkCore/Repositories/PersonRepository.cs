@@ -6,14 +6,14 @@ using PR.Persistence.Repositories;
 
 namespace PR.Persistence.EntityFrameworkCore.Repositories
 {
-    public class PersonRepositoryBase : Repository<Person>, IPersonRepository
+    public class PersonRepository : Repository<Person>, IPersonRepository
     {
         public PRDbContextBase PrDbContext
         {
             get { return Context as PRDbContextBase; }
         }
 
-        public PersonRepositoryBase(
+        public PersonRepository(
             DbContext context) : base(context)
         {
         }

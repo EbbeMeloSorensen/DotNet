@@ -13,7 +13,7 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer
         public UnitOfWork(PRDbContext context)
         {
             _context = context;
-            People = new PersonRepositoryBase(_context);
+            People = new PersonRepository(_context);
         }
 
         public int Complete()

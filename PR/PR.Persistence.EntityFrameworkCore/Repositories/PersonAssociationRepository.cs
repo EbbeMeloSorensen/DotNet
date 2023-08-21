@@ -5,14 +5,14 @@ using PR.Persistence.Repositories;
 
 namespace PR.Persistence.EntityFrameworkCore.Repositories
 {
-    public class PersonAssociationRepositoryBase : Repository<PersonAssociation>, IPersonAssociationRepository
+    public class PersonAssociationRepository : Repository<PersonAssociation>, IPersonAssociationRepository
     {
         public PRDbContextBase PrDbContext
         {
             get { return Context as PRDbContextBase; }
         }
 
-        public PersonAssociationRepositoryBase(
+        public PersonAssociationRepository(
             DbContext context) : base(context)
         {
         }
