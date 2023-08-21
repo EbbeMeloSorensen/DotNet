@@ -25,7 +25,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
 
         public override IUnitOfWork GenerateUnitOfWork()
         {
-            return new UnitOfWork(new PRDbContext());
+            return new UnitOfWorkBase(new PRDbContext());
         }
     }
 }

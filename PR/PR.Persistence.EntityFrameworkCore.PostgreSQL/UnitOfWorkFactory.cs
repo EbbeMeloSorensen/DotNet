@@ -36,7 +36,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
 
         public override IUnitOfWork GenerateUnitOfWork()
         {
-            return new UnitOfWork(new PRDbContext());
+            return new UnitOfWorkBase(new PRDbContext());
         }
 
         private static void SeedDatabase(DbContext context)
