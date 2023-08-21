@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Domain.Entities;
-using PR.Persistence.EntityFrameworkCore.PostgreSQL.EntityConfigurations;
+using PR.Persistence.EntityFrameworkCore.EntityConfigurations;
 
 namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
 {
