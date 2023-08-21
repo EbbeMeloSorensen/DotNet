@@ -1,4 +1,4 @@
-﻿using PR.Persistence.EntityFrameworkCore.SqlServer.Repositories;
+﻿using PR.Persistence.EntityFrameworkCore.Repositories;
 using PR.Persistence.Repositories;
 
 namespace PR.Persistence.EntityFrameworkCore.SqlServer
@@ -13,7 +13,7 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer
         public UnitOfWork(PRDbContext context)
         {
             _context = context;
-            People = new PersonRepository(_context);
+            People = new PersonRepositoryBase(_context);
         }
 
         public int Complete()

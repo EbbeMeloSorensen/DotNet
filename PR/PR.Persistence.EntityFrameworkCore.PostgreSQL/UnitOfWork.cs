@@ -1,5 +1,5 @@
 ﻿using PR.Persistence.Repositories;
-using PR.Persistence.EntityFrameworkCore.PostgreSQL.Repositories;
+using PR.Persistence.EntityFrameworkCore.Repositories;
 
 namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
 {
@@ -13,8 +13,8 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
         public UnitOfWork(PRDbContext context)
         {
             _context = context;
-            People = new PersonRepository(_context);
-            PersonAssociations = new PersonAssociationRepository(_context);
+            People = new PersonRepositoryBase(_context);
+            PersonAssociations = new PersonAssociationRepositoryBase(_context);
         }
 
         public int Complete()
