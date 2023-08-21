@@ -250,6 +250,52 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = now + new TimeSpan(delay++),
             };
 
+            var generalGrievous = new Person
+            {
+                FirstName = "Qymaen",
+                Surname = " jai Sheelal",
+                Nickname = "General Grievous",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var maceWindu = new Person
+            {
+                FirstName = "Mace",
+                Surname = "Windu",
+                Category = "Jedi",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var kiAdiMundi = new Person
+            {
+                FirstName = "Ki-Adi-Mundi",
+                Category = "Jedi",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var agenKolar = new Person
+            {
+                FirstName = "Agen",
+                Surname = "Kolar",
+                Category = "Jedi",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var saeseeTiin = new Person
+            {
+                FirstName = "Saesee",
+                Surname = "Tin",
+                Category = "Jedi",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var kitFisto = new Person
+            {
+                FirstName = "Kit",
+                Category = "Fisto",
+                Created = now + new TimeSpan(delay++),
+            };
+
             var jabba = new Person
             {
                 FirstName = "Jabba",
@@ -389,6 +435,7 @@ namespace PR.Persistence.EntityFrameworkCore
             var ahsoka = new Person
             {
                 FirstName = "Ahsoka",
+                Surname = "Tano",
                 Created = now + new TimeSpan(delay++),
             };
 
@@ -432,6 +479,12 @@ namespace PR.Persistence.EntityFrameworkCore
                 c3po,
                 r2d2,
                 jarjar,
+                generalGrievous,
+                maceWindu,
+                kiAdiMundi,
+                agenKolar,
+                saeseeTiin,
+                kitFisto,
                 jabba,
                 monMothma,
                 jynErso,
