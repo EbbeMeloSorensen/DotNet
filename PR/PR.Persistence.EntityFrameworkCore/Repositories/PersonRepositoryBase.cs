@@ -76,6 +76,5 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
             throw new NotImplementedException();
         }
-
     }
 }

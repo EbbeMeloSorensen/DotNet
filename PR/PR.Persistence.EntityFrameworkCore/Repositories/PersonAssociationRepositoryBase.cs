@@ -3,16 +3,16 @@ using Craft.Persistence.EntityFrameworkCore;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
 
-namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
+namespace PR.Persistence.EntityFrameworkCore.Repositories
 {
-    public class PersonAssociationRepository : Repository<PersonAssociation>, IPersonAssociationRepository
+    public class PersonAssociationRepositoryBase : Repository<PersonAssociation>, IPersonAssociationRepository
     {
-        public PRDbContext PrDbContext
+        public PRDbContextBase PrDbContext
         {
-            get { return Context as PRDbContext; }
+            get { return Context as PRDbContextBase; }
         }
 
-        public PersonAssociationRepository(
+        public PersonAssociationRepositoryBase(
             DbContext context) : base(context)
         {
         }
@@ -21,6 +21,11 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
             Guid id)
         {
             return PrDbContext.PersonAssociations.Find(id);
+        }
+
+        public override void Clear()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Update(
@@ -33,13 +38,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Repositories
             objFromRepository.Description = personAssociation.Description;
         }
 
-        public override void UpdateRange(
-            IEnumerable<PersonAssociation> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Clear()
+        public override void UpdateRange(IEnumerable<PersonAssociation> entities)
         {
             throw new NotImplementedException();
         }

@@ -1,5 +1,4 @@
 ﻿using PR.Persistence.EntityFrameworkCore.Repositories;
-using PR.Persistence.EntityFrameworkCore.Sqlite.Repositories;
 using PR.Persistence.Repositories;
 
 namespace PR.Persistence.EntityFrameworkCore.Sqlite
@@ -15,7 +14,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
         {
             _context = context;
             People = new PersonRepositoryBase(_context);
-            PersonAssociations = new PersonAssociationRepository(_context);
+            PersonAssociations = new PersonAssociationRepositoryBase(_context);
         }
 
         public int Complete()
