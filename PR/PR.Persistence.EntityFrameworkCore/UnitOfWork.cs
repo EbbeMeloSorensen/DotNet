@@ -3,7 +3,7 @@ using PR.Persistence.Repositories;
 
 namespace PR.Persistence.EntityFrameworkCore
 {
-    public class UnitOfWorkBase : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly PRDbContextBase _context;
 
@@ -11,7 +11,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
         public IPersonAssociationRepository PersonAssociations { get; }
 
-        public UnitOfWorkBase(
+        public UnitOfWork(
             PRDbContextBase context)
         {
             _context = context;
