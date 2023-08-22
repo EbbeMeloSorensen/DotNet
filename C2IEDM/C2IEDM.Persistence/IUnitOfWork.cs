@@ -4,9 +4,9 @@ namespace C2IEDM.Persistence;
 
 public interface IUnitOfWork : IDisposable
 {
-    ILocationRepository LocationRepository { get; }
-    IPointRepository PointRepository { get; }
-    IAbsolutePointRepository AbsolutePointRepository { get; }
+    ILocationRepository Locations { get; }
+    IPointRepository Points { get; }
+    IAbsolutePointRepository AbsolutePoints { get; }
 
     int Complete();
 }

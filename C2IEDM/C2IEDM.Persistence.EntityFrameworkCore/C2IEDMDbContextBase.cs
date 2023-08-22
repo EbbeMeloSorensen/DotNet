@@ -5,6 +5,11 @@ namespace C2IEDM.Persistence.EntityFrameworkCore;
 
 public class C2IEDMDbContextBase : DbContext
 {
+    public C2IEDMDbContextBase(
+        DbContextOptions options) : base(options)
+    {
+    }
+
     public DbSet<Location> Locations { get; set; }
     public DbSet<Point> Points { get; set; }
     public DbSet<AbsolutePoint> AbsolutePoints { get; set; }
@@ -12,5 +17,6 @@ public class C2IEDMDbContextBase : DbContext
     protected override void OnModelCreating(
         ModelBuilder builder)
     {
+        builder.Entity<Location>().UseTptMappingStrategy();
     }
 }

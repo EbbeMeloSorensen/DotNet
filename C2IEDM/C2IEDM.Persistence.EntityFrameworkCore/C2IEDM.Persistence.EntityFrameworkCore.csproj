@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.10" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\C2IEDM.Domain\C2IEDM.Domain.csproj" />
+    <ProjectReference Include="..\C2IEDM.Persistence\C2IEDM.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
