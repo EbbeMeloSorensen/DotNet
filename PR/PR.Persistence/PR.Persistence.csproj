@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.Persistence\Craft.Persistence.csproj" />
     <ProjectReference Include="..\PR.Domain\PR.Domain.csproj" />
   </ItemGroup>
