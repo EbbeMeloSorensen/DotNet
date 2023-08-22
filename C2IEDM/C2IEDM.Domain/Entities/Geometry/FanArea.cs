@@ -1,0 +1,13 @@
+namespace C2IEDM.Domain.Entities.Geometry
+{
+    public class FanArea : Surface
+    {
+        public Guid VertexPointId { get; set; }
+        public Point VertexPoint { get; set; } = null!;
+
+        public double MinimumRangeDimension { get; set; }
+        public double MaximumRangeDimension { get; set; }
+        public double OrientationAngle { get; set; }
+        public double SectorSizeAngle { get; set; }
+    }
+}
