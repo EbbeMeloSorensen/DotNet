@@ -36,26 +36,6 @@ namespace PR.Application
             _logger = logger;
         }
 
-        //public void Initialize(
-        //    string host,
-        //    string port,
-        //    string database,
-        //    string schema,
-        //    string user,
-        //    string password)
-        //{
-        //    Logger?.WriteLine(LogMessageCategory.Debug, "DMI.SMS.UI.WPF - initializing application");
-
-        //    _unitOfWorkFactory.Host = host;
-        //    _unitOfWorkFactory.Port = port;
-        //    _unitOfWorkFactory.Database = database;
-        //    _unitOfWorkFactory.Schema = schema;
-        //    _unitOfWorkFactory.User = user;
-        //    _unitOfWorkFactory.Password = password;
-
-        //    _unitOfWorkFactory.Initialize(_logger);
-        //}
-
         public async Task MakeBreakfast(
             ProgressCallback progressCallback = null)
         {
