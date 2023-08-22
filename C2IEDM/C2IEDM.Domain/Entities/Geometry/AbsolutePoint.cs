@@ -1,16 +1,15 @@
-namespace C2IEDM.Domain.Entities.Geometry
+namespace C2IEDM.Domain.Entities.Geometry;
+
+public class AbsolutePoint : Point
 {
-    public class AbsolutePoint : Point
+    public double LatitudeCoordinate { get; set; }
+    public double LongitudeCoordinate { get; set; }
+
+    public Guid? VerticalDistanceId{ get; set; }
+    public virtual VerticalDistance? VerticalDistance { get; set; }
+
+    public override List<double> AsListOfDouble()
     {
-        public double LatitudeCoordinate { get; set; }
-        public double LongitudeCoordinate { get; set; }
-
-        public Guid? VerticalDistanceId{ get; set; }
-        public virtual VerticalDistance? VerticalDistance { get; set; }
-
-        public override List<double> AsListOfDouble()
-        {
-            return new List<double>{LatitudeCoordinate, LongitudeCoordinate};
-        }
+        return new List<double>{LatitudeCoordinate, LongitudeCoordinate};
     }
 }

@@ -1,10 +1,9 @@
-namespace C2IEDM.Domain.Entities.Geometry
-{
-    public class CorridorArea : Surface
-    {
-        public Guid CenterLineId { get; set; }
-        public Line CenterLine { get; set; } = null!;
+namespace C2IEDM.Domain.Entities.Geometry;
 
-        public double WidthDimension { get; set; }
-    }
+public class CorridorArea : Surface
+{
+    public Guid CenterLineId { get; set; }
+    public Line CenterLine { get; set; } = null!;
+
+    public double WidthDimension { get; set; }
 }

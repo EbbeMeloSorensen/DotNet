@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Domain", "C2IEDM.Domain\C2IEDM.Domain.csproj", "{4D3FEAB3-651E-446E-A648-55410B718F91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence", "C2IEDM.Persistence\C2IEDM.Persistence.csproj", "{BF97BE25-26A1-480F-BE53-927F48B03593}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{4D3FEAB3-651E-446E-A648-55410B718F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D3FEAB3-651E-446E-A648-55410B718F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D3FEAB3-651E-446E-A648-55410B718F91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF97BE25-26A1-480F-BE53-927F48B03593}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF97BE25-26A1-480F-BE53-927F48B03593}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF97BE25-26A1-480F-BE53-927F48B03593}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF97BE25-26A1-480F-BE53-927F48B03593}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

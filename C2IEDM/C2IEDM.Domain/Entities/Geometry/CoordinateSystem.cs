@@ -1,7 +1,6 @@
-namespace C2IEDM.Domain.Entities.Geometry
+namespace C2IEDM.Domain.Entities.Geometry;
+
+public abstract class CoordinateSystem
 {
-    public abstract class CoordinateSystem
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

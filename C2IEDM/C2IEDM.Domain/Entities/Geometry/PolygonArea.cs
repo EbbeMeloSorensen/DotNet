@@ -1,8 +1,7 @@
-namespace C2IEDM.Domain.Entities.Geometry
+namespace C2IEDM.Domain.Entities.Geometry;
+
+public class PolygonArea : Surface
 {
-    public class PolygonArea : Surface
-    {
-        public Guid BoundingLineId { get; set; }
-        public Line BoundingLine { get; set; } = null!;
-    }
+    public Guid BoundingLineId { get; set; }
+    public Line BoundingLine { get; set; } = null!;
 }
