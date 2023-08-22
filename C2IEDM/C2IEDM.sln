@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence.EntityFrameworkCore", "C2IEDM.Persistence.EntityFrameworkCore\C2IEDM.Persistence.EntityFrameworkCore.csproj", "{8A17B774-2A03-497D-AF61-65C842652084}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence.EntityFrameworkCore.Sqlite", "C2IEDM.Persistence.EntityFrameworkCore.Sqlite\C2IEDM.Persistence.EntityFrameworkCore.Sqlite.csproj", "{1B958CB6-14E5-4025-899E-A186BD6AE931}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8A17B774-2A03-497D-AF61-65C842652084}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A17B774-2A03-497D-AF61-65C842652084}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A17B774-2A03-497D-AF61-65C842652084}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B958CB6-14E5-4025-899E-A186BD6AE931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B958CB6-14E5-4025-899E-A186BD6AE931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B958CB6-14E5-4025-899E-A186BD6AE931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B958CB6-14E5-4025-899E-A186BD6AE931}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
