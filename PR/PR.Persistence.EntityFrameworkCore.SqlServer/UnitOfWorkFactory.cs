@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Craft.Logging;
-using PR.Domain.Entities;
-
-namespace PR.Persistence.EntityFrameworkCore.SqlServer
+﻿namespace PR.Persistence.EntityFrameworkCore.SqlServer
 {
     public class UnitOfWorkFactory : UnitOfWorkFactoryBase
     {
@@ -13,43 +9,12 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer
 
             if (context.People.Any()) return;
 
-            SeedDatabase(context);
-        }
-
-        public override void Initialize(ILogger logger)
-        {
-        }
-
-        public override Task<bool> CheckRepositoryConnection()
-        {
-            throw new NotImplementedException();
+            Helpers.SeedDatabase(context);
         }
 
         public override IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(new PRDbContext());
-        }
-
-        private static void SeedDatabase(DbContext context)
-        {
-            var people = new List<Person>
-            {
-                new Person
-                {
-                    FirstName = "Kasper"
-                },
-                new Person
-                {
-                    FirstName = "Jesper"
-                },
-                new Person
-                {
-                    FirstName = "Jonathan"
-                }
-            };
-
-            context.AddRange(people);
-            context.SaveChanges();
         }
     }
 }

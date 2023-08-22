@@ -1,6 +1,4 @@
-﻿using Craft.Logging;
-
-namespace PR.Persistence.EntityFrameworkCore.Sqlite
+﻿namespace PR.Persistence.EntityFrameworkCore.Sqlite
 {
     public class UnitOfWorkFactory : UnitOfWorkFactoryBase
     {
@@ -12,15 +10,6 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             if (context.People.Any()) return;
 
             Helpers.SeedDatabase(context);
-        }
-
-        public override void Initialize(ILogger logger)
-        {
-        }
-
-        public override Task<bool> CheckRepositoryConnection()
-        {
-            throw new NotImplementedException();
         }
 
         public override IUnitOfWork GenerateUnitOfWork()

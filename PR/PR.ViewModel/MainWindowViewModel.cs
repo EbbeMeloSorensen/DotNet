@@ -103,7 +103,7 @@ namespace PR.ViewModel
 
             LogViewModel = new LogViewModel();
             _logger = new ViewModelLogger(logger, LogViewModel);
-            _unitOfWorkFactory.Initialize(_logger);
+            //_unitOfWorkFactory.Initialize(_logger);
 
             PersonListViewModel = new PersonListViewModel(unitOfWorkFactory, applicationDialogService);
 

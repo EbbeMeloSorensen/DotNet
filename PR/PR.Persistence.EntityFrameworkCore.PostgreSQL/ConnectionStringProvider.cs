@@ -42,7 +42,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
             Initialize(host, string.IsNullOrEmpty(port) ? 5432 : int.Parse(port), database, schema, user, password);
         }
 
-        public static void Initialize(
+        private static void Initialize(
             string host,
             int port,
             string database,
