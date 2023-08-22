@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
+    <ProjectReference Include="..\C2IEDM.Persistence\C2IEDM.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

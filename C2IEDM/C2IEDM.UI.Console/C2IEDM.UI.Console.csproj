@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
+    <ProjectReference Include="..\C2IEDM.Application\C2IEDM.Application.csproj" />
+    <ProjectReference Include="..\C2IEDM.Persistence.EntityFrameworkCore.Sqlite\C2IEDM.Persistence.EntityFrameworkCore.Sqlite.csproj" />
+  </ItemGroup>
+
+</Project>

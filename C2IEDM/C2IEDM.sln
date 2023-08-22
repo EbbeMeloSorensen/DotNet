@@ -15,6 +15,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence.EntityFr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence.EntityFrameworkCore.Sqlite", "C2IEDM.Persistence.EntityFrameworkCore.Sqlite\C2IEDM.Persistence.EntityFrameworkCore.Sqlite.csproj", "{1B958CB6-14E5-4025-899E-A186BD6AE931}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Application", "C2IEDM.Application\C2IEDM.Application.csproj", "{B2415682-5FEF-4D88-B6BA-AA1D915F11A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\Craft.Logging\Craft.Logging.csproj", "{C4FF5996-90BE-42BB-8EA2-5797EF5897AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.UI.Console", "C2IEDM.UI.Console\C2IEDM.UI.Console.csproj", "{70ABEA07-C28C-4BA3-BE5C-799F6C3C2BCB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{C885605E-1F10-4AB1-A56F-5CEBA99DB4DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +53,22 @@ Global
 		{1B958CB6-14E5-4025-899E-A186BD6AE931}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B958CB6-14E5-4025-899E-A186BD6AE931}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B958CB6-14E5-4025-899E-A186BD6AE931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2415682-5FEF-4D88-B6BA-AA1D915F11A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2415682-5FEF-4D88-B6BA-AA1D915F11A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2415682-5FEF-4D88-B6BA-AA1D915F11A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2415682-5FEF-4D88-B6BA-AA1D915F11A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4FF5996-90BE-42BB-8EA2-5797EF5897AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4FF5996-90BE-42BB-8EA2-5797EF5897AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4FF5996-90BE-42BB-8EA2-5797EF5897AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4FF5996-90BE-42BB-8EA2-5797EF5897AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70ABEA07-C28C-4BA3-BE5C-799F6C3C2BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70ABEA07-C28C-4BA3-BE5C-799F6C3C2BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70ABEA07-C28C-4BA3-BE5C-799F6C3C2BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70ABEA07-C28C-4BA3-BE5C-799F6C3C2BCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C885605E-1F10-4AB1-A56F-5CEBA99DB4DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C885605E-1F10-4AB1-A56F-5CEBA99DB4DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C885605E-1F10-4AB1-A56F-5CEBA99DB4DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C885605E-1F10-4AB1-A56F-5CEBA99DB4DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
