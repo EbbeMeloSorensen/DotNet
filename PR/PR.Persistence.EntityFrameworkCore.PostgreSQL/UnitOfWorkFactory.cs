@@ -1,6 +1,6 @@
 ﻿namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
 {
-    public class UnitOfWorkFactory : UnitOfWorkFactoryBase
+    public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
         static UnitOfWorkFactory()
         {
@@ -12,7 +12,7 @@
             Helpers.SeedDatabase(context);
         }
 
-        public override IUnitOfWork GenerateUnitOfWork()
+        public IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(new PRDbContext());
         }
