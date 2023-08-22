@@ -7,10 +7,7 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
 {
     public class PersonAssociationRepository : Repository<PersonAssociation>, IPersonAssociationRepository
     {
-        public PRDbContextBase PrDbContext
-        {
-            get { return Context as PRDbContextBase; }
-        }
+        private PRDbContextBase PrDbContext => Context as PRDbContextBase;
 
         public PersonAssociationRepository(
             DbContext context) : base(context)
