@@ -3,7 +3,7 @@ using PR.Domain.Entities;
 
 namespace PR.Persistence.EntityFrameworkCore
 {
-    public static class Helpers
+    public static class Seeding
     {
         public static void SeedDatabase(
             DbContext context)

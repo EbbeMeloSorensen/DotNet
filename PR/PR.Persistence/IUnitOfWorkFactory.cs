@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Craft.Logging;
-
-namespace PR.Persistence
+﻿namespace PR.Persistence
 {
     public interface IUnitOfWorkFactory
     {

@@ -9,7 +9,7 @@
 
             if (context.People.Any()) return;
 
-            Helpers.SeedDatabase(context);
+            Seeding.SeedDatabase(context);
         }
 
         public IUnitOfWork GenerateUnitOfWork()
