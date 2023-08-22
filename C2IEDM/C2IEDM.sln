@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence", "C2IED
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{015ABE7B-DEE7-43A1-A7DE-D70B5BE4306B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence.EntityFrameworkCore", "C2IEDM.Persistence.EntityFrameworkCore\C2IEDM.Persistence.EntityFrameworkCore.csproj", "{8A17B774-2A03-497D-AF61-65C842652084}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{015ABE7B-DEE7-43A1-A7DE-D70B5BE4306B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{015ABE7B-DEE7-43A1-A7DE-D70B5BE4306B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{015ABE7B-DEE7-43A1-A7DE-D70B5BE4306B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{015ABE7B-DEE7-43A1-A7DE-D70B5BE4306B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A17B774-2A03-497D-AF61-65C842652084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A17B774-2A03-497D-AF61-65C842652084}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A17B774-2A03-497D-AF61-65C842652084}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A17B774-2A03-497D-AF61-65C842652084}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
