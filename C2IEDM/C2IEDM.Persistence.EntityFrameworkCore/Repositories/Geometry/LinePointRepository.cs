@@ -5,10 +5,9 @@ using C2IEDM.Persistence.Repositories.Geometry;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore.Repositories.Geometry
 {
-    public class LocationRepository : Repository<Location>, ILocationRepository
+    public class LinePointRepository : Repository<LinePoint>, ILinePointRepository
     {
-        public LocationRepository(
-            DbContext context) : base(context)
+        public LinePointRepository(DbContext context) : base(context)
         {
         }
 
@@ -17,12 +16,12 @@ namespace C2IEDM.Persistence.EntityFrameworkCore.Repositories.Geometry
             throw new NotImplementedException();
         }
 
-        public override void Update(Location entity)
+        public override void Update(LinePoint entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<Location> entities)
+        public override void UpdateRange(IEnumerable<LinePoint> entities)
         {
             throw new NotImplementedException();
         }

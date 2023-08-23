@@ -5,9 +5,9 @@ using C2IEDM.Persistence.Repositories.Geometry;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore.Repositories.Geometry;
 
-public class PointRepository : Repository<Point>, IPointRepository
+public class CorridorAreaRepository : Repository<CorridorArea>, ICorridorAreaRepository
 {
-    public PointRepository(DbContext context) : base(context)
+    public CorridorAreaRepository(DbContext context) : base(context)
     {
     }
 
@@ -16,12 +16,12 @@ public class PointRepository : Repository<Point>, IPointRepository
         throw new NotImplementedException();
     }
 
-    public override void Update(Point entity)
+    public override void Update(CorridorArea entity)
     {
         throw new NotImplementedException();
     }
 
-    public override void UpdateRange(IEnumerable<Point> entities)
+    public override void UpdateRange(IEnumerable<CorridorArea> entities)
     {
         throw new NotImplementedException();
     }

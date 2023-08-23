@@ -5,9 +5,9 @@ using C2IEDM.Persistence.Repositories.Geometry;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore.Repositories.Geometry;
 
-public class PointRepository : Repository<Point>, IPointRepository
+public class FanAreaRepository : Repository<FanArea>, IFanAreaRepository
 {
-    public PointRepository(DbContext context) : base(context)
+    public FanAreaRepository(DbContext context) : base(context)
     {
     }
 
@@ -16,12 +16,12 @@ public class PointRepository : Repository<Point>, IPointRepository
         throw new NotImplementedException();
     }
 
-    public override void Update(Point entity)
+    public override void Update(FanArea entity)
     {
         throw new NotImplementedException();
     }
 
-    public override void UpdateRange(IEnumerable<Point> entities)
+    public override void UpdateRange(IEnumerable<FanArea> entities)
     {
         throw new NotImplementedException();
     }
