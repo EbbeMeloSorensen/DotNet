@@ -3,25 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Domain", "C2IEDM.Domain\C2IEDM.Domain.csproj", "{4D3FEAB3-651E-446E-A648-55410B718F91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Domain", "C2IEDM.Domain\C2IEDM.Domain.csproj", "{4D3FEAB3-651E-446E-A648-55410B718F91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence", "C2IEDM.Persistence\C2IEDM.Persistence.csproj", "{BF97BE25-26A1-480F-BE53-927F48B03593}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Persistence", "C2IEDM.Persistence\C2IEDM.Persistence.csproj", "{BF97BE25-26A1-480F-BE53-927F48B03593}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{BCB3119B-8E2B-4F77-B942-7CFAC731F6DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{015ABE7B-DEE7-43A1-A7DE-D70B5BE4306B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence.EntityFrameworkCore", "C2IEDM.Persistence.EntityFrameworkCore\C2IEDM.Persistence.EntityFrameworkCore.csproj", "{8A17B774-2A03-497D-AF61-65C842652084}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Persistence.EntityFrameworkCore", "C2IEDM.Persistence.EntityFrameworkCore\C2IEDM.Persistence.EntityFrameworkCore.csproj", "{8A17B774-2A03-497D-AF61-65C842652084}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence.EntityFrameworkCore.Sqlite", "C2IEDM.Persistence.EntityFrameworkCore.Sqlite\C2IEDM.Persistence.EntityFrameworkCore.Sqlite.csproj", "{1B958CB6-14E5-4025-899E-A186BD6AE931}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Persistence.EntityFrameworkCore.Sqlite", "C2IEDM.Persistence.EntityFrameworkCore.Sqlite\C2IEDM.Persistence.EntityFrameworkCore.Sqlite.csproj", "{1B958CB6-14E5-4025-899E-A186BD6AE931}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Application", "C2IEDM.Application\C2IEDM.Application.csproj", "{B2415682-5FEF-4D88-B6BA-AA1D915F11A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Application", "C2IEDM.Application\C2IEDM.Application.csproj", "{B2415682-5FEF-4D88-B6BA-AA1D915F11A5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\Craft.Logging\Craft.Logging.csproj", "{C4FF5996-90BE-42BB-8EA2-5797EF5897AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.UI.Console", "C2IEDM.UI.Console\C2IEDM.UI.Console.csproj", "{70ABEA07-C28C-4BA3-BE5C-799F6C3C2BCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.UI.Console", "C2IEDM.UI.Console\C2IEDM.UI.Console.csproj", "{70ABEA07-C28C-4BA3-BE5C-799F6C3C2BCB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{C885605E-1F10-4AB1-A56F-5CEBA99DB4DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Persistence.EntityFrameworkCore.PostgreSQL", "C2IEDM.Persistence.EntityFrameworkCore.PostgreSQL\C2IEDM.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{89591479-8D07-4C91-846B-01FFB876F18F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{C885605E-1F10-4AB1-A56F-5CEBA99DB4DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C885605E-1F10-4AB1-A56F-5CEBA99DB4DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C885605E-1F10-4AB1-A56F-5CEBA99DB4DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89591479-8D07-4C91-846B-01FFB876F18F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89591479-8D07-4C91-846B-01FFB876F18F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89591479-8D07-4C91-846B-01FFB876F18F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89591479-8D07-4C91-846B-01FFB876F18F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
