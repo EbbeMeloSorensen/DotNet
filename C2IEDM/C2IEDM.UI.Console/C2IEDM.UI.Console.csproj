@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
   </ItemGroup>
 
@@ -15,6 +16,12 @@
     <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\C2IEDM.Application\C2IEDM.Application.csproj" />
     <ProjectReference Include="..\C2IEDM.Persistence.EntityFrameworkCore.Sqlite\C2IEDM.Persistence.EntityFrameworkCore.Sqlite.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

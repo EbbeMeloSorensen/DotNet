@@ -79,25 +79,25 @@ public class Application
         });
     }
 
-    public async Task ListPeople(
+    public async Task ListLocations(
         ProgressCallback progressCallback = null)
     {
-        IList<Location>? people = null;
+        IList<Location>? locations = null;
 
         await Task.Run(() =>
         {
-            Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
+            Logger?.WriteLine(LogMessageCategory.Information, "Retrieving locations..");
             progressCallback?.Invoke(0.0, "Retrieving people");
 
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                people = unitOfWork.Locations.GetAll().ToList();
+                locations = unitOfWork.Locations.GetAll().ToList();
             }
 
             progressCallback?.Invoke(100, "");
         });
 
         Console.WriteLine();
-        people?.ToList().ForEach(p => Console.WriteLine($"  some location"));
+        locations?.ToList().ForEach(_ => Console.WriteLine($"  {_}"));
     }
 }

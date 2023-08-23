@@ -7,9 +7,9 @@ public class UnitOfWorkFactory : IUnitOfWorkFactory
         using var context = new C2IEDMDbContext();
         context.Database.EnsureCreated();
 
-        //if (context.People.Any()) return;
+        if (context.Locations.Any()) return;
 
-        //Seeding.SeedDatabase(context);
+        Seeding.SeedDatabase(context);
     }
 
     public IUnitOfWork GenerateUnitOfWork()

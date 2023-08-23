@@ -12,4 +12,9 @@ public class AbsolutePoint : Point
     {
         return new List<double>{LatitudeCoordinate, LongitudeCoordinate};
     }
+
+    public override string ToString()
+    {
+        return $"AbsolutePoint (Lat: {LatitudeCoordinate}, Long: {LongitudeCoordinate})";
+    }
 }
