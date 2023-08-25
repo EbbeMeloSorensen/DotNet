@@ -68,7 +68,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Carl",
                         Surname = "Theodor Zahle",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1909-1910 og 1913-1920",
                         Created = now
                     },
@@ -76,7 +76,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Otto",
                         Surname = "Liebe",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1920",
                         Created = now
                     },
@@ -84,7 +84,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Michael",
                         Surname = "Petersen Friis",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1920",
                         Created = now
                     },
@@ -92,7 +92,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Niels",
                         Surname = "Neergaard",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1920-1924",
                         Created = now
                     },
@@ -100,7 +100,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Thomas",
                         Surname = "Madsen-Mygdal",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1926-1929",
                         Created = now
                     },
@@ -108,7 +108,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Thorvald",
                         Surname = "Stauning",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1924-1926 og 1929-1942",
                         Created = now
                     },
@@ -116,7 +116,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Erik",
                         Surname = "Scavenius",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1942-1943",
                         Created = now
                     },
@@ -124,7 +124,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Vilhelm",
                         Surname = "Buhl",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1942 og 1945",
                         Created = now
                     },
@@ -132,7 +132,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Knud",
                         Surname = "Kristensen",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1945-1947",
                         Created = now
                     },
@@ -140,7 +140,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Erik",
                         Surname = "Eriksen",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1950-1953",
                         Created = now
                     },
@@ -148,7 +148,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Hans",
                         Surname = "Hedtoft",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1947-1950 og 1953-1955",
                         Created = now
                     },
@@ -156,7 +156,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Hans Christian",
                         Surname = "Svane Hansen",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1955-1960",
                         Created = now
                     },
@@ -164,7 +164,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Viggo",
                         Surname = "Kampmann",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1960-1962",
                         Created = now
                     },
@@ -172,7 +172,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Hilmar",
                         Surname = "Baunsgaard",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1968-1971",
                         Created = now
                     },
@@ -180,7 +180,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Jens Otto",
                         Surname = "Krag",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1962-1968 og 1975-1982",
                         Created = now
                     },
@@ -188,7 +188,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Poul",
                         Surname = "Hartling",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1973-1975",
                         Created = now
                     },
@@ -196,7 +196,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Anker",
                         Surname = "Jørgensen",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1972-1973 og 1975-1982",
                         Created = now
                     },
@@ -204,7 +204,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Poul",
                         Surname = "Schlüter",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1982-1993",
                         Created = now
                     },
@@ -212,7 +212,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Poul",
                         Surname = "Nyrup",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "1993-2001",
                         Created = now
                     },
@@ -220,7 +220,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Anders",
                         Surname = "Fogh Rasmussen",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "2001-2009",
                         Created = now
                     },
@@ -228,7 +228,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Helle",
                         Surname = "Thorning Schmidt",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "2011-2015",
                         Created = now
                     },
@@ -236,7 +236,7 @@ namespace PR.Web.Persistence
                     {
                         FirstName = "Lars",
                         Surname = "Løkke Rasmussen",
-                        Birthday = new DateTime(1956, 4, 27),
+                        Birthday = new DateTime(1956, 4, 27, 0, 0, 0, DateTimeKind.Utc),
                         Description = "2009-2011 og 2015-2019",
                         Created = now
                     },
@@ -248,7 +248,7 @@ namespace PR.Web.Persistence
                         Address = "Kartoffelrækkerne",
                         ZipCode = "2100",
                         City = "Copenhagen",
-                        Birthday = new DateTime(1975, 7, 24),
+                        Birthday = new DateTime(1975, 7, 24, 0, 0, 0, DateTimeKind.Utc),
                         Category = "Politik",
                         Description = "2019-",
                         Dead = false,

@@ -12,14 +12,15 @@ using PR.Web.Persistence;
 namespace PR.Web.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221009120308_InitialMigration")]
+    [Migration("20230825162650_InitialMigration")]
     partial class InitialMigration
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

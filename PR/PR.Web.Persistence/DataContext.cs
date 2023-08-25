@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PR.Domain.Entities;
-using PR.Persistence.EntityFrameworkCore.EntityConfigurations;
+using PR.Persistence.EntityFrameworkCore;
 
 namespace PR.Web.Persistence
 {
@@ -14,20 +14,10 @@ namespace PR.Web.Persistence
         public DbSet<Person> People { get; set; }
         public DbSet<PersonAssociation> PersonAssociations { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(
+            ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new PersonConfiguration());
-            builder.ApplyConfiguration(new PersonAssociationConfiguration());
-
-            builder.Entity<PersonAssociation>()
-                .HasOne(p => p.SubjectPerson)
-                .WithMany(pa => pa.ObjectPeople)
-                .HasForeignKey(pa => pa.SubjectPersonId);
-
-            builder.Entity<PersonAssociation>()
-                .HasOne(p => p.ObjectPerson)
-                .WithMany(pa => pa.SubjectPeople)
-                .HasForeignKey(pa => pa.ObjectPersonId);
+            PRDbContextBase.Configure(builder);
 
             base.OnModelCreating(builder);
         }

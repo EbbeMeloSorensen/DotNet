@@ -12,6 +12,12 @@ namespace PR.Persistence.EntityFrameworkCore
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
+            Configure(modelBuilder);
+        }
+
+        public static void Configure(
+            ModelBuilder modelBuilder)
+        {
             modelBuilder.ApplyConfiguration(new PersonConfiguration());
             modelBuilder.ApplyConfiguration(new PersonAssociationConfiguration());
 
