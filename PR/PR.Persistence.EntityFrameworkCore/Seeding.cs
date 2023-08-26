@@ -446,6 +446,66 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = now + new TimeSpan(delay++),
             };
 
+            var roseTico = new Person
+            {
+                FirstName = "Rose",
+                Surname = "Tico",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var bailOrgana = new Person
+            {
+                FirstName = "Bail",
+                Surname = "Organa",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var dinDjarin = new Person
+            {
+                FirstName = "Din",
+                Surname = "Djarin",
+                Nickname = "Mando",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var kuiil = new Person
+            {
+                FirstName = "Kuiil",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var grogu = new Person
+            {
+                FirstName = "Grogu",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var boKatanKryze = new Person
+            {
+                FirstName = "Bo-Katan",
+                Surname = "Kryze",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var moffGideon = new Person
+            {
+                FirstName = "Gideon",
+                Nickname = "Moff Gideon",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            //pazVizsla
+            //eliaKane
+            //caraDune
+            //axeWoves
+            //ig11 // ig series droid & bounty hunter from Mandalorian
+            //ig88B // ig series droid & bounty hunter from Empire Strikes Back
+            //jangoFett
+            //blackKrrsantan
+            //armorer
+            //4lom // bounty hunter from Empire Strikes Back
+            //cadBane // bounty hunter from Mandalorian
+
             var people = new List<Person>
             {
                 luke,
@@ -506,7 +566,14 @@ namespace PR.Persistence.EntityFrameworkCore
                 finn,
                 mazKanata,
                 ahsoka,
-                lorSanTekka
+                lorSanTekka,
+                roseTico,
+                bailOrgana,
+                dinDjarin,
+                kuiil,
+                grogu,
+                boKatanKryze,
+                moffGideon
             };
 
             var personAssociations = new List<PersonAssociation>
