@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Web.Persistence", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Web.Application", "C2IEDM.Web.Application\C2IEDM.Web.Application.csproj", "{63E51510-D809-4B7F-A5AE-203A14A33AE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Web.Infrastructure", "C2IEDM.Web.Infrastructure\C2IEDM.Web.Infrastructure.csproj", "{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{63E51510-D809-4B7F-A5AE-203A14A33AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E51510-D809-4B7F-A5AE-203A14A33AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63E51510-D809-4B7F-A5AE-203A14A33AE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
