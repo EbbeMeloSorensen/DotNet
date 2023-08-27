@@ -27,11 +27,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Persistence.EntityFr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Persistence.EntityFrameworkCore.SqlServer", "C2IEDM.Persistence.EntityFrameworkCore.SqlServer\C2IEDM.Persistence.EntityFrameworkCore.SqlServer.csproj", "{8E72A8E0-4046-4DBE-BEFC-8DF2DB218137}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Web.Persistence", "C2IEDM.Web.Persistence\C2IEDM.Web.Persistence.csproj", "{3DA7955E-A20F-495B-9A8A-11C16655BB21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Web.Persistence", "C2IEDM.Web.Persistence\C2IEDM.Web.Persistence.csproj", "{3DA7955E-A20F-495B-9A8A-11C16655BB21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Web.Application", "C2IEDM.Web.Application\C2IEDM.Web.Application.csproj", "{63E51510-D809-4B7F-A5AE-203A14A33AE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Web.Application", "C2IEDM.Web.Application\C2IEDM.Web.Application.csproj", "{63E51510-D809-4B7F-A5AE-203A14A33AE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Web.Infrastructure", "C2IEDM.Web.Infrastructure\C2IEDM.Web.Infrastructure.csproj", "{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Web.Infrastructure", "C2IEDM.Web.Infrastructure\C2IEDM.Web.Infrastructure.csproj", "{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Web.API", "C2IEDM.Web.API\C2IEDM.Web.API.csproj", "{333703E8-C9C6-4612-A811-A95F319B658A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{333703E8-C9C6-4612-A811-A95F319B658A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{333703E8-C9C6-4612-A811-A95F319B658A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{333703E8-C9C6-4612-A811-A95F319B658A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{333703E8-C9C6-4612-A811-A95F319B658A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
