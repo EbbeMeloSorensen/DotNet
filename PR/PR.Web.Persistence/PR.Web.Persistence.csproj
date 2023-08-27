@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PR.Domain\PR.Domain.csproj" />
     <ProjectReference Include="..\PR.Persistence.EntityFrameworkCore\PR.Persistence.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
