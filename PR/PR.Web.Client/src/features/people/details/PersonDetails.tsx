@@ -5,23 +5,30 @@ import LoadingComponent from "../../../app/layout/LoadingComponents";
 import { useStore } from "../../../app/stores/store";
 import PersonDetailedHeader from "./PersonDetailedHeader";
 import PersonDetailedInfo from "./PersonDetailedInfo";
+import PersonRelations from "./PersonRelations";
 
 export default observer(function PersonDetails() {
-    const {personStore} = useStore();
-    const {selectedPerson: person, loadPerson, loadingInitial, clearSelectedPerson} = personStore;
-    const {id} = useParams<{id: string}>();
+  const { personStore } = useStore();
+  const {
+    selectedPerson: person,
+    loadPerson,
+    loadingInitial,
+    clearSelectedPerson,
+  } = personStore;
+  const { id } = useParams<{ id: string }>();
 
-    useEffect(() => {
-        if (id) loadPerson(id);
-        return () => clearSelectedPerson();
-    }, [id, loadPerson, clearSelectedPerson]);
+  useEffect(() => {
+    if (id) loadPerson(id);
+    return () => clearSelectedPerson();
+  }, [id, loadPerson, clearSelectedPerson]);
 
-    if (loadingInitial || !person) return <LoadingComponent />;
+  if (loadingInitial || !person) return <LoadingComponent />;
 
-    return (
-        <>
-            <PersonDetailedHeader person={person} />
-            <PersonDetailedInfo person={person} />
-        </>
-    )
-})
+  return (
+    <>
+      <PersonDetailedHeader person={person} />
+      <PersonDetailedInfo person={person} />
+      <PersonRelations />
+    </>
+  );
+});
