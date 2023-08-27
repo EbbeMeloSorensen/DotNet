@@ -27,8 +27,14 @@ public class C2IEDMDbContextBase : DbContext
     public DbSet<SurfaceVolume> SurfaceVolumes { get; set; }
     public DbSet<TrackArea> TrackAreas { get; set; }
     public DbSet<VerticalDistance> VerticalDistances { get; set; }
-    
+
     protected override void OnModelCreating(
+        ModelBuilder builder)
+    {
+        Configure(builder);
+    }
+
+    public static void Configure(
         ModelBuilder builder)
     {
         builder.ApplyConfiguration(new LinePointConfiguration());
@@ -142,53 +148,53 @@ public class C2IEDMDbContextBase : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<RelativePoint>()
-             .HasOne(rp => rp.CoordinateSystem)
-             .WithMany()
-             .HasForeignKey(rp => rp.CoordinateSystemId)
-             .IsRequired()
-             .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(rp => rp.CoordinateSystem)
+            .WithMany()
+            .HasForeignKey(rp => rp.CoordinateSystemId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<SphereVolume>()
-             .HasOne(sv => sv.CentrePoint)
-             .WithMany()
-             .HasForeignKey(sv => sv.CentrePointId)
-             .IsRequired()
-             .OnDelete(DeleteBehavior.Restrict);
-        
+            .HasOne(sv => sv.CentrePoint)
+            .WithMany()
+            .HasForeignKey(sv => sv.CentrePointId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.Entity<SurfaceVolume>()
-             .HasOne(sv => sv.DefiningSurface)
-             .WithMany()
-             .HasForeignKey(sv => sv.DefiningSurfaceId)
-             .IsRequired()
-             .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(sv => sv.DefiningSurface)
+            .WithMany()
+            .HasForeignKey(sv => sv.DefiningSurfaceId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<OrbitArea>()
-             .HasOne(oa => oa.FirstPoint)
-             .WithMany()
-             .HasForeignKey(oa => oa.FirstPointId)
-             .IsRequired()
-             .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(oa => oa.FirstPoint)
+            .WithMany()
+            .HasForeignKey(oa => oa.FirstPointId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<OrbitArea>()
-             .HasOne(oa => oa.SecondPoint)
-             .WithMany()
-             .HasForeignKey(oa => oa.SecondPointId)
-             .IsRequired()
-             .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(oa => oa.SecondPoint)
+            .WithMany()
+            .HasForeignKey(oa => oa.SecondPointId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<PolyArcArea>()
-             .HasOne(paa => paa.DefiningLine)
-             .WithMany()
-             .HasForeignKey(paa => paa.DefiningLineId)
-             .IsRequired()
-             .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(paa => paa.DefiningLine)
+            .WithMany()
+            .HasForeignKey(paa => paa.DefiningLineId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<PolyArcArea>()
-             .HasOne(paa => paa.BearingOriginPoint)
-             .WithMany()
-             .HasForeignKey(paa => paa.BearingOriginPointId)
-             .IsRequired()
-             .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(paa => paa.BearingOriginPoint)
+            .WithMany()
+            .HasForeignKey(paa => paa.BearingOriginPointId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<TrackArea>()
             .HasOne(ta => ta.BeginPoint)
