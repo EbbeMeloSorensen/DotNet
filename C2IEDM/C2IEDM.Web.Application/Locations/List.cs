@@ -52,7 +52,6 @@ public class List
             return Result<PagedList<LocationDto>>.Success(
                 await PagedList<LocationDto>.CreateAsync(query, request.Params.PageNumber,
                     request.Params.PageSize));
-
         }
     }
 }

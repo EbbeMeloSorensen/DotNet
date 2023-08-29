@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using C2IEDM.Web.API.Controllers;
 using C2IEDM.Web.Application.Locations;
 
-namespace C2IEDM.Web.API;
+namespace C2IEDM.Web.API.Controllers;
 
 public class LocationsController : BaseApiController
 {
