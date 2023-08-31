@@ -79,6 +79,24 @@ public static class ApplicationServiceExtensions
                     .WithOrigins("http://localhost:3000");
             });
         });
+
+        services.AddControllers().AddNewtonsoftJson(opt =>
+            opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore);
+        services.AddControllers().AddNewtonsoftJson(opt =>
+            opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+        services.AddControllers().AddNewtonsoftJson(options =>
+        {
+            var ebbesJsonResolver = new EbbesContractResolver();
+            //ebbesJsonResolver.IgnoreProperty(typeof(LinePoint), "LineId");
+            //ebbesJsonResolver.IgnoreProperty(typeof(LinePoint), "PointId");
+            //ebbesJsonResolver.IgnoreProperty(typeof(LinePoint), "LinePointIndex");
+            //ebbesJsonResolver.IgnoreProperty(typeof(Point), "Id");
+            //ebbesJsonResolver.IgnoreProperty(typeof(Point), "LinePoints");
+
+            options.SerializerSettings.ContractResolver = ebbesJsonResolver;
+        });
+
         services.AddMediatR(assemblies: typeof(List.Handler).Assembly);
         services.AddAutoMapper(assemblies: typeof(MappingProfiles).Assembly);
         services.AddScoped<IUserAccessor, UserAccessor>();

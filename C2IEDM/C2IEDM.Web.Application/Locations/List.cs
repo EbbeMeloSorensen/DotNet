@@ -5,6 +5,7 @@ using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Locations.DTOs;
 using C2IEDM.Web.Application.Interfaces;
 using C2IEDM.Web.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace C2IEDM.Web.Application.Locations;
 
@@ -39,19 +40,57 @@ public class List
 
         public async Task<Result<PagedList<LocationDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
+            var query = request.Type switch
+            {
+                LocationType.AbsolutePoint => _context.AbsolutePoints.AsQueryable(),
+                LocationType.Point => _context.Points.AsQueryable(),
+                LocationType.Location => _context.Locations.AsQueryable(),
+                _ => null
+            };
+
+            var count = await query.CountAsync();
+
+            var locations = await query
+                .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
+                .Take(request.Params.PageSize)
+                .ToListAsync();
+
+            var locationDtos = locations.Select(l =>
+            {
+                var temp = _mapper.Map(l, l.GetType(), typeof(LocationDto));
+
+                if (temp is not LocationDto locationDto)
+                {
+                    throw new InvalidDataException();
+                }
+
+                return locationDto;
+            });
+
+            return Result<PagedList<LocationDto>>.Success(
+                new PagedList<LocationDto>(locationDtos, count, request.Params.PageNumber, request.Params.PageSize));
+
+            /*
+            // Det her var det oprindelige, der jo altså ikke virker polymorfisk
             IQueryable<LocationDto> query;
 
             query = _context.Locations
-                //.OrderBy(d => d.FirstName)
-                //.ThenByDescending(d => d.Surname == null)
-                //.ThenBy(d => d.Surname)
                 .ProjectTo<LocationDto>(_mapper.ConfigurationProvider,
                     new { currentUsername = _userAccessor.GetUsername() })
                 .AsQueryable();
 
-            return Result<PagedList<LocationDto>>.Success(
-                await PagedList<LocationDto>.CreateAsync(query, request.Params.PageNumber,
-                    request.Params.PageSize));
+            var count = await query.CountAsync();
+
+            var locationDtos = await query
+                .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
+                .Take(request.Params.PageSize)
+                .ToListAsync();
+
+            var pagedList =
+                new PagedList<LocationDto>(locationDtos, count, request.Params.PageNumber, request.Params.PageSize);
+
+            return Result<PagedList<LocationDto>>.Success(pagedList);
+            */
         }
     }
 }
