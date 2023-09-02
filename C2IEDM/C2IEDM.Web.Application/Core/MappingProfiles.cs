@@ -16,8 +16,10 @@ public class MappingProfiles : Profile
         CreateMap<Location, Location>();
         CreateMap<Location, LocationDto>()
             .Include<Point, PointDto>()
-            .Include<AbsolutePoint, AbsolutePointDto>();
+            .Include<AbsolutePoint, AbsolutePointDto>()
+            .Include<Line, LineDto>();
         CreateMap<Point, PointDto>();
         CreateMap<AbsolutePoint, AbsolutePointDto>();
+        CreateMap<Line, LineDto>();
     }
 }

@@ -4,8 +4,6 @@ using Microsoft.OpenApi.Models;
 using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Interfaces;
-using C2IEDM.Web.Application.People;
-//using C2IEDM.Web.Application.Locations;
 using C2IEDM.Web.Infrastructure.Security;
 
 namespace C2IEDM.Web.API.Extensions;
@@ -104,7 +102,8 @@ public static class ApplicationServiceExtensions
         //    options.SerializerSettings.ContractResolver = ebbesJsonResolver;
         //});
 
-        services.AddMediatR(assemblies: typeof(List.Handler).Assembly);
+        services.AddMediatR(assemblies: typeof(Application.People.List.Handler).Assembly);
+        //services.AddMediatR(assemblies: typeof(Application.Locations.List.Handler).Assembly);
         services.AddAutoMapper(assemblies: typeof(MappingProfiles).Assembly);
         services.AddScoped<IUserAccessor, UserAccessor>();
 

@@ -13,7 +13,8 @@ public enum LocationType
 {
     Location,
     Point,
-    AbsolutePoint
+    AbsolutePoint,
+    Line
 }
 
 public class List
@@ -45,6 +46,7 @@ public class List
                 LocationType.AbsolutePoint => _context.AbsolutePoints.AsQueryable(),
                 LocationType.Point => _context.Points.AsQueryable(),
                 LocationType.Location => _context.Locations.AsQueryable(),
+                LocationType.Line => _context.Lines.AsQueryable(),
                 _ => null
             };
 
