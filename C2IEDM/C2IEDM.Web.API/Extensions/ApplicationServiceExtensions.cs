@@ -86,17 +86,23 @@ public static class ApplicationServiceExtensions
         services.AddControllers().AddNewtonsoftJson(opt =>
             opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-        services.AddControllers().AddNewtonsoftJson(options =>
-        {
-            var ebbesJsonResolver = new EbbesContractResolver();
-            //ebbesJsonResolver.IgnoreProperty(typeof(LinePoint), "LineId");
-            //ebbesJsonResolver.IgnoreProperty(typeof(LinePoint), "PointId");
-            //ebbesJsonResolver.IgnoreProperty(typeof(LinePoint), "LinePointIndex");
-            //ebbesJsonResolver.IgnoreProperty(typeof(Point), "Id");
-            //ebbesJsonResolver.IgnoreProperty(typeof(Point), "LinePoints");
+        // Jeg har været nødt til at udkommentere dette indtl videre, da det giver fejlen JsonError: No data input at 1:1
+        // ChatGPT siger, at det kan skyldes noget middleware, og jeg mistænker, at det relaterer sig til det med at du
+        // jo opererer med pagination. I PR opererer du jo ikke med NewtonSoftJson, og der er der ikke umiddelbart nogen
+        // problemer. I C2IEDM er du umiddelbart nødt til det at bruge NewtonSoftJson, så du kan operere polymorfisk med
+        // typehierarkier, så det virker som om der er et clash af en art
 
-            options.SerializerSettings.ContractResolver = ebbesJsonResolver;
-        });
+        //services.AddControllers().AddNewtonsoftJson(options =>
+        //{
+        //    var ebbesJsonResolver = new EbbesContractResolver();
+        //    //ebbesJsonResolver.IgnoreProperty(typeof(LinePoint), "LineId");
+        //    //ebbesJsonResolver.IgnoreProperty(typeof(LinePoint), "PointId");
+        //    //ebbesJsonResolver.IgnoreProperty(typeof(LinePoint), "LinePointIndex");
+        //    //ebbesJsonResolver.IgnoreProperty(typeof(Point), "Id");
+        //    //ebbesJsonResolver.IgnoreProperty(typeof(Point), "LinePoints");
+
+        //    options.SerializerSettings.ContractResolver = ebbesJsonResolver;
+        //});
 
         services.AddMediatR(assemblies: typeof(List.Handler).Assembly);
         services.AddAutoMapper(assemblies: typeof(MappingProfiles).Assembly);
