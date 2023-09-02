@@ -1,7 +1,7 @@
-﻿using C2IEDM.Web.Application.Core;
+﻿//using C2IEDM.Web.Application.Core;
 
-namespace C2IEDM.Web.Application.Locations;
+//namespace C2IEDM.Web.Application.Locations;
 
-public class LocationParams : PagingParams
-{
-}
+//public class LocationParams : PagingParams
+//{
+//}

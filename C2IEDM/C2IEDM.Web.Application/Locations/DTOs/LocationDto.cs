@@ -1,12 +1,12 @@
-﻿namespace C2IEDM.Web.Application.Locations.DTOs;
+﻿//namespace C2IEDM.Web.Application.Locations.DTOs;
 
-public class LocationDto
-{
-    public string type { get; set; }
-    public Guid id { get; set; }
+//public class LocationDto
+//{
+//    public string type { get; set; }
+//    public Guid id { get; set; }
 
-    public LocationDto()
-    {
-        type = "Location";
-    }
-}
+//    public LocationDto()
+//    {
+//        type = "Location";
+//    }
+//}

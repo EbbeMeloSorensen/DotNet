@@ -1,9 +1,9 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using C2IEDM.Web.Application.Locations;
 using C2IEDM.Web.API.Extensions;
 using C2IEDM.Web.API.Middleware;
+using C2IEDM.Web.Application.People;
 
 namespace C2IEDM.Web.API;
 

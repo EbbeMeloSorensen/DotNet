@@ -1,4 +1,5 @@
-﻿using C2IEDM.Domain.Entities.Geometry;
+﻿using C2IEDM.Domain.Entities;
+using C2IEDM.Domain.Entities.Geometry;
 using C2IEDM.Persistence.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ namespace C2IEDM.Web.Persistence
         public DataContext(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<Person> People { get; set; }
 
         public DbSet<AbsolutePoint> AbsolutePoints { get; set; }
         public DbSet<ConeVolume> ConeVolumes { get; set; }

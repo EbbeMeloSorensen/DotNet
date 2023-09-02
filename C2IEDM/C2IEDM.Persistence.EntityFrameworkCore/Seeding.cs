@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using C2IEDM.Domain.Entities.Geometry;
+using C2IEDM.Domain.Entities;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore
 {
@@ -14,6 +15,43 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
         private static void SeedLocations(
             DbContext context)
         {
+            var now = DateTime.UtcNow;
+            var delay = 0;
+
+            var luke = new Person
+            {
+                FirstName = "Luke",
+                Surname = "Skywalker",
+                Category = "Jedi",
+                Address = "Tatooine",
+                Created = now + new TimeSpan(delay++)
+            };
+
+            var leia = new Person
+            {
+                FirstName = "Leia",
+                Surname = "Organa",
+                Description = "Princess",
+                Address = "Alderaan",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var anakin = new Person
+            {
+                FirstName = "Anakin",
+                Surname = "Skywalker",
+                Nickname = "Darth Vader",
+                Category = "Jedi, Sith",
+                Created = now + new TimeSpan(delay++),
+            };
+
+            var people = new List<Person>
+            {
+                luke,
+                leia,
+                anakin
+            };
+
             var verticalDistance1 = new VerticalDistance
             {
                 Dimension = 1.0
@@ -172,6 +210,8 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
                 OrientationAngle = 30,
                 SectorSizeAngle = 60
             };
+
+            context.AddRange(people);
 
             context.Add(verticalDistance1);
             context.AddRange(absolutePoints);

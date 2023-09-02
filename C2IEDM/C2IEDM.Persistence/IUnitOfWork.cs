@@ -1,9 +1,12 @@
-﻿using C2IEDM.Persistence.Repositories.Geometry;
+﻿using C2IEDM.Persistence.Repositories;
+using C2IEDM.Persistence.Repositories.Geometry;
 
 namespace C2IEDM.Persistence;
 
 public interface IUnitOfWork : IDisposable
 {
+    IPersonRepository People { get; }
+
     IAbsolutePointRepository AbsolutePoints { get; }
     IConeVolumeRepository ConeVolumes { get; }
     ICoordinateSystemRepository CoordinateSystems { get; }

@@ -1,11 +1,15 @@
-﻿using C2IEDM.Persistence.Repositories.Geometry;
+﻿using C2IEDM.Persistence.EntityFrameworkCore.Repositories;
+using C2IEDM.Persistence.Repositories.Geometry;
 using C2IEDM.Persistence.EntityFrameworkCore.Repositories.Geometry;
+using C2IEDM.Persistence.Repositories;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly C2IEDMDbContextBase _context;
+
+        public IPersonRepository People { get; }
 
         public IAbsolutePointRepository AbsolutePoints { get; }
         public IConeVolumeRepository ConeVolumes { get; }
@@ -33,6 +37,9 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
             C2IEDMDbContextBase context)
         {
             _context = context;
+
+            People = new PersonRepository(_context);
+
             AbsolutePoints = new AbsolutePointRepository(_context);
             ConeVolumes = new ConeVolumeRepository(_context);
             CoordinateSystems = new CoordinateSystemRepository(_context);

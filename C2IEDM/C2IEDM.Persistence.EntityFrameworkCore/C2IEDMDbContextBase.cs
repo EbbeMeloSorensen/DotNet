@@ -37,6 +37,7 @@ public class C2IEDMDbContextBase : DbContext
     public static void Configure(
         ModelBuilder builder)
     {
+        builder.ApplyConfiguration(new PersonConfiguration());
         builder.ApplyConfiguration(new LinePointConfiguration());
 
         builder.Entity<Location>().UseTptMappingStrategy();
