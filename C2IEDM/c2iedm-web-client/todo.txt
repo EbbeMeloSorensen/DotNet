@@ -1,0 +1,7 @@
+Done:
+* Få hele dit star wars datasæt ind, så du kan verificere, at pagination virker
+
+Todo:
+* Sikr, at register, sign in og sign out virker
+* Lav en side, hvor man kan se abolute points, lige som man allerede kan med People
+* Lav noget Object Item lige som person allerede er gjort

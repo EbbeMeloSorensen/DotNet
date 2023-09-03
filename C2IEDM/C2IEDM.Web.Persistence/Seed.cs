@@ -1,12 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using C2IEDM.Domain.Entities;
 using C2IEDM.Domain.Entities.Geometry;
+using C2IEDM.Persistence.EntityFrameworkCore;
 
 namespace C2IEDM.Web.Persistence
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context,
+        public static async Task SeedData(
+            DataContext context,
+            UserManager<AppUser> userManager)
+        {
+            await SeedUsers(context, userManager);
+            await SeedPeople(context);
+            await SeedLocations(context);
+        }
+
+        public static async Task SeedUsers(
+            DataContext context,
             UserManager<AppUser> userManager)
         {
             if (!userManager.Users.Any())
@@ -40,7 +51,21 @@ namespace C2IEDM.Web.Persistence
 
                 await context.SaveChangesAsync();
             }
+        }
 
+        public static async Task SeedPeople(
+            DataContext context)
+        {
+            if (!context.People.Any())
+            {
+                await context.People.AddRangeAsync(Seeding.GenerateListOfPeople());
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public static async Task SeedLocations(
+            DataContext context)
+        {
             if (!context.Locations.Any())
             {
                 var absolutePoints = Enumerable
@@ -126,49 +151,6 @@ namespace C2IEDM.Web.Persistence
                 await context.Locations.AddRangeAsync(absolutePoints);
                 await context.Lines.AddRangeAsync(lines);
                 await context.LinePoints.AddRangeAsync(linePoints);
-                await context.SaveChangesAsync();
-            }
-
-            if (!context.People.Any())
-            {
-                var now = DateTime.UtcNow;
-                var delay = 0;
-
-                var luke = new Person
-                {
-                    FirstName = "Luke",
-                    Surname = "Skywalker",
-                    Category = "Jedi",
-                    Address = "Tatooine",
-                    Created = now + new TimeSpan(delay++)
-                };
-
-                var leia = new Person
-                {
-                    FirstName = "Leia",
-                    Surname = "Organa",
-                    Description = "Princess",
-                    Address = "Alderaan",
-                    Created = now + new TimeSpan(delay++),
-                };
-
-                var anakin = new Person
-                {
-                    FirstName = "Anakin",
-                    Surname = "Skywalker",
-                    Nickname = "Darth Vader",
-                    Category = "Jedi, Sith",
-                    Created = now + new TimeSpan(delay++),
-                };
-
-                var people = new List<Person>
-                {
-                    luke,
-                    leia,
-                    anakin
-                };
-
-                await context.People.AddRangeAsync(people);
                 await context.SaveChangesAsync();
             }
         }
