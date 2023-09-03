@@ -1,0 +1,11 @@
+.mapViewContainer {
+  display: -webkit-box;
+  width: 100%;
+  margin: 0px;
+  height: 100%;
+}
+
+.mapContainer {
+  width: 100%;
+  position: relative;
+}

@@ -21,6 +21,7 @@ export default observer(function NavBar() {
         </Menu.Item>
         <Menu.Item as={NavLink} to="/people" name="People" />
         <Menu.Item as={NavLink} to="/absolutePoints" name="Absolute Points" />
+        <Menu.Item as={NavLink} to="/map" name="Map" />
         <Menu.Item>
           <Button
             as={NavLink}

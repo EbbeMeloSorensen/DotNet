@@ -128,6 +128,12 @@ namespace C2IEDM.Web.Persistence
                     absPoint6,
                     absPoint7};
 
+                absolutePoints.AddRange(Enumerable.Range(1, 50).Select(_ => new AbsolutePoint
+                {
+                    LatitudeCoordinate = _ * 0.1,
+                    LongitudeCoordinate = _ * 0.1,
+                }));
+
                 var line1 = new Line();
                 var line2 = new Line();
 

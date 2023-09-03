@@ -16,6 +16,8 @@
     "formik": "^2.2.9",
     "mobx": "^6.5.0",
     "mobx-react-lite": "^3.4.0",
+    "ol": "^8.0.0",
+    "proj4": "^2.9.0",
     "react": "^17.0.2",
     "react-calendar": "^3.7.0",
     "react-cropper": "^2.1.8",
