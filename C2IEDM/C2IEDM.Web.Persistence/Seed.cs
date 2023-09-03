@@ -68,13 +68,65 @@ namespace C2IEDM.Web.Persistence
         {
             if (!context.Locations.Any())
             {
-                var absolutePoints = Enumerable
-                    .Range(0, 10)
-                    .Select(_ => new AbsolutePoint
-                    {
-                        LatitudeCoordinate = _ * 0.1,
-                        LongitudeCoordinate = 7.913
-                    });
+                var verticalDistance1 = new VerticalDistance
+                {
+                    Dimension = 1.0
+                };
+
+                var absPoint1 = new AbsolutePoint
+                {
+                    LatitudeCoordinate = 9.816808191409391,
+                    LongitudeCoordinate = 55.13953436148247,
+                };
+
+                var absPoint2 = new AbsolutePoint
+                {
+                    LatitudeCoordinate = 10.202169964922433,
+                    LongitudeCoordinate = 54.847172968685214,
+                };
+
+                var absPoint3 = new AbsolutePoint
+                {
+                    LatitudeCoordinate = 9.526866977996978,
+                    LongitudeCoordinate = 54.863907344714946,
+                };
+
+                var absPoint4 = new AbsolutePoint
+                {
+                    LatitudeCoordinate = 10.951680768333889,
+                    LongitudeCoordinate = 54.97114299238095,
+                    VerticalDistance = verticalDistance1
+                };
+
+                var absPoint5 = new AbsolutePoint
+                {
+                    LatitudeCoordinate = 11.931557544334767,
+                    LongitudeCoordinate = 54.90468731477757,
+                    VerticalDistance = verticalDistance1
+                };
+
+                var absPoint6 = new AbsolutePoint
+                {
+                    LatitudeCoordinate = 11.96844180282638,
+                    LongitudeCoordinate = 54.59228432756085,
+                    VerticalDistance = verticalDistance1
+                };
+
+                var absPoint7 = new AbsolutePoint
+                {
+                    LatitudeCoordinate = 10.905450050241162,
+                    LongitudeCoordinate = 54.715507173483466,
+                    VerticalDistance = verticalDistance1
+                };
+
+                var absolutePoints = new List<AbsolutePoint>{
+                    absPoint1,
+                    absPoint2,
+                    absPoint3,
+                    absPoint4,
+                    absPoint5,
+                    absPoint6,
+                    absPoint7};
 
                 var line1 = new Line();
                 var line2 = new Line();
@@ -82,75 +134,107 @@ namespace C2IEDM.Web.Persistence
                 var lines = new List<Line> { line1, line2 };
 
                 var linePoints = new List<LinePoint>
+            {
+                new LinePoint
                 {
-                    new LinePoint
-                    {
-                        Line = line1,
-                        Point = absolutePoints.Skip(0).First(),
-                        Index = 0,
-                        SequenceQuantity = 0
-                    },
-                    new LinePoint
-                    {
-                        Line = line1,
-                        Point = absolutePoints.Skip(1).First(),
-                        Index = 1,
-                        SequenceQuantity = 1
-                    },
-                    new LinePoint
-                    {
-                        Line = line1,
-                        Point = absolutePoints.Skip(2).First(),
-                        Index = 2,
-                        SequenceQuantity = 2
-                    },
-                    new LinePoint
-                    {
-                        Line = line1,
-                        Point = absolutePoints.Skip(3).First(),
-                        Index = 3,
-                        SequenceQuantity = 3
-                    },
-                    new LinePoint
-                    {
-                        Line = line2,
-                        Point = absolutePoints.Skip(4).First(),
-                        Index = 0,
-                        SequenceQuantity = 0
-                    },
-                    new LinePoint
-                    {
-                        Line = line2,
-                        Point = absolutePoints.Skip(5).First(),
-                        Index = 1,
-                        SequenceQuantity = 1
-                    },
-                    new LinePoint
-                    {
-                        Line = line2,
-                        Point = absolutePoints.Skip(6).First(),
-                        Index = 2,
-                        SequenceQuantity = 2
-                    },
-                    new LinePoint
-                    {
-                        Line = line2,
-                        Point = absolutePoints.Skip(7).First(),
-                        Index = 3,
-                        SequenceQuantity = 3
-                    },
-                    new LinePoint
-                    {
-                        Line = line2,
-                        Point = absolutePoints.Skip(8).First(),
-                        Index = 4,
-                        SequenceQuantity = 4
-                    }
+                    Line = line1,
+                    Point = absPoint1,
+                    Index = 0,
+                    SequenceQuantity = 0
+                },
+                new LinePoint
+                {
+                    Line = line1,
+                    Point = absPoint2,
+                    Index = 1,
+                    SequenceQuantity = 1
+                },
+                new LinePoint
+                {
+                    Line = line1,
+                    Point = absPoint3,
+                    Index = 2,
+                    SequenceQuantity = 2
+                },
+                new LinePoint
+                {
+                    Line = line1,
+                    Point = absPoint1,
+                    Index = 3,
+                    SequenceQuantity = 3
+                },
+                new LinePoint
+                {
+                    Line = line2,
+                    Point = absPoint4,
+                    Index = 0,
+                    SequenceQuantity = 0
+                },
+                new LinePoint
+                {
+                    Line = line2,
+                    Point = absPoint5,
+                    Index = 1,
+                    SequenceQuantity = 1
+                },
+                new LinePoint
+                {
+                    Line = line2,
+                    Point = absPoint6,
+                    Index = 2,
+                    SequenceQuantity = 2
+                },
+                new LinePoint
+                {
+                    Line = line2,
+                    Point = absPoint7,
+                    Index = 3,
+                    SequenceQuantity = 3
+                },
+                new LinePoint
+                {
+                    Line = line2,
+                    Point = absPoint4,
+                    Index = 4,
+                    SequenceQuantity = 4
+                }
+            };
+
+                var ellipse1 = new Ellipse
+                {
+                    CentrePoint = absPoint1,
+                    FirstConjugateDiameterPoint = absPoint2,
+                    SecondConjugateDiameterPoint = absPoint3
                 };
 
-                await context.Locations.AddRangeAsync(absolutePoints);
+                var corridorArea1 = new CorridorArea
+                {
+                    CenterLine = line1,
+                    WidthDimension = 1.5
+                };
+
+                var polygonArea1 = new PolygonArea
+                {
+                    BoundingLine = line2,
+                };
+
+                var fanArea1 = new FanArea
+                {
+                    VertexPoint = absPoint1,
+                    MinimumRangeDimension = 1,
+                    MaximumRangeDimension = 3,
+                    OrientationAngle = 30,
+                    SectorSizeAngle = 60
+                };
+
+                await context.VerticalDistances.AddAsync(verticalDistance1);
+                await context.AbsolutePoints.AddRangeAsync(absolutePoints);
                 await context.Lines.AddRangeAsync(lines);
                 await context.LinePoints.AddRangeAsync(linePoints);
+                await context.Ellipses.AddAsync(ellipse1);
+                await context.CorridorAreas.AddAsync(corridorArea1);
+                await context.PolygonAreas.AddAsync(polygonArea1);
+                await context.FanAreas.AddAsync(fanArea1);
                 await context.SaveChangesAsync();
             }
         }

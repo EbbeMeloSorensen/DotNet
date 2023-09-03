@@ -13,7 +13,12 @@ public enum LocationType
     Location,
     Point,
     AbsolutePoint,
-    Line
+    Line,
+    Surface,
+    Ellipse,
+    CorridorArea,
+    PolygonArea,
+    FanArea
 }
 
 public class List
@@ -42,10 +47,15 @@ public class List
         {
             var query = request.Type switch
             {
+                LocationType.FanArea => _context.FanAreas.AsQueryable(),
+                LocationType.CorridorArea => _context.CorridorAreas.AsQueryable(),
+                LocationType.PolygonArea => _context.PolygonAreas.AsQueryable(),
+                LocationType.Ellipse => _context.Ellipses.AsQueryable(),
+                LocationType.Surface => _context.Surfaces.AsQueryable(),
+                LocationType.Line => _context.Lines.AsQueryable(),
                 LocationType.AbsolutePoint => _context.AbsolutePoints.AsQueryable(),
                 LocationType.Point => _context.Points.AsQueryable(),
                 LocationType.Location => _context.Locations.AsQueryable(),
-                LocationType.Line => _context.Lines.AsQueryable(),
                 _ => null
             };
 
