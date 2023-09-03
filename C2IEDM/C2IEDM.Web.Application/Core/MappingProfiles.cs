@@ -17,9 +17,19 @@ public class MappingProfiles : Profile
         CreateMap<Location, LocationDto>()
             .Include<Point, PointDto>()
             .Include<AbsolutePoint, AbsolutePointDto>()
-            .Include<Line, LineDto>();
+            .Include<Line, LineDto>()
+            .Include<Surface, SurfaceDto>()
+            .Include<Ellipse, EllipseDto>()
+            .Include<CorridorArea, CorridorAreaDto>()
+            .Include<PolygonArea, PolygonAreaDto>()
+            .Include<FanArea, FanAreaDto>();
         CreateMap<Point, PointDto>();
         CreateMap<AbsolutePoint, AbsolutePointDto>();
         CreateMap<Line, LineDto>();
+        CreateMap<Surface, SurfaceDto>();
+        CreateMap<Ellipse, EllipseDto>();
+        CreateMap<CorridorArea, CorridorAreaDto>();
+        CreateMap<PolygonArea, PolygonAreaDto>();
+        CreateMap<FanArea, FanAreaDto>();
     }
 }
