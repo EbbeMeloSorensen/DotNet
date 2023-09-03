@@ -51,7 +51,7 @@ export default class PersonStore {
 
   get sortedAbsolutePoints() {
     return Array.from(this.absolutePointRegistry.values()).sort((a, b) => {
-      return a.lat > b.lat ? -1 : 1;
+      return a.latitudeCoordinate > b.latitudeCoordinate ? -1 : 1;
     });
   }
 

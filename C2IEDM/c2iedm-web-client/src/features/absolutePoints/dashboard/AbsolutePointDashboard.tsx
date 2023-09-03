@@ -29,9 +29,23 @@ export default observer(function AbsolutePointDashboard() {
 
   return (
     <Grid>
-      <Grid.Column width="10">
+      <Grid.Column width="16">
         {absolutePointStore.loadingInitial && !loadingNext ? (
           <>
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
+            <AbsolutePointListItemPlaceholder />
             <AbsolutePointListItemPlaceholder />
           </>
         ) : (

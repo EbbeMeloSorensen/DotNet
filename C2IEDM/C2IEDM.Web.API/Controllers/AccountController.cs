@@ -85,6 +85,9 @@ public class AccountController : ControllerBase
         var user = await _userManager.Users
             .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
+        if (user == null)
+            return null;
+
         return CreateUserObject(user);
     }
 

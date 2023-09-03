@@ -16,8 +16,8 @@ export default function AbsolutePointListItem({ absolutePoint }: Props) {
   return (
     <List.Item>
       <List.Content>
-        <List.Header as={Link} to={`/people/${absolutePoint.id}`}>
-          {absolutePoint.lat} {absolutePoint.long}
+        <List.Header as={Link} to={`/absolutePoints/${absolutePoint.id}`}>
+          (Latitude, Longitude): ({`${absolutePoint.latitudeCoordinate.toFixed(2)}`}, {`${absolutePoint.longitudeCoordinate.toFixed(2)}`})
         </List.Header>
       </List.Content>
     </List.Item>
