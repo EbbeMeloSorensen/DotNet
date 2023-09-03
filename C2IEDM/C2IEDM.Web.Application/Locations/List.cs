@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Locations.DTOs;
 using C2IEDM.Web.Application.Interfaces;
@@ -74,6 +73,7 @@ public class List
 
             /*
             // Det her var det oprindelige, der jo altså ikke virker polymorfisk
+            // Bemærk, at den bruger den der userAccessor - det ved jeg ikke hvorfor...
             IQueryable<LocationDto> query;
 
             query = _context.Locations

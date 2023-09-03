@@ -8,6 +8,10 @@ public class LocationsController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetLocations([FromQuery] LocationParams param)
     {
-        return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
+        return HandlePagedResult(await Mediator.Send(new List.Query
+        {
+            Type = LocationType.Location,
+            Params = param
+        }));
     }
 }
