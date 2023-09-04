@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { Map, View } from "ol";
 import { OSM } from "ol/source";
-import "ol/ol.css";
 import { Tile as TileLayer } from "ol/layer";
 import proj4 from "proj4";
 import { register } from "ol/proj/proj4";
 import { useGeographic, get as getProjection } from "ol/proj";
+import "ol/ol.css";
 import "./Map.css";
 
 function MapComponent({ zoomSize }): JSX.Element {
