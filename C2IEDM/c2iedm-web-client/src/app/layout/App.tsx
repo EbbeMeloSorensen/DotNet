@@ -16,7 +16,7 @@ import { useStore } from "../stores/store";
 import LoadingComponent from "./LoadingComponents";
 import ModalContainer from "../common/modals/ModalContainer";
 import PrivateRoute from "./PrivateRoute";
-import MapComponent from "../../features/map/Map";
+import MapView from "../../features/map/MapView";
 
 function App() {
   const location = useLocation();
@@ -55,7 +55,7 @@ function App() {
                   path="/absolutePoints"
                   component={AbsolutePointDashboard}
                 />
-                <PrivateRoute exact path="/map" component={MapComponent} />
+                <PrivateRoute exact path="/map" component={MapView} />
                 <PrivateRoute path="/people/:id" component={PersonDetails} />
                 <PrivateRoute
                   key={location.key}

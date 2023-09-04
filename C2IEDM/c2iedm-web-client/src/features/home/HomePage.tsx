@@ -13,11 +13,11 @@ export default observer(function HomePage() {
             <Container text>
                 <Header as='h1' inverted>
                     <Image size='massive' src='/assets/logo.png' alt='logo' style={{marginBottom: 12}} />
-                    Who is Who?
+                    C2IEDM?
                 </Header>
                 {userStore.isLoggedIn ? (
                     <>
-                    <Header as='h2' inverted content='Welcome to Who is Who?' />
+                    <Header as='h2' inverted content='Welcome to C2IEDM?' />
                     <Button as={Link} to='/people' size='huge' inverted>
                         Go to People
                     </Button>

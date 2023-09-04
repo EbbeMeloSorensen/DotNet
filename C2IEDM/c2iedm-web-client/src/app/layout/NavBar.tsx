@@ -17,7 +17,7 @@ export default observer(function NavBar() {
             alt="logo"
             style={{ marginRight: "10px" }}
           />
-          Who is Who
+          C2IEDM
         </Menu.Item>
         <Menu.Item as={NavLink} to="/people" name="People" />
         <Menu.Item as={NavLink} to="/absolutePoints" name="Absolute Points" />

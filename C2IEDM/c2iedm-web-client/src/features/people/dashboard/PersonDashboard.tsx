@@ -7,7 +7,6 @@ import { useStore } from "../../../app/stores/store";
 import PersonFilters from "./PersonFilters";
 import PersonList from "./PersonList";
 import PersonListItemPlaceholder from "./PersonListItemPlaceholder";
-import MapComponent from "../../map/Map";
 
 export default observer(function PersonDashboard() {
     const {personStore} = useStore();
@@ -26,7 +25,7 @@ export default observer(function PersonDashboard() {
 
     return (
         <Grid>
-            <Grid.Column width='6'>
+            <Grid.Column width='10'>
                 {personStore.loadingInitial && !loadingNext ? (
                     <>
                         <PersonListItemPlaceholder />
@@ -56,13 +55,8 @@ export default observer(function PersonDashboard() {
                         </InfiniteScroll>
                     )}
             </Grid.Column>
-            <Grid.Column width='4'>
-                <PersonFilters />
-            </Grid.Column>
             <Grid.Column width='6'>
-                <div className="mapViewContainer">
-                <MapComponent zoomSize={7.8} />
-                </div>
+                <PersonFilters />
             </Grid.Column>
             <Grid.Column width={10}>
                <Loader active={loadingNext} />
