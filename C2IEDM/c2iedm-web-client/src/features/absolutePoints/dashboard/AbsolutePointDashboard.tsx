@@ -24,6 +24,7 @@ export default observer(function AbsolutePointDashboard() {
   }
 
   useEffect(() => {
+    console.log('useEffect in AbsolutePointDashboard');
     if (absolutePointRegistry.size <= 1) loadAbsolutePoints();
   }, [absolutePointRegistry.size, loadAbsolutePoints]);
 

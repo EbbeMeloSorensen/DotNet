@@ -56,6 +56,7 @@ export default class PersonStore {
   }
 
   loadAbsolutePoints = async () => {
+    console.log('In loading Absolute Points');
     this.loadingInitial = true;
     try {
       const result = await agent.AbsolutePoints.list(this.axiosParams);
