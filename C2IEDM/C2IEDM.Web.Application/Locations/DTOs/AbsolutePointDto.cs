@@ -2,8 +2,6 @@
 
 public class AbsolutePointDto : PointDto
 {
-    public string type { get; set; }
-
     public double latitudeCoordinate { get; set; }
     public double longitudeCoordinate { get; set; }
 
