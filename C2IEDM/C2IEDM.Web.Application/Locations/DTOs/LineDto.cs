@@ -2,7 +2,7 @@
 
 public class LineDto : LocationDto
 {
-    public string type { get; set; }
+    public List<PointDto> LinePoints { get; set; }
 
     public LineDto()
     {

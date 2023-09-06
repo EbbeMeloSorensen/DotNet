@@ -1,5 +1,5 @@
-﻿using C2IEDM.Web.Application.Locations;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using C2IEDM.Web.Application.Locations;
 
 namespace C2IEDM.Web.API.Controllers.Location;
 
@@ -13,5 +13,11 @@ public class LinesController : BaseApiController
             Type = LocationType.Line,
             Params = param
         }));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetLine(Guid id)
+    {
+        return HandleResult(await Mediator.Send(new LineDetails.Query { Id = id }));
     }
 }
