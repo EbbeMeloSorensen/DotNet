@@ -9,6 +9,7 @@ import proj4 from "proj4";
 import { register } from "ol/proj/proj4";
 import { useGeographic, get as getProjection } from "ol/proj";
 import { useStore } from "../../app/stores/store";
+import { Button } from "semantic-ui-react";
 import "ol/ol.css";
 import "./Map.css";
 
@@ -35,6 +36,10 @@ export default observer(function MapComponent({ zoomSize }: Props): JSX.Element 
 
   const { absolutePointStore } = useStore();
   const { sortedAbsolutePoints } = absolutePointStore;
+  const {
+    loadAbsolutePoints,
+    absolutePointRegistry,
+  } = absolutePointStore;
 
   const mapElement = useRef();
   const mapRef = useRef<Map>();
@@ -80,7 +85,7 @@ export default observer(function MapComponent({ zoomSize }: Props): JSX.Element 
       zoom: zoomSize,
       projection: EPSG25832,
     }),
-    layers: [tileLayer, markerLayer],
+    layers: [tileLayer],
   };
 
   useEffect(() => {
@@ -90,9 +95,25 @@ export default observer(function MapComponent({ zoomSize }: Props): JSX.Element 
     return () => initialMap.setTarget(undefined);
   }, []);
 
+  // Denne kaldes åbenbart, når man navigerer hen på mappet, men ikke tidsnok til
+  // at få markers på kortet. Derfor har du gjort det at man kan refreshe ved at klikke på
+  // en knap her på siden
+  useEffect(() => {
+    if (absolutePointRegistry.size <= 1) loadAbsolutePoints();
+  }, [absolutePointRegistry.size, loadAbsolutePoints]);
+
+  // Denne konstruktion er taget fra Floods
+  function handleRefresh() {
+    let layers = [];
+    layers.push(tileLayer);
+    layers.push(markerLayer);
+    map.setLayers(layers);
+  }
+
   return (
     <>
       <div className="mapContainer" ref={mapElement}></div>
+      <Button onClick={handleRefresh} content='Refresh' primary/>
     </>
   );
 });
