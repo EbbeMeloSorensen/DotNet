@@ -8,7 +8,7 @@ public class SurfacesController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetLocations([FromQuery] LocationParams param)
     {
-        return HandlePagedResult(await Mediator.Send(new List.Query
+        return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
             Type = LocationType.Surface,
             Params = param

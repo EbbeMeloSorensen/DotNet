@@ -8,7 +8,7 @@ public class EllipsesController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetEllipses([FromQuery] LocationParams param)
     {
-        return HandlePagedResult(await Mediator.Send(new List.Query
+        return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
             Type = LocationType.Ellipse,
             Params = param

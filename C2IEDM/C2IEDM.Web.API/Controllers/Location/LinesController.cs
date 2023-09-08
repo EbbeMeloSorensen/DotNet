@@ -8,7 +8,7 @@ public class LinesController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetLines([FromQuery] LocationParams param)
     {
-        return HandlePagedResult(await Mediator.Send(new List.Query
+        return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
             Type = LocationType.Line,
             Params = param

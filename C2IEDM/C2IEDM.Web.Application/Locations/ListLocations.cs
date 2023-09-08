@@ -21,7 +21,7 @@ public enum LocationType
     FanArea
 }
 
-public class List
+public class ListLocations
 {
     public class Query : IRequest<Result<PagedList<LocationDto>>>
     {

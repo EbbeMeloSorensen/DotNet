@@ -8,7 +8,7 @@ public class AbsolutePointsController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetAbsolutePoints([FromQuery] LocationParams param)
     {
-        return HandlePagedResult(await Mediator.Send(new List.Query
+        return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
             Type = LocationType.AbsolutePoint,
             Params = param
