@@ -738,6 +738,25 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
                 SectorSizeAngle = 60
             };
 
+            var pointReference1 = new PointReference
+            {
+                OriginPoint = absPoint1,
+                XVectorPoint = absPoint2,
+                YVectorPoint = absPoint3
+            };
+
+            var pointReference2 = new PointReference
+            {
+                OriginPoint = absPoint2,
+                XVectorPoint = absPoint3,
+                YVectorPoint = absPoint4
+            };
+
+            var pointReferences = new List<PointReference>
+            {
+                pointReference1, pointReference2
+            };
+
             context.Add(verticalDistance1);
             context.AddRange(absolutePoints);
             context.AddRange(lines);
@@ -746,6 +765,7 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
             context.Add(corridorArea1);
             context.Add(polygonArea1);
             context.Add(fanArea1);
+            context.AddRange(pointReferences);
             context.SaveChanges();
         }
     }
