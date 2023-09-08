@@ -13,6 +13,9 @@ public class MappingProfiles : Profile
         CreateMap<Person, Person>();
         CreateMap<Person, PersonDto>();
 
+        CreateMap<VerticalDistance, VerticalDistance>();
+        CreateMap<VerticalDistance, VerticalDistanceDto>();
+
         CreateMap<Location, Location>();
         CreateMap<Location, LocationDto>()
             .Include<Point, PointDto>()

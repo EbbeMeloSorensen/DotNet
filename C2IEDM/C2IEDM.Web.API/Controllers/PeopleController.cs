@@ -1,5 +1,5 @@
-﻿using C2IEDM.Web.Application.People;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using C2IEDM.Web.Application.People;
 
 namespace C2IEDM.Web.API.Controllers;
 
