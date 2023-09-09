@@ -1,4 +1,6 @@
-﻿using C2IEDM.Domain.Entities.Geometry;
+﻿using C2IEDM.Domain.Entities.Geometry.Locations;
+using C2IEDM.Domain.Entities.Geometry.Locations.Points;
+using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
 using C2IEDM.Web.Application.Locations.DTOs;
 
 namespace C2IEDM.Web.Application.Locations;

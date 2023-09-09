@@ -1,4 +1,4 @@
-﻿using C2IEDM.Domain.Entities.Geometry;
+﻿using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 using C2IEDM.Persistence.Repositories.Geometry;
 using Craft.Persistence.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

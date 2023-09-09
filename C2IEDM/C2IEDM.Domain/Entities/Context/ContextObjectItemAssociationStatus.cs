@@ -1,4 +1,4 @@
-using C2IEDM.Domain.Entities.ObjectItems;
+using C2IEDM.Domain.Entities.ObjectItems.Organisations;
 
 namespace C2IEDM.Domain.Entities.Context;
 

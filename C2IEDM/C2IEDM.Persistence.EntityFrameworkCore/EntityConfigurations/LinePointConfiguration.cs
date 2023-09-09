@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using C2IEDM.Domain.Entities.Geometry;
+using C2IEDM.Domain.Entities.Geometry.Locations;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore.EntityConfigurations
 {

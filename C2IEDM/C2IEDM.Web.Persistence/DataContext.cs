@@ -1,5 +1,10 @@
 ﻿using C2IEDM.Domain.Entities;
 using C2IEDM.Domain.Entities.Geometry;
+using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
+using C2IEDM.Domain.Entities.Geometry.Locations;
+using C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes;
+using C2IEDM.Domain.Entities.Geometry.Locations.Points;
+using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
 using C2IEDM.Persistence.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

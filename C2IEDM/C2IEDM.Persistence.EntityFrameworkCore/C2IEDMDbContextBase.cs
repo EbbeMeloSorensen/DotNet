@@ -1,6 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using C2IEDM.Domain.Entities.Geometry;
 using C2IEDM.Persistence.EntityFrameworkCore.EntityConfigurations;
+using C2IEDM.Domain.Entities.Geometry.Locations;
+using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
+using C2IEDM.Domain.Entities.Geometry.Locations.Points;
+using C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes;
+using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore;
 

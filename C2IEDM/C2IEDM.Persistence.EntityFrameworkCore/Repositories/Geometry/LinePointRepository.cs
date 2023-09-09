@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Craft.Persistence.EntityFrameworkCore;
-using C2IEDM.Domain.Entities.Geometry;
 using C2IEDM.Persistence.Repositories.Geometry;
+using C2IEDM.Domain.Entities.Geometry.Locations;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore.Repositories.Geometry
 {

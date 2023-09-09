@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using C2IEDM.Domain.Entities.Geometry;
 using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Interfaces;
+using C2IEDM.Domain.Entities.Geometry.Locations;
 
 namespace C2IEDM.Web.Application.Locations;
 

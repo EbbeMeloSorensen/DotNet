@@ -1,4 +1,4 @@
-using C2IEDM.Domain.Entities.Geometry;
+using C2IEDM.Domain.Entities.Geometry.Locations;
 using C2IEDM.Domain.Entities.ObjectItems;
 
 namespace C2IEDM.Domain.Entities.Reporting;

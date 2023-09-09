@@ -1,4 +1,4 @@
-using C2IEDM.Domain.Entities.ObjectItems;
+using C2IEDM.Domain.Entities.ObjectItems.Organisations;
 using Domain.Entities.Reporting;
 
 namespace C2IEDM.Domain.Entities.Reporting;
