@@ -1,4 +1,4 @@
-namespace C2IEDM.Domain.Entities.Geometry.Locations;
+namespace C2IEDM.Domain.Entities.Geometry.Locations.Line;
 
 public class Line : Location
 {

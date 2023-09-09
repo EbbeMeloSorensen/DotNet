@@ -1,6 +1,6 @@
 using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 
-namespace C2IEDM.Domain.Entities.Geometry.Locations;
+namespace C2IEDM.Domain.Entities.Geometry.Locations.Line;
 
 public class LinePoint
 {

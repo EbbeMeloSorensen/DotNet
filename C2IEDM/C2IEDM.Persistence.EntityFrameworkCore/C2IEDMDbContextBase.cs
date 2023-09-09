@@ -6,6 +6,7 @@ using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
 using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 using C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes;
 using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
+using C2IEDM.Domain.Entities.Geometry.Locations.Line;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore;
 

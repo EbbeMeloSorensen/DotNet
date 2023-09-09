@@ -5,7 +5,7 @@ namespace C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
 public class PolyArcArea : Surface
 {
     public Guid DefiningLineId { get; set; }
-    public Line DefiningLine { get; set; } = null!;
+    public Line.Line DefiningLine { get; set; } = null!;
 
     public Guid BearingOriginPointId { get; set; }
     public Point BearingOriginPoint { get; set; } = null!;
