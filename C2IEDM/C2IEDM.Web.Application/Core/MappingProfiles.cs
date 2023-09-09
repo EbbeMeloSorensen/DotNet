@@ -25,6 +25,7 @@ public class MappingProfiles : Profile
         CreateMap<Location, LocationDto>()
             .Include<Point, PointDto>()
             .Include<AbsolutePoint, AbsolutePointDto>()
+            .Include<RelativePoint, RelativePointDto>()
             .Include<Line, LineDto>()
             .Include<Surface, SurfaceDto>()
             .Include<Ellipse, EllipseDto>()
@@ -33,6 +34,7 @@ public class MappingProfiles : Profile
             .Include<FanArea, FanAreaDto>();
         CreateMap<Point, PointDto>();
         CreateMap<AbsolutePoint, AbsolutePointDto>();
+        CreateMap<RelativePoint, RelativePointDto>();
         CreateMap<Line, LineDto>();
         CreateMap<Surface, SurfaceDto>();
         CreateMap<Ellipse, EllipseDto>();

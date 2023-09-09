@@ -251,6 +251,27 @@ namespace C2IEDM.Web.Persistence
                     pointReference1, pointReference2
                 };
 
+                var relativePoint1 = new RelativePoint
+                {
+                    CoordinateSystem = pointReference1,
+                    XCoordinateDimension = 1.2,
+                    YCoordinateDimension = 3.4,
+                    ZCoordinateDimension = 5.6
+                };
+
+                var relativePoint2 = new RelativePoint
+                {
+                    CoordinateSystem = pointReference1,
+                    XCoordinateDimension = 2.3,
+                    YCoordinateDimension = 4.5,
+                    ZCoordinateDimension = 6.7
+                };
+
+                var relativePoints = new List<RelativePoint>
+                {
+                    relativePoint1, relativePoint2
+                };
+
                 await context.VerticalDistances.AddAsync(verticalDistance1);
                 await context.AbsolutePoints.AddRangeAsync(absolutePoints);
                 await context.Lines.AddRangeAsync(lines);
@@ -260,6 +281,7 @@ namespace C2IEDM.Web.Persistence
                 await context.PolygonAreas.AddAsync(polygonArea1);
                 await context.FanAreas.AddAsync(fanArea1);
                 await context.PointReferences.AddRangeAsync(pointReferences);
+                await context.RelativePoints.AddRangeAsync(relativePoints);
                 await context.SaveChangesAsync();
             }
         }
