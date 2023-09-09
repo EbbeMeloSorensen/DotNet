@@ -16,6 +16,11 @@ public class MappingProfiles : Profile
         CreateMap<VerticalDistance, VerticalDistance>();
         CreateMap<VerticalDistance, VerticalDistanceDto>();
 
+        CreateMap<CoordinateSystem, CoordinateSystem>();
+        CreateMap<CoordinateSystem, CoordinateSystemDto>()
+            .Include<PointReference, PointReferenceDto>();
+        CreateMap<PointReference, PointReferenceDto>();
+
         CreateMap<Location, Location>();
         CreateMap<Location, LocationDto>()
             .Include<Point, PointDto>()

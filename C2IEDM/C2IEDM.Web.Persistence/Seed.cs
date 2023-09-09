@@ -232,6 +232,25 @@ namespace C2IEDM.Web.Persistence
                     SectorSizeAngle = 60
                 };
 
+                var pointReference1 = new PointReference
+                {
+                    OriginPoint = absPoint1,
+                    XVectorPoint = absPoint2,
+                    YVectorPoint = absPoint3
+                };
+
+                var pointReference2 = new PointReference
+                {
+                    OriginPoint = absPoint2,
+                    XVectorPoint = absPoint3,
+                    YVectorPoint = absPoint4
+                };
+
+                var pointReferences = new List<PointReference>
+                {
+                    pointReference1, pointReference2
+                };
+
                 await context.VerticalDistances.AddAsync(verticalDistance1);
                 await context.AbsolutePoints.AddRangeAsync(absolutePoints);
                 await context.Lines.AddRangeAsync(lines);
@@ -240,6 +259,7 @@ namespace C2IEDM.Web.Persistence
                 await context.CorridorAreas.AddAsync(corridorArea1);
                 await context.PolygonAreas.AddAsync(polygonArea1);
                 await context.FanAreas.AddAsync(fanArea1);
+                await context.PointReferences.AddRangeAsync(pointReferences);
                 await context.SaveChangesAsync();
             }
         }
