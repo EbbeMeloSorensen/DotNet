@@ -1,4 +1,4 @@
-namespace C2IEDM.Domain.Entities.ObjectTypes.OrganisationTypes.GovernmentOrganisationTypes.MilitaryOrganisationType;
+namespace C2IEDM.Domain.Entities.ObjectTypes.OrganisationTypes.GovernmentOrganisationTypes.MilitaryOrganisationTypes;
 
 public enum UnitTypeCategory
 {
@@ -265,7 +265,7 @@ public enum SizeCategory
     NotOtherwiseSpecified
 }
 
-public class UnitType : MilitaryOrganisationType
+public class UnitType : MilitaryOrganisationTypes.MilitaryOrganisationType
 {
     public UnitTypeCategory UnitTypeCategory { get; set; }
     public ArmCategory ArmCategory { get; set; }
@@ -275,7 +275,7 @@ public class UnitType : MilitaryOrganisationType
     public QualifierCategory? QualifierCategory { get; set; }
     public SizeCategory SizeCategory { get; set; }
 
-    public UnitType() : base()
+    public UnitType()
     {
         MilitaryOrganisationTypeCategory = MilitaryOrganisationTypeCategory.UnitType;
     }

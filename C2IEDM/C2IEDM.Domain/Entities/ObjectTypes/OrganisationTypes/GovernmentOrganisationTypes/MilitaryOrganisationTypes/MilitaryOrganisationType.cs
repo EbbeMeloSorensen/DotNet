@@ -1,6 +1,4 @@
-using C2IEDM.Domain.Entities.ObjectTypes.OrganisationTypes.GovernmentOrganisationTypes;
-
-namespace C2IEDM.Domain.Entities.ObjectTypes.OrganisationTypes.GovernmentOrganisationTypes.MilitaryOrganisationType;
+namespace C2IEDM.Domain.Entities.ObjectTypes.OrganisationTypes.GovernmentOrganisationTypes.MilitaryOrganisationTypes;
 
 public enum MilitaryOrganisationTypeCategory
 {
@@ -35,7 +33,7 @@ public class MilitaryOrganisationType : GovernmentOrganisationType
     public MilitaryOrganisationTypeCategory MilitaryOrganisationTypeCategory { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
 
-    public MilitaryOrganisationType() : base()
+    public MilitaryOrganisationType()
     {
         GovernmentOrganisationTypeCategory = GovernmentOrganisationTypeCategory.MilitaryOrganisationType;
     }

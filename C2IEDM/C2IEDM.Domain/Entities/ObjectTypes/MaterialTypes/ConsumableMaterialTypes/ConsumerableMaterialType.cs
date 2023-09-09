@@ -1,4 +1,4 @@
-﻿namespace C2IEDM.Domain.Entities.ObjectTypes.MaterialTypes.ConsumableMaterialType;
+﻿namespace C2IEDM.Domain.Entities.ObjectTypes.MaterialTypes.ConsumableMaterialTypes;
 
 public class ConsumerableMaterialType : MaterialType
 {
