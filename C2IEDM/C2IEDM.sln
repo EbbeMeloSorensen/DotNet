@@ -33,7 +33,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Web.Application", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Web.Infrastructure", "C2IEDM.Web.Infrastructure\C2IEDM.Web.Infrastructure.csproj", "{CAFA1FDE-80B2-4FDC-A2FD-492B9F1D0D7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.Web.API", "C2IEDM.Web.API\C2IEDM.Web.API.csproj", "{30BBB3B5-BB51-4BBC-B87A-CA0CBEE70861}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Web.API", "C2IEDM.Web.API\C2IEDM.Web.API.csproj", "{30BBB3B5-BB51-4BBC-B87A-CA0CBEE70861}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{11730E49-B12F-40FE-BF3D-34F833A4E50D}"
+	ProjectSection(SolutionItems) = preProject
+		Deployment.md = Deployment.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
