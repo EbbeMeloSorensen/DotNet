@@ -6,7 +6,7 @@ namespace C2IEDM.Web.API.Controllers.Location;
 public class RelativePointsController : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetAbsolutePoints([FromQuery] LocationParams param)
+    public async Task<IActionResult> GetRelativePoints([FromQuery] LocationParams param)
     {
         return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
