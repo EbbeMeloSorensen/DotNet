@@ -1,4 +1,4 @@
-namespace C2IEDM.Domain.Entities.ObjectTypes.OrganisationTypes;
+namespace C2IEDM.Domain.Entities.ObjectTypes.OrganisationTypes.GovernmentOrganisationTypes.MilitaryOrganisationType;
 
 public enum UnitTypeCategory
 {
