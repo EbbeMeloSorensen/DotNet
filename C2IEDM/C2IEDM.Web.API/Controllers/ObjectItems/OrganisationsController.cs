@@ -1,6 +1,7 @@
-﻿using C2IEDM.Web.Application.ObjectItems;
-using C2IEDM.Web.Application.ObjectItems.ObjectItem;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using C2IEDM.Domain.Entities.ObjectItems.Organisations;
+using C2IEDM.Web.Application.ObjectItems;
+using C2IEDM.Web.Application.ObjectItems.Organisation;
 
 namespace C2IEDM.Web.API.Controllers.ObjectItems;
 
@@ -14,5 +15,11 @@ public class OrganisationsController : BaseApiController
             Category = ObjectItemCategory.Organisation,
             Params = param
         }));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrganisation(Organisation organisation)
+    {
+        return HandleResult(await Mediator.Send(new Create.Command { Organisation = organisation }));
     }
 }

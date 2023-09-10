@@ -3,13 +3,13 @@ using FluentValidation;
 using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 
-namespace C2IEDM.Web.Application.ObjectItems.ObjectItem;
+namespace C2IEDM.Web.Application.ObjectItems.Organisation;
 
 public class Create
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Domain.Entities.ObjectItems.ObjectItem ObjectItem { get; set; }
+        public Domain.Entities.ObjectItems.Organisations.Organisation Organisation { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -30,19 +30,20 @@ public class Create
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var newObjectItem = new Domain.Entities.ObjectItems.ObjectItem(
+            var newOrganisation = new Domain.Entities.ObjectItems.Organisations.Organisation(
                 Guid.NewGuid(),
                 DateTime.UtcNow)
             {
-                Name = request.ObjectItem.Name,
-                AlternativeIdentificationText = request.ObjectItem.AlternativeIdentificationText,
+                Name = request.Organisation.Name,
+                AlternativeIdentificationText = request.Organisation.AlternativeIdentificationText,
+                NickName = request.Organisation.NickName
             };
 
-            _context.ObjectItems.Add(newObjectItem);
+            _context.Organisations.Add(newOrganisation);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (!result) return Result<Unit>.Failure("Failed to create object item");
+            if (!result) return Result<Unit>.Failure("Failed to create organisation");
 
             return Result<Unit>.Success(Unit.Value);
         }
