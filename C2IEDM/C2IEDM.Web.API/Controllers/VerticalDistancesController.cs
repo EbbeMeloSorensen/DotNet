@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using C2IEDM.Web.Application.Locations;
 using C2IEDM.Domain.Entities.Geometry;
+using C2IEDM.Web.Application.Locations;
 
 namespace C2IEDM.Web.API.Controllers;
 
@@ -10,6 +10,12 @@ public class VerticalDistancesController : BaseApiController
     public async Task<IActionResult> GetVerticalDistances([FromQuery] VerticalDistanceParams param)
     {
         return HandlePagedResult(await Mediator.Send(new ListVerticalDistances.Query { Params = param }));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateVerticalDistance(VerticalDistance verticalDistance)
+    {
+        return HandleResult(await Mediator.Send(new CreateVerticalDistance.Command { VerticalDistance = verticalDistance }));
     }
 
     [HttpPut("{id}")]

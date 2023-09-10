@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using C2IEDM.Domain.Entities.Geometry;
+using MediatR;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using C2IEDM.Web.Persistence;
@@ -8,18 +9,17 @@ using C2IEDM.Domain.Entities.Geometry.Locations;
 
 namespace C2IEDM.Web.Application.Locations;
 
-public class Create
+public class CreateVerticalDistance
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Location Location { get; set; }
+        public VerticalDistance VerticalDistance { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
-            RuleFor(x => x.Location).SetValidator(new LocationValidator());
         }
     }
 
@@ -36,14 +36,18 @@ public class Create
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(
-                x => x.UserName == _userAccessor.GetUsername());
+            var newVerticalDistance = new VerticalDistance(
+                Guid.NewGuid(),
+                DateTime.UtcNow)
+            {
+                Dimension = request.VerticalDistance.Dimension
+            };
 
-            _context.Locations.Add(request.Location);
+            _context.VerticalDistances.Add(newVerticalDistance);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (!result) return Result<Unit>.Failure("Failed to create location");
+            if (!result) return Result<Unit>.Failure("Failed to create vertical distance");
 
             return Result<Unit>.Success(Unit.Value);
         }
