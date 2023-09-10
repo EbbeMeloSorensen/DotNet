@@ -6,7 +6,10 @@ using C2IEDM.Domain.Entities.Geometry.Locations;
 using C2IEDM.Domain.Entities.Geometry.Locations.Line;
 using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
+using C2IEDM.Domain.Entities.ObjectItems;
+using C2IEDM.Domain.Entities.ObjectItems.Organisations;
 using C2IEDM.Web.Application.Locations.DTOs;
+using C2IEDM.Web.Application.ObjectItems.DTOs;
 using C2IEDM.Web.Application.People;
 
 namespace C2IEDM.Web.Application.Core;
@@ -17,6 +20,13 @@ public class MappingProfiles : Profile
     {
         CreateMap<Person, Person>();
         CreateMap<Person, PersonDto>();
+
+        CreateMap<ObjectItem, ObjectItem>();
+        CreateMap<ObjectItem, ObjectItemDto>()
+            .Include<Organisation, OrganisationDto>()
+            .Include<Unit, UnitDto>();
+        CreateMap<Organisation, OrganisationDto>();
+        CreateMap<Unit, UnitDto>();
 
         CreateMap<VerticalDistance, VerticalDistance>();
         CreateMap<VerticalDistance, VerticalDistanceDto>();

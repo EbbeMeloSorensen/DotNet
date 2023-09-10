@@ -28,7 +28,6 @@ public class ListLocations
     {
         public LocationType Type { get; set; }
         public LocationParams Params { get; set; }
-
     }
 
     public class Handler : IRequestHandler<Query, Result<PagedList<LocationDto>>>
