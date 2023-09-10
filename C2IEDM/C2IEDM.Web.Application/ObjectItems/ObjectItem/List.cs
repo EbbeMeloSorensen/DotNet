@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MediatR;
-using AutoMapper;
+﻿using AutoMapper;
 using C2IEDM.Web.Application.Core;
-using C2IEDM.Web.Application.ObjectItems.DTOs;
 using C2IEDM.Web.Application.Interfaces;
+using C2IEDM.Web.Application.ObjectItems.DTOs;
 using C2IEDM.Web.Persistence;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-namespace C2IEDM.Web.Application.ObjectItems;
+namespace C2IEDM.Web.Application.ObjectItems.ObjectItem;
 
 public enum ObjectItemCategory
 {
@@ -15,7 +15,7 @@ public enum ObjectItemCategory
     Unit
 }
 
-public class ListObjectItems
+public class List
 {
     public class Query : IRequest<Result<PagedList<ObjectItemDto>>>
     {

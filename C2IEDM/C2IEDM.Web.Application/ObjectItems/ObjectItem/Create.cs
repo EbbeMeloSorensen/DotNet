@@ -1,15 +1,15 @@
-﻿using C2IEDM.Web.Application.Core;
-using C2IEDM.Web.Persistence;
+﻿using MediatR;
+using C2IEDM.Web.Application.Core;
 using FluentValidation;
-using MediatR;
+using C2IEDM.Web.Persistence;
 
-namespace C2IEDM.Web.Application.Locations.VerticalDistance;
+namespace C2IEDM.Web.Application.ObjectItems.ObjectItem;
 
 public class Create
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Domain.Entities.Geometry.VerticalDistance VerticalDistance { get; set; }
+        public Domain.Entities.ObjectItems.ObjectItem ObjectItem { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -30,18 +30,19 @@ public class Create
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var newVerticalDistance = new Domain.Entities.Geometry.VerticalDistance(
+            var newObjectItem = new Domain.Entities.ObjectItems.ObjectItem(
                 Guid.NewGuid(),
                 DateTime.UtcNow)
             {
-                Dimension = request.VerticalDistance.Dimension
+                Name = request.ObjectItem.Name,
+                AlternativeIdentificationText = request.ObjectItem.AlternativeIdentificationText,
             };
 
-            _context.VerticalDistances.Add(newVerticalDistance);
+            _context.ObjectItems.Add(newObjectItem);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (!result) return Result<Unit>.Failure("Failed to create vertical distance");
+            if (!result) return Result<Unit>.Failure("Failed to create object item");
 
             return Result<Unit>.Success(Unit.Value);
         }

@@ -1,7 +1,7 @@
-﻿using C2IEDM.Domain.Entities.ObjectItems;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using C2IEDM.Domain.Entities.ObjectItems;
 using C2IEDM.Web.Application.ObjectItems;
-using C2IEDM.Web.Application.Locations;
+using C2IEDM.Web.Application.ObjectItems.ObjectItem;
 
 namespace C2IEDM.Web.API.Controllers.ObjectItems
 {
@@ -10,11 +10,17 @@ namespace C2IEDM.Web.API.Controllers.ObjectItems
         [HttpGet]
         public async Task<IActionResult> GetObjectItems([FromQuery] ObjectItemParams param)
         {
-            return HandlePagedResult(await Mediator.Send(new ListObjectItems.Query
+            return HandlePagedResult(await Mediator.Send(new List.Query
             {
                 Category = ObjectItemCategory.ObjectItem,
                 Params = param
             }));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateObjectItem(ObjectItem objectItem)
+        {
+            return HandleResult(await Mediator.Send(new Create.Command { ObjectItem = objectItem }));
         }
     }
 }
