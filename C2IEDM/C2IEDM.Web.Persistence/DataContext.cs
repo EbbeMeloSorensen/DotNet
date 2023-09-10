@@ -6,6 +6,8 @@ using C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes;
 using C2IEDM.Domain.Entities.Geometry.Locations.Line;
 using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
+using C2IEDM.Domain.Entities.ObjectItems;
+using C2IEDM.Domain.Entities.ObjectItems.Organisations;
 using C2IEDM.Persistence.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +22,7 @@ namespace C2IEDM.Web.Persistence
 
         public DbSet<Person> People { get; set; }
 
+        // Locations
         public DbSet<AbsolutePoint> AbsolutePoints { get; set; }
         public DbSet<ConeVolume> ConeVolumes { get; set; }
         public DbSet<CoordinateSystem> CoordinateSystems { get; set; }
@@ -41,6 +44,11 @@ namespace C2IEDM.Web.Persistence
         public DbSet<SurfaceVolume> SurfaceVolumes { get; set; }
         public DbSet<TrackArea> TrackAreas { get; set; }
         public DbSet<VerticalDistance> VerticalDistances { get; set; }
+
+        // Object Items
+        public DbSet<ObjectItem> ObjectItems { get; set; }
+        public DbSet<Organisation> Organisations { get; set; }
+        public DbSet<Unit> Units { get; set; }
 
         protected override void OnModelCreating(
             ModelBuilder builder)

@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using C2IEDM.Domain.Entities.Geometry;
-using C2IEDM.Persistence.EntityFrameworkCore.EntityConfigurations;
 using C2IEDM.Domain.Entities.Geometry.Locations;
 using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
 using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 using C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes;
 using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
 using C2IEDM.Domain.Entities.Geometry.Locations.Line;
+using C2IEDM.Domain.Entities.ObjectItems;
+using C2IEDM.Domain.Entities.ObjectItems.Organisations;
+using C2IEDM.Persistence.EntityFrameworkCore.EntityConfigurations;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore;
 
@@ -34,6 +36,10 @@ public class C2IEDMDbContextBase : DbContext
     public DbSet<TrackArea> TrackAreas { get; set; }
     public DbSet<VerticalDistance> VerticalDistances { get; set; }
 
+    public DbSet<ObjectItem> ObjectItems { get; set; }
+    public DbSet<Organisation> Organisations { get; set; }
+    public DbSet<Unit> Units { get; set; }
+
     protected override void OnModelCreating(
         ModelBuilder builder)
     {
@@ -48,6 +54,7 @@ public class C2IEDMDbContextBase : DbContext
 
         builder.Entity<Location>().UseTptMappingStrategy();
         builder.Entity<CoordinateSystem>().UseTptMappingStrategy();
+        builder.Entity<ObjectItem>().UseTptMappingStrategy();
 
         builder.Entity<AbsolutePoint>()
             .HasOne(ap => ap.VerticalDistance)

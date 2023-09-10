@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace C2IEDM.Domain.Entities.ObjectItems.Organisations;
 
-namespace C2IEDM.Domain.Entities.ObjectItems.Organisations
+internal class Convoy
 {
-    internal class Convoy
-    {
-    }
 }

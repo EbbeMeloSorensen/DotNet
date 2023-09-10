@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace C2IEDM.Web.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230902111452_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230910094849_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace C2IEDM.Web.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.CoordinateSystem", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.CoordinateSystems.CoordinateSystem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.LinePoint", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Line.LinePoint", b =>
                 {
                     b.Property<Guid>("LineId")
                         .HasColumnType("uuid");
@@ -59,7 +59,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("LinePoints");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Location", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Location", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,6 +84,26 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("VerticalDistances");
+                });
+
+            modelBuilder.Entity("C2IEDM.Domain.Entities.ObjectItems.ObjectItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AlternativeIdentificationText")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ObjectItems");
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("C2IEDM.Domain.Entities.Person", b =>
@@ -331,9 +351,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.PointReference", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.CoordinateSystems.PointReference", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.CoordinateSystem");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.CoordinateSystems.CoordinateSystem");
 
                     b.Property<Guid>("OriginPointId")
                         .HasColumnType("uuid");
@@ -353,9 +373,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("PointReferences");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.GeometricVolume", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Location");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Location");
 
                     b.Property<Guid?>("LowerVerticalDistanceId")
                         .HasColumnType("uuid");
@@ -370,30 +390,40 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("GeometricVolumes");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Line", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Line.Line", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Location");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Location");
 
                     b.ToTable("Lines");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Point", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Location");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Location");
 
                     b.ToTable("Points");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Surface", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Location");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Location");
 
                     b.ToTable("Surfaces");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.ConeVolume", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.ObjectItems.Organisations.Organisation", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.GeometricVolume");
+                    b.HasBaseType("C2IEDM.Domain.Entities.ObjectItems.ObjectItem");
+
+                    b.Property<string>("NickName")
+                        .HasColumnType("text");
+
+                    b.ToTable("Organisations");
+                });
+
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.ConeVolume", b =>
+                {
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume");
 
                     b.Property<Guid>("DefiningSurfaceId")
                         .HasColumnType("uuid");
@@ -408,9 +438,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("ConeVolumes");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.SphereVolume", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.SphereVolume", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.GeometricVolume");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume");
 
                     b.Property<Guid>("CentrePointId")
                         .HasColumnType("uuid");
@@ -423,9 +453,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("SphereVolumes");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.SurfaceVolume", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.SurfaceVolume", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.GeometricVolume");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume");
 
                     b.Property<Guid>("DefiningSurfaceId")
                         .HasColumnType("uuid");
@@ -435,9 +465,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("SurfaceVolumes");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.AbsolutePoint", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Points.AbsolutePoint", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Point");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point");
 
                     b.Property<double>("LatitudeCoordinate")
                         .HasColumnType("double precision");
@@ -453,9 +483,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("AbsolutePoints");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.RelativePoint", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Points.RelativePoint", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Point");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point");
 
                     b.Property<Guid>("CoordinateSystemId")
                         .HasColumnType("uuid");
@@ -474,9 +504,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("RelativePoints");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.CorridorArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.CorridorArea", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Surface");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface");
 
                     b.Property<Guid>("CenterLineId")
                         .HasColumnType("uuid");
@@ -489,9 +519,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("CorridorAreas");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Ellipse", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Ellipse", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Surface");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface");
 
                     b.Property<Guid>("CentrePointId")
                         .HasColumnType("uuid");
@@ -511,9 +541,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("Ellipses");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.FanArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.FanArea", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Surface");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface");
 
                     b.Property<double>("MaximumRangeDimension")
                         .HasColumnType("double precision");
@@ -535,9 +565,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("FanAreas");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.OrbitArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.OrbitArea", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Surface");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface");
 
                     b.Property<Guid>("FirstPointId")
                         .HasColumnType("uuid");
@@ -558,9 +588,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("OrbitAreas");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.PolyArcArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.PolyArcArea", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Surface");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface");
 
                     b.Property<double>("ArcRadiusDimension")
                         .HasColumnType("double precision");
@@ -584,9 +614,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("PolyArcAreas");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.PolygonArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.PolygonArea", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Surface");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface");
 
                     b.Property<Guid>("BoundingLineId")
                         .HasColumnType("uuid");
@@ -596,9 +626,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("PolygonAreas");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.TrackArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.TrackArea", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Surface");
+                    b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface");
 
                     b.Property<Guid>("BeginPointId")
                         .HasColumnType("uuid");
@@ -619,15 +649,26 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("TrackAreas");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.LinePoint", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.ObjectItems.Organisations.Unit", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Line", "Line")
+                    b.HasBaseType("C2IEDM.Domain.Entities.ObjectItems.Organisations.Organisation");
+
+                    b.Property<string>("FormalAbbreviatedName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.ToTable("Units");
+                });
+
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Line.LinePoint", b =>
+                {
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Line.Line", "Line")
                         .WithMany("LinePoints")
                         .HasForeignKey("LineId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "Point")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "Point")
                         .WithMany()
                         .HasForeignKey("PointId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -689,27 +730,27 @@ namespace C2IEDM.Web.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.PointReference", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.CoordinateSystems.PointReference", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.CoordinateSystem", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.CoordinateSystems.CoordinateSystem", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.PointReference", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.CoordinateSystems.PointReference", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "OriginPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "OriginPoint")
                         .WithMany()
                         .HasForeignKey("OriginPointId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "XVectorPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "XVectorPoint")
                         .WithMany()
                         .HasForeignKey("XVectorPointId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "YVectorPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "YVectorPoint")
                         .WithMany()
                         .HasForeignKey("YVectorPointId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -722,11 +763,11 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("YVectorPoint");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.GeometricVolume", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Location", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Location", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.GeometricVolume", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -745,48 +786,57 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("UpperVerticalDistance");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Line", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Line.Line", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Location", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Location", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Line", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Line.Line", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Point", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Location", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Location", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Point", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Surface", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Location", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Location", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Surface", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.ConeVolume", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.ObjectItems.Organisations.Organisation", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Surface", "DefiningSurface")
+                    b.HasOne("C2IEDM.Domain.Entities.ObjectItems.ObjectItem", null)
+                        .WithOne()
+                        .HasForeignKey("C2IEDM.Domain.Entities.ObjectItems.Organisations.Organisation", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.ConeVolume", b =>
+                {
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", "DefiningSurface")
                         .WithMany()
                         .HasForeignKey("DefiningSurfaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.GeometricVolume", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.ConeVolume", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.ConeVolume", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "VertexPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "VertexPoint")
                         .WithMany()
                         .HasForeignKey("VertexPointId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -797,45 +847,45 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("VertexPoint");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.SphereVolume", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.SphereVolume", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "CentrePoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "CentrePoint")
                         .WithMany()
                         .HasForeignKey("CentrePointId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.GeometricVolume", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.SphereVolume", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.SphereVolume", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CentrePoint");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.SurfaceVolume", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.SurfaceVolume", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Surface", "DefiningSurface")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", "DefiningSurface")
                         .WithMany()
                         .HasForeignKey("DefiningSurfaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.GeometricVolume", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.SurfaceVolume", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.SurfaceVolume", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DefiningSurface");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.AbsolutePoint", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Points.AbsolutePoint", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.AbsolutePoint", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Points.AbsolutePoint", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -847,61 +897,61 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("VerticalDistance");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.RelativePoint", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Points.RelativePoint", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.CoordinateSystem", "CoordinateSystem")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.CoordinateSystems.CoordinateSystem", "CoordinateSystem")
                         .WithMany()
                         .HasForeignKey("CoordinateSystemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.RelativePoint", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Points.RelativePoint", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CoordinateSystem");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.CorridorArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.CorridorArea", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Line", "CenterLine")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Line.Line", "CenterLine")
                         .WithMany()
                         .HasForeignKey("CenterLineId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Surface", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.CorridorArea", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.CorridorArea", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CenterLine");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Ellipse", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Ellipse", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "CentrePoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "CentrePoint")
                         .WithMany()
                         .HasForeignKey("CentrePointId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "FirstConjugateDiameterPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "FirstConjugateDiameterPoint")
                         .WithMany()
                         .HasForeignKey("FirstConjugateDiameterPointId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Surface", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Ellipse", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Ellipse", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "SecondConjugateDiameterPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "SecondConjugateDiameterPoint")
                         .WithMany()
                         .HasForeignKey("SecondConjugateDiameterPointId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -914,15 +964,15 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("SecondConjugateDiameterPoint");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.FanArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.FanArea", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Surface", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.FanArea", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.FanArea", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "VertexPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "VertexPoint")
                         .WithMany()
                         .HasForeignKey("VertexPointId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -931,21 +981,21 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("VertexPoint");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.OrbitArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.OrbitArea", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "FirstPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "FirstPoint")
                         .WithMany()
                         .HasForeignKey("FirstPointId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Surface", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.OrbitArea", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.OrbitArea", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "SecondPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "SecondPoint")
                         .WithMany()
                         .HasForeignKey("SecondPointId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -956,23 +1006,23 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("SecondPoint");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.PolyArcArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.PolyArcArea", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "BearingOriginPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "BearingOriginPoint")
                         .WithMany()
                         .HasForeignKey("BearingOriginPointId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Line", "DefiningLine")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Line.Line", "DefiningLine")
                         .WithMany()
                         .HasForeignKey("DefiningLineId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Surface", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.PolyArcArea", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.PolyArcArea", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -981,40 +1031,40 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("DefiningLine");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.PolygonArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.PolygonArea", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Line", "BoundingLine")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Line.Line", "BoundingLine")
                         .WithMany()
                         .HasForeignKey("BoundingLineId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Surface", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.PolygonArea", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.PolygonArea", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BoundingLine");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.TrackArea", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.TrackArea", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "BeginPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "BeginPoint")
                         .WithMany()
                         .HasForeignKey("BeginPointId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Point", "EndPoint")
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Points.Point", "EndPoint")
                         .WithMany()
                         .HasForeignKey("EndPointId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Surface", null)
+                    b.HasOne("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.Surface", null)
                         .WithOne()
-                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.TrackArea", "Id")
+                        .HasForeignKey("C2IEDM.Domain.Entities.Geometry.Locations.Surfaces.TrackArea", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1023,7 +1073,16 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("EndPoint");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Line", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.ObjectItems.Organisations.Unit", b =>
+                {
+                    b.HasOne("C2IEDM.Domain.Entities.ObjectItems.Organisations.Organisation", null)
+                        .WithOne()
+                        .HasForeignKey("C2IEDM.Domain.Entities.ObjectItems.Organisations.Unit", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.Line.Line", b =>
                 {
                     b.Navigation("LinePoints");
                 });

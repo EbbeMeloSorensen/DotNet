@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace C2IEDM.Web.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,6 +72,19 @@ namespace C2IEDM.Web.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ObjectItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    AlternativeIdentificationText = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ObjectItems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -261,6 +274,24 @@ namespace C2IEDM.Web.Persistence.Migrations
                         name: "FK_Surfaces_Locations_Id",
                         column: x => x.Id,
                         principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Organisations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    NickName = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organisations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Organisations_ObjectItems_Id",
+                        column: x => x.Id,
+                        principalTable: "ObjectItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -629,6 +660,24 @@ namespace C2IEDM.Web.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Units",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FormalAbbreviatedName = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Units", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Units_Organisations_Id",
+                        column: x => x.Id,
+                        principalTable: "Organisations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ConeVolumes",
                 columns: table => new
                 {
@@ -930,6 +979,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "TrackAreas");
 
             migrationBuilder.DropTable(
+                name: "Units");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -951,10 +1003,16 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "Surfaces");
 
             migrationBuilder.DropTable(
+                name: "Organisations");
+
+            migrationBuilder.DropTable(
                 name: "VerticalDistances");
 
             migrationBuilder.DropTable(
                 name: "Locations");
+
+            migrationBuilder.DropTable(
+                name: "ObjectItems");
         }
     }
 }

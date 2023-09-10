@@ -5,6 +5,8 @@ using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
 using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
 using C2IEDM.Domain.Entities.Geometry.Locations.Line;
+using C2IEDM.Domain.Entities.ObjectItems;
+using C2IEDM.Domain.Entities.ObjectItems.Organisations;
 
 namespace C2IEDM.Web.Persistence
 {
@@ -17,6 +19,7 @@ namespace C2IEDM.Web.Persistence
             await SeedUsers(context, userManager);
             await SeedPeople(context);
             await SeedLocations(context);
+            await SeedObjectItems(context);
         }
 
         public static async Task SeedUsers(
@@ -286,6 +289,69 @@ namespace C2IEDM.Web.Persistence
                 await context.FanAreas.AddAsync(fanArea1);
                 await context.PointReferences.AddRangeAsync(pointReferences);
                 await context.RelativePoints.AddRangeAsync(relativePoints);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public static async Task SeedObjectItems(
+            DataContext context)
+        {
+            if (!context.ObjectItems.Any())
+            {
+                var objectItem1 = new ObjectItem
+                {
+                    Name = "Bamse"
+                };
+
+                var objectItem2 = new ObjectItem
+                {
+                    Name = "Kylling"
+                };
+
+                var objectItems = new List<ObjectItem>
+                {
+                    objectItem1, objectItem2
+                };
+
+                var organisation1 = new Organisation
+                {
+                    Name = "Luna",
+                    NickName = "L"
+                };
+
+                var organisation2 = new Organisation
+                {
+                    Name = "Aske",
+                    NickName = "A"
+                };
+
+                var organisations = new List<Organisation>
+                {
+                    organisation1, organisation2
+                };
+
+                var unit1 = new Unit
+                {
+                    Name = "Forlæns",
+                    NickName = "F",
+                    FormalAbbreviatedName = "Fx"
+                };
+
+                var unit2 = new Unit
+                {
+                    Name = "Baglæns",
+                    NickName = "B",
+                    FormalAbbreviatedName = "Bx"
+                };
+
+                var units = new List<Unit>
+                {
+                    unit1, unit2
+                };
+
+                await context.ObjectItems.AddRangeAsync(objectItems);
+                await context.Organisations.AddRangeAsync(organisations);
+                await context.Units.AddRangeAsync(units);
                 await context.SaveChangesAsync();
             }
         }
