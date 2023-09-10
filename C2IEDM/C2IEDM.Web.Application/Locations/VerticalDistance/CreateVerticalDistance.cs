@@ -1,19 +1,16 @@
-﻿using C2IEDM.Domain.Entities.Geometry;
-using MediatR;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using C2IEDM.Web.Persistence;
-using C2IEDM.Web.Application.Core;
+﻿using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Interfaces;
-using C2IEDM.Domain.Entities.Geometry.Locations;
+using C2IEDM.Web.Persistence;
+using FluentValidation;
+using MediatR;
 
-namespace C2IEDM.Web.Application.Locations;
+namespace C2IEDM.Web.Application.Locations.VerticalDistance;
 
 public class CreateVerticalDistance
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public VerticalDistance VerticalDistance { get; set; }
+        public Domain.Entities.Geometry.VerticalDistance VerticalDistance { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -36,7 +33,7 @@ public class CreateVerticalDistance
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var newVerticalDistance = new VerticalDistance(
+            var newVerticalDistance = new Domain.Entities.Geometry.VerticalDistance(
                 Guid.NewGuid(),
                 DateTime.UtcNow)
             {

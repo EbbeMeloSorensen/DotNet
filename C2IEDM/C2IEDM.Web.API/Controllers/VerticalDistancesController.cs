@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using C2IEDM.Domain.Entities.Geometry;
 using C2IEDM.Web.Application.Locations;
+using C2IEDM.Web.Application.Locations.VerticalDistance;
 
 namespace C2IEDM.Web.API.Controllers;
 

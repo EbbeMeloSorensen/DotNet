@@ -1,19 +1,16 @@
-﻿using AutoMapper;
-using C2IEDM.Domain.Entities.Geometry;
-using C2IEDM.Web.Application.Core;
-using C2IEDM.Web.Application.People;
-using C2IEDM.Web.Persistence;
-using FluentValidation;
+﻿using Microsoft.EntityFrameworkCore;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using C2IEDM.Web.Persistence;
+using C2IEDM.Web.Application.Core;
 
-namespace C2IEDM.Web.Application.Locations;
+namespace C2IEDM.Web.Application.Locations.VerticalDistance;
 
 public class EditVerticalDistance
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public VerticalDistance VerticalDistance { get; set; }
+        public Domain.Entities.Geometry.VerticalDistance VerticalDistance { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -44,7 +41,7 @@ public class EditVerticalDistance
 
             verticalDistance.Superseded = now;
 
-            var newVerticalDistance = new VerticalDistance(
+            var newVerticalDistance = new Domain.Entities.Geometry.VerticalDistance(
                 request.VerticalDistance.Id,
                 now)
             {

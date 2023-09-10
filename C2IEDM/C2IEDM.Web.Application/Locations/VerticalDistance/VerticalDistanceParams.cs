@@ -1,6 +1,6 @@
 ﻿using C2IEDM.Web.Application.Core;
 
-namespace C2IEDM.Web.Application.Locations;
+namespace C2IEDM.Web.Application.Locations.VerticalDistance;
 
 public class VerticalDistanceParams : PagingParams
 {

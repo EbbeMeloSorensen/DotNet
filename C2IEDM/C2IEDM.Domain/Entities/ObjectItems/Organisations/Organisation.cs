@@ -8,5 +8,6 @@ public class Organisation : ObjectItem
         Guid objectId, 
         DateTime created) : base(objectId, created)
     {
+        NickName = "";
     }
 }

@@ -1,12 +1,12 @@
-﻿using MediatR;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
-using C2IEDM.Web.Application.Locations.DTOs;
 using C2IEDM.Web.Application.Interfaces;
+using C2IEDM.Web.Application.Locations.DTOs;
+using C2IEDM.Web.Persistence;
+using MediatR;
 
-namespace C2IEDM.Web.Application.Locations;
+namespace C2IEDM.Web.Application.Locations.VerticalDistance;
 
 public class ListVerticalDistances
 {
