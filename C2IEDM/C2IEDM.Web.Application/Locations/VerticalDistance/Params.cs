@@ -2,6 +2,6 @@
 
 namespace C2IEDM.Web.Application.Locations.VerticalDistance;
 
-public class VerticalDistanceParams : PagingParams
+public class Params : PagingParams
 {
 }

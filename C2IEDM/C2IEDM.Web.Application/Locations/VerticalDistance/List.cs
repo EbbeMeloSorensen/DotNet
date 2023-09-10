@@ -8,11 +8,11 @@ using MediatR;
 
 namespace C2IEDM.Web.Application.Locations.VerticalDistance;
 
-public class ListVerticalDistances
+public class List
 {
     public class Query : IRequest<Result<PagedList<VerticalDistanceDto>>>
     {
-        public VerticalDistanceParams Params { get; set; }
+        public Params Params { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<PagedList<VerticalDistanceDto>>>

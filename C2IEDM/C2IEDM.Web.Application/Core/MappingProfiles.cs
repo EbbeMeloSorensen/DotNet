@@ -9,6 +9,7 @@ using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
 using C2IEDM.Domain.Entities.ObjectItems;
 using C2IEDM.Domain.Entities.ObjectItems.Organisations;
 using C2IEDM.Web.Application.Locations.DTOs;
+using C2IEDM.Web.Application.Locations.VerticalDistance;
 using C2IEDM.Web.Application.ObjectItems.DTOs;
 using C2IEDM.Web.Application.People;
 

@@ -1,11 +1,11 @@
-﻿using C2IEDM.Web.Application.Core;
-using C2IEDM.Web.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using C2IEDM.Web.Persistence;
+using C2IEDM.Web.Application.Core;
 
 namespace C2IEDM.Web.Application.Locations.VerticalDistance;
 
-public class DeleteVerticalDistance
+public class Delete
 {
     public class Command : IRequest<Result<Unit>>
     {

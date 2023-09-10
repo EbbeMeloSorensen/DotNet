@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MediatR;
-using FluentValidation;
+﻿using C2IEDM.Web.Application.Core;
+using C2IEDM.Web.Application.Interfaces;
 using C2IEDM.Web.Persistence;
-using C2IEDM.Web.Application.Core;
+using FluentValidation;
+using MediatR;
 
 namespace C2IEDM.Web.Application.Locations.VerticalDistance;
 
-public class EditVerticalDistance
+public class Create
 {
     public class Command : IRequest<Result<Unit>>
     {
@@ -23,36 +23,28 @@ public class EditVerticalDistance
     public class Handler : IRequestHandler<Command, Result<Unit>>
     {
         private readonly DataContext _context;
+        private readonly IUserAccessor _userAccessor;
 
-        public Handler(DataContext context)
+        public Handler(DataContext context, IUserAccessor userAccessor)
         {
             _context = context;
+            _userAccessor = userAccessor;
         }
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var query = _context.VerticalDistances
-                .Where(_ => _.ObjectId == request.VerticalDistance.Id && _.Superseded == null)
-                .AsQueryable();
-
-            var verticalDistance = await query.FirstOrDefaultAsync();
-
-            var now = DateTime.UtcNow;
-
-            verticalDistance.Superseded = now;
-
             var newVerticalDistance = new Domain.Entities.Geometry.VerticalDistance(
-                request.VerticalDistance.Id,
-                now)
+                Guid.NewGuid(),
+                DateTime.UtcNow)
             {
                 Dimension = request.VerticalDistance.Dimension
             };
 
-            await _context.VerticalDistances.AddAsync(newVerticalDistance);
+            _context.VerticalDistances.Add(newVerticalDistance);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (!result) return Result<Unit>.Failure("Failed to update vertical distance");
+            if (!result) return Result<Unit>.Failure("Failed to create vertical distance");
 
             return Result<Unit>.Success(Unit.Value);
         }
