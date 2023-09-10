@@ -30,9 +30,7 @@ public class ListVerticalDistances
 
         public async Task<Result<PagedList<VerticalDistanceDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            IQueryable<VerticalDistanceDto> query;
-
-            query = _context.VerticalDistances
+            var query = _context.VerticalDistances
                 .ProjectTo<VerticalDistanceDto>(_mapper.ConfigurationProvider,
                     new { currentUsername = _userAccessor.GetUsername() })
                 .AsQueryable();

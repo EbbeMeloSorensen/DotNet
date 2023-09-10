@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace C2IEDM.Web.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230910094849_InitialMigration")]
+    [Migration("20230910133953_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -78,8 +78,17 @@ namespace C2IEDM.Web.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<double>("Dimension")
                         .HasColumnType("double precision");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Superseded")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -95,9 +104,18 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Property<string>("AlternativeIdentificationText")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Superseded")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

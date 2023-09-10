@@ -10,4 +10,10 @@ public class VerticalDistancesController : BaseApiController
     {
         return HandlePagedResult(await Mediator.Send(new ListVerticalDistances.Query { Params = param }));
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteVerticalDistance(Guid id)
+    {
+        return HandleResult(await Mediator.Send(new DeleteVerticalDistance.Command { Id = id }));
+    }
 }

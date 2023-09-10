@@ -12,6 +12,15 @@ namespace C2IEDM.Web.Persistence
 {
     public class Seed
     {
+        private static DateTime _now;
+        private static int _delayInTicks;
+
+        static Seed()
+        {
+            _now = DateTime.UtcNow;
+            _delayInTicks = 0;
+        }
+
         public static async Task SeedData(
             DataContext context,
             UserManager<AppUser> userManager)
@@ -74,9 +83,14 @@ namespace C2IEDM.Web.Persistence
         {
             if (!context.Locations.Any())
             {
-                var verticalDistance1 = new VerticalDistance
+                var createdTime = DateTime.UtcNow;
+                var delayInTicks = 0;
+
+                var verticalDistance1 = new VerticalDistance(
+                    Guid.NewGuid(),
+                    NextCreatedTime())
                 {
-                    Dimension = 1.0
+                    Dimension = 1.0,
                 };
 
                 var absPoint1 = new AbsolutePoint
@@ -298,12 +312,12 @@ namespace C2IEDM.Web.Persistence
         {
             if (!context.ObjectItems.Any())
             {
-                var objectItem1 = new ObjectItem
+                var objectItem1 = new ObjectItem(Guid.NewGuid(), NextCreatedTime())
                 {
                     Name = "Bamse"
                 };
 
-                var objectItem2 = new ObjectItem
+                var objectItem2 = new ObjectItem(Guid.NewGuid(), NextCreatedTime())
                 {
                     Name = "Kylling"
                 };
@@ -313,13 +327,13 @@ namespace C2IEDM.Web.Persistence
                     objectItem1, objectItem2
                 };
 
-                var organisation1 = new Organisation
+                var organisation1 = new Organisation(Guid.NewGuid(), NextCreatedTime())
                 {
                     Name = "Luna",
                     NickName = "L"
                 };
 
-                var organisation2 = new Organisation
+                var organisation2 = new Organisation(Guid.NewGuid(), NextCreatedTime())
                 {
                     Name = "Aske",
                     NickName = "A"
@@ -330,14 +344,14 @@ namespace C2IEDM.Web.Persistence
                     organisation1, organisation2
                 };
 
-                var unit1 = new Unit
+                var unit1 = new Unit(Guid.NewGuid(), NextCreatedTime())
                 {
                     Name = "Forlæns",
                     NickName = "F",
                     FormalAbbreviatedName = "Fx"
                 };
 
-                var unit2 = new Unit
+                var unit2 = new Unit(Guid.NewGuid(), NextCreatedTime())
                 {
                     Name = "Baglæns",
                     NickName = "B",
@@ -354,6 +368,12 @@ namespace C2IEDM.Web.Persistence
                 await context.Units.AddRangeAsync(units);
                 await context.SaveChangesAsync();
             }
+        }
+
+        private static DateTime NextCreatedTime()
+        {
+            _delayInTicks += 1000;
+            return _now + new TimeSpan(_delayInTicks);
         }
     }
 }

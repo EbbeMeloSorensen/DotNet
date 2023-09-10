@@ -4,7 +4,9 @@ public class Unit : Organisation
 {
     public string FormalAbbreviatedName { get; set; }
 
-    public Unit()
+    public Unit(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
     {
         FormalAbbreviatedName = "";
     }

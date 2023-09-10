@@ -10,6 +10,9 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
 {
     public static class Seeding
     {
+        private static DateTime _now;
+        private static int _delayInTicks;
+
         public static void SeedDatabase(
             DbContext context)
         {
@@ -583,7 +586,7 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
         private static void SeedLocations(
             DbContext context)
         {
-            var verticalDistance1 = new VerticalDistance
+            var verticalDistance1 = new VerticalDistance(Guid.NewGuid(), NextCreatedTime())
             {
                 Dimension = 1.0
             };
@@ -771,6 +774,11 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
             context.Add(fanArea1);
             context.AddRange(pointReferences);
             context.SaveChanges();
+        }
+
+        private static DateTime NextCreatedTime()
+        {
+            return _now + new TimeSpan(_delayInTicks++);
         }
     }
 }

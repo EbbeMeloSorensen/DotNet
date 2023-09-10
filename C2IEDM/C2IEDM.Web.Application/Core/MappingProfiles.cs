@@ -29,7 +29,8 @@ public class MappingProfiles : Profile
         CreateMap<Unit, UnitDto>();
 
         CreateMap<VerticalDistance, VerticalDistance>();
-        CreateMap<VerticalDistance, VerticalDistanceDto>();
+        CreateMap<VerticalDistance, VerticalDistanceDto>()
+            .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.ObjectId));
 
         CreateMap<CoordinateSystem, CoordinateSystem>();
         CreateMap<CoordinateSystem, CoordinateSystemDto>()

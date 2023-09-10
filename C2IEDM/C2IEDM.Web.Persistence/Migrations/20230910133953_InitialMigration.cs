@@ -80,7 +80,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    AlternativeIdentificationText = table.Column<string>(type: "text", nullable: true)
+                    AlternativeIdentificationText = table.Column<string>(type: "text", nullable: true),
+                    ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,7 +117,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Dimension = table.Column<double>(type: "double precision", nullable: false)
+                    Dimension = table.Column<double>(type: "double precision", nullable: false),
+                    ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
