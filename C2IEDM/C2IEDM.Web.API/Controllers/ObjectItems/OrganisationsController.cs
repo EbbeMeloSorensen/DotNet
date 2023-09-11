@@ -23,7 +23,6 @@ public class OrganisationsController : BaseApiController
         return HandleResult(await Mediator.Send(new Create.Command { Organisation = organisation }));
     }
 
-
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOrganisation(Guid id)
     {

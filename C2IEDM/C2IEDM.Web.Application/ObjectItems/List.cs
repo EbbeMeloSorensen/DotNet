@@ -49,6 +49,7 @@ public class List
             var count = await query.CountAsync();
 
             var objectItems = await query
+                .Where(_ => _.Superseded == null)
                 .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
                 .Take(request.Params.PageSize)
                 .ToListAsync();

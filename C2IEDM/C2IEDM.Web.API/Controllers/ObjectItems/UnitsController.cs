@@ -22,4 +22,10 @@ public class UnitsController : BaseApiController
     {
         return HandleResult(await Mediator.Send(new Create.Command { Unit = unit }));
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUnit(Guid id)
+    {
+        return HandleResult(await Mediator.Send(new Application.ObjectItems.ObjectItem.Delete.Command { Id = id }));
+    }
 }
