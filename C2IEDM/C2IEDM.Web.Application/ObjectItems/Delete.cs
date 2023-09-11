@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MediatR;
-using C2IEDM.Web.Application.Core;
+﻿using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Persistence;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-namespace C2IEDM.Web.Application.ObjectItems.ObjectItem;
+namespace C2IEDM.Web.Application.ObjectItems;
 
 public class Delete
 {

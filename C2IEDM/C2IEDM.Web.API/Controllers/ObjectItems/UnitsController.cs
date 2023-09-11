@@ -26,6 +26,6 @@ public class UnitsController : BaseApiController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUnit(Guid id)
     {
-        return HandleResult(await Mediator.Send(new Application.ObjectItems.ObjectItem.Delete.Command { Id = id }));
+        return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
     }
 }

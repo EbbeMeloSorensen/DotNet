@@ -2,6 +2,7 @@
 using C2IEDM.Domain.Entities.ObjectItems;
 using C2IEDM.Web.Application.ObjectItems;
 using C2IEDM.Web.Application.ObjectItems.ObjectItem;
+using C2IEDM.Domain.Entities.Geometry;
 
 namespace C2IEDM.Web.API.Controllers.ObjectItems
 {
@@ -21,6 +22,13 @@ namespace C2IEDM.Web.API.Controllers.ObjectItems
         public async Task<IActionResult> CreateObjectItem(ObjectItem objectItem)
         {
             return HandleResult(await Mediator.Send(new Create.Command { ObjectItem = objectItem }));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditObjectItem(Guid id, ObjectItem objectItem)
+        {
+            objectItem.Id = id;
+            return HandleResult(await Mediator.Send(new Edit.Command { ObjectItem = objectItem }));
         }
 
         [HttpDelete("{id}")]
