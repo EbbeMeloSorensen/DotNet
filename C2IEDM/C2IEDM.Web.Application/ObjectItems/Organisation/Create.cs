@@ -7,7 +7,7 @@ namespace C2IEDM.Web.Application.ObjectItems.Organisation;
 
 public class Create
 {
-    public class Command : IRequest<Result<Unit>>
+    public class Command : IRequest<Result<MediatR.Unit>>
     {
         public Domain.Entities.ObjectItems.Organisations.Organisation Organisation { get; set; }
     }
@@ -19,7 +19,7 @@ public class Create
         }
     }
 
-    public class Handler : IRequestHandler<Command, Result<Unit>>
+    public class Handler : IRequestHandler<Command, Result<MediatR.Unit>>
     {
         private readonly DataContext _context;
 
@@ -28,7 +28,7 @@ public class Create
             _context = context;
         }
 
-        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<MediatR.Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var newOrganisation = new Domain.Entities.ObjectItems.Organisations.Organisation(
                 Guid.NewGuid(),
@@ -43,9 +43,9 @@ public class Create
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (!result) return Result<Unit>.Failure("Failed to create organisation");
+            if (!result) return Result<MediatR.Unit>.Failure("Failed to create organisation");
 
-            return Result<Unit>.Success(Unit.Value);
+            return Result<MediatR.Unit>.Success(MediatR.Unit.Value);
         }
     }
 }

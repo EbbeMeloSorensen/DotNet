@@ -22,5 +22,11 @@ namespace C2IEDM.Web.API.Controllers.ObjectItems
         {
             return HandleResult(await Mediator.Send(new Create.Command { ObjectItem = objectItem }));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteObjectItem(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
+        }
     }
 }

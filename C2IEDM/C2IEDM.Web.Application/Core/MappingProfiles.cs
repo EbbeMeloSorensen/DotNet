@@ -24,6 +24,7 @@ public class MappingProfiles : Profile
 
         CreateMap<ObjectItem, ObjectItem>();
         CreateMap<ObjectItem, ObjectItemDto>()
+            .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.ObjectId))
             .Include<Organisation, OrganisationDto>()
             .Include<Unit, UnitDto>();
         CreateMap<Organisation, OrganisationDto>();

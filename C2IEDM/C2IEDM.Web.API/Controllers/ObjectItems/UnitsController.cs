@@ -1,6 +1,7 @@
-﻿using C2IEDM.Web.Application.ObjectItems;
-using C2IEDM.Web.Application.ObjectItems.ObjectItem;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using C2IEDM.Domain.Entities.ObjectItems.Organisations;
+using C2IEDM.Web.Application.ObjectItems;
+using C2IEDM.Web.Application.ObjectItems.Unit;
 
 namespace C2IEDM.Web.API.Controllers.ObjectItems;
 
@@ -14,5 +15,11 @@ public class UnitsController : BaseApiController
             Category = ObjectItemCategory.Unit,
             Params = param
         }));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateUnit(Unit unit)
+    {
+        return HandleResult(await Mediator.Send(new Create.Command { Unit = unit }));
     }
 }
