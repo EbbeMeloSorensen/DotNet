@@ -13,4 +13,10 @@ public class PolyArcArea : Surface
     public double BeginBearingAngle { get; set; }
     public double EndBearingAngle { get; set; }
     public double ArcRadiusDimension { get; set; }
+
+    public PolyArcArea(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

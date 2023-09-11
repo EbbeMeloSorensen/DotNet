@@ -17,4 +17,10 @@ public class AbsolutePoint : Point
     {
         return $"AbsolutePoint (Lat: {LatitudeCoordinate}, Long: {LongitudeCoordinate})";
     }
+
+    public AbsolutePoint(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

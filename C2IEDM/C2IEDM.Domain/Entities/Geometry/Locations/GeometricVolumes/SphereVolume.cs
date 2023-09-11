@@ -8,4 +8,10 @@ public class SphereVolume : GeometricVolume
     public Point CentrePoint { get; set; } = null!;
 
     public double RadiusDimension { get; set; }
+
+    public SphereVolume(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

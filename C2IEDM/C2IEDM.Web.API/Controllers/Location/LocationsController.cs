@@ -10,7 +10,7 @@ public class LocationsController : BaseApiController
     {
         return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
-            Type = LocationType.Location,
+            Category = LocationCategory.Location,
             Params = param
         }));
     }

@@ -10,4 +10,10 @@ public class ConeVolume : GeometricVolume
 
     public Guid VertexPointId { get; set; }
     public Point VertexPoint { get; set; } = null!;
+
+    public ConeVolume(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

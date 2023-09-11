@@ -27,13 +27,11 @@ public class List
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        private readonly IUserAccessor _userAccessor;
 
-        public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+        public Handler(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _userAccessor = userAccessor;
         }
 
         public async Task<Result<PagedList<ObjectItemDto>>> Handle(Query request, CancellationToken cancellationToken)

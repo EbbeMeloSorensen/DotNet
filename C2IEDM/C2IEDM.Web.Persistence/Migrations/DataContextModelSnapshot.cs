@@ -28,6 +28,15 @@ namespace C2IEDM.Web.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Superseded")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.ToTable("CoordinateSystems");
@@ -43,11 +52,20 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Property<int>("Index")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("PointId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("SequenceQuantity")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("Superseded")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("LineId", "Index");
 
@@ -61,6 +79,15 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Superseded")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

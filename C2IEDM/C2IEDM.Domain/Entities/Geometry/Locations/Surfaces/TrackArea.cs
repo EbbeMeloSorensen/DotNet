@@ -12,4 +12,10 @@ public class TrackArea : Surface
 
     public double LeftWidthDimension { get; set; }
     public double RightWidthDimension { get; set; }
+
+    public TrackArea(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

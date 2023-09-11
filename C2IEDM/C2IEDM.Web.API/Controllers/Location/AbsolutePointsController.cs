@@ -10,7 +10,7 @@ public class AbsolutePointsController : BaseApiController
     {
         return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
-            Type = LocationType.AbsolutePoint,
+            Category = LocationCategory.AbsolutePoint,
             Params = param
         }));
     }

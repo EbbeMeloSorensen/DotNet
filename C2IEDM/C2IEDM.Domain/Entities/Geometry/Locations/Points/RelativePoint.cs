@@ -15,4 +15,8 @@ public class RelativePoint : Point
     {
         throw new NotImplementedException();
     }
+
+    public RelativePoint(Guid objectId, DateTime created) : base(objectId, created)
+    {
+    }
 }

@@ -19,4 +19,10 @@ public class OrbitArea : Surface
 
     public OrbitAreaAlignmentCode OrbitAreaAlignmentCode { get; set; }
     public double WidthDimension { get; set; }
+
+    public OrbitArea(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

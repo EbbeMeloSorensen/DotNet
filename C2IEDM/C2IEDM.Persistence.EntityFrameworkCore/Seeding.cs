@@ -591,46 +591,46 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
                 Dimension = 1.0
             };
 
-            var absPoint1 = new AbsolutePoint
+            var absPoint1 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
             {
                 LatitudeCoordinate = 9.816808191409391,
                 LongitudeCoordinate = 55.13953436148247,
             };
 
-            var absPoint2 = new AbsolutePoint
+            var absPoint2 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
             {
                 LatitudeCoordinate = 10.202169964922433,
                 LongitudeCoordinate = 54.847172968685214,
             };
 
-            var absPoint3 = new AbsolutePoint
+            var absPoint3 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
             {
                 LatitudeCoordinate = 9.526866977996978,
                 LongitudeCoordinate = 54.863907344714946,
             };
 
-            var absPoint4 = new AbsolutePoint
+            var absPoint4 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
             {
                 LatitudeCoordinate = 10.951680768333889,
                 LongitudeCoordinate = 54.97114299238095,
                 VerticalDistance = verticalDistance1
             };
 
-            var absPoint5 = new AbsolutePoint
+            var absPoint5 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
             {
                 LatitudeCoordinate = 11.931557544334767,
                 LongitudeCoordinate = 54.90468731477757,
                 VerticalDistance = verticalDistance1
             };
 
-            var absPoint6 = new AbsolutePoint
+            var absPoint6 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
             {
                 LatitudeCoordinate = 11.96844180282638,
                 LongitudeCoordinate = 54.59228432756085,
                 VerticalDistance = verticalDistance1
             };
 
-            var absPoint7 = new AbsolutePoint
+            var absPoint7 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
             {
                 LatitudeCoordinate = 10.905450050241162,
                 LongitudeCoordinate = 54.715507173483466,
@@ -646,70 +646,70 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
                 absPoint6,
                 absPoint7};
 
-            var line1 = new Line();
-            var line2 = new Line();
+            var line1 = new Line(Guid.NewGuid(), NextCreatedTime());
+            var line2 = new Line(Guid.NewGuid(), NextCreatedTime());
 
             var lines = new List<Line> { line1, line2 };
 
             var linePoints = new List<LinePoint>
             {
-                new LinePoint
+                new LinePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     Line = line1,
                     Point = absPoint1,
                     Index = 0,
                     SequenceQuantity = 0
                 },
-                new LinePoint
+                new LinePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     Line = line1,
                     Point = absPoint2,
                     Index = 1,
                     SequenceQuantity = 1
                 },
-                new LinePoint
+                new LinePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     Line = line1,
                     Point = absPoint3,
                     Index = 2,
                     SequenceQuantity = 2
                 },
-                new LinePoint
+                new LinePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     Line = line1,
                     Point = absPoint1,
                     Index = 3,
                     SequenceQuantity = 3
                 },
-                new LinePoint
+                new LinePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     Line = line2,
                     Point = absPoint4,
                     Index = 0,
                     SequenceQuantity = 0
                 },
-                new LinePoint
+                new LinePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     Line = line2,
                     Point = absPoint5,
                     Index = 1,
                     SequenceQuantity = 1
                 },
-                new LinePoint
+                new LinePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     Line = line2,
                     Point = absPoint6,
                     Index = 2,
                     SequenceQuantity = 2
                 },
-                new LinePoint
+                new LinePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     Line = line2,
                     Point = absPoint7,
                     Index = 3,
                     SequenceQuantity = 3
                 },
-                new LinePoint
+                new LinePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     Line = line2,
                     Point = absPoint4,
@@ -718,25 +718,25 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
                 }
             };
 
-            var ellipse1 = new Ellipse
+            var ellipse1 = new Ellipse(Guid.NewGuid(), NextCreatedTime())
             {
                 CentrePoint = absPoint1,
                 FirstConjugateDiameterPoint = absPoint2,
                 SecondConjugateDiameterPoint = absPoint3
             };
 
-            var corridorArea1 = new CorridorArea
+            var corridorArea1 = new CorridorArea(Guid.NewGuid(), NextCreatedTime())
             {
                 CenterLine = line1,
                 WidthDimension = 1.5
             };
 
-            var polygonArea1 = new PolygonArea
+            var polygonArea1 = new PolygonArea(Guid.NewGuid(), NextCreatedTime())
             {
                 BoundingLine = line2,
             };
 
-            var fanArea1 = new FanArea
+            var fanArea1 = new FanArea(Guid.NewGuid(), NextCreatedTime())
             {
                 VertexPoint = absPoint1,
                 MinimumRangeDimension = 1,
@@ -745,14 +745,14 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
                 SectorSizeAngle = 60
             };
 
-            var pointReference1 = new PointReference
+            var pointReference1 = new PointReference(Guid.NewGuid(), NextCreatedTime())
             {
                 OriginPoint = absPoint1,
                 XVectorPoint = absPoint2,
                 YVectorPoint = absPoint3
             };
 
-            var pointReference2 = new PointReference
+            var pointReference2 = new PointReference(Guid.NewGuid(), NextCreatedTime())
             {
                 OriginPoint = absPoint2,
                 XVectorPoint = absPoint3,

@@ -11,4 +11,10 @@ public class FanArea : Surface
     public double MaximumRangeDimension { get; set; }
     public double OrientationAngle { get; set; }
     public double SectorSizeAngle { get; set; }
+
+    public FanArea(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

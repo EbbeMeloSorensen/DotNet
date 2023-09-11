@@ -12,4 +12,10 @@ public class Ellipse : Surface
 
     public Guid SecondConjugateDiameterPointId { get; set; }
     public Point SecondConjugateDiameterPoint { get; set; } = null!;
+
+    public Ellipse(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

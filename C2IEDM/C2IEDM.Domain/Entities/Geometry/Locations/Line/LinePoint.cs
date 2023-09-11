@@ -2,7 +2,7 @@ using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 
 namespace C2IEDM.Domain.Entities.Geometry.Locations.Line;
 
-public class LinePoint
+public class LinePoint : VersionedObject
 {
     public Guid LineId { get; set; }
     public Line Line { get; set; } = null!;
@@ -12,4 +12,10 @@ public class LinePoint
 
     public int Index { get; set; }
     public int SequenceQuantity { get; set; }
+
+    public LinePoint(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

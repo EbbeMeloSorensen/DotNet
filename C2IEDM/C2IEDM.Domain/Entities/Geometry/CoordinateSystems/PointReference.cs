@@ -12,4 +12,10 @@ public class PointReference : CoordinateSystem
 
     public Guid YVectorPointId { get; set; }
     public Point YVectorPoint { get; set; } = null!;
+
+    public PointReference(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

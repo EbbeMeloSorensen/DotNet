@@ -7,4 +7,10 @@ public abstract class GeometricVolume : Location
 
     public Guid? UpperVerticalDistanceId { get; set; }
     public virtual VerticalDistance? UpperVerticalDistance { get; set; }
+
+    protected GeometricVolume(
+        Guid objectId, 
+        DateTime created) : base(objectId, created)
+    {
+    }
 }

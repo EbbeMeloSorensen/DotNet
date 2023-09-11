@@ -36,11 +36,13 @@ public class MappingProfiles : Profile
 
         CreateMap<CoordinateSystem, CoordinateSystem>();
         CreateMap<CoordinateSystem, CoordinateSystemDto>()
+            .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.ObjectId))
             .Include<PointReference, PointReferenceDto>();
         CreateMap<PointReference, PointReferenceDto>();
 
         CreateMap<Location, Location>();
         CreateMap<Location, LocationDto>()
+            .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.ObjectId))
             .Include<Point, PointDto>()
             .Include<AbsolutePoint, AbsolutePointDto>()
             .Include<RelativePoint, RelativePointDto>()

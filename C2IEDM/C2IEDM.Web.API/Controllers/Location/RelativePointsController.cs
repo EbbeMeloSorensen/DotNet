@@ -10,7 +10,7 @@ public class RelativePointsController : BaseApiController
     {
         return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
-            Type = LocationType.RelativePoint,
+            Category = LocationCategory.RelativePoint,
             Params = param
         }));
     }

@@ -10,7 +10,7 @@ public class PolygonAreasController : BaseApiController
     {
         return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
-            Type = LocationType.PolygonArea,
+            Category = LocationCategory.PolygonArea,
             Params = param
         }));
     }

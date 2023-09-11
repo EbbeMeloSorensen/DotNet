@@ -1,14 +1,14 @@
-﻿using MediatR;
+﻿using Microsoft.EntityFrameworkCore;
+using MediatR;
 using AutoMapper;
+using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Locations.DTOs;
 using C2IEDM.Web.Application.Interfaces;
-using C2IEDM.Web.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace C2IEDM.Web.Application.Locations;
 
-public enum LocationType
+public enum LocationCategory
 {
     Location,
     Point,
@@ -26,7 +26,7 @@ public class ListLocations
 {
     public class Query : IRequest<Result<PagedList<LocationDto>>>
     {
-        public LocationType Type { get; set; }
+        public LocationCategory Category { get; set; }
         public LocationParams Params { get; set; }
     }
 
@@ -34,35 +34,34 @@ public class ListLocations
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        private readonly IUserAccessor _userAccessor;
 
-        public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+        public Handler(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _userAccessor = userAccessor;
         }
 
         public async Task<Result<PagedList<LocationDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var query = request.Type switch
+            var query = request.Category switch
             {
-                LocationType.FanArea => _context.FanAreas.AsQueryable(),
-                LocationType.CorridorArea => _context.CorridorAreas.AsQueryable(),
-                LocationType.PolygonArea => _context.PolygonAreas.AsQueryable(),
-                LocationType.Ellipse => _context.Ellipses.AsQueryable(),
-                LocationType.Surface => _context.Surfaces.AsQueryable(),
-                LocationType.Line => _context.Lines.AsQueryable(),
-                LocationType.RelativePoint => _context.RelativePoints.AsQueryable(),
-                LocationType.AbsolutePoint => _context.AbsolutePoints.AsQueryable(),
-                LocationType.Point => _context.Points.AsQueryable(),
-                LocationType.Location => _context.Locations.AsQueryable(),
+                LocationCategory.FanArea => _context.FanAreas.AsQueryable(),
+                LocationCategory.CorridorArea => _context.CorridorAreas.AsQueryable(),
+                LocationCategory.PolygonArea => _context.PolygonAreas.AsQueryable(),
+                LocationCategory.Ellipse => _context.Ellipses.AsQueryable(),
+                LocationCategory.Surface => _context.Surfaces.AsQueryable(),
+                LocationCategory.Line => _context.Lines.AsQueryable(),
+                LocationCategory.RelativePoint => _context.RelativePoints.AsQueryable(),
+                LocationCategory.AbsolutePoint => _context.AbsolutePoints.AsQueryable(),
+                LocationCategory.Point => _context.Points.AsQueryable(),
+                LocationCategory.Location => _context.Locations.AsQueryable(),
                 _ => null
             };
 
             var count = await query.CountAsync();
 
             var locations = await query
+                .Where(_ => _.Superseded == null)
                 .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
                 .Take(request.Params.PageSize)
                 .ToListAsync();

@@ -10,7 +10,7 @@ public class EllipsesController : BaseApiController
     {
         return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {
-            Type = LocationType.Ellipse,
+            Category = LocationCategory.Ellipse,
             Params = param
         }));
     }
