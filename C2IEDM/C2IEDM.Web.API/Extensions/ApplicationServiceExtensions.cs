@@ -22,8 +22,8 @@ public static class ApplicationServiceExtensions
         // This section is for running locally
         services.AddDbContext<DataContext>(opt =>
         {
-            //opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
-            opt.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+            opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
+            //opt.UseNpgsql(config.GetConnectionString("DefaultConnection"));
             //opt.UseSqlServer(config.GetConnectionString("DefaultConnection"));
         });
 
