@@ -4,7 +4,6 @@ using AutoMapper;
 using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Locations.DTOs;
-using C2IEDM.Web.Application.Interfaces;
 
 namespace C2IEDM.Web.Application.Locations;
 

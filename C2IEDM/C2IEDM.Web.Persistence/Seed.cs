@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using C2IEDM.Domain.Entities.Geometry;
-using C2IEDM.Persistence.EntityFrameworkCore;
 using C2IEDM.Domain.Entities.Geometry.Locations.Points;
-using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
-using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
 using C2IEDM.Domain.Entities.Geometry.Locations.Line;
+using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
+using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
 using C2IEDM.Domain.Entities.ObjectItems;
 using C2IEDM.Domain.Entities.ObjectItems.Organisations;
+using C2IEDM.Persistence.EntityFrameworkCore;
 
 namespace C2IEDM.Web.Persistence
 {
@@ -99,204 +99,204 @@ namespace C2IEDM.Web.Persistence
                     LongitudeCoordinate = 55.13953436148247,
                 };
 
-                var absPoint2 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    LatitudeCoordinate = 10.202169964922433,
-                    LongitudeCoordinate = 54.847172968685214,
-                };
+                //var absPoint2 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                //{
+                //    LatitudeCoordinate = 10.202169964922433,
+                //    LongitudeCoordinate = 54.847172968685214,
+                //};
 
-                var absPoint3 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    LatitudeCoordinate = 9.526866977996978,
-                    LongitudeCoordinate = 54.863907344714946,
-                };
+                //var absPoint3 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                //{
+                //    LatitudeCoordinate = 9.526866977996978,
+                //    LongitudeCoordinate = 54.863907344714946,
+                //};
 
-                var absPoint4 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    LatitudeCoordinate = 10.951680768333889,
-                    LongitudeCoordinate = 54.97114299238095,
-                    VerticalDistance = verticalDistance1
-                };
+                //var absPoint4 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                //{
+                //    LatitudeCoordinate = 10.951680768333889,
+                //    LongitudeCoordinate = 54.97114299238095,
+                //    VerticalDistance = verticalDistance1
+                //};
 
-                var absPoint5 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    LatitudeCoordinate = 11.931557544334767,
-                    LongitudeCoordinate = 54.90468731477757,
-                    VerticalDistance = verticalDistance1
-                };
+                //var absPoint5 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                //{
+                //    LatitudeCoordinate = 11.931557544334767,
+                //    LongitudeCoordinate = 54.90468731477757,
+                //    VerticalDistance = verticalDistance1
+                //};
 
-                var absPoint6 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    LatitudeCoordinate = 11.96844180282638,
-                    LongitudeCoordinate = 54.59228432756085,
-                    VerticalDistance = verticalDistance1
-                };
+                //var absPoint6 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                //{
+                //    LatitudeCoordinate = 11.96844180282638,
+                //    LongitudeCoordinate = 54.59228432756085,
+                //    VerticalDistance = verticalDistance1
+                //};
 
-                var absPoint7 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    LatitudeCoordinate = 10.905450050241162,
-                    LongitudeCoordinate = 54.715507173483466,
-                    VerticalDistance = verticalDistance1
-                };
+                //var absPoint7 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                //{
+                //    LatitudeCoordinate = 10.905450050241162,
+                //    LongitudeCoordinate = 54.715507173483466,
+                //    VerticalDistance = verticalDistance1
+                //};
 
                 var absolutePoints = new List<AbsolutePoint>{
-                    absPoint1,
+                    absPoint1/*,
                     absPoint2,
                     absPoint3,
                     absPoint4,
                     absPoint5,
                     absPoint6,
-                    absPoint7};
+                    absPoint7*/};
 
-                var line1 = new Line(Guid.NewGuid(), NextCreatedTime());
-                var line2 = new Line(Guid.NewGuid(), NextCreatedTime());
+            //    var line1 = new Line(Guid.NewGuid(), NextCreatedTime());
+            //    var line2 = new Line(Guid.NewGuid(), NextCreatedTime());
 
-                var lines = new List<Line> { line1, line2 };
+            //    var lines = new List<Line> { line1, line2 };
 
-                var linePoints = new List<LinePoint>
-            {
-                new LinePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    Line = line1,
-                    Point = absPoint1,
-                    Index = 0,
-                    SequenceQuantity = 0
-                },
-                new LinePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    Line = line1,
-                    Point = absPoint2,
-                    Index = 1,
-                    SequenceQuantity = 1
-                },
-                new LinePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    Line = line1,
-                    Point = absPoint3,
-                    Index = 2,
-                    SequenceQuantity = 2
-                },
-                new LinePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    Line = line1,
-                    Point = absPoint1,
-                    Index = 3,
-                    SequenceQuantity = 3
-                },
-                new LinePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    Line = line2,
-                    Point = absPoint4,
-                    Index = 0,
-                    SequenceQuantity = 0
-                },
-                new LinePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    Line = line2,
-                    Point = absPoint5,
-                    Index = 1,
-                    SequenceQuantity = 1
-                },
-                new LinePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    Line = line2,
-                    Point = absPoint6,
-                    Index = 2,
-                    SequenceQuantity = 2
-                },
-                new LinePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    Line = line2,
-                    Point = absPoint7,
-                    Index = 3,
-                    SequenceQuantity = 3
-                },
-                new LinePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    Line = line2,
-                    Point = absPoint4,
-                    Index = 4,
-                    SequenceQuantity = 4
-                }
-            };
+            //    var linePoints = new List<LinePoint>
+            //{
+            //    new LinePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        Line = line1,
+            //        Point = absPoint1,
+            //        Index = 0,
+            //        SequenceQuantity = 0
+            //    },
+            //    new LinePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        Line = line1,
+            //        Point = absPoint2,
+            //        Index = 1,
+            //        SequenceQuantity = 1
+            //    },
+            //    new LinePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        Line = line1,
+            //        Point = absPoint3,
+            //        Index = 2,
+            //        SequenceQuantity = 2
+            //    },
+            //    new LinePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        Line = line1,
+            //        Point = absPoint1,
+            //        Index = 3,
+            //        SequenceQuantity = 3
+            //    },
+            //    new LinePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        Line = line2,
+            //        Point = absPoint4,
+            //        Index = 0,
+            //        SequenceQuantity = 0
+            //    },
+            //    new LinePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        Line = line2,
+            //        Point = absPoint5,
+            //        Index = 1,
+            //        SequenceQuantity = 1
+            //    },
+            //    new LinePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        Line = line2,
+            //        Point = absPoint6,
+            //        Index = 2,
+            //        SequenceQuantity = 2
+            //    },
+            //    new LinePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        Line = line2,
+            //        Point = absPoint7,
+            //        Index = 3,
+            //        SequenceQuantity = 3
+            //    },
+            //    new LinePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        Line = line2,
+            //        Point = absPoint4,
+            //        Index = 4,
+            //        SequenceQuantity = 4
+            //    }
+            //};
 
-                var ellipse1 = new Ellipse(Guid.NewGuid(), NextCreatedTime())
-                {
-                    CentrePoint = absPoint1,
-                    FirstConjugateDiameterPoint = absPoint2,
-                    SecondConjugateDiameterPoint = absPoint3
-                };
+            //    var ellipse1 = new Ellipse(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        CentrePoint = absPoint1,
+            //        FirstConjugateDiameterPoint = absPoint2,
+            //        SecondConjugateDiameterPoint = absPoint3
+            //    };
 
-                var corridorArea1 = new CorridorArea(Guid.NewGuid(), NextCreatedTime())
-                {
-                    CenterLine = line1,
-                    WidthDimension = 1.5
-                };
+            //    var corridorArea1 = new CorridorArea(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        CenterLine = line1,
+            //        WidthDimension = 1.5
+            //    };
 
-                var polygonArea1 = new PolygonArea(Guid.NewGuid(), NextCreatedTime())
-                {
-                    BoundingLine = line2,
-                };
+            //    var polygonArea1 = new PolygonArea(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        BoundingLine = line2,
+            //    };
 
-                var fanArea1 = new FanArea(Guid.NewGuid(), NextCreatedTime())
-                {
-                    VertexPoint = absPoint1,
-                    MinimumRangeDimension = 1,
-                    MaximumRangeDimension = 3,
-                    OrientationAngle = 30,
-                    SectorSizeAngle = 60
-                };
+            //    var fanArea1 = new FanArea(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        VertexPoint = absPoint1,
+            //        MinimumRangeDimension = 1,
+            //        MaximumRangeDimension = 3,
+            //        OrientationAngle = 30,
+            //        SectorSizeAngle = 60
+            //    };
 
-                var pointReference1 = new PointReference(Guid.NewGuid(), NextCreatedTime())
-                {
-                    OriginPoint = absPoint1,
-                    XVectorPoint = absPoint2,
-                    YVectorPoint = absPoint3
-                };
+            //    var pointReference1 = new PointReference(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        OriginPoint = absPoint1,
+            //        XVectorPoint = absPoint2,
+            //        YVectorPoint = absPoint3
+            //    };
 
-                var pointReference2 = new PointReference(Guid.NewGuid(), NextCreatedTime())
-                {
-                    OriginPoint = absPoint2,
-                    XVectorPoint = absPoint3,
-                    YVectorPoint = absPoint4
-                };
+            //    var pointReference2 = new PointReference(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        OriginPoint = absPoint2,
+            //        XVectorPoint = absPoint3,
+            //        YVectorPoint = absPoint4
+            //    };
 
-                var pointReferences = new List<PointReference>
-                {
-                    pointReference1, pointReference2
-                };
+            //    var pointReferences = new List<PointReference>
+            //    {
+            //        pointReference1, pointReference2
+            //    };
 
-                var relativePoint1 = new RelativePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    CoordinateSystem = pointReference1,
-                    XCoordinateDimension = 1.2,
-                    YCoordinateDimension = 3.4,
-                    ZCoordinateDimension = 5.6
-                };
+            //    var relativePoint1 = new RelativePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        CoordinateSystem = pointReference1,
+            //        XCoordinateDimension = 1.2,
+            //        YCoordinateDimension = 3.4,
+            //        ZCoordinateDimension = 5.6
+            //    };
 
-                var relativePoint2 = new RelativePoint(Guid.NewGuid(), NextCreatedTime())
-                {
-                    CoordinateSystem = pointReference1,
-                    XCoordinateDimension = 2.3,
-                    YCoordinateDimension = 4.5,
-                    ZCoordinateDimension = 6.7
-                };
+            //    var relativePoint2 = new RelativePoint(Guid.NewGuid(), NextCreatedTime())
+            //    {
+            //        CoordinateSystem = pointReference1,
+            //        XCoordinateDimension = 2.3,
+            //        YCoordinateDimension = 4.5,
+            //        ZCoordinateDimension = 6.7
+            //    };
 
-                var relativePoints = new List<RelativePoint>
-                {
-                    relativePoint1, relativePoint2
-                };
+            //    var relativePoints = new List<RelativePoint>
+            //    {
+            //        relativePoint1, relativePoint2
+            //    };
 
                 await context.VerticalDistances.AddAsync(verticalDistance1);
                 await context.AbsolutePoints.AddRangeAsync(absolutePoints);
-                await context.Lines.AddRangeAsync(lines);
-                await context.LinePoints.AddRangeAsync(linePoints);
-                await context.Ellipses.AddAsync(ellipse1);
-                await context.CorridorAreas.AddAsync(corridorArea1);
-                await context.PolygonAreas.AddAsync(polygonArea1);
-                await context.FanAreas.AddAsync(fanArea1);
-                await context.PointReferences.AddRangeAsync(pointReferences);
-                await context.RelativePoints.AddRangeAsync(relativePoints);
+                //await context.Lines.AddRangeAsync(lines);
+                //await context.LinePoints.AddRangeAsync(linePoints);
+                //await context.Ellipses.AddAsync(ellipse1);
+                //await context.CorridorAreas.AddAsync(corridorArea1);
+                //await context.PolygonAreas.AddAsync(polygonArea1);
+                //await context.FanAreas.AddAsync(fanArea1);
+                //await context.PointReferences.AddRangeAsync(pointReferences);
+                //await context.RelativePoints.AddRangeAsync(relativePoints);
                 await context.SaveChangesAsync();
             }
         }
