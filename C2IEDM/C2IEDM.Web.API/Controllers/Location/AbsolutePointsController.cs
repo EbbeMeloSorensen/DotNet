@@ -1,16 +1,16 @@
-﻿using C2IEDM.Web.Application.Locations;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using C2IEDM.Web.Application.Core;
+using C2IEDM.Web.Application.Locations;
 
 namespace C2IEDM.Web.API.Controllers.Location;
 
 public class AbsolutePointsController : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetAbsolutePoints([FromQuery] LocationParams param)
+    public async Task<IActionResult> GetAbsolutePoints([FromQuery] PagingParams param)
     {
-        return HandlePagedResult(await Mediator.Send(new ListLocations.Query
+        return HandlePagedResult(await Mediator.Send(new ListAbsolutePoints.Query
         {
-            Category = LocationCategory.AbsolutePoint,
             Params = param
         }));
     }

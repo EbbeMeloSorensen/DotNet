@@ -1,12 +1,13 @@
-﻿using C2IEDM.Web.Application.Locations;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using C2IEDM.Web.Application.Core;
+using C2IEDM.Web.Application.Locations;
 
 namespace C2IEDM.Web.API.Controllers.Location;
 
 public class EllipsesController : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetEllipses([FromQuery] LocationParams param)
+    public async Task<IActionResult> GetEllipses([FromQuery] PagingParams param)
     {
         return HandlePagedResult(await Mediator.Send(new ListLocations.Query
         {

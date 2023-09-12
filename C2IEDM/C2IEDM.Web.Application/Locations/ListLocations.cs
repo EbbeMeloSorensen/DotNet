@@ -26,7 +26,7 @@ public class ListLocations
     public class Query : IRequest<Result<PagedList<LocationDto>>>
     {
         public LocationCategory Category { get; set; }
-        public LocationParams Params { get; set; }
+        public PagingParams Params { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<PagedList<LocationDto>>>
