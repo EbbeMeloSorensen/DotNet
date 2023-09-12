@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using Microsoft.EntityFrameworkCore;
+using MediatR;
+using AutoMapper;
+using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Locations.DTOs;
-using C2IEDM.Web.Persistence;
-using Microsoft.EntityFrameworkCore;
-using C2IEDM.Domain.Entities.Geometry.Locations;
-using AutoMapper;
+using C2IEDM.Web.Application.Locations.VerticalDistance;
 
 namespace C2IEDM.Web.Application.Locations;
 
@@ -36,18 +36,47 @@ public class ListAbsolutePoints
 
             var absolutePoints = await query
                 .Where(_ => _.Superseded == null)
-                .Include(_ => _.VerticalDistance)
+                //.Include(_ => _.VerticalDistance)
                 .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
                 .Take(request.Params.PageSize)
                 .ToListAsync();
 
-            var absolutePointDtos = absolutePoints.Select(l =>
-            {
-                var temp = _mapper.Map(l, l.GetType(), typeof(AbsolutePointDto));
+            // For en normal database uden historik ville vi bare have et Include statement efter where klausulen
+            // for at få parent rækker med. Det duer imidlertid ikke for en database med historik, da parent rækken
+            // kan være blevet superseeded med en nyere række.
+            // Derfor genererer vi en liste af objekt ids for de parent rækker, vi skal have fat i, og så
+            // henter vi disse rækker i et separat kald til databasen.
 
-                if (temp is not AbsolutePointDto absolutePointDto)
+            var verticalDistanceObjectIds = absolutePoints
+                .Where(_ => _.VerticalDistanceObjectId != null)
+                .Select(_ => _.VerticalDistanceObjectId)
+                .Distinct()
+                .ToList();
+
+            var verticalDistances = await  _context.VerticalDistances.AsQueryable()
+                .Where(_ => _.Superseded == null && verticalDistanceObjectIds.Contains(_.ObjectId))
+                .ToListAsync();
+
+            // Her har vi parent rækkerne i en liste, som vi omdanner til et map for efterfølgende at kunne hæfte dem på de
+            // child rækker, vi i første omgang trak ud af databasen.
+
+            var verticalDistanceMap = verticalDistances.ToDictionary(_ => _.ObjectId, _ => _);
+
+            // Her mapper vi det hele til dto instanser og hæfter parents på
+
+            var absolutePointDtos = absolutePoints.Select(_ =>
+            {
+                var absolutePointDto = _mapper.Map(_, _.GetType(), typeof(AbsolutePointDto)) as AbsolutePointDto;
+
+                if (_.VerticalDistanceObjectId.HasValue &&
+                    verticalDistanceMap.TryGetValue(_.VerticalDistanceObjectId.Value, out var verticalDistance))
                 {
-                    throw new InvalidDataException();
+                    var verticalDistanceDto = _mapper.Map(
+                        verticalDistance, 
+                        typeof(Domain.Entities.Geometry.VerticalDistance), 
+                        typeof(VerticalDistanceDto)) as VerticalDistanceDto;
+
+                    absolutePointDto.VerticalDistance = verticalDistanceDto;
                 }
 
                 return absolutePointDto;

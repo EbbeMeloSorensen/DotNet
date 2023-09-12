@@ -520,6 +520,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Property<Guid?>("VerticalDistanceId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("VerticalDistanceObjectId")
+                        .HasColumnType("uuid");
+
                     b.HasIndex("VerticalDistanceId");
 
                     b.ToTable("AbsolutePoints");

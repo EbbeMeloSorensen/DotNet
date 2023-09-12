@@ -6,6 +6,7 @@ public class AbsolutePoint : Point
     public double LongitudeCoordinate { get; set; }
 
     public Guid? VerticalDistanceId { get; set; }
+    public Guid? VerticalDistanceObjectId { get; set; }
     public virtual VerticalDistance? VerticalDistance { get; set; }
 
     public override List<double> AsListOfDouble()

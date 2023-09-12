@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace C2IEDM.Web.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -346,7 +346,8 @@ namespace C2IEDM.Web.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     LatitudeCoordinate = table.Column<double>(type: "double precision", nullable: false),
                     LongitudeCoordinate = table.Column<double>(type: "double precision", nullable: false),
-                    VerticalDistanceId = table.Column<Guid>(type: "uuid", nullable: true)
+                    VerticalDistanceId = table.Column<Guid>(type: "uuid", nullable: true),
+                    VerticalDistanceObjectId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {

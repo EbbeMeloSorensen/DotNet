@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace C2IEDM.Web.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230911182647_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230912153347_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -521,6 +521,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<Guid?>("VerticalDistanceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("VerticalDistanceObjectId")
                         .HasColumnType("uuid");
 
                     b.HasIndex("VerticalDistanceId");

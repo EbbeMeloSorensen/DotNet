@@ -93,37 +93,39 @@ namespace C2IEDM.Web.Persistence
                     Dimension = 1.0,
                 };
 
-                //var absPoint1 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                //{
-                //    LatitudeCoordinate = 9.816808191409391,
-                //    LongitudeCoordinate = 55.13953436148247,
-                //};
+                var absPoint1 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                {
+                    LatitudeCoordinate = 9.816808191409391,
+                    LongitudeCoordinate = 55.13953436148247,
+                };
 
-                //var absPoint2 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                //{
-                //    LatitudeCoordinate = 10.202169964922433,
-                //    LongitudeCoordinate = 54.847172968685214,
-                //};
+                var absPoint2 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                {
+                    LatitudeCoordinate = 10.202169964922433,
+                    LongitudeCoordinate = 54.847172968685214,
+                };
 
-                //var absPoint3 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                //{
-                //    LatitudeCoordinate = 9.526866977996978,
-                //    LongitudeCoordinate = 54.863907344714946,
-                //};
+                var absPoint3 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                {
+                    LatitudeCoordinate = 9.526866977996978,
+                    LongitudeCoordinate = 54.863907344714946,
+                };
 
                 var absPoint4 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
                 {
                     LatitudeCoordinate = 10.951680768333889,
                     LongitudeCoordinate = 54.97114299238095,
-                    VerticalDistance = verticalDistance1
+                    VerticalDistance = verticalDistance1,
+                    VerticalDistanceObjectId = verticalDistance1.ObjectId
                 };
 
-                //var absPoint5 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
-                //{
-                //    LatitudeCoordinate = 11.931557544334767,
-                //    LongitudeCoordinate = 54.90468731477757,
-                //    VerticalDistance = verticalDistance1
-                //};
+                var absPoint5 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
+                {
+                    LatitudeCoordinate = 11.931557544334767,
+                    LongitudeCoordinate = 54.90468731477757,
+                    VerticalDistance = verticalDistance1,
+                    VerticalDistanceObjectId = verticalDistance1.ObjectId
+                };
 
                 //var absPoint6 = new AbsolutePoint(Guid.NewGuid(), NextCreatedTime())
                 //{
@@ -140,11 +142,11 @@ namespace C2IEDM.Web.Persistence
                 //};
 
                 var absolutePoints = new List<AbsolutePoint>{
-                    //absPoint1,
-                    //absPoint2,
-                    //absPoint3,
-                    absPoint4/*,
-                    absPoint5,
+                    absPoint1,
+                    absPoint2,
+                    absPoint3,
+                    absPoint4,
+                    absPoint5/*,
                     absPoint6,
                     absPoint7*/};
 
