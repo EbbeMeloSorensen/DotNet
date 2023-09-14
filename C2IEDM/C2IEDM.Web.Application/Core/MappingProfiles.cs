@@ -52,6 +52,8 @@ public class MappingProfiles : Profile
             .Include<CorridorArea, CorridorAreaDto>()
             .Include<PolygonArea, PolygonAreaDto>()
             .Include<FanArea, FanAreaDto>();
+        // Bemærk den her, som vi har for Point, selv om den er en underkategori af Location. Det er for at facilitere, at man kan
+        // mappe "polymorfisk" med udgangspunkt i Point, som man f.eks. gør, når man henter punkter for en linie 
         CreateMap<Point, PointDto>()
             .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.ObjectId))
             .Include<AbsolutePoint, AbsolutePointDto>()
