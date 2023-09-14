@@ -3,7 +3,6 @@ using MediatR;
 using AutoMapper;
 using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
-using C2IEDM.Web.Application.Interfaces;
 using C2IEDM.Web.Application.ObjectItems.DTOs;
 
 namespace C2IEDM.Web.Application.ObjectItems;
@@ -20,7 +19,7 @@ public class List
     public class Query : IRequest<Result<PagedList<ObjectItemDto>>>
     {
         public ObjectItemCategory Category { get; set; }
-        public ObjectItemParams Params { get; set; }
+        public PagingParams Params { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<PagedList<ObjectItemDto>>>

@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿using Microsoft.EntityFrameworkCore;
+using MediatR;
+using AutoMapper;
+using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Interfaces;
 using C2IEDM.Web.Application.Locations.DTOs;
-using C2IEDM.Web.Persistence;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace C2IEDM.Web.Application.Locations;
 
@@ -19,7 +19,7 @@ public class ListCoordinateSystems
     public class Query : IRequest<Result<PagedList<CoordinateSystemDto>>>
     {
         public CoordinateSystemType Type { get; set; }
-        public CoordinateSystemParams Params { get; set; }
+        public PagingParams Params { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<PagedList<CoordinateSystemDto>>>

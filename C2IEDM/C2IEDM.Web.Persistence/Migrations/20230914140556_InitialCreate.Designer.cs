@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace C2IEDM.Web.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230912153347_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230914140556_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Property<Guid>("ObjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("Superseded")
+                    b.Property<DateTime>("Superseded")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -58,16 +58,22 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("LineObjectId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ObjectId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("PointId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("PointObjectId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("SequenceQuantity")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("Superseded")
+                    b.Property<DateTime>("Superseded")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("LineId", "Index");
@@ -89,7 +95,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Property<Guid>("ObjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("Superseded")
+                    b.Property<DateTime>("Superseded")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -114,7 +120,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Property<Guid>("ObjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("Superseded")
+                    b.Property<DateTime>("Superseded")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -141,7 +147,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Property<Guid>("ObjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("Superseded")
+                    b.Property<DateTime>("Superseded")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");

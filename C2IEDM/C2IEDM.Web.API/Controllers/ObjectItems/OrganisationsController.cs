@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using C2IEDM.Domain.Entities.ObjectItems.Organisations;
+using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.ObjectItems;
 using C2IEDM.Web.Application.ObjectItems.Organisation;
 
@@ -8,7 +9,7 @@ namespace C2IEDM.Web.API.Controllers.ObjectItems;
 public class OrganisationsController : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetOrganisations([FromQuery] ObjectItemParams param)
+    public async Task<IActionResult> GetOrganisations([FromQuery] PagingParams param)
     {
         return HandlePagedResult(await Mediator.Send(new List.Query
         {

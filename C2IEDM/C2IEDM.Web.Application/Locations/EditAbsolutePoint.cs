@@ -32,7 +32,7 @@ public class EditAbsolutePoint
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var query = _context.AbsolutePoints
-                .Where(_ => _.ObjectId == request.AbsolutePoint.Id && _.Superseded == null)
+                .Where(_ => _.ObjectId == request.AbsolutePoint.Id && _.Superseded == DateTime.MaxValue)
                 .AsQueryable();
 
             var absolutePoint = await query.FirstOrDefaultAsync();

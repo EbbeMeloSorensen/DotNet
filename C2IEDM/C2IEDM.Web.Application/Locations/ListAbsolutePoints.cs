@@ -35,7 +35,7 @@ public class ListAbsolutePoints
             var count = await query.CountAsync();
 
             var absolutePoints = await query
-                .Where(_ => _.Superseded == null)
+                .Where(_ => _.Superseded == DateTime.MaxValue)
                 //.Include(_ => _.VerticalDistance)
                 .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
                 .Take(request.Params.PageSize)
@@ -54,7 +54,7 @@ public class ListAbsolutePoints
                 .ToList();
 
             var verticalDistances = await  _context.VerticalDistances.AsQueryable()
-                .Where(_ => _.Superseded == null && verticalDistanceObjectIds.Contains(_.ObjectId))
+                .Where(_ => _.Superseded == DateTime.MaxValue && verticalDistanceObjectIds.Contains(_.ObjectId))
                 .ToListAsync();
 
             // Her har vi parent rækkerne i en liste, som vi omdanner til et map for efterfølgende at kunne hæfte dem på de

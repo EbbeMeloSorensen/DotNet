@@ -38,7 +38,7 @@ public class ListLines
             var count = await query.CountAsync();
 
             var lines = await query
-                .Where(_ => _.Superseded == null)
+                .Where(_ => _.Superseded == DateTime.MaxValue)
                 //.Include(_ => _.LinePoints)
                 //.ThenInclude(_ => _.Point)
                 .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
@@ -55,7 +55,7 @@ public class ListLines
                 .ToList();
 
             var linePoints = await _context.LinePoints.AsQueryable()
-                .Where(_ => _.Superseded == null && lineObjectIds.Contains(_.LineObjectId))
+                .Where(_ => _.Superseded == DateTime.MaxValue && lineObjectIds.Contains(_.LineObjectId))
                 .ToListAsync();
             
             var pointObjectIds = linePoints
@@ -64,7 +64,7 @@ public class ListLines
                 .ToList();
 
             var points = await _context.Points.AsQueryable()
-                .Where(_ => _.Superseded == null && pointObjectIds.Contains(_.ObjectId))
+                .Where(_ => _.Superseded == DateTime.MaxValue && pointObjectIds.Contains(_.ObjectId))
                 .ToListAsync();
 
             var pointMap = points.ToDictionary(_ => _.ObjectId, _ => _);

@@ -32,7 +32,7 @@ public class Edit
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var query = _context.VerticalDistances
-                .Where(_ => _.ObjectId == request.VerticalDistance.Id && _.Superseded == null)
+                .Where(_ => _.ObjectId == request.VerticalDistance.Id && _.Superseded == DateTime.MaxValue)
                 .AsQueryable();
 
             var verticalDistance = await query.FirstOrDefaultAsync();

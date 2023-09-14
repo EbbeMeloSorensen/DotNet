@@ -2,14 +2,14 @@
 using C2IEDM.Domain.Entities.ObjectItems;
 using C2IEDM.Web.Application.ObjectItems;
 using C2IEDM.Web.Application.ObjectItems.ObjectItem;
-using C2IEDM.Domain.Entities.Geometry;
+using C2IEDM.Web.Application.Core;
 
 namespace C2IEDM.Web.API.Controllers.ObjectItems
 {
     public class ObjectItemsController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetObjectItems([FromQuery] ObjectItemParams param)
+        public async Task<IActionResult> GetObjectItems([FromQuery] PagingParams param)
         {
             return HandlePagedResult(await Mediator.Send(new List.Query
             {

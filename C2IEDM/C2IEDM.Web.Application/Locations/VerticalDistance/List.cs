@@ -30,8 +30,10 @@ public class List
 
         public async Task<Result<PagedList<VerticalDistanceDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
+            var timeOfInterest = new DateTime(2024, 9, 14, 14, 21, 55, DateTimeKind.Utc);
+
             var query = _context.VerticalDistances
-                .Where(_ => _.Superseded == null)
+                .Where(_ => _.Created < timeOfInterest && _.Superseded > timeOfInterest)
                 .ProjectTo<VerticalDistanceDto>(_mapper.ConfigurationProvider,
                     new { currentUsername = _userAccessor.GetUsername() })
                 .AsQueryable();
