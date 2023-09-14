@@ -13,6 +13,7 @@ public class ListAbsolutePoints
     public class Query : IRequest<Result<PagedList<AbsolutePointDto>>>
     {
         public PagingParams Params { get; set; }
+        public DateTime? TimeOfInterest { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<PagedList<AbsolutePointDto>>>
@@ -30,13 +31,15 @@ public class ListAbsolutePoints
             Query request, 
             CancellationToken cancellationToken)
         {
-            var query = _context.AbsolutePoints.AsQueryable();
+            var temp1 = request.TimeOfInterest.HasValue
+                ? _context.AbsolutePoints.Where(_ => _.Created < request.TimeOfInterest.Value && _.Superseded > request.TimeOfInterest.Value)
+                : _context.AbsolutePoints.Where(_ => _.Superseded == DateTime.MaxValue);
+
+            var query = temp1.AsQueryable();
 
             var count = await query.CountAsync();
 
             var absolutePoints = await query
-                .Where(_ => _.Superseded == DateTime.MaxValue)
-                //.Include(_ => _.VerticalDistance)
                 .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
                 .Take(request.Params.PageSize)
                 .ToListAsync();
@@ -53,8 +56,12 @@ public class ListAbsolutePoints
                 .Distinct()
                 .ToList();
 
-            var verticalDistances = await  _context.VerticalDistances.AsQueryable()
-                .Where(_ => _.Superseded == DateTime.MaxValue && verticalDistanceObjectIds.Contains(_.ObjectId))
+            var temp2 = request.TimeOfInterest.HasValue
+                ? _context.VerticalDistances.Where(_ => _.Created < request.TimeOfInterest.Value && _.Superseded > request.TimeOfInterest.Value)
+                : _context.VerticalDistances.Where(_ => _.Superseded == DateTime.MaxValue);
+
+            var verticalDistances = await temp2
+                .Where(_ => verticalDistanceObjectIds.Contains(_.ObjectId))
                 .ToListAsync();
 
             // Her har vi parent rækkerne i en liste, som vi omdanner til et map for efterfølgende at kunne hæfte dem på de

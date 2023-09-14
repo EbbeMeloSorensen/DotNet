@@ -10,10 +10,13 @@ public class AbsolutePointsController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetAbsolutePoints([FromQuery] PagingParams param)
     {
-        return HandlePagedResult(await Mediator.Send(new ListAbsolutePoints.Query
-        {
-            Params = param
-        }));
+        return HandlePagedResult(await Mediator.Send(new ListAbsolutePoints.Query{ Params = param }));
+    }
+
+    [HttpGet("{timeOfInterest}")]
+    public async Task<IActionResult> GetVerticalDistances_Historic([FromQuery] PagingParams param, DateTime timeOfInterest)
+    {
+        return HandlePagedResult(await Mediator.Send(new ListAbsolutePoints.Query { Params = param, TimeOfInterest = timeOfInterest }));
     }
 
     [HttpPut("{id}")]

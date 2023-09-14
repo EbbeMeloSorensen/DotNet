@@ -30,13 +30,9 @@ public class List
 
         public async Task<Result<PagedList<VerticalDistanceDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            //var timeOfInterest = new DateTime(2024, 9, 14, 14, 21, 55, DateTimeKind.Utc);
-
-            var dbSet = _context.VerticalDistances;
-
             var temp = request.TimeOfInterest.HasValue
-                ? dbSet.Where(_ => _.Created < request.TimeOfInterest.Value && _.Superseded > request.TimeOfInterest.Value)
-                : dbSet.Where(_ => _.Superseded == DateTime.MaxValue);
+                ? _context.VerticalDistances.Where(_ => _.Created < request.TimeOfInterest.Value && _.Superseded > request.TimeOfInterest.Value)
+                : _context.VerticalDistances.Where(_ => _.Superseded == DateTime.MaxValue);
 
             var query = temp.ProjectTo<VerticalDistanceDto>(_mapper.ConfigurationProvider,
                     new { currentUsername = _userAccessor.GetUsername() })
