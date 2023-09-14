@@ -9,9 +9,8 @@ public class LinesController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetLines([FromQuery] PagingParams param)
     {
-        return HandlePagedResult(await Mediator.Send(new ListLocations.Query
+        return HandlePagedResult(await Mediator.Send(new ListLines.Query
         {
-            Category = LocationCategory.Line,
             Params = param
         }));
     }

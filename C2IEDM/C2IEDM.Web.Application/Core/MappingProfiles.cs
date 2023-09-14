@@ -52,7 +52,10 @@ public class MappingProfiles : Profile
             .Include<CorridorArea, CorridorAreaDto>()
             .Include<PolygonArea, PolygonAreaDto>()
             .Include<FanArea, FanAreaDto>();
-        CreateMap<Point, PointDto>();
+        CreateMap<Point, PointDto>()
+            .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.ObjectId))
+            .Include<AbsolutePoint, AbsolutePointDto>()
+            .Include<RelativePoint, RelativePointDto>();
         CreateMap<AbsolutePoint, AbsolutePointDto>();
         CreateMap<RelativePoint, RelativePointDto>();
         CreateMap<Line, LineDto>();
