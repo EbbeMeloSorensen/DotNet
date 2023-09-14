@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MediatR;
-using FluentValidation;
+﻿using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Persistence;
-using C2IEDM.Web.Application.Core;
+using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-namespace C2IEDM.Web.Application.Locations.VerticalDistance;
+namespace C2IEDM.Web.Application.Geometry.VerticalDistance;
 
 public class Edit
 {

@@ -37,10 +37,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Web.API", "C2IEDM.We
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{11730E49-B12F-40FE-BF3D-34F833A4E50D}"
 	ProjectSection(SolutionItems) = preProject
-		Deployment.md = Deployment.md
+		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.ViewModel", "C2IEDM.ViewModel\C2IEDM.ViewModel.csproj", "{307F0644-B4A9-4041-A093-F72BF86AE62A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.ViewModel", "C2IEDM.ViewModel\C2IEDM.ViewModel.csproj", "{307F0644-B4A9-4041-A093-F72BF86AE62A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\Craft\Craft.ViewModels\Craft.ViewModels.csproj", "{0AC5073C-936B-4FFA-B983-6DCDBB005CEE}"
 EndProject
@@ -50,7 +50,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\Craft\Cra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{E417A601-568D-4A89-95CF-543BB51DEE68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.UI.WPF", "C2IEDM.UI.WPF\C2IEDM.UI.WPF.csproj", "{4605983A-5A7D-42BE-ADE9-AF8AB22B9167}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.UI.WPF", "C2IEDM.UI.WPF\C2IEDM.UI.WPF.csproj", "{4605983A-5A7D-42BE-ADE9-AF8AB22B9167}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{70F3F135-0078-4C62-BD93-0C67EBD7F892}"
 EndProject

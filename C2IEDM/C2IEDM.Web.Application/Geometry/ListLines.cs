@@ -1,15 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MediatR;
-using AutoMapper;
-using C2IEDM.Web.Persistence;
+﻿using AutoMapper;
 using C2IEDM.Web.Application.Core;
-using C2IEDM.Web.Application.Locations.DTOs;
-using C2IEDM.Web.Application.Locations.VerticalDistance;
-using C2IEDM.Domain.Entities.Geometry.Locations.Points;
-using C2IEDM.Domain.Entities.Geometry;
-using C2IEDM.Domain.Entities.Geometry.Locations.Line;
+using C2IEDM.Web.Application.Geometry.DTOs;
+using C2IEDM.Web.Persistence;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-namespace C2IEDM.Web.Application.Locations;
+namespace C2IEDM.Web.Application.Geometry;
 
 public class ListLines
 {

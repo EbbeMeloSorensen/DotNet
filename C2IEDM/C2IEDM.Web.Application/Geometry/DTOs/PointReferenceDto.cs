@@ -1,4 +1,4 @@
-﻿namespace C2IEDM.Web.Application.Locations.DTOs;
+﻿namespace C2IEDM.Web.Application.Geometry.DTOs;
 
 public class PointReferenceDto : CoordinateSystemDto
 {

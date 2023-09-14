@@ -4,7 +4,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace C2IEDM.Web.Application.Locations;
+namespace C2IEDM.Web.Application.Geometry;
 
 public class EditAbsolutePoint
 {

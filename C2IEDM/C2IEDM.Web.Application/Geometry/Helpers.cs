@@ -2,9 +2,9 @@
 using C2IEDM.Domain.Entities.Geometry.Locations.Line;
 using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
-using C2IEDM.Web.Application.Locations.DTOs;
+using C2IEDM.Web.Application.Geometry.DTOs;
 
-namespace C2IEDM.Web.Application.Locations;
+namespace C2IEDM.Web.Application.Geometry;
 
 public static class Helpers
 {

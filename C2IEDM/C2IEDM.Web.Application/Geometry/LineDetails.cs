@@ -1,10 +1,10 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using C2IEDM.Web.Application.Core;
+using C2IEDM.Web.Application.Geometry.DTOs;
 using C2IEDM.Web.Persistence;
-using C2IEDM.Web.Application.Core;
-using C2IEDM.Web.Application.Locations.DTOs;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-namespace C2IEDM.Web.Application.Locations;
+namespace C2IEDM.Web.Application.Geometry;
 
 public class LineDetails
 {

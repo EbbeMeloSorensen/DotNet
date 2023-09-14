@@ -1,4 +1,4 @@
-## Sadle om til anden database provider
+ ## Sadle om til anden database provider
 1) Slet den eksisterende Migrations-folder under C2IEDM.Web.Persistence
 2) Sikr, at der ikke er lavet nogen database, dvs drop f.eks. databasen i pgAdmin eller slet filerne C2IEDM_Web.db, C2IEDM_Web.db-shm og C2IEDM_Web.db-wal hvis der bruges Sqlite
 3) Launch VS Code og åbn C2IEDM-folderen
@@ -29,3 +29,18 @@
 
 Nu skulle den så gerne skrive en langs smøre, der vidner om at den bygger applikationen og som ender med "deployed to Heroku". Åbn den url, som den viser, i en browser - så skulle applikationen gerne virke.
 
+## Nogle principper for databasen mht navigering langs foreign key relationer
+* Hvis man skal have noget fra et typehierarki, som f.eks. Location, så kan man starte i roden af hierarkiet eller man kan starte på et arbitrært 
+  niveau, og så får man alle subklasser med. Man får i øvrigt alle de attributter med, der indgår i hierarkiet. Som udgangspunkt får man imidlertid
+  IKKE entiter med, der ligger uden for hierarkiet. F.eks. får man ikke Vertical Distances med (en parent for abspoint) hvis man laver et træk på 
+* Locations hierarkiet
+* Man kan dog gøre brug af specialiserede requests, der ud over at få det, som beskrevet i sidste sektion også inkluderer sådanne parent entiteter,
+* som refereres fra entiteter i hierarkiet, f.eks. fra AbsPoint til VerticalDistance, hvis man tager udgangspunkt i AbsPoint
+* Et andet eksempel er Lines, som man kan trække og så få inkluderet LinePoints og så i øvrigt de points, som refereres derfra. Bemærk, at det
+* både kan være abs points og relative points, som kan referere videre til henholdsvis vertical distance og coordinate system
+* 
+
+Kig lige på hvordan du opererer med den der Helper AsLocationDto - den bruger du jo f.eks. somehow til at hive de 3 punkter med for en ellipse.
+
+
+Mål: Lav en WPF-baseret applikation, hvor du kan vedligeholde en samling abs points og se, hvordan det har set ud tidligere

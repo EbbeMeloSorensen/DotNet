@@ -1,4 +1,4 @@
-﻿namespace C2IEDM.Web.Application.Locations.VerticalDistance;
+﻿namespace C2IEDM.Web.Application.Geometry.VerticalDistance;
 
 public class VerticalDistanceDto
 {
