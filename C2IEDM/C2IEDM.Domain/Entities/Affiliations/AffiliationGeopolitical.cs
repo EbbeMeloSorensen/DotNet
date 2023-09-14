@@ -1,4 +1,4 @@
-namespace C2IEDM.Domain.Entities.Affiliation;
+namespace C2IEDM.Domain.Entities.Affiliations;
 
 public enum AffiliationGeopoliticalCode
 {

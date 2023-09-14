@@ -1,4 +1,5 @@
 using C2IEDM.Domain.Entities.ObjectItems;
+using C2IEDM.Domain.Entities.Affiliations;
 
 namespace C2IEDM.Domain.Entities.Reporting;
 
@@ -8,7 +9,7 @@ public class ObjectItemAffiliation
     public ObjectItem ObjectItem { get; set; } = null!;
 
     public Guid AffiliationId { get; set; }
-    public Affiliation.Affiliation Affiliation { get; set; } = null!;
+    public Affiliation Affiliation { get; set; } = null!;
 
     public int ObjectItemAffiliationIndex { get; set; }
 

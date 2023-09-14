@@ -41,6 +41,10 @@ Nu skulle den så gerne skrive en langs smøre, der vidner om at den bygger appl
 * 
 
 Kig lige på hvordan du opererer med den der Helper AsLocationDto - den bruger du jo f.eks. somehow til at hive de 3 punkter med for en ellipse.
+-> Indtil videre har du kun brugt den i forbindelse med at du har hentet detaljer op for et ENKELT objekt - f.eks. EllipseDetails, men mon ikke
+   det skulle kunne bruges til at hente abs points og relative points op, når man f.eks. henter et antal linier?
 
+* Principper for strukturering af Domain: En entitet, der er uafhængig og ikke har nogen subtyper, kan passende være i roden.
+* Hvis man har et helt typehierarki, bør det ligge i en folder
 
 Mål: Lav en WPF-baseret applikation, hvor du kan vedligeholde en samling abs points og se, hvordan det har set ud tidligere
