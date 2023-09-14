@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using C2IEDM.Domain.Entities.Geometry;
+using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Locations.VerticalDistance;
 
 namespace C2IEDM.Web.API.Controllers;
@@ -7,9 +8,15 @@ namespace C2IEDM.Web.API.Controllers;
 public class VerticalDistancesController : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetVerticalDistances([FromQuery] Params param)
+    public async Task<IActionResult> GetVerticalDistances([FromQuery] PagingParams param)
     {
         return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
+    }
+
+    [HttpGet("{timeOfInterest}")]
+    public async Task<IActionResult> GetVerticalDistances_Historic([FromQuery] PagingParams param, DateTime timeOfInterest)
+    {
+        return HandlePagedResult(await Mediator.Send(new List.Query { Params = param, TimeOfInterest = timeOfInterest}));
     }
 
     [HttpPost]

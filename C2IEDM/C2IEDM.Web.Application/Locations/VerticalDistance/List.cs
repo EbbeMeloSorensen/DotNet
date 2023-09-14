@@ -1,10 +1,9 @@
-﻿using AutoMapper;
+﻿using MediatR;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Interfaces;
-using C2IEDM.Web.Application.Locations.DTOs;
-using C2IEDM.Web.Persistence;
-using MediatR;
 
 namespace C2IEDM.Web.Application.Locations.VerticalDistance;
 
@@ -12,7 +11,8 @@ public class List
 {
     public class Query : IRequest<Result<PagedList<VerticalDistanceDto>>>
     {
-        public Params Params { get; set; }
+        public PagingParams Params { get; set; }
+        public DateTime? TimeOfInterest { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<PagedList<VerticalDistanceDto>>>
@@ -30,11 +30,15 @@ public class List
 
         public async Task<Result<PagedList<VerticalDistanceDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var timeOfInterest = new DateTime(2024, 9, 14, 14, 21, 55, DateTimeKind.Utc);
+            //var timeOfInterest = new DateTime(2024, 9, 14, 14, 21, 55, DateTimeKind.Utc);
 
-            var query = _context.VerticalDistances
-                .Where(_ => _.Created < timeOfInterest && _.Superseded > timeOfInterest)
-                .ProjectTo<VerticalDistanceDto>(_mapper.ConfigurationProvider,
+            var dbSet = _context.VerticalDistances;
+
+            var temp = request.TimeOfInterest.HasValue
+                ? dbSet.Where(_ => _.Created < request.TimeOfInterest.Value && _.Superseded > request.TimeOfInterest.Value)
+                : dbSet.Where(_ => _.Superseded == DateTime.MaxValue);
+
+            var query = temp.ProjectTo<VerticalDistanceDto>(_mapper.ConfigurationProvider,
                     new { currentUsername = _userAccessor.GetUsername() })
                 .AsQueryable();
 
