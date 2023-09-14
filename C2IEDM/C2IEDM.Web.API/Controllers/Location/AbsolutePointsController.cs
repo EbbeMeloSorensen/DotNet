@@ -22,5 +22,4 @@ public class AbsolutePointsController : BaseApiController
         absolutePoint.Id = id;
         return HandleResult(await Mediator.Send(new EditAbsolutePoint.Command { AbsolutePoint = absolutePoint }));
     }
-
 }
