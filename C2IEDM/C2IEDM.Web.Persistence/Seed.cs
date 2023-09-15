@@ -396,12 +396,15 @@ namespace C2IEDM.Web.Persistence
             {
                 var observingFacility1 = new ObservingFacility(Guid.NewGuid(), NextCreatedTime())
                 {
-                    Name = "Livgardens Kaserne"
+                    Name = "Livgardens Kaserne",
+                    DateEstablished = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 };
 
                 var observingFacility2 = new ObservingFacility(Guid.NewGuid(), NextCreatedTime())
                 {
-                    Name = "Esbjerg Havn"
+                    Name = "Esbjerg Havn",
+                    DateEstablished = new DateTime(2013, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    DateClosed = new DateTime(2017, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 };
 
                 var observingFacilities = new List<ObservingFacility>
