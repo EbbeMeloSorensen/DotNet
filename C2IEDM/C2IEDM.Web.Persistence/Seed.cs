@@ -7,6 +7,8 @@ using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
 using C2IEDM.Domain.Entities.ObjectItems;
 using C2IEDM.Domain.Entities.ObjectItems.Organisations;
 using C2IEDM.Persistence.EntityFrameworkCore;
+using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 
 namespace C2IEDM.Web.Persistence
 {
@@ -29,6 +31,7 @@ namespace C2IEDM.Web.Persistence
             await SeedPeople(context);
             await SeedLocations(context);
             await SeedObjectItems(context);
+            await SeedWigosStuff(context);
         }
 
         public static async Task SeedUsers(
@@ -382,6 +385,68 @@ namespace C2IEDM.Web.Persistence
                 await context.ObjectItems.AddRangeAsync(objectItems);
                 await context.Organisations.AddRangeAsync(organisations);
                 await context.Units.AddRangeAsync(units);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public static async Task SeedWigosStuff(
+            DataContext context)
+        {
+            if (!context.AbstractEnvironmentalMonitoringFacilities.Any())
+            {
+                var observingFacility1 = new ObservingFacility(Guid.NewGuid(), NextCreatedTime())
+                {
+                    Name = "Livgardens Kaserne"
+                };
+
+                var observingFacility2 = new ObservingFacility(Guid.NewGuid(), NextCreatedTime())
+                {
+                    Name = "Esbjerg Havn"
+                };
+
+                var observingFacilities = new List<ObservingFacility>
+                {
+                    observingFacility1, observingFacility2
+                };
+
+                var point1 = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), NextCreatedTime())
+                {
+                    From = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    To = new DateTime(2019, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    CoordinateSystem = "WGS_84",
+                    Coordinate1 = 1.2,
+                    Coordinate2 = 3.4,
+                    AbstractEnvironmentalMonitoringFacility = observingFacility1,
+                    AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility1.ObjectId
+                };
+
+                var point2 = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), NextCreatedTime())
+                {
+                    From = new DateTime(2019, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    CoordinateSystem = "WGS_84",
+                    Coordinate1 = 5.6,
+                    Coordinate2 = 7.8,
+                    AbstractEnvironmentalMonitoringFacility = observingFacility1,
+                    AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility1.ObjectId
+                };
+
+                var point3 = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), NextCreatedTime())
+                {
+                    From = new DateTime(2019, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    CoordinateSystem = "WGS_84",
+                    Coordinate1 = 3.4,
+                    Coordinate2 = 5.6,
+                    AbstractEnvironmentalMonitoringFacility = observingFacility2,
+                    AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility2.ObjectId
+                };
+
+                var points = new List<Domain.Entities.WIGOS.GeospatialLocations.Point>
+                {
+                    point1, point2, point3
+                };
+
+                await context.ObservingFacilities.AddRangeAsync(observingFacilities);
+                await context.Points_WIGOS.AddRangeAsync(points);
                 await context.SaveChangesAsync();
             }
         }

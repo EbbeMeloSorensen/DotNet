@@ -12,6 +12,20 @@ namespace C2IEDM.Web.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AbstractEnvironmentalMonitoringFacilities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbstractEnvironmentalMonitoringFacilities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -130,6 +144,50 @@ namespace C2IEDM.Web.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VerticalDistances", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GeoSpatialLocations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    From = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    To = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    AbstractEnvironmentalMonitoringFacilityId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AbstractEnvironmentalMonitoringFacilityObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeoSpatialLocations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GeoSpatialLocations_AbstractEnvironmentalMonitoringFacilities_AbstractEnvironmentalMonitoringFacilityId",
+                        column: x => x.AbstractEnvironmentalMonitoringFacilityId,
+                        principalTable: "AbstractEnvironmentalMonitoringFacilities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ObservingFacilities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    DateEstablished = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    DateClosed = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ObservingFacilities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ObservingFacilities_AbstractEnvironmentalMonitoringFacilities_Id",
+                        column: x => x.Id,
+                        principalTable: "AbstractEnvironmentalMonitoringFacilities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -336,6 +394,26 @@ namespace C2IEDM.Web.Persistence.Migrations
                         principalTable: "VerticalDistances",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Points_WIGOS",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CoordinateSystem = table.Column<string>(type: "TEXT", nullable: false),
+                    Coordinate1 = table.Column<double>(type: "REAL", nullable: false),
+                    Coordinate2 = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Points_WIGOS", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Points_WIGOS_GeoSpatialLocations_Id",
+                        column: x => x.Id,
+                        principalTable: "GeoSpatialLocations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -862,6 +940,11 @@ namespace C2IEDM.Web.Persistence.Migrations
                 column: "UpperVerticalDistanceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GeoSpatialLocations_AbstractEnvironmentalMonitoringFacilityId",
+                table: "GeoSpatialLocations",
+                column: "AbstractEnvironmentalMonitoringFacilityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LinePoints_PointId",
                 table: "LinePoints",
                 column: "PointId");
@@ -969,6 +1052,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "LinePoints");
 
             migrationBuilder.DropTable(
+                name: "ObservingFacilities");
+
+            migrationBuilder.DropTable(
                 name: "OrbitAreas");
 
             migrationBuilder.DropTable(
@@ -976,6 +1062,9 @@ namespace C2IEDM.Web.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "PointReferences");
+
+            migrationBuilder.DropTable(
+                name: "Points_WIGOS");
 
             migrationBuilder.DropTable(
                 name: "PolyArcAreas");
@@ -1005,6 +1094,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "GeoSpatialLocations");
+
+            migrationBuilder.DropTable(
                 name: "Lines");
 
             migrationBuilder.DropTable(
@@ -1021,6 +1113,9 @@ namespace C2IEDM.Web.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Organisations");
+
+            migrationBuilder.DropTable(
+                name: "AbstractEnvironmentalMonitoringFacilities");
 
             migrationBuilder.DropTable(
                 name: "VerticalDistances");

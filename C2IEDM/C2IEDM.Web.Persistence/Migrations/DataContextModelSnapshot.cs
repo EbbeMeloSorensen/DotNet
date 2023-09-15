@@ -194,6 +194,64 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("People");
                 });
 
+            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities.AbstractEnvironmentalMonitoringFacility", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Superseded")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbstractEnvironmentalMonitoringFacilities");
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeoSpatialLocation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AbstractEnvironmentalMonitoringFacilityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AbstractEnvironmentalMonitoringFacilityObjectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("From")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Superseded")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("To")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AbstractEnvironmentalMonitoringFacilityId");
+
+                    b.ToTable("GeoSpatialLocations");
+
+                    b.UseTptMappingStrategy();
+                });
+
             modelBuilder.Entity("C2IEDM.Web.Persistence.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -460,6 +518,39 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.ToTable("Organisations");
                 });
 
+            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities.ObservingFacility", b =>
+                {
+                    b.HasBaseType("C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities.AbstractEnvironmentalMonitoringFacility");
+
+                    b.Property<DateTime?>("DateClosed")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateEstablished")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("ObservingFacilities");
+                });
+
+            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point", b =>
+                {
+                    b.HasBaseType("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeoSpatialLocation");
+
+                    b.Property<double>("Coordinate1")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Coordinate2")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("CoordinateSystem")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("Points_WIGOS");
+                });
+
             modelBuilder.Entity("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.ConeVolume", b =>
                 {
                     b.HasBaseType("C2IEDM.Domain.Entities.Geometry.Locations.GeometricVolumes.GeometricVolume");
@@ -721,6 +812,16 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("Point");
                 });
 
+            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeoSpatialLocation", b =>
+                {
+                    b.HasOne("C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities.AbstractEnvironmentalMonitoringFacility", "AbstractEnvironmentalMonitoringFacility")
+                        .WithMany()
+                        .HasForeignKey("AbstractEnvironmentalMonitoringFacilityId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("AbstractEnvironmentalMonitoringFacility");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -860,6 +961,24 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.HasOne("C2IEDM.Domain.Entities.ObjectItems.ObjectItem", null)
                         .WithOne()
                         .HasForeignKey("C2IEDM.Domain.Entities.ObjectItems.Organisations.Organisation", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities.ObservingFacility", b =>
+                {
+                    b.HasOne("C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities.AbstractEnvironmentalMonitoringFacility", null)
+                        .WithOne()
+                        .HasForeignKey("C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities.ObservingFacility", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point", b =>
+                {
+                    b.HasOne("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeoSpatialLocation", null)
+                        .WithOne()
+                        .HasForeignKey("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -69,9 +69,9 @@ public class ListLocations
                 .Take(request.Params.PageSize)
                 .ToListAsync();
 
-            var locationDtos = locations.Select(l =>
+            var locationDtos = locations.Select(_ =>
             {
-                var temp = _mapper.Map(l, l.GetType(), typeof(LocationDto));
+                var temp = _mapper.Map(_, _.GetType(), typeof(LocationDto));
 
                 if (temp is not LocationDto locationDto)
                 {

@@ -26,7 +26,6 @@ namespace C2IEDM.Web.API
             }
 
             await host.RunAsync();
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

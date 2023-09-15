@@ -1,0 +1,5 @@
+﻿namespace C2IEDM.Persistence.EntityFrameworkCore.Repositories.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+
+public class ObservingFacilityRepository
+{
+}

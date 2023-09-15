@@ -1,7 +1,18 @@
-﻿namespace C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
+﻿using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 
-public class GeoSpatialLocation : VersionedObject
+namespace C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
+
+public abstract class GeoSpatialLocation : VersionedObject
 {
+    public Guid Id { get; set; }
+
+    public DateTime? From { get; set; }
+    public DateTime? To { get; set; }
+
+    public Guid AbstractEnvironmentalMonitoringFacilityId { get; set; }
+    public Guid AbstractEnvironmentalMonitoringFacilityObjectId { get; set; }
+    public virtual AbstractEnvironmentalMonitoringFacility AbstractEnvironmentalMonitoringFacility { get; set; }
+
     public GeoSpatialLocation(
         Guid objectId, 
         DateTime created) : base(objectId, created)

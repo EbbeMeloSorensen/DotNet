@@ -9,6 +9,8 @@ using C2IEDM.Domain.Entities.Geometry.Locations.Line;
 using C2IEDM.Domain.Entities.ObjectItems;
 using C2IEDM.Domain.Entities.ObjectItems.Organisations;
 using C2IEDM.Persistence.EntityFrameworkCore.EntityConfigurations;
+using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore;
 
@@ -26,7 +28,7 @@ public class C2IEDMDbContextBase : DbContext
     public DbSet<Location> Locations { get; set; }
     public DbSet<OrbitArea> OrbitAreas { get; set; }
     public DbSet<PointReference> PointReferences { get; set; }
-    public DbSet<Point> Points { get; set; }
+    public DbSet<Domain.Entities.Geometry.Locations.Points.Point> Points { get; set; }
     public DbSet<PolyArcArea> PolyArcAreas { get; set; }
     public DbSet<PolygonArea> PolygonAreas { get; set; }
     public DbSet<RelativePoint> RelativePoints { get; set; }
@@ -55,6 +57,9 @@ public class C2IEDMDbContextBase : DbContext
         builder.Entity<Location>().UseTptMappingStrategy();
         builder.Entity<CoordinateSystem>().UseTptMappingStrategy();
         builder.Entity<ObjectItem>().UseTptMappingStrategy();
+
+        builder.Entity<AbstractEnvironmentalMonitoringFacility>().UseTptMappingStrategy();
+        builder.Entity<GeoSpatialLocation>().UseTptMappingStrategy();
 
         builder.Entity<AbsolutePoint>()
             .HasOne(ap => ap.VerticalDistance)
@@ -222,6 +227,13 @@ public class C2IEDMDbContextBase : DbContext
             .WithMany()
             .HasForeignKey(ta => ta.EndPointId)
             .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<GeoSpatialLocation>()
+            .HasOne(_ => _.AbstractEnvironmentalMonitoringFacility)
+            .WithMany()
+            .HasForeignKey(_ => _.AbstractEnvironmentalMonitoringFacilityId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

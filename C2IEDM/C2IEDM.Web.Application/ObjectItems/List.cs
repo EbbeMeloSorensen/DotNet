@@ -20,6 +20,7 @@ public class List
     {
         public ObjectItemCategory Category { get; set; }
         public PagingParams Params { get; set; }
+        public DateTime? TimeOfInterest { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<PagedList<ObjectItemDto>>>
@@ -43,17 +44,20 @@ public class List
                 _ => null
             };
 
+            query = request.TimeOfInterest.HasValue
+                ? query.Where(_ => _.Created < request.TimeOfInterest.Value && _.Superseded > request.TimeOfInterest.Value)
+                : query.Where(_ => _.Superseded == DateTime.MaxValue);
+
             var count = await query.CountAsync();
 
             var objectItems = await query
-                .Where(_ => _.Superseded == null)
                 .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
                 .Take(request.Params.PageSize)
                 .ToListAsync();
 
-            var objectItemDtos = objectItems.Select(l =>
+            var objectItemDtos = objectItems.Select(_ =>
             {
-                var temp = _mapper.Map(l, l.GetType(), typeof(ObjectItemDto));
+                var temp = _mapper.Map(_, _.GetType(), typeof(ObjectItemDto));
 
                 if (temp is not ObjectItemDto objectItemDto)
                 {
