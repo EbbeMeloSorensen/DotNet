@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿using Microsoft.EntityFrameworkCore;
+using MediatR;
+using AutoMapper;
+using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.Geometry.DTOs;
 using C2IEDM.Web.Application.Geometry.VerticalDistance;
-using C2IEDM.Web.Persistence;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace C2IEDM.Web.Application.Geometry;
 
@@ -31,11 +31,11 @@ public class ListAbsolutePoints
             Query request, 
             CancellationToken cancellationToken)
         {
-            var temp1 = request.TimeOfInterest.HasValue
-                ? _context.AbsolutePoints.Where(_ => _.Created < request.TimeOfInterest.Value && _.Superseded > request.TimeOfInterest.Value)
-                : _context.AbsolutePoints.Where(_ => _.Superseded == DateTime.MaxValue);
+            var query = _context.AbsolutePoints.AsQueryable();
 
-            var query = temp1.AsQueryable();
+            query = request.TimeOfInterest.HasValue
+                ? query.Where(_ => _.Created < request.TimeOfInterest.Value && _.Superseded > request.TimeOfInterest.Value)
+                : query.Where(_ => _.Superseded == DateTime.MaxValue);
 
             var count = await query.CountAsync();
 

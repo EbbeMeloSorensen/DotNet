@@ -27,6 +27,7 @@ public class ListLocations
     {
         public LocationCategory Category { get; set; }
         public PagingParams Params { get; set; }
+        public DateTime? TimeOfInterest { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<PagedList<LocationDto>>>
@@ -57,10 +58,13 @@ public class ListLocations
                 _ => null
             };
 
+            query = request.TimeOfInterest.HasValue
+                ? query.Where(_ => _.Created < request.TimeOfInterest.Value && _.Superseded > request.TimeOfInterest.Value)
+                : query.Where(_ => _.Superseded == DateTime.MaxValue);
+
             var count = await query.CountAsync();
 
             var locations = await query
-                .Where(_ => _.Superseded == null)
                 .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
                 .Take(request.Params.PageSize)
                 .ToListAsync();

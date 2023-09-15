@@ -2,9 +2,11 @@
 1) Slet den eksisterende Migrations-folder under C2IEDM.Web.Persistence
 2) Sikr, at der ikke er lavet nogen database, dvs drop f.eks. databasen i pgAdmin eller slet filerne C2IEDM_Web.db, C2IEDM_Web.db-shm og C2IEDM_Web.db-wal hvis der bruges Sqlite
 3) Launch VS Code og åbn C2IEDM-folderen
-4) I VS Code: Åbn en terminal og sikr, at du står i root folder. Eksekver så `dotnet ef migrations add InitialCreate -p C2IEDM.Web.Persistence -s C2IEDM.Web.API`
-5) I VS Codes terminalvindue: naviger hen til C2IEDM.Web.API og eksekver: `dotnet watch run`. Bemærk, om der skrives fejl til loggingen, f.eks. i forbindelse med at repositoryet populeres
-6) Fyr nogle postan-requests af mod API'et
+4) Ændr værdien for "DefaultConnection" i appsettings.json under C2IEDM.Web.API
+5) Udkommenter og indkommenter relevante linier mht hvilken database provider, der bruges, i ApplicationServiceExtensions.cs filen i Extensions-folderen under C2IEDM.Web.API
+6) I VS Code: Åbn en terminal og sikr, at du står i root folder. Eksekver så `dotnet ef migrations add InitialCreate -p C2IEDM.Web.Persistence -s C2IEDM.Web.API`
+7) I VS Codes terminalvindue: naviger hen til C2IEDM.Web.API og eksekver: `dotnet watch run`. Bemærk, om der skrives fejl til loggingen, f.eks. i forbindelse med at repositoryet populeres
+8) Fyr nogle http requests af mod API'et med Postman
 
 ## Deployering af C2IEDM til Heroku
 
