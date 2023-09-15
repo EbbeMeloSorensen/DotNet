@@ -1,9 +1,9 @@
 ﻿namespace C2IEDM.Web.Application.WIGOS.DTOs;
 
-public class AbstractEnvironmentalMonitoringFacilityDto
+public abstract class AbstractEnvironmentalMonitoringFacilityDto
 {
-    public string category { get; set; }
-    public Guid id { get; set; }
+    public string Category { get; set; }
+    public Guid Id { get; set; }
 
     public AbstractEnvironmentalMonitoringFacilityDto()
     {

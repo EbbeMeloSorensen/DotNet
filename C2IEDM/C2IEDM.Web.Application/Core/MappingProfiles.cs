@@ -8,10 +8,13 @@ using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
 using C2IEDM.Domain.Entities.ObjectItems;
 using C2IEDM.Domain.Entities.ObjectItems.Organisations;
+using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Web.Application.Geometry.DTOs;
 using C2IEDM.Web.Application.Geometry.VerticalDistance;
 using C2IEDM.Web.Application.ObjectItems.DTOs;
 using C2IEDM.Web.Application.People;
+using C2IEDM.Web.Application.WIGOS.DTOs;
+using PointDto = C2IEDM.Web.Application.Geometry.DTOs.PointDto;
 
 namespace C2IEDM.Web.Application.Core;
 
@@ -66,5 +69,12 @@ public class MappingProfiles : Profile
         CreateMap<CorridorArea, CorridorAreaDto>();
         CreateMap<PolygonArea, PolygonAreaDto>();
         CreateMap<FanArea, FanAreaDto>();
+
+        CreateMap<AbstractEnvironmentalMonitoringFacility, AbstractEnvironmentalMonitoringFacility>();
+        CreateMap<AbstractEnvironmentalMonitoringFacility, AbstractEnvironmentalMonitoringFacilityDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ObjectId))
+            .Include<ObservingFacility, ObservingFacilityDto>();
+        CreateMap<ObservingFacility, ObservingFacilityDto>();
+
     }
 }
