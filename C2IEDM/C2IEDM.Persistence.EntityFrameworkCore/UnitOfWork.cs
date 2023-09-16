@@ -1,7 +1,9 @@
 ﻿using C2IEDM.Persistence.EntityFrameworkCore.Repositories;
 using C2IEDM.Persistence.Repositories.Geometry;
 using C2IEDM.Persistence.EntityFrameworkCore.Repositories.Geometry;
+using C2IEDM.Persistence.EntityFrameworkCore.Repositories.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence.Repositories;
+using C2IEDM.Persistence.Repositories.WIGOS;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore
 {
@@ -33,6 +35,9 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
         public ITrackAreaRepository TrackAreas { get; }
         public IVerticalDistanceRepository VerticalDistances { get; }
 
+        public IAbstractEnvironmentalMonitoringFacilityRepository AbstractEnvironmentalMonitoringFacilities { get; }
+        public IObservingFacilityRepository ObservingFacilities { get; }
+
         public UnitOfWork(
             C2IEDMDbContextBase context)
         {
@@ -61,6 +66,9 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
             SurfaceVolumes = new SurfaceVolumeRepository(_context);
             TrackAreas = new TrackAreaRepository(_context);
             VerticalDistances = new VerticalDistanceRepository(_context);
+
+            AbstractEnvironmentalMonitoringFacilities = new AbstractEnvironmentalMonitoringFacilityRepository(_context);
+            ObservingFacilities = new ObservingFacilityRepository(_context);
         }
 
         public int Complete()

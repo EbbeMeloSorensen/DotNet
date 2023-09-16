@@ -1,5 +1,6 @@
 ﻿using C2IEDM.Persistence.Repositories;
 using C2IEDM.Persistence.Repositories.Geometry;
+using C2IEDM.Persistence.Repositories.WIGOS;
 
 namespace C2IEDM.Persistence;
 
@@ -28,6 +29,10 @@ public interface IUnitOfWork : IDisposable
     ISurfaceVolumeRepository SurfaceVolumes { get; }
     ITrackAreaRepository TrackAreas { get; }
     IVerticalDistanceRepository VerticalDistances { get; }
+
+    IAbstractEnvironmentalMonitoringFacilityRepository AbstractEnvironmentalMonitoringFacilities { get; }
+    IObservingFacilityRepository ObservingFacilities { get; }
+
 
     int Complete();
 }
