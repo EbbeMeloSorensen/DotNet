@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.WIGOS.AbstractEnvironmentalMonitoringFacility;
-using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using C2IEDM.Web.Application.WIGOS.ObservingFacility;
 
 namespace C2IEDM.Web.API.Controllers.WIGOS;
 
@@ -20,6 +21,6 @@ public class ObservingFacilitiesController : BaseApiController
     [HttpPost]
     public async Task<IActionResult> CreateObservingFacility(ObservingFacility observingFacility)
     {
-        return HandleResult(await Mediator.Send(new Application.WIGOS.ObservingFacility.Create.Command { ObservingFacility = observingFacility }));
+        return HandleResult(await Mediator.Send(new Create.Command { ObservingFacility = observingFacility }));
     }
 }
