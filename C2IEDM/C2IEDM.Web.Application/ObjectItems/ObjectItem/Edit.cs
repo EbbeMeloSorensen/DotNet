@@ -1,8 +1,8 @@
-﻿using MediatR;
-using C2IEDM.Web.Application.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using MediatR;
 using FluentValidation;
 using C2IEDM.Web.Persistence;
-using Microsoft.EntityFrameworkCore;
+using C2IEDM.Web.Application.Core;
 
 namespace C2IEDM.Web.Application.ObjectItems.ObjectItem;
 

@@ -3,7 +3,7 @@ using FluentValidation;
 using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 
-namespace C2IEDM.Web.Application.WIGOS.ObservingFacility;
+namespace C2IEDM.Web.Application.WIGOS.AbstractEnvironmentalMonitoringFacilities.ObservingFacility;
 
 public class Create
 {

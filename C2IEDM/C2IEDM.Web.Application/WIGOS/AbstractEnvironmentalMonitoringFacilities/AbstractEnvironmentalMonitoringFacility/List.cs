@@ -5,7 +5,7 @@ using C2IEDM.Web.Persistence;
 using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.WIGOS.DTOs;
 
-namespace C2IEDM.Web.Application.WIGOS.AbstractEnvironmentalMonitoringFacility;
+namespace C2IEDM.Web.Application.WIGOS.AbstractEnvironmentalMonitoringFacilities.AbstractEnvironmentalMonitoringFacility;
 
 public enum AbstractEnvironmentalMonitoringFacilityCategory
 {
@@ -34,7 +34,7 @@ public class List
         }
 
         public async Task<Result<PagedList<AbstractEnvironmentalMonitoringFacilityDto>>> Handle(
-            Query request, 
+            Query request,
             CancellationToken cancellationToken)
         {
             var query = request.Category switch

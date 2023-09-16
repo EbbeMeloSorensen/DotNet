@@ -1,7 +1,7 @@
 Todo:
 * CRUD for ObservingFacilities supporteret af API
 	- List (OK)
-	- Create
+	- Create (OK)
 	- Delete
 	- Update
 	- 

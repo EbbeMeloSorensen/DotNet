@@ -24,7 +24,7 @@ public class Delete
         public async Task<Result<MediatR.Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var query = _context.ObjectItems
-                .Where(_ => _.ObjectId == request.Id && _.Superseded == null)
+                .Where(_ => _.ObjectId == request.Id && _.Superseded == DateTime.MaxValue)
                 .AsQueryable();
 
             var objectItem = await query.FirstOrDefaultAsync();
