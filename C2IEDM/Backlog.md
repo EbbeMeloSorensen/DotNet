@@ -14,3 +14,4 @@ Todo:
 * En WPF baseret applikation, hvor man kan vedligeholde en samling observing facilities i en liste. I første omgang uden geospatial locations.
 * Prøv at lave det som du plejer, dvs med forskellige repository plugins, men prøv også gerne at lave en, der trækket på APIet. Du har engang
 * gjort noget tilsvarende, hvor du trak på Frie Data servicen
+Overvej at bruge en decorator for at slippe for at få de supersedede med
