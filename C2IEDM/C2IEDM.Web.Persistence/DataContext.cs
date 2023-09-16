@@ -56,7 +56,7 @@ namespace C2IEDM.Web.Persistence
         public DbSet<AbstractEnvironmentalMonitoringFacility> AbstractEnvironmentalMonitoringFacilities { get; set; }
         public DbSet<ObservingFacility> ObservingFacilities { get; set; }
 
-        public DbSet<GeoSpatialLocation> GeoSpatialLocations { get; set; }
+        public DbSet<GeospatialLocation> GeoSpatialLocations { get; set; }
         public DbSet<Domain.Entities.WIGOS.GeospatialLocations.Point> Points_WIGOS { get; set; }
 
         protected override void OnModelCreating(

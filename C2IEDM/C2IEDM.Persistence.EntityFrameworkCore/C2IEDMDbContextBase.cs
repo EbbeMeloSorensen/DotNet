@@ -16,6 +16,7 @@ namespace C2IEDM.Persistence.EntityFrameworkCore;
 
 public class C2IEDMDbContextBase : DbContext
 {
+    // Geometry
     public DbSet<AbsolutePoint> AbsolutePoints { get; set; }
     public DbSet<ConeVolume> ConeVolumes { get; set; }
     public DbSet<CoordinateSystem> CoordinateSystems { get; set; }
@@ -38,9 +39,16 @@ public class C2IEDMDbContextBase : DbContext
     public DbSet<TrackArea> TrackAreas { get; set; }
     public DbSet<VerticalDistance> VerticalDistances { get; set; }
 
+    // Object Items
     public DbSet<ObjectItem> ObjectItems { get; set; }
     public DbSet<Organisation> Organisations { get; set; }
     public DbSet<Unit> Units { get; set; }
+
+    // Wigos
+    public DbSet<AbstractEnvironmentalMonitoringFacility> AbstractEnvironmentalMonitoringFacilities { get; set; }
+    public DbSet<ObservingFacility> ObservingFacilities { get; set; }
+    public DbSet<GeospatialLocation> GeospatialLocations { get; set; }
+    public DbSet<Domain.Entities.WIGOS.GeospatialLocations.Point> Points_Wigos { get; set; }
 
     protected override void OnModelCreating(
         ModelBuilder builder)
@@ -59,7 +67,7 @@ public class C2IEDMDbContextBase : DbContext
         builder.Entity<ObjectItem>().UseTptMappingStrategy();
 
         builder.Entity<AbstractEnvironmentalMonitoringFacility>().UseTptMappingStrategy();
-        builder.Entity<GeoSpatialLocation>().UseTptMappingStrategy();
+        builder.Entity<GeospatialLocation>().UseTptMappingStrategy();
 
         builder.Entity<AbsolutePoint>()
             .HasOne(ap => ap.VerticalDistance)
@@ -229,7 +237,7 @@ public class C2IEDMDbContextBase : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Entity<GeoSpatialLocation>()
+        builder.Entity<GeospatialLocation>()
             .HasOne(_ => _.AbstractEnvironmentalMonitoringFacility)
             .WithMany()
             .HasForeignKey(_ => _.AbstractEnvironmentalMonitoringFacilityId)

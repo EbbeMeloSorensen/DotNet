@@ -4,7 +4,6 @@ using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Web.Application.WIGOS.AbstractEnvironmentalMonitoringFacilities.AbstractEnvironmentalMonitoringFacility;
 using C2IEDM.Web.Application.WIGOS.AbstractEnvironmentalMonitoringFacilities.ObservingFacility;
-using C2IEDM.Domain.Entities.ObjectItems;
 
 namespace C2IEDM.Web.API.Controllers.WIGOS;
 

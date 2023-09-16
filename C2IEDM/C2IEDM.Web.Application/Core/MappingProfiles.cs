@@ -76,8 +76,8 @@ public class MappingProfiles : Profile
             .Include<ObservingFacility, ObservingFacilityDto>();
         CreateMap<ObservingFacility, ObservingFacilityDto>();
 
-        CreateMap<GeoSpatialLocation, GeoSpatialLocation>();
-        CreateMap<GeoSpatialLocation, GeospatialLocationDto>()
+        CreateMap<GeospatialLocation, GeospatialLocation>();
+        CreateMap<GeospatialLocation, GeospatialLocationDto>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ObjectId))
             .Include<Domain.Entities.WIGOS.GeospatialLocations.Point, WIGOS.DTOs.PointDto>();
         CreateMap<Domain.Entities.WIGOS.GeospatialLocations.Point, WIGOS.DTOs.PointDto>();

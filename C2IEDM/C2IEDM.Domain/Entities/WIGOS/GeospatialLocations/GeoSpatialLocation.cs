@@ -2,7 +2,7 @@
 
 namespace C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 
-public abstract class GeoSpatialLocation : VersionedObject
+public abstract class GeospatialLocation : VersionedObject
 {
     public Guid Id { get; set; }
 
@@ -13,7 +13,7 @@ public abstract class GeoSpatialLocation : VersionedObject
     public Guid AbstractEnvironmentalMonitoringFacilityObjectId { get; set; }
     public virtual AbstractEnvironmentalMonitoringFacility AbstractEnvironmentalMonitoringFacility { get; set; }
 
-    public GeoSpatialLocation(
+    public GeospatialLocation(
         Guid objectId, 
         DateTime created) : base(objectId, created)
     {

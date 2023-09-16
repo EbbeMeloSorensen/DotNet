@@ -1,6 +1,6 @@
 ﻿namespace C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 
-public class Point : GeoSpatialLocation
+public class Point : GeospatialLocation
 {
     public string CoordinateSystem { get; set; }
     public double Coordinate1 { get; set; }

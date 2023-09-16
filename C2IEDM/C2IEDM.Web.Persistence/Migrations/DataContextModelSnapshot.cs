@@ -221,7 +221,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeoSpatialLocation", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeospatialLocation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -545,7 +545,7 @@ namespace C2IEDM.Web.Persistence.Migrations
 
             modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point", b =>
                 {
-                    b.HasBaseType("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeoSpatialLocation");
+                    b.HasBaseType("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeospatialLocation");
 
                     b.Property<double>("Coordinate1")
                         .HasColumnType("double precision");
@@ -821,7 +821,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                     b.Navigation("Point");
                 });
 
-            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeoSpatialLocation", b =>
+            modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeospatialLocation", b =>
                 {
                     b.HasOne("C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities.AbstractEnvironmentalMonitoringFacility", "AbstractEnvironmentalMonitoringFacility")
                         .WithMany()
@@ -985,7 +985,7 @@ namespace C2IEDM.Web.Persistence.Migrations
 
             modelBuilder.Entity("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point", b =>
                 {
-                    b.HasOne("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeoSpatialLocation", null)
+                    b.HasOne("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.GeospatialLocation", null)
                         .WithOne()
                         .HasForeignKey("C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
