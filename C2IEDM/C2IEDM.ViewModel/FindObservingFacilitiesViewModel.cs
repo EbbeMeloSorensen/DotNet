@@ -25,6 +25,6 @@ public class FindObservingFacilitiesViewModel : ViewModelBase
 
     public Expression<Func<ObservingFacility, bool>> FilterAsExpression()
     {
-        return _ => _.Name.ToUpper().Contains(_nameFilterInUppercase);
+        return _ => _.Superseded == DateTime.MaxValue && _.Name.ToUpper().Contains(_nameFilterInUppercase);
     }
 }
