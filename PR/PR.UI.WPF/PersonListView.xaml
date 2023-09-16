@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:PR.UI.WPF"
              xmlns:viewModel="clr-namespace:PR.ViewModel;assembly=PR.ViewModel"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:utils="clr-namespace:Craft.UI.Utils;assembly=Craft.UI.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance viewModel:PersonListViewModel}">
@@ -44,7 +45,7 @@
         <ListBox Grid.Row="3" Margin="1" x:Name="PeopleListBox" SelectionMode="Extended" DisplayMemberPath="DisplayText" 
                  ItemsSource="{Binding PersonViewModels}">
             <b:Interaction.Behaviors>
-                <local:MultiSelectionBehavior SelectedItems="{Binding SelectedPersonViewModels}"/>
+                <utils:MultiSelectionBehavior SelectedItems="{Binding SelectedPersonViewModels}"/>
             </b:Interaction.Behaviors>
         </ListBox>
     </Grid>
