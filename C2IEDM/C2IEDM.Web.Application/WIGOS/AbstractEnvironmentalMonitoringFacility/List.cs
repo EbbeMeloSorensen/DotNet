@@ -1,12 +1,9 @@
-﻿using MediatR;
-using C2IEDM.Web.Application.Core;
-using C2IEDM.Web.Application.WIGOS.DTOs;
-using C2IEDM.Web.Application.ObjectItems.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using MediatR;
 using AutoMapper;
 using C2IEDM.Web.Persistence;
-using C2IEDM.Web.Application.ObjectItems;
-using Microsoft.EntityFrameworkCore;
-using C2IEDM.Domain.Entities.ObjectItems;
+using C2IEDM.Web.Application.Core;
+using C2IEDM.Web.Application.WIGOS.DTOs;
 
 namespace C2IEDM.Web.Application.WIGOS.AbstractEnvironmentalMonitoringFacility;
 
@@ -36,7 +33,9 @@ public class List
             _mapper = mapper;
         }
 
-        public async Task<Result<PagedList<AbstractEnvironmentalMonitoringFacilityDto>>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<PagedList<AbstractEnvironmentalMonitoringFacilityDto>>> Handle(
+            Query request, 
+            CancellationToken cancellationToken)
         {
             var query = request.Category switch
             {
@@ -54,7 +53,7 @@ public class List
             var abstractEnvironmentalMonitoringFacilities = await query
                 .Skip((request.Params.PageNumber - 1) * request.Params.PageSize)
                 .Take(request.Params.PageSize)
-            .ToListAsync();
+                .ToListAsync();
 
             var abstractEnvironmentalMonitoringFacilityDtos = abstractEnvironmentalMonitoringFacilities.Select(_ =>
             {

@@ -1,6 +1,6 @@
-﻿using C2IEDM.Web.Application.Core;
+﻿using Microsoft.AspNetCore.Mvc;
+using C2IEDM.Web.Application.Core;
 using C2IEDM.Web.Application.WIGOS.AbstractEnvironmentalMonitoringFacility;
-using Microsoft.AspNetCore.Mvc;
 
 namespace C2IEDM.Web.API.Controllers.WIGOS;
 

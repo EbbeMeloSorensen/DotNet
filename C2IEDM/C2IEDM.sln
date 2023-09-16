@@ -37,6 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.Web.API", "C2IEDM.We
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{11730E49-B12F-40FE-BF3D-34F833A4E50D}"
 	ProjectSection(SolutionItems) = preProject
+		Backlog.md = Backlog.md
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
