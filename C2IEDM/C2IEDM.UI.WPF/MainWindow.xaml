@@ -7,6 +7,13 @@
         mc:Ignorable="d"
         Title="C2IEDM" Height="450" Width="800"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="N" 
+                    Command="{Binding CreateObservingFacilityCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </Window.InputBindings>
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -15,12 +22,24 @@
         </Menu>
 
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <!--<RowDefinition Height="Auto"/>-->
+            </Grid.RowDefinitions>
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <local:ObservingFacilitiesListView Grid.Column="0" DataContext="{Binding ObservingFacilityListViewModel}"/>
+            <StackPanel Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Button Content="New.." Command="{Binding CreateObservingFacilityCommand}" 
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <!--<Button Content="Delete" Command="{Binding DeleteSelectedPeopleCommand}"/>-->
+            </StackPanel>
+
+            <local:ObservingFacilitiesListView Grid.Row="1" Grid.Column="0" DataContext="{Binding ObservingFacilityListViewModel}"/>
 
         </Grid>
     </DockPanel>

@@ -2,8 +2,8 @@ Todo:
 * CRUD for ObservingFacilities supporteret af API
 	- List (OK)
 	- Create (OK)
-	- Delete
-	- Update
+	- Delete (OK)
+	- Update (OK)
 	- 
 * CRUD for GeospatialLocations supporteret af API
 	- List (OK)
@@ -17,3 +17,6 @@ Todo:
 Overvej at bruge en decorator for at slippe for at få de supersedede med
 Egentlig skal du jo bare have den samme simple where klausul på, som du også bruger i Web.Application-projektet.
 Og mht at hive children op skal du jo alligevel have dedikerede methods på banen lige som du allerede har i PR med GetPeopleIncludingAssociations
+* 
+WPF applikation
+- Create Observing Facility

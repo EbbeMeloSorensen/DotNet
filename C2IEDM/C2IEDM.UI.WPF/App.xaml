@@ -2,10 +2,21 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:C2IEDM.UI.WPF"
+             xmlns:dialogs="clr-namespace:Craft.UIElements.Dialogs;assembly=Craft.UIElements"
+             xmlns:viewModelBase="clr-namespace:Craft.ViewModels.Dialogs;assembly=Craft.ViewModels"
+             xmlns:viewModelLocal="clr-namespace:C2IEDM.ViewModel;assembly=C2IEDM.ViewModel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
+
+            <DataTemplate DataType="{x:Type viewModelBase:MessageBoxDialogViewModel}">
+                <dialogs:MessageBoxDialogView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModelLocal:CreateObservingFacilityDialogViewModel}">
+                <local:CreateObservingFacilityDialogView/>
+            </DataTemplate>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />
