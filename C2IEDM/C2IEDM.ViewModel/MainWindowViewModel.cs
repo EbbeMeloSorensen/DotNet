@@ -9,6 +9,7 @@ using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
+using Craft.Utils;
 
 namespace C2IEDM.ViewModel;
 
@@ -18,6 +19,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
     private readonly ILogger _logger;
+    private readonly ObservableObject<DateTime?> _timeOfInterest;
 
     public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; }
 
@@ -53,7 +55,17 @@ public class MainWindowViewModel : ViewModelBase
         LogViewModel = new LogViewModel();
         _logger = new ViewModelLogger(logger, LogViewModel);
 
-        ObservingFacilityListViewModel = new ObservingFacilityListViewModel(unitOfWorkFactory, applicationDialogService);
+        _timeOfInterest = new ObservableObject<DateTime?>
+        {
+            //Object = null
+            //Object = new DateTime(2023, 9, 17, 13, 0, 0, DateTimeKind.Utc) // -- Kun bræk
+            Object = new DateTime(2023, 9, 17, 11, 0, 0, DateTimeKind.Utc) // -- 
+        };
+
+        ObservingFacilityListViewModel = new ObservingFacilityListViewModel(
+            unitOfWorkFactory, 
+            applicationDialogService,
+            _timeOfInterest);
 
         ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
             unitOfWorkFactory,

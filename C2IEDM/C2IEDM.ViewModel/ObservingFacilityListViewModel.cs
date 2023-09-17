@@ -1,14 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
-using GalaSoft.MvvmLight.Command;
-using System.Windows;
-using C2IEDM.Domain.Entities;
 
 namespace C2IEDM.ViewModel;
 
@@ -60,13 +60,14 @@ public class ObservingFacilityListViewModel : ViewModelBase
 
     public ObservingFacilityListViewModel(
         IUnitOfWorkFactory unitOfWorkFactory,
-        IDialogService applicationDialogService)
+        IDialogService applicationDialogService,
+        ObservableObject<DateTime?> timeOfInterest)
     {
         _unitOfWorkFactory = unitOfWorkFactory;
         _applicationDialogService = applicationDialogService;
         _sorting = Sorting.Name;
 
-        FindObservingFacilitiesViewModel = new FindObservingFacilitiesViewModel();
+        FindObservingFacilitiesViewModel = new FindObservingFacilitiesViewModel(timeOfInterest);
 
         _observingFacilities = new List<ObservingFacility>();
 
