@@ -20,3 +20,7 @@ Og mht at hive children op skal du jo alligevel have dedikerede methods på banen
 * 
 WPF applikation
 - Create Observing Facility
+- Delete
+- Update
+- Show historical situation (måske en del af filteret?.. eller måske en del af en mere fancy kontrol, hvor man også kan se, 
+- hvornår der er lavet ændringer..)
