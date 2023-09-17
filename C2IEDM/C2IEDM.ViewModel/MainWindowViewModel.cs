@@ -1,14 +1,14 @@
+using System;
+using System.Linq;
+using System.ComponentModel;
+using System.Windows;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
-using C2IEDM.Persistence;
-using System.ComponentModel;
-using GalaSoft.MvvmLight.Command;
-using C2IEDM.Domain.Entities;
-using System.Windows;
-using System;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using C2IEDM.Persistence;
 
 namespace C2IEDM.ViewModel;
 
@@ -24,10 +24,16 @@ public class MainWindowViewModel : ViewModelBase
     public LogViewModel LogViewModel { get; }
 
     private RelayCommand<object> _createObservingFacilityCommand;
+    private RelayCommand _deleteSelectedObservingFacilitiesCommand;
 
     public RelayCommand<object> CreateObservingFacilityCommand
     {
         get { return _createObservingFacilityCommand ?? (_createObservingFacilityCommand = new RelayCommand<object>(CreateObservingFacility, CanCreateObservingFacility)); }
+    }
+
+    public RelayCommand DeleteSelectedObservingFacilitiesCommand
+    {
+        get { return _deleteSelectedObservingFacilitiesCommand ?? (_deleteSelectedObservingFacilitiesCommand = new RelayCommand(DeleteSelectedObservingFacilities, CanDeleteSelectedObservingFacilities)); }
     }
 
     public MainWindowViewModel(
@@ -54,7 +60,7 @@ public class MainWindowViewModel : ViewModelBase
         object sender,
         PropertyChangedEventArgs e)
     {
-        //DeleteSelectedPeopleCommand.RaiseCanExecuteChanged();
+        DeleteSelectedObservingFacilitiesCommand.RaiseCanExecuteChanged();
         //ExportSelectionToGraphmlCommand.RaiseCanExecuteChanged();
     }
 
@@ -105,5 +111,39 @@ public class MainWindowViewModel : ViewModelBase
     private bool CanCreateObservingFacility(object owner)
     {
         return true;
+    }
+
+    private void DeleteSelectedObservingFacilities()
+    {
+        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+        {
+            var ids = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Select(p => p.Id).ToList();
+
+            var observingFacilitiesForDeletion = unitOfWork.ObservingFacilities
+                //.GetPeopleIncludingAssociations(p => ids.Contains(p.Id))
+                .Find(p => ids.Contains(p.Id))
+                .ToList();
+
+            //var personAssociationsForDeletion = peopleForDeletion
+            //    .SelectMany(p => p.ObjectPeople)
+            //    .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
+            //    .ToList();
+
+            var now = DateTime.UtcNow;
+
+            observingFacilitiesForDeletion.ForEach(_ => _.Superseded = now);
+
+            //unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
+            unitOfWork.ObservingFacilities.UpdateRange(observingFacilitiesForDeletion);
+            unitOfWork.Complete();
+
+            ObservingFacilityListViewModel.RemoveObservingFacilities(observingFacilitiesForDeletion);
+        }
+    }
+
+    private bool CanDeleteSelectedObservingFacilities()
+    {
+        return ObservingFacilityListViewModel.SelectedObservingFacilities.Objects != null &&
+               ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any();
     }
 }

@@ -21,8 +21,20 @@ public class ObservingFacilityRepository : Repository<ObservingFacility>, IObser
         throw new NotImplementedException();
     }
 
-    public override void UpdateRange(IEnumerable<ObservingFacility> entities)
+    public override void UpdateRange(
+        IEnumerable<ObservingFacility> observingFacilities)
     {
-        throw new NotImplementedException();
+        var updatedObservingFacilities= observingFacilities.ToList();
+        var ids = updatedObservingFacilities.Select(p => p.Id);
+        var observingFacilitiesFromRepository = Find(p => ids.Contains(p.Id)).ToList();
+
+        observingFacilitiesFromRepository.ForEach(ofRepo =>
+        {
+            var updatedObservingFacility = updatedObservingFacilities.Single(ofUpd => ofUpd.Id == ofRepo.Id);
+
+            ofRepo.Name = updatedObservingFacility.Name;
+            ofRepo.DateEstablished = updatedObservingFacility.DateEstablished;
+            ofRepo.DateClosed = updatedObservingFacility.DateClosed;
+        });
     }
 }

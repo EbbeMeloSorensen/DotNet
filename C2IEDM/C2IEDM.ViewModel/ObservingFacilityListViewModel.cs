@@ -96,6 +96,19 @@ public class ObservingFacilityListViewModel : ViewModelBase
         }
     }
 
+    public void RemoveObservingFacilities(
+        IEnumerable<ObservingFacility> observingFacilities)
+    {
+        var idsOfDeletedObservingFacilities = observingFacilities.Select(_ => _.Id);
+
+        _observingFacilities = _observingFacilities
+            .Where(_ => !idsOfDeletedObservingFacilities.Contains(_.Id))
+            .ToList();
+
+        SelectedObservingFacilityListItemViewModels.Clear();
+        UpdateObservingFacilityListItemViewModels();
+    }
+
     private void RetrieveObservingFacilitiesMatchingFilterFromRepository()
     {
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
