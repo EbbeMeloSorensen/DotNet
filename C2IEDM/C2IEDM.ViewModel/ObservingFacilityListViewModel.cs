@@ -96,6 +96,37 @@ public class ObservingFacilityListViewModel : ViewModelBase
         }
     }
 
+    public void UpdateObservingFacilities(
+        IEnumerable<ObservingFacility> observingFacilities)
+    {
+        var idsOfUpdatedObservingFacilities = observingFacilities.Select(_ => _.Id).ToList();
+
+        foreach (var observingFacility in _observingFacilities)
+        {
+            if (idsOfUpdatedObservingFacilities.Contains(observingFacility.Id))
+            {
+                var temp = observingFacilities.Single(_ => _.Id == observingFacility.Id);
+
+                observingFacility.Name = temp.Name;
+                observingFacility.DateEstablished = temp.DateEstablished;
+                observingFacility.DateClosed = temp.DateClosed;
+            }
+        }
+
+        ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(_observingFacilities.Select(
+            _ => new ObservingFacilityListItemViewModel { ObservingFacility = _ }));
+
+        SelectedObservingFacilityListItemViewModels.Clear();
+
+        foreach (var observingFacilityListItemViewModel in ObservingFacilityListItemViewModels)
+        {
+            if (idsOfUpdatedObservingFacilities.Contains(observingFacilityListItemViewModel.ObservingFacility.Id))
+            {
+                SelectedObservingFacilityListItemViewModels.Add(observingFacilityListItemViewModel);
+            }
+        }
+    }
+
     public void RemoveObservingFacilities(
         IEnumerable<ObservingFacility> observingFacilities)
     {

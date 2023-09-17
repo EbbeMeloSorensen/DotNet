@@ -19,7 +19,9 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IDialogService _applicationDialogService;
     private readonly ILogger _logger;
 
-    public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; private set; }
+    public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; }
+
+    public ObservingFacilitiesDetailsViewModel ObservingFacilitiesDetailsViewModel { get; }
 
     public LogViewModel LogViewModel { get; }
 
@@ -53,7 +55,20 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilityListViewModel = new ObservingFacilityListViewModel(unitOfWorkFactory, applicationDialogService);
 
+        ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
+            unitOfWorkFactory,
+            ObservingFacilityListViewModel.SelectedObservingFacilities);
+
+        ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated;
+
         ObservingFacilityListViewModel.SelectedObservingFacilities.PropertyChanged += HandleObservingFacilitySelectionChanged;
+    }
+
+    private void ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated(
+        object? sender, 
+        Application.ObservingFacilitiesEventArgs e)
+    {
+        ObservingFacilityListViewModel.UpdateObservingFacilities(e.ObservingFacilities);
     }
 
     private void HandleObservingFacilitySelectionChanged(

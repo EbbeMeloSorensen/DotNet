@@ -41,6 +41,17 @@
 
             <local:ObservingFacilitiesListView Grid.Row="1" Grid.Column="0" DataContext="{Binding ObservingFacilityListViewModel}"/>
 
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <local:ObservingFacilitiesDetailsView Grid.Row="0" DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
+
+                <!--<local:PersonAssociationsView Grid.Row="1" DataContext="{Binding PersonAssociationsViewModel}"/>-->
+            </Grid>
+
         </Grid>
     </DockPanel>
 </Window>
