@@ -59,6 +59,9 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -86,6 +89,13 @@
                             <TextBlock Grid.Column="0" Grid.Row="5" Margin="3" Text="World Window Height, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="5" Margin="1"
                                      Text="{Binding GeometryEditorViewModel3.WorldWindowSize.Height, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="3" Grid.Row="0" Margin="3" Text="Cursor Position X:"/>
+                            <TextBox Grid.Column="4" Grid.Row="0" Margin="1" 
+                                     Text="{Binding GeometryEditorViewModel3.MousePositionWorld.X, Mode=OneWay, StringFormat=N3}"/>
+                            <TextBlock Grid.Column="3" Grid.Row="1" Margin="3" Text="Cursor Position Y:"/>
+                            <TextBox Grid.Column="4" Grid.Row="1" Margin="1" 
+                                     Text="{Binding GeometryEditorViewModel3.MousePositionWorld.Y, Mode=OneWay, StringFormat=N3}"/>
+
                         </Grid>
                     </Grid>
                 </TabItem>
@@ -181,7 +191,22 @@
                     <scrollFree:CoordinateSystemView DataContext="{Binding CoordinateSystemViewModel}" />
                 </TabItem>
                 <TabItem Header="Time Series">
-                    <scrollFree:CoordinateSystemView DataContext="{Binding TimeSeriesViewModel}" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <scrollFree:CoordinateSystemView Grid.Row="0" DataContext="{Binding TimeSeriesViewModel}" />
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Margin="3" Text="Time:"/>
+                            <TextBox Grid.Column="1" Margin="1"
+                                     Text="{Binding TimeSeriesViewModel.GeometryEditorViewModel.MousePositionWorld.X}"/>
+                        </Grid>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </TabItem>

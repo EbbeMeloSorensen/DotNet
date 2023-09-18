@@ -8,6 +8,17 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     public class TimeSeriesViewModel : CoordinateSystemViewModel
     {
         private DateTime _timeAtOrigo;
+        private DateTime _timeAtCursor;
+
+        public DateTime TimeAtCursor
+        {
+            get { return _timeAtCursor; }
+            set
+            {
+                _timeAtCursor = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public TimeSeriesViewModel(
             Point worldWindowFocus,
@@ -20,6 +31,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _marginX = marginX;
             _marginY = marginY;
             _timeAtOrigo = timeAtOrigo;
+            _timeAtCursor = new DateTime(1975, 7, 24, 0, 0, 0);
         }
 
         protected override void UpdateCoordinateSystemForGeometryEditorViewModel(
