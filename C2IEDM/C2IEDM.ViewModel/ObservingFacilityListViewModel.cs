@@ -1,14 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
-using GalaSoft.MvvmLight.Command;
-using System.Windows;
-using C2IEDM.Domain.Entities;
 
 namespace C2IEDM.ViewModel;
 
@@ -60,13 +60,14 @@ public class ObservingFacilityListViewModel : ViewModelBase
 
     public ObservingFacilityListViewModel(
         IUnitOfWorkFactory unitOfWorkFactory,
-        IDialogService applicationDialogService)
+        IDialogService applicationDialogService,
+        ObservableObject<DateTime?> timeOfInterest)
     {
         _unitOfWorkFactory = unitOfWorkFactory;
         _applicationDialogService = applicationDialogService;
         _sorting = Sorting.Name;
 
-        FindObservingFacilitiesViewModel = new FindObservingFacilitiesViewModel();
+        FindObservingFacilitiesViewModel = new FindObservingFacilitiesViewModel(timeOfInterest);
 
         _observingFacilities = new List<ObservingFacility>();
 
@@ -94,6 +95,50 @@ public class ObservingFacilityListViewModel : ViewModelBase
             SelectedObservingFacilityListItemViewModels.Add(observingFacilityListItemViewModel);
             break;
         }
+    }
+
+    public void UpdateObservingFacilities(
+        IEnumerable<ObservingFacility> observingFacilities)
+    {
+        var idsOfUpdatedObservingFacilities = observingFacilities.Select(_ => _.Id).ToList();
+
+        foreach (var observingFacility in _observingFacilities)
+        {
+            if (idsOfUpdatedObservingFacilities.Contains(observingFacility.Id))
+            {
+                var temp = observingFacilities.Single(_ => _.Id == observingFacility.Id);
+
+                observingFacility.Name = temp.Name;
+                observingFacility.DateEstablished = temp.DateEstablished;
+                observingFacility.DateClosed = temp.DateClosed;
+            }
+        }
+
+        ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(_observingFacilities.Select(
+            _ => new ObservingFacilityListItemViewModel { ObservingFacility = _ }));
+
+        SelectedObservingFacilityListItemViewModels.Clear();
+
+        foreach (var observingFacilityListItemViewModel in ObservingFacilityListItemViewModels)
+        {
+            if (idsOfUpdatedObservingFacilities.Contains(observingFacilityListItemViewModel.ObservingFacility.Id))
+            {
+                SelectedObservingFacilityListItemViewModels.Add(observingFacilityListItemViewModel);
+            }
+        }
+    }
+
+    public void RemoveObservingFacilities(
+        IEnumerable<ObservingFacility> observingFacilities)
+    {
+        var idsOfDeletedObservingFacilities = observingFacilities.Select(_ => _.Id);
+
+        _observingFacilities = _observingFacilities
+            .Where(_ => !idsOfDeletedObservingFacilities.Contains(_.Id))
+            .ToList();
+
+        SelectedObservingFacilityListItemViewModels.Clear();
+        UpdateObservingFacilityListItemViewModels();
     }
 
     private void RetrieveObservingFacilitiesMatchingFilterFromRepository()
