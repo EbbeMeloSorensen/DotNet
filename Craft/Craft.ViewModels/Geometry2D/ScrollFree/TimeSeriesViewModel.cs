@@ -32,7 +32,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _marginY = marginY;
             _timeAtOrigo = timeAtOrigo;
 
-            GeometryEditorViewModel.MouseClickOccured += (s, e) =>
+            GeometryEditorViewModel.MousePositionChanged += (s, e) =>
             {
                 TimeAtCursor = _timeAtOrigo + TimeSpan.FromDays(e.CursorWorldPosition.X);
             };

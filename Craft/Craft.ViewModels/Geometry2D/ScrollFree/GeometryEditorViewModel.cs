@@ -162,6 +162,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public event EventHandler<WorldWindowUpdatedEventArgs> WorldWindowUpdateOccured;
         public event EventHandler<WorldWindowUpdatedEventArgs> WorldWindowMajorUpdateOccured;
+        public event EventHandler<MouseEventArgs> MousePositionChanged;
         public event EventHandler<MouseEventArgs> MouseClickOccured;
 
         // A callback delegate passed to the view model will be kept and
@@ -594,6 +595,25 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             Point mousePositionViewport)
         {
             var handler = MouseClickOccured;
+
+            if (handler != null)
+            {
+                // Undersøg om det er nødvendigt at kommunikere klik position ned, for den vedligeholdes hele tiden
+                // i forbindelse med håndtering af mouse move
+                var mousePositionWorld = new Point(
+                    _worldWindowUpperLeft.X + mousePositionViewport.X / _scaling.Width,
+                    _worldWindowUpperLeft.Y + mousePositionViewport.Y / _scaling.Height);
+
+                // Todo: Lav om til World Position
+                handler(this, new MouseEventArgs(mousePositionWorld));
+            }
+        }
+
+        // This method is called from the View class
+        public void OnMousePositionChanged(
+            Point mousePositionViewport)
+        {
+            var handler = MousePositionChanged;
 
             if (handler != null)
             {

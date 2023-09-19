@@ -158,6 +158,10 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
                 ViewModel.OnWorldWindowUpdateOccured();
             }
+            else
+            {
+                ViewModel.OnMousePositionChanged(mouseViewPosition);
+            }
         }
 
         private void UIElement_OnMouseWheel(object sender, MouseWheelEventArgs e)
