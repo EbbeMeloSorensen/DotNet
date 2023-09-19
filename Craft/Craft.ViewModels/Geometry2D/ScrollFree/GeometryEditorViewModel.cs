@@ -29,6 +29,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Matrix _transformationMatrix;
         private Brush _defaultBrush;
         private Dictionary<int, ShapeViewModel> _shapeViewModelMap;
+        private bool _xAxisLocked;
+        private bool _yAxisLocked;
 
         public string ImagePath
         {
@@ -139,6 +141,26 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _transformationMatrix = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool XAxisLocked
+        {
+            get { return _xAxisLocked; }
+            set
+            {
+                _xAxisLocked = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool YAxisLocked
+        {
+            get { return _yAxisLocked; }
+            set
+            {
+                _yAxisLocked = value;
                 RaisePropertyChanged();
             }
         }

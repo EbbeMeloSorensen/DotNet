@@ -95,9 +95,12 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             }
             else if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
+                var xFactor = ViewModel.XAxisLocked ? 1.0 : 2.0;
+                var yFactor = ViewModel.YAxisLocked ? 1.0 : 2.0;
+
                 ViewModel.Scaling = new Size(
-                    ViewModel.Scaling.Width * 2,
-                    ViewModel.Scaling.Height * 2);
+                    ViewModel.Scaling.Width * xFactor,
+                    ViewModel.Scaling.Height * yFactor);
 
                 ViewModel.OnWorldWindowMajorUpdateOccured();
             }
@@ -128,12 +131,15 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             {
                 return;
             }
-
+            
             if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
+                var xFactor = ViewModel.XAxisLocked ? 1.0 : 0.5;
+                var yFactor = ViewModel.YAxisLocked ? 1.0 : 0.5;
+
                 ViewModel.Scaling = new Size(
-                    ViewModel.Scaling.Width / 2,
-                    ViewModel.Scaling.Height / 2);
+                    ViewModel.Scaling.Width * xFactor,
+                    ViewModel.Scaling.Height * yFactor);
 
                 ViewModel.OnWorldWindowMajorUpdateOccured();
             }
@@ -160,9 +166,15 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                     mouseViewPosition.Y - _mouseDownViewport.Y
                 );
 
-                ViewModel.WorldWindowUpperLeft = new Point(
-                    _worldWindowUpperLeftInitial.X - mouseOffsetViewPort.X / ViewModel.Scaling.Width,
-                    _worldWindowUpperLeftInitial.Y - mouseOffsetViewPort.Y / ViewModel.Scaling.Height);
+                var x = ViewModel.XAxisLocked
+                    ? ViewModel.WorldWindowUpperLeft.X
+                    : _worldWindowUpperLeftInitial.X - mouseOffsetViewPort.X / ViewModel.Scaling.Width;
+
+                var y = ViewModel.YAxisLocked
+                    ? ViewModel.WorldWindowUpperLeft.Y
+                    : _worldWindowUpperLeftInitial.Y - mouseOffsetViewPort.Y / ViewModel.Scaling.Height;
+
+                ViewModel.WorldWindowUpperLeft = new Point(x, y);
 
                 ViewModel.OnWorldWindowUpdateOccured();
             }
@@ -181,29 +193,29 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                 return;
             }
 
-            var x_factor = 1.2;
-            var y_factor = 1.2;
+            var xFactor = ViewModel.XAxisLocked ? 1.0 : 1.2;
+            var yFactor = ViewModel.YAxisLocked ? 1.0 : 1.2;
 
             if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
-                y_factor = 1.0;
+                yFactor = 1.0;
             }
             else if (Keyboard.IsKeyDown(Key.LeftAlt))
             {
-                x_factor = 1.0;
+                xFactor = 1.0;
             }
 
             if (e.Delta > 0)
             {
                 ViewModel.Scaling = new Size(
-                    ViewModel.Scaling.Width * x_factor,
-                    ViewModel.Scaling.Height * y_factor);
+                    ViewModel.Scaling.Width * xFactor,
+                    ViewModel.Scaling.Height * yFactor);
             }
             else
             {
                 ViewModel.Scaling = new Size(
-                    ViewModel.Scaling.Width / x_factor,
-                    ViewModel.Scaling.Height / y_factor);
+                    ViewModel.Scaling.Width / xFactor,
+                    ViewModel.Scaling.Height / yFactor);
             }
 
             ViewModel.OnWorldWindowUpdateOccured();
