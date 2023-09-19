@@ -79,7 +79,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 MousePositionWorld = new Point(
                     _worldWindowUpperLeft.X + _mousePositionViewport.X / _scaling.Width,
-                    (_worldWindowUpperLeft.Y + _mousePositionViewport.Y / _scaling.Height) * _yAxisFactor);
+                    (_worldWindowUpperLeft.Y + _mousePositionViewport.Y / _scaling.Height) /* * _yAxisFactor*/); // Not here - it messes up other stuff
             }
         }
 
