@@ -72,6 +72,10 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                 _dragging = true;
                 Canvas.CaptureMouse();
             }
+            else
+            {
+                ViewModel.OnMouseClickOccured(_mouseDownViewport);
+            }
         }
 
         private void UIElement_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -129,7 +133,7 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             }
         }
 
-        private void UIElement_OnMouseMove(object sender, MouseEventArgs e)
+        private void UIElement_OnMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (ViewModel == null)
             {

@@ -31,7 +31,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _marginX = marginX;
             _marginY = marginY;
             _timeAtOrigo = timeAtOrigo;
-            _timeAtCursor = new DateTime(1975, 7, 24, 0, 0, 0);
+
+            GeometryEditorViewModel.MouseClickOccured += (s, e) =>
+            {
+                TimeAtCursor = _timeAtOrigo + TimeSpan.FromDays(e.CursorWorldPosition.X);
+            };
         }
 
         protected override void UpdateCoordinateSystemForGeometryEditorViewModel(

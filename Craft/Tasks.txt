@@ -30,6 +30,10 @@ Done:
 * Labels på plads - dvs noget tekst, der lige som points bibeholder størrelse uanset skalering
 
 In progress:
+* Bedre granularitet, når man zoomer ind på en tidsakse
+* Visualisering af samling af "timestamps of interest"
+* Mulighed for at "låse" WorldWindow til et interval på y-aksen, så det ikke ændres, når man panorerer eller zoomer
+* GeometryEditorViewModel skal publicere et event om at der klikkes et sted
 * Man skal kunne starte med et World Window, der fylder hele viewporten ud, hvor scaling X og scaling Y sættes hver for sig i stedet for at være ens
 * Grid lines og kurver skal have samme tykkelse uanset magnification
 * Lav CoordinateSystemViewModel sådan at WorldWindow starter ved koordinatakserne og ikke helt ude i kanten
