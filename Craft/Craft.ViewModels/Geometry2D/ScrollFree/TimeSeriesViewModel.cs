@@ -65,12 +65,45 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double dy,
             double thickness)
         {
+            // Jo mere man zoomer ind, jo større bliver scaling, og desto mindre bliver variablen lineSpacingX_World_Min,
+            // som udtrykker, hvor stor afstanden mellem vertikale gitterlinier mindst vil skulle være i World koordinater.
+            // Dvs hvis man har zoomet meget ind, så er der også mulighed for at operere med en høj densitet af gitterlinier.
+            // Konstruktionen nedenfor svarer til den, der er lavet for et almindeligt koordinatsystem, men det er nok
+            // ikke så smart for tidsserier..
+
             var lineSpacingX_ViewPort_Min = 75.0;
             var lineSpacingX_World_Min = lineSpacingX_ViewPort_Min / GeometryEditorViewModel.Scaling.Width;
-            var lineSpacingX_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingX_World_Min)));
 
             // Her er lineSpacingX_World f.eks. 0.01, 0.1, 1, 10, 100 eller 1000
+            // .. Det er nok ikke super godt til en tidsakse
+            var lineSpacingX_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingX_World_Min)));
 
+            // Noget alla det her er nok bedre
+            if (lineSpacingX_World_Min < 1.0 / 24.0 / 60.0 / 60.0)
+            {
+                // Operer med en linie pr sekund
+            }
+            if (lineSpacingX_World_Min < 1.0 / 24.0 / 60.0)
+            {
+                // Operer med en linie pr minut
+            }
+            if (lineSpacingX_World_Min < 1.0 / 24.0)
+            {
+                // Operer med en linie pr time
+            }
+            else if (lineSpacingX_World_Min < 1.0)
+            {
+                // Operer med en linie pr dag
+            }
+            else if (lineSpacingX_World_Min < 30.0)
+            {
+                // Operer med en linie pr måned
+            }
+            else if (lineSpacingX_World_Min < 365.0)
+            {
+                // Operer med en linie pr år
+            }
+            
             // 1: Find ud af spacing af linier for x-aksen
             var spacingX = 1.0;
             var labelWidth = spacingX * GeometryEditorViewModel.Scaling.Width;
@@ -91,7 +124,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         x += spacingX;
                         continue;
                     }
-                    else if (lineSpacingX_World > 1.1 && (day != 1 && day % 5 != 0 || day > 25))
+                    
+                    if (lineSpacingX_World > 1.1 && (day != 1 && day % 5 != 0 || day > 25))
                     {
                         x += spacingX;
                         continue;

@@ -152,6 +152,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 60,
                 timeAtOrigo);
 
+            TimeSeriesViewModel.GeometryEditorViewModel.YAxisLocked = true;
+
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
 
             DrawAHouse(GeometryEditorViewModel1);

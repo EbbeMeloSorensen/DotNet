@@ -226,11 +226,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             _gridBrush);
                     }
 
-                    var text = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture);
+                    var dateAsText = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture);
 
                     // Place label at ticks
                     GeometryEditorViewModel.AddLabel(
-                        text,
+                        dateAsText,
                         new PointD(x, y0 + dy),
                         labelWidth,
                         labelHeight,
