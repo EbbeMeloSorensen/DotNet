@@ -515,8 +515,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 shiftY = maxDy + dy;
             }
 
-            if (System.Math.Abs(shiftX) > 0.001 ||
-                System.Math.Abs(shiftY) > 0.001)
+            if (Math.Abs(shiftX) > 0.001 ||
+                Math.Abs(shiftY) > 0.001)
             {
                 WorldWindowUpperLeft = new Point(
                     WorldWindowUpperLeft.X + shiftX,

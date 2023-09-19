@@ -78,7 +78,9 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             }
         }
 
-        private void UIElement_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void UIElement_OnMouseLeftButtonUp(
+            object sender, 
+            MouseButtonEventArgs e)
         {
             if (ViewModel == null)
             {
@@ -106,7 +108,9 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             }
         }
 
-        private void UIElement_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void UIElement_OnMouseRightButtonDown(
+            object sender, 
+            MouseButtonEventArgs e)
         {
             if (ViewModel == null)
             {
@@ -116,7 +120,9 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             _mouseDownViewport = e.GetPosition((FrameworkElement)sender);
         }
 
-        private void UIElement_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        private void UIElement_OnMouseRightButtonUp(
+            object sender, 
+            MouseButtonEventArgs e)
         {
             if (ViewModel == null)
             {
@@ -133,7 +139,9 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             }
         }
 
-        private void UIElement_OnMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        private void UIElement_OnMouseMove(
+            object sender, 
+            System.Windows.Input.MouseEventArgs e)
         {
             if (ViewModel == null)
             {
@@ -164,7 +172,9 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             }
         }
 
-        private void UIElement_OnMouseWheel(object sender, MouseWheelEventArgs e)
+        private void UIElement_OnMouseWheel(
+            object sender, 
+            MouseWheelEventArgs e)
         {
             if (ViewModel == null)
             {
