@@ -12,7 +12,7 @@
 
     <UserControl.Resources>
         <valueConverters:DoubleAdder x:Key="DoubleAdder"/>
-        <valueConverters:DoubleAdder x:Key="DoubleScaler"/>
+        <valueConverters:DoubleScaler x:Key="DoubleScaler"/>
     </UserControl.Resources>
 
     <TabControl SelectedIndex="0">
@@ -96,12 +96,16 @@
                             <TextBlock Grid.Column="3" Grid.Row="1" Margin="3" Text="Cursor Position Y:"/>
                             <TextBox Grid.Column="4" Grid.Row="1" Margin="1">
                                 <TextBox.Text>
-                                    <Binding Path="GeometryEditorViewModel3.MousePositionWorld.Y" Mode="OneWay" StringFormat="N3"/>
+                                    <Binding Path="GeometryEditorViewModel3.MousePositionWorld.Y" 
+                                             Mode="OneWay" 
+                                             StringFormat="N3"
+                                             Converter="{StaticResource DoubleScaler}">
+                                        <Binding.ConverterParameter>
+                                            <system:Double>-1</system:Double>
+                                        </Binding.ConverterParameter>
+                                    </Binding>
                                 </TextBox.Text>
                             </TextBox>
-                            <!--<TextBox Grid.Column="4" Grid.Row="1" Margin="1" 
-                                     Text="{Binding GeometryEditorViewModel3.MousePositionWorld.Y, Mode=OneWay, StringFormat=N3}"/>-->
-
                         </Grid>
                     </Grid>
                 </TabItem>
