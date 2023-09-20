@@ -74,63 +74,117 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var lineSpacingX_ViewPort_Min = 75.0;
             var lineSpacingX_World_Min = lineSpacingX_ViewPort_Min / GeometryEditorViewModel.Scaling.Width;
 
-            // Her er lineSpacingX_World f.eks. 0.01, 0.1, 1, 10, 100 eller 1000
-            // .. Det er nok ikke super godt til en tidsakse
-            var lineSpacingX_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingX_World_Min)));
+            var lineSpacingX_World = 1.0;
+            var delta = TimeSpan.FromDays(1);
 
             // Noget alla det her er nok bedre
             if (lineSpacingX_World_Min < 1.0 / 24.0 / 60.0 / 60.0)
             {
                 // Operer med en linie pr sekund
+                lineSpacingX_World = 1.0 / 24.0 / 60.0 / 60.0;
+                delta = TimeSpan.FromSeconds(1);
             }
-            if (lineSpacingX_World_Min < 1.0 / 24.0 / 60.0)
+            else if (lineSpacingX_World_Min < 1.0 / 24.0 / 60.0)
             {
                 // Operer med en linie pr minut
+                lineSpacingX_World = 1.0 / 24.0 / 60.0;
+                delta = TimeSpan.FromMinutes(1);
             }
-            if (lineSpacingX_World_Min < 1.0 / 24.0)
+            else if (lineSpacingX_World_Min < 1.0 / 24.0 / 12.0)
+            {
+                // Operer med en linie pr 5 minutter
+                lineSpacingX_World = 1.0 / 24.0 / 12.0;
+                delta = TimeSpan.FromMinutes(5);
+            }
+            else if (lineSpacingX_World_Min < 1.0 / 24.0 / 6.0)
+            {
+                // Operer med en linie pr 10 minutter
+                lineSpacingX_World = 1.0 / 24.0 / 6.0;
+                delta = TimeSpan.FromMinutes(10);
+            }
+            else if (lineSpacingX_World_Min < 1.0 / 24.0 / 4.0)
+            {
+                // Operer med en linie pr 15 minutter
+                lineSpacingX_World = 1.0 / 24.0 / 4.0;
+                delta = TimeSpan.FromMinutes(15);
+            }
+            else if (lineSpacingX_World_Min < 1.0 / 24.0 / 2.0)
+            {
+                // Operer med en linie pr 30 minutter
+                lineSpacingX_World = 1.0 / 24.0 / 2.0;
+                delta = TimeSpan.FromMinutes(30);
+            }
+            else if (lineSpacingX_World_Min < 1.0 / 24.0)
             {
                 // Operer med en linie pr time
+                lineSpacingX_World = 1.0 / 24.0;
+                delta = TimeSpan.FromHours(1);
+            }
+            else if (lineSpacingX_World_Min < 1.0 / 12.0)
+            {
+                // Operer med en linie pr 2 timer
+                lineSpacingX_World = 1.0 / 12.0;
+                delta = TimeSpan.FromHours(2);
+            }
+            else if (lineSpacingX_World_Min < 1.0 / 8.0)
+            {
+                // Operer med en linie pr 3 timer
+                lineSpacingX_World = 1.0 / 8.0;
+                delta = TimeSpan.FromHours(3);
+            }
+            else if (lineSpacingX_World_Min < 1.0 / 6.0)
+            {
+                // Operer med en linie pr 4 timer
+                lineSpacingX_World = 1.0 / 6.0;
+                delta = TimeSpan.FromHours(4);
+            }
+            else if (lineSpacingX_World_Min < 1.0 / 4.0)
+            {
+                // Operer med en linie pr 6 timer
+                lineSpacingX_World = 1.0 / 4.0;
+                delta = TimeSpan.FromHours(6);
+            }
+            else if (lineSpacingX_World_Min < 1.0 / 2.0)
+            {
+                // Operer med en linie pr 12 timer
+                lineSpacingX_World = 1.0 / 2.0;
+                delta = TimeSpan.FromHours(12);
             }
             else if (lineSpacingX_World_Min < 1.0)
             {
                 // Operer med en linie pr dag
+                lineSpacingX_World = 1.0;
+                delta = TimeSpan.FromDays(1);
             }
             else if (lineSpacingX_World_Min < 30.0)
             {
                 // Operer med en linie pr måned
+                var a = 0;
             }
             else if (lineSpacingX_World_Min < 365.0)
             {
                 // Operer med en linie pr år
+                var a = 0;
             }
-            
-            // 1: Find ud af spacing af linier for x-aksen
-            var spacingX = 1.0;
-            var labelWidth = spacingX * GeometryEditorViewModel.Scaling.Width;
+            else if (lineSpacingX_World_Min < 3652.5)
+            {
+                // Operer med en linie pr årti
+                var a = 0;
+            }
+
+            var labelWidth = lineSpacingX_World * GeometryEditorViewModel.Scaling.Width;
             var labelHeight = 20.0;
 
             // Find ud af første x-værdi (for en linie)
-            var x = Math.Floor(x0 / spacingX) * spacingX;
+            var x = Math.Floor(x0 / lineSpacingX_World) * lineSpacingX_World;
+            var timeSpan = RoundSeconds(TimeSpan.FromDays(x));
+            var t = _timeAtOrigo + timeSpan; 
+            //t = t.ToLocalTime(); // Ideen er ikke helt skæv, men det bliver alligevel noget klyt
 
             while (x < x1)
             {
                 if (x > x0 + dx)
                 {
-                    var t = _timeAtOrigo + TimeSpan.FromDays(x);
-                    var day = t.Date.Day;
-
-                    if (lineSpacingX_World > 10.1 && day != 1)
-                    {
-                        x += spacingX;
-                        continue;
-                    }
-                    
-                    if (lineSpacingX_World > 1.1 && (day != 1 && day % 5 != 0 || day > 25))
-                    {
-                        x += spacingX;
-                        continue;
-                    }
-
                     if (_includeGrid)
                     {
                         GeometryEditorViewModel.AddLine(
@@ -140,10 +194,27 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             _gridBrush);
                     }
 
-                    var dateText = day.ToString();
+                    var day = t.Date.Day;
+                    var hour = t.Hour;
+                    var minute = t.Minute;
+
+                    var label = "x";
+
+                    if (minute > 0)
+                    {
+                        label = $"{hour}:{minute.ToString().PadLeft(2, '0')}";
+                    }
+                    else if (hour > 0)
+                    {
+                        label = $"{hour}:00";
+                    }
+                    else
+                    {
+                        label = $"{day}";
+                    }
 
                     GeometryEditorViewModel.AddLabel(
-                        dateText,
+                        label,
                         new PointD(x, y0 + dy),
                         labelWidth,
                         labelHeight,
@@ -174,8 +245,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     }
                 }
 
-                x += spacingX;
+                x += lineSpacingX_World;
+                t += delta;
             }
+        }
+
+        // Helper for rounding Timespan to closest timespan where second is zero
+        private static TimeSpan RoundSeconds(TimeSpan span)
+        {
+            return TimeSpan.FromSeconds(Math.Round(span.TotalSeconds));
         }
     }
 }

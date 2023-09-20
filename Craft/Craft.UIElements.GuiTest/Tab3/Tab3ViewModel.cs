@@ -138,15 +138,16 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 25);
 
-            var timeWindow = TimeSpan.FromDays(7);
+            //var timeSpan = TimeSpan.FromHours(1);
+            var timeSpan = TimeSpan.FromDays(7);
             var utcNow = DateTime.UtcNow;
-            var timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
-            var tFocus = utcNow - timeWindow / 2;
+            var timeAtOrigo = utcNow.Date - timeSpan;
+            var tFocus = utcNow - timeSpan / 2;
             var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
 
             TimeSeriesViewModel = new TimeSeriesViewModel(
                 new Point(xFocus, 0),
-                new Size(7, 3),
+                new Size(timeSpan.TotalDays, 3),
                 true,
                 25,
                 60,

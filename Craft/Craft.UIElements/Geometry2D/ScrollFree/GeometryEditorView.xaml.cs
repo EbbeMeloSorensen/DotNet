@@ -66,7 +66,7 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
             _mouseDownViewport = e.GetPosition((FrameworkElement)sender);
 
-            if (Keyboard.IsKeyDown(Key.LeftShift))
+            if (Keyboard.IsKeyDown(Key.LeftShift) || true) // Så længe det bare er en viewer, opererer vi med at man pr default panner, når man dragger
             {
                 _worldWindowUpperLeftInitial = ViewModel.WorldWindowUpperLeft;
                 _dragging = true;
