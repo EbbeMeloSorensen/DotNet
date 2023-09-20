@@ -31,6 +31,10 @@ Done:
 
 In progress:
 * Bedre granularitet, når man zoomer ind på en tidsakse
+* Det skal stadig se ordentligt ud, når man zoomer ud
+* Der skal stå noget meningsfyldt i bjælken under labels såsom dato, så man ikke er i tvivl om, hvilket tidsinterval man ser på
+* Tidskurven skal nok tegnes pænere, så man transformerer punkter og BAGEFTER tegner, fremfor at skalere sele kurven i vildskab
+* Det skal kunne slås fra at man tegner horisontale og/eller vertikale grid lines
 * Visualisering af samling af "timestamps of interest"
 * Mulighed for at "låse" WorldWindow til et interval på y-aksen, så det ikke ændres, når man panorerer eller zoomer
 * GeometryEditorViewModel skal publicere et event om at der klikkes et sted
