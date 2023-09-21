@@ -23,7 +23,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected Size _viewPortSize;
         protected Size _worldWindowSize;
         private Point _mousePositionViewport;
-        private Point _mousePositionWorld;
         protected Point _worldWindowUpperLeft;
         private Size _scaling;
         private Matrix _transformationMatrix;
@@ -31,6 +30,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Dictionary<int, ShapeViewModel> _shapeViewModelMap;
         private bool _xAxisLocked;
         private bool _yAxisLocked;
+
+        public ObservableObject<Point?> MousePositionWorld { get; }
 
         public string ImagePath
         {
@@ -78,19 +79,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 RaisePropertyChanged();
 
-                MousePositionWorld = new Point(
+                MousePositionWorld.Object = new Point(
                     _worldWindowUpperLeft.X + _mousePositionViewport.X / _scaling.Width,
                     _worldWindowUpperLeft.Y + _mousePositionViewport.Y / _scaling.Height);
-            }
-        }
-
-        public Point MousePositionWorld
-        {
-            get { return _mousePositionWorld; }
-            set
-            {
-                _mousePositionWorld = value;
-                RaisePropertyChanged();
             }
         }
 
@@ -126,10 +117,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 // Set the Size of the World Window, i.e. not its position. The World Window size only depends on magnification and viewport size
                 UpdateWorldWindowSize();
 
+                if (!MousePositionWorld.Object.HasValue)
+                {
+                    FocusInCenterOfViewPort();
+                }
+
                 // Set the position of the World Window. Notice that this also affects the Transformation Matrix
                 WorldWindowUpperLeft = new Point(
-                    _mousePositionWorld.X - _mousePositionViewport.X * _worldWindowSize.Width / _viewPortSize.Width,
-                    _mousePositionWorld.Y - _mousePositionViewport.Y * _worldWindowSize.Height / _viewPortSize.Height);
+                    MousePositionWorld.Object.Value.X - _mousePositionViewport.X * _worldWindowSize.Width / _viewPortSize.Width,
+                    MousePositionWorld.Object.Value.Y - _mousePositionViewport.Y * _worldWindowSize.Height / _viewPortSize.Height);
 
                 RaisePropertyChanged();
             }
@@ -237,6 +233,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
             WorldWindowBottomRightLimit = new Point(double.MaxValue, double.MaxValue);
+
+            MousePositionWorld = new ObservableObject<Point?> { Object = null };
 
             PolygonViewModels = new ObservableCollection<PolygonViewModel>();
             PolylineViewModels = new ObservableCollection<PolylineViewModel>();

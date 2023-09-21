@@ -25,6 +25,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
             CompositionTarget.Rendering += UpdateModel;
             DataContextChanged += GeometryEditorView_DataContextChanged;
+
+            MouseLeave += GeometryEditorView_MouseLeave;
         }
 
         private void GeometryEditorView_DataContextChanged(
@@ -222,7 +224,16 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             ViewModel.OnWorldWindowMajorUpdateOccured();
         }
 
-        private void UpdateModel(object sender, EventArgs e)
+        private void GeometryEditorView_MouseLeave(
+            object sender,
+            System.Windows.Input.MouseEventArgs e)
+        {
+            // Her har vi f.eks. mulighed for at skjule et koordinatsæt i brugergrænsefladen
+        }
+
+        private void UpdateModel(
+            object sender, 
+            EventArgs e)
         {
             if (ViewModel == null)
             {

@@ -30,6 +30,7 @@ Done:
 * Labels på plads - dvs noget tekst, der lige som points bibeholder størrelse uanset skalering
 
 In progress:
+* Tilføj en ObservableObject for MouseWorldPosition - ovevej senere at erstatte Dependenvy propertyen
 * Klikke på et punkt i et koordinatsystem og få information om, hvad der er klikket på
 * Klikke på et punkt i time series viewet og få vist det som en linie
 * Bedre granularitet, når man zoomer ind på en tidsakse
