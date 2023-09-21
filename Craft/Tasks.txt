@@ -30,6 +30,8 @@ Done:
 * Labels på plads - dvs noget tekst, der lige som points bibeholder størrelse uanset skalering
 
 In progress:
+* Klikke på et punkt i et koordinatsystem og få information om, hvad der er klikket på
+* Klikke på et punkt i time series viewet og få vist det som en linie
 * Bedre granularitet, når man zoomer ind på en tidsakse
 * Det skal stadig se ordentligt ud, når man zoomer ud
 * Der skal stå noget meningsfyldt i bjælken under labels såsom dato, så man ikke er i tvivl om, hvilket tidsinterval man ser på
@@ -44,6 +46,7 @@ In progress:
 * Man skal kunne sætte World Window under runtime og ikke bare under opstart
 
 Todo:
+* Når cursoren forlader et område, skal der ikke længere stå noget
 * Der skal være et mode, hvor man kontinuert opdaterer zoom, som du har kunnet før og formentlig stadig kan med nogle kontroller
 * Leg med tegning af parameterfremstillinger
 * Leg med tegning af splines af forskellig art
