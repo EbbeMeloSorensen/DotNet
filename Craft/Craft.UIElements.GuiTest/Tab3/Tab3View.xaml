@@ -90,25 +90,12 @@
                             <TextBlock Grid.Column="0" Grid.Row="5" Margin="3" Text="World Window Height, X:"/>
                             <TextBox Grid.Column="1" Grid.Row="5" Margin="1"
                                      Text="{Binding GeometryEditorViewModel3.WorldWindowSize.Height, Mode=OneWay, StringFormat=N3}"/>
-                            <TextBlock Grid.Column="3" Grid.Row="0" Margin="3" Text="Cursor Position X:"/>
-                            <TextBox Grid.Column="4" Grid.Row="0" Margin="1" 
-                                     Text="{Binding GeometryEditorViewModel3.MousePositionWorld.X, Mode=OneWay, StringFormat=N3}"/>
-                            <TextBlock Grid.Column="3" Grid.Row="1" Margin="3" Text="Cursor Position Y:"/>
-                            <TextBox Grid.Column="4" Grid.Row="1" Margin="1">
-                                <TextBox.Text>
-                                    <Binding Path="GeometryEditorViewModel3.MousePositionWorld.Y" 
-                                             Mode="OneWay" 
-                                             StringFormat="N3"
-                                             Converter="{StaticResource DoubleScaler}">
-                                        <Binding.ConverterParameter>
-                                            <system:Double>-1</system:Double>
-                                        </Binding.ConverterParameter>
-                                    </Binding>
-                                </TextBox.Text>
-                            </TextBox>
-                            <CheckBox Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="2" Content="Lock X Axis"
+                            <TextBlock Grid.Column="3" Grid.Row="0" Margin="3" Text="Cursor Position:"/>
+                            <TextBox Grid.Column="4" Grid.Row="0" Margin="1" IsReadOnly="True" Width="100"
+                                     Text="{Binding CursorPositionAsText, Mode=OneWay}"/>
+                            <CheckBox Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Content="Lock X Axis"
                                       IsChecked="{Binding GeometryEditorViewModel3.XAxisLocked}"/>
-                            <CheckBox Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="2" Content="Lock Y Axis"
+                            <CheckBox Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="2" Content="Lock Y Axis"
                                       IsChecked="{Binding GeometryEditorViewModel3.YAxisLocked}"/>
                         </Grid>
                     </Grid>
@@ -218,7 +205,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Margin="3" Text="Time:"/>
                             <TextBox Grid.Column="1" Margin="1" IsReadOnly="True"
-                                     Text="{Binding TimeSeriesViewModel.TimeAtCursor}"/>
+                                     Text="{Binding TimeAtMousePositionAsText}"/>
                         </Grid>
                     </Grid>
                 </TabItem>

@@ -8,17 +8,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     public class TimeSeriesViewModel : CoordinateSystemViewModel
     {
         private DateTime _timeAtOrigo;
-        private DateTime _timeAtCursor;
 
-        public DateTime TimeAtCursor
-        {
-            get { return _timeAtCursor; }
-            set
-            {
-                _timeAtCursor = value;
-                RaisePropertyChanged();
-            }
-        }
+        public ObservableObject<DateTime?> TimeAtMousePosition { get; }
 
         public TimeSeriesViewModel(
             Point worldWindowFocus,
@@ -32,9 +23,13 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _marginY = marginY;
             _timeAtOrigo = timeAtOrigo;
 
-            GeometryEditorViewModel.MousePositionChanged += (s, e) =>
+            TimeAtMousePosition = new ObservableObject<DateTime?>();
+
+            GeometryEditorViewModel.MousePositionWorld.PropertyChanged += (s, e) =>
             {
-                TimeAtCursor = _timeAtOrigo + TimeSpan.FromDays(e.CursorWorldPosition.X);
+                TimeAtMousePosition.Object = GeometryEditorViewModel.MousePositionWorld.Object.HasValue
+                    ? _timeAtOrigo + TimeSpan.FromDays(GeometryEditorViewModel.MousePositionWorld.Object.Value.X)
+                    : null;
             };
         }
 

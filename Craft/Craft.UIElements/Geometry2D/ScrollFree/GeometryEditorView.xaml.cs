@@ -180,10 +180,6 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
                 ViewModel.OnWorldWindowUpdateOccured();
             }
-            else
-            {
-                ViewModel.OnMousePositionChanged(mouseViewPosition);
-            }
         }
 
         private void UIElement_OnMouseWheel(
@@ -228,7 +224,7 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             object sender,
             System.Windows.Input.MouseEventArgs e)
         {
-            // Her har vi f.eks. mulighed for at skjule et koordinatsæt i brugergrænsefladen
+            ViewModel.MousePositionWorld.Object = null;
         }
 
         private void UpdateModel(
