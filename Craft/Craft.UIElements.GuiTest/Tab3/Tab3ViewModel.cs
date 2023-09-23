@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
@@ -242,23 +243,25 @@ namespace Craft.UIElements.GuiTest.Tab3
                 var x1 = e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width;
                 var y0 = e.WorldWindowUpperLeft.Y;
                 var y1 = e.WorldWindowUpperLeft.Y + e.WorldWindowSize.Height;
-
-                var timeOfInterest = DateTime.UtcNow;
-                var x = (timeOfInterest - TimeSeriesViewModel2.TimeAtOrigo).TotalDays;
-
+                
                 TimeSeriesViewModel2.GeometryEditorViewModel.ClearLines();
 
-                if (x < x0 || x > x1)
+                var timeStampsOfInterest = new List<DateTime>
                 {
-                    return;
-                }
+                    DateTime.UtcNow,
+                    DateTime.UtcNow - TimeSpan.FromMinutes(30),
+                    DateTime.UtcNow - TimeSpan.FromMinutes(45),
+                };
 
                 var lineThickness = 2.0 / TimeSeriesViewModel2.GeometryEditorViewModel.Scaling.Width;
 
-                var lineViewModel1 =
-                    new LineViewModel(new PointD(x, y0), new PointD(x, y1), lineThickness, _curveBrush);
+                var lineViewModels = timeStampsOfInterest
+                    .Select(_ => (_ - TimeSeriesViewModel2.TimeAtOrigo).TotalDays)
+                    .Where(_ => _ > x0 && _ < x1)
+                    .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), lineThickness, _curveBrush))
+                    .ToList();
 
-                TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(lineViewModel1);
+                lineViewModels.ForEach(_ => TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(_));
             };
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
