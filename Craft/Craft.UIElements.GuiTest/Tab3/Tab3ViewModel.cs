@@ -210,7 +210,9 @@ namespace Craft.UIElements.GuiTest.Tab3
                 GeometryEditorViewModel_WorldWindowMajorUpdateOccured1;
         }
 
-        private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured1(object? sender, WorldWindowUpdatedEventArgs e)
+        private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured1(
+            object? sender, 
+            WorldWindowUpdatedEventArgs e)
         {
             var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
             var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
