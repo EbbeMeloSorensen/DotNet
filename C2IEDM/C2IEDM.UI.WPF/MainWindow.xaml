@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:C2IEDM.UI.WPF"
+        xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="C2IEDM" Height="450" Width="800"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
@@ -43,11 +44,13 @@
 
             <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <local:ObservingFacilitiesDetailsView Grid.Row="0" DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
+
+                <scrollFree:CoordinateSystemView Grid.Row="1" DataContext="{Binding TimeSeriesViewModel}"/>
 
                 <!--<local:PersonAssociationsView Grid.Row="1" DataContext="{Binding PersonAssociationsViewModel}"/>-->
             </Grid>

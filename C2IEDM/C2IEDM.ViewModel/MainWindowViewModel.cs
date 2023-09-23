@@ -10,6 +10,7 @@ using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
 using Craft.Utils;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 
 namespace C2IEDM.ViewModel;
 
@@ -24,6 +25,8 @@ public class MainWindowViewModel : ViewModelBase
     public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; }
 
     public ObservingFacilitiesDetailsViewModel ObservingFacilitiesDetailsViewModel { get; }
+
+    public TimeSeriesViewModel TimeSeriesViewModel { get; }
 
     public LogViewModel LogViewModel { get; }
 
@@ -71,6 +74,20 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWorkFactory,
             ObservingFacilityListViewModel.SelectedObservingFacilities);
 
+        var timeSpan = TimeSpan.FromHours(1);
+        var utcNow = DateTime.UtcNow;
+        var timeAtOrigo = utcNow.Date;
+        var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1);
+        var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
+
+        TimeSeriesViewModel = new TimeSeriesViewModel(
+            new Point(xFocus, 0),
+            new Size(timeSpan.TotalDays, 3),
+            true,
+            25,
+            60,
+            timeAtOrigo);
+        
         ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated;
 
         ObservingFacilityListViewModel.SelectedObservingFacilities.PropertyChanged += HandleObservingFacilitySelectionChanged;

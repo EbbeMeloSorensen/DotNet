@@ -3,6 +3,7 @@
                     xmlns:valueConverters="clr-namespace:Craft.UI.Utils.ValueConverters;assembly=Craft.UI.Utils">
     <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <valueConverters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter"/>
+
     <ControlTemplate x:Key="errorTemplate">
         <Border BorderBrush="Red" BorderThickness="2">
             <Grid>
