@@ -7,7 +7,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class TimeSeriesViewModel : CoordinateSystemViewModel
     {
-        private DateTime _timeAtOrigo;
+        public DateTime TimeAtOrigo { get; }
 
         public ObservableObject<DateTime?> TimeAtMousePosition { get; }
 
@@ -21,14 +21,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
             _marginX = marginX;
             _marginY = marginY;
-            _timeAtOrigo = timeAtOrigo;
+            TimeAtOrigo = timeAtOrigo;
 
             TimeAtMousePosition = new ObservableObject<DateTime?>();
 
             GeometryEditorViewModel.MousePositionWorld.PropertyChanged += (s, e) =>
             {
                 TimeAtMousePosition.Object = GeometryEditorViewModel.MousePositionWorld.Object.HasValue
-                    ? _timeAtOrigo + TimeSpan.FromDays(GeometryEditorViewModel.MousePositionWorld.Object.Value.X)
+                    ? TimeAtOrigo + TimeSpan.FromDays(GeometryEditorViewModel.MousePositionWorld.Object.Value.X)
                     : null;
             };
         }
@@ -48,8 +48,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             GeometryEditorViewModel.ClearLines();
             GeometryEditorViewModel.ClearLabels();
 
-            DrawHorizontalGridLines(x0, y0, x1, y1, dx, dy, thickness);
-            DrawVerticalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+            if (ShowHorizontalGridLines)
+            {
+                DrawHorizontalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+            }
+
+            if (ShowVerticalGridLines)
+            {
+                DrawVerticalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+            }
         }
 
         protected virtual void DrawVerticalGridLines(
@@ -174,7 +181,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             // Find ud af første x-værdi (for en linie)
             var x = Math.Floor(x0 / lineSpacingX_World) * lineSpacingX_World;
             var timeSpan = RoundSeconds(TimeSpan.FromDays(x));
-            var t = _timeAtOrigo + timeSpan; 
+            var t = TimeAtOrigo + timeSpan; 
             //t = t.ToLocalTime(); // Ideen er ikke helt skæv, men det bliver alligevel noget klyt
 
             while (x < x1)

@@ -29,7 +29,8 @@ namespace Craft.UIElements.GuiTest.Tab3
         private int _worldWindowUpdateCount;
         private int _worldWindowMajorUpdateCount;
         private string _cursorPositionAsText;
-        private string _timeAtMousePositionAsText;
+        private string _timeAtMousePositionAsText1;
+        private string _timeAtMousePositionAsText2;
 
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
@@ -66,12 +67,22 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
         }
 
-        public string TimeAtMousePositionAsText
+        public string TimeAtMousePositionAsText1
         {
-            get { return _timeAtMousePositionAsText; }
+            get { return _timeAtMousePositionAsText1; }
             set
             {
-                _timeAtMousePositionAsText = value;
+                _timeAtMousePositionAsText1 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string TimeAtMousePositionAsText2
+        {
+            get { return _timeAtMousePositionAsText2; }
+            set
+            {
+                _timeAtMousePositionAsText2 = value;
                 RaisePropertyChanged();
             }
         }
@@ -113,7 +124,8 @@ namespace Craft.UIElements.GuiTest.Tab3
         public GeometryEditorViewModel GeometryEditorViewModel3 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel4 { get; }
         public CoordinateSystemViewModel CoordinateSystemViewModel { get; }
-        public TimeSeriesViewModel TimeSeriesViewModel { get; }
+        public TimeSeriesViewModel TimeSeriesViewModel1 { get; }
+        public TimeSeriesViewModel TimeSeriesViewModel2 { get; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
 
         public Tab3ViewModel()
@@ -160,15 +172,15 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 25);
 
-            var timeSpan = TimeSpan.FromHours(1);
-            //var timeSpan = TimeSpan.FromDays(7);
+            //var timeSpan = TimeSpan.FromHours(1);
+            var timeSpan = TimeSpan.FromDays(7);
             var utcNow = DateTime.UtcNow;
             //var timeAtOrigo = utcNow.Date - timeSpan;
             var timeAtOrigo = utcNow.Date;
             var tFocus = utcNow - timeSpan / 2;
             var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
 
-            TimeSeriesViewModel = new TimeSeriesViewModel(
+            TimeSeriesViewModel1 = new TimeSeriesViewModel(
                 new Point(xFocus, 0),
                 new Size(timeSpan.TotalDays, 3),
                 true,
@@ -176,13 +188,77 @@ namespace Craft.UIElements.GuiTest.Tab3
                 60,
                 timeAtOrigo);
 
-            TimeSeriesViewModel.GeometryEditorViewModel.YAxisLocked = true;
+            TimeSeriesViewModel1.GeometryEditorViewModel.YAxisLocked = true;
 
-            TimeSeriesViewModel.TimeAtMousePosition.PropertyChanged += (s, e) =>
+            TimeSeriesViewModel1.TimeAtMousePosition.PropertyChanged += (s, e) =>
             {
-                TimeAtMousePositionAsText = TimeSeriesViewModel.TimeAtMousePosition.Object.HasValue
-                    ? TimeSeriesViewModel.TimeAtMousePosition.Object.Value.ToString()
+                TimeAtMousePositionAsText1 = TimeSeriesViewModel1.TimeAtMousePosition.Object.HasValue
+                    ? TimeSeriesViewModel1.TimeAtMousePosition.Object.Value.ToString()
                     : "";
+            };
+
+            TimeSeriesViewModel1.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+            {
+                var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
+                var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
+
+                var points = new List<PointD>();
+                for (var x = x0; x <= x1; x += 0.1)
+                {
+                    points.Add(new PointD(x, Math.Sin(3 * x))); // (sinus)
+                }
+
+                TimeSeriesViewModel1.GeometryEditorViewModel.ClearPolylines();
+                TimeSeriesViewModel1.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
+            };
+
+            var timeSpan2 = TimeSpan.FromHours(1);
+            var utcNow2 = DateTime.UtcNow;
+            var timeAtOrigo2 = utcNow2.Date;
+            var tFocus2 = utcNow2 - timeSpan2 / 2 + TimeSpan.FromMinutes(1);
+            var xFocus2 = (tFocus2 - timeAtOrigo2) / TimeSpan.FromDays(1.0);
+
+            TimeSeriesViewModel2 = new TimeSeriesViewModel(
+                new Point(xFocus2, 0),
+                new Size(timeSpan2.TotalDays, 3),
+                true,
+                25,
+                60,
+                timeAtOrigo2);
+
+            TimeSeriesViewModel2.GeometryEditorViewModel.YAxisLocked = true;
+            TimeSeriesViewModel2.ShowHorizontalGridLines = false;
+
+            TimeSeriesViewModel2.TimeAtMousePosition.PropertyChanged += (s, e) =>
+            {
+                TimeAtMousePositionAsText2 = TimeSeriesViewModel2.TimeAtMousePosition.Object.HasValue
+                    ? TimeSeriesViewModel2.TimeAtMousePosition.Object.Value.ToString()
+                    : "";
+            };
+
+            TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+            {
+                var x0 = e.WorldWindowUpperLeft.X;
+                var x1 = e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width;
+                var y0 = e.WorldWindowUpperLeft.Y;
+                var y1 = e.WorldWindowUpperLeft.Y + e.WorldWindowSize.Height;
+
+                var timeOfInterest = DateTime.UtcNow;
+                var x = (timeOfInterest - TimeSeriesViewModel2.TimeAtOrigo).TotalDays;
+
+                TimeSeriesViewModel2.GeometryEditorViewModel.ClearLines();
+
+                if (x < x0 || x > x1)
+                {
+                    return;
+                }
+
+                var lineThickness = 2.0 / TimeSeriesViewModel2.GeometryEditorViewModel.Scaling.Width;
+
+                var lineViewModel1 =
+                    new LineViewModel(new PointD(x, y0), new PointD(x, y1), lineThickness, _curveBrush);
+
+                TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(lineViewModel1);
             };
 
             ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
@@ -205,26 +281,6 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += 
                 GeometryEditorViewModel_WorldWindowMajorUpdateOccured;
-
-            TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += 
-                GeometryEditorViewModel_WorldWindowMajorUpdateOccured1;
-        }
-
-        private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured1(
-            object? sender, 
-            WorldWindowUpdatedEventArgs e)
-        {
-            var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
-            var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
-
-            var points = new List<PointD>();
-            for (var x = x0; x <= x1; x += 0.1)
-            {
-                points.Add(new PointD(x, Math.Sin(3 * x))); // (sinus)
-            }
-
-            TimeSeriesViewModel.GeometryEditorViewModel.ClearPolylines();
-            TimeSeriesViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
         }
 
         private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured(
