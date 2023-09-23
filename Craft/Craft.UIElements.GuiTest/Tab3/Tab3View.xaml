@@ -23,6 +23,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <scrollFree:GeometryEditorView
                             Grid.Row="0" DataContext="{Binding GeometryEditorViewModel1}"/>
@@ -32,12 +33,17 @@
                             <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" 
                                     Command="{Binding ZoomOutForGeometryEditor1Command}" >Zoom Out</Button>
                         </StackPanel>
+                        <TextBlock Grid.Row="2" TextWrapping="Wrap">
+                            Here, we have a basic GeometryEditorView with an underlying GeometryEditorViewModel where Scaling is 
+                            initialized to Sx = 1 and Sy = 1, and where the Y axis points downwards.
+                        </TextBlock>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Inverted">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding GeometryEditorViewModel2}"/>
@@ -47,6 +53,11 @@
                             <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" 
                                     Command="{Binding ZoomOutForGeometryEditor2Command}" >Zoom Out</Button>
                         </StackPanel>
+                        <TextBlock Grid.Row="2">
+                            Here, we again have a basic GeometryEditorView with an underlying GeometryEditorViewModel where Scaling is 
+                            initialized to Sx = 1 and Sy = 1, but here, the Y axis points upwards as is common for a mathematical
+                            coordinate system
+                        </TextBlock>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Function Curve I">
@@ -189,7 +200,33 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Function Curve III">
-                    <scrollFree:CoordinateSystemView DataContext="{Binding CoordinateSystemViewModel}" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <scrollFree:CoordinateSystemView Grid.Row="0" DataContext="{Binding CoordinateSystemViewModel}" />
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Show horizontal grid lines"
+                                      IsChecked="{Binding CoordinateSystemViewModel.ShowHorizontalGridLines}"/>
+                            <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Show vertical grid lines"
+                                      IsChecked="{Binding CoordinateSystemViewModel.ShowVerticalGridLines}"/>
+                        </Grid>
+                        <TextBlock Grid.Row="2">
+                            Here, we again have a basic GeometryEditorView with an underlying GeometryEditorViewModel where Scaling is 
+                            initialized to Sx = 1 and Sy = 1, but here, the Y axis points upwards as is common for a mathematical
+                            coordinate system
+                        </TextBlock>
+                    </Grid>
                 </TabItem>
                 <TabItem Header="Time Series">
                     <Grid>

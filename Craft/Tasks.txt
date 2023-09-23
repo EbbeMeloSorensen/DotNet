@@ -47,6 +47,7 @@ In progress:
 * Man skal kunne sætte World Window under runtime og ikke bare under opstart
 
 Todo:
+* Fix det med at man ikke kan zoome med ctrl+leftclick
 * Når cursoren forlader et område, skal der ikke længere stå noget
 * Der skal være et mode, hvor man kontinuert opdaterer zoom, som du har kunnet før og formentlig stadig kan med nogle kontroller
 * Leg med tegning af parameterfremstillinger

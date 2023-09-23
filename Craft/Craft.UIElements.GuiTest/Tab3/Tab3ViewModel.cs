@@ -163,7 +163,8 @@ namespace Craft.UIElements.GuiTest.Tab3
             var timeSpan = TimeSpan.FromHours(1);
             //var timeSpan = TimeSpan.FromDays(7);
             var utcNow = DateTime.UtcNow;
-            var timeAtOrigo = utcNow.Date - timeSpan;
+            //var timeAtOrigo = utcNow.Date - timeSpan;
+            var timeAtOrigo = utcNow.Date;
             var tFocus = utcNow - timeSpan / 2;
             var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
 

@@ -14,6 +14,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected double _Y2;
         protected bool _includeGrid = true;
         protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.25 };
+        private bool _showHorizontalGridLines;
+        private bool _showVerticalGridLines;
 
         public double MarginX
         {
@@ -36,6 +38,28 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public bool ShowHorizontalGridLines
+        {
+            get { return _showHorizontalGridLines; }
+            set
+            {
+                _showHorizontalGridLines = value;
+                UpdateCoordinateSystemForGeometryEditorViewModel();
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowVerticalGridLines
+        {
+            get { return _showVerticalGridLines; }
+            set
+            {
+                _showVerticalGridLines = value;
+                UpdateCoordinateSystemForGeometryEditorViewModel();
+                RaisePropertyChanged();
+            }
+        }
+
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
 
         public CoordinateSystemViewModel(
@@ -47,6 +71,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
             _marginX = marginX;
             _marginY = marginY;
+            _showHorizontalGridLines = true;
+            _showVerticalGridLines = true;
 
             GeometryEditorViewModel = 
                 new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, fitAspectRatio);
@@ -85,19 +111,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             object? sender, 
             WorldWindowUpdatedEventArgs e)
         {
-            UpdateCoordinateSystemForGeometryEditorViewModel(
-                e.WorldWindowUpperLeft.X,
-                e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width,
-                -e.WorldWindowUpperLeft.Y - e.WorldWindowSize.Height,
-                -e.WorldWindowUpperLeft.Y);
+            UpdateCoordinateSystemForGeometryEditorViewModel();
         }
 
-        protected virtual void UpdateCoordinateSystemForGeometryEditorViewModel(
-            double x0,
-            double x1,
-            double y0,
-            double y1)
+        protected virtual void UpdateCoordinateSystemForGeometryEditorViewModel()
         {
+            var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
+            var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
+            var y0 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y - GeometryEditorViewModel.WorldWindowSize.Height;
+            var y1 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y;
+
             // We want margins and thickness to be independent on scaling
             var dx = _marginX / GeometryEditorViewModel.Scaling.Width;
             var dy = _marginY / GeometryEditorViewModel.Scaling.Height;
@@ -106,8 +129,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             GeometryEditorViewModel.ClearLines();
             GeometryEditorViewModel.ClearLabels();
 
-            DrawHorizontalGridLines(x0, y0, x1, y1, dx, dy, thickness);
-            DrawVerticalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+            if (ShowHorizontalGridLines)
+            {
+                DrawHorizontalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+            }
+
+            if (ShowVerticalGridLines)
+            {
+                DrawVerticalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+            }
         }
 
         protected void DrawHorizontalGridLines(

@@ -33,12 +33,13 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             };
         }
 
-        protected override void UpdateCoordinateSystemForGeometryEditorViewModel(
-            double x0,
-            double x1,
-            double y0,
-            double y1)
+        protected override void UpdateCoordinateSystemForGeometryEditorViewModel()
         {
+            var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
+            var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
+            var y0 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y - GeometryEditorViewModel.WorldWindowSize.Height;
+            var y1 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y;
+
             // We want thickness to be independent on scaling
             var dx = _marginX / GeometryEditorViewModel.Scaling.Width;
             var dy = _marginY / GeometryEditorViewModel.Scaling.Height;
