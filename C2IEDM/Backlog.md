@@ -19,8 +19,11 @@ Egentlig skal du jo bare have den samme simple where klausul på, som du også bru
 Og mht at hive children op skal du jo alligevel have dedikerede methods på banen lige som du allerede har i PR med GetPeopleIncludingAssociations
 * 
 WPF applikation
-- Create Observing Facility
-- Delete
-- Update
+- Create Observing Facility (OK)
+- Delete  (OK)
+- Vis timeStamps i TimeSeriesViewModel, dem, der er i databasen ved opstart (OK)
+- Updater timeStamps-samlingen, når der laves nye observing facilities (OK)
+- Updater timeStamps-samlingen, når der slettes eksisterende observing facilities
+- En funktion, der kan kaldes for at opdatere timeseries viewet, dvs trække det frem til current
 - Show historical situation (måske en del af filteret?.. eller måske en del af en mere fancy kontrol, hvor man også kan se, 
 - hvornår der er lavet ændringer..)

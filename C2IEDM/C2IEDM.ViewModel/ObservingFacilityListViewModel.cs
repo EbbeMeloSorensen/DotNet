@@ -176,13 +176,13 @@ public class ObservingFacilityListViewModel : ViewModelBase
 
         if (count == 0)
         {
-            var dialogViewModel = new MessageBoxDialogViewModel("No person matches the search criteria", false);
+            var dialogViewModel = new MessageBoxDialogViewModel("No observing facilities the search criteria", false);
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }
 
         if (count > limit)
         {
-            var dialogViewModel = new MessageBoxDialogViewModel($"{count} people match the search criteria.\nDo you want to retrieve them all from the repository?", true);
+            var dialogViewModel = new MessageBoxDialogViewModel($"{count} observing facilities match the search criteria.\nDo you want to retrieve them all from the repository?", true);
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
             {
                 return;

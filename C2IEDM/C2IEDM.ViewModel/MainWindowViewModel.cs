@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
+using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
-using Craft.Utils;
-using Craft.ViewModels.Geometry2D.ScrollFree;
 
 namespace C2IEDM.ViewModel;
 
@@ -24,6 +24,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ILogger _logger;
     private readonly List<DateTime> _databaseWriteTimes;
     private readonly ObservableObject<DateTime?> _timeOfInterest;
+    private Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
 
     public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; }
 
@@ -63,9 +64,9 @@ public class MainWindowViewModel : ViewModelBase
 
         _timeOfInterest = new ObservableObject<DateTime?>
         {
-            //Object = null
+            Object = null
             //Object = new DateTime(2023, 9, 17, 13, 0, 0, DateTimeKind.Utc) // -- Kun bræk
-            Object = new DateTime(2023, 9, 17, 11, 0, 0, DateTimeKind.Utc) // -- 
+            //Object = new DateTime(2023, 9, 17, 11, 0, 0, DateTimeKind.Utc) // -- 
         };
 
         ObservingFacilityListViewModel = new ObservingFacilityListViewModel(
@@ -91,6 +92,7 @@ public class MainWindowViewModel : ViewModelBase
             60,
             timeAtOrigo);
 
+        TimeSeriesViewModel.GeometryEditorViewModel.YAxisLocked = true;
         TimeSeriesViewModel.ShowHorizontalGridLines = false;
 
         ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated;
@@ -107,7 +109,12 @@ public class MainWindowViewModel : ViewModelBase
 
         TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
         {
+            RefreshTimeSeriesView();
+        };
 
+        TimeSeriesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
+        {
+            var temp = TimeSeriesViewModel.TimeAtMousePosition;
         };
     }
 
@@ -126,7 +133,8 @@ public class MainWindowViewModel : ViewModelBase
         //ExportSelectionToGraphmlCommand.RaiseCanExecuteChanged();
     }
 
-    private void CreateObservingFacility(object owner)
+    private void CreateObservingFacility(
+        object owner)
     {
         var dialogViewModel = new CreateObservingFacilityDialogViewModel();
 
@@ -168,9 +176,13 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         ObservingFacilityListViewModel.AddObservingFacility(observingFacility);
+
+        _databaseWriteTimes.Add(DateTime.UtcNow);
+        RefreshTimeSeriesView();
     }
 
-    private bool CanCreateObservingFacility(object owner)
+    private bool CanCreateObservingFacility(
+        object owner)
     {
         return true;
     }
@@ -200,6 +212,9 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWork.Complete();
 
             ObservingFacilityListViewModel.RemoveObservingFacilities(observingFacilitiesForDeletion);
+
+            _databaseWriteTimes.Add(DateTime.UtcNow);
+            RefreshTimeSeriesView();
         }
     }
 
@@ -207,5 +222,28 @@ public class MainWindowViewModel : ViewModelBase
     {
         return ObservingFacilityListViewModel.SelectedObservingFacilities.Objects != null &&
                ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any();
+    }
+
+    private void RefreshTimeSeriesView()
+    {
+        var x0 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
+        var x1 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
+        var y0 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y;
+
+        var y1 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
+             TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * TimeSeriesViewModel.Y2 /
+             TimeSeriesViewModel.GeometryEditorViewModel.ViewPortSize.Height;
+
+        TimeSeriesViewModel.GeometryEditorViewModel.ClearLines();
+
+        var lineThickness = 2.0 / TimeSeriesViewModel.GeometryEditorViewModel.Scaling.Width;
+
+        var lineViewModels = _databaseWriteTimes
+            .Select(_ => (_ - TimeSeriesViewModel.TimeAtOrigo).TotalDays)
+            .Where(_ => _ > x0 && _ < x1)
+            .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), lineThickness, _timeStampBrush))
+            .ToList();
+
+        lineViewModels.ForEach(_ => TimeSeriesViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
     }
 }
