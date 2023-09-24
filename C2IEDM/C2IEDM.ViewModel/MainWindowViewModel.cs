@@ -114,7 +114,7 @@ public class MainWindowViewModel : ViewModelBase
 
         TimeSeriesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
-            var temp = TimeSeriesViewModel.TimeAtMousePosition;
+            _timeOfInterest.Object = TimeSeriesViewModel.TimeAtMousePosition.Object;
         };
     }
 
