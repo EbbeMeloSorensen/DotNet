@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Documents;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
@@ -20,6 +22,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
     private readonly ILogger _logger;
+    private readonly List<DateTime> _databaseWriteTimes;
     private readonly ObservableObject<DateTime?> _timeOfInterest;
 
     public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; }
@@ -87,10 +90,25 @@ public class MainWindowViewModel : ViewModelBase
             25,
             60,
             timeAtOrigo);
-        
+
+        TimeSeriesViewModel.ShowHorizontalGridLines = false;
+
         ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated;
 
         ObservingFacilityListViewModel.SelectedObservingFacilities.PropertyChanged += HandleObservingFacilitySelectionChanged;
+
+        using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+        {
+            var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+            var timeStampsOfInterest =  observingFacilities.Select(_ => _.Created).ToList();
+            timeStampsOfInterest.AddRange(observingFacilities.Select(_ => _.Superseded));
+            _databaseWriteTimes = timeStampsOfInterest.Distinct().ToList();
+        }
+
+        TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+        {
+
+        };
     }
 
     private void ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated(

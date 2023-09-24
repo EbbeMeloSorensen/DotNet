@@ -4,6 +4,8 @@
     <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <valueConverters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter"/>
 
+    <SolidColorBrush Color="WhiteSmoke" x:Key="BackgroundBrush"/>
+
     <ControlTemplate x:Key="errorTemplate">
         <Border BorderBrush="Red" BorderThickness="2">
             <Grid>
