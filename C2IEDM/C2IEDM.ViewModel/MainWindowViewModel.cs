@@ -25,6 +25,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly List<DateTime> _databaseWriteTimes;
     private readonly ObservableObject<DateTime?> _timeOfInterest;
     private Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
+    private Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
 
     public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; }
 
@@ -65,8 +66,6 @@ public class MainWindowViewModel : ViewModelBase
         _timeOfInterest = new ObservableObject<DateTime?>
         {
             Object = null
-            //Object = new DateTime(2023, 9, 17, 13, 0, 0, DateTimeKind.Utc) // -- Kun bræk
-            //Object = new DateTime(2023, 9, 17, 11, 0, 0, DateTimeKind.Utc) // -- 
         };
 
         ObservingFacilityListViewModel = new ObservingFacilityListViewModel(
@@ -115,6 +114,7 @@ public class MainWindowViewModel : ViewModelBase
         TimeSeriesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
             _timeOfInterest.Object = TimeSeriesViewModel.TimeAtMousePosition.Object;
+            RefreshTimeSeriesView();
         };
     }
 
@@ -228,9 +228,10 @@ public class MainWindowViewModel : ViewModelBase
     {
         var x0 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
         var x1 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
-        var y0 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y;
+        var y0 = -TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y - TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowSize.Height;
+        var y1 = -TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y;
 
-        var y1 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
+        var y2 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
              TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * TimeSeriesViewModel.Y2 /
              TimeSeriesViewModel.GeometryEditorViewModel.ViewPortSize.Height;
 
@@ -241,9 +242,21 @@ public class MainWindowViewModel : ViewModelBase
         var lineViewModels = _databaseWriteTimes
             .Select(_ => (_ - TimeSeriesViewModel.TimeAtOrigo).TotalDays)
             .Where(_ => _ > x0 && _ < x1)
-            .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), lineThickness, _timeStampBrush))
+            .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y2), lineThickness, _timeStampBrush))
             .ToList();
 
         lineViewModels.ForEach(_ => TimeSeriesViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
+
+        if (_timeOfInterest.Object.HasValue)
+        {
+            var xTimeOfInterest = (_timeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo).TotalDays;
+
+            if (xTimeOfInterest > x0 && xTimeOfInterest < x1)
+            {
+                TimeSeriesViewModel.GeometryEditorViewModel.LineViewModels.Add(
+                    new LineViewModel(new PointD(xTimeOfInterest, y0), new PointD(xTimeOfInterest, y2), lineThickness, _timeOfInterestBrush));
+
+            }
+        }
     }
 }
