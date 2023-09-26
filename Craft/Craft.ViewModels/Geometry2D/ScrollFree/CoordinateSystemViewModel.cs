@@ -14,6 +14,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected double _Y2;
         protected bool _includeGrid = true;
         protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.25 };
+        private bool _showHorizontalAxis;
+        private bool _showVerticalAxis;
         private bool _showHorizontalGridLines;
         private bool _showVerticalGridLines;
 
@@ -34,6 +36,26 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _Y2 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowHorizontalAxis
+        {
+            get { return _showHorizontalAxis; }
+            set
+            {
+                _showHorizontalAxis = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowVerticalAxis
+        {
+            get { return _showVerticalAxis; }
+            set
+            {
+                _showVerticalAxis = value;
                 RaisePropertyChanged();
             }
         }
@@ -71,6 +93,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
             _marginX = marginX;
             _marginY = marginY;
+            _showHorizontalAxis = true;
+            _showVerticalAxis = true;
             _showHorizontalGridLines = true;
             _showVerticalGridLines = true;
 

@@ -10,7 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <valueConverters:DoubleAdder x:Key="DoubleAdder"/>
+        <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -22,6 +22,13 @@
                 X2="{Binding MarginX}"
                 Y1="0"
                 Y2="{Binding Y2}">
+                <Line.Visibility>
+                    <Binding Path="ShowHorizontalAxis" Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Line.Visibility>
             </Line>
             <Line Stroke="Black"
                 StrokeThickness="1"

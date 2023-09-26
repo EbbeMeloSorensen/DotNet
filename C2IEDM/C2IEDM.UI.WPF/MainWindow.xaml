@@ -45,12 +45,20 @@
             <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <local:ObservingFacilitiesDetailsView Grid.Row="0" DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
 
-                <scrollFree:CoordinateSystemView Grid.Row="1" DataContext="{Binding TimeSeriesViewModel}"/>
+                <Expander Grid.Row="1" IsExpanded="True" ExpandDirection="Up">
+                    <Expander.Header>
+                        <TextBlock Text="Database Write Times"/>
+                    </Expander.Header>
+                    <GroupBox>
+                        <scrollFree:CoordinateSystemView Height="80"
+                                                         DataContext="{Binding TimeSeriesViewModel}"/>
+                    </GroupBox>
+                </Expander>
 
                 <!--<local:PersonAssociationsView Grid.Row="1" DataContext="{Binding PersonAssociationsViewModel}"/>-->
             </Grid>

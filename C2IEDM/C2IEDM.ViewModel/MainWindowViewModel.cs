@@ -87,12 +87,13 @@ public class MainWindowViewModel : ViewModelBase
             new Point(xFocus, 0),
             new Size(timeSpan.TotalDays, 3),
             true,
-            25,
-            60,
+            0,
+            40,
             timeAtOrigo);
 
         TimeSeriesViewModel.GeometryEditorViewModel.YAxisLocked = true;
         TimeSeriesViewModel.ShowHorizontalGridLines = false;
+        TimeSeriesViewModel.ShowHorizontalAxis = false;
 
         ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated;
 
