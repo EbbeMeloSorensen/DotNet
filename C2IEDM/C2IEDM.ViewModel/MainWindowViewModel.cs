@@ -192,11 +192,12 @@ public class MainWindowViewModel : ViewModelBase
     {
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
-            var ids = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Select(p => p.Id).ToList();
+            var ids = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects
+                .Select(p => p.Id).ToList();
 
             var observingFacilitiesForDeletion = unitOfWork.ObservingFacilities
                 //.GetPeopleIncludingAssociations(p => ids.Contains(p.Id))
-                .Find(p => ids.Contains(p.Id))
+                .Find(_ => _.Superseded == DateTime.MaxValue && ids.Contains(_.Id))
                 .ToList();
 
             //var personAssociationsForDeletion = peopleForDeletion
@@ -214,7 +215,7 @@ public class MainWindowViewModel : ViewModelBase
 
             ObservingFacilityListViewModel.RemoveObservingFacilities(observingFacilitiesForDeletion);
 
-            _databaseWriteTimes.Add(DateTime.UtcNow);
+            _databaseWriteTimes.Add(now);
             RefreshTimeSeriesView();
         }
     }

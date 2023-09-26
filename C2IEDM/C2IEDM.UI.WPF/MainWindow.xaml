@@ -54,9 +54,8 @@
                     <Expander.Header>
                         <TextBlock Text="Database Write Times"/>
                     </Expander.Header>
-                    <GroupBox>
-                        <scrollFree:CoordinateSystemView Height="80"
-                                                         DataContext="{Binding TimeSeriesViewModel}"/>
+                    <GroupBox Height="100" Margin="10" Header="Database Write Times">
+                        <scrollFree:CoordinateSystemView Margin="0, 6, 0, 0" DataContext="{Binding TimeSeriesViewModel}"/>
                     </GroupBox>
                 </Expander>
 
