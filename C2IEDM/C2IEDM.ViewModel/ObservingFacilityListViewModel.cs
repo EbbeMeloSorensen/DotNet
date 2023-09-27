@@ -61,13 +61,14 @@ public class ObservingFacilityListViewModel : ViewModelBase
     public ObservingFacilityListViewModel(
         IUnitOfWorkFactory unitOfWorkFactory,
         IDialogService applicationDialogService,
-        ObservableObject<DateTime?> timeOfInterest)
+        ObservableObject<DateTime?> timeOfInterest,
+        ObservableObject<bool> displayRetrospectionControls)
     {
         _unitOfWorkFactory = unitOfWorkFactory;
         _applicationDialogService = applicationDialogService;
         _sorting = Sorting.Name;
 
-        FindObservingFacilitiesViewModel = new FindObservingFacilitiesViewModel(timeOfInterest);
+        FindObservingFacilitiesViewModel = new FindObservingFacilitiesViewModel(timeOfInterest, displayRetrospectionControls);
 
         _observingFacilities = new List<ObservingFacility>();
 

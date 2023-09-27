@@ -26,6 +26,17 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ObservableObject<DateTime?> _timeOfInterest;
     private Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
+    private readonly ObservableObject<bool> _displayRetrospectionControls;
+
+    public bool DisplayRetrospectionControls
+    {
+        get => _displayRetrospectionControls.Object;
+        set
+        {
+            _displayRetrospectionControls.Object = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; }
 
@@ -69,10 +80,16 @@ public class MainWindowViewModel : ViewModelBase
             Object = null
         };
 
+        _displayRetrospectionControls = new ObservableObject<bool>
+        {
+            Object = false
+        };
+
         ObservingFacilityListViewModel = new ObservingFacilityListViewModel(
             unitOfWorkFactory, 
             applicationDialogService,
-            _timeOfInterest);
+            _timeOfInterest,
+            _displayRetrospectionControls);
 
         ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
             unitOfWorkFactory,

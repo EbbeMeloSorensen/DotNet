@@ -11,6 +11,17 @@ public class FindObservingFacilitiesViewModel : ViewModelBase
     private string _nameFilter = "";
     private string _nameFilterInUppercase = "";
     private readonly ObservableObject<DateTime?> _timeOfInterest;
+    private bool _displayRetrospectionControls;
+
+    public bool DisplayRetrospectionControls
+    {
+        get => _displayRetrospectionControls;
+        set
+        {
+            _displayRetrospectionControls = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public string NameFilter
     {
@@ -25,9 +36,18 @@ public class FindObservingFacilitiesViewModel : ViewModelBase
     }
 
     public FindObservingFacilitiesViewModel(
-        ObservableObject<DateTime?> timeOfInterest)
+        ObservableObject<DateTime?> timeOfInterest,
+        ObservableObject<bool> displayRetrospectionControls)
     {
         _timeOfInterest = timeOfInterest;
+
+        displayRetrospectionControls.PropertyChanged += (s, e) =>
+        {
+            if (s is ObservableObject<bool> temp)
+            {
+                DisplayRetrospectionControls = temp.Object;
+            }
+        };
     }
 
     public Expression<Func<ObservingFacility, bool>> FilterAsExpression()

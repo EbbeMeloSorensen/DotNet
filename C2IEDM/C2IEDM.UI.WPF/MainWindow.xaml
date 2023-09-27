@@ -5,10 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:C2IEDM.UI.WPF"
         xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="C2IEDM" Height="450" Width="800"
         WindowState="Maximized"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="N" 
@@ -21,13 +30,19 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_Exit"/>
             </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Clear database"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem IsCheckable="True" Header="Retrospection" 
+                          IsChecked="{Binding DisplayRetrospectionControls}" />
+            </MenuItem>
         </Menu>
 
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <!--<RowDefinition Height="Auto"/>-->
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
@@ -41,7 +56,9 @@
                 <Button Content="Delete" Command="{Binding DeleteSelectedObservingFacilitiesCommand}"/>
             </StackPanel>
 
-            <local:ObservingFacilitiesListView Grid.Row="1" Grid.Column="0" DataContext="{Binding ObservingFacilityListViewModel}"/>
+            <local:ObservingFacilitiesListView
+                Grid.Row="1" Grid.Column="0"
+                DataContext="{Binding ObservingFacilityListViewModel}"/>
 
             <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -54,6 +71,14 @@
                     DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
 
                 <Expander Grid.Row="1" IsExpanded="True" ExpandDirection="Up">
+                    <Expander.Visibility>
+                        <Binding Path="DisplayRetrospectionControls"
+                                 Converter="{StaticResource BooleanToVisibilityConverter}">
+                            <Binding.ConverterParameter>
+                                <system:Boolean>True</system:Boolean>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </Expander.Visibility>
                     <Expander.Header>
                         <TextBlock Text="Retrospection"/>
                     </Expander.Header>
