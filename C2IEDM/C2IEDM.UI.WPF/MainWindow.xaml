@@ -7,6 +7,7 @@
         xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="C2IEDM" Height="450" Width="800"
+        WindowState="Maximized"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
 
     <Window.InputBindings>
@@ -48,15 +49,26 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <local:ObservingFacilitiesDetailsView Grid.Row="0" DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
+                <local:ObservingFacilitiesDetailsView 
+                    Grid.Row="0"
+                    DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
 
                 <Expander Grid.Row="1" IsExpanded="True" ExpandDirection="Up">
                     <Expander.Header>
-                        <TextBlock Text="Database Write Times"/>
+                        <TextBlock Text="Retrospection"/>
                     </Expander.Header>
-                    <GroupBox Height="100" Margin="10" Header="Database Write Times">
-                        <scrollFree:CoordinateSystemView Margin="0, 6, 0, 0" DataContext="{Binding TimeSeriesViewModel}"/>
-                    </GroupBox>
+                    <TabControl>
+                        <TabItem Header="Historical Time">
+                            <scrollFree:CoordinateSystemView
+                                Height="75" 
+                                DataContext="{Binding HistoricalTimeViewModel}"/>
+                        </TabItem>
+                        <TabItem Header="Database Write Times">
+                            <scrollFree:CoordinateSystemView
+                                Height="75" 
+                                DataContext="{Binding DatabaseWriteTimesViewModel}"/>
+                        </TabItem>
+                    </TabControl>
                 </Expander>
 
                 <!--<local:PersonAssociationsView Grid.Row="1" DataContext="{Binding PersonAssociationsViewModel}"/>-->

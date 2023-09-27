@@ -33,7 +33,7 @@
                 Command="{Binding FindObservingFacilitiesCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
 
-        <GroupBox Grid.Row="2" Header="Sorting">
+        <GroupBox Grid.Row="2" Header="Sorting" Visibility="Collapsed">
             <StackPanel>
                 <RadioButton Content="Name"
                              IsChecked="{Binding Path=Sorting, Mode=TwoWay, Converter={StaticResource EnumMatchToBooleanConverter}, ConverterParameter=Name}"/>

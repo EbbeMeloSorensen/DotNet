@@ -31,7 +31,8 @@ public class MainWindowViewModel : ViewModelBase
 
     public ObservingFacilitiesDetailsViewModel ObservingFacilitiesDetailsViewModel { get; }
 
-    public TimeSeriesViewModel TimeSeriesViewModel { get; }
+    public TimeSeriesViewModel DatabaseWriteTimesViewModel { get; private set;  }
+    public TimeSeriesViewModel HistoricalTimeViewModel { get; private set; }
 
     public LogViewModel LogViewModel { get; }
 
@@ -76,39 +77,13 @@ public class MainWindowViewModel : ViewModelBase
         ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
             unitOfWorkFactory,
             ObservingFacilityListViewModel.SelectedObservingFacilities);
-
-        var timeSpan = TimeSpan.FromHours(1);
-        var utcNow = DateTime.UtcNow;
-        var timeAtOrigo = utcNow.Date;
-        var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1);
-        var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
-
-        TimeSeriesViewModel = new TimeSeriesViewModel(
-            new Point(xFocus, 0),
-            new Size(timeSpan.TotalDays, 3),
-            true,
-            0,
-            40,
-            timeAtOrigo);
-
-        TimeSeriesViewModel.GeometryEditorViewModel.YAxisLocked = true;
-        TimeSeriesViewModel.ShowHorizontalGridLines = false;
-        TimeSeriesViewModel.ShowHorizontalAxis = false;
+        
+        InitializeDatabaseWriteTimesViewModel();
+        InitializeHistoricalTimeViewModel();
 
         ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated;
 
         ObservingFacilityListViewModel.SelectedObservingFacilities.PropertyChanged += HandleObservingFacilitySelectionChanged;
-
-        TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
-        {
-            RefreshTimeSeriesView();
-        };
-
-        TimeSeriesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
-        {
-            _timeOfInterest.Object = TimeSeriesViewModel.TimeAtMousePosition.Object;
-            RefreshTimeSeriesView();
-        };
 
         if (true)
         {
@@ -244,36 +219,97 @@ public class MainWindowViewModel : ViewModelBase
                ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any();
     }
 
+    private void InitializeHistoricalTimeViewModel()
+    {
+        var timeSpan = TimeSpan.FromDays(40);
+        var utcNow = DateTime.UtcNow;
+        var timeAtOrigo = utcNow.Date;
+        var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1);
+        var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
+
+        HistoricalTimeViewModel = new TimeSeriesViewModel(
+            new Point(xFocus, 0),
+            new Size(timeSpan.TotalDays, 3),
+            true,
+            0,
+            40,
+            timeAtOrigo);
+
+        HistoricalTimeViewModel.GeometryEditorViewModel.YAxisLocked = true;
+        HistoricalTimeViewModel.ShowHorizontalGridLines = false;
+        HistoricalTimeViewModel.ShowHorizontalAxis = false;
+
+        HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+        {
+        };
+
+        HistoricalTimeViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
+        {
+        };
+    }
+
+    private void InitializeDatabaseWriteTimesViewModel()
+    {
+        var timeSpan = TimeSpan.FromHours(1);
+        var utcNow = DateTime.UtcNow;
+        var timeAtOrigo = utcNow.Date;
+        var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1);
+        var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
+
+        DatabaseWriteTimesViewModel = new TimeSeriesViewModel(
+            new Point(xFocus, 0),
+            new Size(timeSpan.TotalDays, 3),
+            true,
+            0,
+            40,
+            timeAtOrigo);
+
+        DatabaseWriteTimesViewModel.GeometryEditorViewModel.YAxisLocked = true;
+        DatabaseWriteTimesViewModel.ShowHorizontalGridLines = false;
+        DatabaseWriteTimesViewModel.ShowHorizontalAxis = false;
+
+        DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+        {
+            RefreshTimeSeriesView();
+        };
+
+        DatabaseWriteTimesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
+        {
+            _timeOfInterest.Object = DatabaseWriteTimesViewModel.TimeAtMousePosition.Object;
+            RefreshTimeSeriesView();
+        };
+    }
+
     private void RefreshTimeSeriesView()
     {
-        var x0 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
-        var x1 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
-        var y0 = -TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y - TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowSize.Height;
-        var y1 = -TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y;
+        var x0 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
+        var x1 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
+        var y0 = -DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y - DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height;
+        var y1 = -DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y;
 
-        var y2 = TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
-             TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * TimeSeriesViewModel.Y2 /
-             TimeSeriesViewModel.GeometryEditorViewModel.ViewPortSize.Height;
+        var y2 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
+             DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * DatabaseWriteTimesViewModel.Y2 /
+             DatabaseWriteTimesViewModel.GeometryEditorViewModel.ViewPortSize.Height;
 
-        TimeSeriesViewModel.GeometryEditorViewModel.ClearLines();
+        DatabaseWriteTimesViewModel.GeometryEditorViewModel.ClearLines();
 
-        var lineThickness = 2.0 / TimeSeriesViewModel.GeometryEditorViewModel.Scaling.Width;
+        var lineThickness = 2.0 / DatabaseWriteTimesViewModel.GeometryEditorViewModel.Scaling.Width;
 
         var lineViewModels = _databaseWriteTimes
-            .Select(_ => (_ - TimeSeriesViewModel.TimeAtOrigo).TotalDays)
+            .Select(_ => (_ - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays)
             .Where(_ => _ > x0 && _ < x1)
             .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y2), lineThickness, _timeStampBrush))
             .ToList();
 
-        lineViewModels.ForEach(_ => TimeSeriesViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
+        lineViewModels.ForEach(_ => DatabaseWriteTimesViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
 
         if (_timeOfInterest.Object.HasValue)
         {
-            var xTimeOfInterest = (_timeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo).TotalDays;
+            var xTimeOfInterest = (_timeOfInterest.Object.Value - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays;
 
             if (xTimeOfInterest > x0 && xTimeOfInterest < x1)
             {
-                TimeSeriesViewModel.GeometryEditorViewModel.LineViewModels.Add(
+                DatabaseWriteTimesViewModel.GeometryEditorViewModel.LineViewModels.Add(
                     new LineViewModel(new PointD(xTimeOfInterest, y0), new PointD(xTimeOfInterest, y2), lineThickness, _timeOfInterestBrush));
 
             }
