@@ -99,14 +99,6 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilityListViewModel.SelectedObservingFacilities.PropertyChanged += HandleObservingFacilitySelectionChanged;
 
-        using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
-        {
-            var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
-            var timeStampsOfInterest =  observingFacilities.Select(_ => _.Created).ToList();
-            timeStampsOfInterest.AddRange(observingFacilities.Select(_ => _.Superseded));
-            _databaseWriteTimes = timeStampsOfInterest.Distinct().ToList();
-        }
-
         TimeSeriesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
         {
             RefreshTimeSeriesView();
@@ -117,6 +109,29 @@ public class MainWindowViewModel : ViewModelBase
             _timeOfInterest.Object = TimeSeriesViewModel.TimeAtMousePosition.Object;
             RefreshTimeSeriesView();
         };
+
+        if (true)
+        {
+            try
+            {
+                using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+                    var timeStampsOfInterest = observingFacilities.Select(_ => _.Created).ToList();
+                    timeStampsOfInterest.AddRange(observingFacilities.Select(_ => _.Superseded));
+                    _databaseWriteTimes = timeStampsOfInterest.Distinct().ToList();
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Just swallow it for now - write it to the log later
+                _databaseWriteTimes = new List<DateTime>();
+            }
+        }
+        else
+        {
+            _databaseWriteTimes = new List<DateTime>();
+        }
     }
 
     private void ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated(

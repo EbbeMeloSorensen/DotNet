@@ -29,7 +29,7 @@
 
         <local:FindObservingFacilitiesView Grid.Row="0" DataContext="{Binding FindObservingFacilitiesViewModel}"/>
 
-        <Button Grid.Row="1" Content="Find" HorizontalAlignment="Right" Margin="1" Width="75"
+        <Button Grid.Row="1" Content="Find" HorizontalAlignment="Right" Margin="1, 5, 1, 1" Width="75"
                 Command="{Binding FindObservingFacilitiesCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
 
