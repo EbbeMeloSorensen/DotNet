@@ -1,15 +1,15 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Craft.Utils;
 using Craft.UI.Utils;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
-using Craft.Utils;
-using System;
 using C2IEDM.Application;
-using GalaSoft.MvvmLight.Command;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace C2IEDM.ViewModel;
 
@@ -172,10 +172,10 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
 
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
-            var ids = _observingFacilities.Objects.Select(p => p.Id).ToList();
+            var objectIds = _observingFacilities.Objects.Select(_ => _.ObjectId).ToList();
 
             var observingFacilitiesForUpdating= unitOfWork.ObservingFacilities
-                .Find(_ => _.Superseded == DateTime.MaxValue && ids.Contains(_.Id))
+                .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId))
                 .ToList();
 
             var now = DateTime.UtcNow;
@@ -201,11 +201,9 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
                                 SharedDateClosed.Value.Month,
                                 SharedDateClosed.Value.Day,
                                 0, 0, 0, DateTimeKind.Utc)
-                            : _.DateClosed,
-                    Created = now,
-                    Superseded = DateTime.MaxValue
+                            : _.DateClosed
                 };
-            });
+            }).ToList();
 
             unitOfWork.ObservingFacilities.AddRange(newObservingFacilityRows);
             unitOfWork.Complete();

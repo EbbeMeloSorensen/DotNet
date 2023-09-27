@@ -124,6 +124,8 @@ public class MainWindowViewModel : ViewModelBase
         Application.ObservingFacilitiesEventArgs e)
     {
         ObservingFacilityListViewModel.UpdateObservingFacilities(e.ObservingFacilities);
+        _databaseWriteTimes.Add(e.ObservingFacilities.First().Created);
+        RefreshTimeSeriesView();
     }
 
     private void HandleObservingFacilitySelectionChanged(
@@ -160,14 +162,15 @@ public class MainWindowViewModel : ViewModelBase
                 0, 0, 0, DateTimeKind.Utc)
             : new DateTime?();
 
+        var now = DateTime.UtcNow;
+
         var observingFacility = new ObservingFacility(
             Guid.NewGuid(),
-            DateTime.UtcNow)
+            now)
         {
             Name = dialogViewModel.Name,
             DateEstablished = dateEstablished,
-            DateClosed = dateClosed,
-            Created = DateTime.UtcNow
+            DateClosed = dateClosed
         };
 
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
@@ -178,7 +181,7 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilityListViewModel.AddObservingFacility(observingFacility);
 
-        _databaseWriteTimes.Add(DateTime.UtcNow);
+        _databaseWriteTimes.Add(now);
         RefreshTimeSeriesView();
     }
 

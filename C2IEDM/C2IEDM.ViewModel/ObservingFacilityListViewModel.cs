@@ -100,13 +100,13 @@ public class ObservingFacilityListViewModel : ViewModelBase
     public void UpdateObservingFacilities(
         IEnumerable<ObservingFacility> observingFacilities)
     {
-        var idsOfUpdatedObservingFacilities = observingFacilities.Select(_ => _.Id).ToList();
+        var objectIdsOfUpdatedObservingFacilities = observingFacilities.Select(_ => _.ObjectId).ToList();
 
         foreach (var observingFacility in _observingFacilities)
         {
-            if (idsOfUpdatedObservingFacilities.Contains(observingFacility.Id))
+            if (objectIdsOfUpdatedObservingFacilities.Contains(observingFacility.ObjectId))
             {
-                var temp = observingFacilities.Single(_ => _.Id == observingFacility.Id);
+                var temp = observingFacilities.Single(_ => _.ObjectId == observingFacility.ObjectId);
 
                 observingFacility.Name = temp.Name;
                 observingFacility.DateEstablished = temp.DateEstablished;
@@ -121,7 +121,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
 
         foreach (var observingFacilityListItemViewModel in ObservingFacilityListItemViewModels)
         {
-            if (idsOfUpdatedObservingFacilities.Contains(observingFacilityListItemViewModel.ObservingFacility.Id))
+            if (objectIdsOfUpdatedObservingFacilities.Contains(observingFacilityListItemViewModel.ObservingFacility.ObjectId))
             {
                 SelectedObservingFacilityListItemViewModels.Add(observingFacilityListItemViewModel);
             }
