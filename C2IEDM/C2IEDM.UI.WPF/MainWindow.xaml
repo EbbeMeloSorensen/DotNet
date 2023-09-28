@@ -23,6 +23,9 @@
         <KeyBinding Modifiers="Control" Key="N" 
                     Command="{Binding CreateObservingFacilityCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Esc"
+                    Command="{Binding EscapeCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
     </Window.InputBindings>
 
     <DockPanel>
@@ -69,6 +72,19 @@
 
                 <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding MapViewModel}" />
 
+                <Border BorderBrush="Black" Background="#80808080" Opacity="1.0" BorderThickness="1" Margin="10, 20, 10, 10" 
+                    Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Border.Visibility>
+                        <Binding Path="DisplayMessageInMap"
+                            Converter="{StaticResource BooleanToVisibilityConverter}">
+                            <Binding.ConverterParameter>
+                                <system:Boolean>True</system:Boolean>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </Border.Visibility>
+                    <TextBlock Text="Click the map to place observing facility" Margin="10, 10, 10, 10"/>
+                </Border>
+
                 <local:ObservingFacilitiesDetailsView 
                     Grid.Row="1"
                     DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
@@ -101,8 +117,8 @@
                 </Expander>
 
                 <!--<local:PersonAssociationsView Grid.Row="1" DataContext="{Binding PersonAssociationsViewModel}"/>-->
-            </Grid>
 
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>

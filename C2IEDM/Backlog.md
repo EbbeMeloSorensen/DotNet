@@ -41,3 +41,9 @@ før i tiden, og en, hvor man kunne se, hvordan databasen PÅ ET TIDLIGERE TIDDSPU
 Det kunne jo passende være to tidspunkter, der blev vist i hver deres felt i brugergrænsefladen. Skal man så vise det i samme view? nej det er 
 nok ikke smart, men lige som det kunne være smart at have mulighed for at vælge tidspunkter i time series viewet, så kunne det være sjovt at kunne 
 vælge det historiske tidspunkt, man var interesseret i, i et time series view.
+
+Når man laver en ny observing Facility, skal den også have en lokation. Brugeroplevelsen kan være, at man vælger New og så får en modeless besked om at man 
+skal klikke på kortet
+Todo: Mulighed for at maintaine aspect ratio under navigation i kort
+Todo: Når man har klikket et sted, så skal der vises et punkt
+Todo: Koordinater skal med ind i dialogboksen

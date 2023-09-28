@@ -27,6 +27,8 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
     private readonly ObservableObject<bool> _displayRetrospectionControls;
+    private bool _displayMessageInMap;
+    private Window _owner;
 
     public bool DisplayRetrospectionControls
     {
@@ -34,6 +36,16 @@ public class MainWindowViewModel : ViewModelBase
         set
         {
             _displayRetrospectionControls.Object = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool DisplayMessageInMap 
+    {
+        get => _displayMessageInMap;
+        set
+        {
+            _displayMessageInMap = value;
             RaisePropertyChanged();
         }
     }
@@ -47,6 +59,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private RelayCommand<object> _createObservingFacilityCommand;
     private RelayCommand _deleteSelectedObservingFacilitiesCommand;
+    private RelayCommand _escapeCommand;
 
     public RelayCommand<object> CreateObservingFacilityCommand
     {
@@ -55,7 +68,13 @@ public class MainWindowViewModel : ViewModelBase
 
     public RelayCommand DeleteSelectedObservingFacilitiesCommand
     {
-        get { return _deleteSelectedObservingFacilitiesCommand ?? (_deleteSelectedObservingFacilitiesCommand = new RelayCommand(DeleteSelectedObservingFacilities, CanDeleteSelectedObservingFacilities)); }
+        get { return _deleteSelectedObservingFacilitiesCommand ?? (_deleteSelectedObservingFacilitiesCommand = 
+                new RelayCommand(DeleteSelectedObservingFacilities, CanDeleteSelectedObservingFacilities)); }
+    }
+
+    public RelayCommand EscapeCommand
+    {
+        get { return _escapeCommand ?? (_escapeCommand = new RelayCommand(Escape)); }
     }
 
     public MainWindowViewModel(
@@ -125,50 +144,8 @@ public class MainWindowViewModel : ViewModelBase
     private void CreateObservingFacility(
         object owner)
     {
-        var dialogViewModel = new CreateObservingFacilityDialogViewModel();
-
-        if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-        {
-            return;
-        }
-
-        var dateEstablished = dialogViewModel.DateEstablished.HasValue
-            ? new DateTime(
-                dialogViewModel.DateEstablished.Value.Year,
-                dialogViewModel.DateEstablished.Value.Month,
-                dialogViewModel.DateEstablished.Value.Day,
-                0, 0, 0, DateTimeKind.Utc)
-            : new DateTime?();
-
-        var dateClosed = dialogViewModel.DateClosed.HasValue
-            ? new DateTime(
-                dialogViewModel.DateClosed.Value.Year,
-                dialogViewModel.DateClosed.Value.Month,
-                dialogViewModel.DateClosed.Value.Day,
-                0, 0, 0, DateTimeKind.Utc)
-            : new DateTime?();
-
-        var now = DateTime.UtcNow;
-
-        var observingFacility = new ObservingFacility(
-            Guid.NewGuid(),
-            now)
-        {
-            Name = dialogViewModel.Name,
-            DateEstablished = dateEstablished,
-            DateClosed = dateClosed
-        };
-
-        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-        {
-            unitOfWork.ObservingFacilities.Add(observingFacility);
-            unitOfWork.Complete();
-        }
-
-        ObservingFacilityListViewModel.AddObservingFacility(observingFacility);
-
-        _databaseWriteTimes.Add(now);
-        RefreshTimeSeriesView();
+        _owner = owner as Window;
+        DisplayMessageInMap = true;
     }
 
     private bool CanCreateObservingFacility(
@@ -213,6 +190,11 @@ public class MainWindowViewModel : ViewModelBase
     {
         return ObservingFacilityListViewModel.SelectedObservingFacilities.Objects != null &&
                ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any();
+    }
+
+    private void Escape()
+    {
+        DisplayMessageInMap = false;
     }
 
     private void InitializeLogViewModel(ILogger logger)
@@ -268,6 +250,61 @@ public class MainWindowViewModel : ViewModelBase
             Math.Abs(worldWindowBoundingBoxNorthWest.Y - worldWindowBoundingBoxSouthEast.Y));
 
         MapViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, false);
+
+        MapViewModel.MouseClickOccured += (s, e) =>
+        {
+            if (!DisplayMessageInMap || !MapViewModel.MousePositionWorld.Object.HasValue)
+            {
+                return;
+            }
+
+            DisplayMessageInMap = false;
+
+            var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
+            {
+                return;
+            }
+
+            var dateEstablished = dialogViewModel.DateEstablished.HasValue
+                ? new DateTime(
+                    dialogViewModel.DateEstablished.Value.Year,
+                    dialogViewModel.DateEstablished.Value.Month,
+                    dialogViewModel.DateEstablished.Value.Day,
+                    0, 0, 0, DateTimeKind.Utc)
+                : new DateTime?();
+
+            var dateClosed = dialogViewModel.DateClosed.HasValue
+                ? new DateTime(
+                    dialogViewModel.DateClosed.Value.Year,
+                    dialogViewModel.DateClosed.Value.Month,
+                    dialogViewModel.DateClosed.Value.Day,
+                    0, 0, 0, DateTimeKind.Utc)
+                : new DateTime?();
+
+            var now = DateTime.UtcNow;
+
+            var observingFacility = new ObservingFacility(
+                Guid.NewGuid(),
+                now)
+            {
+                Name = dialogViewModel.Name,
+                DateEstablished = dateEstablished,
+                DateClosed = dateClosed
+            };
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.ObservingFacilities.Add(observingFacility);
+                unitOfWork.Complete();
+            }
+
+            ObservingFacilityListViewModel.AddObservingFacility(observingFacility);
+
+            _databaseWriteTimes.Add(now);
+            RefreshTimeSeriesView();
+        };
     }
 
     private void InitializeHistoricalTimeViewModel()

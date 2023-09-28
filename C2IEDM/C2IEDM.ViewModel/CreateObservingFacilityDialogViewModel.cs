@@ -2,15 +2,11 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Net;
-using System.Reflection.Emit;
 using System.Windows;
-using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
-using System.Xml.Linq;
-using Craft.UI.Utils;
-using Craft.Utils;
-using Craft.ViewModels.Dialogs;
 using GalaSoft.MvvmLight.Command;
+using Craft.Utils;
+using Craft.UI.Utils;
+using Craft.ViewModels.Dialogs;
 
 namespace C2IEDM.ViewModel;
 
@@ -157,6 +153,11 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
             _error = value;
             RaisePropertyChanged();
         }
+    }
+
+    public CreateObservingFacilityDialogViewModel(
+        Point mousePositionWorld)
+    {
     }
 
     private void RaisePropertyChanges()
