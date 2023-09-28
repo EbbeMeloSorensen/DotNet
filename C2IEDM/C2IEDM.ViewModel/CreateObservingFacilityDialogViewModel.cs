@@ -17,9 +17,11 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     private string _error = string.Empty;
 
     private string _name;
-    public DateTime? _dateEstablished { get; set; }
-    public DateTime? _dateClosed { get; set; }
-
+    private DateTime? _dateEstablished;
+    private DateTime? _dateClosed;
+    private double _latitude;
+    private double _longitude;
+    
     private RelayCommand<object> _okCommand;
     private RelayCommand<object> _cancelCommand;
 
@@ -53,6 +55,26 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         }
     }
 
+    public double Latitude
+    {
+        get { return _latitude; }
+        set
+        {
+            _latitude = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public double Longitude
+    {
+        get { return _longitude; }
+        set
+        {
+            _longitude = value;
+            RaisePropertyChanged();
+        }
+    }
+
     public RelayCommand<object> OKCommand
     {
         get { return _okCommand ?? (_okCommand = new RelayCommand<object>(OK, CanOK)); }
@@ -67,8 +89,8 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     {
         UpdateState(StateOfView.Updated);
 
-        Error = string.Join("",
-            ValidationMessages.Select(e => e.ErrorMessage).ToArray());
+        Error = string.Join("", ValidationMessages.Select(e => e.ErrorMessage).ToArray());
+
         if (!string.IsNullOrEmpty(Error))
         {
             return;
@@ -117,6 +139,11 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
 
                             break;
                         }
+                    case "Latitude":
+                        {
+
+                            break;
+                        }
                 }
             }
 
@@ -137,7 +164,9 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
                 {
                     new ValidationError {PropertyName = "Name"},
                     new ValidationError {PropertyName = "DateEstablished"},
-                    new ValidationError {PropertyName = "DateClosed"}
+                    new ValidationError {PropertyName = "DateClosed"},
+                    new ValidationError {PropertyName = "Latitude"},
+                    new ValidationError {PropertyName = "Longitude"}
                 };
             }
 
@@ -158,6 +187,8 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     public CreateObservingFacilityDialogViewModel(
         Point mousePositionWorld)
     {
+        Latitude = Math.Round(mousePositionWorld.X, 4);
+        Longitude = Math.Round(mousePositionWorld.Y, 4);
     }
 
     private void RaisePropertyChanges()
@@ -165,6 +196,8 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         RaisePropertyChanged("Name");
         RaisePropertyChanged("DateEstablished");
         RaisePropertyChanged("DateClosed");
+        RaisePropertyChanged("Latitude");
+        RaisePropertyChanged("Longitude");
     }
 
     private void UpdateState(StateOfView state)
