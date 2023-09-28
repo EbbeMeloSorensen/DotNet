@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Utils;
+using Craft.DataStructures.IO;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
@@ -18,14 +18,14 @@ namespace C2IEDM.ViewModel;
 
 public class MainWindowViewModel : ViewModelBase
 {
+    private ILogger _logger;
     private readonly Application.Application _application;
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
-    private readonly ILogger _logger;
     private readonly List<DateTime> _databaseWriteTimes;
     private readonly ObservableObject<DateTime?> _timeOfInterest;
-    private Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
-    private Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
+    private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
+    private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
     private readonly ObservableObject<bool> _displayRetrospectionControls;
 
     public bool DisplayRetrospectionControls
@@ -38,14 +38,12 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; }
-
-    public ObservingFacilitiesDetailsViewModel ObservingFacilitiesDetailsViewModel { get; }
-
+    public LogViewModel LogViewModel { get; private set; }
+    public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; private set; }
+    public ObservingFacilitiesDetailsViewModel ObservingFacilitiesDetailsViewModel { get; private set; }
+    public GeometryEditorViewModel MapViewModel { get; private set; }
     public TimeSeriesViewModel DatabaseWriteTimesViewModel { get; private set;  }
     public TimeSeriesViewModel HistoricalTimeViewModel { get; private set; }
-
-    public LogViewModel LogViewModel { get; }
 
     private RelayCommand<object> _createObservingFacilityCommand;
     private RelayCommand _deleteSelectedObservingFacilitiesCommand;
@@ -72,9 +70,6 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWorkFactory,
             logger);
 
-        LogViewModel = new LogViewModel();
-        _logger = new ViewModelLogger(logger, LogViewModel);
-
         _timeOfInterest = new ObservableObject<DateTime?>
         {
             Object = null
@@ -85,24 +80,16 @@ public class MainWindowViewModel : ViewModelBase
             Object = false
         };
 
-        ObservingFacilityListViewModel = new ObservingFacilityListViewModel(
-            unitOfWorkFactory, 
-            applicationDialogService,
-            _timeOfInterest,
-            _displayRetrospectionControls);
-
-        ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
-            unitOfWorkFactory,
-            ObservingFacilityListViewModel.SelectedObservingFacilities);
-        
+        InitializeLogViewModel(logger);
+        InitializeObservingFacilityListViewModel(unitOfWorkFactory, applicationDialogService);
+        InitializeObservingFacilitiesDetailsViewModel(unitOfWorkFactory);
+        InitializeMapViewModel();
         InitializeDatabaseWriteTimesViewModel();
         InitializeHistoricalTimeViewModel();
 
-        ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated;
+        DrawMapOfDenmark();
 
-        ObservingFacilityListViewModel.SelectedObservingFacilities.PropertyChanged += HandleObservingFacilitySelectionChanged;
-
-        if (true)
+        if (false)
         {
             try
             {
@@ -126,22 +113,14 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private void ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated(
-        object? sender, 
-        Application.ObservingFacilitiesEventArgs e)
-    {
-        ObservingFacilityListViewModel.UpdateObservingFacilities(e.ObservingFacilities);
-        _databaseWriteTimes.Add(e.ObservingFacilities.First().Created);
-        RefreshTimeSeriesView();
-    }
-
-    private void HandleObservingFacilitySelectionChanged(
-        object sender,
-        PropertyChangedEventArgs e)
-    {
-        DeleteSelectedObservingFacilitiesCommand.RaiseCanExecuteChanged();
-        //ExportSelectionToGraphmlCommand.RaiseCanExecuteChanged();
-    }
+    //private void ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated(
+    //    object? sender, 
+    //    Application.ObservingFacilitiesEventArgs e)
+    //{
+    //    ObservingFacilityListViewModel.UpdateObservingFacilities(e.ObservingFacilities);
+    //    _databaseWriteTimes.Add(e.ObservingFacilities.First().Created);
+    //    RefreshTimeSeriesView();
+    //}
 
     private void CreateObservingFacility(
         object owner)
@@ -234,6 +213,61 @@ public class MainWindowViewModel : ViewModelBase
     {
         return ObservingFacilityListViewModel.SelectedObservingFacilities.Objects != null &&
                ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any();
+    }
+
+    private void InitializeLogViewModel(ILogger logger)
+    {
+        LogViewModel = new LogViewModel();
+        _logger = new ViewModelLogger(logger, LogViewModel);
+    }
+
+    private void InitializeObservingFacilityListViewModel(
+        IUnitOfWorkFactory unitOfWorkFactory,
+        IDialogService applicationDialogService)
+    {
+        ObservingFacilityListViewModel = new ObservingFacilityListViewModel(
+            unitOfWorkFactory,
+            applicationDialogService,
+            _timeOfInterest,
+            _displayRetrospectionControls);
+
+        ObservingFacilityListViewModel.SelectedObservingFacilities.PropertyChanged += (s, e) =>
+        {
+            DeleteSelectedObservingFacilitiesCommand.RaiseCanExecuteChanged();
+        };
+    }
+
+    private void InitializeObservingFacilitiesDetailsViewModel(
+        IUnitOfWorkFactory unitOfWorkFactory)
+    {
+        ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
+            unitOfWorkFactory,
+            ObservingFacilityListViewModel.SelectedObservingFacilities);
+
+        ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += (s, e) =>
+        {
+            ObservingFacilityListViewModel.UpdateObservingFacilities(e.ObservingFacilities);
+            _databaseWriteTimes.Add(e.ObservingFacilities.First().Created);
+            RefreshTimeSeriesView();
+        };
+    }
+
+    private void InitializeMapViewModel()
+    {
+        //var worldWindowBoundingBoxNorthWest = new Point(10.25, 57.95);
+        //var worldWindowBoundingBoxSouthEast = new Point(13.75, 54.45);
+        var worldWindowBoundingBoxNorthWest = new Point(8, 57.95);
+        var worldWindowBoundingBoxSouthEast = new Point(16, 54.45);
+
+        var worldWindowFocus = new Point(
+            (worldWindowBoundingBoxNorthWest.X + worldWindowBoundingBoxSouthEast.X) / 2,
+            (worldWindowBoundingBoxNorthWest.Y + worldWindowBoundingBoxSouthEast.Y) / 2);
+
+        var worldWindowSize = new Size(
+            Math.Abs(worldWindowBoundingBoxNorthWest.X - worldWindowBoundingBoxSouthEast.X),
+            Math.Abs(worldWindowBoundingBoxNorthWest.Y - worldWindowBoundingBoxSouthEast.Y));
+
+        MapViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, false);
     }
 
     private void InitializeHistoricalTimeViewModel()
@@ -330,6 +364,23 @@ public class MainWindowViewModel : ViewModelBase
                     new LineViewModel(new PointD(xTimeOfInterest, y0), new PointD(xTimeOfInterest, y2), lineThickness, _timeOfInterestBrush));
 
             }
+        }
+    }
+
+    private void DrawMapOfDenmark()
+    {
+        // Load GML file of Denmark
+        //var fileName = @".\Data\Denmark.gml";
+        var fileName = @".\Data\DenmarkAndGreenland.gml";
+        DataIOHandler.ExtractGeometricPrimitivesFromGMLFile(fileName, out var polygons);
+
+        // Add the regions of Denmark to the map as polygons
+        var lineThickness = 0.005;
+        var brush = new SolidColorBrush(new Color { R = 150, G = 255, B = 150, A = 127 });
+
+        foreach (var polygon in polygons)
+        {
+            MapViewModel.AddPolygon(polygon.Select(p => new PointD(p[1], p[0])), lineThickness, brush);
         }
     }
 }

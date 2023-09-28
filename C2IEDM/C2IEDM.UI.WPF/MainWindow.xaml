@@ -60,20 +60,24 @@
                 Grid.Row="1" Grid.Column="0"
                 DataContext="{Binding ObservingFacilityListViewModel}"/>
 
-            <Grid Grid.Row="1" Grid.Column="1">
+            <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
+                <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding MapViewModel}" />
+
                 <local:ObservingFacilitiesDetailsView 
-                    Grid.Row="0"
+                    Grid.Row="1"
                     DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
 
-                <Expander Grid.Row="1" IsExpanded="True" ExpandDirection="Up">
+                <Expander Grid.Row="2" IsExpanded="True" ExpandDirection="Up">
                     <Expander.Visibility>
-                        <Binding Path="DisplayRetrospectionControls"
-                                 Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding 
+                            Path="DisplayRetrospectionControls"
+                            Converter="{StaticResource BooleanToVisibilityConverter}">
                             <Binding.ConverterParameter>
                                 <system:Boolean>True</system:Boolean>
                             </Binding.ConverterParameter>
