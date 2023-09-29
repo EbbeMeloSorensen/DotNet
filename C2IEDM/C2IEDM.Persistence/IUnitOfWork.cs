@@ -20,7 +20,7 @@ public interface IUnitOfWork : IDisposable
     ILocationRepository Locations { get; }
     IOrbitAreaRepository OrbitAreas { get; }
     IPointReferenceRepository PointReferences { get; }
-    IPointRepository Points { get; }
+    Repositories.Geometry.IPointRepository Points { get; }
     IPolyArcAreaRepository PolyArcAreas { get; }
     IPolygonAreaRepository PolygonAreas { get; }
     IRelativePointRepository RelativePoints { get; }

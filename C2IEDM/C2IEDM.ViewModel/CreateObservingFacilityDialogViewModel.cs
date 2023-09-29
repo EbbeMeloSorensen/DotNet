@@ -17,11 +17,13 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     private string _error = string.Empty;
 
     private string _name;
-    private DateTime? _dateEstablished;
+    private DateTime _dateEstablished;
     private DateTime? _dateClosed;
     private double _latitude;
     private double _longitude;
-    
+    private DateTime _from;
+    private DateTime? _to;
+
     private RelayCommand<object> _okCommand;
     private RelayCommand<object> _cancelCommand;
 
@@ -35,7 +37,7 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         }
     }
 
-    public DateTime? DateEstablished
+    public DateTime DateEstablished
     {
         get { return _dateEstablished; }
         set
@@ -51,6 +53,26 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         set
         {
             _dateClosed = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public DateTime From
+    {
+        get { return _from; }
+        set
+        {
+            _from = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public DateTime? To
+    {
+        get { return _to; }
+        set
+        {
+            _to = value;
             RaisePropertyChanged();
         }
     }
@@ -75,6 +97,16 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         }
     }
 
+    public string Error
+    {
+        get { return _error; }
+        set
+        {
+            _error = value;
+            RaisePropertyChanged();
+        }
+    }
+
     public RelayCommand<object> OKCommand
     {
         get { return _okCommand ?? (_okCommand = new RelayCommand<object>(OK, CanOK)); }
@@ -83,6 +115,16 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     public RelayCommand<object> CancelCommand
     {
         get { return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(Cancel, CanCancel)); }
+    }
+
+    public CreateObservingFacilityDialogViewModel(
+        Point mousePositionWorld)
+    {
+        var currentDate = DateTime.Now.Date;
+        DateEstablished = currentDate;
+        From = currentDate;
+        Latitude = Math.Round(mousePositionWorld.X, 4);
+        Longitude = Math.Round(mousePositionWorld.Y, 4);
     }
 
     private void OK(object parameter)
@@ -141,7 +183,10 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
                         }
                     case "Latitude":
                         {
-
+                            break;
+                        }
+                    case "Longitude":
+                        {
                             break;
                         }
                 }
@@ -166,29 +211,14 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
                     new ValidationError {PropertyName = "DateEstablished"},
                     new ValidationError {PropertyName = "DateClosed"},
                     new ValidationError {PropertyName = "Latitude"},
-                    new ValidationError {PropertyName = "Longitude"}
+                    new ValidationError {PropertyName = "Longitude"},
+                    new ValidationError {PropertyName = "From"},
+                    new ValidationError {PropertyName = "To"},
                 };
             }
 
             return _validationMessages;
         }
-    }
-
-    public string Error
-    {
-        get { return _error; }
-        set
-        {
-            _error = value;
-            RaisePropertyChanged();
-        }
-    }
-
-    public CreateObservingFacilityDialogViewModel(
-        Point mousePositionWorld)
-    {
-        Latitude = Math.Round(mousePositionWorld.X, 4);
-        Longitude = Math.Round(mousePositionWorld.Y, 4);
     }
 
     private void RaisePropertyChanges()
@@ -198,6 +228,8 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         RaisePropertyChanged("DateClosed");
         RaisePropertyChanged("Latitude");
         RaisePropertyChanged("Longitude");
+        RaisePropertyChanged("From");
+        RaisePropertyChanged("To");
     }
 
     private void UpdateState(StateOfView state)

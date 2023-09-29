@@ -267,13 +267,11 @@ public class MainWindowViewModel : ViewModelBase
                 return;
             }
 
-            var dateEstablished = dialogViewModel.DateEstablished.HasValue
-                ? new DateTime(
-                    dialogViewModel.DateEstablished.Value.Year,
-                    dialogViewModel.DateEstablished.Value.Month,
-                    dialogViewModel.DateEstablished.Value.Day,
-                    0, 0, 0, DateTimeKind.Utc)
-                : new DateTime?();
+            var dateEstablished = new DateTime(
+                dialogViewModel.DateEstablished.Year,
+                dialogViewModel.DateEstablished.Month,
+                dialogViewModel.DateEstablished.Day,
+                0, 0, 0, DateTimeKind.Utc);
 
             var dateClosed = dialogViewModel.DateClosed.HasValue
                 ? new DateTime(
