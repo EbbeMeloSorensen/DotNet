@@ -44,6 +44,9 @@ vælge det historiske tidspunkt, man var interesseret i, i et time series view.
 
 Når man laver en ny observing Facility, skal den også have en lokation. Brugeroplevelsen kan være, at man vælger New og så får en modeless besked om at man 
 skal klikke på kortet
+Todo: Lav noget, der svarer til ListLines, blot i C2IEDM.Persistence
+Todo: Kig på ListLines som inspiration til at lave noget tilsvarende for List AbstractEnvironmentalMonitoringFacilities - check det med Postman
+Todo: Lav noget tilsvarende for 
 Todo: Mulighed for at maintaine aspect ratio under navigation i kort
 Todo: Når man har klikket et sted, så skal der vises et punkt
 Todo: Koordinater skal med ind i dialogboksen

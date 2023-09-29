@@ -5,4 +5,5 @@ namespace C2IEDM.Persistence.Repositories.Geometry;
 
 public interface ILineRepository : IRepository<Line>
 {
+    IList<Line> GetLinesIncludingPoints();
 }

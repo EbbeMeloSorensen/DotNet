@@ -25,5 +25,10 @@ namespace C2IEDM.Persistence.EntityFrameworkCore.Repositories.Geometry
         {
             throw new NotImplementedException();
         }
+
+        public IList<Line> GetLinesIncludingPoints()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
