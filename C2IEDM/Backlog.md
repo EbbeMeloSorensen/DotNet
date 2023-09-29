@@ -47,3 +47,9 @@ skal klikke på kortet
 Todo: Mulighed for at maintaine aspect ratio under navigation i kort
 Todo: Når man har klikket et sted, så skal der vises et punkt
 Todo: Koordinater skal med ind i dialogboksen
+Todo: Når man klikker ok efter at have angivet egenskaber for en observing facility, så skal der oprettes et punkt (dvs en geospatiel lokation) i databasen
+Todo: Hiv seneste lokation op for ObservingFacilities for at populere map viewet
+Todo: Indfør et mode, hvor find knappen skjules, og hvor listen opdateres, lige så snart man ændrer noget i filteret (som om man altid bare klikker i vildskab på den)
+Overvej lige om ikke en geospatiel lokation bør være en mange til mange relation i stedet for en simpel child af AbstractEnvironmentalMonitoringFacility
+Hvordan er det lige i dmi.data.studio? der vises alle de stationer vist, som også er i listen, i map viewet. Sørg lige for at det er ordentligt - gerne som i den
+gamle BMS application. Også fint hvis man kan operere med at ting er selected 

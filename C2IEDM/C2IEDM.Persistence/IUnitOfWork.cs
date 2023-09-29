@@ -32,7 +32,8 @@ public interface IUnitOfWork : IDisposable
 
     IAbstractEnvironmentalMonitoringFacilityRepository AbstractEnvironmentalMonitoringFacilities { get; }
     IObservingFacilityRepository ObservingFacilities { get; }
-
+    IGeospatialLocationRepository GeospatialLocations { get; }
+    Repositories.WIGOS.IPointRepository Points_Wigos { get; }
 
     int Complete();
 }

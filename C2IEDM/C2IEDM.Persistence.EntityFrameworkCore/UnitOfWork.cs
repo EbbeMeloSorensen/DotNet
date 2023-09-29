@@ -4,6 +4,7 @@ using C2IEDM.Persistence.EntityFrameworkCore.Repositories.Geometry;
 using C2IEDM.Persistence.EntityFrameworkCore.Repositories.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence.Repositories;
 using C2IEDM.Persistence.Repositories.WIGOS;
+using C2IEDM.Persistence.EntityFrameworkCore.Repositories.WIGOS.GeospatialLocations;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore
 {
@@ -25,7 +26,7 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
         public ILocationRepository Locations { get; }
         public IOrbitAreaRepository OrbitAreas { get; }
         public IPointReferenceRepository PointReferences { get; }
-        public IPointRepository Points { get; }
+        public Persistence.Repositories.Geometry.IPointRepository Points { get; }
         public IPolyArcAreaRepository PolyArcAreas { get; }
         public IPolygonAreaRepository PolygonAreas { get; }
         public IRelativePointRepository RelativePoints { get; }
@@ -37,6 +38,8 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
 
         public IAbstractEnvironmentalMonitoringFacilityRepository AbstractEnvironmentalMonitoringFacilities { get; }
         public IObservingFacilityRepository ObservingFacilities { get; }
+        public IGeospatialLocationRepository GeospatialLocations { get; }
+        public Persistence.Repositories.WIGOS.IPointRepository Points_Wigos { get; }
 
         public UnitOfWork(
             C2IEDMDbContextBase context)
@@ -57,7 +60,7 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
             Locations = new LocationRepository(_context);
             OrbitAreas = new OrbitAreaRepository(_context);
             PointReferences = new PointReferenceRepository(_context);
-            Points = new PointRepository(_context);
+            Points = new Repositories.Geometry.PointRepository(_context);
             PolyArcAreas = new PolyArcAreaRepository(_context);
             PolygonAreas = new PolygonAreaRepository(_context);
             RelativePoints = new RelativePointRepository(_context);
@@ -69,6 +72,8 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
 
             AbstractEnvironmentalMonitoringFacilities = new AbstractEnvironmentalMonitoringFacilityRepository(_context);
             ObservingFacilities = new ObservingFacilityRepository(_context);
+            GeospatialLocations = new GeospatialLocationRepository(_context);
+            Points_Wigos = new Repositories.WIGOS.GeospatialLocations.PointRepository(_context);
         }
 
         public int Complete()

@@ -281,6 +281,10 @@ public class MainWindowViewModel : ViewModelBase
                     0, 0, 0, DateTimeKind.Utc)
                 : new DateTime?();
 
+            var latitude = dialogViewModel.Latitude;
+
+            var longitude = dialogViewModel.Longitude;
+
             var now = DateTime.UtcNow;
 
             var observingFacility = new ObservingFacility(
@@ -292,9 +296,19 @@ public class MainWindowViewModel : ViewModelBase
                 DateClosed = dateClosed
             };
 
+            var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
+            {
+                AbstractEnvironmentalMonitoringFacility = observingFacility,
+                AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
+                Coordinate1 = latitude,
+                Coordinate2 = longitude,
+                CoordinateSystem = "WGS_84"
+            };
+
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
                 unitOfWork.ObservingFacilities.Add(observingFacility);
+                unitOfWork.Points_Wigos.Add(point);
                 unitOfWork.Complete();
             }
 
