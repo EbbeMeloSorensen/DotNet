@@ -37,8 +37,10 @@
                 <MenuItem Header="Clear database"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem IsCheckable="True" Header="Retrospection" 
-                          IsChecked="{Binding DisplayRetrospectionControls}" />
+                <MenuItem IsCheckable="True" Header="Historical Time" 
+                          IsChecked="{Binding DisplayHistoricalTimeControls}" />
+                <MenuItem IsCheckable="True" Header="Database Time" 
+                          IsChecked="{Binding DisplayDatabaseTimeControls}" />
             </MenuItem>
         </Menu>
 
@@ -102,13 +104,29 @@
                     <Expander.Header>
                         <TextBlock Text="Retrospection"/>
                     </Expander.Header>
-                    <TabControl>
+                    <TabControl SelectedIndex="{Binding SelectedTabIndexForRetrospectionTimeLines}">
                         <TabItem Header="Historical Time">
+                            <TabItem.Visibility>
+                                <Binding Path="DisplayHistoricalTimeControls"
+                                         Converter="{StaticResource BooleanToVisibilityConverter}">
+                                    <Binding.ConverterParameter>
+                                        <system:Boolean>True</system:Boolean>
+                                    </Binding.ConverterParameter>
+                                </Binding>
+                            </TabItem.Visibility>
                             <scrollFree:CoordinateSystemView
                                 Height="75" 
                                 DataContext="{Binding HistoricalTimeViewModel}"/>
                         </TabItem>
                         <TabItem Header="Database Write Times">
+                            <TabItem.Visibility>
+                                <Binding Path="DisplayDatabaseTimeControls"
+                                         Converter="{StaticResource BooleanToVisibilityConverter}">
+                                    <Binding.ConverterParameter>
+                                        <system:Boolean>True</system:Boolean>
+                                    </Binding.ConverterParameter>
+                                </Binding>
+                            </TabItem.Visibility>
                             <scrollFree:CoordinateSystemView
                                 Height="75" 
                                 DataContext="{Binding DatabaseWriteTimesViewModel}"/>

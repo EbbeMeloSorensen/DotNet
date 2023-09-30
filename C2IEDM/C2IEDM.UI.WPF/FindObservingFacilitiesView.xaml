@@ -32,7 +32,7 @@
         <TextBox Margin="1,3,1,3" Grid.Row="0" Grid.Column="1" Text="{Binding NameFilter}"/>
         <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Retrospection">
             <GroupBox.Visibility>
-                <Binding Path="DisplayRetrospectionControls"
+                <Binding Path="DisplayRetrospectionControlSection"
                          Converter="{StaticResource BooleanToVisibilityConverter}">
                     <Binding.ConverterParameter>
                         <system:Boolean>True</system:Boolean>
@@ -41,8 +41,30 @@
             </GroupBox.Visibility>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition>
+                        <RowDefinition.Style>
+                            <Style TargetType="{x:Type RowDefinition}">
+                                <Setter Property="Height" Value="0"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=DisplayHistoricalTimeField}" Value="true">
+                                        <Setter Property="Height" Value="Auto"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RowDefinition.Style>
+                    </RowDefinition>
+                    <RowDefinition>
+                        <RowDefinition.Style>
+                            <Style TargetType="{x:Type RowDefinition}">
+                                <Setter Property="Height" Value="0"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=DisplayDatabaseTimeField}" Value="true">
+                                        <Setter Property="Height" Value="Auto"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RowDefinition.Style>
+                    </RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

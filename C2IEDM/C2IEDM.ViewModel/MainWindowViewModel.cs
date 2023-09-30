@@ -27,7 +27,10 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
     private readonly ObservableObject<bool> _displayRetrospectionControls;
+    private readonly ObservableObject<bool> _displayHistoricalTimeControls;
+    private readonly ObservableObject<bool> _displayDatabaseTimeControls;
     private bool _displayMessageInMap;
+    private int _selectedTabIndexForRetrospectionTimeLines;
     private Window _owner;
 
     public bool DisplayRetrospectionControls
@@ -40,12 +43,42 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public bool DisplayHistoricalTimeControls
+    {
+        get => _displayHistoricalTimeControls.Object;
+        set
+        {
+            _displayHistoricalTimeControls.Object = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool DisplayDatabaseTimeControls
+    {
+        get => _displayDatabaseTimeControls.Object;
+        set
+        {
+            _displayDatabaseTimeControls.Object = value;
+            RaisePropertyChanged();
+        }
+    }
+
     public bool DisplayMessageInMap 
     {
         get => _displayMessageInMap;
         set
         {
             _displayMessageInMap = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public int SelectedTabIndexForRetrospectionTimeLines
+    {
+        get => _selectedTabIndexForRetrospectionTimeLines;
+        set
+        {
+            _selectedTabIndexForRetrospectionTimeLines = value;
             RaisePropertyChanged();
         }
     }
@@ -99,6 +132,22 @@ public class MainWindowViewModel : ViewModelBase
             Object = false
         };
 
+        _displayHistoricalTimeControls = new ObservableObject<bool>
+        {
+            Object = false
+        };
+
+        _displayDatabaseTimeControls = new ObservableObject<bool>
+        {
+            Object = false
+        };
+
+        _displayHistoricalTimeControls.PropertyChanged += (s, e) =>
+            UpdateRetrospectionControls();
+
+        _displayDatabaseTimeControls.PropertyChanged += (s, e) =>
+            UpdateRetrospectionControls();
+
         InitializeLogViewModel(logger);
         InitializeObservingFacilityListViewModel(unitOfWorkFactory, applicationDialogService);
         InitializeObservingFacilitiesDetailsViewModel(unitOfWorkFactory);
@@ -131,15 +180,6 @@ public class MainWindowViewModel : ViewModelBase
             _databaseWriteTimes = new List<DateTime>();
         }
     }
-
-    //private void ObservingFacilityDetailsViewModel_ObservingFacilitiesUpdated(
-    //    object? sender, 
-    //    Application.ObservingFacilitiesEventArgs e)
-    //{
-    //    ObservingFacilityListViewModel.UpdateObservingFacilities(e.ObservingFacilities);
-    //    _databaseWriteTimes.Add(e.ObservingFacilities.First().Created);
-    //    RefreshTimeSeriesView();
-    //}
 
     private void CreateObservingFacility(
         object owner)
@@ -211,7 +251,8 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWorkFactory,
             applicationDialogService,
             _timeOfInterest,
-            _displayRetrospectionControls);
+            _displayHistoricalTimeControls,
+            _displayDatabaseTimeControls);
 
         ObservingFacilityListViewModel.SelectedObservingFacilities.PropertyChanged += (s, e) =>
         {
@@ -431,5 +472,23 @@ public class MainWindowViewModel : ViewModelBase
         {
             MapViewModel.AddPolygon(polygon.Select(p => new PointD(p[1], p[0])), lineThickness, brush);
         }
+    }
+
+    private void UpdateRetrospectionControls()
+    {
+        if (_displayHistoricalTimeControls.Object == false &&
+            SelectedTabIndexForRetrospectionTimeLines == 0)
+        {
+            SelectedTabIndexForRetrospectionTimeLines = 1;
+        }
+        else if (_displayDatabaseTimeControls.Object == false &&
+                 SelectedTabIndexForRetrospectionTimeLines == 1)
+        {
+            SelectedTabIndexForRetrospectionTimeLines = 0;
+        }
+
+        DisplayRetrospectionControls = 
+            _displayHistoricalTimeControls.Object ||
+            _displayDatabaseTimeControls.Object;
     }
 }

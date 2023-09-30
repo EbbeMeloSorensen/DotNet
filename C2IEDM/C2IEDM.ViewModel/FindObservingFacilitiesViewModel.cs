@@ -11,14 +11,38 @@ public class FindObservingFacilitiesViewModel : ViewModelBase
     private string _nameFilter = "";
     private string _nameFilterInUppercase = "";
     private readonly ObservableObject<DateTime?> _timeOfInterest;
-    private bool _displayRetrospectionControls;
+    private readonly ObservableObject<bool> _displayHistoricalTimeControls;
+    private readonly ObservableObject<bool> _displayDatabaseTimeControls;
+    private bool _displayRetrospectionControlSection;
+    private bool _displayHistoricalTimeField;
+    private bool _displayDatabaseTimeField;
 
-    public bool DisplayRetrospectionControls
+    public bool DisplayRetrospectionControlSection
     {
-        get => _displayRetrospectionControls;
+        get => _displayRetrospectionControlSection;
         set
         {
-            _displayRetrospectionControls = value;
+            _displayRetrospectionControlSection = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool DisplayHistoricalTimeField
+    {
+        get => _displayHistoricalTimeField;
+        set
+        {
+            _displayHistoricalTimeField = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool DisplayDatabaseTimeField
+    {
+        get => _displayDatabaseTimeField;
+        set
+        {
+            _displayDatabaseTimeField = value;
             RaisePropertyChanged();
         }
     }
@@ -37,17 +61,27 @@ public class FindObservingFacilitiesViewModel : ViewModelBase
 
     public FindObservingFacilitiesViewModel(
         ObservableObject<DateTime?> timeOfInterest,
-        ObservableObject<bool> displayRetrospectionControls)
+        ObservableObject<bool> displayHistoricalTimeControls,
+        ObservableObject<bool> displayDatabaseTimeControls)
     {
         _timeOfInterest = timeOfInterest;
+        _displayHistoricalTimeControls = displayHistoricalTimeControls;
+        _displayDatabaseTimeControls = displayDatabaseTimeControls;
 
-        displayRetrospectionControls.PropertyChanged += (s, e) =>
-        {
-            if (s is ObservableObject<bool> temp)
-            {
-                DisplayRetrospectionControls = temp.Object;
-            }
-        };
+        UpdateRetrospectionControlGroup();
+
+        _displayHistoricalTimeControls.PropertyChanged += (s, e) => UpdateRetrospectionControlGroup();
+        _displayDatabaseTimeControls.PropertyChanged += (s, e) => UpdateRetrospectionControlGroup();
+    }
+
+    private void UpdateRetrospectionControlGroup()
+    {
+        DisplayRetrospectionControlSection =
+            _displayHistoricalTimeControls.Object ||
+            _displayDatabaseTimeControls.Object;
+
+        DisplayHistoricalTimeField = _displayHistoricalTimeControls.Object;
+        DisplayDatabaseTimeField = _displayDatabaseTimeControls.Object;
     }
 
     public Expression<Func<ObservingFacility, bool>> FilterAsExpression()
