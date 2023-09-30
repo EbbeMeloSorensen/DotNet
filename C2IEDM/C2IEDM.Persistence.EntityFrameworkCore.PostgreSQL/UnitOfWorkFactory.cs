@@ -8,7 +8,7 @@ public class UnitOfWorkFactory : IUnitOfWorkFactory
 
         try
         {
-            if (false)
+            if (true)
             {
                 context.Database.EnsureCreated();
 

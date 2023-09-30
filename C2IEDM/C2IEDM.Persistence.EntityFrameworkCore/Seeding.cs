@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using C2IEDM.Domain.Entities.Geometry;
 using C2IEDM.Domain.Entities;
+using C2IEDM.Domain.Entities.Geometry;
 using C2IEDM.Domain.Entities.Geometry.Locations.Points;
 using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
 using C2IEDM.Domain.Entities.Geometry.Locations.Surfaces;
@@ -12,6 +12,11 @@ namespace C2IEDM.Persistence.EntityFrameworkCore
     {
         private static DateTime _now;
         private static int _delayInTicks;
+
+        static Seeding()
+        {
+            _now = DateTime.UtcNow;
+        }
 
         public static void SeedDatabase(
             DbContext context)

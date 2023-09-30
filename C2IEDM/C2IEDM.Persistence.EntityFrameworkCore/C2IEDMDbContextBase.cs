@@ -75,7 +75,7 @@ public class C2IEDMDbContextBase : DbContext
             .HasForeignKey(ap => ap.VerticalDistanceId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
-
+        
         builder.Entity<ConeVolume>()
             .HasOne(cv => cv.VertexPoint)
             .WithMany()
