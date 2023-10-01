@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace C2IEDM.UI.WPF
 {
     /// <summary>
-    /// Interaction logic for FindObservingFacilitiesView.xaml
+    /// Interaction logic for ObservingFacilityFilterView.xaml
     /// </summary>
-    public partial class FindObservingFacilitiesView : UserControl
+    public partial class ObservingFacilityFilterView : UserControl
     {
-        public FindObservingFacilitiesView()
+        public ObservingFacilityFilterView()
         {
             InitializeComponent();
         }
