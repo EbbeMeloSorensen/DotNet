@@ -9,6 +9,7 @@ using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
+using Craft.DataStructures.IO.graphml.x;
 
 namespace C2IEDM.ViewModel;
 
@@ -16,12 +17,13 @@ public class ObservingFacilityListViewModel : ViewModelBase
 {
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
-    private IList<ObservingFacility> _observingFacilities;
+    //private IList<ObservingFacility> _observingFacilities;
     private ObservableCollection<ObservingFacilityListItemViewModel> _observingFacilityListItemViewModels;
     private Sorting _sorting;
 
     private RelayCommand<object> _findObservingFacilitiesCommand;
 
+    public ObjectCollection<ObservingFacility> ObservingFacilities { get; }
     public ObjectCollection<ObservingFacility> SelectedObservingFacilities { get; }
 
     public ObservableCollection<ObservingFacilityListItemViewModel> ObservingFacilityListItemViewModels
@@ -74,10 +76,17 @@ public class ObservingFacilityListViewModel : ViewModelBase
             displayHistoricalTimeControls,
             displayDatabaseTimeControls);
 
-        _observingFacilities = new List<ObservingFacility>();
+        ObservingFacilities = new ObjectCollection<ObservingFacility>
+        {
+            Objects = new List<ObservingFacility>()
+        };
+
+        SelectedObservingFacilities = new ObjectCollection<ObservingFacility>
+        {
+            Objects = new List<ObservingFacility>()
+        };
 
         SelectedObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>();
-        SelectedObservingFacilities = new ObjectCollection<ObservingFacility>();
 
         SelectedObservingFacilityListItemViewModels.CollectionChanged += (s, e) =>
         {
@@ -88,9 +97,10 @@ public class ObservingFacilityListViewModel : ViewModelBase
     public void AddObservingFacility(
         ObservingFacility observingFacility)
     {
-        _observingFacilities.Add(observingFacility);
+        var observingFacilities = ObservingFacilities.Objects.ToList();
+        observingFacilities.Add(observingFacility);
+        ObservingFacilities.Objects = observingFacilities;
         UpdateObservingFacilityListItemViewModels();
-
         SelectedObservingFacilityListItemViewModels.Clear();
 
         foreach (var observingFacilityListItemViewModel in ObservingFacilityListItemViewModels)
@@ -107,7 +117,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         var objectIdsOfUpdatedObservingFacilities = observingFacilities.Select(_ => _.ObjectId).ToList();
 
-        foreach (var observingFacility in _observingFacilities)
+        foreach (var observingFacility in ObservingFacilities.Objects)
         {
             if (objectIdsOfUpdatedObservingFacilities.Contains(observingFacility.ObjectId))
             {
@@ -119,8 +129,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
             }
         }
 
-        ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(_observingFacilities.Select(
-            _ => new ObservingFacilityListItemViewModel { ObservingFacility = _ }));
+        ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(
+            ObservingFacilities.Objects.Select(_ => new ObservingFacilityListItemViewModel { ObservingFacility = _ }));
 
         SelectedObservingFacilityListItemViewModels.Clear();
 
@@ -138,7 +148,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         var objectIdsOfDeletedObservingFacilities = observingFacilities.Select(_ => _.ObjectId);
 
-        _observingFacilities = _observingFacilities
+        ObservingFacilities.Objects = ObservingFacilities.Objects
             .Where(_ => !objectIdsOfDeletedObservingFacilities.Contains(_.ObjectId))
             .ToList();
 
@@ -150,7 +160,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
-            _observingFacilities = unitOfWork.ObservingFacilities.Find(ObservingFacilityFilterViewModel.FilterAsExpression()).ToList();
+            ObservingFacilities.Objects = 
+                unitOfWork.ObservingFacilities.Find(ObservingFacilityFilterViewModel.FilterAsExpression()).ToList();
         }
     }
 
@@ -170,8 +181,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         UpdateSorting();
 
-        ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(_observingFacilities.Select(
-            _ => new ObservingFacilityListItemViewModel() { ObservingFacility = _ }));
+        ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(
+            ObservingFacilities.Objects.Select(_ => new ObservingFacilityListItemViewModel() { ObservingFacility = _ }));
     }
 
     private void FindObservingFacilities(object owner)
