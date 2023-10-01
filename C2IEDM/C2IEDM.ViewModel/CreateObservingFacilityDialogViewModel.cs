@@ -140,6 +140,10 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
 
         Name = Name.NullifyIfEmpty();
 
+        // For now, we let EstablidhedDate and ClosedDate follow the From and To dates
+        DateEstablished = From;
+        DateClosed = To;
+
         CloseDialogWithResult(parameter as Window, DialogResult.OK);
     }
 

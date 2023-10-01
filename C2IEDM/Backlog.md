@@ -1,3 +1,13 @@
+Done
+* Sørg for at DateEstablished og DateClosed følger henholdsvis From og To, når man opretter en ny observing facility
+
+Todo:
+* DateEstablished og DateClosed skal ikke vises i brugergrænsefladen, men følge From og To for de underliggende Geospatial Locations.
+  Det gælder både Create-dialogen og detalje viewet
+* I list viewet skal man kun vise de observing facilities, hvor der gælder at time of interest ligger mellem hvis establishing date 
+  og evt closing
+
+(Herunder roder det lidt rigeligt)
 Todo:
 * CRUD for ObservingFacilities supporteret af API
 	- List (OK)

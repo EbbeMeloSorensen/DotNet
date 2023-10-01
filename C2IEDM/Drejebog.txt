@@ -1,0 +1,6 @@
+1) Start med en tom database (sørg for at have mulighed for at wipe)
+2) Lav et antal nye, hvor de sættes til at have from (og established) samme dag
+3) Lav et antal nye, hvor from (og established) sættes til før i tiden
+4) Lav et antal nye, hvor from (og established) sættes til før i tiden, og hvor de også sættes til at være afsluttet.
+   Gør her opmærksom på at den i modsætning til de andre ikke vises på kortet (fordi den er nedlagt)
+5) Angiv for en af dem, at den stod et andet sted tidligere (så den får en historik med flere lokationer)

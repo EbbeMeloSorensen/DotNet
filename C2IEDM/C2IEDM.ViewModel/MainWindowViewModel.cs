@@ -313,85 +313,7 @@ public class MainWindowViewModel : ViewModelBase
 
         MapViewModel.MouseClickOccured += (s, e) =>
         {
-            if (!DisplayMessageInMap || !MapViewModel.MousePositionWorld.Object.HasValue)
-            {
-                return;
-            }
-
-            DisplayMessageInMap = false;
-
-            var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
-
-            if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
-            {
-                return;
-            }
-
-            var dateEstablished = new DateTime(
-                dialogViewModel.DateEstablished.Year,
-                dialogViewModel.DateEstablished.Month,
-                dialogViewModel.DateEstablished.Day,
-                0, 0, 0, DateTimeKind.Utc);
-
-            var dateClosed = dialogViewModel.DateClosed.HasValue
-                ? new DateTime(
-                    dialogViewModel.DateClosed.Value.Year,
-                    dialogViewModel.DateClosed.Value.Month,
-                    dialogViewModel.DateClosed.Value.Day,
-                    0, 0, 0, DateTimeKind.Utc)
-                : new DateTime?();
-
-            var from = new DateTime(
-                dialogViewModel.From.Year,
-                dialogViewModel.From.Month,
-                dialogViewModel.From.Day,
-                0, 0, 0, DateTimeKind.Utc);
-
-            var to = dialogViewModel.To.HasValue
-                ? new DateTime(
-                    dialogViewModel.To.Value.Year,
-                    dialogViewModel.To.Value.Month,
-                    dialogViewModel.To.Value.Day,
-                    0, 0, 0, DateTimeKind.Utc)
-                : new DateTime?();
-
-            var latitude = dialogViewModel.Latitude;
-
-            var longitude = dialogViewModel.Longitude;
-
-            var now = DateTime.UtcNow;
-
-            var observingFacility = new ObservingFacility(
-                Guid.NewGuid(),
-                now)
-            {
-                Name = dialogViewModel.Name,
-                DateEstablished = dateEstablished,
-                DateClosed = dateClosed
-            };
-
-            var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
-            {
-                AbstractEnvironmentalMonitoringFacility = observingFacility,
-                AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
-                From = from,
-                To = to,
-                Coordinate1 = latitude,
-                Coordinate2 = longitude,
-                CoordinateSystem = "WGS_84"
-            };
-
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-            {
-                unitOfWork.ObservingFacilities.Add(observingFacility);
-                unitOfWork.Points_Wigos.Add(point);
-                unitOfWork.Complete();
-            }
-
-            ObservingFacilityListViewModel.AddObservingFacility(observingFacility, point);
-
-            _databaseWriteTimes.Add(now);
-            RefreshTimeSeriesView();
+            CreateNewObservingFacility();
         };
     }
 
@@ -525,5 +447,88 @@ public class MainWindowViewModel : ViewModelBase
         DisplayRetrospectionControls = 
             _displayHistoricalTimeControls.Object ||
             _displayDatabaseTimeControls.Object;
+    }
+
+    private void CreateNewObservingFacility()
+    {
+        if (!DisplayMessageInMap || !MapViewModel.MousePositionWorld.Object.HasValue)
+        {
+            return;
+        }
+
+        DisplayMessageInMap = false;
+
+        var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
+
+        if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
+        {
+            return;
+        }
+
+        var dateEstablished = new DateTime(
+            dialogViewModel.DateEstablished.Year,
+            dialogViewModel.DateEstablished.Month,
+            dialogViewModel.DateEstablished.Day,
+            0, 0, 0, DateTimeKind.Utc);
+
+        var dateClosed = dialogViewModel.DateClosed.HasValue
+            ? new DateTime(
+                dialogViewModel.DateClosed.Value.Year,
+                dialogViewModel.DateClosed.Value.Month,
+                dialogViewModel.DateClosed.Value.Day,
+                0, 0, 0, DateTimeKind.Utc)
+            : new DateTime?();
+
+        var from = new DateTime(
+            dialogViewModel.From.Year,
+            dialogViewModel.From.Month,
+            dialogViewModel.From.Day,
+            0, 0, 0, DateTimeKind.Utc);
+
+        var to = dialogViewModel.To.HasValue
+            ? new DateTime(
+                dialogViewModel.To.Value.Year,
+                dialogViewModel.To.Value.Month,
+                dialogViewModel.To.Value.Day,
+                0, 0, 0, DateTimeKind.Utc)
+            : new DateTime?();
+
+        var latitude = dialogViewModel.Latitude;
+
+        var longitude = dialogViewModel.Longitude;
+
+        var now = DateTime.UtcNow;
+
+        var observingFacility = new ObservingFacility(
+            Guid.NewGuid(),
+            now)
+        {
+            Name = dialogViewModel.Name,
+            DateEstablished = dateEstablished,
+            DateClosed = dateClosed
+        };
+
+        var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
+        {
+            AbstractEnvironmentalMonitoringFacility = observingFacility,
+            AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
+            From = from,
+            To = to,
+            Coordinate1 = latitude,
+            Coordinate2 = longitude,
+            CoordinateSystem = "WGS_84"
+        };
+
+        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+        {
+            unitOfWork.ObservingFacilities.Add(observingFacility);
+            unitOfWork.Points_Wigos.Add(point);
+            unitOfWork.Complete();
+        }
+
+        ObservingFacilityListViewModel.AddObservingFacility(observingFacility, point);
+
+        _databaseWriteTimes.Add(now);
+        RefreshTimeSeriesView();
     }
 }
