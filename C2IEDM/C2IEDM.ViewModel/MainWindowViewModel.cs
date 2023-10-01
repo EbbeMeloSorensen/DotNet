@@ -135,12 +135,13 @@ public class MainWindowViewModel : ViewModelBase
 
         _displayHistoricalTimeControls = new ObservableObject<bool>
         {
-            Object = false
+            // Todo: Set to false (currently set to true for development purposes)
+            Object = true
         };
 
         _displayDatabaseTimeControls = new ObservableObject<bool>
         {
-            Object = false
+            Object = true
         };
 
         _displayHistoricalTimeControls.PropertyChanged += (s, e) =>
@@ -180,6 +181,8 @@ public class MainWindowViewModel : ViewModelBase
         {
             _databaseWriteTimes = new List<DateTime>();
         }
+
+        UpdateRetrospectionControls();
     }
 
     private void CreateObservingFacility(
