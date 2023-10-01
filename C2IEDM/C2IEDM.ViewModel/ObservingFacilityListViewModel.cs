@@ -19,7 +19,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
     private IList<ObservingFacility> _observingFacilities;
     private Sorting _sorting;
 
-    public FindObservingFacilitiesViewModel FindObservingFacilitiesViewModel { get; }
+    public ObservingFacilityFilterViewModel ObservingFacilityFilterViewModel { get; }
     private ObservableCollection<ObservingFacilityListItemViewModel> _observingFacilityListItemViewModels;
 
     private RelayCommand<object> _findObservingFacilitiesCommand;
@@ -69,7 +69,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
         _applicationDialogService = applicationDialogService;
         _sorting = Sorting.Name;
 
-        FindObservingFacilitiesViewModel = new FindObservingFacilitiesViewModel(
+        ObservingFacilityFilterViewModel = new ObservingFacilityFilterViewModel(
             timeOfInterest, 
             displayHistoricalTimeControls,
             displayDatabaseTimeControls);
@@ -150,7 +150,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
-            _observingFacilities = unitOfWork.ObservingFacilities.Find(FindObservingFacilitiesViewModel.FilterAsExpression()).ToList();
+            _observingFacilities = unitOfWork.ObservingFacilities.Find(ObservingFacilityFilterViewModel.FilterAsExpression()).ToList();
         }
     }
 
@@ -158,7 +158,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
-            return unitOfWork.ObservingFacilities.Count(FindObservingFacilitiesViewModel.FilterAsExpression());
+            return unitOfWork.ObservingFacilities.Count(ObservingFacilityFilterViewModel.FilterAsExpression());
         }
     }
 

@@ -6,7 +6,7 @@ using Craft.Utils;
 
 namespace C2IEDM.ViewModel;
 
-public class FindObservingFacilitiesViewModel : ViewModelBase
+public class ObservingFacilityFilterViewModel : ViewModelBase
 {
     private string _nameFilter = "";
     private string _nameFilterInUppercase = "";
@@ -59,7 +59,7 @@ public class FindObservingFacilitiesViewModel : ViewModelBase
         }
     }
 
-    public FindObservingFacilitiesViewModel(
+    public ObservingFacilityFilterViewModel(
         ObservableObject<DateTime?> timeOfInterest,
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
