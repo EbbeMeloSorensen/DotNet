@@ -121,6 +121,11 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
             ? firstObservingFacility.DateClosed
             : null;
 
+        if (SharedDateClosed.HasValue && SharedDateClosed.Value.Year == 9999)
+        {
+            SharedDateClosed = null;
+        }
+
         _originalSharedName = SharedName;
         _originalSharedDateEstablished = SharedDateEstablished;
         _originalSharedDateClosed = SharedDateClosed;

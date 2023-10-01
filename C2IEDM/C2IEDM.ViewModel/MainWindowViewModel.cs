@@ -165,7 +165,7 @@ public class MainWindowViewModel : ViewModelBase
 
         DrawMapOfDenmark();
 
-        if (false)
+        if (true)
         {
             try
             {
@@ -486,25 +486,38 @@ public class MainWindowViewModel : ViewModelBase
             0, 0, 0, DateTimeKind.Utc);
 
         var dateClosed = dialogViewModel.DateClosed.HasValue
-            ? new DateTime(
-                dialogViewModel.DateClosed.Value.Year,
-                dialogViewModel.DateClosed.Value.Month,
-                dialogViewModel.DateClosed.Value.Day,
-                0, 0, 0, DateTimeKind.Utc)
+            ? dialogViewModel.DateClosed == DateTime.MaxValue
+                ? DateTime.MaxValue
+                : new DateTime(
+                    dialogViewModel.DateClosed.Value.Year,
+                    dialogViewModel.DateClosed.Value.Month,
+                    dialogViewModel.DateClosed.Value.Day,
+                    dialogViewModel.DateClosed.Value.Hour,
+                    dialogViewModel.DateClosed.Value.Minute,
+                    dialogViewModel.DateClosed.Value.Second, 
+                    DateTimeKind.Utc)
             : new DateTime?();
 
         var from = new DateTime(
             dialogViewModel.From.Year,
             dialogViewModel.From.Month,
             dialogViewModel.From.Day,
-            0, 0, 0, DateTimeKind.Utc);
+            dialogViewModel.From.Hour,
+            dialogViewModel.From.Minute,
+            dialogViewModel.From.Second,
+            DateTimeKind.Utc);
 
         var to = dialogViewModel.To.HasValue
-            ? new DateTime(
-                dialogViewModel.To.Value.Year,
-                dialogViewModel.To.Value.Month,
-                dialogViewModel.To.Value.Day,
-                0, 0, 0, DateTimeKind.Utc)
+            ? dialogViewModel.To == DateTime.MaxValue
+                ? DateTime.MaxValue
+                : new DateTime(
+                    dialogViewModel.To.Value.Year,
+                    dialogViewModel.To.Value.Month,
+                    dialogViewModel.To.Value.Day,
+                    dialogViewModel.To.Value.Hour,
+                    dialogViewModel.To.Value.Minute,
+                    dialogViewModel.To.Value.Second,
+                    DateTimeKind.Utc)
             : new DateTime?();
 
         var latitude = dialogViewModel.Latitude;
@@ -540,7 +553,10 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWork.Complete();
         }
 
-        ObservingFacilityListViewModel.AddObservingFacility(observingFacility, point);
+        if (observingFacility.DateClosed == DateTime.MaxValue)
+        {
+            ObservingFacilityListViewModel.AddObservingFacility(observingFacility, point);
+        }
 
         _databaseWriteTimes.Add(now);
         RefreshDatabaseTimeSeriesView();

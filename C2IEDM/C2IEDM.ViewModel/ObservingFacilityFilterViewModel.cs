@@ -138,16 +138,34 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
 
     public Expression<Func<ObservingFacility, bool>> FilterAsExpression()
     {
+        if (_historicalTimeOfInterest.Object.HasValue &&
+            _databaseTimeOfInterest.Object.HasValue)
+        {
+            throw new NotImplementedException();
+        }
+
         if (_databaseTimeOfInterest.Object.HasValue)
         {
+            throw new NotImplementedException();
+
             return _ =>
-                _.Created <= _databaseTimeOfInterest.Object.Value && 
-                _.Superseded > _databaseTimeOfInterest.Object.Value && 
+                _.Created <= _databaseTimeOfInterest.Object.Value &&   // Kun rækker skrevet før pågældende tidspunkt
+                _.Superseded > _databaseTimeOfInterest.Object.Value && // Kun rækker, der er "gældende" (eller var gældende på pågældnde tidspunkt)
                 _.Name.ToUpper().Contains(_nameFilterInUppercase);
         }
 
-        return _ => 
-            _.Superseded == DateTime.MaxValue && 
+        if (_historicalTimeOfInterest.Object.HasValue)
+        {
+            return _ =>
+                _.Superseded == DateTime.MaxValue &&
+                _.DateEstablished <= _historicalTimeOfInterest.Object.Value &&
+                _.DateClosed > _historicalTimeOfInterest.Object.Value &&
+                _.Name.ToUpper().Contains(_nameFilterInUppercase);
+        }
+
+        return _ =>
+            _.Superseded == DateTime.MaxValue &&
+            _.DateClosed == DateTime.MaxValue &&
             _.Name.ToUpper().Contains(_nameFilterInUppercase);
     }
 }

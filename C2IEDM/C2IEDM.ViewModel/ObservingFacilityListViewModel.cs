@@ -217,7 +217,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
 
     private void FindObservingFacilities(object owner)
     {
-        var limit = 10;
+        var limit = 100;
         var count = CountObservingFacilitiesMatchingFilterFromRepository();
 
         if (count == 0)

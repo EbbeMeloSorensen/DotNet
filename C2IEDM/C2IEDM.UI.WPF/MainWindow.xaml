@@ -118,7 +118,7 @@
                                 Height="75" 
                                 DataContext="{Binding HistoricalTimeViewModel}"/>
                         </TabItem>
-                        <TabItem Header="Database Write Times">
+                        <TabItem Header="Database Write Time">
                             <TabItem.Visibility>
                                 <Binding Path="DisplayDatabaseTimeControls"
                                          Converter="{StaticResource BooleanToVisibilityConverter}">

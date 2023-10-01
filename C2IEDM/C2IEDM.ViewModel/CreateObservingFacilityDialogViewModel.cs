@@ -140,6 +140,12 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
 
         Name = Name.NullifyIfEmpty();
 
+        // In the database, we represent a missing to date with the maxDate value
+        if (!To.HasValue)
+        {
+            To = DateTime.MaxValue;
+        }
+
         // For now, we let EstablidhedDate and ClosedDate follow the From and To dates
         DateEstablished = From;
         DateClosed = To;
