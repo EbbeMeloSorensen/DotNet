@@ -9,7 +9,6 @@ using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
-using Craft.DataStructures.IO.graphml.x;
 
 namespace C2IEDM.ViewModel;
 
@@ -17,7 +16,6 @@ public class ObservingFacilityListViewModel : ViewModelBase
 {
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
-    //private IList<ObservingFacility> _observingFacilities;
     private ObservableCollection<ObservingFacilityListItemViewModel> _observingFacilityListItemViewModels;
     private Sorting _sorting;
 
