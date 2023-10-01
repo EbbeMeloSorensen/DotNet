@@ -17,12 +17,12 @@ public class ObservingFacilityListViewModel : ViewModelBase
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
     private IList<ObservingFacility> _observingFacilities;
+    private ObservableCollection<ObservingFacilityListItemViewModel> _observingFacilityListItemViewModels;
     private Sorting _sorting;
 
-    public ObservingFacilityFilterViewModel ObservingFacilityFilterViewModel { get; }
-    private ObservableCollection<ObservingFacilityListItemViewModel> _observingFacilityListItemViewModels;
-
     private RelayCommand<object> _findObservingFacilitiesCommand;
+
+    public ObjectCollection<ObservingFacility> SelectedObservingFacilities { get; }
 
     public ObservableCollection<ObservingFacilityListItemViewModel> ObservingFacilityListItemViewModels
     {
@@ -34,9 +34,9 @@ public class ObservingFacilityListViewModel : ViewModelBase
         }
     }
 
-    public ObjectCollection<ObservingFacility> SelectedObservingFacilities { get; }
-
     public ObservableCollection<ObservingFacilityListItemViewModel> SelectedObservingFacilityListItemViewModels { get; set; }
+
+    public ObservingFacilityFilterViewModel ObservingFacilityFilterViewModel { get; }
 
     public Sorting Sorting
     {
