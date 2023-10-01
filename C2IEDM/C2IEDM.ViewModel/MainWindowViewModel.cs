@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
@@ -27,6 +26,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ObservableObject<DateTime?> _timeOfInterest;
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
+    private readonly Brush _observingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
     private readonly ObservableObject<bool> _displayRetrospectionControls;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
@@ -254,6 +254,29 @@ public class MainWindowViewModel : ViewModelBase
         {
             DeleteSelectedObservingFacilitiesCommand.RaiseCanExecuteChanged();
         };
+
+        ObservingFacilityListViewModel.ObservingFacilityDataExtracts.PropertyChanged += (s, e) =>
+        {
+            // Update the map view
+
+            MapViewModel.PointViewModels.Clear();
+
+            foreach (var observingFacilityDataExtract in ObservingFacilityListViewModel.ObservingFacilityDataExtracts.Objects)
+            {
+                // Todo: Vælg kun dem, der passer med historisk valgt tidspunkt
+
+                observingFacilityDataExtract.GeospatialLocations.ForEach(_ =>
+                {
+                    if (_ is not Domain.Entities.WIGOS.GeospatialLocations.Point point)
+                    {
+                        return;
+                    }
+
+                    MapViewModel.PointViewModels.Add(new PointViewModel(
+                        new PointD(point.Coordinate1, -point.Coordinate2), 10, _observingFacilityBrush));
+                });
+            }
+        };
     }
 
     private void InitializeObservingFacilitiesDetailsViewModel(
@@ -365,7 +388,7 @@ public class MainWindowViewModel : ViewModelBase
                 unitOfWork.Complete();
             }
 
-            ObservingFacilityListViewModel.AddObservingFacility(observingFacility);
+            ObservingFacilityListViewModel.AddObservingFacility(observingFacility, point);
 
             _databaseWriteTimes.Add(now);
             RefreshTimeSeriesView();

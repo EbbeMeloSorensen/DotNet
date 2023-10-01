@@ -124,7 +124,7 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         DateEstablished = currentDate;
         From = currentDate;
         Latitude = Math.Round(mousePositionWorld.X, 4);
-        Longitude = Math.Round(mousePositionWorld.Y, 4);
+        Longitude = -Math.Round(mousePositionWorld.Y, 4);
     }
 
     private void OK(object parameter)

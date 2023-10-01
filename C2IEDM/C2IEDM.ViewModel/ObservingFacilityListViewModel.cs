@@ -9,6 +9,7 @@ using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
+using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 
 namespace C2IEDM.ViewModel;
 
@@ -93,17 +94,24 @@ public class ObservingFacilityListViewModel : ViewModelBase
     }
 
     public void AddObservingFacility(
-        ObservingFacility observingFacility)
+        ObservingFacility observingFacility,
+        GeospatialLocation geospatialLocation)
     {
-        var observingFacilities = ObservingFacilityDataExtracts.Objects.ToList();
+        var observingFacilityDataExtracts = ObservingFacilityDataExtracts.Objects.ToList();
 
-        observingFacilities.Add(new ObservingFacilityDataExtract
+        observingFacilityDataExtracts.Add(new ObservingFacilityDataExtract
         {
-            ObservingFacility = observingFacility
+            ObservingFacility = observingFacility,
+            GeospatialLocations = new List<GeospatialLocation>
+            {
+                geospatialLocation
+            }
         });
 
-        ObservingFacilityDataExtracts.Objects = observingFacilities;
+        ObservingFacilityDataExtracts.Objects = observingFacilityDataExtracts;
+
         UpdateObservingFacilityListItemViewModels();
+
         SelectedObservingFacilityListItemViewModels.Clear();
 
         foreach (var observingFacilityListItemViewModel in ObservingFacilityListItemViewModels)
@@ -164,13 +172,21 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
-            var observingFacilities = unitOfWork.ObservingFacilities
-                .Find(ObservingFacilityFilterViewModel.FilterAsExpression()).ToList();
+            var observingFacilityDictionary = unitOfWork.ObservingFacilities
+                .FindIncludingGeospatialLocations(ObservingFacilityFilterViewModel.FilterAsExpression());
 
-            ObservingFacilityDataExtracts.Objects = observingFacilities.Select(of => new ObservingFacilityDataExtract
-            {
-                ObservingFacility = of
-            });
+            ObservingFacilityDataExtracts.Objects = observingFacilityDictionary
+                .Select(_ =>
+                {
+                    var observingFacility = _.Key;
+                    var geospatalLocations = _.Value;
+
+                    return new ObservingFacilityDataExtract
+                    {
+                        ObservingFacility = observingFacility,
+                        GeospatialLocations = geospatalLocations
+                    };
+                });
         }
     }
 
