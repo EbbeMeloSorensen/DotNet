@@ -22,6 +22,15 @@ public class ObservingFacilityRepository : Repository<ObservingFacility>, IObser
     }
 
     public Dictionary<ObservingFacility, List<GeospatialLocation>> FindIncludingGeospatialLocations(
+        Expression<Func<ObservingFacility, bool>> predicate)
+    {
+        var predicates = new List<Expression<Func<ObservingFacility, bool>>>();
+        predicates.Add(_ => _.Superseded == DateTime.MaxValue);
+
+        return FindIncludingGeospatialLocations(predicates);
+    }
+
+    public Dictionary<ObservingFacility, List<GeospatialLocation>> FindIncludingGeospatialLocations(
         IList<Expression<Func<ObservingFacility, bool>>> predicates)
     {
         predicates.Add(_ => _.Superseded == DateTime.MaxValue);
