@@ -140,36 +140,6 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
             return;
         }
 
-        //var now = DateTime.UtcNow;
-
-        //var updatedObservingFacilities = _observingFacilities.Objects.Select(_ => new ObservingFacility(_.ObjectId, now)
-        //{
-        //    Id = _.Id,
-        //    Name = SharedName != _originalSharedName ? SharedName : _.Name,
-        //    DateEstablished = SharedDateEstablished != _originalSharedDateEstablished
-        //        ? new DateTime(
-        //            SharedDateEstablished.Value.Year,
-        //            SharedDateEstablished.Value.Month,
-        //            SharedDateEstablished.Value.Day,
-        //            0, 0, 0, DateTimeKind.Utc)
-        //        : _.DateEstablished,
-        //    DateClosed = SharedDateClosed != _originalSharedDateClosed
-        //        ? new DateTime(
-        //            SharedDateClosed.Value.Year,
-        //            SharedDateClosed.Value.Month,
-        //            SharedDateClosed.Value.Day,
-        //            0, 0, 0, DateTimeKind.Utc)
-        //        : _.DateClosed,
-        //}).ToList();
-
-        //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-        //{
-        //    unitOfWork.ObservingFacilities.UpdateRange(updatedObservingFacilities);
-        //    unitOfWork.Complete();
-        //}
-
-        //OnObservingFacilitiesUpdated(updatedObservingFacilities);
-
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
             var objectIds = _observingFacilities.Objects.Select(_ => _.ObjectId).ToList();

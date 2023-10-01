@@ -21,7 +21,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
 
     private RelayCommand<object> _findObservingFacilitiesCommand;
 
-    public ObjectCollection<ObservingFacilityDataExtract> ObservingFacilities { get; }
+    public ObjectCollection<ObservingFacilityDataExtract> ObservingFacilityDataExtracts { get; }
     public ObjectCollection<ObservingFacility> SelectedObservingFacilities { get; }
 
     public ObservableCollection<ObservingFacilityListItemViewModel> ObservingFacilityListItemViewModels
@@ -74,7 +74,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
             displayHistoricalTimeControls,
             displayDatabaseTimeControls);
 
-        ObservingFacilities = new ObjectCollection<ObservingFacilityDataExtract>
+        ObservingFacilityDataExtracts = new ObjectCollection<ObservingFacilityDataExtract>
         {
             Objects = new List<ObservingFacilityDataExtract>()
         };
@@ -95,14 +95,14 @@ public class ObservingFacilityListViewModel : ViewModelBase
     public void AddObservingFacility(
         ObservingFacility observingFacility)
     {
-        var observingFacilities = ObservingFacilities.Objects.ToList();
+        var observingFacilities = ObservingFacilityDataExtracts.Objects.ToList();
 
         observingFacilities.Add(new ObservingFacilityDataExtract
         {
             ObservingFacility = observingFacility
         });
 
-        ObservingFacilities.Objects = observingFacilities;
+        ObservingFacilityDataExtracts.Objects = observingFacilities;
         UpdateObservingFacilityListItemViewModels();
         SelectedObservingFacilityListItemViewModels.Clear();
 
@@ -120,7 +120,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         var objectIdsOfUpdatedObservingFacilities = observingFacilities.Select(_ => _.ObjectId).ToList();
 
-        foreach (var observingFacility in ObservingFacilities.Objects)
+        foreach (var observingFacility in ObservingFacilityDataExtracts.Objects)
         {
             if (objectIdsOfUpdatedObservingFacilities.Contains(observingFacility.ObservingFacility.ObjectId))
             {
@@ -133,7 +133,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
         }
 
         ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(
-            ObservingFacilities.Objects.Select(_ => new ObservingFacilityListItemViewModel { ObservingFacility = _.ObservingFacility }));
+            ObservingFacilityDataExtracts.Objects.Select(
+                _ => new ObservingFacilityListItemViewModel { ObservingFacility = _.ObservingFacility }));
 
         SelectedObservingFacilityListItemViewModels.Clear();
 
@@ -151,7 +152,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         var objectIdsOfDeletedObservingFacilities = observingFacilities.Select(_ => _.ObjectId);
 
-        ObservingFacilities.Objects = ObservingFacilities.Objects
+        ObservingFacilityDataExtracts.Objects = ObservingFacilityDataExtracts.Objects
             .Where(_ => !objectIdsOfDeletedObservingFacilities.Contains(_.ObservingFacility.ObjectId))
             .ToList();
 
@@ -166,7 +167,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
             var observingFacilities = unitOfWork.ObservingFacilities
                 .Find(ObservingFacilityFilterViewModel.FilterAsExpression()).ToList();
 
-            ObservingFacilities.Objects = observingFacilities.Select(of => new ObservingFacilityDataExtract
+            ObservingFacilityDataExtracts.Objects = observingFacilities.Select(of => new ObservingFacilityDataExtract
             {
                 ObservingFacility = of
             });
@@ -190,7 +191,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
         UpdateSorting();
 
         ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(
-            ObservingFacilities.Objects.Select(_ => new ObservingFacilityListItemViewModel()
+            ObservingFacilityDataExtracts.Objects.Select(_ => new ObservingFacilityListItemViewModel()
             {
                 ObservingFacility = _.ObservingFacility
             }));
