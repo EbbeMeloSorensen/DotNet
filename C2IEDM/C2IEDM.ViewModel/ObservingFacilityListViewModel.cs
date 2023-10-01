@@ -62,7 +62,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
     public ObservingFacilityListViewModel(
         IUnitOfWorkFactory unitOfWorkFactory,
         IDialogService applicationDialogService,
-        ObservableObject<DateTime?> timeOfInterest,
+        ObservableObject<DateTime?> historicalTimeOfInterest,
+        ObservableObject<DateTime?> databaseTimeOfInterest,
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
     {
@@ -71,7 +72,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
         _sorting = Sorting.Name;
 
         ObservingFacilityFilterViewModel = new ObservingFacilityFilterViewModel(
-            timeOfInterest, 
+            historicalTimeOfInterest,
+            databaseTimeOfInterest, 
             displayHistoricalTimeControls,
             displayDatabaseTimeControls);
 

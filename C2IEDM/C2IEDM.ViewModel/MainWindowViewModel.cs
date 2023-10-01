@@ -23,7 +23,8 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
     private readonly List<DateTime> _databaseWriteTimes;
-    private readonly ObservableObject<DateTime?> _timeOfInterest;
+    private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
+    private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
     private readonly Brush _observingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
@@ -123,7 +124,12 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWorkFactory,
             logger);
 
-        _timeOfInterest = new ObservableObject<DateTime?>
+        _historicalTimeOfInterest = new ObservableObject<DateTime?>
+        {
+            Object = null
+        };
+
+        _databaseTimeOfInterest = new ObservableObject<DateTime?>
         {
             Object = null
         };
@@ -221,7 +227,7 @@ public class MainWindowViewModel : ViewModelBase
             ObservingFacilityListViewModel.RemoveObservingFacilities(observingFacilitiesForDeletion);
 
             _databaseWriteTimes.Add(now);
-            RefreshTimeSeriesView();
+            RefreshDatabaseTimeSeriesView();
         }
     }
 
@@ -249,7 +255,8 @@ public class MainWindowViewModel : ViewModelBase
         ObservingFacilityListViewModel = new ObservingFacilityListViewModel(
             unitOfWorkFactory,
             applicationDialogService,
-            _timeOfInterest,
+            _historicalTimeOfInterest,
+            _databaseTimeOfInterest,
             _displayHistoricalTimeControls,
             _displayDatabaseTimeControls);
 
@@ -260,25 +267,7 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilityListViewModel.ObservingFacilityDataExtracts.PropertyChanged += (s, e) =>
         {
-            // Update the map view
-
-            MapViewModel.PointViewModels.Clear();
-
-            foreach (var observingFacilityDataExtract in ObservingFacilityListViewModel.ObservingFacilityDataExtracts.Objects)
-            {
-                // Todo: Vælg kun dem, der passer med historisk valgt tidspunkt
-
-                observingFacilityDataExtract.GeospatialLocations.ForEach(_ =>
-                {
-                    if (_ is not Domain.Entities.WIGOS.GeospatialLocations.Point point)
-                    {
-                        return;
-                    }
-
-                    MapViewModel.PointViewModels.Add(new PointViewModel(
-                        new PointD(point.Coordinate1, -point.Coordinate2), 10, _observingFacilityBrush));
-                });
-            }
+            UpdateMapView();
         };
     }
 
@@ -293,7 +282,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             ObservingFacilityListViewModel.UpdateObservingFacilities(e.ObservingFacilities);
             _databaseWriteTimes.Add(e.ObservingFacilities.First().Created);
-            RefreshTimeSeriesView();
+            RefreshDatabaseTimeSeriesView();
         };
     }
 
@@ -346,6 +335,7 @@ public class MainWindowViewModel : ViewModelBase
 
         HistoricalTimeViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
+            _historicalTimeOfInterest.Object = HistoricalTimeViewModel.TimeAtMousePosition.Object;
         };
     }
 
@@ -371,17 +361,17 @@ public class MainWindowViewModel : ViewModelBase
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
         {
-            RefreshTimeSeriesView();
+            RefreshDatabaseTimeSeriesView();
         };
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
-            _timeOfInterest.Object = DatabaseWriteTimesViewModel.TimeAtMousePosition.Object;
-            RefreshTimeSeriesView();
+            _databaseTimeOfInterest.Object = DatabaseWriteTimesViewModel.TimeAtMousePosition.Object;
+            RefreshDatabaseTimeSeriesView();
         };
     }
 
-    private void RefreshTimeSeriesView()
+    private void RefreshDatabaseTimeSeriesView()
     {
         var x0 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
         var x1 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
@@ -404,9 +394,9 @@ public class MainWindowViewModel : ViewModelBase
 
         lineViewModels.ForEach(_ => DatabaseWriteTimesViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
 
-        if (_timeOfInterest.Object.HasValue)
+        if (_databaseTimeOfInterest.Object.HasValue)
         {
-            var xTimeOfInterest = (_timeOfInterest.Object.Value - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays;
+            var xTimeOfInterest = (_databaseTimeOfInterest.Object.Value - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays;
 
             if (xTimeOfInterest > x0 && xTimeOfInterest < x1)
             {
@@ -431,6 +421,27 @@ public class MainWindowViewModel : ViewModelBase
         foreach (var polygon in polygons)
         {
             MapViewModel.AddPolygon(polygon.Select(p => new PointD(p[1], p[0])), lineThickness, brush);
+        }
+    }
+
+    private void UpdateMapView()
+    {
+        MapViewModel.PointViewModels.Clear();
+
+        foreach (var observingFacilityDataExtract in ObservingFacilityListViewModel.ObservingFacilityDataExtracts.Objects)
+        {
+            // Todo: Vælg kun dem, der passer med historisk valgt tidspunkt
+
+            observingFacilityDataExtract.GeospatialLocations.ForEach(_ =>
+            {
+                if (_ is not Domain.Entities.WIGOS.GeospatialLocations.Point point)
+                {
+                    return;
+                }
+
+                MapViewModel.PointViewModels.Add(new PointViewModel(
+                    new PointD(point.Coordinate1, -point.Coordinate2), 10, _observingFacilityBrush));
+            });
         }
     }
 
@@ -532,6 +543,6 @@ public class MainWindowViewModel : ViewModelBase
         ObservingFacilityListViewModel.AddObservingFacility(observingFacility, point);
 
         _databaseWriteTimes.Add(now);
-        RefreshTimeSeriesView();
+        RefreshDatabaseTimeSeriesView();
     }
 }
