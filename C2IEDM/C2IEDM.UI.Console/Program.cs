@@ -33,12 +33,35 @@ namespace C2IEDM.UI.Console
         public static async Task ListLocations(
             List options)
         {
-            await GetApplication().ListLocations((progress, nameOfSubtask) =>
+            switch (options.Entity)
             {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
+                case "Location":
+                {
+                    await GetApplication().ListLocations((progress, nameOfSubtask) =>
+                    {
+                        System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                        System.Console.Write($"{progress:F2} %");
+                        return false;
+                    });
+
+                    break;
+                }
+                case "ObservingFacility":
+                {
+                    await GetApplication().ListObservingFacilities((progress, nameOfSubtask) =>
+                    {
+                        System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                        System.Console.Write($"{progress:F2} %");
+                        return false;
+                    });
+
+                    break;
+                }
+                default:
+                {
+                    throw new InvalidOperationException("The entity parameter passed to the program was invalid");
+                }
+            }
         }
 
         private static Application.Application GetApplication()

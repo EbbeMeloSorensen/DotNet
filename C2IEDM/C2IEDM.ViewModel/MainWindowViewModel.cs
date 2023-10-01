@@ -322,6 +322,20 @@ public class MainWindowViewModel : ViewModelBase
                     0, 0, 0, DateTimeKind.Utc)
                 : new DateTime?();
 
+            var from = new DateTime(
+                dialogViewModel.From.Year,
+                dialogViewModel.From.Month,
+                dialogViewModel.From.Day,
+                0, 0, 0, DateTimeKind.Utc);
+
+            var to = dialogViewModel.To.HasValue
+                ? new DateTime(
+                    dialogViewModel.To.Value.Year,
+                    dialogViewModel.To.Value.Month,
+                    dialogViewModel.To.Value.Day,
+                    0, 0, 0, DateTimeKind.Utc)
+                : new DateTime?();
+
             var latitude = dialogViewModel.Latitude;
 
             var longitude = dialogViewModel.Longitude;
@@ -341,6 +355,8 @@ public class MainWindowViewModel : ViewModelBase
             {
                 AbstractEnvironmentalMonitoringFacility = observingFacility,
                 AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
+                From = from,
+                To = to,
                 Coordinate1 = latitude,
                 Coordinate2 = longitude,
                 CoordinateSystem = "WGS_84"

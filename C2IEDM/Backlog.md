@@ -46,8 +46,9 @@ Når man laver en ny observing Facility, skal den også have en lokation. Brugerop
 skal klikke på kortet
 Todo: Lav noget, der svarer til ListLines, blot i C2IEDM.Persistence
 Todo: Kig på ListLines som inspiration til at lave noget tilsvarende for List AbstractEnvironmentalMonitoringFacilities - check det med Postman
-Todo: Lav noget tilsvarende for 
+Todo: Introducer et mode, hvor der ikke er en Find knap
 Todo: Mulighed for at maintaine aspect ratio under navigation i kort
+Todo: Introducer en mulighed for at importere sms stationer
 Todo: Når man har klikket et sted, så skal der vises et punkt
 Todo: Koordinater skal med ind i dialogboksen
 Todo: Når man klikker ok efter at have angivet egenskaber for en observing facility, så skal der oprettes et punkt (dvs en geospatiel lokation) i databasen

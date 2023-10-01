@@ -1,6 +1,10 @@
 ﻿using Craft.Logging;
 using C2IEDM.Persistence;
 using C2IEDM.Domain.Entities.Geometry.Locations;
+using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using System;
+using System.Linq.Expressions;
+using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 
 namespace C2IEDM.Application;
 
@@ -87,10 +91,11 @@ public class Application
         await Task.Run(() =>
         {
             Logger?.WriteLine(LogMessageCategory.Information, "Retrieving locations..");
-            progressCallback?.Invoke(0.0, "Retrieving people");
+            progressCallback?.Invoke(0.0, "Retrieving locations");
 
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
+                // Todo: Denne hiver alle rækker med, inkl de superseedede - den skal kun tage de gældende rækker med
                 locations = unitOfWork.Locations.GetAll().ToList();
             }
 
@@ -99,5 +104,39 @@ public class Application
 
         Console.WriteLine();
         locations?.ToList().ForEach(_ => Console.WriteLine($"  {_}"));
+    }
+
+    public async Task ListObservingFacilities(
+        ProgressCallback progressCallback = null)
+    {
+        List<KeyValuePair<ObservingFacility, List<GeospatialLocation>>> observingFacilityDictionary = null;
+
+        await Task.Run(() =>
+        {
+            Logger?.WriteLine(LogMessageCategory.Information, "Retrieving observing facilities..");
+            progressCallback?.Invoke(0.0, "Retrieving observing facilities");
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var predicates = new List<Expression<Func<ObservingFacility, bool>>>();
+
+                observingFacilityDictionary = 
+                    unitOfWork.ObservingFacilities.FindIncludingGeospatialLocations(predicates).ToList();
+            }
+
+            progressCallback?.Invoke(100, "");
+        });
+
+        Console.WriteLine();
+
+        foreach (var entry in observingFacilityDictionary)
+        {
+            Console.WriteLine($"  Observing Facility: {entry.Key.Name}");
+
+            foreach (var geospatialLocation in entry.Value)
+            {
+                Console.WriteLine($"    Location: {geospatialLocation}");
+            }
+        }
     }
 }

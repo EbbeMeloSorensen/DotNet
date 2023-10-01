@@ -2,7 +2,7 @@
   "profiles": {
     "C2IEDM.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "list"
+      "commandLineArgs": "list -e ObservingFacility"
     }
   }
 }

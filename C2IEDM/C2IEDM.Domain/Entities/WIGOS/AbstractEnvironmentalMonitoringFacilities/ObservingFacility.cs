@@ -11,4 +11,9 @@ public class ObservingFacility : AbstractEnvironmentalMonitoringFacility
         DateTime created) : base(objectId, created)
     {
     }
+
+    public override string ToString()
+    {
+        return $"Observing Facility: {Name}";
+    }
 }

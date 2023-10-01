@@ -11,4 +11,26 @@ public class Point : GeospatialLocation
         DateTime created) : base(objectId, created)
     {
     }
+
+    public override string ToString()
+    {
+        var result = $"({Coordinate1}, {Coordinate2})";
+
+        if (From.HasValue || To.HasValue)
+        {
+            result += ",";
+        }
+
+        if (From.HasValue)
+        {
+            result += $" From: {From.Value.ToShortDateString()}";
+        }
+
+        if (To.HasValue)
+        {
+            result += $" To: {To.Value.ToShortDateString()}";
+        }
+
+        return result;
+    }
 }
