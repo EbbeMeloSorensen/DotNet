@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
@@ -198,24 +199,19 @@ public class MainWindowViewModel : ViewModelBase
     {
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
-            var ids = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects
-                .Select(p => p.Id).ToList();
+            // Todo: Remember to also delete orphaned children
+
+            var objectIds = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects
+                .Select(_ => _.ObjectId).ToList();
 
             var observingFacilitiesForDeletion = unitOfWork.ObservingFacilities
-                //.GetPeopleIncludingAssociations(p => ids.Contains(p.Id))
-                .Find(_ => _.Superseded == DateTime.MaxValue && ids.Contains(_.Id))
+                .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId))
                 .ToList();
-
-            //var personAssociationsForDeletion = peopleForDeletion
-            //    .SelectMany(p => p.ObjectPeople)
-            //    .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
-            //    .ToList();
 
             var now = DateTime.UtcNow;
 
             observingFacilitiesForDeletion.ForEach(_ => _.Superseded = now);
 
-            //unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
             unitOfWork.ObservingFacilities.UpdateRange(observingFacilitiesForDeletion);
             unitOfWork.Complete();
 

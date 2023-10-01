@@ -136,10 +136,10 @@ public class ObservingFacilityListViewModel : ViewModelBase
     public void RemoveObservingFacilities(
         IEnumerable<ObservingFacility> observingFacilities)
     {
-        var idsOfDeletedObservingFacilities = observingFacilities.Select(_ => _.Id);
+        var objectIdsOfDeletedObservingFacilities = observingFacilities.Select(_ => _.ObjectId);
 
         _observingFacilities = _observingFacilities
-            .Where(_ => !idsOfDeletedObservingFacilities.Contains(_.Id))
+            .Where(_ => !objectIdsOfDeletedObservingFacilities.Contains(_.ObjectId))
             .ToList();
 
         SelectedObservingFacilityListItemViewModels.Clear();
