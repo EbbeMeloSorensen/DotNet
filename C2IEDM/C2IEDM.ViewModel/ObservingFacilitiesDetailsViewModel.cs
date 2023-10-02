@@ -117,13 +117,13 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
             ? firstObservingFacility.DateEstablished
             : null;
 
-        SharedDateClosed = temp.Objects.All(_ => _.DateClosed == firstObservingFacility.DateClosed)
+        var sharedDateClosed = temp.Objects.All(_ => _.DateClosed == firstObservingFacility.DateClosed)
             ? firstObservingFacility.DateClosed
             : null;
 
-        if (SharedDateClosed.HasValue && SharedDateClosed.Value.Year == 9999)
+        if (sharedDateClosed.HasValue && sharedDateClosed.Value.Year != 9999)
         {
-            SharedDateClosed = null;
+            SharedDateClosed = sharedDateClosed;
         }
 
         _originalSharedName = SharedName;

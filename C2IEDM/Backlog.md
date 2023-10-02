@@ -2,6 +2,8 @@ Done
 * Sørg for at DateEstablished og DateClosed følger henholdsvis From og To, når man opretter en ny observing facility
 
 Todo:
+* Du skal kunne ændre en observing facility ved at sætte dens Closed Date til en dato, der ligger før i tiden.
+  Når det sker, skal den også sætte to time for den seneste geospatielle lokation til samme tidspunkt
 * DateEstablished og DateClosed skal ikke vises i brugergrænsefladen, men følge From og To for de underliggende Geospatial Locations.
   Det gælder både Create-dialogen og detalje viewet
 * I list viewet skal man kun vise de observing facilities, hvor der gælder at time of interest ligger mellem hvis establishing date 

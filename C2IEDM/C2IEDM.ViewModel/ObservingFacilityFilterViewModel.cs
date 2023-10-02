@@ -146,26 +146,25 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
 
         if (_databaseTimeOfInterest.Object.HasValue)
         {
-            throw new NotImplementedException();
-
             return _ =>
                 _.Created <= _databaseTimeOfInterest.Object.Value &&   // Kun rækker skrevet før pågældende tidspunkt
-                _.Superseded > _databaseTimeOfInterest.Object.Value && // Kun rækker, der er "gældende" (eller var gældende på pågældnde tidspunkt)
+                _.Superseded > _databaseTimeOfInterest.Object.Value && // Kun rækker, der er "gældende" (eller var gældende på pågældende tidspunkt)
+                _.DateClosed > _databaseTimeOfInterest.Object.Value && // Kun rækker, hvis virkningstidsinterval skærer database time of interest, dvs stationer, der var aktive pågældende tidspunkt
                 _.Name.ToUpper().Contains(_nameFilterInUppercase);
         }
 
         if (_historicalTimeOfInterest.Object.HasValue)
         {
             return _ =>
-                _.Superseded == DateTime.MaxValue &&
-                _.DateEstablished <= _historicalTimeOfInterest.Object.Value &&
-                _.DateClosed > _historicalTimeOfInterest.Object.Value &&
+                _.Superseded == DateTime.MaxValue &&                            // Kun rækker, der er gældende
+                _.DateEstablished <= _historicalTimeOfInterest.Object.Value &&  // ->
+                _.DateClosed > _historicalTimeOfInterest.Object.Value &&        // Kun rækker, hvis virkningstidsinterval skærer historical time of interest
                 _.Name.ToUpper().Contains(_nameFilterInUppercase);
         }
 
         return _ =>
-            _.Superseded == DateTime.MaxValue &&
-            _.DateClosed == DateTime.MaxValue &&
+            _.Superseded == DateTime.MaxValue &&                // Kun rækker, der er gældende
+            _.DateClosed == DateTime.MaxValue &&                // Kun rækker, hvis virkningstidsinterval skærer historical time of interest, dvs stationer, der er aktive i dag
             _.Name.ToUpper().Contains(_nameFilterInUppercase);
     }
 }
