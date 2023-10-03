@@ -30,6 +30,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Dictionary<int, ShapeViewModel> _shapeViewModelMap;
         private bool _xAxisLocked;
         private bool _yAxisLocked;
+        private bool _aspectRatioLocked;
 
         public ObservableObject<Point?> MousePositionWorld { get; }
 
@@ -157,6 +158,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _yAxisLocked = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool AspectRatioLocked
+        {
+            get { return _aspectRatioLocked; }
+            set
+            {
+                _aspectRatioLocked = value;
                 RaisePropertyChanged();
             }
         }

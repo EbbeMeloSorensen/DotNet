@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using GalaSoft.MvvmLight;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using Craft.Utils;
+using GalaSoft.MvvmLight.Command;
 
 namespace C2IEDM.ViewModel;
 
@@ -21,6 +22,9 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
     private bool _displayDatabaseTimeField;
     private string _historicalTimeOfInterestAsString;
     private string _databaseTimeOfInterestAsString;
+
+    private RelayCommand _clearHistoricalTimeCommand;
+    private RelayCommand _clearDatabaseTimeCommand;
 
     public bool DisplayNameFilterField 
     {
@@ -94,6 +98,22 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         }
     }
 
+    public RelayCommand ClearHistoricalTimeCommand
+    {
+        get
+        {
+            return _clearHistoricalTimeCommand ?? (_clearHistoricalTimeCommand = new RelayCommand(ClearHistoricalTime, CanClearHistoricalTime));
+        }
+    }
+
+    public RelayCommand ClearDatabaseTimeCommand
+    {
+        get
+        {
+            return _clearDatabaseTimeCommand ?? (_clearDatabaseTimeCommand = new RelayCommand(ClearDatabaseTime, CanClearDatabaseTime));
+        }
+    }
+
     public ObservingFacilityFilterViewModel(
         ObservableObject<DateTime?> historicalTimeOfInterest,
         ObservableObject<DateTime?> databaseTimeOfInterest,
@@ -118,8 +138,10 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
             }
             else
             {
-                HistoricalTimeOfInterestAsString = "Latest";
+                HistoricalTimeOfInterestAsString = "Now";
             }
+
+            ClearHistoricalTimeCommand.RaiseCanExecuteChanged();
         };
 
         _databaseTimeOfInterest.PropertyChanged += (s, e) =>
@@ -132,6 +154,8 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
             {
                 DatabaseTimeOfInterestAsString = "Latest";
             }
+
+            ClearDatabaseTimeCommand.RaiseCanExecuteChanged();
         };
 
         _displayNameFilter.PropertyChanged += (s, e) => UpdateFilterControls();
@@ -139,21 +163,6 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         _displayDatabaseTimeControls.PropertyChanged += (s, e) => UpdateRetrospectionControlGroup();
 
         UpdateRetrospectionControlGroup();
-    }
-
-    private void UpdateFilterControls()
-    {
-        DisplayNameFilterField = _displayNameFilter.Object;
-    }
-
-    private void UpdateRetrospectionControlGroup()
-    {
-        DisplayRetrospectionControlSection =
-            _displayHistoricalTimeControls.Object ||
-            _displayDatabaseTimeControls.Object;
-
-        DisplayHistoricalTimeField = _displayHistoricalTimeControls.Object;
-        DisplayDatabaseTimeField = _displayDatabaseTimeControls.Object;
     }
 
     public Expression<Func<ObservingFacility, bool>> FilterAsExpression()
@@ -191,5 +200,40 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
             _.Superseded == DateTime.MaxValue &&                // Kun rækker, der er gældende
             _.DateClosed == DateTime.MaxValue &&                // Kun rækker, hvis virkningstidsinterval skærer historical time of interest, dvs stationer, der er aktive i dag
             _.Name.ToUpper().Contains(_nameFilterInUppercase);
+    }
+
+    private void UpdateFilterControls()
+    {
+        DisplayNameFilterField = _displayNameFilter.Object;
+    }
+
+    private void UpdateRetrospectionControlGroup()
+    {
+        DisplayRetrospectionControlSection =
+            _displayHistoricalTimeControls.Object ||
+            _displayDatabaseTimeControls.Object;
+
+        DisplayHistoricalTimeField = _displayHistoricalTimeControls.Object;
+        DisplayDatabaseTimeField = _displayDatabaseTimeControls.Object;
+    }
+
+    private void ClearHistoricalTime()
+    {
+        _historicalTimeOfInterest.Object = null;
+    }
+
+    private bool CanClearHistoricalTime()
+    {
+        return _historicalTimeOfInterest.Object.HasValue;
+    }
+
+    private void ClearDatabaseTime()
+    {
+        _databaseTimeOfInterest.Object = null;
+    }
+
+    private bool CanClearDatabaseTime()
+    {
+        return _databaseTimeOfInterest.Object.HasValue;
     }
 }

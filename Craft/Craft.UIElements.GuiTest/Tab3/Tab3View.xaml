@@ -108,6 +108,8 @@
                                       IsChecked="{Binding GeometryEditorViewModel3.XAxisLocked}"/>
                             <CheckBox Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="2" Content="Lock Y Axis"
                                       IsChecked="{Binding GeometryEditorViewModel3.YAxisLocked}"/>
+                            <CheckBox Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="2" Content="Lock Aspect Ratio"
+                                      IsChecked="{Binding GeometryEditorViewModel3.AspectRatioLocked}"/>
                         </Grid>
                     </Grid>
                 </TabItem>

@@ -194,13 +194,16 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             var xFactor = ViewModel.XAxisLocked ? 1.0 : 1.2;
             var yFactor = ViewModel.YAxisLocked ? 1.0 : 1.2;
 
-            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            if (!ViewModel.AspectRatioLocked)
             {
-                yFactor = 1.0;
-            }
-            else if (Keyboard.IsKeyDown(Key.LeftAlt))
-            {
-                xFactor = 1.0;
+                if (Keyboard.IsKeyDown(Key.LeftCtrl))
+                {
+                    yFactor = 1.0;
+                }
+                else if (Keyboard.IsKeyDown(Key.LeftAlt))
+                {
+                    xFactor = 1.0;
+                }
             }
 
             if (e.Delta > 0)

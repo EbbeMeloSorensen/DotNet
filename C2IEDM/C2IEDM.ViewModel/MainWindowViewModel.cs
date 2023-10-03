@@ -345,8 +345,6 @@ public class MainWindowViewModel : ViewModelBase
 
     private void InitializeMapViewModel()
     {
-        //var worldWindowBoundingBoxNorthWest = new Point(10.25, 57.95);
-        //var worldWindowBoundingBoxSouthEast = new Point(13.75, 54.45);
         var worldWindowBoundingBoxNorthWest = new Point(8, 57.95);
         var worldWindowBoundingBoxSouthEast = new Point(16, 54.45);
 
@@ -358,7 +356,10 @@ public class MainWindowViewModel : ViewModelBase
             Math.Abs(worldWindowBoundingBoxNorthWest.X - worldWindowBoundingBoxSouthEast.X),
             Math.Abs(worldWindowBoundingBoxNorthWest.Y - worldWindowBoundingBoxSouthEast.Y));
 
-        MapViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, false);
+        MapViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, false)
+        {
+            AspectRatioLocked = true
+        };
 
         MapViewModel.MouseClickOccured += (s, e) =>
         {
