@@ -16,3 +16,7 @@
 Ideer:
 * Gør det sådan at dem, du sætter op, de begynder at generere måledata, og hvor data er fejlbehæftet med f.eks. outliers
   .. Så kan man operere med et mode, hvor man kan få lov til at rense data
+* Mht Allans feedback, så husk lige, at du jo altså har lavet prototypen PERSISTENT IGNORANT, så du hurtigt kan skifte mellem forskellige data layers.
+  Som sådan skulle det kunne lade sig gøre at lave et plugin, der kalder en hvilken som helst anden backend. Prøv f.eks. at lave et plugin, der
+  kalder din asp.net core baserede backend, dvs det samme som din React applikation gør! Når du er så langt, burde det være overkommeligt at lave et
+  plugin, som wrapper det API, Lars laver
