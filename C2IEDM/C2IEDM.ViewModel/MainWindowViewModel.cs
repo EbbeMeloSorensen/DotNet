@@ -28,6 +28,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
     private readonly Brush _observingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
+    private readonly ObservableObject<bool> _displayNameFilter;
     private readonly ObservableObject<bool> _displayRetrospectionControls;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
@@ -39,6 +40,16 @@ public class MainWindowViewModel : ViewModelBase
     private RelayCommand<object> _deleteSelectedObservingFacilitiesCommand;
     private RelayCommand<object> _clearRepositoryCommand;
     private RelayCommand _escapeCommand;
+
+    public bool DisplayNameFilter
+    {
+        get => _displayNameFilter.Object;
+        set
+        {
+            _displayNameFilter.Object = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public bool DisplayRetrospectionControls
     {
@@ -142,6 +153,11 @@ public class MainWindowViewModel : ViewModelBase
         _databaseTimeOfInterest = new ObservableObject<DateTime?>
         {
             Object = null
+        };
+
+        _displayNameFilter = new ObservableObject<bool>
+        {
+            Object = false
         };
 
         _displayRetrospectionControls = new ObservableObject<bool>
@@ -297,6 +313,7 @@ public class MainWindowViewModel : ViewModelBase
             applicationDialogService,
             _historicalTimeOfInterest,
             _databaseTimeOfInterest,
+            _displayNameFilter,
             _displayHistoricalTimeControls,
             _displayDatabaseTimeControls);
 
@@ -375,6 +392,11 @@ public class MainWindowViewModel : ViewModelBase
 
         HistoricalTimeViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
+            if (HistoricalTimeViewModel.TimeAtMousePosition.Object > DateTime.UtcNow)
+            {
+                return;
+            }
+
             _historicalTimeOfInterest.Object = HistoricalTimeViewModel.TimeAtMousePosition.Object;
         };
     }
@@ -407,6 +429,20 @@ public class MainWindowViewModel : ViewModelBase
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
             _databaseTimeOfInterest.Object = DatabaseWriteTimesViewModel.TimeAtMousePosition.Object;
+
+            if (!_databaseTimeOfInterest.Object.HasValue)
+            {
+                // Dette burde ikke forekomme i praksis
+                return;
+            }
+
+            // Der skal altid gælde, at historisk tid er ældre end eller lig med databasetid
+            if (!_historicalTimeOfInterest.Object.HasValue ||
+                _historicalTimeOfInterest.Object.Value > _databaseTimeOfInterest.Object.Value)
+            {
+                _historicalTimeOfInterest.Object = _databaseTimeOfInterest.Object.Value;
+            }
+
             RefreshDatabaseTimeSeriesView();
         };
     }

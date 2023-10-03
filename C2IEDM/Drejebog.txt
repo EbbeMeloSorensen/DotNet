@@ -1,6 +1,18 @@
 1) Start med en tom database (sørg for at have mulighed for at wipe)
-2) Lav et antal nye, hvor de sættes til at have from (og established) samme dag
-3) Lav et antal nye, hvor from (og established) sættes til før i tiden
-4) Lav et antal nye, hvor from (og established) sættes til før i tiden, og hvor de også sættes til at være afsluttet.
-   Gør her opmærksom på at den i modsætning til de andre hverken vises i listen eller på kortet (fordi den er nedlagt)
-5) Angiv for en af dem, at den stod et andet sted tidligere (så den får en historik med flere lokationer)
+2) Lav en ny, hvor den sættes til at være blevet oprettet på dags dato
+3) Lav en ny, hvor den sættes til at være blevet oprettet på en dato før i tiden
+4) Lav en ny, hvor den sættes til at være blevet oprettet på en dato før i tiden, og hvor den også sættes til at være nedlagt.
+   Gør her opmærksom på at den i modsætning til de andre hverken vises i listen eller på kortet (fordi den jo er nedlagt og vi kigger på current situation)
+5) Gå tilbage i historisk tid og vis, hvordan det så ud, dengang den var aktiv, den som blev markeret som nedlagt (vis kort med falmede farver)
+   Gør evt her opmærksom på, at man ikke kan udføre ændringer, når man kigger på historiske kort - eller hvad.. måske ville det egentlig give god mening?
+6) Lav en retroaktiv ændring ved at ændre oprettelsesdato for den første, hvor man ellers angav, at den blev oprettet på dags dato
+7) Gå igen tilbage i tid og kig på det korrigerede historiske map
+   Gør her opmærksom på, at man nu på det historiske kort kan se den observing facility, der før var skjult
+8) Illustrer nu databasetid ved at gå tilbage til, HVAD DATABASEN påstod tidligere (Her kan du måske tilføje en eller anden syret farve)
+9) 
+
+*) Angiv for en af dem, at den stod et andet sted tidligere (så den får en historik med flere lokationer)
+
+Ideer:
+* Gør det sådan at dem, du sætter op, de begynder at generere måledata, og hvor data er fejlbehæftet med f.eks. outliers
+  .. Så kan man operere med et mode, hvor man kan få lov til at rense data

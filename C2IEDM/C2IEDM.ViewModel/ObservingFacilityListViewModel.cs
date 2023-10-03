@@ -64,6 +64,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
         IDialogService applicationDialogService,
         ObservableObject<DateTime?> historicalTimeOfInterest,
         ObservableObject<DateTime?> databaseTimeOfInterest,
+        ObservableObject<bool> displayNameFilter,
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
     {
@@ -74,6 +75,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
         ObservingFacilityFilterViewModel = new ObservingFacilityFilterViewModel(
             historicalTimeOfInterest,
             databaseTimeOfInterest, 
+            displayNameFilter,
             displayHistoricalTimeControls,
             displayDatabaseTimeControls);
 
@@ -202,6 +204,16 @@ public class ObservingFacilityListViewModel : ViewModelBase
 
     private void UpdateSorting()
     {
+        switch (Sorting)
+        {
+            case Sorting.Name:
+                {
+                    ObservingFacilityDataExtracts.Objects = ObservingFacilityDataExtracts.Objects.OrderBy(_ => _.ObservingFacility.Name);
+                    break;
+                }
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     private void UpdateObservingFacilityListItemViewModels()

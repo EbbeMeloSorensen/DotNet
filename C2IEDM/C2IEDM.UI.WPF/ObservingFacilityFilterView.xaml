@@ -20,7 +20,18 @@
 
     <Grid Width="275">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="0"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=DisplayNameFilterField}" Value="true">
+                                <Setter Property="Height" Value="Auto"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -81,7 +92,7 @@
                          Text="{Binding DatabaseTimeOfInterestAsString}">
                     <TextBox.ToolTip>Set by clicking in the "Database Write Time" view at the bottom of the screen</TextBox.ToolTip>
                 </TextBox>
-                <Button Grid.Row="0" Grid.Column="2" Margin="2, 1, 1, 1" Width="50" Content="Latest" IsEnabled="false"/>
+                <Button Grid.Row="0" Grid.Column="2" Margin="2, 1, 1, 1" Width="50" Content="Now" IsEnabled="false"/>
                 <Button Grid.Row="1" Grid.Column="2" Margin="2, 3, 1, 1" Width="50" Content="Latest" IsEnabled="false"/>
             </Grid>
         </GroupBox>

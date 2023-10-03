@@ -39,6 +39,9 @@
                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             </MenuItem>
             <MenuItem Header="_View">
+                <MenuItem IsCheckable="True" Header="Name Filter" 
+                          IsChecked="{Binding DisplayNameFilter}" />
+                <Separator/>
                 <MenuItem IsCheckable="True" Header="Historical Time" 
                           IsChecked="{Binding DisplayHistoricalTimeControls}" />
                 <MenuItem IsCheckable="True" Header="Database Time" 
@@ -58,9 +61,11 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                <Button Content="New.." Command="{Binding CreateObservingFacilityCommand}" 
+                <Button Content="New.." Margin="2"
+                        Command="{Binding CreateObservingFacilityCommand}" 
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-                <Button Content="Delete" Command="{Binding DeleteSelectedObservingFacilitiesCommand}"
+                <Button Content="Delete" Margin="2"
+                        Command="{Binding DeleteSelectedObservingFacilitiesCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             </StackPanel>
 

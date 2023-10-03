@@ -12,13 +12,25 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
     private string _nameFilterInUppercase = "";
     private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
     private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
+    private readonly ObservableObject<bool> _displayNameFilter;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
+    private bool _displayNameFilterField;
     private bool _displayRetrospectionControlSection;
     private bool _displayHistoricalTimeField;
     private bool _displayDatabaseTimeField;
     private string _historicalTimeOfInterestAsString;
     private string _databaseTimeOfInterestAsString;
+
+    public bool DisplayNameFilterField 
+    {
+        get => _displayNameFilterField;
+        set
+        {
+            _displayNameFilterField = value;
+            RaisePropertyChanged();
+        } 
+    }
 
     public bool DisplayRetrospectionControlSection
     {
@@ -85,15 +97,17 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
     public ObservingFacilityFilterViewModel(
         ObservableObject<DateTime?> historicalTimeOfInterest,
         ObservableObject<DateTime?> databaseTimeOfInterest,
+        ObservableObject<bool> displayNameFilter,
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
     {
         _historicalTimeOfInterest = historicalTimeOfInterest;
         _databaseTimeOfInterest = databaseTimeOfInterest;
+        _displayNameFilter = displayNameFilter;
         _displayHistoricalTimeControls = displayHistoricalTimeControls;
         _displayDatabaseTimeControls = displayDatabaseTimeControls;
 
-        _historicalTimeOfInterestAsString = "Latest";
+        _historicalTimeOfInterestAsString = "Now";
         _databaseTimeOfInterestAsString = "Latest";
 
         _historicalTimeOfInterest.PropertyChanged += (s, e) =>
@@ -120,10 +134,16 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
             }
         };
 
+        _displayNameFilter.PropertyChanged += (s, e) => UpdateFilterControls();
         _displayHistoricalTimeControls.PropertyChanged += (s, e) => UpdateRetrospectionControlGroup();
         _displayDatabaseTimeControls.PropertyChanged += (s, e) => UpdateRetrospectionControlGroup();
 
         UpdateRetrospectionControlGroup();
+    }
+
+    private void UpdateFilterControls()
+    {
+        DisplayNameFilterField = _displayNameFilter.Object;
     }
 
     private void UpdateRetrospectionControlGroup()
@@ -141,7 +161,12 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         if (_historicalTimeOfInterest.Object.HasValue &&
             _databaseTimeOfInterest.Object.HasValue)
         {
-            throw new NotImplementedException();
+            return _ =>
+                _.Created <= _databaseTimeOfInterest.Object.Value &&            // Kun rækker skrevet før pågældende tidspunkt
+                _.Superseded > _databaseTimeOfInterest.Object.Value &&          // Kun rækker, der er "gældende" (eller var gældende på pågældende tidspunkt)
+                _.DateEstablished <= _historicalTimeOfInterest.Object.Value &&  // ->
+                _.DateClosed > _historicalTimeOfInterest.Object.Value &&        // Kun rækker, hvis virkningstidsinterval skærer historical time of interest
+                _.Name.ToUpper().Contains(_nameFilterInUppercase);
         }
 
         if (_databaseTimeOfInterest.Object.HasValue)
