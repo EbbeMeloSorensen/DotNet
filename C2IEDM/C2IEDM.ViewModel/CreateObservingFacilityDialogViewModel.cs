@@ -24,6 +24,11 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     private DateTime _from;
     private DateTime? _to;
 
+    private DateTime _displayDateStart_DateFrom;
+    private DateTime _displayDateEnd_DateFrom;
+    private DateTime _displayDateStart_DateTo;
+    private DateTime _displayDateEnd_DateTo;
+
     private RelayCommand<object> _okCommand;
     private RelayCommand<object> _cancelCommand;
 
@@ -77,6 +82,46 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         }
     }
 
+    public DateTime DisplayDateStart_DateFrom
+    {
+        get => _displayDateStart_DateFrom;
+        set
+        {
+            _displayDateStart_DateFrom = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public DateTime DisplayDateEnd_DateFrom
+    {
+        get => _displayDateEnd_DateFrom;
+        set
+        {
+            _displayDateEnd_DateFrom = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public DateTime DisplayDateStart_DateTo
+    {
+        get => _displayDateStart_DateTo;
+        set
+        {
+            _displayDateStart_DateTo = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public DateTime DisplayDateEnd_DateTo
+    {
+        get => _displayDateEnd_DateTo;
+        set
+        {
+            _displayDateEnd_DateTo = value;
+            RaisePropertyChanged();
+        }
+    }
+
     public double Latitude
     {
         get { return _latitude; }
@@ -121,6 +166,8 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         Point mousePositionWorld)
     {
         var currentDate = DateTime.Now.Date;
+        DisplayDateEnd_DateFrom = currentDate;
+        DisplayDateEnd_DateTo = currentDate;
         DateEstablished = currentDate;
         From = currentDate;
         Latitude = Math.Round(mousePositionWorld.X, 4);

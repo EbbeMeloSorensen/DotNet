@@ -57,9 +57,13 @@
                         SelectedDate="{Binding DateClosed}"/>
             <TextBlock Grid.Row="5" Grid.Column="0" Padding="3" Text="From:"/>
             <DatePicker Grid.Row="5" Grid.Column="1" Padding="3" 
+                        DisplayDateStart="{Binding DisplayDateStart_DateFrom}" 
+                        DisplayDateEnd="{Binding DisplayDateEnd_DateFrom}" 
                         SelectedDate="{Binding From}"/>
             <TextBlock Grid.Row="6" Grid.Column="0" Padding="3" Text="To:"/>
             <DatePicker Grid.Row="6" Grid.Column="1" Padding="3" 
+                        DisplayDateStart="{Binding DisplayDateStart_DateTo}" 
+                        DisplayDateEnd="{Binding DisplayDateEnd_DateTo}" 
                         SelectedDate="{Binding To}"/>
         </Grid>
 

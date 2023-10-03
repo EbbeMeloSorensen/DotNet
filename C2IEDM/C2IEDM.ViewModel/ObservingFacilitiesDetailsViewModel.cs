@@ -29,8 +29,11 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     private string _sharedName;
     private DateTime? _sharedDateEstablished;
     private DateTime? _sharedDateClosed;
-    private DateTime _displayDateStart;
-    private DateTime _displayDateEnd;
+
+    private DateTime _displayDateStart_DateEstablished;
+    private DateTime _displayDateEnd_DateEstablished;
+    private DateTime _displayDateStart_DateClosed;
+    private DateTime _displayDateEnd_DateClosed;
 
     private bool _isVisible;
 
@@ -71,22 +74,42 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    public DateTime DisplayDateStart
+    public DateTime DisplayDateStart_DateEstablished
     {
-        get => _displayDateStart;
+        get => _displayDateStart_DateEstablished;
         set
         {
-            _displayDateStart = value;
+            _displayDateStart_DateEstablished = value;
             RaisePropertyChanged();
         }
     }
 
-    public DateTime DisplayDateEnd
+    public DateTime DisplayDateEnd_DateEstablished
     {
-        get => _displayDateEnd;
+        get => _displayDateEnd_DateEstablished;
         set
         {
-            _displayDateEnd = value;
+            _displayDateEnd_DateEstablished = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public DateTime DisplayDateStart_DateClosed
+    {
+        get => _displayDateStart_DateClosed;
+        set
+        {
+            _displayDateStart_DateClosed = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public DateTime DisplayDateEnd_DateClosed
+    {
+        get => _displayDateEnd_DateClosed;
+        set
+        {
+            _displayDateEnd_DateClosed = value;
             RaisePropertyChanged();
         }
     }
@@ -141,19 +164,32 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
             ? firstObservingFacility.DateEstablished
             : null;
 
-        DisplayDateStart = DateTime.Now - TimeSpan.FromDays(7); // Todo: Man skal kunne angive, at noget lukkes i dag eller blev lukket tidligere
-        DisplayDateEnd = DateTime.Now; // Man skal ikke kunne angive at noget lukkes i fremtiden
+        if (SharedDateEstablished.HasValue)
+        {
+            DisplayDateStart_DateClosed = SharedDateEstablished.Value;
+        }
+        else
+        {
+            // Hvis vi er her, har vi at gøre med en selection af FLERE observing facilities med opstillet på FORSKELLIGE dage.
+            // Todo: Find ud af, hvilket range af dage, det er legitimt at vælge, og som gælder for alle de valgte observing facilities.
+            //       (hint: Man må ikke føre det forbi seneste forekomst af DateClosed, og man må ikke føre det tilbage, hvis det går i karambolage
+            //       med tidligere geospatielle lokationer)
+            throw new NotImplementedException();
+        }
 
-        SharedDateClosed = DateTime.Now; // Dette er for at sikre, at den foreslår dags dato, hvis man selecter den
+        // Man skal ikke kunne angive, at noget lukkes i fremtiden
+        DisplayDateEnd_DateClosed = DateTime.Now;
+
+        // Dette er for at sikre, at den foreslår dags dato, hvis man selecter den
+        SharedDateClosed = DateTime.Now;
 
         var sharedDateClosed = temp.Objects.All(_ => _.DateClosed == firstObservingFacility.DateClosed)
             ? firstObservingFacility.DateClosed
             : null;
 
-        if (sharedDateClosed.HasValue && sharedDateClosed.Value.Year != 9999)
-        {
-            SharedDateClosed = sharedDateClosed;
-        }
+        SharedDateClosed = sharedDateClosed.HasValue && sharedDateClosed.Value.Year != 9999
+            ? SharedDateClosed = sharedDateClosed.Value
+            : null;
 
         _originalSharedName = SharedName;
         _originalSharedDateEstablished = SharedDateEstablished;
