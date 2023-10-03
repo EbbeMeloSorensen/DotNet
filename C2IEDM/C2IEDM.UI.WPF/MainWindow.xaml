@@ -34,7 +34,9 @@
                 <MenuItem Header="_Exit"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Clear database"/>
+                <MenuItem Header="Clear database" 
+                          Command="{Binding ClearRepositoryCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem IsCheckable="True" Header="Historical Time" 
@@ -58,7 +60,8 @@
             <StackPanel Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <Button Content="New.." Command="{Binding CreateObservingFacilityCommand}" 
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-                <Button Content="Delete" Command="{Binding DeleteSelectedObservingFacilitiesCommand}"/>
+                <Button Content="Delete" Command="{Binding DeleteSelectedObservingFacilitiesCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             </StackPanel>
 
             <local:ObservingFacilitiesListView

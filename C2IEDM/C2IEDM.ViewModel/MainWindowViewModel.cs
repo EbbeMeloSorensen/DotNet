@@ -35,6 +35,11 @@ public class MainWindowViewModel : ViewModelBase
     private int _selectedTabIndexForRetrospectionTimeLines;
     private Window _owner;
 
+    private RelayCommand<object> _createObservingFacilityCommand;
+    private RelayCommand<object> _deleteSelectedObservingFacilitiesCommand;
+    private RelayCommand<object> _clearRepositoryCommand;
+    private RelayCommand _escapeCommand;
+
     public bool DisplayRetrospectionControls
     {
         get => _displayRetrospectionControls.Object;
@@ -92,19 +97,24 @@ public class MainWindowViewModel : ViewModelBase
     public TimeSeriesViewModel DatabaseWriteTimesViewModel { get; private set;  }
     public TimeSeriesViewModel HistoricalTimeViewModel { get; private set; }
 
-    private RelayCommand<object> _createObservingFacilityCommand;
-    private RelayCommand _deleteSelectedObservingFacilitiesCommand;
-    private RelayCommand _escapeCommand;
-
     public RelayCommand<object> CreateObservingFacilityCommand
     {
         get { return _createObservingFacilityCommand ?? (_createObservingFacilityCommand = new RelayCommand<object>(CreateObservingFacility, CanCreateObservingFacility)); }
     }
 
-    public RelayCommand DeleteSelectedObservingFacilitiesCommand
+    public RelayCommand<object> DeleteSelectedObservingFacilitiesCommand
     {
         get { return _deleteSelectedObservingFacilitiesCommand ?? (_deleteSelectedObservingFacilitiesCommand = 
-                new RelayCommand(DeleteSelectedObservingFacilities, CanDeleteSelectedObservingFacilities)); }
+                new RelayCommand<object>(DeleteSelectedObservingFacilities, CanDeleteSelectedObservingFacilities)); }
+    }
+
+    public RelayCommand<object> ClearRepositoryCommand
+    {
+        get
+        {
+            return _clearRepositoryCommand ?? (_clearRepositoryCommand =
+                new RelayCommand<object>(ClearRepository, CanClearRepository));
+        }
     }
 
     public RelayCommand EscapeCommand
@@ -204,7 +214,8 @@ public class MainWindowViewModel : ViewModelBase
         return true;
     }
 
-    private void DeleteSelectedObservingFacilities()
+    private void DeleteSelectedObservingFacilities(
+        object owner)
     {
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
@@ -231,10 +242,39 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private bool CanDeleteSelectedObservingFacilities()
+    private bool CanDeleteSelectedObservingFacilities(
+        object owner)
     {
         return ObservingFacilityListViewModel.SelectedObservingFacilities.Objects != null &&
                ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any();
+    }
+
+    private void ClearRepository(
+        object owner)
+    {
+        var dialogViewModel1 = new MessageBoxDialogViewModel("Clear repository?", true);
+
+        if (_applicationDialogService.ShowDialog(dialogViewModel1, owner as Window) == DialogResult.Cancel)
+        {
+            return;
+        }
+
+        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+        {
+            unitOfWork.GeospatialLocations.Clear();
+            unitOfWork.AbstractEnvironmentalMonitoringFacilities.Clear();
+            unitOfWork.Complete();
+        }
+
+        var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was cleared", false);
+
+        _applicationDialogService.ShowDialog(dialogViewModel2, owner as Window);
+    }
+
+    private bool CanClearRepository(
+        object owner)
+    {
+        return true;
     }
 
     private void Escape()

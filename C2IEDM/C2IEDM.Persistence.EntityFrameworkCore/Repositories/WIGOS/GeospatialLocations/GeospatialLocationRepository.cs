@@ -13,7 +13,10 @@ public class GeospatialLocationRepository : Repository<GeospatialLocation>, IGeo
 
     public override void Clear()
     {
-        throw new NotImplementedException();
+        var context = Context as C2IEDMDbContextBase;
+
+        context.RemoveRange(context.GeospatialLocations);
+        context.SaveChanges();
     }
 
     public override void Update(GeospatialLocation entity)

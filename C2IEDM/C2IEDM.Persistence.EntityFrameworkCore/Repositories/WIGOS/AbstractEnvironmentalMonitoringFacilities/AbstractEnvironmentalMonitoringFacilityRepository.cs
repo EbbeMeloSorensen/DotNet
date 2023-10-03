@@ -13,7 +13,10 @@ public class AbstractEnvironmentalMonitoringFacilityRepository : Repository<Abst
 
     public override void Clear()
     {
-        throw new NotImplementedException();
+        var context = Context as C2IEDMDbContextBase;
+
+        context.RemoveRange(context.AbstractEnvironmentalMonitoringFacilities);
+        context.SaveChanges();
     }
 
     public override void Update(AbstractEnvironmentalMonitoringFacility entity)
