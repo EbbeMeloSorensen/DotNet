@@ -5,8 +5,13 @@ Done
 * Name filter skal kunne slås til og fra og ikke vises pr default
 * Sørg for at man ikke har lov til at ændre på aspect ratio for map viewet
 * Man skal kunne gå ud af retroaktivt mode ved at klikke på de der knapper i filteret
+* I list viewet skal man kun vise de observing facilities, hvor der gælder, at time of interest ligger mellem hvis establishing date og closing date
 
 In progress:
+* Introducer det mode, hvor Find-knappen ikke vises, men kaldes hver gang der sker en ændring i filteret
+* Sørg for at gøre tydeligt opmærksom på, når man kigger på historisk tid - evt med farver - alla falmede kort
+* Sørg for at vedligeholde hjælpestreger for de 2 tidslinier
+* På de 2 tidsakser skal man kunne se en linie, der angiver nuværende tidspunkt - gerne med løbende opdatering
 
 Todo:
 * Du skal kunne ændre en observing facility ved at sætte dens Closed Date til en dato, der ligger før i tiden.
@@ -17,12 +22,7 @@ Todo:
   er ældre end From for den seneste geospatielle lokation.
 * DateEstablished og DateClosed skal ikke vises i brugergrænsefladen, men følge From og To for de underliggende Geospatial Locations.
   Det gælder både Create-dialogen og detalje viewet
-* I list viewet skal man kun vise de observing facilities, hvor der gælder, at time of interest ligger mellem hvis establishing date 
-  og evt closing
-* Hvis man opretter en ny, som i øvrigt er nedlagt, så skal den ikke vises, og derudover skal man cleare selection
-* Sørg for at vedligeholde hjælpestreger for de 2 tidslinier
-* Sørg for at gøre tydeligt opmærksom på, når man kigger på historisk tid - evt med farver - alla falmede kort
-* På de 2 tidsakser skal man kunne se en linie, der angiver nuværende tidspunkt - gerne med løbende opdatering
+* Hvis man opretter en ny, som i øvrigt er nedlagt (og derfor ikke vises), så skal man cleare selection
 * Pr default skal den bare vælge en dato i historisk tid - med Shift kan man så angive, at det skal være mere granuleret
 
 (Herunder roder det lidt rigeligt)

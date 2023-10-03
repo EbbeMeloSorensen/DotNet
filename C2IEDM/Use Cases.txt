@@ -1,4 +1,8 @@
 Use cases:
 
 * Tøm databasen (demonstrationsformål)
-* 
+* Opret e
+
+Reflektioner:
+Use case wise, så er du med prototypen der, hvor en observing facility kun kan have EEN lokation, hvor den så har stået i en given periode,
+som i øvrigt kan være uafsluttet. Du supporterer indtil videre IKKE, at den kan have stået forskellige steder.
