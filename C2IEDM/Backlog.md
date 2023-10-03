@@ -3,10 +3,14 @@ Done
 
 Todo:
 * Du skal kunne ændre en observing facility ved at sætte dens Closed Date til en dato, der ligger før i tiden.
-  Når det sker, skal den også sætte to time for den seneste geospatielle lokation til samme tidspunkt
+  Når det sker, skal den også sætte to time for den seneste geospatielle lokation til samme tidspunkt.
+  ... Det er kun i "almindeligt" mode at man kan tilføje eller ændre data". I det mode ser man også kun de aktive stationer, og så skal man 
+  have mulighed for at "nedlægge" dem, dvs sætte deres DateClosed til en dato. Det skal så udvirke, at den seneste Geospatielle lokation også
+  sættes til samme dato. Det skal valideres, at man ikke sætter datoen til noget i fremtiden, og også, at man ikke sætter det til noget, der
+  er ældre end From for den seneste geospatielle lokation.
 * DateEstablished og DateClosed skal ikke vises i brugergrænsefladen, men følge From og To for de underliggende Geospatial Locations.
   Det gælder både Create-dialogen og detalje viewet
-* I list viewet skal man kun vise de observing facilities, hvor der gælder at time of interest ligger mellem hvis establishing date 
+* I list viewet skal man kun vise de observing facilities, hvor der gælder, at time of interest ligger mellem hvis establishing date 
   og evt closing
 
 (Herunder roder det lidt rigeligt)

@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Drejebog.txt = Drejebog.txt
 		Readme.md = Readme.md
 		SqlQueries.sql = SqlQueries.sql
+		Use Cases.txt = Use Cases.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "C2IEDM.ViewModel", "C2IEDM.ViewModel\C2IEDM.ViewModel.csproj", "{307F0644-B4A9-4041-A093-F72BF86AE62A}"

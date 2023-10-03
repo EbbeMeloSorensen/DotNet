@@ -29,6 +29,8 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     private string _sharedName;
     private DateTime? _sharedDateEstablished;
     private DateTime? _sharedDateClosed;
+    private DateTime _displayDateStart;
+    private DateTime _displayDateEnd;
 
     private bool _isVisible;
 
@@ -69,6 +71,26 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
+    public DateTime DisplayDateStart
+    {
+        get => _displayDateStart;
+        set
+        {
+            _displayDateStart = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public DateTime DisplayDateEnd
+    {
+        get => _displayDateEnd;
+        set
+        {
+            _displayDateEnd = value;
+            RaisePropertyChanged();
+        }
+    }
+
     public bool IsVisible
     {
         get { return _isVisible; }
@@ -94,7 +116,9 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         _observingFacilities.PropertyChanged += Initialize;
     }
 
-    private void Initialize(object sender, PropertyChangedEventArgs e)
+    private void Initialize(
+        object sender, 
+        PropertyChangedEventArgs e)
     {
         _state = StateOfView.Initial;
         var temp = sender as ObjectCollection<ObservingFacility>;
@@ -116,6 +140,11 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         SharedDateEstablished = temp.Objects.All(_ => _.DateEstablished == firstObservingFacility.DateEstablished)
             ? firstObservingFacility.DateEstablished
             : null;
+
+        DisplayDateStart = DateTime.Now - TimeSpan.FromDays(7); // Todo: Man skal kunne angive, at noget lukkes i dag eller blev lukket tidligere
+        DisplayDateEnd = DateTime.Now; // Man skal ikke kunne angive at noget lukkes i fremtiden
+
+        SharedDateClosed = DateTime.Now; // Dette er for at sikre, at den foreslår dags dato, hvis man selecter den
 
         var sharedDateClosed = temp.Objects.All(_ => _.DateClosed == firstObservingFacility.DateClosed)
             ? firstObservingFacility.DateClosed
