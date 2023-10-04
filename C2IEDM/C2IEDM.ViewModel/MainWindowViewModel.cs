@@ -358,6 +358,7 @@ public class MainWindowViewModel : ViewModelBase
 
         MapViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, false)
         {
+            BackgroundBrush = new SolidColorBrush(Colors.LightBlue),
             AspectRatioLocked = true
         };
 

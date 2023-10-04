@@ -27,6 +27,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Size _scaling;
         private Matrix _transformationMatrix;
         private Brush _defaultBrush;
+        private Brush _backgroundBrush;
         private Dictionary<int, ShapeViewModel> _shapeViewModelMap;
         private bool _xAxisLocked;
         private bool _yAxisLocked;
@@ -172,6 +173,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public Brush BackgroundBrush
+        {
+            get => _backgroundBrush;
+            set
+            {
+                _backgroundBrush = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ObservableCollection<PolygonViewModel> PolygonViewModels { get; }
 
         public ObservableCollection<PolylineViewModel> PolylineViewModels { get; }
@@ -238,6 +249,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         protected GeometryEditorViewModel()
         {
+            _backgroundBrush = new SolidColorBrush(Colors.WhiteSmoke);
             _defaultBrush = new SolidColorBrush(Colors.Black);
             _shapeViewModelMap = new Dictionary<int, ShapeViewModel>();
 

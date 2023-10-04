@@ -15,7 +15,7 @@
             MouseRightButtonUp="UIElement_OnMouseRightButtonUp"
             MouseMove="UIElement_OnMouseMove"
             MouseWheel="UIElement_OnMouseWheel"
-            Background="{StaticResource BackgroundBrush}">
+            Background="{Binding BackgroundBrush}">
 
         <Image Source="{Binding 
             Path=ImagePath, 
