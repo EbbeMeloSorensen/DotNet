@@ -25,6 +25,10 @@ public class MainWindowViewModel : ViewModelBase
     private readonly List<DateTime> _databaseWriteTimes;
     private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
     private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
+    private readonly Brush _mapBrushSeaCurrent = new SolidColorBrush(new Color { R = 200, G = 200, B = 255, A = 255 });
+    private readonly Brush _mapBrushSeaHistoric = new SolidColorBrush(new Color { R = 239, G = 228, B = 176, A = 255 });
+    private readonly Brush _mapBrushLandCurrent = new SolidColorBrush(new Color { R = 100, G = 200, B = 100, A = 255 });
+    private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
     private readonly Brush _observingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
@@ -154,6 +158,12 @@ public class MainWindowViewModel : ViewModelBase
         {
             Object = null
         };
+
+        _historicalTimeOfInterest.PropertyChanged += (s, e) => 
+            UpdateMapColoring();
+
+        _databaseTimeOfInterest.PropertyChanged += (s, e) =>
+            UpdateMapColoring();
 
         _displayNameFilter = new ObservableObject<bool>
         {
@@ -324,7 +334,7 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilityListViewModel.ObservingFacilityDataExtracts.PropertyChanged += (s, e) =>
         {
-            UpdateMapView();
+            UpdateMapPoints();
         };
     }
 
@@ -358,7 +368,6 @@ public class MainWindowViewModel : ViewModelBase
 
         MapViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, false)
         {
-            BackgroundBrush = new SolidColorBrush(Colors.LightBlue),
             AspectRatioLocked = true
         };
 
@@ -366,6 +375,8 @@ public class MainWindowViewModel : ViewModelBase
         {
             CreateNewObservingFacility();
         };
+
+        UpdateMapColoring();
     }
 
     private void InitializeHistoricalTimeViewModel()
@@ -494,15 +505,15 @@ public class MainWindowViewModel : ViewModelBase
 
         // Add the regions of Denmark to the map as polygons
         var lineThickness = 0.005;
-        var brush = new SolidColorBrush(new Color { R = 150, G = 255, B = 150, A = 127 });
 
         foreach (var polygon in polygons)
         {
-            MapViewModel.AddPolygon(polygon.Select(p => new PointD(p[1], p[0])), lineThickness, brush);
+            MapViewModel.AddPolygon(polygon
+                .Select(p => new PointD(p[1], p[0])), lineThickness, _mapBrushLandCurrent);
         }
     }
 
-    private void UpdateMapView()
+    private void UpdateMapPoints()
     {
         MapViewModel.PointViewModels.Clear();
 
@@ -523,6 +534,29 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private void UpdateMapColoring()
+    {
+        if (_historicalTimeOfInterest.Object.HasValue ||
+            _databaseTimeOfInterest.Object.HasValue)
+        {
+            MapViewModel.BackgroundBrush = _mapBrushSeaHistoric;
+
+            foreach (var polygonViewModel in MapViewModel.PolygonViewModels)
+            {
+                polygonViewModel.Brush = _mapBrushLandHistoric;
+            }
+        }
+        else
+        {
+            MapViewModel.BackgroundBrush = _mapBrushSeaCurrent;
+
+            foreach (var polygonViewModel in MapViewModel.PolygonViewModels)
+            {
+                polygonViewModel.Brush = _mapBrushLandCurrent;
+            }
+        }
+    }
+
     private void UpdateRetrospectionControls()
     {
         if (_displayHistoricalTimeControls.Object == false &&
@@ -536,7 +570,7 @@ public class MainWindowViewModel : ViewModelBase
             SelectedTabIndexForRetrospectionTimeLines = 0;
         }
 
-        DisplayRetrospectionControls = 
+        DisplayRetrospectionControls =
             _displayHistoricalTimeControls.Object ||
             _displayDatabaseTimeControls.Object;
     }
