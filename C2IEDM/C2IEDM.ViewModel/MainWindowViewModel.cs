@@ -576,6 +576,11 @@ public class MainWindowViewModel : ViewModelBase
                 polygonViewModel.Brush = _mapBrushLandCurrent;
             }
         }
+
+        if (_autoRefresh.Object)
+        {
+            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+        }
     }
 
     private void UpdateRetrospectionControls()

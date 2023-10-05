@@ -110,7 +110,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
 
         autoRefresh.PropertyChanged += (s, e) =>
         {
-            DisplayFindButton = autoRefresh.Object;
+            DisplayFindButton = !autoRefresh.Object;
         };
     }
 
