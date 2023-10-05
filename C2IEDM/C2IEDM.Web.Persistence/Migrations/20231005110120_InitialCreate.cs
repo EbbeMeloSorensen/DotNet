@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,10 +15,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AbstractEnvironmentalMonitoringFacilities",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,10 +29,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -44,22 +43,22 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    DisplayName = table.Column<string>(type: "text", nullable: false),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    DisplayName = table.Column<string>(type: "TEXT", nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,10 +69,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "CoordinateSystems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,10 +83,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "Locations",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,12 +97,12 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "ObjectItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    AlternativeIdentificationText = table.Column<string>(type: "text", nullable: true),
-                    ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    AlternativeIdentificationText = table.Column<string>(type: "TEXT", nullable: true),
+                    ObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,18 +113,18 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "People",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    Surname = table.Column<string>(type: "text", nullable: true),
-                    Nickname = table.Column<string>(type: "text", nullable: true),
-                    Address = table.Column<string>(type: "text", nullable: true),
-                    ZipCode = table.Column<string>(type: "text", nullable: true),
-                    City = table.Column<string>(type: "text", nullable: true),
-                    Birthday = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Category = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Dead = table.Column<bool>(type: "boolean", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    Surname = table.Column<string>(type: "TEXT", nullable: true),
+                    Nickname = table.Column<string>(type: "TEXT", nullable: true),
+                    Address = table.Column<string>(type: "TEXT", nullable: true),
+                    ZipCode = table.Column<string>(type: "TEXT", nullable: true),
+                    City = table.Column<string>(type: "TEXT", nullable: true),
+                    Birthday = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Category = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Dead = table.Column<bool>(type: "INTEGER", nullable: true),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,11 +135,11 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "VerticalDistances",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Dimension = table.Column<double>(type: "double precision", nullable: false),
-                    ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Dimension = table.Column<double>(type: "REAL", nullable: false),
+                    ObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -151,20 +150,20 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "GeoSpatialLocations",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    From = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    To = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    AbstractEnvironmentalMonitoringFacilityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AbstractEnvironmentalMonitoringFacilityObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    From = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    To = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    AbstractEnvironmentalMonitoringFacilityId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AbstractEnvironmentalMonitoringFacilityObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GeoSpatialLocations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GeoSpatialLocations_AbstractEnvironmentalMonitoringFaciliti~",
+                        name: "FK_GeoSpatialLocations_AbstractEnvironmentalMonitoringFacilities_AbstractEnvironmentalMonitoringFacilityId",
                         column: x => x.AbstractEnvironmentalMonitoringFacilityId,
                         principalTable: "AbstractEnvironmentalMonitoringFacilities",
                         principalColumn: "Id",
@@ -175,16 +174,16 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "ObservingFacilities",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    DateEstablished = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DateClosed = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    DateEstablished = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    DateClosed = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ObservingFacilities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ObservingFacilities_AbstractEnvironmentalMonitoringFaciliti~",
+                        name: "FK_ObservingFacilities_AbstractEnvironmentalMonitoringFacilities_Id",
                         column: x => x.Id,
                         principalTable: "AbstractEnvironmentalMonitoringFacilities",
                         principalColumn: "Id",
@@ -195,11 +194,11 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -216,11 +215,11 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -237,10 +236,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
+                    ProviderKey = table.Column<string>(type: "TEXT", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -257,8 +256,8 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -281,10 +280,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -301,7 +300,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "Lines",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -318,7 +317,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "Points",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -335,7 +334,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "Surfaces",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -352,8 +351,8 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "Organisations",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    NickName = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    NickName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -370,9 +369,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "GeometricVolumes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    LowerVerticalDistanceId = table.Column<Guid>(type: "uuid", nullable: true),
-                    UpperVerticalDistanceId = table.Column<Guid>(type: "uuid", nullable: true)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    LowerVerticalDistanceId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UpperVerticalDistanceId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -401,10 +400,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "Points_WIGOS",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CoordinateSystem = table.Column<string>(type: "text", nullable: false),
-                    Coordinate1 = table.Column<double>(type: "double precision", nullable: false),
-                    Coordinate2 = table.Column<double>(type: "double precision", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CoordinateSystem = table.Column<string>(type: "TEXT", nullable: false),
+                    Coordinate1 = table.Column<double>(type: "REAL", nullable: false),
+                    Coordinate2 = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -421,11 +420,11 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "AbsolutePoints",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    LatitudeCoordinate = table.Column<double>(type: "double precision", nullable: false),
-                    LongitudeCoordinate = table.Column<double>(type: "double precision", nullable: false),
-                    VerticalDistanceId = table.Column<Guid>(type: "uuid", nullable: true),
-                    VerticalDistanceObjectId = table.Column<Guid>(type: "uuid", nullable: true)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    LatitudeCoordinate = table.Column<double>(type: "REAL", nullable: false),
+                    LongitudeCoordinate = table.Column<double>(type: "REAL", nullable: false),
+                    VerticalDistanceId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    VerticalDistanceObjectId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -448,15 +447,15 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "LinePoints",
                 columns: table => new
                 {
-                    LineId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Index = table.Column<int>(type: "integer", nullable: false),
-                    LineObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PointObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SequenceQuantity = table.Column<int>(type: "integer", nullable: false),
-                    ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    LineId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Index = table.Column<int>(type: "INTEGER", nullable: false),
+                    LineObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    PointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    PointObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SequenceQuantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    ObjectId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -479,10 +478,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "PointReferences",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    OriginPointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    XVectorPointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    YVectorPointId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    OriginPointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    XVectorPointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    YVectorPointId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -517,11 +516,11 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "RelativePoints",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CoordinateSystemId = table.Column<Guid>(type: "uuid", nullable: false),
-                    XCoordinateDimension = table.Column<double>(type: "double precision", nullable: false),
-                    YCoordinateDimension = table.Column<double>(type: "double precision", nullable: false),
-                    ZCoordinateDimension = table.Column<double>(type: "double precision", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CoordinateSystemId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    XCoordinateDimension = table.Column<double>(type: "REAL", nullable: false),
+                    YCoordinateDimension = table.Column<double>(type: "REAL", nullable: false),
+                    ZCoordinateDimension = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -544,9 +543,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "CorridorAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CenterLineId = table.Column<Guid>(type: "uuid", nullable: false),
-                    WidthDimension = table.Column<double>(type: "double precision", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CenterLineId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    WidthDimension = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -569,10 +568,10 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "Ellipses",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CentrePointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstConjugateDiameterPointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SecondConjugateDiameterPointId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CentrePointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FirstConjugateDiameterPointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SecondConjugateDiameterPointId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -607,12 +606,12 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "FanAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    VertexPointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    MinimumRangeDimension = table.Column<double>(type: "double precision", nullable: false),
-                    MaximumRangeDimension = table.Column<double>(type: "double precision", nullable: false),
-                    OrientationAngle = table.Column<double>(type: "double precision", nullable: false),
-                    SectorSizeAngle = table.Column<double>(type: "double precision", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VertexPointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    MinimumRangeDimension = table.Column<double>(type: "REAL", nullable: false),
+                    MaximumRangeDimension = table.Column<double>(type: "REAL", nullable: false),
+                    OrientationAngle = table.Column<double>(type: "REAL", nullable: false),
+                    SectorSizeAngle = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -635,11 +634,11 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "OrbitAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstPointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SecondPointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    OrbitAreaAlignmentCode = table.Column<int>(type: "integer", nullable: false),
-                    WidthDimension = table.Column<double>(type: "double precision", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FirstPointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SecondPointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    OrbitAreaAlignmentCode = table.Column<int>(type: "INTEGER", nullable: false),
+                    WidthDimension = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -668,12 +667,12 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "PolyArcAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DefiningLineId = table.Column<Guid>(type: "uuid", nullable: false),
-                    BearingOriginPointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    BeginBearingAngle = table.Column<double>(type: "double precision", nullable: false),
-                    EndBearingAngle = table.Column<double>(type: "double precision", nullable: false),
-                    ArcRadiusDimension = table.Column<double>(type: "double precision", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DefiningLineId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    BearingOriginPointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    BeginBearingAngle = table.Column<double>(type: "REAL", nullable: false),
+                    EndBearingAngle = table.Column<double>(type: "REAL", nullable: false),
+                    ArcRadiusDimension = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -702,8 +701,8 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "PolygonAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    BoundingLineId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    BoundingLineId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -726,11 +725,11 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "TrackAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    BeginPointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EndPointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    LeftWidthDimension = table.Column<double>(type: "double precision", nullable: false),
-                    RightWidthDimension = table.Column<double>(type: "double precision", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    BeginPointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EndPointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    LeftWidthDimension = table.Column<double>(type: "REAL", nullable: false),
+                    RightWidthDimension = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -759,8 +758,8 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "Units",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FormalAbbreviatedName = table.Column<string>(type: "text", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FormalAbbreviatedName = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -777,9 +776,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "ConeVolumes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DefiningSurfaceId = table.Column<Guid>(type: "uuid", nullable: false),
-                    VertexPointId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DefiningSurfaceId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VertexPointId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -808,9 +807,9 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "SphereVolumes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CentrePointId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RadiusDimension = table.Column<double>(type: "double precision", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CentrePointId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RadiusDimension = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -833,8 +832,8 @@ namespace C2IEDM.Web.Persistence.Migrations
                 name: "SurfaceVolumes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DefiningSurfaceId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DefiningSurfaceId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -941,7 +940,7 @@ namespace C2IEDM.Web.Persistence.Migrations
                 column: "UpperVerticalDistanceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GeoSpatialLocations_AbstractEnvironmentalMonitoringFacility~",
+                name: "IX_GeoSpatialLocations_AbstractEnvironmentalMonitoringFacilityId",
                 table: "GeoSpatialLocations",
                 column: "AbstractEnvironmentalMonitoringFacilityId");
 
