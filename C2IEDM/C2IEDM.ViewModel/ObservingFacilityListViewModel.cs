@@ -19,8 +19,19 @@ public class ObservingFacilityListViewModel : ViewModelBase
     private readonly IDialogService _applicationDialogService;
     private ObservableCollection<ObservingFacilityListItemViewModel> _observingFacilityListItemViewModels;
     private Sorting _sorting;
+    private bool _displayFindButton;
 
     private RelayCommand<object> _findObservingFacilitiesCommand;
+
+    public bool DisplayFindButton
+    {
+        get => _displayFindButton;
+        set
+        {
+            _displayFindButton = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public ObjectCollection<ObservingFacilityDataExtract> ObservingFacilityDataExtracts { get; }
     public ObjectCollection<ObservingFacility> SelectedObservingFacilities { get; }
@@ -64,6 +75,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
         IDialogService applicationDialogService,
         ObservableObject<DateTime?> historicalTimeOfInterest,
         ObservableObject<DateTime?> databaseTimeOfInterest,
+        ObservableObject<bool> autoRefresh,
         ObservableObject<bool> displayNameFilter,
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
@@ -94,6 +106,11 @@ public class ObservingFacilityListViewModel : ViewModelBase
         SelectedObservingFacilityListItemViewModels.CollectionChanged += (s, e) =>
         {
             SelectedObservingFacilities.Objects = SelectedObservingFacilityListItemViewModels.Select(_ => _.ObservingFacility);
+        };
+
+        autoRefresh.PropertyChanged += (s, e) =>
+        {
+            DisplayFindButton = autoRefresh.Object;
         };
     }
 
@@ -227,23 +244,27 @@ public class ObservingFacilityListViewModel : ViewModelBase
             }));
     }
 
-    private void FindObservingFacilities(object owner)
+    private void FindObservingFacilities(
+        object owner)
     {
-        var limit = 100;
-        var count = CountObservingFacilitiesMatchingFilterFromRepository();
-
-        if (count == 0)
+        if (owner != null)
         {
-            var dialogViewModel = new MessageBoxDialogViewModel("No observing facilities the search criteria", false);
-            _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
-        }
+            var limit = 100;
+            var count = CountObservingFacilitiesMatchingFilterFromRepository();
 
-        if (count > limit)
-        {
-            var dialogViewModel = new MessageBoxDialogViewModel($"{count} observing facilities match the search criteria.\nDo you want to retrieve them all from the repository?", true);
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
+            if (count == 0)
             {
-                return;
+                var dialogViewModel = new MessageBoxDialogViewModel("No observing facilities the search criteria", false);
+                _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            }
+
+            if (count > limit)
+            {
+                var dialogViewModel = new MessageBoxDialogViewModel($"{count} observing facilities match the search criteria.\nDo you want to retrieve them all from the repository?", true);
+                if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
+                {
+                    return;
+                }
             }
         }
 

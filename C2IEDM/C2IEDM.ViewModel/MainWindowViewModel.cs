@@ -32,6 +32,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
     private readonly Brush _observingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
+    private readonly ObservableObject<bool> _autoRefresh;
     private readonly ObservableObject<bool> _displayNameFilter;
     private readonly ObservableObject<bool> _displayRetrospectionControls;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
@@ -44,6 +45,16 @@ public class MainWindowViewModel : ViewModelBase
     private RelayCommand<object> _deleteSelectedObservingFacilitiesCommand;
     private RelayCommand<object> _clearRepositoryCommand;
     private RelayCommand _escapeCommand;
+
+    public bool AutoRefresh
+    {
+        get => _autoRefresh.Object;
+        set
+        {
+            _autoRefresh.Object = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public bool DisplayNameFilter
     {
@@ -165,6 +176,11 @@ public class MainWindowViewModel : ViewModelBase
         _databaseTimeOfInterest.PropertyChanged += (s, e) =>
             UpdateMapColoring();
 
+        _autoRefresh = new ObservableObject<bool>
+        {
+            Object = true
+        };
+
         _displayNameFilter = new ObservableObject<bool>
         {
             Object = false
@@ -177,13 +193,12 @@ public class MainWindowViewModel : ViewModelBase
 
         _displayHistoricalTimeControls = new ObservableObject<bool>
         {
-            // Todo: Set to false (currently set to true for development purposes)
-            Object = true
+            Object = false
         };
 
         _displayDatabaseTimeControls = new ObservableObject<bool>
         {
-            Object = true
+            Object = false
         };
 
         _displayHistoricalTimeControls.PropertyChanged += (s, e) =>
@@ -225,6 +240,11 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         UpdateRetrospectionControls();
+
+        if (_autoRefresh.Object)
+        {
+            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+        }
     }
 
     private void CreateObservingFacility(
@@ -323,6 +343,7 @@ public class MainWindowViewModel : ViewModelBase
             applicationDialogService,
             _historicalTimeOfInterest,
             _databaseTimeOfInterest,
+            _autoRefresh,
             _displayNameFilter,
             _displayHistoricalTimeControls,
             _displayDatabaseTimeControls);

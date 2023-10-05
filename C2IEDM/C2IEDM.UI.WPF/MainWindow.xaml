@@ -41,6 +41,8 @@
             <MenuItem Header="_View">
                 <MenuItem IsCheckable="True" Header="Name Filter" 
                           IsChecked="{Binding DisplayNameFilter}" />
+                <MenuItem IsCheckable="True" Header="Auto Refresh" 
+                          IsChecked="{Binding AutoRefresh}" />
                 <Separator/>
                 <MenuItem IsCheckable="True" Header="Historical Time" 
                           IsChecked="{Binding DisplayHistoricalTimeControls}" />
