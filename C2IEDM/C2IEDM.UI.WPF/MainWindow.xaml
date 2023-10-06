@@ -51,6 +51,14 @@
             </MenuItem>
         </Menu>
 
+        <StatusBar DockPanel.Dock="Bottom" Height="25">
+            <StatusBarItem>
+                <!--<TextBlock Text="Historical Situation of 24/07/2013 as depicted by the database at that time"/>-->
+                <!--<TextBlock Text="Historical Situation of 24/07/2013 as depicted by the database as of 17/09/2021"/>-->
+                <TextBlock Text="{Binding StatusBarText}"/>
+            </StatusBarItem>
+        </StatusBar>
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

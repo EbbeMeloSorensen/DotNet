@@ -9,11 +9,29 @@ Done
 * Sørg for at gøre tydeligt opmærksom på, når man kigger på historisk tid - evt med farver - alla falmede kort
 
 In progress:
+* Der skal vises noget tekst, hvor det fremgår, når man har at gøre med en historisk situation, gerne i en statusbar
+* Sørg for at vedligeholde hjælpestreger for de database tidslinien
+  - En for Now
+  - En for time of interest
+* Sørg for at vedligeholde hjælpestreger for de history tidslinien
+  - En for Now
+  - En for time of interest
 * Introducer det mode, hvor Find-knappen ikke vises, men kaldes hver gang der sker en ændring i filteret
-* Sørg for at vedligeholde hjælpestreger for de 2 tidslinier
 * På de 2 tidsakser skal man kunne se en linie, der angiver nuværende tidspunkt - gerne med løbende opdatering
 
 Todo:
+* Details view skal vises pænere - i højre side i portræt format lige som i sms
+* Du skal have et view alla det i PR for associations, som viser lokationer
+* Man skal ikke kunne lave nye stationer i history mode
+* Man skal ikke kunne slette noget i history mode
+* Man skal ikke kunne opdatere noget i history mode
+* Der skal være et visuelt cue om at man har skruet tilbage på database tid
+* I Tidsserie viewet skal man med nogle pileknapper kunne gå hen til næste linie
+* Der skal være et mode for et tidsserieview, hvos det følger med current time.
+* Når man tegner streger, skal den tegne streger for et interval, der er 3 gange bredere end World Window, så man disse streger ind, når man panner
+* stregerne skal tegnes med en farve, der angiver, om man kaldte create, update eller delete
+* Når man klikker på Now-knappen (ud for historisk tid) efter at have været tilbage i transaktionstid, så skal man nulstille historisk tid OG databasetid 
+* Listen må også gerne få en baggrundsfarve, der er falmet*
 * Du skal kunne ændre en observing facility ved at sætte dens Closed Date til en dato, der ligger før i tiden.
   Når det sker, skal den også sætte to time for den seneste geospatielle lokation til samme tidspunkt.
   ... Det er kun i "almindeligt" mode at man kan tilføje eller ændre data". I det mode ser man også kun de aktive stationer, og så skal man 

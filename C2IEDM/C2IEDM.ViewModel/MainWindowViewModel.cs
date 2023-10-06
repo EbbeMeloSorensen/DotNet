@@ -37,6 +37,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ObservableObject<bool> _displayRetrospectionControls;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
+    private string _statusBarText;
     private bool _displayMessageInMap;
     private int _selectedTabIndexForRetrospectionTimeLines;
     private Window _owner;
@@ -92,6 +93,16 @@ public class MainWindowViewModel : ViewModelBase
         set
         {
             _displayDatabaseTimeControls.Object = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public string StatusBarText
+    {
+        get => _statusBarText;
+        set
+        {
+            _statusBarText = value;
             RaisePropertyChanged();
         }
     }
@@ -170,11 +181,18 @@ public class MainWindowViewModel : ViewModelBase
             Object = null
         };
 
-        _historicalTimeOfInterest.PropertyChanged += (s, e) => 
+        _historicalTimeOfInterest.PropertyChanged += (s, e) =>
+        {
             UpdateMapColoring();
+            UpdateStatusBar();
+        };
 
         _databaseTimeOfInterest.PropertyChanged += (s, e) =>
+        {
             UpdateMapColoring();
+            RefreshDatabaseTimeSeriesView();
+            UpdateStatusBar();
+        };
 
         _autoRefresh = new ObservableObject<bool>
         {
@@ -483,15 +501,27 @@ public class MainWindowViewModel : ViewModelBase
 
     private void RefreshDatabaseTimeSeriesView()
     {
+        // Called:
+        //   - During upstart
+        //   - When a new observing facility is created
+        //   - When selected observing facilities are updated
+        //   - When selected observing facilities are deleted
+        //   - When a major world window update occurs (such as after a drag)
+        //   - When the user changes the database time of interest by clicking in the view
+        //   - When the user resets the database time of interest by clicking the Latest button
+
+        // Calculate position of world window
         var x0 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
         var x1 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
         var y0 = -DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y - DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height;
         var y1 = -DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y;
 
+        // Calculate y coordinate of the principal axis (so we can make the lines stop there)
         var y2 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
              DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * DatabaseWriteTimesViewModel.Y2 /
              DatabaseWriteTimesViewModel.GeometryEditorViewModel.ViewPortSize.Height;
 
+        // Clear lines
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.ClearLines();
 
         var lineThickness = 2.0 / DatabaseWriteTimesViewModel.GeometryEditorViewModel.Scaling.Width;
@@ -599,6 +629,12 @@ public class MainWindowViewModel : ViewModelBase
         DisplayRetrospectionControls =
             _displayHistoricalTimeControls.Object ||
             _displayDatabaseTimeControls.Object;
+    }
+
+    private void UpdateStatusBar()
+    {
+        //if (_historicalTimeOfInterest == )
+
     }
 
     private void CreateNewObservingFacility()
