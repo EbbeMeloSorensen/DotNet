@@ -211,12 +211,12 @@ public class MainWindowViewModel : ViewModelBase
 
         _displayHistoricalTimeControls = new ObservableObject<bool>
         {
-            Object = false
+            Object = true
         };
 
         _displayDatabaseTimeControls = new ObservableObject<bool>
         {
-            Object = false
+            Object = true
         };
 
         _displayHistoricalTimeControls.PropertyChanged += (s, e) =>
@@ -258,6 +258,7 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         UpdateRetrospectionControls();
+        UpdateStatusBar();
 
         if (_autoRefresh.Object)
         {
@@ -633,8 +634,22 @@ public class MainWindowViewModel : ViewModelBase
 
     private void UpdateStatusBar()
     {
-        //if (_historicalTimeOfInterest == )
-
+        if (!_historicalTimeOfInterest.Object.HasValue)
+        {
+            StatusBarText = "Current situation";
+        }
+        else if (!_databaseTimeOfInterest.Object.HasValue)
+        {
+            StatusBarText = $"Historical situation of {_historicalTimeOfInterest.Object.Value.AsDateString()}";
+        }
+        else if (_historicalTimeOfInterest.Object.Value == _databaseTimeOfInterest.Object.Value)
+        {
+            StatusBarText = $"Historical situation of {_historicalTimeOfInterest.Object.Value.AsDateString()} as depicted by the database at that time";
+        }
+        else
+        {
+            StatusBarText = $"Historical situation of {_historicalTimeOfInterest.Object.Value.AsDateString()} as depicted by the database as of {_databaseTimeOfInterest.Object.Value.AsDateTimeString(false)}";
+        }
     }
 
     private void CreateNewObservingFacility()
