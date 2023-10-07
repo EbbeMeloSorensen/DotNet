@@ -53,116 +53,113 @@
 
         <StatusBar DockPanel.Dock="Bottom" Height="25">
             <StatusBarItem>
-                <!--<TextBlock Text="Historical Situation of 24/07/2013 as depicted by the database at that time"/>-->
-                <!--<TextBlock Text="Historical Situation of 24/07/2013 as depicted by the database as of 17/09/2021"/>-->
                 <TextBlock Text="{Binding StatusBarText}"/>
             </StatusBarItem>
         </StatusBar>
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                <Button Content="New.." Margin="2"
-                        Command="{Binding CreateObservingFacilityCommand}" 
-                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-                <Button Content="Delete" Margin="2"
-                        Command="{Binding DeleteSelectedObservingFacilitiesCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            </StackPanel>
+            <!-- Map view -->
+            <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" DataContext="{Binding MapViewModel}" />
 
-            <!-- List (Master) view -->
-            <local:ObservingFacilitiesListView
-                Grid.Row="1" Grid.Column="0"
-                DataContext="{Binding ObservingFacilityListViewModel}"/>
+            <!-- Master view (Observing Facility List with toolbar and filter) -->
+            <Border Grid.Row="0" Grid.Column="0" Margin="10"
+                    BorderBrush="DarkGray" BorderThickness="1">
+                <Grid 
+                    Background="{Binding ControlBackgroundBrush}" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                    <!--Tool Bar-->
+                    <StackPanel Grid.Row ="0" Orientation="Horizontal">
+                        <Button Content="New.." Margin="5, 5, 5, 5"
+                                Command="{Binding CreateObservingFacilityCommand}" 
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        <Button Content="Delete" Margin="0, 5, 5, 5"
+                                Command="{Binding DeleteSelectedObservingFacilitiesCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    </StackPanel>
 
-                <!-- Map view -->
-                <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" DataContext="{Binding MapViewModel}" />
+                    <!-- List (Master) view -->
+                    <local:ObservingFacilitiesListView
+                        Grid.Row="1"
+                        DataContext="{Binding ObservingFacilityListViewModel}"/>
+                </Grid>
+            </Border>
 
-                <!-- Details view -->
-                <local:ObservingFacilitiesDetailsView  
-                    Grid.Row="0" Grid.Column="1" Margin="10" VerticalAlignment="Top" Height="115"
-                    Background="WhiteSmoke"
-                    DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
+            <!-- Details view -->
+            <local:ObservingFacilitiesDetailsView
+                Grid.Row="0" Grid.Column="2" Margin="10" VerticalAlignment="Top" Height="115"
+                DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
 
-                <!-- Message in the map about clicking in the map in order to place an observing facility -->
-                <Border BorderBrush="Black" Background="#80808080" Opacity="1.0" BorderThickness="1" Margin="10, 20, 10, 10" 
-                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <Border.Visibility>
-                        <Binding Path="DisplayMessageInMap"
-                            Converter="{StaticResource BooleanToVisibilityConverter}">
-                            <Binding.ConverterParameter>
-                                <system:Boolean>True</system:Boolean>
-                            </Binding.ConverterParameter>
-                        </Binding>
-                    </Border.Visibility>
-                    <TextBlock Text="Click the map to place observing facility" Margin="10, 10, 10, 10"/>
-                </Border>
+            <!-- Message in the map about clicking in the map in order to place an observing facility -->
+            <Border BorderBrush="Black" Background="#80808080" Opacity="1.0" BorderThickness="1" Margin="10, 20, 10, 10" 
+                Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Border.Visibility>
+                    <Binding Path="DisplayMessageInMap"
+                        Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Border.Visibility>
+                <TextBlock Text="Click the map to place observing facility" Margin="10, 10, 10, 10"/>
+            </Border>
 
-                <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsExpanded="True" ExpandDirection="Up" Margin="10, 0, 10, 0" >
-                    <Expander.Visibility>
-                        <Binding 
-                            Path="DisplayRetrospectionControls"
-                            Converter="{StaticResource BooleanToVisibilityConverter}">
-                            <Binding.ConverterParameter>
-                                <system:Boolean>True</system:Boolean>
-                            </Binding.ConverterParameter>
-                        </Binding>
-                    </Expander.Visibility>
-                    <Expander.Header>
-                        <TextBlock Text="Retrospection"/>
-                    </Expander.Header>
-                    <TabControl SelectedIndex="{Binding SelectedTabIndexForRetrospectionTimeLines}">
-                        <TabItem Header="Historical Time">
-                            <TabItem.Visibility>
-                                <Binding Path="DisplayHistoricalTimeControls"
-                                         Converter="{StaticResource BooleanToVisibilityConverter}">
-                                    <Binding.ConverterParameter>
-                                        <system:Boolean>True</system:Boolean>
-                                    </Binding.ConverterParameter>
-                                </Binding>
-                            </TabItem.Visibility>
-                            <scrollFree:CoordinateSystemView
-                                Height="75" 
-                                DataContext="{Binding HistoricalTimeViewModel}"/>
-                        </TabItem>
-                        <TabItem Header="Database Write Time">
-                            <TabItem.Visibility>
-                                <Binding Path="DisplayDatabaseTimeControls"
-                                         Converter="{StaticResource BooleanToVisibilityConverter}">
-                                    <Binding.ConverterParameter>
-                                        <system:Boolean>True</system:Boolean>
-                                    </Binding.ConverterParameter>
-                                </Binding>
-                            </TabItem.Visibility>
-                            <scrollFree:CoordinateSystemView
-                                Height="75" 
-                                DataContext="{Binding DatabaseWriteTimesViewModel}"/>
-                        </TabItem>
-                    </TabControl>
-                </Expander>
-
-                <!--<local:PersonAssociationsView Grid.Row="1" DataContext="{Binding PersonAssociationsViewModel}"/>-->
-
-            </Grid>
+            <!--Retrospection controls--> 
+            <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" IsExpanded="True" ExpandDirection="Up" Margin="10, 0, 10, 0" >
+                <Expander.Visibility>
+                    <Binding 
+                        Path="DisplayRetrospectionControls"
+                        Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Expander.Visibility>
+                <Expander.Header>
+                    <TextBlock Text="Retrospection"/>
+                </Expander.Header>
+                <TabControl SelectedIndex="{Binding SelectedTabIndexForRetrospectionTimeLines}">
+                    <TabItem Header="Historical Time">
+                        <TabItem.Visibility>
+                            <Binding Path="DisplayHistoricalTimeControls"
+                                     Converter="{StaticResource BooleanToVisibilityConverter}">
+                                <Binding.ConverterParameter>
+                                    <system:Boolean>True</system:Boolean>
+                                </Binding.ConverterParameter>
+                            </Binding>
+                        </TabItem.Visibility>
+                        <scrollFree:CoordinateSystemView
+                            Height="75" 
+                            DataContext="{Binding HistoricalTimeViewModel}"/>
+                    </TabItem>
+                    <TabItem Header="Database Write Time">
+                        <TabItem.Visibility>
+                            <Binding Path="DisplayDatabaseTimeControls"
+                                     Converter="{StaticResource BooleanToVisibilityConverter}">
+                                <Binding.ConverterParameter>
+                                    <system:Boolean>True</system:Boolean>
+                                </Binding.ConverterParameter>
+                            </Binding>
+                        </TabItem.Visibility>
+                        <scrollFree:CoordinateSystemView
+                            Height="75" 
+                            DataContext="{Binding DatabaseWriteTimesViewModel}"/>
+                    </TabItem>
+                </TabControl>
+            </Expander>
         </Grid>
     </DockPanel>
 </Window>

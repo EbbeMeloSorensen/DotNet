@@ -51,7 +51,7 @@
             </StackPanel>
         </GroupBox>
 
-        <ListBox Grid.Row="3" Margin="1" x:Name="PeopleListBox" SelectionMode="Extended" DisplayMemberPath="DisplayText" 
+        <ListBox Grid.Row="3" Margin="5" x:Name="PeopleListBox" SelectionMode="Extended" DisplayMemberPath="DisplayText" 
                  ItemsSource="{Binding ObservingFacilityListItemViewModels}">
             <b:Interaction.Behaviors>
                 <utils:MultiSelectionBehavior SelectedItems="{Binding SelectedObservingFacilityListItemViewModels}"/>

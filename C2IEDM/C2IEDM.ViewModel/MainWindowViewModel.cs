@@ -32,6 +32,9 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
     private readonly Brush _observingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
+    private readonly Brush _controlBackgroundBrushCurrent = new SolidColorBrush(Colors.WhiteSmoke);
+    private readonly Brush _controlBackgroundBrushHistoric = new SolidColorBrush(Colors.BurlyWood);
+    private Brush _controlBackgroundBrush;
     private readonly ObservableObject<bool> _autoRefresh;
     private readonly ObservableObject<bool> _displayNameFilter;
     private readonly ObservableObject<bool> _displayRetrospectionControls;
@@ -127,6 +130,16 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public Brush ControlBackgroundBrush
+    {
+        get => _controlBackgroundBrush;
+        set
+        {
+            _controlBackgroundBrush = value;
+            RaisePropertyChanged();
+        }
+    }
+
     public LogViewModel LogViewModel { get; private set; }
     public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; private set; }
     public ObservingFacilitiesDetailsViewModel ObservingFacilitiesDetailsViewModel { get; private set; }
@@ -184,6 +197,7 @@ public class MainWindowViewModel : ViewModelBase
         _historicalTimeOfInterest.PropertyChanged += (s, e) =>
         {
             UpdateMapColoring();
+            UpdateControlBackground();
             UpdateStatusBar();
         };
 
@@ -191,6 +205,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             UpdateMapColoring();
             RefreshDatabaseTimeSeriesView();
+            UpdateControlBackground();
             UpdateStatusBar();
         };
 
@@ -258,6 +273,7 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         UpdateRetrospectionControls();
+        UpdateControlBackground();
         UpdateStatusBar();
 
         if (_autoRefresh.Object)
@@ -395,8 +411,8 @@ public class MainWindowViewModel : ViewModelBase
 
     private void InitializeMapViewModel()
     {
-        var worldWindowBoundingBoxNorthWest = new Point(8, 57.95);
-        var worldWindowBoundingBoxSouthEast = new Point(16, 54.45);
+        var worldWindowBoundingBoxNorthWest = new Point(6.5, 57.95);
+        var worldWindowBoundingBoxSouthEast = new Point(15.5, 54.45);
 
         var worldWindowFocus = new Point(
             (worldWindowBoundingBoxNorthWest.X + worldWindowBoundingBoxSouthEast.X) / 2,
@@ -630,6 +646,16 @@ public class MainWindowViewModel : ViewModelBase
         DisplayRetrospectionControls =
             _displayHistoricalTimeControls.Object ||
             _displayDatabaseTimeControls.Object;
+    }
+
+    private void UpdateControlBackground()
+    {
+        ControlBackgroundBrush = _historicalTimeOfInterest.Object.HasValue
+            ? _controlBackgroundBrushHistoric
+            : _controlBackgroundBrushCurrent;
+
+        // Af en eller anden årsag virker det her ikke?!
+        ObservingFacilitiesDetailsViewModel.BackgroundBrush = ControlBackgroundBrush;
     }
 
     private void UpdateStatusBar()

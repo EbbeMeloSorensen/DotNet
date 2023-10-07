@@ -26,8 +26,8 @@
         </Binding>
     </UserControl.Visibility>
 
-    <Border BorderBrush="Black" BorderThickness="1">
-        <Grid>
+    <Border BorderBrush="DarkGray" BorderThickness="1">
+        <Grid Background="{Binding BackgroundBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>

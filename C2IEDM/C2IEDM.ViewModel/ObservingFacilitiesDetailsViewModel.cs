@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
@@ -36,6 +37,7 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     private DateTime _displayDateEnd_DateClosed;
 
     private bool _isVisible;
+    private Brush _backgroundBrush;
 
     private RelayCommand _applyChangesCommand;
 
@@ -124,6 +126,16 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
+    public Brush BackgroundBrush
+    {
+        get => _backgroundBrush;
+        set
+        {
+            _backgroundBrush = value;
+            RaisePropertyChanges();
+        }
+    }
+
     public RelayCommand ApplyChangesCommand
     {
         get { return _applyChangesCommand ?? (_applyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges)); }
@@ -135,6 +147,7 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     {
         _unitOfWorkFactory = unitOfWorkFactory;
         _observingFacilities = observingFacilities;
+        _backgroundBrush = new SolidColorBrush(Colors.Orange);
 
         _observingFacilities.PropertyChanged += Initialize;
     }
@@ -167,26 +180,18 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
             : null;
 
         // Determine valid options for changing the Establishing date for the selected observing facilities
-        //var minDateClosed = temp.Objects.Min(_ => _.DateClosed);
+        var earliestDateClosed = temp.Objects.Min(_ => _.DateClosed);
+        var latestDateEstablished = temp.Objects.Max(_ => _.DateEstablished);
 
+        var now = DateTime.Now;
 
-        if (SharedDateEstablished.HasValue)
-        {
-            // Den kan tidligst lukkes på samme dato som den er established
-            DisplayDateStart_DateClosed = SharedDateEstablished.Value;
-        }
-        else
-        {
-            var latestEstablishingDate = temp.Objects.Max(_ => _.DateEstablished);
-
-            DisplayDateStart_DateClosed = latestEstablishingDate;
-        }
-
-        // Man skal ikke kunne angive, at noget lukkes i fremtiden
-        DisplayDateEnd_DateClosed = DateTime.Now;
+        DisplayDateStart_DateEstablished = earliestDateClosed;
+        DisplayDateStart_DateClosed = latestDateEstablished;
+        DisplayDateEnd_DateClosed = now;
 
         // Dette er for at sikre, at den foreslår dags dato, hvis man selecter den
-        SharedDateClosed = DateTime.Now;
+        SharedDateEstablished = now;
+        SharedDateClosed = now;
 
         var sharedDateClosed = temp.Objects.All(_ => _.DateClosed == firstObservingFacility.DateClosed)
             ? firstObservingFacility.DateClosed
