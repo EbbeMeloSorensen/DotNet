@@ -196,6 +196,11 @@ public class MainWindowViewModel : ViewModelBase
 
         _historicalTimeOfInterest.PropertyChanged += (s, e) =>
         {
+            if (!_historicalTimeOfInterest.Object.HasValue)
+            {
+                _databaseTimeOfInterest.Object = null;
+            }
+
             UpdateMapColoring();
             UpdateControlBackground();
             UpdateStatusBar();
@@ -346,6 +351,9 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWork.AbstractEnvironmentalMonitoringFacilities.Clear();
             unitOfWork.Complete();
         }
+
+        _databaseWriteTimes.Clear();
+        RefreshDatabaseTimeSeriesView();
 
         ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
 
