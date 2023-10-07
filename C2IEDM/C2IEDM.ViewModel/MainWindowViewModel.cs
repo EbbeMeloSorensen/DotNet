@@ -685,7 +685,7 @@ public class MainWindowViewModel : ViewModelBase
                     dialogViewModel.DateClosed.Value.Minute,
                     dialogViewModel.DateClosed.Value.Second, 
                     DateTimeKind.Utc)
-            : new DateTime?();
+            : DateTime.MaxValue;
 
         var from = new DateTime(
             dialogViewModel.From.Year,
@@ -707,7 +707,7 @@ public class MainWindowViewModel : ViewModelBase
                     dialogViewModel.To.Value.Minute,
                     dialogViewModel.To.Value.Second,
                     DateTimeKind.Utc)
-            : new DateTime?();
+            : DateTime.MaxValue;
 
         var latitude = dialogViewModel.Latitude;
 

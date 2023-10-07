@@ -179,10 +179,7 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         {
             var latestEstablishingDate = temp.Objects.Max(_ => _.DateEstablished);
 
-            if (latestEstablishingDate.HasValue)
-            {
-                DisplayDateStart_DateClosed = latestEstablishingDate.Value;
-            }
+            DisplayDateStart_DateClosed = latestEstablishingDate;
         }
 
         // Man skal ikke kunne angive, at noget lukkes i fremtiden
@@ -193,10 +190,10 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
 
         var sharedDateClosed = temp.Objects.All(_ => _.DateClosed == firstObservingFacility.DateClosed)
             ? firstObservingFacility.DateClosed
-            : null;
+            : DateTime.MaxValue;
 
-        SharedDateClosed = sharedDateClosed.HasValue && sharedDateClosed.Value.Year != 9999
-            ? SharedDateClosed = sharedDateClosed.Value
+        SharedDateClosed = sharedDateClosed.Year != 9999
+            ? SharedDateClosed = sharedDateClosed
             : null;
 
         _originalSharedName = SharedName;

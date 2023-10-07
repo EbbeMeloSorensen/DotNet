@@ -14,21 +14,11 @@ public class Point : GeospatialLocation
 
     public override string ToString()
     {
-        var result = $"({Coordinate1}, {Coordinate2})";
+        var result = $"({Coordinate1}, {Coordinate2}), From: {From.ToShortDateString()}";
 
-        if (From.HasValue || To.HasValue)
+        if (To < DateTime.MaxValue)
         {
-            result += ",";
-        }
-
-        if (From.HasValue)
-        {
-            result += $" From: {From.Value.ToShortDateString()}";
-        }
-
-        if (To.HasValue)
-        {
-            result += $" To: {To.Value.ToShortDateString()}";
+            result += $" To: {To.ToShortDateString()}";
         }
 
         return result;
