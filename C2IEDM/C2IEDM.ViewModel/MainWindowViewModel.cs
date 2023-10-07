@@ -347,6 +347,8 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWork.Complete();
         }
 
+        ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+
         var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was cleared", false);
 
         _applicationDialogService.ShowDialog(dialogViewModel2, owner as Window);
@@ -653,9 +655,6 @@ public class MainWindowViewModel : ViewModelBase
         ControlBackgroundBrush = _historicalTimeOfInterest.Object.HasValue
             ? _controlBackgroundBrushHistoric
             : _controlBackgroundBrushCurrent;
-
-        // Af en eller anden årsag virker det her ikke?!
-        ObservingFacilitiesDetailsViewModel.BackgroundBrush = ControlBackgroundBrush;
     }
 
     private void UpdateStatusBar()

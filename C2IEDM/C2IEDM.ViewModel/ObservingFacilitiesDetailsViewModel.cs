@@ -37,7 +37,6 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     private DateTime _displayDateEnd_DateClosed;
 
     private bool _isVisible;
-    private Brush _backgroundBrush;
 
     private RelayCommand _applyChangesCommand;
 
@@ -126,16 +125,6 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    public Brush BackgroundBrush
-    {
-        get => _backgroundBrush;
-        set
-        {
-            _backgroundBrush = value;
-            RaisePropertyChanges();
-        }
-    }
-
     public RelayCommand ApplyChangesCommand
     {
         get { return _applyChangesCommand ?? (_applyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges)); }
@@ -147,7 +136,6 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     {
         _unitOfWorkFactory = unitOfWorkFactory;
         _observingFacilities = observingFacilities;
-        _backgroundBrush = new SolidColorBrush(Colors.Orange);
 
         _observingFacilities.PropertyChanged += Initialize;
     }
