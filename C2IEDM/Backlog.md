@@ -7,10 +7,12 @@ Done
 * Man skal kunne gå ud af retroaktivt mode ved at klikke på de der knapper i filteret
 * I list viewet skal man kun vise de observing facilities, hvor der gælder, at time of interest ligger mellem hvis establishing date og closing date
 * Sørg for at gøre tydeligt opmærksom på, når man kigger på historisk tid - evt med farver - alla falmede kort
+* Der skal vises noget tekst, hvor det fremgår, når man har at gøre med en historisk situation, gerne i en statusbar
+* Ret fejlen med at det crasher, hvis man selecter flere observing facilities, der er opstillet på forskellige dage
 
 In progress:
-* Der skal vises noget tekst, hvor det fremgår, når man har at gøre med en historisk situation, gerne i en statusbar
-* Sørg for at vedligeholde hjælpestreger for de database tidslinien
+* Sørg for at den foreslår nogle rimelige muligheder, hvis man prøver at ændre Establishing Date
+* Sørg for at vedligeholde hjælpestreger for de database tidslinien (I første omgang ved at gentegne det hele)
   - En for Now
   - En for time of interest
 * Sørg for at vedligeholde hjælpestreger for de history tidslinien
@@ -18,9 +20,13 @@ In progress:
   - En for time of interest
 * Introducer det mode, hvor Find-knappen ikke vises, men kaldes hver gang der sker en ændring i filteret
 * På de 2 tidsakser skal man kunne se en linie, der angiver nuværende tidspunkt - gerne med løbende opdatering
+* Details view skal vises pænere - i højre side i portræt format lige som i sms
 
 Todo:
-* Details view skal vises pænere - i højre side i portræt format lige som i sms
+* Man skal kunne importere sms data
+* Man skal kunne vise tidsserier (som i DMI.Data.Studio)
+* Man skal kunne vise Gant-diagrammer for forskellige tidsperioder (som i DMI.Data.Studio)
+* Man skal kunne vise perioder, hvor der er foretaget målinger (som i DMI.Data.Studio)
 * Du skal have et view alla det i PR for associations, som viser lokationer
 * Man skal ikke kunne lave nye stationer i history mode
 * Man skal ikke kunne slette noget i history mode

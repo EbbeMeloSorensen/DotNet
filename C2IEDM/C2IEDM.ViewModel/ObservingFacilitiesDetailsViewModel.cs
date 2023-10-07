@@ -156,25 +156,33 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
 
         IsVisible = true;
 
+        // If the observing facilities have the same name then show the shared name, otherwise leave the field empty
         SharedName = temp.Objects.All(_ => _.Name == firstObservingFacility.Name)
             ? firstObservingFacility.Name
             : null;
 
+        // If the observing facilities were established the same date then show the shared date, otherwise leave the field empty
         SharedDateEstablished = temp.Objects.All(_ => _.DateEstablished == firstObservingFacility.DateEstablished)
             ? firstObservingFacility.DateEstablished
             : null;
 
+        // Determine valid options for changing the Establishing date for the selected observing facilities
+        //var minDateClosed = temp.Objects.Min(_ => _.DateClosed);
+
+
         if (SharedDateEstablished.HasValue)
         {
+            // Den kan tidligst lukkes på samme dato som den er established
             DisplayDateStart_DateClosed = SharedDateEstablished.Value;
         }
         else
         {
-            // Hvis vi er her, har vi at gøre med en selection af FLERE observing facilities med opstillet på FORSKELLIGE dage.
-            // Todo: Find ud af, hvilket range af dage, det er legitimt at vælge, og som gælder for alle de valgte observing facilities.
-            //       (hint: Man må ikke føre det forbi seneste forekomst af DateClosed, og man må ikke føre det tilbage, hvis det går i karambolage
-            //       med tidligere geospatielle lokationer)
-            throw new NotImplementedException();
+            var latestEstablishingDate = temp.Objects.Max(_ => _.DateEstablished);
+
+            if (latestEstablishingDate.HasValue)
+            {
+                DisplayDateStart_DateClosed = latestEstablishingDate.Value;
+            }
         }
 
         // Man skal ikke kunne angive, at noget lukkes i fremtiden
