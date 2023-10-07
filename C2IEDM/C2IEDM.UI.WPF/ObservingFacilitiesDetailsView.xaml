@@ -26,47 +26,49 @@
         </Binding>
     </UserControl.Visibility>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid Grid.Row="0" Column="0">
+    <Border BorderBrush="Black" BorderThickness="1">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Margin="3" Grid.Row="2" Grid.Column="0" Text="Name:"/>
-            <TextBox Margin="3" Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
+
+            <Grid Grid.Row="0" Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="3" Grid.Row="2" Grid.Column="0" Text="Name:"/>
+                <TextBox Margin="3" Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding SharedName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="3" Grid.Row="3" Grid.Column="0" Text="Date Established:"/>
-            <DatePicker Margin="3" Grid.Row="3" Grid.Column="1"
+                <TextBlock Margin="3" Grid.Row="3" Grid.Column="0" Text="Date Established:"/>
+                <DatePicker Margin="3" Grid.Row="3" Grid.Column="1"
                         DisplayDateStart="{Binding DisplayDateStart_DateEstablished}" 
                         DisplayDateEnd="{Binding DisplayDateEnd_DateEstablished}" 
                         SelectedDate ="{Binding SharedDateEstablished, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="3" Grid.Row="4" Grid.Column="0" Text="Date Closed:"/>
-            <DatePicker Margin="3" Grid.Row="4" Grid.Column="1"
+                <TextBlock Margin="3" Grid.Row="4" Grid.Column="0" Text="Date Closed:"/>
+                <DatePicker Margin="3" Grid.Row="4" Grid.Column="1"
                         DisplayDateStart="{Binding DisplayDateStart_DateClosed}" 
                         DisplayDateEnd="{Binding DisplayDateEnd_DateClosed}" 
                         SelectedDate ="{Binding SharedDateClosed, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Grid.Row ="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="3,3,3,3" Width="50" Content="Update" HorizontalAlignment="Right"
+                <Button Grid.Row ="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="3,3,3,3" Width="50" Content="Update" HorizontalAlignment="Right"
                     Command="{Binding ApplyChangesCommand}" />
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </UserControl>
