@@ -16,20 +16,22 @@
     <Grid>
         <local:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
         <Canvas>
+            <!-- Vertical axis -->
             <Line Stroke="Black"
-                StrokeThickness="1"
-                X1="{Binding MarginX}"
-                X2="{Binding MarginX}"
-                Y1="0"
-                Y2="{Binding Y2}">
+                  StrokeThickness="1"
+                  X1="{Binding MarginX}"
+                  X2="{Binding MarginX}"
+                  Y1="0"
+                  Y2="{Binding Y2}">
                 <Line.Visibility>
-                    <Binding Path="ShowHorizontalAxis" Converter="{StaticResource BooleanToVisibilityConverter}">
+                    <Binding Path="ShowVerticalAxis" Converter="{StaticResource BooleanToVisibilityConverter}">
                         <Binding.ConverterParameter>
                             <system:Boolean>True</system:Boolean>
                         </Binding.ConverterParameter>
                     </Binding>
                 </Line.Visibility>
             </Line>
+            <!-- Horizontal axis -->
             <Line Stroke="Black"
                 StrokeThickness="1"
                 X1="{Binding MarginX}"

@@ -9,18 +9,18 @@ Done
 * Sørg for at gøre tydeligt opmærksom på, når man kigger på historisk tid - evt med farver - alla falmede kort
 * Der skal vises noget tekst, hvor det fremgår, når man har at gøre med en historisk situation, gerne i en statusbar
 * Ret fejlen med at det crasher, hvis man selecter flere observing facilities, der er opstillet på forskellige dage
+* Introducer det mode, hvor Find-knappen ikke vises, men kaldes hver gang der sker en ændring i filteret
+* Details view skal vises pænere - i højre side i portræt format lige som i sms
 
 In progress:
 * Sørg for at den foreslår nogle rimelige muligheder, hvis man prøver at ændre Establishing Date
-* Sørg for at vedligeholde hjælpestreger for de database tidslinien (I første omgang ved at gentegne det hele)
-  - En for Now
-  - En for time of interest
+* Sørg for at vedligeholde hjælpestreger for database tidslinien
+  - Én for Now
+  - Én for selected time
 * Sørg for at vedligeholde hjælpestreger for de history tidslinien
-  - En for Now
-  - En for time of interest
-* Introducer det mode, hvor Find-knappen ikke vises, men kaldes hver gang der sker en ændring i filteret
+  - Én for Now
+  - Én for selected time
 * På de 2 tidsakser skal man kunne se en linie, der angiver nuværende tidspunkt - gerne med løbende opdatering
-* Details view skal vises pænere - i højre side i portræt format lige som i sms
 
 Todo:
 * Man skal kunne importere sms data

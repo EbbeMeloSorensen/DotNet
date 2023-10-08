@@ -463,7 +463,7 @@ public class MainWindowViewModel : ViewModelBase
 
         HistoricalTimeViewModel.GeometryEditorViewModel.YAxisLocked = true;
         HistoricalTimeViewModel.ShowHorizontalGridLines = false;
-        HistoricalTimeViewModel.ShowHorizontalAxis = false;
+        HistoricalTimeViewModel.ShowVerticalAxis = false;
 
         HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
         {
@@ -498,7 +498,7 @@ public class MainWindowViewModel : ViewModelBase
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.YAxisLocked = true;
         DatabaseWriteTimesViewModel.ShowHorizontalGridLines = false;
-        DatabaseWriteTimesViewModel.ShowHorizontalAxis = false;
+        DatabaseWriteTimesViewModel.ShowVerticalAxis = false;
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
         {

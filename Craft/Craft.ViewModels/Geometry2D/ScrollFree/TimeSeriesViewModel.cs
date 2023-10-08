@@ -7,6 +7,18 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class TimeSeriesViewModel : CoordinateSystemViewModel
     {
+        private bool _showCurrentTime;
+
+        public bool ShowCurrentTime
+        {
+            get => _showCurrentTime;
+            set
+            {
+                _showCurrentTime = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public DateTime TimeAtOrigo { get; }
 
         public ObservableObject<DateTime?> TimeAtMousePosition { get; }
