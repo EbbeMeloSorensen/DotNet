@@ -31,6 +31,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
+    private readonly Brush _currentTimeBrush = new SolidColorBrush(Colors.Black);
     private readonly Brush _observingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
     private readonly Brush _controlBackgroundBrushCurrent = new SolidColorBrush(Colors.WhiteSmoke);
     private readonly Brush _controlBackgroundBrushHistoric = new SolidColorBrush(Colors.BurlyWood);
@@ -507,6 +508,11 @@ public class MainWindowViewModel : ViewModelBase
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
+            if (DatabaseWriteTimesViewModel.TimeAtMousePosition.Object > DateTime.UtcNow)
+            {
+                return;
+            }
+
             _databaseTimeOfInterest.Object = DatabaseWriteTimesViewModel.TimeAtMousePosition.Object;
 
             if (!_databaseTimeOfInterest.Object.HasValue)
@@ -571,6 +577,15 @@ public class MainWindowViewModel : ViewModelBase
                     new LineViewModel(new PointD(xTimeOfInterest, y0), new PointD(xTimeOfInterest, y2), lineThickness, _timeOfInterestBrush));
 
             }
+        }
+
+        // Todo: Erstat det her med en linie i selve Geometry ViewModel, der hurtigt kan ændre placering
+        var xCurrentTime = (DateTime.UtcNow - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays;
+        if (xCurrentTime > x0 && xCurrentTime < x1)
+        {
+            DatabaseWriteTimesViewModel.GeometryEditorViewModel.LineViewModels.Add(
+                new LineViewModel(new PointD(xCurrentTime, y0), new PointD(xCurrentTime, y2), lineThickness, _currentTimeBrush));
+
         }
     }
 
