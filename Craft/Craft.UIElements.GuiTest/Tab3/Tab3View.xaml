@@ -53,7 +53,7 @@
                             <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" 
                                     Command="{Binding ZoomOutForGeometryEditor2Command}" >Zoom Out</Button>
                         </StackPanel>
-                        <TextBlock Grid.Row="2">
+                        <TextBlock Grid.Row="2" TextWrapping="Wrap">
                             Here, we again have a basic GeometryEditorView with an underlying GeometryEditorViewModel where Scaling is 
                             initialized to Sx = 1 and Sy = 1, but here, the Y axis points upwards as is common for a mathematical
                             coordinate system
@@ -64,6 +64,7 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding GeometryEditorViewModel3}"/>
@@ -111,12 +112,22 @@
                             <CheckBox Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="2" Content="Lock Aspect Ratio"
                                       IsChecked="{Binding GeometryEditorViewModel3.AspectRatioLocked}"/>
                         </Grid>
+                        <TextBlock Grid.Row="2" TextWrapping="Wrap">
+                            Here, we again have a basic GeometryEditorView with an underlying GeometryEditorViewModel where the Y axis 
+                            points upwards as is common for a mathematical coordinate system. Instead of setting the scaling directly,
+                            it is done by initializing a world window (x = [-3; 4], y=[-1;1]) which must be fully visible in the viewport.
+                            The coordinate system and curve in this view is drawn just as the house in the first two views, i.e. there 
+                            is no functionality for adjusting the coordinate axes to the position of the World Window. The curve is
+                            redrawn at every major update of the World Window (e.g. after a resize and at the end of a panning operation)
+                            using the part of the x axis that lies within the bounds of the World Window.
+                        </TextBlock>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Function Curve II">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
@@ -199,6 +210,16 @@
                             <TextBox Grid.Column="1" Grid.Row="7" Margin="1"
                                      Text="{Binding WorldWindowMajorUpdateCount, Mode=OneWay}"/>
                         </Grid>
+                        <TextBlock Grid.Row="2" TextWrapping="Wrap">
+                            Here, we again have a basic GeometryEditorView with an underlying GeometryEditorViewModel where the Y axis 
+                            points upwards as is common for a mathematical coordinate system. The World Window is initialized in the same way
+                            as for the previous view, and the curve is also redrawn when a major update of the World Window occurs.
+                            However, here, the coordinate system axes including ticks and labels as well as grid lines are ALSO redrawn 
+                            when a major update of the World Window occurs. The logic for updating the coordinate system is placed in a 
+                            method that is called from the handler of the major world window update event, i.e. this logic is not reusable. 
+                            The view in the xaml file also includes a Canvas for drawing the coordinate system axes instead of letting the 
+                            GeometryEditor view draw them.
+                        </TextBlock>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Function Curve III">
@@ -223,10 +244,10 @@
                             <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Show vertical grid lines"
                                       IsChecked="{Binding CoordinateSystemViewModel.ShowVerticalGridLines}"/>
                         </Grid>
-                        <TextBlock Grid.Row="2">
-                            Here, we again have a basic GeometryEditorView with an underlying GeometryEditorViewModel where Scaling is 
-                            initialized to Sx = 1 and Sy = 1, but here, the Y axis points upwards as is common for a mathematical
-                            coordinate system
+                        <TextBlock Grid.Row="2" TextWrapping="Wrap">
+                            Here, we have a CoordinateSystemView with an underlying CoordinateSystemViewModel, where the
+                            logic for drawing the coordinate system and grid lines is a part of the viewmodel and view,
+                            so that it is reusable.
                         </TextBlock>
                     </Grid>
                 </TabItem>
@@ -248,11 +269,13 @@
                                      Text="{Binding TimeAtMousePositionAsText1}"/>
                         </Grid>
                         <TextBlock Grid.Row="2" TextWrapping="Wrap">
-                            Here, we have a CoordinateSystemView with an underlying TimeSerieViewModel initialized
-                            with a time interval that goes from current time to 7 days back. When a major update of
-                            the World Window position occurs, the ViewModel hosting the TimeSerieViewModel clears
-                            the PolyLines collection of the GeometryEditorViewModel (owned by the TimeSeriesViewModel)
-                            and then adds a new Polyline representing a dummy time series
+                            Here, we have a CoordinateSystemView with an underlying TimeSerieViewModel that resembles
+                            the CoordinateSystemViewModel from the previous view, except for the way it draws ticks and
+                            labels for the x axis as well as vertical grid lines. The time interval is initialized so
+                            it goes from current time to 7 days back. When a major update of the World Window position 
+                            occurs, the ViewModel hosting the TimeSerieViewModel clears the PolyLines collection of the 
+                            GeometryEditorViewModel (owned by the TimeSeriesViewModel) and then adds a new Polyline 
+                            representing a dummy time series
                         </TextBlock>
                     </Grid>
                 </TabItem>
@@ -260,6 +283,7 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <scrollFree:CoordinateSystemView Grid.Row="0" DataContext="{Binding TimeSeriesViewModel2}" />
@@ -272,6 +296,13 @@
                             <TextBox Grid.Column="1" Margin="1" IsReadOnly="True"
                                      Text="{Binding TimeAtMousePositionAsText2}"/>
                         </Grid>
+                        <TextBlock Grid.Row="2" TextWrapping="Wrap">
+                            Here, we have a CoordinateSystemView with an underlying TimeSerieViewModel initialized
+                            with a time interval that goes from current time to 7 hour back. When a major update of
+                            the World Window position occurs, the ViewModel hosting the TimeSerieViewModel clears
+                            the Lines collection of the GeometryEditorViewModel (owned by the TimeSeriesViewModel)
+                            and then adds a number of lines representing timestamps of interest
+                        </TextBlock>
                     </Grid>
                 </TabItem>
             </TabControl>
