@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
@@ -32,6 +34,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         private string _cursorPositionAsText;
         private string _timeAtMousePositionAsText1;
         private string _timeAtMousePositionAsText2;
+        private DateTime _startTime;
 
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
@@ -530,9 +533,43 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 25);
 
-            // Sæt den til noget i World koordinater
-            CoordinateSystemViewModel.XValueOfInterestViewPort = 100;
-            CoordinateSystemViewModel.ShowXValueOfInterest = true;
+            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
+            {
+                UpdateXValueOfInterest();
+            };
+
+            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+            {
+                UpdateXValueOfInterest();
+            };
+
+            var timer = new DispatcherTimer
+            {
+                Interval = new TimeSpan(100000)
+            };
+
+            timer.Tick += (s, e) =>
+            {
+                UpdateXValueOfInterest();
+            };
+
+            _startTime = DateTime.UtcNow;
+
+            timer.Start();
+        }
+
+        private void UpdateXValueOfInterest()
+        {
+            var elapsedTime = DateTime.UtcNow - _startTime;
+
+            CoordinateSystemViewModel.XValueOfInterest = -2.0 + elapsedTime.TotalSeconds / 20;
+
+            var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
+            var x1 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
+
+            CoordinateSystemViewModel.ShowXValueOfInterest =
+                CoordinateSystemViewModel.XValueOfInterest >= x0 &&
+                CoordinateSystemViewModel.XValueOfInterest <= x1;
         }
 
         private void InitializeTimeSeriesViewModel1()

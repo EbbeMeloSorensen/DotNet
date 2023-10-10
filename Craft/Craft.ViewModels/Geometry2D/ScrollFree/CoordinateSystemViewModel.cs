@@ -50,9 +50,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 _xValueOfInterest = value;
 
-                // Todo: Omregn til viewport koordinater
-                //XValueOfInterestViewPort = View
-                throw new NotImplementedException();
+                XValueOfInterestViewPort =
+                    GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_xValueOfInterest);
 
                 RaisePropertyChanged();
             }

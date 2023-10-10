@@ -35,6 +35,7 @@ In progress:
   - Der skal være 2 modes: 
     1) hvor den er lige så fast som Y-aksen, dvs hvis den ændrer sig, så flyttes World Window
     2) En, hvor den opdateres uafhængigt af World Window
+  - Man skal kunne sætte X-værdien og så skal den selv omregne til Viewport koordinater
 * Tilføj en ObservableObject for MouseWorldPosition - ovevej senere at erstatte Dependency propertyen
 * Klikke på et punkt i time series viewet og få vist det som en linie
 * Bedre granularitet, når man zoomer ind på en tidsakse

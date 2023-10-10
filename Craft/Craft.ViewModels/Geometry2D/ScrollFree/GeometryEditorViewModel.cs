@@ -82,8 +82,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 RaisePropertyChanged();
 
                 MousePositionWorld.Object = new Point(
-                    _worldWindowUpperLeft.X + _mousePositionViewport.X / _scaling.Width,
-                    _worldWindowUpperLeft.Y + _mousePositionViewport.Y / _scaling.Height);
+                    ConvertViewPortXCoordinateToWorldXCoordinate(_mousePositionViewport.X),
+                    ConvertViewPortYCoordinateToWorldYCoordinate(_mousePositionViewport.Y));
             }
         }
 
@@ -640,14 +640,37 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             if (handler != null)
             {
-                // Undersøg om det er nødvendigt at kommunikere klik position ned, for den vedligeholdes hele tiden
-                // i forbindelse med håndtering af mouse move
                 var mousePositionWorld = new Point(
-                    _worldWindowUpperLeft.X + mousePositionViewport.X / _scaling.Width,
-                    _worldWindowUpperLeft.Y + mousePositionViewport.Y / _scaling.Height);
+                    ConvertViewPortXCoordinateToWorldXCoordinate(mousePositionViewport.X),
+                    ConvertViewPortYCoordinateToWorldYCoordinate(mousePositionViewport.Y));
 
                 handler(this, new MouseEventArgs(mousePositionWorld));
             }
+        }
+
+        public double ConvertViewPortXCoordinateToWorldXCoordinate(
+            double viewPortXCoordinate)
+        {
+            return _worldWindowUpperLeft.X + viewPortXCoordinate / _scaling.Width;
+        }
+
+        public double ConvertViewPortYCoordinateToWorldYCoordinate(
+            double viewPortYCoordinate)
+        {
+            return _worldWindowUpperLeft.Y + viewPortYCoordinate / _scaling.Height;
+        }
+
+        public double ConvertWorldXCoordinateToViewPortXCoordinate(
+            double worldXCoordinate)
+        {
+            return (worldXCoordinate - _worldWindowUpperLeft.X) * _scaling.Width;
+        }
+
+        public double ConvertWorldYCoordinateToViewPortYCoordinate(
+            double worldYCoordinate)
+        {
+
+            return (worldYCoordinate - _worldWindowUpperLeft.Y) * _scaling.Height;
         }
     }
 }
