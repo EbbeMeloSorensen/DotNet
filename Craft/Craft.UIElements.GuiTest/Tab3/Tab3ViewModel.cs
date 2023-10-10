@@ -124,7 +124,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel3 { get; }
         public GeometryEditorViewModel GeometryEditorViewModel4 { get; }
-        public CoordinateSystemViewModel CoordinateSystemViewModel { get; }
+        public CoordinateSystemViewModel CoordinateSystemViewModel { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel1 { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel2 { get; private set; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
@@ -166,13 +166,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 worldWindowSize,
                 false);
 
-            CoordinateSystemViewModel = new CoordinateSystemViewModel(
-                worldWindowFocus,
-                worldWindowSize,
-                false,
-                25,
-                25);
-
+            InitializeCoordinateSysteViewModel(worldWindowFocus, worldWindowSize);
             InitializeTimeSeriesViewModel1();
             InitializeTimeSeriesViewModel2();
 
@@ -523,6 +517,22 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 y += spacingY;
             }
+        }
+
+        private void InitializeCoordinateSysteViewModel(
+            Point worldWindowFocus,
+            Size worldWindowSize)
+        {
+            CoordinateSystemViewModel = new CoordinateSystemViewModel(
+                worldWindowFocus,
+                worldWindowSize,
+                false,
+                25,
+                25);
+
+            // Sæt den til noget i World koordinater
+            CoordinateSystemViewModel.XValueOfInterestViewPort = 100;
+            CoordinateSystemViewModel.ShowXValueOfInterest = true;
         }
 
         private void InitializeTimeSeriesViewModel1()

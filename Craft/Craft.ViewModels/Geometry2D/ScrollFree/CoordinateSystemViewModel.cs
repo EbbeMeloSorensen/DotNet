@@ -18,6 +18,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private bool _showVerticalAxis;
         private bool _showHorizontalGridLines;
         private bool _showVerticalGridLines;
+        private double _xValueOfInterest;
+        private double _xValueOfInterestViewPort;
+        private bool _showXValueOfInterest;
 
         public double MarginX
         {
@@ -36,6 +39,41 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _Y2 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double XValueOfInterest
+        {
+            get => _xValueOfInterest;
+            set
+            {
+                _xValueOfInterest = value;
+
+                // Todo: Omregn til viewport koordinater
+                //XValueOfInterestViewPort = View
+                throw new NotImplementedException();
+
+                RaisePropertyChanged();
+            }
+        }
+
+        public double XValueOfInterestViewPort
+        {
+            get => _xValueOfInterestViewPort;
+            set
+            {
+                _xValueOfInterestViewPort = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowXValueOfInterest
+        {
+            get => _showXValueOfInterest;
+            set
+            {
+                _showXValueOfInterest = value;
                 RaisePropertyChanged();
             }
         }
