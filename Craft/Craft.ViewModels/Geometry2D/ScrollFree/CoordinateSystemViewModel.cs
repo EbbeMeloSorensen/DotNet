@@ -21,6 +21,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private double _xValueOfInterest;
         private double _xValueOfInterestViewPort;
         private bool _showXValueOfInterest;
+        private bool _lockWorldWindowOnXValueOfInterest;
 
         public double MarginX
         {
@@ -73,6 +74,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _showXValueOfInterest = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool LockWorldWindowOnXValueOfInterest
+        {
+            get => _lockWorldWindowOnXValueOfInterest;
+            set
+            {
+                _lockWorldWindowOnXValueOfInterest = value;
                 RaisePropertyChanged();
             }
         }

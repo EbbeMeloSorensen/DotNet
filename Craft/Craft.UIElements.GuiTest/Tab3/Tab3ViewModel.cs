@@ -123,10 +123,10 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
         }
 
-        public GeometryEditorViewModel GeometryEditorViewModel1 { get; }
-        public GeometryEditorViewModel GeometryEditorViewModel2 { get; }
-        public GeometryEditorViewModel GeometryEditorViewModel3 { get; }
-        public GeometryEditorViewModel GeometryEditorViewModel4 { get; }
+        public GeometryEditorViewModel GeometryEditorViewModel1 { get; private set; }
+        public GeometryEditorViewModel GeometryEditorViewModel2 { get; private set; }
+        public GeometryEditorViewModel GeometryEditorViewModel3 { get; private set; }
+        public GeometryEditorViewModel GeometryEditorViewModel4 { get; private set; }
         public CoordinateSystemViewModel CoordinateSystemViewModel { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel1 { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel2 { get; private set; }
@@ -157,18 +157,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 _x1 - _x0,
                 _y1 - _y0);
 
-            GeometryEditorViewModel3 = new GeometryEditorViewModel(
-                -1,
-                worldWindowFocus,
-                worldWindowSize,
-                false);
-
-            GeometryEditorViewModel4 = new GeometryEditorViewModel(
-                -1,
-                worldWindowFocus,
-                worldWindowSize,
-                false);
-
+            InitializeGeometryEditorViewModel3(worldWindowFocus, worldWindowSize);
+            InitializeGeometryEditorViewModel4(worldWindowFocus, worldWindowSize);
             InitializeCoordinateSysteViewModel(worldWindowFocus, worldWindowSize);
             InitializeTimeSeriesViewModel1();
             InitializeTimeSeriesViewModel2();
@@ -179,66 +169,6 @@ namespace Craft.UIElements.GuiTest.Tab3
             DrawAHouse(GeometryEditorViewModel2);
 
             DrawACoordinateSystem(GeometryEditorViewModel3);
-
-            GeometryEditorViewModel3.WorldWindowMajorUpdateOccured += GeometryEditorViewModel3_WorldWindowMajorUpdateOccured;
-            GeometryEditorViewModel3.MousePositionWorld.PropertyChanged += (s, e) =>
-            {
-                CursorPositionAsText = GeometryEditorViewModel3.MousePositionWorld.Object.HasValue
-                    ? $"({GeometryEditorViewModel3.MousePositionWorld.Object.Value.X:N2}, {-GeometryEditorViewModel3.MousePositionWorld.Object.Value.Y:N2})"
-                    : "";
-            };
-
-            GeometryEditorViewModel4.WorldWindowUpdateOccured += GeometryEditorViewModel4_WorldWindowUpdateOccured1;
-            GeometryEditorViewModel4.WorldWindowMajorUpdateOccured += GeometryEditorViewModel4_WorldWindowMajorUpdateOccured;
-
-            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += 
-                GeometryEditorViewModel_WorldWindowMajorUpdateOccured;
-        }
-
-        private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured(
-            object? sender, 
-            WorldWindowUpdatedEventArgs e)
-        {
-            var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
-            var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
-
-            var points = new List<PointD>();
-            for (var x = x0; x <= x1; x += 0.1)
-            {
-                points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
-            }
-
-            CoordinateSystemViewModel.GeometryEditorViewModel.ClearPolylines();
-            CoordinateSystemViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
-        }
-
-        private void GeometryEditorViewModel3_WorldWindowMajorUpdateOccured(
-            object? sender,
-            WorldWindowUpdatedEventArgs e)
-        {
-            var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
-            var x1 = Math.Ceiling(x0 + e.WorldWindowSize.Width);
-
-            var points = new List<PointD>();
-            for (var x = x0; x <= x1; x += 0.1)
-            {
-                //points.Add(new PointD(x, x));                                                         // y = x
-                //points.Add(new PointD(x, 0.5 * x));                                                   // y = 0.5x
-                //points.Add(new PointD(x, 0.5 * x - 1));                                               // y = 0.5x - 1
-                //points.Add(new PointD(x, -x));                                                        // y = -x
-                //points.Add(new PointD(x, 0));                                                         // y = 0
-                //points.Add(new PointD(x, 2));                                                         // y = 2
-                //points.Add(new PointD(x, x * x));                                                     // y = x^2
-                //points.Add(new PointD(x, x * x * x));                                                 // y = x^3
-                //points.Add(new PointD(x, Math.Abs(x)));                                               // y = |x|
-                //points.Add(new PointD(x, -x * x));                                                    // y = -x^2
-                //points.Add(new PointD(x, Math.Pow(x - 2, 2) - 3));                                    // y = (x - 2)^2 - 3 = x^2 - 4x + 1
-                points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) / 4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
-                //points.Add(new PointD(x, Math.Sin(x)));                                               // y = sin(x)
-            }
-
-            GeometryEditorViewModel3.ClearPolylines();
-            GeometryEditorViewModel3.AddPolyline(points, _curveThickness, _curveBrush);
         }
 
         private void DrawAHouse(
@@ -376,51 +306,6 @@ namespace Craft.UIElements.GuiTest.Tab3
             GeometryEditorViewModel2.ChangeScaling(1 / 1.2);
         }
 
-        private void GeometryEditorViewModel4_WorldWindowMajorUpdateOccured(
-            object? sender,
-            WorldWindowUpdatedEventArgs e)
-        {
-            WorldWindowMajorUpdateCount++;
-
-            // Notice that world window coordinates are always given in "non-inverted" coordinates,
-            // so we need to invert the y coordinate
-            UpdateCoordinateSystemForGeometryEditorViewModel4(
-                e.WorldWindowUpperLeft.X,
-                e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width,
-                -e.WorldWindowUpperLeft.Y - e.WorldWindowSize.Height,
-                -e.WorldWindowUpperLeft.Y);
-
-            var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
-            var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
-
-            var points = new List<PointD>();
-            for (var x = x0; x <= x1; x += 0.1)
-            {
-                //points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) / 4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
-                points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
-            }
-
-            GeometryEditorViewModel4.ClearPolylines();
-            GeometryEditorViewModel4.AddPolyline(points, _curveThickness, _curveBrush);
-        }
-
-        private void GeometryEditorViewModel4_WorldWindowUpdateOccured1(
-            object? sender,
-            WorldWindowUpdatedEventArgs e)
-        {
-            WorldWindowUpdateCount++;
-
-            // Notice that world window coordinates are always given in "non-inverted" coordinates,
-            // so we need to invert the y coordinate
-            //UpdateCoordinateSystemForGeometryEditorViewModel4(
-            //    e.WorldWindowUpperLeft.X,
-            //    e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width,
-            //    -e.WorldWindowUpperLeft.Y - e.WorldWindowSize.Height,
-            //    -e.WorldWindowUpperLeft.Y);
-
-            GeometryEditorViewModel4.ClearLabels();
-        }
-
         private void UpdateCoordinateSystemForGeometryEditorViewModel4(
             double x0,
             double x1,
@@ -522,6 +407,94 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
         }
 
+        private void InitializeGeometryEditorViewModel3(
+            Point worldWindowFocus,
+            Size worldWindowSize)
+        {
+            GeometryEditorViewModel3 = new GeometryEditorViewModel(
+                -1,
+                worldWindowFocus,
+                worldWindowSize,
+                false);
+
+            GeometryEditorViewModel3.WorldWindowMajorUpdateOccured += (s, e) =>
+            {
+                var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
+                var x1 = Math.Ceiling(x0 + e.WorldWindowSize.Width);
+
+                var points = new List<PointD>();
+                for (var x = x0; x <= x1; x += 0.1)
+                {
+                    //points.Add(new PointD(x, x));                                                         // y = x
+                    //points.Add(new PointD(x, 0.5 * x));                                                   // y = 0.5x
+                    //points.Add(new PointD(x, 0.5 * x - 1));                                               // y = 0.5x - 1
+                    //points.Add(new PointD(x, -x));                                                        // y = -x
+                    //points.Add(new PointD(x, 0));                                                         // y = 0
+                    //points.Add(new PointD(x, 2));                                                         // y = 2
+                    //points.Add(new PointD(x, x * x));                                                     // y = x^2
+                    //points.Add(new PointD(x, x * x * x));                                                 // y = x^3
+                    //points.Add(new PointD(x, Math.Abs(x)));                                               // y = |x|
+                    //points.Add(new PointD(x, -x * x));                                                    // y = -x^2
+                    //points.Add(new PointD(x, Math.Pow(x - 2, 2) - 3));                                    // y = (x - 2)^2 - 3 = x^2 - 4x + 1
+                    points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) / 4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
+                                                                                                            //points.Add(new PointD(x, Math.Sin(x)));                                               // y = sin(x)
+                }
+
+                GeometryEditorViewModel3.ClearPolylines();
+                GeometryEditorViewModel3.AddPolyline(points, _curveThickness, _curveBrush);
+            };
+
+            GeometryEditorViewModel3.MousePositionWorld.PropertyChanged += (s, e) =>
+            {
+                CursorPositionAsText = GeometryEditorViewModel3.MousePositionWorld.Object.HasValue
+                    ? $"({GeometryEditorViewModel3.MousePositionWorld.Object.Value.X:N2}, {-GeometryEditorViewModel3.MousePositionWorld.Object.Value.Y:N2})"
+                    : "";
+            };
+        }
+
+        private void InitializeGeometryEditorViewModel4(
+            Point worldWindowFocus,
+            Size worldWindowSize)
+        {
+            GeometryEditorViewModel4 = new GeometryEditorViewModel(
+                -1,
+                worldWindowFocus,
+                worldWindowSize,
+                false);
+
+            GeometryEditorViewModel4.WorldWindowUpdateOccured += (s, e) => 
+            {
+                WorldWindowUpdateCount++;
+                GeometryEditorViewModel4.ClearLabels();
+            };
+
+            GeometryEditorViewModel4.WorldWindowMajorUpdateOccured += (s, e) => 
+            {
+                WorldWindowMajorUpdateCount++;
+
+                // Notice that world window coordinates are always given in "non-inverted" coordinates,
+                // so we need to invert the y coordinate
+                UpdateCoordinateSystemForGeometryEditorViewModel4(
+                    e.WorldWindowUpperLeft.X,
+                    e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width,
+                    -e.WorldWindowUpperLeft.Y - e.WorldWindowSize.Height,
+                    -e.WorldWindowUpperLeft.Y);
+
+                var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
+                var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
+
+                var points = new List<PointD>();
+                for (var x = x0; x <= x1; x += 0.1)
+                {
+                    //points.Add(new PointD(x, Math.Pow(x, 3) / 4 + 3 * Math.Pow(x, 2) / 4 - 3 * x / 2 - 2)); // y = 0.25x^3 + 0.75x^2 - 1.5x - 2
+                    points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
+                }
+
+                GeometryEditorViewModel4.ClearPolylines();
+                GeometryEditorViewModel4.AddPolyline(points, _curveThickness, _curveBrush);
+            };
+        }
+
         private void InitializeCoordinateSysteViewModel(
             Point worldWindowFocus,
             Size worldWindowSize)
@@ -535,12 +508,24 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
-                UpdateXValueOfInterest();
+                UpdateXValueOfInterestForCoordinateSystemViewModel();
             };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
-                UpdateXValueOfInterest();
+                var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
+                var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
+
+                var points = new List<PointD>();
+                for (var x = x0; x <= x1; x += 0.1)
+                {
+                    points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
+                }
+
+                CoordinateSystemViewModel.GeometryEditorViewModel.ClearPolylines();
+                CoordinateSystemViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
+
+                UpdateXValueOfInterestForCoordinateSystemViewModel();
             };
 
             var timer = new DispatcherTimer
@@ -550,26 +535,12 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             timer.Tick += (s, e) =>
             {
-                UpdateXValueOfInterest();
+                UpdateXValueOfInterestForCoordinateSystemViewModel();
             };
 
             _startTime = DateTime.UtcNow;
 
             timer.Start();
-        }
-
-        private void UpdateXValueOfInterest()
-        {
-            var elapsedTime = DateTime.UtcNow - _startTime;
-
-            CoordinateSystemViewModel.XValueOfInterest = -2.0 + elapsedTime.TotalSeconds / 20;
-
-            var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
-            var x1 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
-
-            CoordinateSystemViewModel.ShowXValueOfInterest =
-                CoordinateSystemViewModel.XValueOfInterest >= x0 &&
-                CoordinateSystemViewModel.XValueOfInterest <= x1;
         }
 
         private void InitializeTimeSeriesViewModel1()
@@ -666,6 +637,20 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 lineViewModels.ForEach(_ => TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(_));
             };
+        }
+
+        private void UpdateXValueOfInterestForCoordinateSystemViewModel()
+        {
+            var elapsedTime = DateTime.UtcNow - _startTime;
+
+            CoordinateSystemViewModel.XValueOfInterest = -2.0 + elapsedTime.TotalSeconds / 20;
+
+            var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
+            var x1 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
+
+            CoordinateSystemViewModel.ShowXValueOfInterest =
+                CoordinateSystemViewModel.XValueOfInterest >= x0 &&
+                CoordinateSystemViewModel.XValueOfInterest <= x1;
         }
     }
 }
