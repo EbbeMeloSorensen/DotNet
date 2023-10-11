@@ -504,7 +504,10 @@ namespace Craft.UIElements.GuiTest.Tab3
                 worldWindowSize,
                 false,
                 25,
-                25);
+                25)
+            {
+                LockWorldWindowOnDynamicXValue = true
+            };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
@@ -513,6 +516,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
+                // Update the function curve
                 var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
                 var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
 
@@ -641,16 +645,29 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void UpdateXValueOfInterestForCoordinateSystemViewModel()
         {
+            // Update the x value of interest
             var elapsedTime = DateTime.UtcNow - _startTime;
+            CoordinateSystemViewModel.DynamicXValue = -2.0 + elapsedTime.TotalSeconds / 10;
 
-            CoordinateSystemViewModel.XValueOfInterest = -2.0 + elapsedTime.TotalSeconds / 20;
-
+            // Figure out if the line representing the x value of interest should be visible
             var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
             var x1 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
 
-            CoordinateSystemViewModel.ShowXValueOfInterest =
-                CoordinateSystemViewModel.XValueOfInterest >= x0 &&
-                CoordinateSystemViewModel.XValueOfInterest <= x1;
+            if (CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue)
+            {
+                CoordinateSystemViewModel.ShowDynamicXValue = true;
+
+                // Position the World Window so that the x value of interest is in the middle
+                CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                    CoordinateSystemViewModel.DynamicXValue - CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width / 2,
+                    CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+            }
+            else
+            {
+                CoordinateSystemViewModel.ShowDynamicXValue =
+                    CoordinateSystemViewModel.DynamicXValue >= x0 &&
+                    CoordinateSystemViewModel.DynamicXValue <= x1;
+            }
         }
     }
 }

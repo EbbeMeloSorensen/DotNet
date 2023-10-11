@@ -31,7 +31,7 @@ Done:
 * Klikke på et punkt i et koordinatsystem og få information om, hvad der er klikket på
 
 In progress:
-* Prøv i handleren for tick eventet at sætte World Window således at XValue Of Interest er i midten
+* Man skal kunne sætte WorldWindow position (kan man ikke allerede det? - prøv i handleren for tick eventet at sætte World Window således at XValue Of Interest er i midten)
 * Vis en linie for en dynamisk X-værdi i CoordinateSystemView
   - Der skal være 2 modes: 
     1) hvor den er lige så fast som Y-aksen, dvs hvis den ændrer sig, så flyttes World Window

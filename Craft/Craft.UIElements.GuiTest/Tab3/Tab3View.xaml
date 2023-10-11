@@ -234,6 +234,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -243,6 +244,8 @@
                                       IsChecked="{Binding CoordinateSystemViewModel.ShowHorizontalGridLines}"/>
                             <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Show vertical grid lines"
                                       IsChecked="{Binding CoordinateSystemViewModel.ShowVerticalGridLines}"/>
+                            <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Focus on x value of interest"
+                                      IsChecked="{Binding CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue}"/>
                         </Grid>
                         <TextBlock Grid.Row="2" TextWrapping="Wrap">
                             Here, we have a CoordinateSystemView with an underlying CoordinateSystemViewModel, where the

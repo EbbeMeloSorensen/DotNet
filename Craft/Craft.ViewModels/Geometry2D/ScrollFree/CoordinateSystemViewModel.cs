@@ -18,10 +18,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private bool _showVerticalAxis;
         private bool _showHorizontalGridLines;
         private bool _showVerticalGridLines;
-        private double _xValueOfInterest;
-        private double _xValueOfInterestViewPort;
-        private bool _showXValueOfInterest;
-        private bool _lockWorldWindowOnXValueOfInterest;
+        private double _dynamicXValue;
+        private double _dynamicXValueViewPort;
+        private bool _showDynamicXValue;
+        private bool _lockWorldWindowOnDynamicXValue;
 
         public double MarginX
         {
@@ -44,46 +44,46 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        public double XValueOfInterest
+        public double DynamicXValue
         {
-            get => _xValueOfInterest;
+            get => _dynamicXValue;
             set
             {
-                _xValueOfInterest = value;
+                _dynamicXValue = value;
 
-                XValueOfInterestViewPort =
-                    GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_xValueOfInterest);
+                DynamicXValueViewPort =
+                    GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_dynamicXValue);
 
                 RaisePropertyChanged();
             }
         }
 
-        public double XValueOfInterestViewPort
+        public double DynamicXValueViewPort
         {
-            get => _xValueOfInterestViewPort;
+            get => _dynamicXValueViewPort;
             set
             {
-                _xValueOfInterestViewPort = value;
+                _dynamicXValueViewPort = value;
                 RaisePropertyChanged();
             }
         }
 
-        public bool ShowXValueOfInterest
+        public bool ShowDynamicXValue
         {
-            get => _showXValueOfInterest;
+            get => _showDynamicXValue;
             set
             {
-                _showXValueOfInterest = value;
+                _showDynamicXValue = value;
                 RaisePropertyChanged();
             }
         }
 
-        public bool LockWorldWindowOnXValueOfInterest
+        public bool LockWorldWindowOnDynamicXValue
         {
-            get => _lockWorldWindowOnXValueOfInterest;
+            get => _lockWorldWindowOnDynamicXValue;
             set
             {
-                _lockWorldWindowOnXValueOfInterest = value;
+                _lockWorldWindowOnDynamicXValue = value;
                 RaisePropertyChanged();
             }
         }
