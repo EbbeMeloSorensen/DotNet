@@ -511,6 +511,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
+                CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue = false;
                 UpdateXValueOfInterestForCoordinateSystemViewModel();
             };
 
