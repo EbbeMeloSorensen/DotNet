@@ -219,7 +219,6 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                     ViewModel.Scaling.Height / yFactor);
             }
 
-            ViewModel.OnWorldWindowUpdateOccured();
             ViewModel.OnWorldWindowMajorUpdateOccured();
         }
 
