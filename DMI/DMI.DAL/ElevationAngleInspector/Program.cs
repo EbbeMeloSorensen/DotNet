@@ -35,7 +35,7 @@ try
         "INNER JOIN sde.elevationangles ON sde.sensorlocation.globalid=sde.elevationangles.parentguid " + 
         "WHERE sde.stationinformation.gdb_to_date = '9999-12-31 23:59:59' " + 
         "AND sde.elevationangles.gdb_to_date = '9999-12-31 23:59:59' " + 
-        "AND sde.stationinformation.stationid_dmi = 5560 " + 
+        //"AND sde.stationinformation.stationid_dmi = 5560 " + 
         "ORDER BY sde.stationinformation.stationid_dmi, sde.elevationangles.datefrom " +
         "--LIMIT 10";
 
