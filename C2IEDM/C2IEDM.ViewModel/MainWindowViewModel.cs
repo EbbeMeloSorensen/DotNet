@@ -232,12 +232,12 @@ public class MainWindowViewModel : ViewModelBase
 
         _displayHistoricalTimeControls = new ObservableObject<bool>
         {
-            Object = true
+            Object = false
         };
 
         _displayDatabaseTimeControls = new ObservableObject<bool>
         {
-            Object = true
+            Object = false
         };
 
         _displayHistoricalTimeControls.PropertyChanged += (s, e) =>
