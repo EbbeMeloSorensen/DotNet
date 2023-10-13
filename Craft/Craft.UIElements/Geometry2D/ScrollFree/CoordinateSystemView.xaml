@@ -22,7 +22,7 @@
                   X1="{Binding DynamicXValueViewPort}"
                   X2="{Binding DynamicXValueViewPort}"
                   Y1="0"
-                  Y2="{Binding Y2}">
+                  Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
                 <Line.Visibility>
                     <Binding Path="ShowDynamicXValue" Converter="{StaticResource BooleanToVisibilityConverter}">
                         <Binding.ConverterParameter>
@@ -34,10 +34,10 @@
             <!-- Vertical axis -->
             <Line Stroke="Black"
                   StrokeThickness="1"
-                  X1="{Binding MarginX}"
-                  X2="{Binding MarginX}"
+                  X1="{Binding GeometryEditorViewModel.MarginLeft}"
+                  X2="{Binding GeometryEditorViewModel.MarginLeft}"
                   Y1="0"
-                  Y2="{Binding Y2}">
+                  Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
                 <Line.Visibility>
                     <Binding Path="ShowVerticalAxis" Converter="{StaticResource BooleanToVisibilityConverter}">
                         <Binding.ConverterParameter>
@@ -49,10 +49,10 @@
             <!-- Horizontal axis -->
             <Line Stroke="Black"
                 StrokeThickness="1"
-                X1="{Binding MarginX}"
+                X1="{Binding GeometryEditorViewModel.MarginLeft}"
                 X2="{Binding GeometryEditorViewModel.ViewPortSize.Width}"
-                Y1="{Binding Y2}"
-                Y2="{Binding Y2}">
+                Y1="{Binding GeometryEditorViewModel.MarginBottomOffset}"
+                Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
             </Line>
         </Canvas>
     </Grid>

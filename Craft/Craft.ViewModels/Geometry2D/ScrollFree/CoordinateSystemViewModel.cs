@@ -9,11 +9,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class CoordinateSystemViewModel : ViewModelBase
     {
-        protected double _marginX;
-        protected double _marginY;
-        protected double _Y2;
         protected bool _includeGrid = true;
-        protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.25 };
+        protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.35 };
         private bool _showHorizontalAxis;
         private bool _showVerticalAxis;
         private bool _showHorizontalGridLines;
@@ -22,27 +19,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private double _dynamicXValueViewPort;
         private bool _showDynamicXValue;
         private bool _lockWorldWindowOnDynamicXValue;
-
-        public double MarginX
-        {
-            get
-            {
-                return _marginX;
-            }
-        }
-
-        public double Y2 
-        { 
-            get
-            {
-                return _Y2;
-            }
-            set
-            {
-                _Y2 = value;
-                RaisePropertyChanged();
-            }
-        }
 
         public double DynamicXValue
         {
@@ -139,15 +115,19 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double marginX,
             double marginY)
         {
-            _marginX = marginX;
-            _marginY = marginY;
             _showHorizontalAxis = true;
             _showVerticalAxis = true;
             _showHorizontalGridLines = true;
             _showVerticalGridLines = true;
 
             GeometryEditorViewModel = 
-                new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, fitAspectRatio);
+                new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, fitAspectRatio)
+                {
+                    MarginLeft = marginX,
+                    MarginBottom = marginY,
+                    ShowMarginLeft = marginX > 0,
+                    ShowMarginBottom = marginY > 0
+                };
 
             GeometryEditorViewModel.PropertyChanged += GeometryEditorViewModel_PropertyChanged;
 
@@ -166,7 +146,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 case "ViewPortSize":
                 {
-                    Y2 = GeometryEditorViewModel.ViewPortSize.Height - _marginY;
+                    GeometryEditorViewModel.MarginBottomOffset = 
+                        GeometryEditorViewModel.ViewPortSize.Height - GeometryEditorViewModel.MarginBottom;
                     break;
                 }
             }
@@ -194,35 +175,39 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var y1 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y;
 
             // We want margins and thickness to be independent on scaling
-            var dx = _marginX / GeometryEditorViewModel.Scaling.Width;
-            var dy = _marginY / GeometryEditorViewModel.Scaling.Height;
+            var dx = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
+            var dy = GeometryEditorViewModel.MarginBottom / GeometryEditorViewModel.Scaling.Height;
             var thickness = 1 / GeometryEditorViewModel.Scaling.Width;
 
+            // Clear the grid lines
             GeometryEditorViewModel.ClearLines();
+
+            // Clear the labels
             GeometryEditorViewModel.ClearLabels();
 
             if (ShowHorizontalGridLines)
             {
-                DrawHorizontalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+                DrawHorizontalGridLinesAndLabels(x0, y0, x1, y1, dx, dy, thickness, 1.0);
             }
 
             if (ShowVerticalGridLines)
             {
-                DrawVerticalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+                DrawVerticalGridLinesAndLabels(x0, y0, x1, y1, dx, dy, thickness, 1.0);
             }
         }
 
-        protected void DrawHorizontalGridLines(
+        protected void DrawHorizontalGridLinesAndLabels(
             double x0,
             double y0,
             double x1,
             double y1,
             double dx,
             double dy,
-            double thickness)
+            double thickness,
+            double expandFactor)
         {
             // 1: Find ud af spacing af horisontale grid lines
-            var lineSpacingY_ViewPort_Min = 50.0;
+            var lineSpacingY_ViewPort_Min = 75.0;
             var lineSpacingY_World_Min = lineSpacingY_ViewPort_Min / GeometryEditorViewModel.Scaling.Height;
             var lineSpacingY_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingY_World_Min)));
 
@@ -239,30 +224,34 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 lineSpacingY_World /= 2;
             }
 
-            var lineSpacingY_ViewPort = lineSpacingY_World * GeometryEditorViewModel.Scaling.Height;
-
             // Hvor mange decimaler er der generelt på et tick?
             // (Det skal vi bruge for at kompensere for afrundingsfejl, så der ikke f.eks. kommer til at stå 0.60000000000012)
             var labelDecimals = (int)Math.Max(0, Math.Ceiling(-Math.Log10(lineSpacingY_World)));
 
+            // Expand the window where grid lines are to be drawn in order to avoid empty areas appearing during panning
+            var xMin = x0 - expandFactor * (x1 - x0);
+            var xMax = x1 + expandFactor * (x1 - x0);
+            var yMin = y0 - expandFactor * (y1 - y0);
+            var yMax = y1 + expandFactor * (y1 - y0);
+
             // Find ud af første y-værdi
-            var y = Math.Floor(y0 / lineSpacingY_World) * lineSpacingY_World;
+            var y = Math.Floor(yMin / lineSpacingY_World) * lineSpacingY_World;
 
-            while (y < y1)
+            while (y < yMax)
             {
-                if (y > y0 + dy)
+                if (_includeGrid)
                 {
-                    if (_includeGrid)
-                    {
-                        GeometryEditorViewModel.AddLine(
-                            new PointD(x0 + dx, y),
-                            new PointD(x1, y),
-                            thickness,
-                            _gridBrush);
-                    }
+                    GeometryEditorViewModel.AddLine(
+                        new PointD(xMin, y),
+                        new PointD(xMax, y),
+                        thickness,
+                        _gridBrush);
+                }
 
-                    var text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture);
+                var text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture);
 
+                if (y > y0 + dy && y < y1)
+                {
                     GeometryEditorViewModel.AddLabel(
                         text,
                         new PointD(x0 + dx * 0.8, y),
@@ -276,14 +265,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        protected virtual void DrawVerticalGridLines(
+        protected virtual void DrawVerticalGridLinesAndLabels(
             double x0,
             double y0,
             double x1,
             double y1,
             double dx,
             double dy,
-            double thickness)
+            double thickness,
+            double expandFactor)
         {
             // 1: Find ud af spacing af vertikale grid lines
             var lineSpacingX_ViewPort_Min = 75.0;
@@ -312,24 +302,30 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             // (Det skal vi bruge for at kompensere for afrundingsfejl, så der ikke f.eks. kommer til at stå 0.60000000000012)
             var labelDecimals = (int) Math.Max(0, Math.Ceiling(-Math.Log10(lineSpacingX_World)));
 
+            // Expand the window where grid lines are to be drawn in order to avoid empty areas appearing during panning
+            var xMin = x0 - expandFactor * (x1 - x0);
+            var xMax = x1 + expandFactor * (x1 - x0);
+            var yMin = y0 - expandFactor * (y1 - y0);
+            var yMax = y1 + expandFactor * (y1 - y0);
+
             // Find ud af første x-værdi
-            var x = Math.Floor(x0 / lineSpacingX_World) * lineSpacingX_World;
+            var x = Math.Floor(xMin / lineSpacingX_World) * lineSpacingX_World;
 
-            while (x < x1)
+            while (x < xMax)
             {
-                if (x > x0 + dx)
+                if (_includeGrid)
                 {
-                    if (_includeGrid)
-                    {
-                        GeometryEditorViewModel.AddLine(
-                            new PointD(x, y0 + dy),
-                            new PointD(x, y1),
-                            thickness,
-                            _gridBrush);
-                    }
+                    GeometryEditorViewModel.AddLine(
+                        new PointD(x, yMin),
+                        new PointD(x, yMax),
+                        thickness,
+                        _gridBrush);
+                }
 
-                    var dateAsText = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture);
+                var dateAsText = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture);
 
+                if (x > x0 + dx && x < x1)
+                {
                     // Place label at ticks
                     GeometryEditorViewModel.AddLabel(
                         dateAsText,

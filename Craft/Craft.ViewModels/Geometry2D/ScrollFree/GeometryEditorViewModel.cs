@@ -33,6 +33,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private bool _yAxisLocked;
         private bool _aspectRatioLocked;
 
+        private double _marginLeft;
+        private double _marginBottom;
+        private double _marginBottomOffset;
+        private bool _showMarginLeft; 
+        private bool _showMarginBottom; 
+
         public ObservableObject<Point?> MousePositionWorld { get; }
 
         public string ImagePath
@@ -169,6 +175,56 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _aspectRatioLocked = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double MarginLeft
+        {
+            get { return _marginLeft; }
+            set
+            {
+                _marginLeft = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double MarginBottom
+        {
+            get { return _marginBottom; }
+            set
+            {
+                _marginBottom = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double MarginBottomOffset
+        {
+            get { return _marginBottomOffset; }
+            set
+            {
+                _marginBottomOffset = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowMarginLeft
+        {
+            get { return _showMarginLeft; }
+            set
+            {
+                _showMarginLeft = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowMarginBottom
+        {
+            get { return _showMarginBottom; }
+            set
+            {
+                _showMarginBottom = value;
                 RaisePropertyChanged();
             }
         }

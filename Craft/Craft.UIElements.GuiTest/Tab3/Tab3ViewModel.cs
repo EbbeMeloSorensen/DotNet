@@ -506,7 +506,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 25)
             {
-                LockWorldWindowOnDynamicXValue = true
+                LockWorldWindowOnDynamicXValue = false,
             };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
@@ -518,10 +518,11 @@ namespace Craft.UIElements.GuiTest.Tab3
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
                 // Update the function curve
-                var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
-                var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
+                var x0 = e.WorldWindowUpperLeft.X - e.WorldWindowSize.Width;
+                var x1 = e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width * 2;
 
                 var points = new List<PointD>();
+
                 for (var x = x0; x <= x1; x += 0.1)
                 {
                     points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
@@ -665,8 +666,12 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
             else
             {
+                var marginInWorldDistance =
+                    CoordinateSystemViewModel.GeometryEditorViewModel.MarginLeft /
+                    CoordinateSystemViewModel.GeometryEditorViewModel.Scaling.Width;
+
                 CoordinateSystemViewModel.ShowDynamicXValue =
-                    CoordinateSystemViewModel.DynamicXValue >= x0 &&
+                    CoordinateSystemViewModel.DynamicXValue >= x0 + marginInWorldDistance &&
                     CoordinateSystemViewModel.DynamicXValue <= x1;
             }
         }

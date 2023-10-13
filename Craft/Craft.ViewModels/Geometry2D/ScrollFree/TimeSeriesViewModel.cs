@@ -31,8 +31,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double marginY,
             DateTime timeAtOrigo) : base(worldWindowFocus, worldWindowSize, fitAspectRatio, marginX, marginY)
         {
-            _marginX = marginX;
-            _marginY = marginY;
             TimeAtOrigo = timeAtOrigo;
 
             TimeAtMousePosition = new ObservableObject<DateTime?>();
@@ -53,8 +51,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var y1 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y;
 
             // We want thickness to be independent on scaling
-            var dx = _marginX / GeometryEditorViewModel.Scaling.Width;
-            var dy = _marginY / GeometryEditorViewModel.Scaling.Height;
+            var dx = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
+            var dy = GeometryEditorViewModel.MarginBottom / GeometryEditorViewModel.Scaling.Height;
             var thickness = 1 / GeometryEditorViewModel.Scaling.Width;
 
             GeometryEditorViewModel.ClearLines();
@@ -62,16 +60,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             if (ShowHorizontalGridLines)
             {
-                DrawHorizontalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+                DrawHorizontalGridLinesAndLabels(x0, y0, x1, y1, dx, dy, thickness, 1.0);
             }
 
             if (ShowVerticalGridLines)
             {
-                DrawVerticalGridLines(x0, y0, x1, y1, dx, dy, thickness);
+                DrawVerticalGridLinesAndLabels(x0, y0, x1, y1, dx, dy, thickness);
             }
         }
 
-        protected virtual void DrawVerticalGridLines(
+        protected virtual void DrawVerticalGridLinesAndLabels(
             double x0,
             double y0,
             double x1,
