@@ -35,7 +35,7 @@ try
         "INNER JOIN sde.elevationangles ON sde.sensorlocation.globalid=sde.elevationangles.parentguid " + 
         "WHERE sde.stationinformation.gdb_to_date = '9999-12-31 23:59:59' " + 
         "AND sde.elevationangles.gdb_to_date = '9999-12-31 23:59:59' " + 
-        "AND sde.stationinformation.stationid_dmi = 5560 " + 
+        "--AND sde.stationinformation.stationid_dmi = 5560 " + 
         "ORDER BY sde.stationinformation.stationid_dmi, sde.elevationangles.datefrom " +
         "--LIMIT 10";
 
@@ -53,19 +53,24 @@ try
                     wgs_lat = sms_reader.IsDBNull(2) ? null : sms_reader.GetDouble(2),
                     wgs_long = sms_reader.IsDBNull(3) ? null : sms_reader.GetDouble(3),
                     datefrom = sms_reader.GetDateTime(4),
-                    angle_n = sms_reader.GetInt32(5),
-                    angle_ne = sms_reader.GetInt32(6),
-                    angle_e = sms_reader.GetInt32(7),
-                    angle_se = sms_reader.GetInt32(8),
-                    angle_s = sms_reader.GetInt32(9),
-                    angle_sw = sms_reader.GetInt32(10),
-                    angle_w = sms_reader.GetInt32(11),
-                    angle_nw = sms_reader.GetInt32(12),
-                    angleindex = sms_reader.GetInt32(13)
+                    angle_n = sms_reader.IsDBNull(5) ? null : sms_reader.GetInt32(5),
+                    angle_ne = sms_reader.IsDBNull(6) ? null : sms_reader.GetInt32(6),
+                    angle_e = sms_reader.IsDBNull(7) ? null : sms_reader.GetInt32(7),
+                    angle_se = sms_reader.IsDBNull(8) ? null : sms_reader.GetInt32(8),
+                    angle_s = sms_reader.IsDBNull(9) ? null : sms_reader.GetInt32(9),
+                    angle_sw = sms_reader.IsDBNull(10) ? null : sms_reader.GetInt32(10),
+                    angle_w = sms_reader.IsDBNull(11) ? null : sms_reader.GetInt32(11),
+                    angle_nw = sms_reader.IsDBNull(12) ? null : sms_reader.GetInt32(12),
+                    angleindex = sms_reader.IsDBNull(13) ? null : sms_reader.GetInt32(13)
                 });
             }
         }
     }
+
+    sms_stations = sms_stations
+        .OrderBy(_ => _.stationid_dmi)
+        .ThenBy(_ => _.datefrom)
+        .ToList();
 }
 catch (PostgresException excp)
 {
