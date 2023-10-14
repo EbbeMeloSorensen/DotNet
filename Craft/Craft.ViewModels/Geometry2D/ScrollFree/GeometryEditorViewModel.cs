@@ -249,7 +249,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public ObservableCollection<LineViewModel> LineViewModels { get; }
 
-        public ObservableCollection<LabelViewModel> LabelViewModels { get; }
+        public ObservableCollection<LabelViewModel> LabelViewModels { get; private set; }
 
         public IEnumerable<int> AllShapeIds
         {
@@ -513,7 +513,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double width,
             double height,
             PointD shift,
-            double opacity)
+            double opacity,
+            string tag = null)
         {
             LabelViewModels.Add(new LabelViewModel
             {
@@ -522,7 +523,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 Width = width, 
                 Height = height,
                 Shift = shift,
-                Opacity = opacity
+                Opacity = opacity,
+                Tag = tag
             });
         }
 
@@ -552,9 +554,32 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             LineViewModels.Clear();
         }
 
-        public void ClearLabels()
+        public void ClearLabels(
+            string tag = null)
         {
-            LabelViewModels.Clear();
+            if (tag == null)
+            {
+                LabelViewModels.Clear();
+            }
+            else
+            {
+                var again = true;
+
+                do
+                {
+                    var temp = LabelViewModels.FirstOrDefault(_ => _.Tag == tag);
+
+                    if (temp == null)
+                    {
+                        again = false;
+                    }
+                    else
+                    {
+                        LabelViewModels.Remove(temp);
+                    }
+
+                } while (again);
+            }
         }
 
         public void FocusInCenterOfViewPort()

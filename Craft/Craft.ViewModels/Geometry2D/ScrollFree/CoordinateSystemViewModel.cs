@@ -157,7 +157,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             object? sender, 
             WorldWindowUpdatedEventArgs e)
         {
-            GeometryEditorViewModel.ClearLabels();
+            if (GeometryEditorViewModel.YAxisLocked)
+            {
+                GeometryEditorViewModel.ClearLabels("y");
+            }
+            else
+            {
+                GeometryEditorViewModel.ClearLabels();
+            }
         }
 
         private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured(
@@ -258,7 +265,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         20,
                         20,
                         new PointD(-10, 0),
-                        0.0);
+                        0.0,
+                        "y");
                 }
 
                 y += lineSpacingY_World;
@@ -324,17 +332,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 var dateAsText = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture);
 
-                if (x > x0 + dx && x < x1)
-                {
-                    // Place label at ticks
-                    GeometryEditorViewModel.AddLabel(
-                        dateAsText,
-                        new PointD(x, y0 + dy),
-                        labelWidth,
-                        labelHeight,
-                        new PointD(0, labelHeight / 2),
-                        0.0);
-                }
+                // Place label at ticks
+                GeometryEditorViewModel.AddLabel(
+                    dateAsText,
+                    new PointD(x, y0 + dy),
+                    labelWidth,
+                    labelHeight,
+                    new PointD(0, labelHeight / 2),
+                    0.0,
+                    "x");
 
                 x += lineSpacingX_World;
             }

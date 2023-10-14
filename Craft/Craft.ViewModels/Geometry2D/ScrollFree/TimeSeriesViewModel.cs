@@ -232,7 +232,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         labelWidth,
                         labelHeight,
                         new PointD(0, labelHeight / 2),
-                        0.0);
+                        0.0,
+                        "x");
 
                     if (day == 1)
                     {
@@ -244,7 +245,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             labelWidth,
                             labelHeight,
                             new PointD(0, 1.5 * labelHeight),
-                            0.0);
+                            0.0,
+                            "x");
 
                         var yearText = t.Year.ToString();
 
@@ -254,7 +256,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             labelWidth,
                             labelHeight,
                             new PointD(0, 2.5 * labelHeight),
-                            0.0);
+                            0.0,
+                            "x");
                     }
                 }
 

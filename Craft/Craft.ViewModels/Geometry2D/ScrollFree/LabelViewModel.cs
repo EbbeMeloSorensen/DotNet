@@ -71,5 +71,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 RaisePropertyChanged();
             }
         }
+
+        public string Tag { get; set; }
     }
 }
