@@ -32,6 +32,8 @@ Done:
 * Refaktorer tegning af grid lines, så der tegnes så mange, at der ikke opstår "tomme" områder under panorering
 
 In progress:
+* Det funker fint med at lade en transformation afgøre placeringen af labels, men mon ikke man kunne slå x eller y fra, eller bare override med en viewport koordinat?
+  på den måde burde du kunne vise labels hele tiden - også når du panorerer, og så ville du slippe for det der pis med at skulle skjule labels
 * Når man aktiverer tracking af den der value of interest, så hopper labels hen det forkert sted
 * Labels bør tegnes af CoordinateSystemViewet (og også de der margener - indtil videre har du dem kun i den bagvedliggende GeometryEditorViewModel, fordi du vil have labels foran)
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines
