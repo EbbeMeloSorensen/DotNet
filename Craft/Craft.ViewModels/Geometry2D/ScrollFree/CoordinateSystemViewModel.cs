@@ -157,7 +157,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             object? sender, 
             WorldWindowUpdatedEventArgs e)
         {
-            if (GeometryEditorViewModel.YAxisLocked)
+            ClearLabels();
+        }
+
+        public void ClearLabels()
+        {
+            if (GeometryEditorViewModel.XAxisLocked)
+            {
+                GeometryEditorViewModel.ClearLabels("x");
+            }
+            else if (GeometryEditorViewModel.YAxisLocked)
             {
                 GeometryEditorViewModel.ClearLabels("y");
             }

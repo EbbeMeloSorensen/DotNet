@@ -29,9 +29,11 @@ Done:
      - CoordinateToCanvasPositionConverter for points
 * Labels på plads - dvs noget tekst, der lige som points bibeholder størrelse uanset skalering
 * Klikke på et punkt i et koordinatsystem og få information om, hvad der er klikket på
+* Refaktorer tegning af grid lines, så der tegnes så mange, at der ikke opstår "tomme" områder under panorering
 
 In progress:
-* Refaktorer tegning af grid lines, så der tegnes så mange, at der ikke opstår "tomme" områder under panorering
+* Når man aktiverer tracking af den der value of interest, så hopper labels hen det forkert sted
+* Labels bør tegnes af CoordinateSystemViewet (og også de der margener - indtil videre har du dem kun i den bagvedliggende GeometryEditorViewModel, fordi du vil have labels foran)
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines
 * Prøv i handleren for tick eventet at sætte World Window således at XValue Of Interest er i midten
   - Når man panorerer i vinduet, skal den holde op med at autoopdatere world vinduet (OK)

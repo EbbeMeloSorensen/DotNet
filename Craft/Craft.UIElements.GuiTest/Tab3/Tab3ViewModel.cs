@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -658,6 +657,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             if (CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue)
             {
                 CoordinateSystemViewModel.ShowDynamicXValue = true;
+                CoordinateSystemViewModel.ClearLabels();
 
                 // Position the World Window so that the x value of interest is in the middle
                 CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
