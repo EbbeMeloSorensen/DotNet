@@ -164,7 +164,7 @@
                 <Style>
                     <Setter Property="Canvas.Left">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource LabelPositionConverter}">
+                            <MultiBinding Converter="{StaticResource PointPositionConverter}">
                                 <Binding Path="Point.X"/>
                                 <Binding Path="DataContext.WorldWindowUpperLeft.X" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
@@ -177,7 +177,7 @@
                     </Setter>
                     <Setter Property="Canvas.Top">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource LabelPositionConverter}">
+                            <MultiBinding Converter="{StaticResource PointPositionConverter}">
                                 <Binding Path="Point.Y"/>
                                 <Binding Path="DataContext.WorldWindowUpperLeft.Y" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>

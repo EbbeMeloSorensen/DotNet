@@ -9,6 +9,7 @@
     <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <valueConverters:ImagePathConverter x:Key="ImagePathConverter"/>
     <valueConverters:ShapePositionConverter x:Key="ShapePositionConverter"/>
+    <valueConverters:PointPositionConverter x:Key="PointPositionConverter"/>
     <valueConverters:LabelPositionConverter x:Key="LabelPositionConverter"/>
     <valueConverters:DoubleScaler x:Key="DoubleScaler"/>
     <scrollFree:ShapeTemplateSelector x:Key="ShapeTemplateSelector"/>
