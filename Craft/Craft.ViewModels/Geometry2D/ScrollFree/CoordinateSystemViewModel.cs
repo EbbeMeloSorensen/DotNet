@@ -298,5 +298,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 x += lineSpacingX_World;
             }
         }
+
+        public bool EnclosedByExpandedWorldWindow(
+            Point nextWorldWindowUpperLeft)
+        {
+            return
+                nextWorldWindowUpperLeft.X > _expandedWorldWindowUpperLeft.X &&
+                nextWorldWindowUpperLeft.Y > _expandedWorldWindowUpperLeft.Y &&
+                nextWorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width < _expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width &&
+                nextWorldWindowUpperLeft.Y + GeometryEditorViewModel.WorldWindowSize.Height < _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height;
+        }
     }
 }

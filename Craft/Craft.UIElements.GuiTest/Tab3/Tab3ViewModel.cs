@@ -506,7 +506,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 1)
             {
-                LockWorldWindowOnDynamicXValue = true,
+                LockWorldWindowOnDynamicXValue = false,
             };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
@@ -518,6 +518,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
                 // Update the function curve
+                // Todo: Use the expanded world window owned by the coordinate system view model instead of just assuming it is expanded by a factor of 1
                 var x0 = e.WorldWindowUpperLeft.X - e.WorldWindowSize.Width;
                 var x1 = e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width * 2;
 
@@ -662,10 +663,21 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 CoordinateSystemViewModel.ShowDynamicXValue = true;
 
-                // Position the World Window so that the x value of interest is in the middle
-                CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
-                    CoordinateSystemViewModel.DynamicXValue - CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width / 2,
+                // Calculate next World Window Position
+                var nextWorldWindowUpperLeft = new Point(
+                    CoordinateSystemViewModel.DynamicXValue -
+                    CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width / 2,
                     CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+
+                // Determine if the next World Window is enclosed by the expanded world window
+                if (!CoordinateSystemViewModel.EnclosedByExpandedWorldWindow(nextWorldWindowUpperLeft))
+                {
+                    throw new NotImplementedException();
+                }
+
+                // Position the World Window so that the x value of interest is in the middle
+                CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft =
+                    nextWorldWindowUpperLeft;
             }
             else
             {
