@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
-            <valueConverters:CoordinateToCanvasPositionConverter x:Key="CoordinateToCanvasPositionConverter"/>
+            <valueConverters:WorldToCanvasCoordinateConverter x:Key="WorldToCanvasCoordinateConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -32,7 +32,7 @@
                 <Style>
                     <Setter Property="Canvas.Left">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
+                            <MultiBinding Converter="{StaticResource WorldToCanvasCoordinateConverter}">
                                 <Binding Path="Point.X"/>
                                 <Binding Path="Diameter"/>
                             </MultiBinding>
@@ -40,7 +40,7 @@
                     </Setter>
                     <Setter Property="Canvas.Top">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
+                            <MultiBinding Converter="{StaticResource WorldToCanvasCoordinateConverter}">
                                 <Binding Path="Point.Y"/>
                                 <Binding Path="Diameter"/>
                             </MultiBinding>
