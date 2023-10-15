@@ -269,7 +269,7 @@ namespace Craft.GeometryEditor3D.ViewModel
             // Add stuff to the scene
             GenerateCoordinateSystem(20);
             GenerateHouseFromGraphicsBook(1);
-            //GenerateCubeCenteredAtOrigo(100);
+            GenerateCubeCenteredAtOrigo(100);
             GenerateHouseFromGraphicsBook(1);
             //GenerateCircle(new Vector3D(0, 0, 0), 50, 30);
         }

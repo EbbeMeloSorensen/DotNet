@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Craft.UI.Utils.ValueConverters
 {
-    // Denne bruger vi til placering af Shapes, som er en fællesbetegnelse for Ellipses og Rectangles.
+    // Used in GeometryEditorView for positioning of Shapes, i.e. Ellipses and Rectangles
     public class CoordinateToMagnifiableCanvasPositionConverter : IMultiValueConverter
     {
         public object Convert(
@@ -16,10 +16,10 @@ namespace Craft.UI.Utils.ValueConverters
             try
             {
                 var coordinate = (double)values[0];
-                var diameter = (double)values[1];
+                var extent = (double)values[1];
                 var magnification = (double)values[2];
 
-                return (coordinate - diameter / 2) * magnification;
+                return (coordinate - extent / 2) * magnification;
             }
             catch (Exception)
             {
