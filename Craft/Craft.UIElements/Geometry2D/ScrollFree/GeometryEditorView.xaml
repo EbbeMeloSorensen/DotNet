@@ -215,6 +215,7 @@
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                                 <Binding Path="Width"/>
                                 <Binding Path="Shift.X"/>
+                                <Binding Path="FixedViewPortXCoordinate"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
@@ -228,6 +229,7 @@
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                                 <Binding Path="Height"/>
                                 <Binding Path="Shift.Y"/>
+                                <Binding Path="FixedViewPortYCoordinate"/>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>

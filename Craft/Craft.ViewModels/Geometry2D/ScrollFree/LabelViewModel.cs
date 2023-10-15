@@ -73,5 +73,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         }
 
         public string Tag { get; set; }
+
+        public double? FixedViewPortXCoordinate { get; set; }
+        public double? FixedViewPortYCoordinate { get; set; }
     }
 }

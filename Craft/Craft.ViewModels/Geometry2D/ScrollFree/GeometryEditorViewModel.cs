@@ -514,7 +514,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double height,
             PointD shift,
             double opacity,
-            string tag = null)
+            string tag = null  )
         {
             LabelViewModels.Add(new LabelViewModel
             {

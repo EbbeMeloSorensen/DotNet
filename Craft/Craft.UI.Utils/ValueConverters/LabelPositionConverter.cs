@@ -24,6 +24,12 @@ namespace Craft.UI.Utils.ValueConverters
             var scale = (double)values[2];
             var extent = (double)values[3];
             var shift = (double)values[4];
+            var fixedViewPortCoordinate = (double?)values[5];
+
+            if (fixedViewPortCoordinate.HasValue)
+            {
+                return fixedViewPortCoordinate.Value;
+            }
 
             return (coordinate - upperLeft) * scale - extent / 2 + shift;
         }
