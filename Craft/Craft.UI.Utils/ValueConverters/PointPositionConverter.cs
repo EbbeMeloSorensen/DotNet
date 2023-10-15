@@ -23,9 +23,8 @@ namespace Craft.UI.Utils.ValueConverters
             var upperLeft = (double)values[1];
             var scale = (double)values[2];
             var extent = (double)values[3];
-            var shift = (double)values[4];
 
-            return (coordinate - upperLeft) * scale - extent / 2 + shift;
+            return (coordinate - upperLeft) * scale - extent / 2;
         }
 
         public object[] ConvertBack(
