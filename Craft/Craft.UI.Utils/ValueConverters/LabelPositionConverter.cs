@@ -4,8 +4,8 @@ using System.Windows.Data;
 
 namespace Craft.UI.Utils.ValueConverters
 {
-    // Used in GeometryEditorView for positioning of Points and Labels
-    public class CoordinateToCanvasPositionConverter : IMultiValueConverter
+    // Used in GeometryEditorView for positioning Labels
+    public class LabelPositionConverter : IMultiValueConverter
     {
         public object Convert(
             object[] values, 

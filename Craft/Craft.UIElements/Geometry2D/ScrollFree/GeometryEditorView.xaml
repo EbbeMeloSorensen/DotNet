@@ -164,7 +164,7 @@
                 <Style>
                     <Setter Property="Canvas.Left">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
+                            <MultiBinding Converter="{StaticResource LabelPositionConverter}">
                                 <Binding Path="Point.X"/>
                                 <Binding Path="DataContext.WorldWindowUpperLeft.X" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
@@ -177,7 +177,7 @@
                     </Setter>
                     <Setter Property="Canvas.Top">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
+                            <MultiBinding Converter="{StaticResource LabelPositionConverter}">
                                 <Binding Path="Point.Y"/>
                                 <Binding Path="DataContext.WorldWindowUpperLeft.Y" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
@@ -209,7 +209,7 @@
                 <Style>
                     <Setter Property="Canvas.Left">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
+                            <MultiBinding Converter="{StaticResource LabelPositionConverter}">
                                 <Binding Path="Point.X"/>
                                 <Binding Path="DataContext.WorldWindowUpperLeft.X" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>
@@ -222,7 +222,7 @@
                     </Setter>
                     <Setter Property="Canvas.Top">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource CoordinateToCanvasPositionConverter}">
+                            <MultiBinding Converter="{StaticResource LabelPositionConverter}">
                                 <Binding Path="Point.Y"/>
                                 <Binding Path="DataContext.WorldWindowUpperLeft.Y" 
                                          RelativeSource="{RelativeSource AncestorType=UserControl}"/>

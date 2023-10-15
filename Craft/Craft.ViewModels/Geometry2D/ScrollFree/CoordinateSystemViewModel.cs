@@ -157,7 +157,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             object? sender, 
             WorldWindowUpdatedEventArgs e)
         {
-            ClearLabels();
+            //ClearLabels();
         }
 
         public void ClearLabels()

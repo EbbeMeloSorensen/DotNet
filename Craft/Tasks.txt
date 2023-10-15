@@ -26,7 +26,7 @@ Done:
      uanset scaling. Bemærk, at du bruger et væld af forskellige teknikker til positionering af forskellige ting:
      - RenderTransform (med transformations-matricen) for polygoner, polylines, lines
      - CoordinateToMagnifiableCanvasPositionConverter for shapes (du vil gerne sætte Canvas.Left og Canvas.Top)
-     - CoordinateToCanvasPositionConverter for points
+     - PointPositionConverter for points
 * Labels på plads - dvs noget tekst, der lige som points bibeholder størrelse uanset skalering
 * Klikke på et punkt i et koordinatsystem og få information om, hvad der er klikket på
 * Refaktorer tegning af grid lines, så der tegnes så mange, at der ikke opstår "tomme" områder under panorering
