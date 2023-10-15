@@ -6,6 +6,7 @@
                     xmlns:scrollFree="clr-namespace:Craft.ViewModels.Geometry2D.ScrollFree;assembly=Craft.ViewModels">
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="NavajoWhite"/>
+    <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <valueConverters:ImagePathConverter x:Key="ImagePathConverter"/>
     <valueConverters:CoordinateToMagnifiableCanvasPositionConverter x:Key="CoordinateToMagnifiableCanvasPositionConverter"/>
     <valueConverters:CoordinateToCanvasPositionConverter x:Key="CoordinateToCanvasPositionConverter"/>
