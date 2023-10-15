@@ -503,9 +503,10 @@ namespace Craft.UIElements.GuiTest.Tab3
                 worldWindowSize,
                 false,
                 25,
-                25)
+                25,
+                1)
             {
-                LockWorldWindowOnDynamicXValue = false,
+                LockWorldWindowOnDynamicXValue = true,
             };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
@@ -524,7 +525,8 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 for (var x = x0; x <= x1; x += 0.1)
                 {
-                    points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
+                    //points.Add(new PointD(x, Math.Exp(-0.01 * x * x) * Math.Sin(3 * x))); // (gaussian and sinus)
+                    points.Add(new PointD(x, Math.Sin(0.1 * x) * Math.Sin(3 * x))); // (high frequency sinus enveloped by low frequency sinus)
                 }
 
                 CoordinateSystemViewModel.GeometryEditorViewModel.ClearPolylines();
@@ -563,6 +565,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 true,
                 25,
                 60,
+                1,
                 timeAtOrigo);
 
             TimeSeriesViewModel1.GeometryEditorViewModel.YAxisLocked = true;
@@ -604,6 +607,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 true,
                 25,
                 60,
+                1,
                 timeAtOrigo);
 
             TimeSeriesViewModel2.GeometryEditorViewModel.YAxisLocked = true;
@@ -657,7 +661,6 @@ namespace Craft.UIElements.GuiTest.Tab3
             if (CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue)
             {
                 CoordinateSystemViewModel.ShowDynamicXValue = true;
-                //CoordinateSystemViewModel.ClearLabels();
 
                 // Position the World Window so that the x value of interest is in the middle
                 CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(

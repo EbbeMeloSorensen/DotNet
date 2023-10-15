@@ -30,12 +30,24 @@ Done:
 * Labels på plads - dvs noget tekst, der lige som points bibeholder størrelse uanset skalering
 * Klikke på et punkt i et koordinatsystem og få information om, hvad der er klikket på
 * Refaktorer tegning af grid lines, så der tegnes så mange, at der ikke opstår "tomme" områder under panorering
+* Det fungerer fint med at lade en transformation afgøre placeringen af labels, men mon ikke man kunne slå x eller y fra, eller bare override med en viewport koordinat?
+  på den måde burde du kunne vise labels hele tiden - også når du panorerer, og så ville du slippe for det der med at skulle skjule labels
+* Når man aktiverer tracking af den der value of interest, så hopper labels hen det forkert sted (fixed)
+* Labels bør tegnes af CoordinateSystemViewet (og også de der margener - indtil videre har du dem kun i den bagvedliggende GeometryEditorViewModel, fordi du vil have labels foran)
+  -> Mnjoooh - du har fundet en fin løsning, hvor de stadig tegnes af GeometryEditorViewModel, og hvor du bruger en value converter, der tillader override af x eller y værdi med en viewport koordinat
 
 In progress:
-* Det funker fint med at lade en transformation afgøre placeringen af labels, men mon ikke man kunne slå x eller y fra, eller bare override med en viewport koordinat?
-  på den måde burde du kunne vise labels hele tiden - også når du panorerer, og så ville du slippe for det der pis med at skulle skjule labels
-* Når man aktiverer tracking af den der value of interest, så hopper labels hen det forkert sted
-* Labels bør tegnes af CoordinateSystemViewet (og også de der margener - indtil videre har du dem kun i den bagvedliggende GeometryEditorViewModel, fordi du vil have labels foran)
+* Når man er i tracking mode, svarer det til panorering, hvor der f.eks. ikke tegnes nye gridlines. 
+  Derfor driver den på et tidspunkt ud i det tomme område, hvor der ikke er tegnet noget.
+  Løsning: Den skal vedligeholde en variabel, der beskriver, hvor tæt den er på det vindue, der fremkommer ved at udvide world window i forbindelse 
+  med tegning af gridlines. Når så den er tæt på kanten, skal den kalde samme funktion, som kaldes fra Major Update.
+  Det kunne passende laves generelt, så det også kunne bruges i f.eks. spil.. og altså ikke være en del af CoordinateViewModel...
+  Indtil videre ligger det faktisk bare i Tab3ViewModel, der har en timer, og så er det den, der opdaterer det, der pt hedder DynamicXValue
+  og bagefter sætter World Window positionen. Husk i øvrigt lige på, at det altså er CoordinateSystemViewModellen, der tegner de der grid lines
+  under anvendelse af GeometryEditorViewModellens general purpose funktionalitet, så måske er det meget naturligt, at det er den, der afgør,
+  hvornår der skal gentegnes. Men hold lige fat i ideen - du vil jo f.eks. gerne lave noget Zelda-style sceneskift, som ikke afhænger af 
+  CoordinateViewModellen..
+
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines
 * Prøv i handleren for tick eventet at sætte World Window således at XValue Of Interest er i midten
   - Når man panorerer i vinduet, skal den holde op med at autoopdatere world vinduet (OK)

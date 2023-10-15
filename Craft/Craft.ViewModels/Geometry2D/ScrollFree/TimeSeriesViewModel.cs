@@ -29,7 +29,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             bool fitAspectRatio,
             double marginX,
             double marginY,
-            DateTime timeAtOrigo) : base(worldWindowFocus, worldWindowSize, fitAspectRatio, marginX, marginY)
+            double expansionFactor,
+            DateTime timeAtOrigo) : base(worldWindowFocus, worldWindowSize, fitAspectRatio, marginX, marginY, expansionFactor)
         {
             TimeAtOrigo = timeAtOrigo;
 
@@ -60,7 +61,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             if (ShowHorizontalGridLines)
             {
-                DrawHorizontalGridLinesAndLabels(x0, y0, x1, y1, dx, dy, thickness, 1.0);
+                DrawHorizontalGridLinesAndLabels(x0, dx, thickness);
             }
 
             if (ShowVerticalGridLines)

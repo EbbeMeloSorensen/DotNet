@@ -538,7 +538,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 Height = height,
                 Shift = shift,
                 Opacity = opacity,
-                Tag = tag,
                 FixedViewPortXCoordinate = fixedViewPortXCoordinate,
                 FixedViewPortYCoordinate = fixedViewPortYCoordinate
             });
@@ -570,32 +569,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             LineViewModels.Clear();
         }
 
-        public void ClearLabels(
-            string tag = null)
+        public void ClearLabels()
         {
-            if (tag == null)
-            {
-                LabelViewModels.Clear();
-            }
-            else
-            {
-                var again = true;
-
-                do
-                {
-                    var temp = LabelViewModels.FirstOrDefault(_ => _.Tag == tag);
-
-                    if (temp == null)
-                    {
-                        again = false;
-                    }
-                    else
-                    {
-                        LabelViewModels.Remove(temp);
-                    }
-
-                } while (again);
-            }
+            LabelViewModels.Clear();
         }
 
         public void FocusInCenterOfViewPort()
