@@ -648,7 +648,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         {
             // Update the x value of interest
             var elapsedTime = DateTime.UtcNow - _startTime;
-            CoordinateSystemViewModel.DynamicXValue = -2.0 + elapsedTime.TotalSeconds / 10;
+            CoordinateSystemViewModel.DynamicXValue = -2.0 + elapsedTime.TotalSeconds;
 
             // Figure out if the line representing the x value of interest should be visible
             var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
@@ -657,7 +657,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             if (CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue)
             {
                 CoordinateSystemViewModel.ShowDynamicXValue = true;
-                CoordinateSystemViewModel.ClearLabels();
+                //CoordinateSystemViewModel.ClearLabels();
 
                 // Position the World Window so that the x value of interest is in the middle
                 CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(

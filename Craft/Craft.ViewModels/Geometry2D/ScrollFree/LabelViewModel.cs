@@ -11,6 +11,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private PointD _shift;
         private string _text;
         private double _opacity;
+        public double? _fixedViewPortXCoordinate;
+        public double? _fixedViewPortYCoordinate;
 
         public PointD Point
         {
@@ -74,7 +76,24 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public string Tag { get; set; }
 
-        public double? FixedViewPortXCoordinate { get; set; }
-        public double? FixedViewPortYCoordinate { get; set; }
+        public double? FixedViewPortXCoordinate
+        {
+            get => _fixedViewPortXCoordinate;
+            set
+            {
+                _fixedViewPortXCoordinate = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double? FixedViewPortYCoordinate
+        {
+            get => _fixedViewPortYCoordinate;
+            set
+            {
+                _fixedViewPortYCoordinate = value;
+                RaisePropertyChanged();
+            }
+        }
     }
 }

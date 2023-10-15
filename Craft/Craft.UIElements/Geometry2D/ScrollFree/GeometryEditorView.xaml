@@ -129,7 +129,7 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
-        <Rectangle Fill="{Binding BackgroundBrush}" 
+        <Rectangle Fill="{Binding MarginBrush}" 
                    Width="{Binding MarginLeft}" 
                    Height="{Binding ViewPortSize.Height}">
             <Rectangle.Visibility>
@@ -141,7 +141,7 @@
             </Rectangle.Visibility>
         </Rectangle>
 
-        <Rectangle Fill="{Binding BackgroundBrush}" 
+        <Rectangle Fill="{Binding MarginBrush}" 
                    Height="{Binding MarginBottom}" 
                    Width="{Binding ViewPortSize.Width}"
                    Canvas.Top="{Binding MarginBottomOffset}">

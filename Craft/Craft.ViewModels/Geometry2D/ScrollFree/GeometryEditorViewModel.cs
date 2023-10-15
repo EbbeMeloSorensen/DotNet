@@ -28,6 +28,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Matrix _transformationMatrix;
         private Brush _defaultBrush;
         private Brush _backgroundBrush;
+        private Brush _marginBrush;
         private Dictionary<int, ShapeViewModel> _shapeViewModelMap;
         private bool _xAxisLocked;
         private bool _yAxisLocked;
@@ -239,6 +240,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public Brush MarginBrush
+        {
+            get => _marginBrush;
+            set
+            {
+                _marginBrush = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ObservableCollection<PolygonViewModel> PolygonViewModels { get; }
 
         public ObservableCollection<PolylineViewModel> PolylineViewModels { get; }
@@ -306,6 +317,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected GeometryEditorViewModel()
         {
             _backgroundBrush = new SolidColorBrush(Colors.WhiteSmoke);
+            _marginBrush = new SolidColorBrush(Colors.White);
             _defaultBrush = new SolidColorBrush(Colors.Black);
             _shapeViewModelMap = new Dictionary<int, ShapeViewModel>();
 
@@ -514,7 +526,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double height,
             PointD shift,
             double opacity,
-            string tag = null  )
+            string tag = null,
+            double? fixedViewPortXCoordinate = null,
+            double? fixedViewPortYCoordinate = null)
         {
             LabelViewModels.Add(new LabelViewModel
             {
@@ -524,7 +538,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 Height = height,
                 Shift = shift,
                 Opacity = opacity,
-                Tag = tag
+                Tag = tag,
+                FixedViewPortXCoordinate = fixedViewPortXCoordinate,
+                FixedViewPortYCoordinate = fixedViewPortYCoordinate
             });
         }
 

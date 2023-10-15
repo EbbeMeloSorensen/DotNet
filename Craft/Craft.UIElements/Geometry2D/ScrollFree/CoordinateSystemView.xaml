@@ -16,6 +16,13 @@
     <Grid>
         <local:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
         <Canvas>
+            <Rectangle Fill="{Binding GeometryEditorViewModel.MarginBrush}"
+                       Canvas.Top="{Binding GeometryEditorViewModel.MarginBottomOffset}"
+                       Width="{Binding GeometryEditorViewModel.MarginLeft}" 
+                       Height="{Binding GeometryEditorViewModel.MarginBottom}">
+
+            </Rectangle>
+
             <!-- Vertical line representing x value of interest -->
             <Line Stroke="Purple"
                   StrokeThickness="1"

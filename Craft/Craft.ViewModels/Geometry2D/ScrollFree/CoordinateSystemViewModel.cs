@@ -133,9 +133,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             GeometryEditorViewModel.WorldWindowMajorUpdateOccured += 
                 GeometryEditorViewModel_WorldWindowMajorUpdateOccured;
-
-            GeometryEditorViewModel.WorldWindowUpdateOccured += 
-                GeometryEditorViewModel_WorldWindowUpdateOccured;
         }
 
         private void GeometryEditorViewModel_PropertyChanged(
@@ -148,31 +145,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 {
                     GeometryEditorViewModel.MarginBottomOffset = 
                         GeometryEditorViewModel.ViewPortSize.Height - GeometryEditorViewModel.MarginBottom;
+
                     break;
                 }
-            }
-        }
-
-        private void GeometryEditorViewModel_WorldWindowUpdateOccured(
-            object? sender, 
-            WorldWindowUpdatedEventArgs e)
-        {
-            //ClearLabels();
-        }
-
-        public void ClearLabels()
-        {
-            if (GeometryEditorViewModel.XAxisLocked)
-            {
-                GeometryEditorViewModel.ClearLabels("x");
-            }
-            else if (GeometryEditorViewModel.YAxisLocked)
-            {
-                GeometryEditorViewModel.ClearLabels("y");
-            }
-            else
-            {
-                GeometryEditorViewModel.ClearLabels();
             }
         }
 
@@ -266,17 +241,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 var text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture);
 
-                if (y > y0 + dy && y < y1)
-                {
-                    GeometryEditorViewModel.AddLabel(
-                        text,
-                        new PointD(x0 + dx * 0.8, y),
-                        20,
-                        20,
-                        new PointD(-10, 0),
-                        0.0,
-                        "y");
-                }
+                // Place a label with a the coordinate to the left of the grid line
+                GeometryEditorViewModel.AddLabel(
+                    text,
+                    new PointD(x0 + dx * 0.8, y),
+                    20,
+                    20,
+                    new PointD(-10, 0),
+                    0.0,
+                    "y",
+                    0);
 
                 y += lineSpacingY_World;
             }
@@ -341,7 +315,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 var dateAsText = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture);
 
-                // Place label at ticks
+                // Place a label with a the coordinate under the grid line
                 GeometryEditorViewModel.AddLabel(
                     dateAsText,
                     new PointD(x, y0 + dy),
@@ -349,7 +323,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     labelHeight,
                     new PointD(0, labelHeight / 2),
                     0.0,
-                    "x");
+                    "x",
+                    null,
+                    GeometryEditorViewModel.MarginBottomOffset);
 
                 x += lineSpacingX_World;
             }
