@@ -443,6 +443,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                         OnWorldWindowMajorUpdateOccured();
                     }
+                        
+                    MarginBottomOffset = ViewPortSize.Height - MarginBottom;
+
                     break;
             }
         }

@@ -134,15 +134,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     ShowMarginBottom = marginY > 0
                 };
 
-            GeometryEditorViewModel.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == "ViewPortSize")
-                {
-                    GeometryEditorViewModel.MarginBottomOffset =
-                        GeometryEditorViewModel.ViewPortSize.Height - GeometryEditorViewModel.MarginBottom;
-                }
-            };
-
             GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
                 UpdateCoordinateSystemForGeometryEditorViewModel();
