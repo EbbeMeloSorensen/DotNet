@@ -107,7 +107,7 @@
                 <Style>
                     <Setter Property="Canvas.Left">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource CoordinateToMagnifiableCanvasPositionConverter}">
+                            <MultiBinding Converter="{StaticResource ShapePositionConverter}">
                                 <Binding Path="Point.X"/>
                                 <Binding Path="Width"/>
                                 <Binding Path="DataContext.Scaling.Width" 
@@ -117,7 +117,7 @@
                     </Setter>
                     <Setter Property="Canvas.Top">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource CoordinateToMagnifiableCanvasPositionConverter}">
+                            <MultiBinding Converter="{StaticResource ShapePositionConverter}">
                                 <Binding Path="Point.Y"/>
                                 <Binding Path="Height"/>
                                 <Binding Path="DataContext.Scaling.Height" 

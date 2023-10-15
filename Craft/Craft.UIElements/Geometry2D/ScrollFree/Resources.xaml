@@ -8,7 +8,7 @@
     <SolidColorBrush x:Key="BackgroundBrush" Color="NavajoWhite"/>
     <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <valueConverters:ImagePathConverter x:Key="ImagePathConverter"/>
-    <valueConverters:CoordinateToMagnifiableCanvasPositionConverter x:Key="CoordinateToMagnifiableCanvasPositionConverter"/>
+    <valueConverters:ShapePositionConverter x:Key="ShapePositionConverter"/>
     <valueConverters:LabelPositionConverter x:Key="LabelPositionConverter"/>
     <valueConverters:DoubleScaler x:Key="DoubleScaler"/>
     <scrollFree:ShapeTemplateSelector x:Key="ShapeTemplateSelector"/>

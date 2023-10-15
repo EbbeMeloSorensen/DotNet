@@ -5,7 +5,7 @@ using System.Windows.Data;
 namespace Craft.UI.Utils.ValueConverters
 {
     // Used in GeometryEditorView for positioning of Shapes, i.e. Ellipses and Rectangles
-    public class CoordinateToMagnifiableCanvasPositionConverter : IMultiValueConverter
+    public class ShapePositionConverter : IMultiValueConverter
     {
         public object Convert(
             object[] values, 
