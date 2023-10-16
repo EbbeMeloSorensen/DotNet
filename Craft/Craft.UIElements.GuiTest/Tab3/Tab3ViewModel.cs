@@ -512,7 +512,6 @@ namespace Craft.UIElements.GuiTest.Tab3
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
                 CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue = false;
-                UpdateXValueOfInterestForCoordinateSystemViewModel();
             };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
@@ -532,8 +531,6 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 CoordinateSystemViewModel.GeometryEditorViewModel.ClearPolylines();
                 CoordinateSystemViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
-
-                UpdateXValueOfInterestForCoordinateSystemViewModel();
             };
 
             var timer = new DispatcherTimer
@@ -663,21 +660,11 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 CoordinateSystemViewModel.ShowDynamicXValue = true;
 
-                // Calculate next World Window Position
-                var nextWorldWindowUpperLeft = new Point(
+                // Position the World Window so that the x value of interest is in the middle
+                CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
                     CoordinateSystemViewModel.DynamicXValue -
                     CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width / 2,
                     CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
-
-                // Determine if the next World Window is enclosed by the expanded world window
-                if (!CoordinateSystemViewModel.EnclosedByExpandedWorldWindow(nextWorldWindowUpperLeft))
-                {
-                    throw new NotImplementedException();
-                }
-
-                // Position the World Window so that the x value of interest is in the middle
-                CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft =
-                    nextWorldWindowUpperLeft;
             }
             else
             {
