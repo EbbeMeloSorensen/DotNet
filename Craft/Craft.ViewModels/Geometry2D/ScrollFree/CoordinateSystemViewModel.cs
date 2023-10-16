@@ -138,6 +138,17 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 UpdateCoordinateSystemForGeometryEditorViewModel();
             };
+
+            GeometryEditorViewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName != "WorldWindowUpperLeft") return;
+
+                if (!IsWorldWindowEnclosedByExpandedWorldWindow())
+                {
+                    UpdateCoordinateSystemForGeometryEditorViewModel();
+                    GeometryEditorViewModel.OnWorldWindowMajorUpdateOccured();
+                }
+            };
         }
 
         protected virtual void UpdateCoordinateSystemForGeometryEditorViewModel()
@@ -299,14 +310,13 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        public bool EnclosedByExpandedWorldWindow(
-            Point nextWorldWindowUpperLeft)
+        private bool IsWorldWindowEnclosedByExpandedWorldWindow()
         {
             return
-                nextWorldWindowUpperLeft.X > _expandedWorldWindowUpperLeft.X &&
-                nextWorldWindowUpperLeft.Y > _expandedWorldWindowUpperLeft.Y &&
-                nextWorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width < _expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width &&
-                nextWorldWindowUpperLeft.Y + GeometryEditorViewModel.WorldWindowSize.Height < _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height;
+                GeometryEditorViewModel.WorldWindowUpperLeft.X > _expandedWorldWindowUpperLeft.X &&
+                GeometryEditorViewModel.WorldWindowUpperLeft.Y > _expandedWorldWindowUpperLeft.Y &&
+                GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width < _expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width &&
+                GeometryEditorViewModel.WorldWindowUpperLeft.Y + GeometryEditorViewModel.WorldWindowSize.Height < _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height;
         }
     }
 }

@@ -28,8 +28,10 @@ namespace Craft.UIElements.GuiTest.Tab3
         private double _y0 = -1.0;
         private double _y1 = 1.0;
 
-        private int _worldWindowUpdateCount;
-        private int _worldWindowMajorUpdateCount;
+        private int _worldWindowUpdateCountForGeometryEditorViewModel4;
+        private int _worldWindowMajorUpdateCountForGeometryEditorViewModel4;
+        private int _worldWindowUpdateCountForCoordinateSystemViewModel;
+        private int _worldWindowMajorUpdateCountForCoordinateSystemViewModel;
         private string _cursorPositionAsText;
         private string _timeAtMousePositionAsText1;
         private string _timeAtMousePositionAsText2;
@@ -40,22 +42,42 @@ namespace Craft.UIElements.GuiTest.Tab3
         private RelayCommand _zoomInForGeometryEditor2Command;
         private RelayCommand _zoomOutForGeometryEditor2Command;
 
-        public int WorldWindowUpdateCount
+        public int WorldWindowUpdateCountForGeometryEditorViewModel4
         {
-            get { return _worldWindowUpdateCount; }
+            get { return _worldWindowUpdateCountForGeometryEditorViewModel4; }
             set
             {
-                _worldWindowUpdateCount = value;
+                _worldWindowUpdateCountForGeometryEditorViewModel4 = value;
                 RaisePropertyChanged();
             }
         }
 
-        public int WorldWindowMajorUpdateCount
+        public int WorldWindowMajorUpdateCountForGeometryEditorViewModel4
         {
-            get { return _worldWindowMajorUpdateCount; }
+            get { return _worldWindowMajorUpdateCountForGeometryEditorViewModel4; }
             set
             {
-                _worldWindowMajorUpdateCount = value;
+                _worldWindowMajorUpdateCountForGeometryEditorViewModel4 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int WorldWindowUpdateCountForCoordinateSystemViewModel
+        {
+            get { return _worldWindowUpdateCountForCoordinateSystemViewModel; }
+            set
+            {
+                _worldWindowUpdateCountForCoordinateSystemViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int WorldWindowMajorUpdateCountForCoordinateSystemViewModel
+        {
+            get { return _worldWindowMajorUpdateCountForCoordinateSystemViewModel; }
+            set
+            {
+                _worldWindowMajorUpdateCountForCoordinateSystemViewModel = value;
                 RaisePropertyChanged();
             }
         }
@@ -463,13 +485,13 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             GeometryEditorViewModel4.WorldWindowUpdateOccured += (s, e) => 
             {
-                WorldWindowUpdateCount++;
+                WorldWindowUpdateCountForGeometryEditorViewModel4++;
                 GeometryEditorViewModel4.ClearLabels();
             };
 
             GeometryEditorViewModel4.WorldWindowMajorUpdateOccured += (s, e) => 
             {
-                WorldWindowMajorUpdateCount++;
+                WorldWindowMajorUpdateCountForGeometryEditorViewModel4++;
 
                 // Notice that world window coordinates are always given in "non-inverted" coordinates,
                 // so we need to invert the y coordinate
@@ -506,16 +528,19 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 1)
             {
-                LockWorldWindowOnDynamicXValue = false,
+                LockWorldWindowOnDynamicXValue = true,
             };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
+                WorldWindowUpdateCountForCoordinateSystemViewModel++;
                 CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue = false;
             };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
+                WorldWindowMajorUpdateCountForCoordinateSystemViewModel++;
+
                 // Update the function curve
                 // Todo: Use the expanded world window owned by the coordinate system view model instead of just assuming it is expanded by a factor of 1
                 var x0 = e.WorldWindowUpperLeft.X - e.WorldWindowSize.Width;
