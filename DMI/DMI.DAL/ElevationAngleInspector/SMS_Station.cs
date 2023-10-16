@@ -2,11 +2,7 @@ namespace ElevationAngleInspector
 {
     public class SMS_Station
     {
-        public int stationid_dmi { get; set; }
-        
-        public string stationname { get; set; }
-        public double? wgs_lat { get; set; }
-        public double? wgs_long { get; set; }
+        public int? stationid_dmi { get; set; }
         public DateTime datefrom { get; set; }
         public int? angle_n { get; set; }
         public int? angle_ne { get; set; }
@@ -20,6 +16,7 @@ namespace ElevationAngleInspector
 
         public override string ToString()
         {
+            var stationid_dmi_asString = stationid_dmi.HasValue ? stationid_dmi.Value.ToString() : "null";
             var angle_n_asString = angle_n.HasValue ? angle_n.Value.ToString() : "null";
             var angle_ne_asString = angle_ne.HasValue ? angle_ne.Value.ToString() : "null";
             var angle_e_asString = angle_e.HasValue ? angle_e.Value.ToString() : "null";
@@ -31,7 +28,8 @@ namespace ElevationAngleInspector
             var angleindex_asString = angleindex.HasValue ? angleindex.Value.ToString() : "null";
 
             return
-                $"{stationid_dmi, -10}, {stationname, -40}, {wgs_lat, -12}, {wgs_long, -12}, {datefrom.AsShortDateString(), -10}, " + 
+                $"{stationid_dmi_asString, -10}, " + 
+                $"{datefrom.AsShortDateString(), -10}, " + 
                 $"{angle_n_asString, 5}, " + 
                 $"{angle_ne_asString, 5}, " +
                 $"{angle_e_asString, 5}, " +
