@@ -15,6 +15,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private bool _showVerticalAxis;
         private bool _showHorizontalGridLines;
         private bool _showVerticalGridLines;
+        private double _staticXValue;
+        private double _staticXValueViewPort;
+        private bool _showStaticXValue;
         private double _dynamicXValue;
         private double _dynamicXValueViewPort;
         private bool _showDynamicXValue;
@@ -23,6 +26,59 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Point _expandedWorldWindowUpperLeft;
         private Size _expandedWorldWindowSize;
 
+        public double StaticXValue
+        {
+            get => _staticXValue;
+            set
+            {
+                _staticXValue = value;
+                UpdateStaticXValueViewPort();
+                RaisePropertyChanged();
+            }
+        }
+
+        private void UpdateStaticXValueViewPort()
+        {
+            StaticXValueViewPort =
+                GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_staticXValue);
+        }
+
+        public double StaticXValueViewPort
+        {
+            get => _staticXValueViewPort;
+            set
+            {
+                _staticXValueViewPort = value;
+
+                // Figure out if the line representing the static x value should be visible
+                var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
+                var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
+
+                var marginInWorldDistance = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
+
+                ShowStaticXValue =
+                    StaticXValue >= x0 + marginInWorldDistance &&
+                    StaticXValue <= x1;
+
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowStaticXValue
+        {
+            get => _showStaticXValue;
+            set
+            {
+                _showStaticXValue = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        // This Value is highlighted with a vertical line in the coordinate system.
+        // The host of the CoordinateSystemViewModel may assign the "UpdateModelCallback" callback function to
+        // a method where it sets the Dynamic XValue property to an arbitrary value.
+        // If the CoordinateSystemViewModel is configured for focusing on the dynamic x value, the World Window
+        // will also move, when the dynamic x value is updated.
         public double DynamicXValue
         {
             get => _dynamicXValue;
@@ -32,6 +88,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 DynamicXValueViewPort =
                     GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_dynamicXValue);
+
+                StaticXValue = StaticXValue; // Ikke naturligt at sætte den her.. Det skal gerne være uafhængigt af den dynamiske
+                                             // Måske burde man alligevel operere med, at den tegnes af den underliggende GeometryEditorViewModel
+                                             // Mnjaaaah borset fra at du gerne vil lade den være uafhængig af din collection af lines..
 
                 RaisePropertyChanged();
             }
@@ -43,6 +103,29 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _dynamicXValueViewPort = value;
+
+                if (LockWorldWindowOnDynamicXValue)
+                {
+                    ShowDynamicXValue = true;
+
+                    // Position the World Window so that the x value of interest is in the middle
+                    GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                        DynamicXValue - GeometryEditorViewModel.WorldWindowSize.Width / 2,
+                        GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+                }
+                else
+                {
+                    // Figure out if the line representing the x value of interest should be visible
+                    var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
+                    var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
+
+                    var marginInWorldDistance = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
+
+                    ShowDynamicXValue =
+                        DynamicXValue >= x0 + marginInWorldDistance &&
+                        DynamicXValue <= x1;
+                }
+
                 RaisePropertyChanged();
             }
         }
@@ -134,9 +217,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     ShowMarginBottom = marginY > 0
                 };
 
+            GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
+            {
+                UpdateStaticXValueViewPort();
+            };
+
             GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
                 UpdateCoordinateSystemForGeometryEditorViewModel();
+                UpdateStaticXValueViewPort();
             };
 
             GeometryEditorViewModel.PropertyChanged += (s, e) =>

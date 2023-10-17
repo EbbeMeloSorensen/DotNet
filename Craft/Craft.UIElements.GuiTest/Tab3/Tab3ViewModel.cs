@@ -532,6 +532,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 1)
             {
                 LockWorldWindowOnDynamicXValue = true,
+                StaticXValue = 4.0
             };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
@@ -569,37 +570,13 @@ namespace Craft.UIElements.GuiTest.Tab3
                 /////////////////////////////////////////////////////////////////////////////////////////
                 // Her er vi, når der fra User Controllen kommer en anmodning om at der skal gentegnes //
                 // dvs det sker ret tit...                                                             //
-                // NÅR det sker, har man mulighed for at flytte på World Window                        //
+                // NÅR det sker, har man mulighed for at opdatere DynamicXValue, hvilket så kan        //
+                // udvirke, at WorldWindow flyttes                                                     //
                 /////////////////////////////////////////////////////////////////////////////////////////
 
                 // Update the x value of interest
                 var secondsElapsed = 0.001 * _stopwatch.Elapsed.TotalMilliseconds;
-                CoordinateSystemViewModel.DynamicXValue = -2.0 + secondsElapsed;
-
-                if (CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue)
-                {
-                    CoordinateSystemViewModel.ShowDynamicXValue = true;
-
-                    // Position the World Window so that the x value of interest is in the middle
-                    CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
-                        CoordinateSystemViewModel.DynamicXValue -
-                        CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width / 2,
-                        CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
-                }
-                else
-                {
-                    // Figure out if the line representing the x value of interest should be visible
-                    var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
-                    var x1 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
-
-                    var marginInWorldDistance =
-                        CoordinateSystemViewModel.GeometryEditorViewModel.MarginLeft /
-                        CoordinateSystemViewModel.GeometryEditorViewModel.Scaling.Width;
-
-                    CoordinateSystemViewModel.ShowDynamicXValue =
-                        CoordinateSystemViewModel.DynamicXValue >= x0 + marginInWorldDistance &&
-                        CoordinateSystemViewModel.DynamicXValue <= x1;
-                }
+                //CoordinateSystemViewModel.DynamicXValue = -2.0 + secondsElapsed;
             };
         }
 
