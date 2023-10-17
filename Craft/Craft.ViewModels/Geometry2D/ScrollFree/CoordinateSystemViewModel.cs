@@ -139,18 +139,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 UpdateCoordinateSystemForGeometryEditorViewModel();
             };
 
-            //GeometryEditorViewModel.PropertyChanged += (s, e) =>
-            //{
-            //    if (e.PropertyName != "WorldWindowUpperLeft") return;
+            GeometryEditorViewModel.PropertyChanged += (s, e) =>
+            {
+                if (!LockWorldWindowOnDynamicXValue ||
+                    e.PropertyName != "WorldWindowUpperLeft" ||
+                    IsWorldWindowEnclosedByExpandedWorldWindow()) return;
 
-            //    if (!IsWorldWindowEnclosedByExpandedWorldWindow())
-            //    {
-            //        UpdateCoordinateSystemForGeometryEditorViewModel();
-            //        GeometryEditorViewModel.OnWorldWindowMajorUpdateOccured();
-            //    }
-            //};
-
-            //GeometryEditorViewModel.UpdateModelCallBack = UpdateModel;
+                UpdateCoordinateSystemForGeometryEditorViewModel();
+                GeometryEditorViewModel.OnWorldWindowMajorUpdateOccured();
+            };
         }
 
         //private void UpdateModel()

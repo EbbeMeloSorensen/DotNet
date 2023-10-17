@@ -545,7 +545,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 WorldWindowMajorUpdateCountForCoordinateSystemViewModel++;
 
                 // Få lige grid tegning på plads, og tag så kurven bagefter
-                return;
+                //return;
 
                 // Update the function curve
                 // Todo: Use the expanded world window owned by the coordinate system view model instead of just assuming it is expanded by a factor of 1
