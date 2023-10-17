@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Geometry2D.Scrolling;
+using System.Diagnostics;
 
 namespace Craft.UIElements.GuiTest.Tab3
 {
@@ -35,7 +36,8 @@ namespace Craft.UIElements.GuiTest.Tab3
         private string _cursorPositionAsText;
         private string _timeAtMousePositionAsText1;
         private string _timeAtMousePositionAsText2;
-        private DateTime _startTime;
+        private Stopwatch _stopwatch;
+        //private DateTime _startTime;
 
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
@@ -190,6 +192,9 @@ namespace Craft.UIElements.GuiTest.Tab3
             DrawAHouse(GeometryEditorViewModel2);
 
             DrawACoordinateSystem(GeometryEditorViewModel3);
+
+            _stopwatch = new Stopwatch();
+            _stopwatch.Start();
         }
 
         private void DrawAHouse(
@@ -558,19 +563,55 @@ namespace Craft.UIElements.GuiTest.Tab3
                 CoordinateSystemViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
             };
 
-            var timer = new DispatcherTimer
+            CoordinateSystemViewModel.GeometryEditorViewModel.UpdateModelCallBack = () =>
             {
-                Interval = new TimeSpan(100000)
+                // Her er vi, når der fra User Controllen kommer en anmodning om at der skal gentegnes
+                // dvs det sker ret tit...
+                // NÅR det sker, har man mulighed for at flytte på World Window
+
+                // Update the x value of interest
+                var secondsElapsed = 0.001 * _stopwatch.Elapsed.TotalMilliseconds;
+                CoordinateSystemViewModel.DynamicXValue = -2.0 + secondsElapsed;
+
+                if (CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue)
+                {
+                    CoordinateSystemViewModel.ShowDynamicXValue = true;
+
+                    // Position the World Window so that the x value of interest is in the middle
+                    CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                        CoordinateSystemViewModel.DynamicXValue -
+                        CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width / 2,
+                        CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+                }
+                else
+                {
+                    // Figure out if the line representing the x value of interest should be visible
+                    var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
+                    var x1 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
+
+                    var marginInWorldDistance =
+                        CoordinateSystemViewModel.GeometryEditorViewModel.MarginLeft /
+                        CoordinateSystemViewModel.GeometryEditorViewModel.Scaling.Width;
+
+                    CoordinateSystemViewModel.ShowDynamicXValue =
+                        CoordinateSystemViewModel.DynamicXValue >= x0 + marginInWorldDistance &&
+                        CoordinateSystemViewModel.DynamicXValue <= x1;
+                }
             };
 
-            timer.Tick += (s, e) =>
-            {
-                UpdateXValueOfInterestForCoordinateSystemViewModel();
-            };
+            //var timer = new DispatcherTimer
+            //{
+            //    Interval = new TimeSpan(100000)
+            //};
 
-            _startTime = DateTime.UtcNow;
+            //timer.Tick += (s, e) =>
+            //{
+            //    UpdateXValueOfInterestForCoordinateSystemViewModel();
+            //};
 
-            timer.Start();
+            //_startTime = DateTime.UtcNow;
+
+            //timer.Start();
         }
 
         private void InitializeTimeSeriesViewModel1()
@@ -671,36 +712,36 @@ namespace Craft.UIElements.GuiTest.Tab3
             };
         }
 
-        private void UpdateXValueOfInterestForCoordinateSystemViewModel()
-        {
-            // Update the x value of interest
-            var elapsedTime = DateTime.UtcNow - _startTime;
-            CoordinateSystemViewModel.DynamicXValue = -2.0 + elapsedTime.TotalSeconds;
+        //private void UpdateXValueOfInterestForCoordinateSystemViewModel()
+        //{
+        //    // Update the x value of interest
+        //    var elapsedTime = DateTime.UtcNow - _startTime;
+        //    CoordinateSystemViewModel.DynamicXValue = -2.0 + elapsedTime.TotalSeconds;
 
-            // Figure out if the line representing the x value of interest should be visible
-            var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
-            var x1 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
+        //    // Figure out if the line representing the x value of interest should be visible
+        //    var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
+        //    var x1 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
 
-            if (CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue)
-            {
-                CoordinateSystemViewModel.ShowDynamicXValue = true;
+        //    if (CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue)
+        //    {
+        //        CoordinateSystemViewModel.ShowDynamicXValue = true;
 
-                // Position the World Window so that the x value of interest is in the middle
-                CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
-                    CoordinateSystemViewModel.DynamicXValue -
-                    CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width / 2,
-                    CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
-            }
-            else
-            {
-                var marginInWorldDistance =
-                    CoordinateSystemViewModel.GeometryEditorViewModel.MarginLeft /
-                    CoordinateSystemViewModel.GeometryEditorViewModel.Scaling.Width;
+        //        // Position the World Window so that the x value of interest is in the middle
+        //        CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+        //            CoordinateSystemViewModel.DynamicXValue -
+        //            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width / 2,
+        //            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+        //    }
+        //    else
+        //    {
+        //        var marginInWorldDistance =
+        //            CoordinateSystemViewModel.GeometryEditorViewModel.MarginLeft /
+        //            CoordinateSystemViewModel.GeometryEditorViewModel.Scaling.Width;
 
-                CoordinateSystemViewModel.ShowDynamicXValue =
-                    CoordinateSystemViewModel.DynamicXValue >= x0 + marginInWorldDistance &&
-                    CoordinateSystemViewModel.DynamicXValue <= x1;
-            }
-        }
+        //        CoordinateSystemViewModel.ShowDynamicXValue =
+        //            CoordinateSystemViewModel.DynamicXValue >= x0 + marginInWorldDistance &&
+        //            CoordinateSystemViewModel.DynamicXValue <= x1;
+        //    }
+        //}
     }
 }
