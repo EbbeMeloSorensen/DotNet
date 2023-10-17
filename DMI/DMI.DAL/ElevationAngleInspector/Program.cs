@@ -124,104 +124,124 @@ catch (PostgresException excp)
     throw excp;
 }
 
+var smsReportLines = new List<SMS_Report_Line>();
+
 // Traverse the collection of elevation angle sets from sms and compare with statdb
-using (var streamWriter = new StreamWriter("elevation_angles_sms_vs_statdb.txt"))
+foreach(var sms_station in sms_stations)
 {
-    foreach(var sms_station in sms_stations)
+    var smsReportLine = new SMS_Report_Line();
+    smsReportLine.stationid_dmi = sms_station.stationid_dmi;
+    smsReportLine.datefrom = sms_station.datefrom;
+    smsReportLine.angle_n = sms_station.angle_n;
+    smsReportLine.angle_ne = sms_station.angle_ne;
+    smsReportLine.angle_e = sms_station.angle_e;
+    smsReportLine.angle_se = sms_station.angle_se;
+    smsReportLine.angle_s = sms_station.angle_s;
+    smsReportLine.angle_sw = sms_station.angle_sw;
+    smsReportLine.angle_w = sms_station.angle_w;
+    smsReportLine.angle_nw = sms_station.angle_nw;
+    smsReportLine.angleindex = sms_station.angleindex;
+
+    if (!sms_station.stationid_dmi.HasValue)
     {
-        var line = sms_station.ToString();
+        smsReportLine.comment = "station id missing in sms database";
+    }
+    else
+    {
+        // Try to find a matching elevation angle set in the elevation angle list from statdb
+        var elevationAngleSetsFromStatDB = statdb_stations
+            .Where(_ => _.statid / 100 == sms_station.stationid_dmi && _.start_time == sms_station.datefrom);
 
-        if (!sms_station.stationid_dmi.HasValue)
+        if (!elevationAngleSetsFromStatDB.Any())
         {
-            line += ",  station id missing in sms database";
+            smsReportLine.comment = "no elevation angle set for given station id and date in statdb";
         }
-        else
+        else if (elevationAngleSetsFromStatDB.Count() > 1)
         {
-            // Try to find a matching elevation angle set in the elevation angle list from statdb
-            var elevationAngleSetsFromStatDB = statdb_stations
-                .Where(_ => _.statid / 100 == sms_station.stationid_dmi && _.start_time == sms_station.datefrom);
+            var distinctNValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_n).Distinct();
+            var distinctNEValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_ne).Distinct();
+            var distinctEValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_e).Distinct();
+            var distinctSEValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_se).Distinct();
+            var distinctSValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_s).Distinct();
+            var distinctSWValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_sw).Distinct();
+            var distinctWValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_w).Distinct();
+            var distinctNWValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_nw).Distinct();
+            var distinctIndexValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindexindex).Distinct();
 
-            if (!elevationAngleSetsFromStatDB.Any())
+            if (distinctNValues.Count() == 1 &&
+                distinctNEValues.Count() == 1 &&
+                distinctEValues.Count() == 1 &&
+                distinctSEValues.Count() == 1 &&
+                distinctSValues.Count() == 1 &&
+                distinctSWValues.Count() == 1 &&
+                distinctWValues.Count() == 1 &&
+                distinctNWValues.Count() == 1 &&
+                distinctIndexValues.Count() == 1)
             {
-                line += ",  no elevation angle set for given station id and date in statdb";
-            }
-            else if (elevationAngleSetsFromStatDB.Count() > 1)
-            {
-                var distinctNValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_n).Distinct();
-                var distinctNEValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_ne).Distinct();
-                var distinctEValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_e).Distinct();
-                var distinctSEValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_se).Distinct();
-                var distinctSValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_s).Distinct();
-                var distinctSWValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_sw).Distinct();
-                var distinctWValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_w).Distinct();
-                var distinctNWValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindex_nw).Distinct();
-                var distinctIndexValues = elevationAngleSetsFromStatDB.Select(_ => _.leeindexindex).Distinct();
+                var nValue = distinctNValues.Single();
+                var neValue = distinctNEValues.Single();
+                var eValue = distinctEValues.Single();
+                var seValue = distinctSEValues.Single();
+                var sValue = distinctSValues.Single();
+                var swValue = distinctSWValues.Single();
+                var wValue = distinctWValues.Single();
+                var nwValue = distinctNWValues.Single();
+                var indexValue = distinctIndexValues.Single();
 
-                if (distinctNValues.Count() == 1 &&
-                    distinctNEValues.Count() == 1 &&
-                    distinctEValues.Count() == 1 &&
-                    distinctSEValues.Count() == 1 &&
-                    distinctSValues.Count() == 1 &&
-                    distinctSWValues.Count() == 1 &&
-                    distinctWValues.Count() == 1 &&
-                    distinctNWValues.Count() == 1 &&
-                    distinctIndexValues.Count() == 1)
+                if (sms_station.angle_n == nValue &&
+                    sms_station.angle_ne == neValue &&
+                    sms_station.angle_e == eValue &&
+                    sms_station.angle_se == seValue &&
+                    sms_station.angle_s == sValue &&
+                    sms_station.angle_sw == swValue &&
+                    sms_station.angle_w == wValue &&
+                    sms_station.angle_nw == nwValue &&
+                    sms_station.angleindex == indexValue)
                 {
-                    var nValue = distinctNValues.Single();
-                    var neValue = distinctNEValues.Single();
-                    var eValue = distinctEValues.Single();
-                    var seValue = distinctSEValues.Single();
-                    var sValue = distinctSValues.Single();
-                    var swValue = distinctSWValues.Single();
-                    var wValue = distinctWValues.Single();
-                    var nwValue = distinctNWValues.Single();
-                    var indexValue = distinctIndexValues.Single();
-
-                    if (sms_station.angle_n == nValue &&
-                        sms_station.angle_ne == neValue &&
-                        sms_station.angle_e == eValue &&
-                        sms_station.angle_se == seValue &&
-                        sms_station.angle_s == sValue &&
-                        sms_station.angle_sw == swValue &&
-                        sms_station.angle_w == wValue &&
-                        sms_station.angle_nw == nwValue &&
-                        sms_station.angleindex == indexValue)
-                    {
-                        //line += ",  match (multiple representations in statdb)";
-                        line += ",  match";
-                    }
-                }
-                else
-                {
-                    line += ",  multiple elevation angle sets for given station id and date in statdb";
+                    smsReportLine.comment = "match (multiple representations in statdb)";
                 }
             }
             else
             {
-                var elevationAngleSetFromStatDB = elevationAngleSetsFromStatDB.Single();
-
-                if (elevationAngleSetFromStatDB.leeindex_n == sms_station.angle_n &&
-                    elevationAngleSetFromStatDB.leeindex_ne == sms_station.angle_ne &&
-                    elevationAngleSetFromStatDB.leeindex_e == sms_station.angle_e &&
-                    elevationAngleSetFromStatDB.leeindex_se == sms_station.angle_se &&
-                    elevationAngleSetFromStatDB.leeindex_s == sms_station.angle_s &&
-                    elevationAngleSetFromStatDB.leeindex_sw == sms_station.angle_sw &&
-                    elevationAngleSetFromStatDB.leeindex_w == sms_station.angle_w &&
-                    elevationAngleSetFromStatDB.leeindex_nw == sms_station.angle_nw &&
-                    elevationAngleSetFromStatDB.leeindexindex == sms_station.angleindex)
-                {
-                    line += ",  match";
-                }
-                else
-                {
-                    line += ",  mismatch for angle set for given station id and date";
-                }
+                smsReportLine.comment = "multiple elevation angle sets for given station id and date in statdb";
             }
         }
+        else
+        {
+            var elevationAngleSetFromStatDB = elevationAngleSetsFromStatDB.Single();
 
+            if (elevationAngleSetFromStatDB.leeindex_n == sms_station.angle_n &&
+                elevationAngleSetFromStatDB.leeindex_ne == sms_station.angle_ne &&
+                elevationAngleSetFromStatDB.leeindex_e == sms_station.angle_e &&
+                elevationAngleSetFromStatDB.leeindex_se == sms_station.angle_se &&
+                elevationAngleSetFromStatDB.leeindex_s == sms_station.angle_s &&
+                elevationAngleSetFromStatDB.leeindex_sw == sms_station.angle_sw &&
+                elevationAngleSetFromStatDB.leeindex_w == sms_station.angle_w &&
+                elevationAngleSetFromStatDB.leeindex_nw == sms_station.angle_nw &&
+                elevationAngleSetFromStatDB.leeindexindex == sms_station.angleindex)
+            {
+                smsReportLine.comment = "match";
+            }
+            else
+            {
+                smsReportLine.comment = "mismatch for angle set for given station id and date";
+            }
+        }
+    }
+
+    smsReportLines.Add(smsReportLine);
+}
+
+smsReportLines = smsReportLines
+    .OrderBy(_ => _.datefrom)
+    .ToList();
+
+using (var streamWriter = new StreamWriter("elevation_angles_sms_vs_statdb.txt"))
+{
+    foreach (var smsReportLine in smsReportLines) 
+    {
+        var line = smsReportLine.ToString();
         Console.WriteLine(line);
         streamWriter.WriteLine(line);
     }
 }
-
-
