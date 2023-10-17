@@ -529,7 +529,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double height,
             PointD shift,
             double opacity,
-            string tag = null,
             double? fixedViewPortXCoordinate = null,
             double? fixedViewPortYCoordinate = null)
         {

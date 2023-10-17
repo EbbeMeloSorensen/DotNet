@@ -238,7 +238,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     20,
                     new PointD(-10, 0),
                     0.0,
-                    "y",
                     0);
 
                 y += lineSpacingY_World;
@@ -301,7 +300,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     labelHeight,
                     new PointD(0, labelHeight / 2),
                     0.0,
-                    "x",
                     null,
                     GeometryEditorViewModel.MarginBottomOffset);
 
