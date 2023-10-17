@@ -150,15 +150,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             };
         }
 
-        //private void UpdateModel()
-        //{
-        //    // Her er vi, når der fra User Controllen kommer en anmodning om at der skal gentegnes
-        //    // dvs det sker ret tit...
-        //    // NÅR det sker, har man mulighed for at flytte på World Window
-        //    // .. så er spørgsmålet så, om det skal ske her i CoordinateSystemViewModel, eller højere oppe - det skal mok ske højere oppe
-        //    var a = 0;
-        //}
-
         protected virtual void UpdateCoordinateSystemForGeometryEditorViewModel()
         {
             var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
