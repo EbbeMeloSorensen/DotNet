@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
@@ -37,7 +36,6 @@ namespace Craft.UIElements.GuiTest.Tab3
         private string _timeAtMousePositionAsText1;
         private string _timeAtMousePositionAsText2;
         private Stopwatch _stopwatch;
-        //private DateTime _startTime;
 
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
@@ -546,6 +544,9 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 WorldWindowMajorUpdateCountForCoordinateSystemViewModel++;
 
+                // Få lige grid tegning på plads, og tag så kurven bagefter
+                return;
+
                 // Update the function curve
                 // Todo: Use the expanded world window owned by the coordinate system view model instead of just assuming it is expanded by a factor of 1
                 var x0 = e.WorldWindowUpperLeft.X - e.WorldWindowSize.Width;
@@ -565,9 +566,11 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             CoordinateSystemViewModel.GeometryEditorViewModel.UpdateModelCallBack = () =>
             {
-                // Her er vi, når der fra User Controllen kommer en anmodning om at der skal gentegnes
-                // dvs det sker ret tit...
-                // NÅR det sker, har man mulighed for at flytte på World Window
+                /////////////////////////////////////////////////////////////////////////////////////////
+                // Her er vi, når der fra User Controllen kommer en anmodning om at der skal gentegnes //
+                // dvs det sker ret tit...                                                             //
+                // NÅR det sker, har man mulighed for at flytte på World Window                        //
+                /////////////////////////////////////////////////////////////////////////////////////////
 
                 // Update the x value of interest
                 var secondsElapsed = 0.001 * _stopwatch.Elapsed.TotalMilliseconds;
@@ -598,20 +601,6 @@ namespace Craft.UIElements.GuiTest.Tab3
                         CoordinateSystemViewModel.DynamicXValue <= x1;
                 }
             };
-
-            //var timer = new DispatcherTimer
-            //{
-            //    Interval = new TimeSpan(100000)
-            //};
-
-            //timer.Tick += (s, e) =>
-            //{
-            //    UpdateXValueOfInterestForCoordinateSystemViewModel();
-            //};
-
-            //_startTime = DateTime.UtcNow;
-
-            //timer.Start();
         }
 
         private void InitializeTimeSeriesViewModel1()
@@ -711,37 +700,5 @@ namespace Craft.UIElements.GuiTest.Tab3
                 lineViewModels.ForEach(_ => TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(_));
             };
         }
-
-        //private void UpdateXValueOfInterestForCoordinateSystemViewModel()
-        //{
-        //    // Update the x value of interest
-        //    var elapsedTime = DateTime.UtcNow - _startTime;
-        //    CoordinateSystemViewModel.DynamicXValue = -2.0 + elapsedTime.TotalSeconds;
-
-        //    // Figure out if the line representing the x value of interest should be visible
-        //    var x0 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
-        //    var x1 = CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
-
-        //    if (CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue)
-        //    {
-        //        CoordinateSystemViewModel.ShowDynamicXValue = true;
-
-        //        // Position the World Window so that the x value of interest is in the middle
-        //        CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
-        //            CoordinateSystemViewModel.DynamicXValue -
-        //            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowSize.Width / 2,
-        //            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
-        //    }
-        //    else
-        //    {
-        //        var marginInWorldDistance =
-        //            CoordinateSystemViewModel.GeometryEditorViewModel.MarginLeft /
-        //            CoordinateSystemViewModel.GeometryEditorViewModel.Scaling.Width;
-
-        //        CoordinateSystemViewModel.ShowDynamicXValue =
-        //            CoordinateSystemViewModel.DynamicXValue >= x0 + marginInWorldDistance &&
-        //            CoordinateSystemViewModel.DynamicXValue <= x1;
-        //    }
-        //}
     }
 }
