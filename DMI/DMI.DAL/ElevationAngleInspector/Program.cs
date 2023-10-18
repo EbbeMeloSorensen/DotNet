@@ -203,7 +203,8 @@ foreach(var sms_station in sms_stations)
             }
             else
             {
-                smsReportLine.comment = "multiple elevation angle sets for given station id and date in statdb";
+                // This doesn't occur
+                throw new NotImplementedException();
             }
         }
         else
@@ -224,7 +225,7 @@ foreach(var sms_station in sms_stations)
             }
             else
             {
-                smsReportLine.comment = "mismatch for angle set for given station id and date";
+                smsReportLine.comment = $"mismatch for angle set for given station id and date (row in statdb: {elevationAngleSetFromStatDB})";
             }
         }
     }
@@ -236,12 +237,76 @@ smsReportLines = smsReportLines
     .OrderBy(_ => _.datefrom)
     .ToList();
 
+var firstYear = smsReportLines.Min(_ => _.datefrom.Year);
+var lastYear = smsReportLines.Max(_ => _.datefrom.Year);
+
 using (var streamWriter = new StreamWriter("elevation_angles_sms_vs_statdb.txt"))
 {
     foreach (var smsReportLine in smsReportLines) 
     {
-        var line = smsReportLine.ToString();
-        Console.WriteLine(line);
-        streamWriter.WriteLine(line);
+        PrintLine(streamWriter, smsReportLine.ToString());
     }
+
+    var omitElevationAngleSetsWithoutAStationId = true;
+    var year = firstYear;
+
+    while (year <= lastYear)
+    {
+        var smsReportLinesForCurrentYear = smsReportLines.Where(_ => _.datefrom.Year == year) ;
+
+        if (smsReportLinesForCurrentYear.Any())
+        {
+            PrintLine(streamWriter, "");
+            PrintLine(streamWriter, $"Summary of elevation angle sets for {year}:");
+            PrintSummary(streamWriter, smsReportLinesForCurrentYear, omitElevationAngleSetsWithoutAStationId);
+        }
+
+        year++;
+    }
+
+    PrintLine(streamWriter, "");
+    PrintLine(streamWriter, "Summary of entire collection of elevation angle sets:");
+    PrintSummary(streamWriter, smsReportLines, omitElevationAngleSetsWithoutAStationId);
+}
+
+static void PrintLine(
+    StreamWriter streamWriter, 
+    string line)
+{
+    Console.WriteLine(line);
+    streamWriter.WriteLine(line);
+}
+
+static void PrintSummary(
+    StreamWriter streamWriter, 
+    IEnumerable<SMS_Report_Line> smsReportLines,
+    bool omitElevationAngleSetsWithoutAStationId)
+{
+    var matchCount = smsReportLines.Count(_ => _.comment.Substring(0, 5) == "match");
+    var noStationIDInSMSCount = smsReportLines.Count(_ => _.comment == "station id missing in sms database");
+    var noElevatoinAnglesetWithGivenStationIdAndDateCount = smsReportLines.Count(_ => _.comment == "no elevation angle set for given station id and date in statdb");
+    var mismatchCount = smsReportLines.Count(_ => _.comment.Substring(0, 5) == "misma");
+    var sum = matchCount + noStationIDInSMSCount + noElevatoinAnglesetWithGivenStationIdAndDateCount + mismatchCount;
+    var totalCount = smsReportLines.Count();
+
+    if (sum != totalCount)
+    {
+        throw new InvalidDataException();
+    }
+
+    if (omitElevationAngleSetsWithoutAStationId)
+    {
+        totalCount -= noStationIDInSMSCount;
+    }
+
+    PrintLine(streamWriter, $"  Elevation angle sets in SMS matching an elevation angles set in StatDB:       {matchCount,10} ({matchCount * 100.0 / totalCount:N3} %)");
+
+    if (!omitElevationAngleSetsWithoutAStationId)
+    {
+        PrintLine(streamWriter, $"  Elevation angle sets in SMS without a station id:                             {noStationIDInSMSCount,10} ({noStationIDInSMSCount * 100.0 / totalCount:N3} %)");
+    }
+
+    PrintLine(streamWriter, $"  Elevation angle sets in SMS that are not present in StatDB:                   {noElevatoinAnglesetWithGivenStationIdAndDateCount,10} ({noElevatoinAnglesetWithGivenStationIdAndDateCount * 100.0 / totalCount:N3} %)");
+    PrintLine(streamWriter, $"  Elevation angle sets in SMS with a mismatching elevation angle set in StatDB: {mismatchCount,10} ({mismatchCount * 100.0 / totalCount:N3} %)");
+    PrintLine(streamWriter, $"  Elevation angle sets in total in SMS:                                         {totalCount,10}");
 }

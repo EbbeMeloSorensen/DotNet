@@ -1,0 +1,20 @@
+SELECT
+	station.statid,
+	leeindex.start_time,
+	leeindex.n,
+	leeindex.ne,
+	leeindex.e,
+	leeindex.se,
+	leeindex.s,
+	leeindex.sw,
+	leeindex.w,
+	leeindex.nw,
+	leeindex.index
+FROM station
+INNER JOIN leeindex ON station.statid=leeindex.statid
+--WHERE station.statid / 100 = 5713 AND start_time = '2018-01-11 00:00:00' -- all elevation angles 0
+--WHERE station.statid / 100 = 5763 AND start_time = '2018-01-11 00:00:00' -- all elevation angles 0
+--WHERE station.statid / 100 = 5795 AND start_time = '2018-03-15 00:00:00' -- all elevation angles 0
+--WHERE station.statid / 100 = 5461 AND start_time = '2018-06-11 00:00:00' -- all elevation angles 0
+WHERE station.statid / 100 = 6116 AND start_time = '2018-08-01 00:00:00' -- missing
+ORDER BY station.statid, start_time
