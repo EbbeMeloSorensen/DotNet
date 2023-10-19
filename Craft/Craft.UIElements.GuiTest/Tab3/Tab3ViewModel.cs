@@ -581,11 +581,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             CoordinateSystemViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
             {
-                if (CoordinateSystemViewModel.GeometryEditorViewModel.MousePositionWorld.Object.HasValue)
-                {
-                    CoordinateSystemViewModel.StaticXValue =
-                        CoordinateSystemViewModel.GeometryEditorViewModel.MousePositionWorld.Object.Value.X;
-                }
+                CoordinateSystemViewModel.StaticXValue = e.CursorWorldPosition.X;
             };
         }
 

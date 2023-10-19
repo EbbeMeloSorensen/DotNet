@@ -9,12 +9,13 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class CoordinateSystemViewModel : ViewModelBase
     {
-        protected bool _includeGrid = true;
         protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.35 };
         private bool _showHorizontalAxis;
         private bool _showVerticalAxis;
         private bool _showHorizontalGridLines;
         private bool _showVerticalGridLines;
+        private bool _showXAxisLabels;
+        private bool _showYAxisLabels;
         private double? _staticXValue;
         private double _staticXValueViewPort;
         private bool _showStaticXValue;
@@ -211,6 +212,28 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public bool ShowXAxisLabels
+        {
+            get { return _showXAxisLabels; }
+            set
+            {
+                _showXAxisLabels = value;
+                UpdateCoordinateSystemForGeometryEditorViewModel();
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowYAxisLabels
+        {
+            get { return _showYAxisLabels; }
+            set
+            {
+                _showYAxisLabels = value;
+                UpdateCoordinateSystemForGeometryEditorViewModel();
+                RaisePropertyChanged();
+            }
+        }
+
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
 
         public CoordinateSystemViewModel(
@@ -284,18 +307,18 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             // Clear the labels
             GeometryEditorViewModel.ClearLabels();
 
-            if (ShowHorizontalGridLines)
+            if (ShowHorizontalGridLines || ShowYAxisLabels)
             {
-                DrawHorizontalGridLinesAndLabels(x0, dx, thickness);
+                DrawHorizontalGridLinesAndOrLabels(x0, dx, thickness);
             }
 
-            if (ShowVerticalGridLines)
+            if (ShowVerticalGridLines || ShowXAxisLabels)
             {
-                DrawVerticalGridLinesAndLabels(y0, dy, thickness);
+                DrawVerticalGridLinesAndOrLabels(y0, dy, thickness);
             }
         }
 
-        protected void DrawHorizontalGridLinesAndLabels(
+        protected void DrawHorizontalGridLinesAndOrLabels(
             double x0,
             double dx,
             double thickness)
@@ -327,7 +350,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             while (y < _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height)
             {
-                if (_includeGrid)
+                if (ShowHorizontalGridLines)
                 {
                     GeometryEditorViewModel.AddLine(
                         new PointD(_expandedWorldWindowUpperLeft.X, y),
@@ -336,23 +359,23 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         _gridBrush);
                 }
 
-                var text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture);
-
-                // Place a label with a the coordinate to the left of the grid line
-                GeometryEditorViewModel.AddLabel(
-                    text,
-                    new PointD(x0 + dx * 0.8, y),
-                    20,
-                    20,
-                    new PointD(-10, 0),
-                    0.0,
-                    0);
+                if (_showYAxisLabels)
+                {
+                    GeometryEditorViewModel.AddLabel(
+                        Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture),
+                        new PointD(x0 + dx * 0.8, y),
+                        20,
+                        20,
+                        new PointD(-10, 0),
+                        0.0,
+                        0);
+                }
 
                 y += lineSpacingY_World;
             }
         }
 
-        protected virtual void DrawVerticalGridLinesAndLabels(
+        protected virtual void DrawVerticalGridLinesAndOrLabels(
             double y0,
             double dy,
             double thickness)
@@ -389,7 +412,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             while (x < _expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width)
             {
-                if (_includeGrid)
+                if (ShowVerticalGridLines)
                 {
                     GeometryEditorViewModel.AddLine(
                         new PointD(x, _expandedWorldWindowUpperLeft.Y),
@@ -398,18 +421,18 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         _gridBrush);
                 }
 
-                var dateAsText = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture);
-
-                // Place a label with a the coordinate under the grid line
-                GeometryEditorViewModel.AddLabel(
-                    dateAsText,
-                    new PointD(x, y0 + dy),
-                    labelWidth,
-                    labelHeight,
-                    new PointD(0, labelHeight / 2),
-                    0.0,
-                    null,
-                    GeometryEditorViewModel.MarginBottomOffset);
+                if (ShowXAxisLabels)
+                {
+                    GeometryEditorViewModel.AddLabel(
+                        Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture),
+                        new PointD(x, y0 + dy),
+                        labelWidth,
+                        labelHeight,
+                        new PointD(0, labelHeight / 2),
+                        0.0,
+                        null,
+                        GeometryEditorViewModel.MarginBottomOffset);
+                }
 
                 x += lineSpacingX_World;
             }

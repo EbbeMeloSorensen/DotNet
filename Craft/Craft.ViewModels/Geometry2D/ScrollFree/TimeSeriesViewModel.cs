@@ -61,16 +61,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             if (ShowHorizontalGridLines)
             {
-                DrawHorizontalGridLinesAndLabels(x0, dx, thickness);
+                DrawHorizontalGridLinesAndOrLabels(x0, dx, thickness);
             }
 
             if (ShowVerticalGridLines)
             {
-                DrawVerticalGridLinesAndLabels(x0, y0, x1, y1, dx, dy, thickness);
+                DrawVerticalGridLinesAndOrLabels(x0, y0, x1, y1, dx, dy, thickness);
             }
         }
 
-        protected virtual void DrawVerticalGridLinesAndLabels(
+        protected virtual void DrawVerticalGridLinesAndOrLabels(
             double x0,
             double y0,
             double x1,
@@ -199,7 +199,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 if (x > x0 + dx)
                 {
-                    if (_includeGrid)
+                    if (ShowVerticalGridLines)
                     {
                         GeometryEditorViewModel.AddLine(
                             new PointD(x, y0 + dy),
