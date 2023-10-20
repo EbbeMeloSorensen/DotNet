@@ -4075,13 +4075,13 @@ namespace Simulator.Laboratory.ViewModel
             var coolDown = 100;
             var coolDownDictionary = new Dictionary<int, int>();
 
-            var enemies = Enumerable.Range(1, 15)
-                .Select(i => new
-                {
-                    StateIndex = i * 200,
-                    BodyState = new BodyState(new Enemy(i, 0.15, 1, false), new Vector2D(-10, 0), new Vector2D(1.0, 0.0)) { Life = 5 }
-                })
-                .ToDictionary(x => x.StateIndex, x => x.BodyState);
+            //var enemies = Enumerable.Range(1, 15)
+            //    .Select(i => new
+            //    {
+            //        StateIndex = i * 200,
+            //        BodyState = new BodyState(new Enemy(i, 0.15, 1, false), new Vector2D(-10, 0), new Vector2D(1.0, 0.0)) { Life = 5 }
+            //    })
+            //    .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
             scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
@@ -4095,69 +4095,69 @@ namespace Simulator.Laboratory.ViewModel
                 }
 
                 // Remove projectile due to hitting an enemy?
-                if (boundaryCollisionReports.Any())
-                {
-                    propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id));
-                }
+                //if (boundaryCollisionReports.Any())
+                //{
+                //    propagatedState.RemoveBodyStates(boundaryCollisionReports
+                //        .Where(bcr => bcr.Body is Projectile)
+                //        .Select(bcr => bcr.Body.Id));
+                //}
 
-                var hitEnemies = new HashSet<BodyState>();
+                //var hitEnemies = new HashSet<BodyState>();
 
-                bodyCollisionReports.ForEach(bcr =>
-                {
-                    if (bcr.Body1 is Player1Circular || bcr.Body2 is Player1Circular)
-                    {
-                        // Player collided with enemy
-                        var damage =
-                            (bcr.Body1 is Player1Circular && bcr.Body2.Mass > 0.5 ||
-                             bcr.Body2 is Player1Circular && bcr.Body1.Mass > 0.5)
-                             ? 3.0
-                             : 1.0;
+                //bodyCollisionReports.ForEach(bcr =>
+                //{
+                //    if (bcr.Body1 is Player1Circular || bcr.Body2 is Player1Circular)
+                //    {
+                //        // Player collided with enemy
+                //        var damage =
+                //            (bcr.Body1 is Player1Circular && bcr.Body2.Mass > 0.5 ||
+                //             bcr.Body2 is Player1Circular && bcr.Body1.Mass > 0.5)
+                //             ? 3.0
+                //             : 1.0;
 
-                        var player = propagatedState.BodyStates.First();
-                        player.Life -= damage;
+                //        var player = propagatedState.BodyStates.First();
+                //        player.Life -= damage;
 
-                        if (player.Life < 0.5)
-                        {
-                            response.IndexOfLastState = propagatedState.Index;
-                            response.Outcome = "Game Over";
-                        }
-                    }
-                    else if (bcr.Body1 is Projectile || bcr.Body2 is Projectile)
-                    {
-                        // Projectile collided with enemy
-                        if (bcr.Body1 is Projectile)
-                        {
-                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body1.Id });
-                            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id);
-                            hitEnemies.Add(bodyState);
-                        }
-                        else
-                        {
-                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body2.Id });
-                            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id);
-                            hitEnemies.Add(bodyState);
-                        }
-                    }
-                });
+                //        if (player.Life < 0.5)
+                //        {
+                //            response.IndexOfLastState = propagatedState.Index;
+                //            response.Outcome = "Game Over";
+                //        }
+                //    }
+                //    else if (bcr.Body1 is Projectile || bcr.Body2 is Projectile)
+                //    {
+                //        // Projectile collided with enemy
+                //        if (bcr.Body1 is Projectile)
+                //        {
+                //            propagatedState.RemoveBodyStates(new List<int> { bcr.Body1.Id });
+                //            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id);
+                //            hitEnemies.Add(bodyState);
+                //        }
+                //        else
+                //        {
+                //            propagatedState.RemoveBodyStates(new List<int> { bcr.Body2.Id });
+                //            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id);
+                //            hitEnemies.Add(bodyState);
+                //        }
+                //    }
+                //});
 
-                hitEnemies.ToList().ForEach(e =>
-                {
-                    e.Life -= 1;
+                //hitEnemies.ToList().ForEach(e =>
+                //{
+                //    e.Life -= 1;
 
-                    if (e.Life <= 0.1)
-                    {
-                        propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
+                //    if (e.Life <= 0.1)
+                //    {
+                //        propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
                         
-                        if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
-                        {
-                            // All enemies are dead, so player wins
-                            response.IndexOfLastState = propagatedState.Index;
-                            response.Outcome = "You Win";
-                        }
-                    }
-                });
+                //        if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
+                //        {
+                //            // All enemies are dead, so player wins
+                //            response.IndexOfLastState = propagatedState.Index;
+                //            response.Outcome = "You Win";
+                //        }
+                //    }
+                //});
 
                 // Determine if we should add a new cannon
                 if (mousePos != null)
@@ -4217,10 +4217,10 @@ namespace Simulator.Laboratory.ViewModel
                 });
 
                 // Add an enemy?
-                if (enemies.ContainsKey(propagatedState.Index))
-                {
-                    propagatedState.AddBodyState(enemies[propagatedState.Index]);
-                }
+                //if (enemies.ContainsKey(propagatedState.Index))
+                //{
+                //    propagatedState.AddBodyState(enemies[propagatedState.Index]);
+                //}
 
                 return response;
             };
