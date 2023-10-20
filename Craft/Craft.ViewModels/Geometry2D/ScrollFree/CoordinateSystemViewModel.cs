@@ -9,16 +9,17 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class CoordinateSystemViewModel : ViewModelBase
     {
-        protected bool _includeGrid = true;
         protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.35 };
         private bool _showHorizontalAxis;
         private bool _showVerticalAxis;
         private bool _showHorizontalGridLines;
         private bool _showVerticalGridLines;
-        private double _staticXValue;
+        private bool _showXAxisLabels;
+        private bool _showYAxisLabels;
+        private double? _staticXValue;
         private double _staticXValueViewPort;
         private bool _showStaticXValue;
-        private double _dynamicXValue;
+        private double? _dynamicXValue;
         private double _dynamicXValueViewPort;
         private bool _showDynamicXValue;
         private bool _lockWorldWindowOnDynamicXValue;
@@ -26,7 +27,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Point _expandedWorldWindowUpperLeft;
         private Size _expandedWorldWindowSize;
 
-        public double StaticXValue
+        public double? StaticXValue
         {
             get => _staticXValue;
             set
@@ -39,8 +40,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         private void UpdateStaticXValueViewPort()
         {
-            StaticXValueViewPort =
-                GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_staticXValue);
+            if (_staticXValue.HasValue)
+            {
+                StaticXValueViewPort =
+                    GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_staticXValue.Value);
+            }
+            else
+            {
+                ShowStaticXValue = false;
+            }
         }
 
         public double StaticXValueViewPort
@@ -79,19 +87,24 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // a method where it sets the Dynamic XValue property to an arbitrary value.
         // If the CoordinateSystemViewModel is configured for focusing on the dynamic x value, the World Window
         // will also move, when the dynamic x value is updated.
-        public double DynamicXValue
+        public double? DynamicXValue
         {
             get => _dynamicXValue;
             set
             {
                 _dynamicXValue = value;
 
-                DynamicXValueViewPort =
-                    GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_dynamicXValue);
+                if (_dynamicXValue.HasValue)
+                {
+                    DynamicXValueViewPort =
+                        GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_dynamicXValue.Value);
+                }
+                else
+                {
+                    ShowDynamicXValue = false;
+                }
 
-                StaticXValue = StaticXValue; // Ikke naturligt at sætte den her.. Det skal gerne være uafhængigt af den dynamiske
-                                             // Måske burde man alligevel operere med, at den tegnes af den underliggende GeometryEditorViewModel
-                                             // Mnjaaaah borset fra at du gerne vil lade den være uafhængig af din collection af lines..
+                UpdateStaticXValueViewPort();
 
                 RaisePropertyChanged();
             }
@@ -104,26 +117,33 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 _dynamicXValueViewPort = value;
 
-                if (LockWorldWindowOnDynamicXValue)
+                if (DynamicXValue.HasValue)
                 {
-                    ShowDynamicXValue = true;
+                    if (LockWorldWindowOnDynamicXValue)
+                    {
+                        ShowDynamicXValue = true;
 
-                    // Position the World Window so that the x value of interest is in the middle
-                    GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
-                        DynamicXValue - GeometryEditorViewModel.WorldWindowSize.Width / 2,
-                        GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+                        // Position the World Window so that the x value of interest is in the middle
+                        GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                            DynamicXValue.Value - GeometryEditorViewModel.WorldWindowSize.Width / 2,
+                            GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+                    }
+                    else
+                    {
+                        // Figure out if the line representing the x value of interest should be visible
+                        var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
+                        var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
+
+                        var marginInWorldDistance = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
+
+                        ShowDynamicXValue =
+                            DynamicXValue >= x0 + marginInWorldDistance &&
+                            DynamicXValue <= x1;
+                    }
                 }
                 else
                 {
-                    // Figure out if the line representing the x value of interest should be visible
-                    var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
-                    var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
-
-                    var marginInWorldDistance = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
-
-                    ShowDynamicXValue =
-                        DynamicXValue >= x0 + marginInWorldDistance &&
-                        DynamicXValue <= x1;
+                    ShowDynamicXValue = false;
                 }
 
                 RaisePropertyChanged();
@@ -187,6 +207,28 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _showVerticalGridLines = value;
+                UpdateCoordinateSystemForGeometryEditorViewModel();
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowXAxisLabels
+        {
+            get { return _showXAxisLabels; }
+            set
+            {
+                _showXAxisLabels = value;
+                UpdateCoordinateSystemForGeometryEditorViewModel();
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowYAxisLabels
+        {
+            get { return _showYAxisLabels; }
+            set
+            {
+                _showYAxisLabels = value;
                 UpdateCoordinateSystemForGeometryEditorViewModel();
                 RaisePropertyChanged();
             }
@@ -265,18 +307,18 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             // Clear the labels
             GeometryEditorViewModel.ClearLabels();
 
-            if (ShowHorizontalGridLines)
+            if (ShowHorizontalGridLines || ShowYAxisLabels)
             {
-                DrawHorizontalGridLinesAndLabels(x0, dx, thickness);
+                DrawHorizontalGridLinesAndOrLabels(x0, dx, thickness);
             }
 
-            if (ShowVerticalGridLines)
+            if (ShowVerticalGridLines || ShowXAxisLabels)
             {
-                DrawVerticalGridLinesAndLabels(y0, dy, thickness);
+                DrawVerticalGridLinesAndOrLabels(y0, dy, thickness);
             }
         }
 
-        protected void DrawHorizontalGridLinesAndLabels(
+        protected void DrawHorizontalGridLinesAndOrLabels(
             double x0,
             double dx,
             double thickness)
@@ -308,7 +350,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             while (y < _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height)
             {
-                if (_includeGrid)
+                if (ShowHorizontalGridLines)
                 {
                     GeometryEditorViewModel.AddLine(
                         new PointD(_expandedWorldWindowUpperLeft.X, y),
@@ -317,23 +359,23 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         _gridBrush);
                 }
 
-                var text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture);
-
-                // Place a label with a the coordinate to the left of the grid line
-                GeometryEditorViewModel.AddLabel(
-                    text,
-                    new PointD(x0 + dx * 0.8, y),
-                    20,
-                    20,
-                    new PointD(-10, 0),
-                    0.0,
-                    0);
+                if (_showYAxisLabels)
+                {
+                    GeometryEditorViewModel.AddLabel(
+                        Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture),
+                        new PointD(x0 + dx * 0.8, y),
+                        20,
+                        20,
+                        new PointD(-10, 0),
+                        0.0,
+                        0);
+                }
 
                 y += lineSpacingY_World;
             }
         }
 
-        protected virtual void DrawVerticalGridLinesAndLabels(
+        protected virtual void DrawVerticalGridLinesAndOrLabels(
             double y0,
             double dy,
             double thickness)
@@ -370,7 +412,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             while (x < _expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width)
             {
-                if (_includeGrid)
+                if (ShowVerticalGridLines)
                 {
                     GeometryEditorViewModel.AddLine(
                         new PointD(x, _expandedWorldWindowUpperLeft.Y),
@@ -379,18 +421,18 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         _gridBrush);
                 }
 
-                var dateAsText = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture);
-
-                // Place a label with a the coordinate under the grid line
-                GeometryEditorViewModel.AddLabel(
-                    dateAsText,
-                    new PointD(x, y0 + dy),
-                    labelWidth,
-                    labelHeight,
-                    new PointD(0, labelHeight / 2),
-                    0.0,
-                    null,
-                    GeometryEditorViewModel.MarginBottomOffset);
+                if (ShowXAxisLabels)
+                {
+                    GeometryEditorViewModel.AddLabel(
+                        Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture),
+                        new PointD(x, y0 + dy),
+                        labelWidth,
+                        labelHeight,
+                        new PointD(0, labelHeight / 2),
+                        0.0,
+                        null,
+                        GeometryEditorViewModel.MarginBottomOffset);
+                }
 
                 x += lineSpacingX_World;
             }

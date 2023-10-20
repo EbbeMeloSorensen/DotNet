@@ -235,12 +235,14 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="10"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="15"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -249,17 +251,21 @@
                                       IsChecked="{Binding CoordinateSystemViewModel.ShowHorizontalGridLines}"/>
                             <CheckBox Grid.Row="1" Grid.Column="0" Content="Show vertical grid lines"
                                       IsChecked="{Binding CoordinateSystemViewModel.ShowVerticalGridLines}"/>
-                            <CheckBox Grid.Row="2" Grid.Column="0" Content="Focus on x value of interest"
+                            <CheckBox Grid.Row="2" Grid.Column="0" Content="Show x axis labels"
+                                      IsChecked="{Binding CoordinateSystemViewModel.ShowXAxisLabels}"/>
+                            <CheckBox Grid.Row="3" Grid.Column="0" Content="Show y axis labels"
+                                      IsChecked="{Binding CoordinateSystemViewModel.ShowYAxisLabels}"/>
+                            <CheckBox Grid.Row="4" Grid.Column="0" Content="Focus on x value of interest"
                                       IsChecked="{Binding CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue}"/>
                             <CheckBox Grid.Row="0" Grid.Column="2" Content="Lock X Axis"
                                       IsChecked="{Binding CoordinateSystemViewModel.GeometryEditorViewModel.XAxisLocked}"/>
                             <CheckBox Grid.Row="1" Grid.Column="2" Content="Lock Y Axis"
                                       IsChecked="{Binding CoordinateSystemViewModel.GeometryEditorViewModel.YAxisLocked}"/>
-                            <TextBlock Grid.Row="0" Grid.Column="4" Margin="3" Text="World Window Updates:"/>
-                            <TextBox Grid.Row="0" Grid.Column="5" Margin="1"
+                            <TextBlock Grid.Row="0" Grid.Column="4" Text="World Window Updates:"/>
+                            <TextBox Grid.Row="0" Grid.Column="5" 
                                      Text="{Binding WorldWindowUpdateCountForCoordinateSystemViewModel, Mode=OneWay}"/>
-                            <TextBlock Grid.Row="1" Grid.Column="4" Margin="3" Text="World Window Major Updates:"/>
-                            <TextBox Grid.Row="1" Grid.Column="5" Margin="1"
+                            <TextBlock Grid.Row="1" Grid.Column="4" Text="World Window Major Updates:"/>
+                            <TextBox Grid.Row="1" Grid.Column="5" 
                                      Text="{Binding WorldWindowMajorUpdateCountForCoordinateSystemViewModel, Mode=OneWay}"/>
                         </Grid>
                         <TextBlock Grid.Row="2" TextWrapping="Wrap">
