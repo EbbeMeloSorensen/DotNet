@@ -8,7 +8,6 @@ using Craft.Math;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
-using Simulator.Application;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
 using Simulator.ViewModel;
@@ -163,7 +162,10 @@ namespace Simulator.Laboratory.ViewModel
                 }
             };
 
-            AddScene(GenerateSceneAddBodiesByClicking());
+            AddScene(GenerateSceneAddBodiesByClicking1());
+            AddScene(GenerateSceneAddBodiesByClicking2());
+            AddScene(GenerateSceneAddBodiesByClicking3());
+            AddScene(GenerateSceneAddBodiesByClicking4(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneShootEmUp7(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneShootEmUp8(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneFountain1());
@@ -3795,7 +3797,7 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneAddBodiesByClicking()
+        private static Scene GenerateSceneAddBodiesByClicking1()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(0, 0)));
@@ -3803,13 +3805,19 @@ namespace Simulator.Laboratory.ViewModel
             var standardGravity = 9.82;
             var gravitationalConstant = 0.0;
             var handleBodyCollisions = false;
+            var coefficientOfFriction = 0.0;
+
             var scene = new Scene(
-                "Add bodies by clicking", 
+                "Add bodies by clicking - falling balls", 
                 120.0, 
                 new Point2D(-2, -3), 
                 initialState,
                 standardGravity, 
-                gravitationalConstant, 0, 1, handleBodyCollisions, 0.005);
+                gravitationalConstant,
+                coefficientOfFriction, 
+                1, 
+                handleBodyCollisions, 
+                0.005);
 
             Point2D mousePos = null;
 
@@ -3838,6 +3846,384 @@ namespace Simulator.Laboratory.ViewModel
                 return new PostPropagationResponse();
             };
 
+            return scene;
+        }
+
+        private static Scene GenerateSceneAddBodiesByClicking2()
+        {
+            var initialState = new State();
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(0, 0)));
+
+            var standardGravity = 0.0;
+            var gravitationalConstant = 10.0;
+            var handleBodyCollisions = true;
+            var coefficientOfFriction = 0.0;
+
+            var scene = new Scene(
+                "Add bodies by clicking - bouncing planets",
+                120.0,
+                new Point2D(-2, -3),
+                initialState,
+                standardGravity,
+                gravitationalConstant,
+                coefficientOfFriction,
+                1,
+                handleBodyCollisions,
+                0.005);
+
+            Point2D mousePos = null;
+
+            scene.CollisionBetweenTwoBodiesOccuredCallBack = (body1, body2) =>
+            {
+                return OutcomeOfCollisionBetweenTwoBodies.ElasticCollision;
+            };
+
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
+            {
+                if (mouseClickPosition == null) return false;
+
+                mousePos = mouseClickPosition.Position;
+                return true;
+            };
+
+            var nextBodyId = 2;
+
+            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            {
+                if (mousePos != null)
+                {
+                    var vector = new Vector2D(mousePos.X, mousePos.Y);
+
+                    mousePos = null;
+
+                    propagatedState.AddBodyState(new BodyState(
+                        new CircularBody(nextBodyId++, 0.1, 1, true), vector, new Vector2D(0, 0)));
+                }
+
+                return new PostPropagationResponse();
+            };
+
+            return scene;
+        }
+
+        private static Scene GenerateSceneAddBodiesByClicking3()
+        {
+            var radiusOfBalls = 0.5;
+
+            var initialState = new State();
+            initialState.AddBodyState(new BodyState(new CircularBody(1, radiusOfBalls, 1, false), new Vector2D(0, 0), new Vector2D(0, 0)));
+
+            var standardGravity = 0.0;
+            var gravitationalConstant = 0.0;
+            var handleBodyCollisions = false;
+            var coefficientOfFriction = 0.0;
+
+            var scene = new Scene(
+                "Add bodies by clicking - no overlap",
+                120.0,
+                new Point2D(-2, -3),
+                initialState,
+                standardGravity,
+                gravitationalConstant,
+                coefficientOfFriction,
+                1,
+                handleBodyCollisions,
+                0.005);
+
+            Point2D mousePos = null;
+
+            double DistanceToClosestBody(
+                State state,
+                Point2D point,
+                double radius)
+            {
+                var minSqrDist = state.BodyStates.Min(_ =>
+                {
+                    return _.Position.AsPoint2D().SquaredDistanceTo(point);
+                });
+
+                var minDist = minSqrDist < double.Epsilon ? 0.0 : Math.Sqrt(minSqrDist);
+
+                return Math.Max(0.0, minDist - radius);
+            }
+
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
+            {
+                if (mouseClickPosition == null) return false;
+
+                mousePos = mouseClickPosition.Position;
+                return true;
+            };
+
+            var nextBodyId = 2;
+
+            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            {
+                if (mousePos != null)
+                {
+                    var vector = new Vector2D(mousePos.X, mousePos.Y);
+
+                    var distanceToClosesetBody = DistanceToClosestBody(propagatedState, mousePos, radiusOfBalls);
+
+                    if (distanceToClosesetBody > radiusOfBalls)
+                    {
+                        propagatedState.AddBodyState(new BodyState(
+                            new CircularBody(nextBodyId++, radiusOfBalls, 1, true), vector, new Vector2D(0, 0)));
+                    }
+
+                    mousePos = null;
+                }
+
+                return new PostPropagationResponse();
+            };
+
+            return scene;
+        }
+
+        private static Scene GenerateSceneAddBodiesByClicking4()
+        {
+            var disposeProjectilesMap = new Dictionary<int, int>();
+            var nextCannonId = 1000;
+            var nextProjectileId = 10000;
+
+            var radiusOfCannons = 0.2;
+            var radiusOfProjectiles = 0.05;
+
+            var initialState = new State();
+
+            var standardGravity = 0.0;
+            var gravitationalConstant = 0.0;
+            var handleBodyCollisions = true;
+            var coefficientOfFriction = 0.0;
+
+            var scene = new Scene(
+                "Add bodies that shoot in predefined direction",
+                120.0,
+                new Point2D(-2, -3),
+                initialState,
+                standardGravity,
+                gravitationalConstant,
+                coefficientOfFriction,
+                1,
+                handleBodyCollisions,
+                0.005);
+
+            double DistanceToClosestBody(
+                State state,
+                Point2D point,
+                double radius)
+            {
+                if (!state.BodyStates.Any())
+                {
+                    return Double.MaxValue;
+                }
+
+                var minSqrDist = state.BodyStates.Min(_ =>
+                {
+                    return _.Position.AsPoint2D().SquaredDistanceTo(point);
+                });
+
+                var minDist = minSqrDist < double.Epsilon ? 0.0 : Math.Sqrt(minSqrDist);
+
+                return Math.Max(0.0, minDist - radius);
+            }
+
+            scene.InitializationCallback = (state, message) =>
+            {
+                disposeProjectilesMap.Clear();
+                nextCannonId = 1000;
+                nextProjectileId = 5000;
+            };
+
+            scene.CheckForCollisionBetweenBodiesCallback = (body1, body2) =>
+            {
+                // Vi interesserer os kun for kollisioner mellem enemies og projektiler
+                if (body1 is Enemy || body2 is Enemy)
+                {
+                    if (body1 is Projectile || body2 is Projectile)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            scene.CollisionBetweenTwoBodiesOccuredCallBack = (body1, body2) =>
+            {
+                if (body1 is Enemy || body2 is Enemy)
+                {
+                    if (body1 is Projectile || body2 is Projectile)
+                    {
+                        return OutcomeOfCollisionBetweenTwoBodies.Ignore;
+                    }
+                }
+
+                return OutcomeOfCollisionBetweenTwoBodies.Block;
+            };
+
+            Point2D mousePos = null;
+
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
+            {
+                if (mouseClickPosition == null) return false;
+
+                mousePos = mouseClickPosition.Position;
+                return true;
+            };
+
+            var coolDown = 100;
+            var coolDownDictionary = new Dictionary<int, int>();
+
+            var enemies = Enumerable.Range(1, 15)
+                .Select(i => new
+                {
+                    StateIndex = i * 200,
+                    BodyState = new BodyState(new Enemy(i, 0.15, 1, false), new Vector2D(-10, 0), new Vector2D(1.0, 0.0)) { Life = 5 }
+                })
+                .ToDictionary(x => x.StateIndex, x => x.BodyState);
+
+            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            {
+                var response = new PostPropagationResponse();
+
+                // Remove projectile due to expiration?
+                if (disposeProjectilesMap.ContainsKey(propagatedState.Index))
+                {
+                    var projectile = propagatedState.TryGetBodyState(disposeProjectilesMap[propagatedState.Index]);
+                    propagatedState?.RemoveBodyState(projectile);
+                }
+
+                // Remove projectile due to hitting an enemy?
+                if (boundaryCollisionReports.Any())
+                {
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports
+                        .Where(bcr => bcr.Body is Projectile)
+                        .Select(bcr => bcr.Body.Id));
+                }
+
+                var hitEnemies = new HashSet<BodyState>();
+
+                bodyCollisionReports.ForEach(bcr =>
+                {
+                    if (bcr.Body1 is Player1Circular || bcr.Body2 is Player1Circular)
+                    {
+                        // Player collided with enemy
+                        var damage =
+                            (bcr.Body1 is Player1Circular && bcr.Body2.Mass > 0.5 ||
+                             bcr.Body2 is Player1Circular && bcr.Body1.Mass > 0.5)
+                             ? 3.0
+                             : 1.0;
+
+                        var player = propagatedState.BodyStates.First();
+                        player.Life -= damage;
+
+                        if (player.Life < 0.5)
+                        {
+                            response.IndexOfLastState = propagatedState.Index;
+                            response.Outcome = "Game Over";
+                        }
+                    }
+                    else if (bcr.Body1 is Projectile || bcr.Body2 is Projectile)
+                    {
+                        // Projectile collided with enemy
+                        if (bcr.Body1 is Projectile)
+                        {
+                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body1.Id });
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id);
+                            hitEnemies.Add(bodyState);
+                        }
+                        else
+                        {
+                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body2.Id });
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id);
+                            hitEnemies.Add(bodyState);
+                        }
+                    }
+                });
+
+                hitEnemies.ToList().ForEach(e =>
+                {
+                    e.Life -= 1;
+
+                    if (e.Life <= 0.1)
+                    {
+                        propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
+                        
+                        if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
+                        {
+                            // All enemies are dead, so player wins
+                            response.IndexOfLastState = propagatedState.Index;
+                            response.Outcome = "You Win";
+                        }
+                    }
+                });
+
+                // Determine if we should add a new cannon
+                if (mousePos != null)
+                {
+                    var vector = new Vector2D(mousePos.X, mousePos.Y);
+
+                    var distanceToClosesetBody = DistanceToClosestBody(propagatedState, mousePos, radiusOfCannons);
+
+                    if (distanceToClosesetBody > radiusOfCannons)
+                    {
+                        propagatedState.AddBodyState(new BodyState(
+                            new CircularBody(nextCannonId, radiusOfCannons, 1, false), vector, new Vector2D(0, 0)));
+
+                        coolDownDictionary[nextCannonId] = propagatedState.Index + coolDown;
+
+                        nextCannonId++;
+                    }
+
+                    mousePos = null;
+                }
+
+                // Determine if any of the cannons shoot
+                var indexesOfShootingCannons = new List<int>();
+
+                foreach (var keyValuePair in coolDownDictionary)
+                {
+                    if (keyValuePair.Value == propagatedState.Index)
+                    {
+                        var shootingCannon = propagatedState.TryGetBodyState(keyValuePair.Key);
+
+                        if (shootingCannon != null)
+                        {
+                            // Add a new "projectile"
+                            var position = shootingCannon.Position;
+
+                            propagatedState.AddBodyState(new BodyState(
+                                new Projectile(
+                                    nextProjectileId, 
+                                    radiusOfProjectiles, 
+                                    1, 
+                                    false),
+                                    position, 
+                                    new Vector2D(0, 5)));
+
+                            disposeProjectilesMap[propagatedState.Index + 100] = nextProjectileId;
+
+                            nextProjectileId++;
+
+                            indexesOfShootingCannons.Add(keyValuePair.Key);
+                        }
+                    }
+                }
+
+                indexesOfShootingCannons.ForEach(_ =>
+                {
+                    coolDownDictionary[_] = propagatedState.Index + coolDown;
+                });
+
+                // Add an enemy?
+                if (enemies.ContainsKey(propagatedState.Index))
+                {
+                    propagatedState.AddBodyState(enemies[propagatedState.Index]);
+                }
+
+                return response;
+            };
 
             return scene;
         }
