@@ -155,6 +155,7 @@ namespace Simulator.Laboratory.ViewModel
                 }
             };
 
+            AddScene(GenerateSceneAddBodiesByClicking());
             AddScene(GenerateSceneShootEmUp7(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneShootEmUp8(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneFountain1());
@@ -3782,6 +3783,16 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.AddRectangularBoundary(-1.2, 3.3, -1.1, 3.2);
             scene.AddBoundary(new LineSegment(new Vector2D(-1.1, 3.15), new Vector2D(-0.3, 3.15), "Maze, room 1"));
+
+            return scene;
+        }
+
+        private static Scene GenerateSceneAddBodiesByClicking()
+        {
+            var initialState = new State();
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(0, -5)));
+
+            var scene = new Scene("Add bodies by clicking", 120.0, new Point2D(-2, -3), initialState, 0, 0, 0, 1, false, 0.005);
 
             return scene;
         }
