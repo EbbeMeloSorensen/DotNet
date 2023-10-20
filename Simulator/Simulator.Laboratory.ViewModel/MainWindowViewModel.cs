@@ -3798,9 +3798,46 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneAddBodiesByClicking()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(0, -5)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(0, 0)));
 
-            var scene = new Scene("Add bodies by clicking", 120.0, new Point2D(-2, -3), initialState, 0, 0, 0, 1, false, 0.005);
+            var standardGravity = 9.82;
+            var gravitationalConstant = 0.0;
+            var handleBodyCollisions = false;
+            var scene = new Scene(
+                "Add bodies by clicking", 
+                120.0, 
+                new Point2D(-2, -3), 
+                initialState,
+                standardGravity, 
+                gravitationalConstant, 0, 1, handleBodyCollisions, 0.005);
+
+            Point2D mousePos = null;
+
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
+            {
+                if (mouseClickPosition == null) return false;
+
+                mousePos = mouseClickPosition.Position;
+                return true;
+            };
+
+            var nextBodyId = 2;
+
+            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            {
+                if (mousePos != null)
+                {
+                    var vector = new Vector2D(mousePos.X, mousePos.Y);
+
+                    mousePos = null;
+
+                    propagatedState.AddBodyState(new BodyState(
+                        new CircularBody(nextBodyId++, 0.1, 1, true), vector, new Vector2D(0, 0)));
+                }
+
+                return new PostPropagationResponse();
+            };
+
 
             return scene;
         }

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.CompilerServices;
 using Craft.Logging;
 using Craft.Math;
@@ -147,6 +146,7 @@ namespace Simulator.Application
 
         public void StartOrResumeAnimation()
         {
+            MouseClickPosition = null;
             AnimationLaunched = true;
             AnimationRunning = true;
             Stopwatch.Start();
@@ -233,6 +233,8 @@ namespace Simulator.Application
                         Engine.Reset();
                         StopAnimation();
                     }
+
+                    MouseClickPosition = null; // Lad nu ff være med at hacke sådan.. (det virker tilsyneladende, men det er ikke videre elegant)
 
                     _logger?.WriteLine(LogMessageCategory.Debug, message, "state_sequence");
                 }

@@ -172,7 +172,6 @@ namespace Simulator.Application
                     var somethingWasChanged = Scene.InteractionCallBack.Invoke(keyBoardState, keyBoardEvents, mouseClickPosition, collisions, result);
 
                     keyBoardEvents.Clear();
-                    mouseClickPosition = null;
 
                     if (somethingWasChanged)
                     {
