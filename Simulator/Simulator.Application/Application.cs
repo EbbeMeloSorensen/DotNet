@@ -3,8 +3,10 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using Craft.Logging;
+using Craft.Math;
 using Simulator.Domain;
 
 namespace Simulator.Application
@@ -40,8 +42,9 @@ namespace Simulator.Application
 
         public Engine Engine { get; }
         public Stopwatch Stopwatch { get; }
-        public Keyboard KeyboardState { get; }
-        public Keyboard KeyboardEvents { get; }
+        public KeyboardState KeyboardState { get; }
+        public KeyboardState KeyboardEvents { get; }
+        public MouseClickPosition? MouseClickPosition { get; private set; }
         public int LastIndexRequested { get; private set; }
         public int LastIndexConsumed { get; private set; }
         public int IndexDifference { get; private set; }
@@ -79,8 +82,8 @@ namespace Simulator.Application
         {
             _logger = logger;
 
-            KeyboardState = new Keyboard();
-            KeyboardEvents = new Keyboard();
+            KeyboardState = new KeyboardState();
+            KeyboardEvents = new KeyboardState();
 
             Engine = new Engine(logger);
             Stopwatch = new Stopwatch();
@@ -136,6 +139,12 @@ namespace Simulator.Application
             OnKeyEventOccured(keyboardKey, keyEventType);
         }
 
+        public void HandleMouseClickEvent(
+            Point2D position)
+        {
+            MouseClickPosition = new MouseClickPosition(position);
+        }
+
         public void StartOrResumeAnimation()
         {
             AnimationLaunched = true;
@@ -158,6 +167,7 @@ namespace Simulator.Application
         {
             KeyboardState.Clear();
             KeyboardEvents.Clear();
+            MouseClickPosition = null;
 
             AnimationRunning = false;
             AnimationComplete = true;
@@ -200,6 +210,7 @@ namespace Simulator.Application
                     LastIndexRequested,
                     KeyboardState,
                     KeyboardEvents,
+                    MouseClickPosition,
                     out var idsOfDisposedBodies);
 
                 if (currentState != null)

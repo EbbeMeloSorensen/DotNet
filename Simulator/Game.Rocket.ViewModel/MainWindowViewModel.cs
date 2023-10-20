@@ -115,7 +115,7 @@ namespace Game.Rocket.ViewModel
             CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack =
                 (body1, body2) => OutcomeOfCollisionBetweenTwoBodies.Ignore;
 
-            InteractionCallBack interactionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            InteractionCallBack interactionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 

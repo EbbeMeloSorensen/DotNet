@@ -91,8 +91,9 @@ namespace Simulator.Application
         // then that callback function is invoked. If the callback returns a new velocity then the calculated states after the current one are invalidated and disposed of.
         public State TryGetState(
             int stateIndex,
-            Keyboard keyBoardState,
-            Keyboard keyBoardEvents,
+            KeyboardState keyBoardState,
+            KeyboardState keyBoardEvents,
+            MouseClickPosition? mouseClickPosition,
             out List<int> idsOfDisposedBodies)
         {
             State result = null;
@@ -168,9 +169,10 @@ namespace Simulator.Application
 
                 if (Scene.InteractionCallBack != null)
                 {
-                    var somethingWasChanged = Scene.InteractionCallBack.Invoke(keyBoardState, keyBoardEvents, collisions, result);
+                    var somethingWasChanged = Scene.InteractionCallBack.Invoke(keyBoardState, keyBoardEvents, mouseClickPosition, collisions, result);
 
                     keyBoardEvents.Clear();
+                    mouseClickPosition = null;
 
                     if (somethingWasChanged)
                     {

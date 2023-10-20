@@ -1,6 +1,6 @@
 ﻿namespace Simulator.Domain
 {
-    public class Keyboard
+    public class KeyboardState
     {
         public bool LeftArrowDown { get; set; }
         public bool RightArrowDown { get; set; }
@@ -17,9 +17,9 @@
             SpaceDown = false;
         }
 
-        public Keyboard Clone()
+        public KeyboardState Clone()
         {
-            return new Keyboard
+            return new KeyboardState
             {
                 LeftArrowDown = LeftArrowDown,
                 RightArrowDown = RightArrowDown,

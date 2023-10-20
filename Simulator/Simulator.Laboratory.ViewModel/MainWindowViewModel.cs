@@ -8,6 +8,7 @@ using Craft.Math;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
+using Simulator.Application;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
 using Simulator.ViewModel;
@@ -87,6 +88,13 @@ namespace Simulator.Laboratory.ViewModel
             GeometryEditorViewModel = new GeometryEditorViewModel(1)
             {
                 UpdateModelCallBack = Application.UpdateModel
+            };
+
+            GeometryEditorViewModel.MouseClickOccured += (s, e) =>
+            {
+                Application.HandleMouseClickEvent(new Point2D(
+                    e.CursorWorldPosition.X, 
+                    e.CursorWorldPosition.Y));
             };
 
             _sceneViewManager = new SceneViewManager(Application, GeometryEditorViewModel);
@@ -335,7 +343,7 @@ namespace Simulator.Laboratory.ViewModel
             var scene = new Scene("Rocket, loose, in space (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
             scene.IncludeCustomForces = true;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
@@ -376,7 +384,7 @@ namespace Simulator.Laboratory.ViewModel
             var scene = new Scene("Rocket, controlled, in space (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
             scene.IncludeCustomForces = true;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
@@ -426,7 +434,7 @@ namespace Simulator.Laboratory.ViewModel
             var scene = new Scene("Rocket, controlled, lunar surface (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.62, 0, 0, 1, false, 0.005);
             scene.IncludeCustomForces = true;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
@@ -495,7 +503,7 @@ namespace Simulator.Laboratory.ViewModel
                 return response;
             };
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
@@ -981,7 +989,7 @@ namespace Simulator.Laboratory.ViewModel
 
             var scene = new Scene("Rotation III (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
@@ -1021,7 +1029,7 @@ namespace Simulator.Laboratory.ViewModel
 
             var scene = new Scene("Rotation IV (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
@@ -1105,7 +1113,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
@@ -1166,7 +1174,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
@@ -1224,7 +1232,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
@@ -2034,7 +2042,7 @@ namespace Simulator.Laboratory.ViewModel
                 return response;
             };
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 if (!keyboardState.UpArrowDown) return false;
 
@@ -2099,7 +2107,7 @@ namespace Simulator.Laboratory.ViewModel
 
             var grounded = false;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 // Find ud af, om figuren står på jorden eller ej
                 // Vi vil gerne undersøge, hvad der er sket af kollisioner siden sidst, specielt om player 1 har kollideret med "ground", 
@@ -2174,7 +2182,7 @@ namespace Simulator.Laboratory.ViewModel
 
             var grounded = false;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 // Find ud af, om figuren står på jorden eller ej
                 // Vi vil gerne undersøge, hvad der er sket af kollisioner siden sidst, specielt om player 1 har kollideret med "ground", 
@@ -2253,7 +2261,7 @@ namespace Simulator.Laboratory.ViewModel
 
             var grounded = false;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 // Find ud af, om figuren står på jorden eller ej
                 // Vi vil gerne undersøge, hvad der er sket af kollisioner siden sidst, specielt om player 1 har kollideret med "ground", 
@@ -2347,7 +2355,7 @@ namespace Simulator.Laboratory.ViewModel
 
             // Denne callback funktion er som udgangspunkt identisk med DungeonCrawler8Directions,
             // men vi har alligevel brug for at customize den, for at gemme information om hvorvidt space blev trykket ned
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 // Det her virker tilsyneladende men er sgu alligevel lidt af et hack - for du kan vel ikke være sikker på at 
                 // space er nede, når denne funktion kaldes, og så risikerer du at misse et tryk på space
@@ -2426,7 +2434,7 @@ namespace Simulator.Laboratory.ViewModel
 
             var spaceKeyWasPressed = false;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 spaceKeyWasPressed = keyboardEvents.SpaceDown && keyboardState.SpaceDown;
 
@@ -2516,7 +2524,7 @@ namespace Simulator.Laboratory.ViewModel
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
             var left = false;
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 currentState.BodyStates.First().ArtificialVelocity = new Vector2D(left ? -3 : 3, 0);
                 left = !left;
@@ -2563,7 +2571,7 @@ namespace Simulator.Laboratory.ViewModel
             var stateIndexOfFirstShotInBurst = -1000;
             var stateIndexOfLastShotInBurst = -1000;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
@@ -2726,7 +2734,7 @@ namespace Simulator.Laboratory.ViewModel
             var stateIndexOfFirstShotInBurst = -1000;
             var stateIndexOfLastShotInBurst = -1000;
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
@@ -2886,7 +2894,7 @@ namespace Simulator.Laboratory.ViewModel
                 temp.Clear();
             };
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
@@ -3041,7 +3049,7 @@ namespace Simulator.Laboratory.ViewModel
                 return OutcomeOfCollisionBetweenTwoBodies.Block;
             };
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
@@ -3289,7 +3297,7 @@ namespace Simulator.Laboratory.ViewModel
                 return OutcomeOfCollisionBetweenTwoBodies.Block;
             };
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
@@ -3482,7 +3490,7 @@ namespace Simulator.Laboratory.ViewModel
                 return OutcomeOfCollisionBetweenTwoBodies.ElasticCollision;
             };
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 var currentStateOfMainBody = currentState.BodyStates.First();
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
@@ -3568,11 +3576,11 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
-            var currentKeyboardState = new Keyboard();
+            var currentKeyboardState = new KeyboardState();
             var spaceKeyWasPressed = false;
             var lastMovementDirection = new Vector2D(0, -1);
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 spaceKeyWasPressed = keyboardState.SpaceDown && !currentKeyboardState.SpaceDown;
                 currentKeyboardState = keyboardState.Clone();

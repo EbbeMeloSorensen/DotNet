@@ -24,8 +24,9 @@ namespace Simulator.Domain
         string message);
 
     public delegate bool InteractionCallBack(
-        Keyboard keyboardState,
-        Keyboard keyboardEvents,
+        KeyboardState keyboardState,
+        KeyboardState keyboardEvents,
+        MouseClickPosition? mouseClickPosition,
         Dictionary<int, List<BoundaryCollisionReport>> collisions, // Collisions since last consumption of current state
         State currentState);
 
@@ -109,7 +110,7 @@ namespace Simulator.Domain
                 {
                     case StandardInteractionCallback.DungeonCrawler8Directions:
                     {
-                        InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+                        InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
                         {
                             var currentStateOfMainBody = currentState.BodyStates.First();
                             var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;

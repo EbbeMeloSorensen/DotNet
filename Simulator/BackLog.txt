@@ -270,10 +270,8 @@ Done:
   - det er ikke skide let at gennemskue - fixet indtil videre med en try catch blok i value converteren
 
 Todo:
+* Man skal kunne påvirke tilstanden med mouse click events
 * Når der vælges noget i Unlocked Levels, skal den starte den bane, svarende til at man vælger i den anden liste og trykker start
-* Visse levels, (når de startes), skal tilføjes til den der liste 
-  o 
-  o måske skulle man operere med en collection af scener
 * Den kan stadig gå i uendelig løkke, selv om den er ret stabil - du skal nok have nogle fail fast guards ind..
 * Lav en side, hvor man ser alle baner samt den seneste og kan låse op for flere
 * Lav en Zelda style transition fra en level til den næste

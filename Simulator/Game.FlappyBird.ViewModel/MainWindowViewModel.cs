@@ -128,7 +128,7 @@ namespace Game.FlappyBird.ViewModel
                 return response;
             };
 
-            scene.InteractionCallBack = (keyboardState, keyboardEvents, collisions, currentState) =>
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 if (!keyboardState.UpArrowDown) return false;
 
