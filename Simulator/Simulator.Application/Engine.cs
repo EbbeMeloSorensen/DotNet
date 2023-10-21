@@ -382,7 +382,7 @@ namespace Simulator.Application
                     _stateSequenceCount++;
                     _lastIndexGenerated++;
 
-                    var message = $"State producer thread: Produced state {_lastIndexGenerated}. Buffer size: {_stateSequenceCount}";
+                    var message = $"State producer thread: Produced state {_lastIndexGenerated}. Buffer size: {_stateSequenceCount}. Bodies: {propagatedState.BodyStates.Count}";
 
                     if (_stateSequenceCount == QueueMaxSize)
                     {

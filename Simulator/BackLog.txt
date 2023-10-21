@@ -268,9 +268,17 @@ Done:
   - Hvis ikke man forsyner SceneViewManager med en, så skal den bruge en, der er default
 * Undersøg hvorfor det fucker op, hvis man prøver at skifte direkte fra level 1 til level 2 - det er det der skide magnification
   - det er ikke skide let at gennemskue - fixet indtil videre med en try catch blok i value converteren
+* Man skal kunne påvirke tilstanden med mouse click events
 
 Todo:
-* Man skal kunne påvirke tilstanden med mouse click events
+* Fix bug: I GenerateSceneAddBodiesByClicking4 kan man stoppe skydning ved f.eks. at sætte en masse kanoner hurtigt efter hinanden.
+  Det hænger jo nok sammen med at du discarder fremtidige states... i hvert fald så minder det om det, du havde under ShootEmUp serien.
+  Det var jo faktisk lige det du sloges så meget med for Jitter. Jitter har til formål at verificere, at tingene stadig virker, selv
+  om man invliderer future states i vildskab. Hvorfor virker det så i Jitter? Lige lidt detaljer først: I Jitter invaliderer du HVER
+  GANG Interaction Callbacl kaldes.
+
+* Lav en general purpose samling af operatorer til f.eks. at finde tætteste body af en given type (i stedet for at have det som lokale 
+  funktioner i viewmodel-klassen). Det kunne måske passende være extension methods til State
 * Når der vælges noget i Unlocked Levels, skal den starte den bane, svarende til at man vælger i den anden liste og trykker start
 * Den kan stadig gå i uendelig løkke, selv om den er ret stabil - du skal nok have nogle fail fast guards ind..
 * Lav en side, hvor man ser alle baner samt den seneste og kan låse op for flere

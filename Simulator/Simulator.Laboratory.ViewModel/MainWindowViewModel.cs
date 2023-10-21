@@ -60,7 +60,7 @@ namespace Simulator.Laboratory.ViewModel
             _shapeUpdateCallbacks = new Dictionary<Scene, ShapeUpdateCallback>();
 
             _logger = logger;
-            _logger = null; // Disable logging (it should only be used for debugging purposes)
+            //_logger = null; // Disable logging (it should only be used for debugging purposes)
             _logger?.WriteLine(LogMessageCategory.Information, "Simulator - Starting up");
 
             Outcome = null;
@@ -2359,9 +2359,6 @@ namespace Simulator.Laboratory.ViewModel
             // men vi har alligevel brug for at customize den, for at gemme information om hvorvidt space blev trykket ned
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                // Det her virker tilsyneladende men er sgu alligevel lidt af et hack - for du kan vel ikke være sikker på at 
-                // space er nede, når denne funktion kaldes, og så risikerer du at misse et tryk på space
-
                 spaceKeyWasPressed = keyboardEvents.SpaceDown && keyboardState.SpaceDown;
 
                 var currentStateOfMainBody = currentState.BodyStates.First();
@@ -3982,18 +3979,21 @@ namespace Simulator.Laboratory.ViewModel
 
         private static Scene GenerateSceneAddBodiesByClicking4()
         {
-            var disposeProjectilesMap = new Dictionary<int, int>();
+            const double radiusOfCannons = 0.2;
+            const double radiusOfProjectiles = 0.05;
+            const int rateOfFire = 50;
+
             var nextCannonId = 1000;
             var nextProjectileId = 10000;
-
-            var radiusOfCannons = 0.2;
-            var radiusOfProjectiles = 0.05;
+            var stateIndexOfFirstShotInSalvo = -1000;
+            var stateIndexOfNextPossibleShot = -1000;
+            var cannonCount = 0;
 
             var initialState = new State();
 
             var standardGravity = 0.0;
             var gravitationalConstant = 0.0;
-            var handleBodyCollisions = true;
+            var handleBodyCollisions = false;
             var coefficientOfFriction = 0.0;
 
             var scene = new Scene(
@@ -4008,221 +4008,100 @@ namespace Simulator.Laboratory.ViewModel
                 handleBodyCollisions,
                 0.005);
 
-            double DistanceToClosestBody(
-                State state,
-                Point2D point,
-                double radius)
-            {
-                if (!state.BodyStates.Any())
-                {
-                    return Double.MaxValue;
-                }
-
-                var minSqrDist = state.BodyStates.Min(_ =>
-                {
-                    return _.Position.AsPoint2D().SquaredDistanceTo(point);
-                });
-
-                var minDist = minSqrDist < double.Epsilon ? 0.0 : Math.Sqrt(minSqrDist);
-
-                return Math.Max(0.0, minDist - radius);
-            }
-
             scene.InitializationCallback = (state, message) =>
             {
-                disposeProjectilesMap.Clear();
                 nextCannonId = 1000;
-                nextProjectileId = 5000;
-            };
-
-            scene.CheckForCollisionBetweenBodiesCallback = (body1, body2) =>
-            {
-                // Vi interesserer os kun for kollisioner mellem enemies og projektiler
-                if (body1 is Enemy || body2 is Enemy)
-                {
-                    if (body1 is Projectile || body2 is Projectile)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            };
-
-            scene.CollisionBetweenTwoBodiesOccuredCallBack = (body1, body2) =>
-            {
-                if (body1 is Enemy || body2 is Enemy)
-                {
-                    if (body1 is Projectile || body2 is Projectile)
-                    {
-                        return OutcomeOfCollisionBetweenTwoBodies.Ignore;
-                    }
-                }
-
-                return OutcomeOfCollisionBetweenTwoBodies.Block;
+                nextProjectileId = 10000;
+                stateIndexOfFirstShotInSalvo = -1000;
+                stateIndexOfNextPossibleShot = -1000;
+                cannonCount = 0;
             };
 
             Point2D mousePos = null;
+            var stateIndexAtLastClick = 0;
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                if (mouseClickPosition == null) return false;
+                if (mouseClickPosition == null)
+                {
+                    mousePos = null;
+                    //return false;
+                    return true;
+                }
 
                 mousePos = mouseClickPosition.Position;
+                stateIndexAtLastClick = currentState.Index;
                 return true;
             };
 
-            var coolDown = 100;
-            var coolDownDictionary = new Dictionary<int, int>();
-
-            //var enemies = Enumerable.Range(1, 15)
-            //    .Select(i => new
-            //    {
-            //        StateIndex = i * 200,
-            //        BodyState = new BodyState(new Enemy(i, 0.15, 1, false), new Vector2D(-10, 0), new Vector2D(1.0, 0.0)) { Life = 5 }
-            //    })
-            //    .ToDictionary(x => x.StateIndex, x => x.BodyState);
-
+            // Husk, at denne kaldes af BEREGNEREN, der jo altså som regel er langt foran current state
             scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
-                var response = new PostPropagationResponse();
-
-                // Remove projectile due to expiration?
-                if (disposeProjectilesMap.ContainsKey(propagatedState.Index))
-                {
-                    var projectile = propagatedState.TryGetBodyState(disposeProjectilesMap[propagatedState.Index]);
-                    propagatedState?.RemoveBodyState(projectile);
-                }
-
-                // Remove projectile due to hitting an enemy?
-                //if (boundaryCollisionReports.Any())
-                //{
-                //    propagatedState.RemoveBodyStates(boundaryCollisionReports
-                //        .Where(bcr => bcr.Body is Projectile)
-                //        .Select(bcr => bcr.Body.Id));
-                //}
-
-                //var hitEnemies = new HashSet<BodyState>();
-
-                //bodyCollisionReports.ForEach(bcr =>
-                //{
-                //    if (bcr.Body1 is Player1Circular || bcr.Body2 is Player1Circular)
-                //    {
-                //        // Player collided with enemy
-                //        var damage =
-                //            (bcr.Body1 is Player1Circular && bcr.Body2.Mass > 0.5 ||
-                //             bcr.Body2 is Player1Circular && bcr.Body1.Mass > 0.5)
-                //             ? 3.0
-                //             : 1.0;
-
-                //        var player = propagatedState.BodyStates.First();
-                //        player.Life -= damage;
-
-                //        if (player.Life < 0.5)
-                //        {
-                //            response.IndexOfLastState = propagatedState.Index;
-                //            response.Outcome = "Game Over";
-                //        }
-                //    }
-                //    else if (bcr.Body1 is Projectile || bcr.Body2 is Projectile)
-                //    {
-                //        // Projectile collided with enemy
-                //        if (bcr.Body1 is Projectile)
-                //        {
-                //            propagatedState.RemoveBodyStates(new List<int> { bcr.Body1.Id });
-                //            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id);
-                //            hitEnemies.Add(bodyState);
-                //        }
-                //        else
-                //        {
-                //            propagatedState.RemoveBodyStates(new List<int> { bcr.Body2.Id });
-                //            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id);
-                //            hitEnemies.Add(bodyState);
-                //        }
-                //    }
-                //});
-
-                //hitEnemies.ToList().ForEach(e =>
-                //{
-                //    e.Life -= 1;
-
-                //    if (e.Life <= 0.1)
-                //    {
-                //        propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
-                        
-                //        if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
-                //        {
-                //            // All enemies are dead, so player wins
-                //            response.IndexOfLastState = propagatedState.Index;
-                //            response.Outcome = "You Win";
-                //        }
-                //    }
-                //});
-
                 // Determine if we should add a new cannon
-                if (mousePos != null)
+                if (mousePos != null && cannonCount == 0)
                 {
                     var vector = new Vector2D(mousePos.X, mousePos.Y);
 
-                    var distanceToClosesetBody = DistanceToClosestBody(propagatedState, mousePos, radiusOfCannons);
+                    propagatedState.AddBodyState(new BodyState(
+                        new CircularBody(nextCannonId, radiusOfCannons, 1, false), vector, new Vector2D(0, 0)));
 
-                    if (distanceToClosesetBody > radiusOfCannons)
-                    {
-                        propagatedState.AddBodyState(new BodyState(
-                            new CircularBody(nextCannonId, radiusOfCannons, 1, false), vector, new Vector2D(0, 0)));
+                    stateIndexOfFirstShotInSalvo = stateIndexAtLastClick + 1;
+                    stateIndexOfNextPossibleShot = stateIndexAtLastClick + 1 + rateOfFire;
 
-                        coolDownDictionary[nextCannonId] = propagatedState.Index + coolDown;
-
-                        nextCannonId++;
-                    }
+                    cannonCount++;
+                    nextCannonId++;
 
                     mousePos = null;
                 }
 
-                // Determine if any of the cannons shoot
-                var indexesOfShootingCannons = new List<int>();
-
-                foreach (var keyValuePair in coolDownDictionary)
+                // Determine if a placed cannon shoots
+                //if (cannonCount > 0 && (propagatedState.Index - stateIndexOfFirstShotInSalvo) % rateOfFire == 0) 
+                if (cannonCount > 0 && propagatedState.Index == stateIndexOfNextPossibleShot)
                 {
-                    if (keyValuePair.Value == propagatedState.Index)
-                    {
-                        var shootingCannon = propagatedState.TryGetBodyState(keyValuePair.Key);
+                    propagatedState.AddBodyState(new BodyState(
+                        new Projectile(
+                            nextProjectileId++,
+                            radiusOfProjectiles,
+                            1,
+                            false),
+                            new Vector2D(0, 0),
+                            new Vector2D(0, 5)));
 
-                        if (shootingCannon != null)
-                        {
-                            // Add a new "projectile"
-                            var position = shootingCannon.Position;
+                    // DEN HER LINIE gør, at efterfølgende klik munder ud i, at der IKKE skydes.
+                    //stateIndexOfNextPossibleShot = propagatedState.Index + rateOfFire;
 
-                            propagatedState.AddBodyState(new BodyState(
-                                new Projectile(
-                                    nextProjectileId, 
-                                    radiusOfProjectiles, 
-                                    1, 
-                                    false),
-                                    position, 
-                                    new Vector2D(0, 5)));
-
-                            disposeProjectilesMap[propagatedState.Index + 100] = nextProjectileId;
-
-                            nextProjectileId++;
-
-                            indexesOfShootingCannons.Add(keyValuePair.Key);
-                        }
-                    }
+                    // Hvorfor virker det ikke?
+                    // -> I første omgang, så får den lavet tilstanden med et projektil, men så sker der det, at 
+                    //    consumeren efterspørger en tidligere tilstand, hvor projektilet ENDNU IKKE ER.
+                    //    Det er godt og fint, men når så interaction callback funktionen kaldes og man i den forbindelse
+                    //    discarder future states, så FLUSHES tilstanden med projektilet ud, OG - når så man kommer op på den
+                    //    tilstand, hvor projektilet i den tidligere kørsel blev genereret, så laves den IKKE, FORDI den jo
+                    //    tror, at den skal laves senere, når nu vi jo altså har bumpet stateIndexOfNextPossibleShot-variablen.
+                    //    Hvis man som i Shoot'Em Up 4 afgør, om man skal lave en ny under anvendelse af et tal, som IKKE bumpes
+                    //    i forbindelse med at der tilføjes et projektil til en beregnet tilstand, så virker det.
+                    // SUMMA SUMMARUM:
+                    //    Du bør IKKE ændre en variabel, der bruges til at afgøre, om en tilsstand skal ændre sig, i forbindelse
+                    //    med at du ændrer tilstanden, FORDI den tilstand med stor sandsynlighed bliver discarded. Du er nødt til
+                    //    at sørge for, at tilstanden beregnes på SAMME måde, når produceren påny kommer hen til den tilstand, der
+                    //    gjorde sig gældende umiddelbart før pågældende ændring, dvs værdierne for de variable, der afgør, om
+                    //    og hvordan tilstanden ændres, skal bibeholdes.
+                    // LØSNING:
+                    //    Du skal lave en løsning, hvor kriteriet for at kanonen kan afgive et skud, er hvor lang tid der er gået
+                    //    siden den SIDST afgav et skud, og det ved du altså kun, hvis du "høster" en tilstand, hvor den faktisk
+                    //    HAR afgivet det skud - ellers er det bare et potentielt event på lige fod med det, du også opererer med
+                    //    i andet regi, såsom body collisions.
+                    // MEN - hvorfor er det nu lige, at der tilsyneladende ikke er problemer i Shoot'em Up 4? For der manipulerer
+                    //       du jo altså også en variabel, der bruges i Post propagation callback. Måske fordi du kun sætter den
+                    //       til current state index plus 1, så den somehow ikke når at blive invalideret.
+                    //       Generelt må princippet vel være, at man kun kan ændre en tilstand i post propagation callback med
+                    //       udgangspunkt i noget, der ER sket (dvs høstet). Det betyder, at man godt må ændre en tilstand med
+                    //       udgangspunkt i variable, der sættes i handleren for INTERACTION CALLBACK (som jo repræsenterer
+                    //       current state, dvs seneste HØSTEDE tilstand). Man må derimod IKKE manipulere variable, der influerer
+                    //       på, om en tilstand skal ændres, i selve handleren for post propagation callback, idet den beskæftiger
+                    //       sig med FREMTIDIGE tilstande, som ofte discardes.
                 }
 
-                indexesOfShootingCannons.ForEach(_ =>
-                {
-                    coolDownDictionary[_] = propagatedState.Index + coolDown;
-                });
-
-                // Add an enemy?
-                //if (enemies.ContainsKey(propagatedState.Index))
-                //{
-                //    propagatedState.AddBodyState(enemies[propagatedState.Index]);
-                //}
-
-                return response;
+                return new PostPropagationResponse();
             };
 
             return scene;
