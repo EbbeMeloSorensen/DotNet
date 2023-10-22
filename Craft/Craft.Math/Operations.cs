@@ -29,6 +29,17 @@ namespace Craft.Math
             return dx * dx + dy * dy;
         }
 
+        // Calculates the squared distance between 2 points represented by vectors
+        public static double SquaredDistanceTo(
+            this Vector2D v1,
+            Vector2D v2)
+        {
+            var dx = v2.X - v1.X;
+            var dy = v2.Y - v1.Y;
+
+            return dx * dx + dy * dy;
+        }
+
         // Determines whether 2 lines intersect. 
         public static bool Intersects(
             this LineSegment2D l1, 

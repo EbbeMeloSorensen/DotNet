@@ -3929,21 +3929,6 @@ namespace Simulator.Laboratory.ViewModel
 
             Point2D mousePos = null;
 
-            double DistanceToClosestBody(
-                State state,
-                Point2D point,
-                double radius)
-            {
-                var minSqrDist = state.BodyStates.Min(_ =>
-                {
-                    return _.Position.AsPoint2D().SquaredDistanceTo(point);
-                });
-
-                var minDist = minSqrDist < double.Epsilon ? 0.0 : Math.Sqrt(minSqrDist);
-
-                return Math.Max(0.0, minDist - radius);
-            }
-
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
                 if (mouseClickPosition == null) return false;
@@ -3958,14 +3943,12 @@ namespace Simulator.Laboratory.ViewModel
             {
                 if (mousePos != null)
                 {
-                    var vector = new Vector2D(mousePos.X, mousePos.Y);
+                    var mousePosAsVector = mousePos.AsVector2D();
 
-                    var distanceToClosesetBody = DistanceToClosestBody(propagatedState, mousePos, radiusOfBalls);
-
-                    if (distanceToClosesetBody > radiusOfBalls)
+                    if (propagatedState.DistanceToCenterOfClosestBody(mousePosAsVector) > 2 * radiusOfBalls)
                     {
                         propagatedState.AddBodyState(new BodyState(
-                            new CircularBody(nextBodyId++, radiusOfBalls, 1, true), vector, new Vector2D(0, 0)));
+                            new CircularBody(nextBodyId++, radiusOfBalls, 1, true), mousePosAsVector, new Vector2D(0, 0)));
                     }
 
                     mousePos = null;
@@ -4032,13 +4015,16 @@ namespace Simulator.Laboratory.ViewModel
                 // Determine if we should add a new cannon
                 if (mousePos != null)
                 {
-                    var vector = new Vector2D(mousePos.X, mousePos.Y);
+                    var mousePosAsVector = mousePos.AsVector2D();
 
-                    propagatedState.AddBodyState(new BodyState(
-                        new Cannon(nextCannonId, radiusOfCannons), vector, new Vector2D(0, 0))
+                    if (propagatedState.DistanceToCenterOfClosestBody(mousePosAsVector) > 2 * radiusOfCannons)
                     {
-                        CoolDown = cannonCoolDown
-                    });
+                        propagatedState.AddBodyState(new BodyState(
+                            new Cannon(nextCannonId, radiusOfCannons), mousePosAsVector, new Vector2D(0, 0))
+                        {
+                            CoolDown = cannonCoolDown
+                        });
+                    }
 
                     nextCannonId++;
 
