@@ -3945,7 +3945,9 @@ namespace Simulator.Laboratory.ViewModel
                 {
                     var mousePosAsVector = mousePos.AsVector2D();
 
-                    if (propagatedState.DistanceToCenterOfClosestBody(mousePosAsVector) > 2 * radiusOfBalls)
+                    var bodyCenters = propagatedState.BodyStates.Select(_ => _.Position);
+
+                    if (bodyCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfBalls)
                     {
                         propagatedState.AddBodyState(new BodyState(
                             new CircularBody(nextBodyId++, radiusOfBalls, 1, true), mousePosAsVector, new Vector2D(0, 0)));
@@ -4009,24 +4011,25 @@ namespace Simulator.Laboratory.ViewModel
                 return true;
             };
 
-            // Husk, at denne kaldes af BEREGNEREN, der jo altså som regel er langt foran current state
             scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
                 // Determine if we should add a new cannon
                 if (mousePos != null)
                 {
                     var mousePosAsVector = mousePos.AsVector2D();
+                    
+                    var cannonCenters = propagatedState.BodyStates
+                        .Where(_ => _.Body is Cannon)
+                        .Select(_ => _.Position);
 
-                    if (propagatedState.DistanceToCenterOfClosestBody(mousePosAsVector) > 2 * radiusOfCannons)
+                    if (cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons)
                     {
                         propagatedState.AddBodyState(new BodyState(
-                            new Cannon(nextCannonId, radiusOfCannons), mousePosAsVector, new Vector2D(0, 0))
+                            new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector, new Vector2D(0, 0))
                         {
                             CoolDown = cannonCoolDown
                         });
                     }
-
-                    nextCannonId++;
 
                     mousePos = null;
                 }

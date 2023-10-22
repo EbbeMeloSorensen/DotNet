@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Craft.Math
 {
@@ -38,6 +41,20 @@ namespace Craft.Math
             var dy = v2.Y - v1.Y;
 
             return dx * dx + dy * dy;
+        }
+
+        public static double DistanceToClosestPoint(
+            this IEnumerable<Vector2D> points,
+            Vector2D point)
+        {
+            if (!points.Any())
+            {
+                return double.MaxValue;
+            }
+
+            var minSqrDist = points.Min(_ => _.SquaredDistanceTo(point));
+
+            return minSqrDist < double.Epsilon ? 0.0 : System.Math.Sqrt(minSqrDist);
         }
 
         // Determines whether 2 lines intersect. 

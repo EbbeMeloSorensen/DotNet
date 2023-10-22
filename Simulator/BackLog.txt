@@ -276,9 +276,9 @@ Done:
   GANG Interaction Callback kaldes.
 * Lav en general purpose samling af operatorer til f.eks. at finde tætteste body af en given type (i stedet for at have det som lokale 
   funktioner i viewmodel-klassen). Det kunne måske passende være extension methods til State
+* Placering af kanoner - der skal man kun sammenligne med andre kanoner og ikke projektiler
 
 Todo:
-* Placering af kanoner - der skal man kun sammenligne med andre kanoner og ikke projektiler
 * Bedre state mascine i rocket
 * Unlock af baner i rocket
 * Når der vælges noget i Unlocked Levels, skal den starte den bane, svarende til at man vælger i den anden liste og trykker start

@@ -71,21 +71,5 @@ namespace Simulator.Domain
         {
             return BodyStates.Count == 0 ? null : BodyStates.First().Position;
         }
-
-        public double DistanceToCenterOfClosestBody(
-            Vector2D point)
-        {
-            if (!BodyStates.Any())
-            {
-                return double.MaxValue;
-            }
-
-            var minSqrDist = BodyStates.Min(_ =>
-            {
-                return _.Position.SquaredDistanceTo(point);
-            });
-
-            return minSqrDist < double.Epsilon ? 0.0 : Math.Sqrt(minSqrDist);
-        }
     }
 }
