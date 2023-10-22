@@ -3981,12 +3981,10 @@ namespace Simulator.Laboratory.ViewModel
         {
             const double radiusOfCannons = 0.2;
             const double radiusOfProjectiles = 0.05;
-            const int rateOfFire = 50;
+            const int cannonCoolDown = 100;
 
             var nextCannonId = 1000;
             var nextProjectileId = 10000;
-            var stateIndexOfFirstShotInSalvo = -1000;
-            var stateIndexOfNextPossibleShot = -1000;
             var cannonCount = 0;
 
             var initialState = new State();
@@ -4012,8 +4010,6 @@ namespace Simulator.Laboratory.ViewModel
             {
                 nextCannonId = 1000;
                 nextProjectileId = 10000;
-                stateIndexOfFirstShotInSalvo = -1000;
-                stateIndexOfNextPossibleShot = -1000;
                 cannonCount = 0;
             };
 
@@ -4025,8 +4021,7 @@ namespace Simulator.Laboratory.ViewModel
                 if (mouseClickPosition == null)
                 {
                     mousePos = null;
-                    //return false;
-                    return true;
+                    return false;
                 }
 
                 mousePos = mouseClickPosition.Position;
@@ -4043,10 +4038,10 @@ namespace Simulator.Laboratory.ViewModel
                     var vector = new Vector2D(mousePos.X, mousePos.Y);
 
                     propagatedState.AddBodyState(new BodyState(
-                        new CircularBody(nextCannonId, radiusOfCannons, 1, false), vector, new Vector2D(0, 0)));
-
-                    stateIndexOfFirstShotInSalvo = stateIndexAtLastClick + 1;
-                    stateIndexOfNextPossibleShot = stateIndexAtLastClick + 1 + rateOfFire;
+                        new CircularBody(nextCannonId, radiusOfCannons, 1, false), vector, new Vector2D(0, 0))
+                    {
+                        CoolDown = cannonCoolDown
+                    });
 
                     cannonCount++;
                     nextCannonId++;
@@ -4055,50 +4050,23 @@ namespace Simulator.Laboratory.ViewModel
                 }
 
                 // Determine if a placed cannon shoots
-                //if (cannonCount > 0 && (propagatedState.Index - stateIndexOfFirstShotInSalvo) % rateOfFire == 0) 
-                if (cannonCount > 0 && propagatedState.Index == stateIndexOfNextPossibleShot)
+                if (cannonCount > 0)
                 {
-                    propagatedState.AddBodyState(new BodyState(
-                        new Projectile(
-                            nextProjectileId++,
-                            radiusOfProjectiles,
-                            1,
-                            false),
+                    var cannon = propagatedState.BodyStates.Single(_ => !(_.Body is Projectile));
+
+                    if (cannon.CoolDown == 0)
+                    {
+                        propagatedState.AddBodyState(new BodyState(
+                            new Projectile(
+                                nextProjectileId++,
+                                radiusOfProjectiles,
+                                1,
+                                false),
                             new Vector2D(0, 0),
                             new Vector2D(0, 5)));
 
-                    // DEN HER LINIE gør, at efterfølgende klik munder ud i, at der IKKE skydes.
-                    //stateIndexOfNextPossibleShot = propagatedState.Index + rateOfFire;
-
-                    // Hvorfor virker det ikke?
-                    // -> I første omgang, så får den lavet tilstanden med et projektil, men så sker der det, at 
-                    //    consumeren efterspørger en tidligere tilstand, hvor projektilet ENDNU IKKE ER.
-                    //    Det er godt og fint, men når så interaction callback funktionen kaldes og man i den forbindelse
-                    //    discarder future states, så FLUSHES tilstanden med projektilet ud, OG - når så man kommer op på den
-                    //    tilstand, hvor projektilet i den tidligere kørsel blev genereret, så laves den IKKE, FORDI den jo
-                    //    tror, at den skal laves senere, når nu vi jo altså har bumpet stateIndexOfNextPossibleShot-variablen.
-                    //    Hvis man som i Shoot'Em Up 4 afgør, om man skal lave en ny under anvendelse af et tal, som IKKE bumpes
-                    //    i forbindelse med at der tilføjes et projektil til en beregnet tilstand, så virker det.
-                    // SUMMA SUMMARUM:
-                    //    Du bør IKKE ændre en variabel, der bruges til at afgøre, om en tilsstand skal ændre sig, i forbindelse
-                    //    med at du ændrer tilstanden, FORDI den tilstand med stor sandsynlighed bliver discarded. Du er nødt til
-                    //    at sørge for, at tilstanden beregnes på SAMME måde, når produceren påny kommer hen til den tilstand, der
-                    //    gjorde sig gældende umiddelbart før pågældende ændring, dvs værdierne for de variable, der afgør, om
-                    //    og hvordan tilstanden ændres, skal bibeholdes.
-                    // LØSNING:
-                    //    Du skal lave en løsning, hvor kriteriet for at kanonen kan afgive et skud, er hvor lang tid der er gået
-                    //    siden den SIDST afgav et skud, og det ved du altså kun, hvis du "høster" en tilstand, hvor den faktisk
-                    //    HAR afgivet det skud - ellers er det bare et potentielt event på lige fod med det, du også opererer med
-                    //    i andet regi, såsom body collisions.
-                    // MEN - hvorfor er det nu lige, at der tilsyneladende ikke er problemer i Shoot'em Up 4? For der manipulerer
-                    //       du jo altså også en variabel, der bruges i Post propagation callback. Måske fordi du kun sætter den
-                    //       til current state index plus 1, så den somehow ikke når at blive invalideret.
-                    //       Generelt må princippet vel være, at man kun kan ændre en tilstand i post propagation callback med
-                    //       udgangspunkt i noget, der ER sket (dvs høstet). Det betyder, at man godt må ændre en tilstand med
-                    //       udgangspunkt i variable, der sættes i handleren for INTERACTION CALLBACK (som jo repræsenterer
-                    //       current state, dvs seneste HØSTEDE tilstand). Man må derimod IKKE manipulere variable, der influerer
-                    //       på, om en tilstand skal ændres, i selve handleren for post propagation callback, idet den beskæftiger
-                    //       sig med FREMTIDIGE tilstande, som ofte discardes.
+                        cannon.CoolDown = cannonCoolDown;
+                    }
                 }
 
                 return new PostPropagationResponse();

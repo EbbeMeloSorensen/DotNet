@@ -43,11 +43,6 @@ namespace Simulator.Application
             var iteration = 1;
             while (timeLeftInCurrentIncrement > 1E-12)
             {
-                if (iteration > 100)
-                {
-                    //var a = 0;
-                }
-
                 // Beregn positionsforskydninger givet de gældende kræfter (hvor vi vel at mærke ikke tager højde for boundaries)
                 var propagatedBodyStateMap = CalculatePropagatedBodyStateMap(
                     state,
@@ -358,6 +353,7 @@ namespace Simulator.Application
                     Orientation = x.nextOrientation,
                     RotationalSpeed = x.bs.RotationalSpeed,
                     Life = x.bs.Life,
+                    CoolDown = Math.Max(0, x.bs.CoolDown - 1),
                     ArtificialVelocity = x.bs.ArtificialVelocity,
                     CustomForce = x.bs.CustomForce
                 },
