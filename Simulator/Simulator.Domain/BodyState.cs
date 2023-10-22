@@ -11,8 +11,9 @@ namespace Simulator.Domain
         public Vector2D CustomForce { get; set; }
         public double Orientation { get; set; }
         public double RotationalSpeed { get; set; }
-        public double Life { get; set; }
-        public double CoolDown { get; set; }
+        public int Life { get; set; }
+        public int LifeSpan { get; set; }
+        public int CoolDown { get; set; }
 
         public Vector2D EffectiveCustomForce => CustomForce.Rotate(-Orientation);
         public Vector2D EffectiveArtificialVelocity => ArtificialVelocity.Rotate(-Orientation);
@@ -40,6 +41,7 @@ namespace Simulator.Domain
                 Orientation = Orientation,
                 RotationalSpeed = RotationalSpeed,
                 Life = Life,
+                LifeSpan = LifeSpan,
                 CoolDown = CoolDown
             };
         }

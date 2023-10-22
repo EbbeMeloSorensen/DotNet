@@ -353,6 +353,7 @@ namespace Simulator.Application
                     Orientation = x.nextOrientation,
                     RotationalSpeed = x.bs.RotationalSpeed,
                     Life = x.bs.Life,
+                    LifeSpan = Math.Max(0, x.bs.LifeSpan - 1),
                     CoolDown = Math.Max(0, x.bs.CoolDown - 1),
                     ArtificialVelocity = x.bs.ArtificialVelocity,
                     CustomForce = x.bs.CustomForce

@@ -3151,13 +3151,13 @@ namespace Simulator.Laboratory.ViewModel
                         var damage =
                             (bcr.Body1 is Player1Circular && bcr.Body2.Mass > 0.5 ||
                              bcr.Body2 is Player1Circular && bcr.Body1.Mass > 0.5)
-                             ? 3.0
-                             : 1.0;
+                             ? 3
+                             : 1;
 
                         var player = propagatedState.BodyStates.First();
                         player.Life -= damage;
 
-                        if (player.Life < 0.5)
+                        if (player.Life == 0)
                         {
                             response.IndexOfLastState = propagatedState.Index;
                             response.Outcome = "Game Over";
@@ -3982,10 +3982,10 @@ namespace Simulator.Laboratory.ViewModel
             const double radiusOfCannons = 0.2;
             const double radiusOfProjectiles = 0.05;
             const int cannonCoolDown = 100;
+            const int projectileLifespan = 100;
 
             var nextCannonId = 1000;
             var nextProjectileId = 10000;
-            var cannonCount = 0;
 
             var initialState = new State();
 
@@ -4010,11 +4010,9 @@ namespace Simulator.Laboratory.ViewModel
             {
                 nextCannonId = 1000;
                 nextProjectileId = 10000;
-                cannonCount = 0;
             };
 
             Point2D mousePos = null;
-            var stateIndexAtLastClick = 0;
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
@@ -4025,7 +4023,6 @@ namespace Simulator.Laboratory.ViewModel
                 }
 
                 mousePos = mouseClickPosition.Position;
-                stateIndexAtLastClick = currentState.Index;
                 return true;
             };
 
@@ -4033,41 +4030,50 @@ namespace Simulator.Laboratory.ViewModel
             scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
                 // Determine if we should add a new cannon
-                if (mousePos != null && cannonCount == 0)
+                if (mousePos != null)
                 {
                     var vector = new Vector2D(mousePos.X, mousePos.Y);
 
                     propagatedState.AddBodyState(new BodyState(
-                        new CircularBody(nextCannonId, radiusOfCannons, 1, false), vector, new Vector2D(0, 0))
+                        new Cannon(nextCannonId, radiusOfCannons), vector, new Vector2D(0, 0))
                     {
                         CoolDown = cannonCoolDown
                     });
 
-                    cannonCount++;
                     nextCannonId++;
 
                     mousePos = null;
                 }
 
-                // Determine if a placed cannon shoots
-                if (cannonCount > 0)
+                // Remove projectiles
+                var disposableProjectiles = propagatedState.BodyStates
+                    .Where(_ => _.Body is Projectile && _.LifeSpan == 0)
+                    .Select(_ => _.Body.Id)
+                    .ToList();
+
+                propagatedState.RemoveBodyStates(disposableProjectiles);
+
+                // Determine if some of the cannons shoot
+                var bodyStatesOfCannonsThatMayShoot = propagatedState.BodyStates
+                    .Where(_ => _.Body is Cannon && _.CoolDown == 0)
+                    .ToList();
+
+                bodyStatesOfCannonsThatMayShoot.ForEach(bodyState =>
                 {
-                    var cannon = propagatedState.BodyStates.Single(_ => !(_.Body is Projectile));
+                    propagatedState.AddBodyState(new BodyState(
+                        new Projectile(
+                            nextProjectileId++,
+                            radiusOfProjectiles,
+                            1,
+                            false),
+                        bodyState.Position,
+                        new Vector2D(0, 5))
+                        {
+                            LifeSpan = projectileLifespan
+                        });
 
-                    if (cannon.CoolDown == 0)
-                    {
-                        propagatedState.AddBodyState(new BodyState(
-                            new Projectile(
-                                nextProjectileId++,
-                                radiusOfProjectiles,
-                                1,
-                                false),
-                            new Vector2D(0, 0),
-                            new Vector2D(0, 5)));
-
-                        cannon.CoolDown = cannonCoolDown;
-                    }
-                }
+                    bodyState.CoolDown = cannonCoolDown;
+                });
 
                 return new PostPropagationResponse();
             };
