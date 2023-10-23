@@ -348,13 +348,14 @@ namespace Simulator.Application
                 select new { bs, nextPosition, nextNaturalVelocity, nextOrientation };
 
             return query.ToDictionary(
-                x => new BodyState(x.bs.Body, x.nextPosition, x.nextNaturalVelocity)
+                x => new BodyState(x.bs.Body, x.nextPosition)
                 {
                     Orientation = x.nextOrientation,
                     RotationalSpeed = x.bs.RotationalSpeed,
                     Life = x.bs.Life,
                     LifeSpan = Math.Max(0, x.bs.LifeSpan - 1),
                     CoolDown = Math.Max(0, x.bs.CoolDown - 1),
+                    NaturalVelocity = x.nextNaturalVelocity,
                     ArtificialVelocity = x.bs.ArtificialVelocity,
                     CustomForce = x.bs.CustomForce
                 },

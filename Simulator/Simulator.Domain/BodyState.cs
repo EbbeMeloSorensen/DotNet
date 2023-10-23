@@ -1,4 +1,5 @@
-﻿using Craft.Math;
+﻿using System;
+using Craft.Math;
 
 namespace Simulator.Domain
 {
@@ -21,21 +22,21 @@ namespace Simulator.Domain
 
         public BodyState(
             Body body,
-            Vector2D position,
-            Vector2D velocity)
+            Vector2D position)
         {
             Body = body;
             Position = position;
-            NaturalVelocity = velocity;
-
+            
+            NaturalVelocity = new Vector2D(0, 0);
             ArtificialVelocity = new Vector2D(0, 0);
             CustomForce = new Vector2D(0, 0);
         }
 
         public BodyState Clone()
         {
-            return new BodyState(Body, Position, NaturalVelocity)
+            return new BodyState(Body, Position)
             {
+                NaturalVelocity = NaturalVelocity,
                 ArtificialVelocity = ArtificialVelocity,
                 CustomForce = CustomForce,
                 Orientation = Orientation,
@@ -44,6 +45,18 @@ namespace Simulator.Domain
                 LifeSpan = LifeSpan,
                 CoolDown = CoolDown
             };
+        }
+
+        public BodyState Propagate(
+            double time,
+            Vector2D force)
+        {
+            var acceleration = force / Body.Mass;
+            var nextNaturalVelocity = NaturalVelocity + time * acceleration;
+            var nextPosition = Position + time * Velocity;
+            var nextOrientation = Orientation + time * RotationalSpeed;
+
+            throw new NotImplementedException();
         }
     }
 }

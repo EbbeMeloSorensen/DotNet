@@ -336,7 +336,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRocket1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1))
             {
                 Orientation = 0.5 * Math.PI,
                 CustomForce = new Vector2D(1, 0)
@@ -378,7 +378,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRocket2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1))
             {
                 Orientation = 0.5 * Math.PI
             });
@@ -428,7 +428,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRocket3()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1))
             {
                 Orientation = 0.5 * Math.PI
             });
@@ -478,7 +478,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRocket4()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(-0.5, -0.5), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(-0.5, -0.5))
             {
                 Orientation = 0.5 * Math.PI
             });
@@ -579,7 +579,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 60,
-                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(0.5, -0.75), new Vector2D(1, 0))
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(0.5, -0.75)){NaturalVelocity = new Vector2D(1, 0) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -631,7 +631,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 60,
-                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(0.5, -0.75), new Vector2D(1, 0))
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(0.5, -0.75)){NaturalVelocity = new Vector2D(1, 0) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -670,7 +670,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 150,
-                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(-0.8, 0), new Vector2D(0.3, 0))
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(-0.8, 0)){NaturalVelocity = new Vector2D(0.3, 0) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -711,7 +711,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 20,
-                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(-0.8, 0.8), new Vector2D(2.7, -4))
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(-0.8, 0.8)){NaturalVelocity = new Vector2D(2.7, -4) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -731,7 +731,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBall1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(1.5, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
 
             //var scene = new Scene("Moving ball I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
             var scene = new Scene("Moving ball I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
@@ -750,7 +750,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBall2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(1.5, 0.5)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
             var scene = new Scene("Moving ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -770,7 +770,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBall3()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(1.5, 0.5)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
             var scene = new Scene("Moving ball III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -790,7 +790,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBall4()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(1.5, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
 
             var scene = new Scene("Moving ball IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -810,7 +810,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBall5()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(1.5, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
 
             var scene = new Scene("Moving ball V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -830,7 +830,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBrick1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, -0.125), new Vector2D(1.5, 0.5)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
             var scene = new Scene("Moving brick I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -850,7 +850,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBrick2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.5, 0.3, 1, true), new Vector2D(1, -0.125), new Vector2D(1.5, 1)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.5, 0.3, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 1) });
 
             var scene = new Scene("Moving brick II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -874,7 +874,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBrick3()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, -0.125), new Vector2D(1.5, 0.5)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
             var scene = new Scene("Moving brick III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -894,7 +894,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBrick4()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, 1), new Vector2D(1, 0)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, 1)){NaturalVelocity = new Vector2D(1, 0) });
 
             var scene = new Scene("Moving brick IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -912,7 +912,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBrick5()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.4, 1, true), new Vector2D(1, 0.25), new Vector2D(1, 1)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.4, 1, true), new Vector2D(1, 0.25)){NaturalVelocity = new Vector2D(1, 1) });
 
             var scene = new Scene("Moving brick V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -932,7 +932,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMovingBrick6()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.3, 1, true), new Vector2D(1, -0.125), new Vector2D(1.5, -1.4)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.4, 0.3, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, -1.4) });
 
             var scene = new Scene("Moving brick VI", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -957,7 +957,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRotation1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1))
             {
                 RotationalSpeed = Math.PI
             });
@@ -970,7 +970,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRotation2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1))
             {
                 Orientation = 0.25 * Math.PI,
                 RotationalSpeed = 0.5 * Math.PI,
@@ -984,7 +984,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRotation3()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1))
             {
                 Orientation = 0.5 * Math.PI
             });
@@ -1024,7 +1024,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRotation4()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1))
             {
                 Orientation = 0.5 * Math.PI
             });
@@ -1079,7 +1079,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBallRestingInGravityField()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
             var scene = new Scene("Ball resting in gravity field", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.005);
 
@@ -1092,7 +1092,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBallInteraction1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
             var scene = new Scene("Ball interaction I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
 
@@ -1106,7 +1106,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRotationConstrained1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1))
             {
                 Orientation = 0.5 * Math.PI
             });
@@ -1167,7 +1167,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRotationConstrained2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1))
             {
                 Orientation = 0.5 * Math.PI
             });
@@ -1225,7 +1225,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRotationConstrained3()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1.7), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1.7))
             {
                 Orientation = 0.5 * Math.PI
             });
@@ -1284,7 +1284,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBallInteraction2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1.03, -0.125), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1.03, -0.125)));
 
             var scene = new Scene("Ball interaction II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
 
@@ -1299,7 +1299,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBallInteraction3()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(1, 0.0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(1, 0.0)));
 
             var scene = new Scene("Ball interaction III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
 
@@ -1314,7 +1314,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBallInteraction4()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
             var scene = new Scene("Ball interaction IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
 
@@ -1330,7 +1330,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBallInteraction5()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
             var scene = new Scene("Ball interaction V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
 
@@ -1358,9 +1358,9 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBallInteractionLargeScene1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(3, 2.5), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.125, 1, true), new Vector2D(1, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(3, 2.5)));
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.125, 1, true), new Vector2D(1, 0)));
 
             var scene = new Scene("Ball interaction, large scene I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005, SceneViewMode.FocusOnFirstBody, -0.5, -0.5, 9.5, 9.5);
 
@@ -1385,9 +1385,9 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBallInteractionLargeScene2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 0.5), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.125, 1, true), new Vector2D(1, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 0.5)));
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.125, 1, true), new Vector2D(1, 0)));
 
             var scene = new Scene("Ball interaction, large scene II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, -0.5, -0.5, 9.5, 9.5, 0.25, 0.25, 0.5, 0.5);
@@ -1413,7 +1413,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBrickInteraction1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.3, 0.3, 1, true), new Vector2D(1.5, 0.5), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.3, 0.3, 1, true), new Vector2D(1.5, 0.5)));
 
             var scene = new Scene("Brick interaction I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -1442,7 +1442,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 50,
-                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85), new Vector2D(2 * random.NextDouble() - 1, -8))
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85)){NaturalVelocity = new Vector2D(2 * random.NextDouble() - 1, -8) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -1480,7 +1480,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 200,
-                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85), new Vector2D(2 * random.NextDouble() - 1, -8))
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85)){NaturalVelocity = new Vector2D(2 * random.NextDouble() - 1, -8) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -1505,7 +1505,7 @@ namespace Simulator.Laboratory.ViewModel
 
             Enumerable.Range(1, 10).ToList().ForEach(i =>
             {
-                initialState.AddBodyState(new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(i * 0.25, 2.9), new Vector2D(0, 0)));
+                initialState.AddBodyState(new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(i * 0.25, 2.9)));
             });
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -1516,7 +1516,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 if (propagatedState.Index == 10)
                 {
-                    propagatedState.AddBodyState(new BodyState(new CircularBody(11, 0.1, 1, true), new Vector2D(0, 2.85), new Vector2D(0, -8)));
+                    propagatedState.AddBodyState(new BodyState(new CircularBody(11, 0.1, 1, true), new Vector2D(0, 2.85)){NaturalVelocity = new Vector2D(0, -8) });
                 }
 
                 return new PostPropagationResponse();
@@ -1541,7 +1541,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 200,
-                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85), new Vector2D(2 * random.NextDouble() - 1, -8))
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85)){NaturalVelocity = new Vector2D(2 * random.NextDouble() - 1, -8) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -1572,7 +1572,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 200,
-                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85), new Vector2D(2 * random.NextDouble() - 1, -8))
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85)){NaturalVelocity = new Vector2D(2 * random.NextDouble() - 1, -8) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -1648,7 +1648,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 200,
-                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85), new Vector2D(2 * random.NextDouble() - 1, -8))
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(1, 2.85)){NaturalVelocity = new Vector2D(2 * random.NextDouble() - 1, -8) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -1678,7 +1678,7 @@ namespace Simulator.Laboratory.ViewModel
                                 var angle = 2.0 * Math.PI * i / nFragments;
                                 var velocity = 2 * new Vector2D(Math.Cos(angle), Math.Sin(angle));
 
-                                propagatedState.AddBodyState(new BodyState(new CircularBody(nextBodyId, 0.05, 0.2, true), bodyState.Position, velocity));
+                                propagatedState.AddBodyState(new BodyState(new CircularBody(nextBodyId, 0.05, 0.2, true), bodyState.Position){NaturalVelocity = velocity});
                                 newBodyIds.Add(nextBodyId);
                                 nextBodyId++;
                             });
@@ -1710,7 +1710,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBouncingBall1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(0, -5)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)){NaturalVelocity = new Vector2D(0, -5) });
 
             var scene = new Scene("Bouncing ball I", 120.0, new Point2D(-2, -3), initialState, 9.82, 0, 0, 1, false, 0.005);
 
@@ -1726,7 +1726,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBouncingBall2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(2, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 0) });
 
             //var scene = new Scene("Bouncing ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.0003);
             var scene = new Scene("Bouncing ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.001);
@@ -1746,7 +1746,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateScenePoolTableWithOneBall()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(2, 1)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 1) });
 
             var scene = new Scene("Pool table, 1 ball", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.001);
 
@@ -1762,7 +1762,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateScenePoolTableWithOneBallAndThreeBoundaryPoints()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(2, 1)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 1) });
 
             var scene = new Scene("Pool table, 1 ball, 3 boundary points", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.001);
 
@@ -1781,8 +1781,8 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateScenePoolTableWithTwoBallsAnd1LineSegment()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(2, 1)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(1, 0.7), new Vector2D(2, 1)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 1) });
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(1, 0.7)){NaturalVelocity = new Vector2D(2, 1) });
 
             var scene = new Scene("Pool table, 2 balls, 1 boundary line segment", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.001);
 
@@ -1799,7 +1799,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateScenePoolTableWith1BallAnd1LineSegment()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(2, 1)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 1) });
 
             var scene = new Scene("Pool table, 1 ball, 1 boundary line segment", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.001);
 
@@ -1816,8 +1816,8 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateScenePoolTableWithTwoBalls()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 0), new Vector2D(2, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(2, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 0)){NaturalVelocity = new Vector2D(2, 0) });
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(2, 0)));
 
             var scene = new Scene("Pool table, 2 balls", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
 
@@ -1838,14 +1838,14 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneSimultaneousCollisionsWithBoundary()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(-0.8, 0), new Vector2D(0.2, -1)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.1, 1, true), new Vector2D(-0.5, 0), new Vector2D(0.2, -1)));
-            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.1, 1, true), new Vector2D(-0.2, 0), new Vector2D(0.2, -1)));
-            initialState.AddBodyState(new BodyState(new CircularBody(4, 0.1, 1, true), new Vector2D(0.1, 0), new Vector2D(0.2, -1)));
-            initialState.AddBodyState(new BodyState(new CircularBody(5, 0.1, 1, true), new Vector2D(0.4, 0), new Vector2D(0.2, -1)));
-            initialState.AddBodyState(new BodyState(new CircularBody(6, 0.1, 1, true), new Vector2D(0.7, 0), new Vector2D(0.2, -1)));
-            initialState.AddBodyState(new BodyState(new CircularBody(7, 0.1, 1, true), new Vector2D(1.0, 0), new Vector2D(0.2, -1)));
-            initialState.AddBodyState(new BodyState(new CircularBody(8, 0.1, 1, true), new Vector2D(1.3, 0), new Vector2D(0.2, -1)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(-0.8, 0)){NaturalVelocity = new Vector2D(0.2, -1) });
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.1, 1, true), new Vector2D(-0.5, 0)){NaturalVelocity = new Vector2D(0.2, -1) });
+            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.1, 1, true), new Vector2D(-0.2, 0)) { NaturalVelocity = new Vector2D(0.2, -1) });
+            initialState.AddBodyState(new BodyState(new CircularBody(4, 0.1, 1, true), new Vector2D(0.1, 0)) { NaturalVelocity = new Vector2D(0.2, -1) });
+            initialState.AddBodyState(new BodyState(new CircularBody(5, 0.1, 1, true), new Vector2D(0.4, 0)) { NaturalVelocity = new Vector2D(0.2, -1) });
+            initialState.AddBodyState(new BodyState(new CircularBody(6, 0.1, 1, true), new Vector2D(0.7, 0)) { NaturalVelocity = new Vector2D(0.2, -1) });
+            initialState.AddBodyState(new BodyState(new CircularBody(7, 0.1, 1, true), new Vector2D(1.0, 0)) { NaturalVelocity = new Vector2D(0.2, -1) });
+            initialState.AddBodyState(new BodyState(new CircularBody(8, 0.1, 1, true), new Vector2D(1.3, 0)) { NaturalVelocity = new Vector2D(0.2, -1) });
 
             var scene = new Scene("Simultaneous collisions with boundary", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
 
@@ -1866,11 +1866,11 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneNewtonsCradle1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(3, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.1, 1, true), new Vector2D(1, 0), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.1, 1, true), new Vector2D(1.2, 0), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(4, 0.1, 1, true), new Vector2D(1.4, 0), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(5, 0.1, 1, true), new Vector2D(1.6, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)){NaturalVelocity = new Vector2D(3, 0) });
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.1, 1, true), new Vector2D(1, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.1, 1, true), new Vector2D(1.2, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(4, 0.1, 1, true), new Vector2D(1.4, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(5, 0.1, 1, true), new Vector2D(1.6, 0)));
 
             var scene = new Scene("Newtons cradle I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
 
@@ -1891,11 +1891,11 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneNewtonsCradle2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(3, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.1, 1, true), new Vector2D(0.2, 0), new Vector2D(3, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.1, 1, true), new Vector2D(1.2, 0), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(4, 0.1, 1, true), new Vector2D(1.4, 0), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(5, 0.1, 1, true), new Vector2D(1.6, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)){NaturalVelocity = new Vector2D(3, 0) });
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.1, 1, true), new Vector2D(0.2, 0)){NaturalVelocity = new Vector2D(3, 0) });
+            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.1, 1, true), new Vector2D(1.2, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(4, 0.1, 1, true), new Vector2D(1.4, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(5, 0.1, 1, true), new Vector2D(1.6, 0)));
 
             var scene = new Scene("Newtons cradle II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
 
@@ -1916,9 +1916,9 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateScenePoolTableWithThreeBalls()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 0), new Vector2D(2, 1)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0.3), new Vector2D(1, 2)));
-            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.125, 1, true), new Vector2D(2, 0.6), new Vector2D(-1, 1)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 0)){NaturalVelocity = new Vector2D(2, 1) });
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0.3)){NaturalVelocity = new Vector2D(1, 2) });
+            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.125, 1, true), new Vector2D(2, 0.6)){NaturalVelocity = new Vector2D(-1, 1) });
 
             var scene = new Scene("Pool table, 3 balls", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
 
@@ -1939,9 +1939,9 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateScenePoolTableWithThreeBallsAndFriction()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 0), new Vector2D(4, 1.5)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0.3), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.125, 1, true), new Vector2D(2, 0.6), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 0)){NaturalVelocity = new Vector2D(4, 1.5) });
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0.3)));
+            initialState.AddBodyState(new BodyState(new CircularBody(3, 0.125, 1, true), new Vector2D(2, 0.6)));
 
             var scene = new Scene("Pool table, 3 balls, friction", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0.5, 1, true, 0.001);
 
@@ -1962,9 +1962,9 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneOrbit1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 30, 5000, true), new Vector2D(300, 300), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 10, 20, true), new Vector2D(200, 300), new Vector2D(0, -1000)));
-            initialState.AddBodyState(new BodyState(new CircularBody(3, 10, 20, true), new Vector2D(400, 300), new Vector2D(0, 1000)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 30, 5000, true), new Vector2D(300, 300)));
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 10, 20, true), new Vector2D(200, 300)){NaturalVelocity = new Vector2D(0, -1000) });
+            initialState.AddBodyState(new BodyState(new CircularBody(3, 10, 20, true), new Vector2D(400, 300)){NaturalVelocity = new Vector2D(0, 1000) });
 
             var random = new Random(0);
 
@@ -1986,9 +1986,9 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneOrbit2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 30, 5000, true), new Vector2D(300, 300), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 10, 20, true), new Vector2D(200, 300), new Vector2D(0, -1000)));
-            initialState.AddBodyState(new BodyState(new CircularBody(3, 10, 20, true), new Vector2D(400, 300), new Vector2D(0, 1000)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 30, 5000, true), new Vector2D(300, 300)));
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 10, 20, true), new Vector2D(200, 300)){NaturalVelocity = new Vector2D(0, -1000) });
+            initialState.AddBodyState(new BodyState(new CircularBody(3, 10, 20, true), new Vector2D(400, 300)){NaturalVelocity = new Vector2D(0, 1000) });
 
             var random = new Random(0);
 
@@ -2000,7 +2000,7 @@ namespace Simulator.Laboratory.ViewModel
                 var velocityY = random.Next(500, 800);
 
                 initialState.AddBodyState(
-                    new BodyState(new CircularBody(id, 10, 20, true), new Vector2D(posX, posY), new Vector2D(velocityX, velocityY)));
+                    new BodyState(new CircularBody(id, 10, 20, true), new Vector2D(posX, posY)){NaturalVelocity = new Vector2D(velocityX, velocityY) });
             });
 
             var scene = new Scene("Orbit II", 1.0, new Point2D(20, 115), initialState, 0, 1.5E4, 0, 0.5, false, 0.005, SceneViewMode.FocusOnCenterOfMass);
@@ -2010,8 +2010,8 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMoonAndEarth()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 6371000, 5.972E+24, true), new Vector2D(0, 0), new Vector2D(0, 0)));
-            initialState.AddBodyState(new BodyState(new CircularBody(2, 1737100, 7.34767309E+22, true), new Vector2D(385000000, 0), new Vector2D(0, -1022)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 6371000, 5.972E+24, true), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(2, 1737100, 7.34767309E+22, true), new Vector2D(385000000, 0)){NaturalVelocity = new Vector2D(0, -1022) });
 
             return new Scene("Moon and Earth", 7E-07, new Point2D(-21E7, -22E7), initialState, 0, 6.674E-11, 0, 315360, false, 360, SceneViewMode.FocusOnCenterOfMass);
         }
@@ -2019,7 +2019,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneFlappyBird()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(1, -0.1), new Vector2D(1.5, -3)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(1, -0.1)){NaturalVelocity = new Vector2D(1.5, -3) });
 
             var scene = new Scene("Flappy Bird", 120.0, new Point2D(-1.4, -1.3),
                 initialState, 9.82, 0, 0, 1, false, 0.005, SceneViewMode.MaintainFocusInVicinityOfPoint,
@@ -2100,7 +2100,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateScenePlatformer1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0)));
 
             var scene = new Scene("Platformer I (Ghost'n Goblins style)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
@@ -2175,7 +2175,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateScenePlatformer2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0)));
 
             var scene = new Scene("Platformer (Moving while jumping)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
@@ -2252,7 +2252,7 @@ namespace Simulator.Laboratory.ViewModel
             var basicArtificialVelocity = new Vector2D(-0.5, 0);
 
             var initialState = new State();
-            var bodyState = new BodyState(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0), new Vector2D(0, 0));
+            var bodyState = new BodyState(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0));
             bodyState.ArtificialVelocity = basicArtificialVelocity;
             initialState.AddBodyState(bodyState);
 
@@ -2326,7 +2326,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneCollisionRegistrationTest()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.3, 0.3, 1, false), new Vector2D(-0.000000001, 0.000000000), new Vector2D(1.001, 1.001)));
+            initialState.AddBodyState(new BodyState(new RectangularBody(1, 0.3, 0.3, 1, false), new Vector2D(-0.000000001, 0.000000000)){NaturalVelocity = new Vector2D(1.001, 1.001) });
 
             var scene = new Scene("Collision Registration Test", 120.0, new Point2D(-1.4, -1.3), initialState, 0.1 * 9.82, 0, 0, 1, false, 0.005, SceneViewMode.Stationary,
                 double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0, 1E200, 0.25);
@@ -2348,7 +2348,7 @@ namespace Simulator.Laboratory.ViewModel
             // at space er trykket ned.
 
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 2), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 2)));
 
             var scene = new Scene("Shoot 'em up I (Semi-automatic fire, shots not collected)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -2413,7 +2413,7 @@ namespace Simulator.Laboratory.ViewModel
                     spaceKeyWasPressed = false;
 
                     propagatedState.AddBodyState(new BodyState(
-                        new CircularBody(nextBodyId++, 0.05, 1, true), propagatedState.BodyStates.First().Position, new Vector2D(0, -5)));
+                        new CircularBody(nextBodyId++, 0.05, 1, true), propagatedState.BodyStates.First().Position){NaturalVelocity = new Vector2D(0, -5) });
                 }
 
                 return new PostPropagationResponse();
@@ -2425,7 +2425,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneShootEmUp2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, true), new Vector2D(1, 2), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, true), new Vector2D(1, 2)));
 
             var scene = new Scene("Shoot 'em up II (Semi-automatic fire, shots collected)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -2502,7 +2502,7 @@ namespace Simulator.Laboratory.ViewModel
                     spaceKeyWasPressed = false;
 
                     propagatedState.AddBodyState(new BodyState(
-                        new Projectile(nextBodyId++, 0.05, 1, true), propagatedState.BodyStates.First().Position + new Vector2D(0, -0.126), new Vector2D(0, -5)));
+                        new Projectile(nextBodyId++, 0.05, 1, true), propagatedState.BodyStates.First().Position + new Vector2D(0, -0.126)){NaturalVelocity = new Vector2D(0, -5) });
                 }
 
                 return new PostPropagationResponse();
@@ -2516,7 +2516,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneShootEmUp3()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, true), new Vector2D(0, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, true), new Vector2D(0, 0)));
 
             var scene = new Scene("Shoot 'em up III (Jitter)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -2545,7 +2545,7 @@ namespace Simulator.Laboratory.ViewModel
                 if (propagatedState.Index % 2 == 0)
                 {
                     propagatedState.AddBodyState(new BodyState(
-                        new Projectile(nextBodyId++, 0.05, 1, true), propagatedState.BodyStates.First().Position, new Vector2D(0, -1)));
+                        new Projectile(nextBodyId++, 0.05, 1, true), propagatedState.BodyStates.First().Position){NaturalVelocity = new Vector2D(0, -1) });
                 }
 
                 return new PostPropagationResponse();
@@ -2559,7 +2559,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneShootEmUp4()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, true), new Vector2D(1, 2), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, true), new Vector2D(1, 2)));
 
             var scene = new Scene("Shoot 'em up IV (continuous fire)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -2686,7 +2686,7 @@ namespace Simulator.Laboratory.ViewModel
                 // Add a projectile from main body?
                 if (spaceKeyIsDown && (propagatedState.Index - stateIndexOfFirstShotInBurst) % rateOfFire == 0)
                 {
-                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId++, 0.05, 1, true), propagatedState.BodyStates.First().Position, new Vector2D(0, -4)));
+                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId++, 0.05, 1, true), propagatedState.BodyStates.First().Position){NaturalVelocity = new Vector2D(0, -4) });
                 }
 
                 return new PostPropagationResponse();
@@ -2700,7 +2700,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneShootEmUp5()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, false), new Vector2D(1, 2), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, false), new Vector2D(1, 2)));
 
             var scene = new Scene("Shoot 'em up IV (with enemies)", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
 
@@ -2810,7 +2810,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 10,
-                    BodyState = new BodyState(new Enemy(i, 0.15, 1, true), new Vector2D(-0.8, -0.8), new Vector2D(2.0, 0.4))
+                    BodyState = new BodyState(new Enemy(i, 0.15, 1, true), new Vector2D(-0.8, -0.8)){NaturalVelocity = new Vector2D(2.0, 0.4) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -2853,7 +2853,7 @@ namespace Simulator.Laboratory.ViewModel
                 // Add a projectile from main body?
                 if (spaceKeyIsDown && (propagatedState.Index - stateIndexOfFirstShotInBurst) % rateOfFire == 0)
                 {
-                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId++, 0.05, 1, true), propagatedState.BodyStates.First().Position, new Vector2D(0, -4)));
+                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId++, 0.05, 1, true), propagatedState.BodyStates.First().Position){NaturalVelocity = new Vector2D(0, -4) });
                 }
 
                 // Add an enemy?
@@ -2873,7 +2873,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneShootEmUp6()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, true), new Vector2D(1, 2), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 1, true), new Vector2D(1, 2)));
 
             var scene = new Scene("Shoot 'em up VI (continuous fire, limited projectile lifetime)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
@@ -2975,7 +2975,7 @@ namespace Simulator.Laboratory.ViewModel
                 {
                     nextProjectileId++;
                     temp[propagatedState.Index + 100] = nextProjectileId;
-                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId, 0.05, 1, true), propagatedState.BodyStates.First().Position, new Vector2D(0, -4)));
+                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId, 0.05, 1, true), propagatedState.BodyStates.First().Position){NaturalVelocity = new Vector2D(0, -4) });
                 }
 
                 return new PostPropagationResponse();
@@ -2987,7 +2987,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneShootEmUp7()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 999999, false), new Vector2D(2, 2.5), new Vector2D(0, 0)) { Life = 10 });
+            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 999999, false), new Vector2D(2, 2.5)) { Life = 10 });
 
             var scene = new Scene("Shoot 'em up VII (with enemies)", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
 
@@ -3125,7 +3125,11 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 50,
-                    BodyState = new BodyState(new Enemy(i, 0.15, 1, true), new Vector2D(-0.8, -0.8), new Vector2D(2.0, 0.4)) { Life = 5 }
+                    BodyState = new BodyState(new Enemy(i, 0.15, 1, true), new Vector2D(-0.8, -0.8))
+                    {
+                        NaturalVelocity = new Vector2D(2.0, 0.4),
+                        Life = 5
+                    }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -3196,7 +3200,7 @@ namespace Simulator.Laboratory.ViewModel
                                 var angle = 0.125 * Math.PI + 2.0 * Math.PI * i / nFragments;
                                 var velocity = 3.0 * new Vector2D(Math.Cos(angle), Math.Sin(angle));
 
-                                propagatedState.AddBodyState(new BodyState(new Enemy(nextEnemyId++, 0.1, 0.1, true), e.Position, velocity));
+                                propagatedState.AddBodyState(new BodyState(new Enemy(nextEnemyId++, 0.1, 0.1, true), e.Position){NaturalVelocity = velocity });
                             });
                         }
 
@@ -3212,7 +3216,7 @@ namespace Simulator.Laboratory.ViewModel
                 // Add a projectile from main body?
                 if (spaceKeyIsDown && (propagatedState.Index - stateIndexOfFirstShotInBurst) % rateOfFire == 0)
                 {
-                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId++, 0.05, 1, true), propagatedState.BodyStates.First().Position, new Vector2D(0, -4)));
+                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId++, 0.05, 1, true), propagatedState.BodyStates.First().Position){NaturalVelocity = new Vector2D(0, -4) });
                 }
 
                 // Add an enemy?
@@ -3234,7 +3238,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneShootEmUp8()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 999999, false), new Vector2D(1, 2), new Vector2D(0, 0)) { Life = 10 });
+            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.125, 999999, false), new Vector2D(1, 2)) { Life = 10 });
 
             var scene = new Scene("Shoot 'em up VIII (automatic)", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
 
@@ -3375,7 +3379,11 @@ namespace Simulator.Laboratory.ViewModel
                 {
                     //StateIndex = i * 50,
                     StateIndex = i * 20,
-                    BodyState = new BodyState(new Enemy(i, 0.15, 1, true), new Vector2D(-0.8, -0.8), new Vector2D(2.0, 0.4)) { Life = 5 }
+                    BodyState = new BodyState(new Enemy(i, 0.15, 1, true), new Vector2D(-0.8, -0.8))
+                    {
+                        NaturalVelocity = new Vector2D(2.0, 0.4),
+                        Life = 5
+                    }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -3434,7 +3442,10 @@ namespace Simulator.Laboratory.ViewModel
                                 var angle = 0.125 * Math.PI + 2.0 * Math.PI * i / nFragments;
                                 var velocity = 3.0 * new Vector2D(Math.Cos(angle), Math.Sin(angle));
 
-                                propagatedState.AddBodyState(new BodyState(new Enemy(nextEnemyId++, 0.1, 0.1, true), e.Position, velocity));
+                                propagatedState.AddBodyState(new BodyState(new Enemy(nextEnemyId++, 0.1, 0.1, true), e.Position)
+                                {
+                                    NaturalVelocity = velocity
+                                });
                             });
                         }
 
@@ -3451,7 +3462,7 @@ namespace Simulator.Laboratory.ViewModel
                 //if (spaceKeyIsDown && (propagatedState.Index - stateIndexOfFirstShotInBurst) % rateOfFire == 0)
                 if ((propagatedState.Index - stateIndexOfFirstShotInBurst) % rateOfFire == 0)
                 {
-                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId++, 0.05, 1, true), propagatedState.BodyStates.First().Position, new Vector2D(0, -4)));
+                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId++, 0.05, 1, true), propagatedState.BodyStates.First().Position){NaturalVelocity = new Vector2D(0, -4) });
                 }
 
                 // Add an enemy?
@@ -3471,7 +3482,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneDodgeball()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.075, 1, true), new Vector2D(1, 2), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new Player1Circular(1, 0.075, 1, true), new Vector2D(1, 2)));
 
             var scene = new Scene("Dodgeball", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.005);
 
@@ -3540,7 +3551,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 80,
-                    BodyState = new BodyState(new Enemy(i, 0.15, 1, true), new Vector2D(-0.8, -0.8), new Vector2D(2.0, 0.4))
+                    BodyState = new BodyState(new Enemy(i, 0.15, 1, true), new Vector2D(-0.8, -0.8)){NaturalVelocity = new Vector2D(2.0, 0.4) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -3568,7 +3579,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRambo()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Player1Rectangular(1, 0.25, 0.25, 1, true), new Vector2D(0, 1), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new Player1Rectangular(1, 0.25, 0.25, 1, true), new Vector2D(0, 1)));
 
             var scene = new Scene("Rambo", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, -0.6, -0.6, 9.6, 9.6);
@@ -3652,7 +3663,7 @@ namespace Simulator.Laboratory.ViewModel
                 if (currentKeyboardState.SpaceDown && (propagatedState.Index - stateIndexOfFirstShotInBurst) % rateOfFire == 0)
                 {
                     propagatedState.AddBodyState(new BodyState(
-                        new Projectile(nextBodyId++, 0.05, 1, true), propagatedState.BodyStates.First().Position, projectileSpeed * lastMovementDirection));
+                        new Projectile(nextBodyId++, 0.05, 1, true), propagatedState.BodyStates.First().Position){NaturalVelocity = projectileSpeed * lastMovementDirection });
                 }
 
                 return new PostPropagationResponse();
@@ -3683,7 +3694,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMultipleOutcomes()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
             var scene = new Scene("Multiple outcomes", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
 
@@ -3715,7 +3726,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMazeRoom1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1)));
 
             var scene = new Scene("Maze, room 1", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
 
@@ -3756,7 +3767,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneMazeRoom2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
             var scene = new Scene("Maze, room 2", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
 
@@ -3797,7 +3808,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneAddBodiesByClicking1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)));
 
             var standardGravity = 9.82;
             var gravitationalConstant = 0.0;
@@ -3837,7 +3848,7 @@ namespace Simulator.Laboratory.ViewModel
                     mousePos = null;
 
                     propagatedState.AddBodyState(new BodyState(
-                        new CircularBody(nextBodyId++, 0.1, 1, true), vector, new Vector2D(0, 0)));
+                        new CircularBody(nextBodyId++, 0.1, 1, true), vector));
                 }
 
                 return new PostPropagationResponse();
@@ -3849,7 +3860,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneAddBodiesByClicking2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)));
 
             var standardGravity = 0.0;
             var gravitationalConstant = 10.0;
@@ -3894,7 +3905,7 @@ namespace Simulator.Laboratory.ViewModel
                     mousePos = null;
 
                     propagatedState.AddBodyState(new BodyState(
-                        new CircularBody(nextBodyId++, 0.1, 1, true), vector, new Vector2D(0, 0)));
+                        new CircularBody(nextBodyId++, 0.1, 1, true), vector));
                 }
 
                 return new PostPropagationResponse();
@@ -3908,7 +3919,7 @@ namespace Simulator.Laboratory.ViewModel
             var radiusOfBalls = 0.5;
 
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, radiusOfBalls, 1, false), new Vector2D(0, 0), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, radiusOfBalls, 1, false), new Vector2D(0, 0)));
 
             var standardGravity = 0.0;
             var gravitationalConstant = 0.0;
@@ -3950,7 +3961,7 @@ namespace Simulator.Laboratory.ViewModel
                     if (bodyCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfBalls)
                     {
                         propagatedState.AddBodyState(new BodyState(
-                            new CircularBody(nextBodyId++, radiusOfBalls, 1, true), mousePosAsVector, new Vector2D(0, 0)));
+                            new CircularBody(nextBodyId++, radiusOfBalls, 1, true), mousePosAsVector));
                     }
 
                     mousePos = null;
@@ -4025,7 +4036,7 @@ namespace Simulator.Laboratory.ViewModel
                     if (cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons)
                     {
                         propagatedState.AddBodyState(new BodyState(
-                            new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector, new Vector2D(0, 0))
+                            new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
                         {
                             CoolDown = cannonCoolDown
                         });
@@ -4055,9 +4066,9 @@ namespace Simulator.Laboratory.ViewModel
                             radiusOfProjectiles,
                             1,
                             false),
-                        bodyState.Position,
-                        new Vector2D(0, 5))
+                        bodyState.Position)
                         {
+                            NaturalVelocity = new Vector2D(0, 5),
                             LifeSpan = projectileLifespan
                         });
 

@@ -190,7 +190,7 @@ namespace Game.Rocket.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 50,
-                    BodyState = new BodyState(new Meteor(i, 0.15, 1, true), new Vector2D(-0.8, -0.8), new Vector2D(0.8, 0.2)) { Life = 5 }
+                    BodyState = new BodyState(new Meteor(i, 0.15, 1, true), new Vector2D(-0.8, -0.8)) { Life = 5, NaturalVelocity = new Vector2D(0.8, 0.2) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -236,9 +236,10 @@ namespace Game.Rocket.ViewModel
                                         new Vector2D(Math.Cos(angle), Math.Sin(angle));
 
                         propagatedState.AddBodyState(new BodyState(new Fragment(nextFragmentId++, 0.1, 0.1, true),
-                            rocket.Position, velocity1));
+                            rocket.Position){NaturalVelocity = velocity1});
+
                         propagatedState.AddBodyState(new BodyState(new Fragment(nextFragmentId++, 0.1, 0.1, true),
-                            rocket.Position, 2 * velocity2));
+                            rocket.Position){NaturalVelocity = 2 * velocity2 });
                     });
 
                     response.Outcome = "Game Over";
@@ -287,7 +288,7 @@ namespace Game.Rocket.ViewModel
                                 var angle = 0.125 * Math.PI + 2.0 * Math.PI * i / nMeteorFragments;
                                 var velocity = 0.5 * new Vector2D(Math.Cos(angle), Math.Sin(angle));
 
-                                propagatedState.AddBodyState(new BodyState(new Meteor(nextMeteorId++, 0.1, 0.1, true), e.Position, velocity));
+                                propagatedState.AddBodyState(new BodyState(new Meteor(nextMeteorId++, 0.1, 0.1, true), e.Position){NaturalVelocity = velocity});
                             });
                         }
                     }
@@ -304,7 +305,7 @@ namespace Game.Rocket.ViewModel
                         projectileSpeed * Math.Cos(rocket.Orientation),
                         projectileSpeed * -Math.Sin(rocket.Orientation));
 
-                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId, 0.025, 1, true), rocket.Position, projectileVelocity));
+                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId, 0.025, 1, true), rocket.Position){NaturalVelocity = projectileVelocity });
                 }
 
                 // Add an enemy?
@@ -576,8 +577,9 @@ namespace Game.Rocket.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
             {
+                NaturalVelocity = new Vector2D(0, 0),
                 Orientation = 0.5 * Math.PI
             });
 
@@ -617,8 +619,9 @@ namespace Game.Rocket.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
             {
+                NaturalVelocity = new Vector2D(0, 0),
                 Orientation = 0.5 * Math.PI
             });
 
@@ -660,8 +663,9 @@ namespace Game.Rocket.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5), new Vector2D(0, 0))
+            initialState.AddBodyState(new BodyState(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
             {
+                NaturalVelocity = new Vector2D(0, 0),
                 Orientation = 0.5 * Math.PI
             });
 

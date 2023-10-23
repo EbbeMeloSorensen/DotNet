@@ -103,7 +103,13 @@ namespace Game.FlappyBird.ViewModel
         private Scene GenerateScene()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.2, 1, true), new Vector2D(1, -0.1), new Vector2D(1.5, -3)));
+            initialState.AddBodyState(new BodyState(
+                new CircularBody(1, 0.2, 1, true), 
+                new Vector2D(1, -0.1))
+                {
+                    NaturalVelocity = new Vector2D(1.5, -3)
+                });
+            
 
             var scene = new Scene("Flappy Bird", 207.0, new Point2D(-1.0421360596707818, -1.0484053497942387),
                 initialState, 9.82, 0, 0, 1, false, 0.005, SceneViewMode.MaintainFocusInVicinityOfPoint,
