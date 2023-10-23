@@ -3863,7 +3863,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)));
 
             var standardGravity = 0.0;
-            var gravitationalConstant = 10.0;
+            var gravitationalConstant = 5.0;
             var handleBodyCollisions = true;
             var coefficientOfFriction = 0.0;
 
@@ -4047,7 +4047,10 @@ namespace Simulator.Laboratory.ViewModel
 
                 // Remove projectiles
                 var disposableProjectiles = propagatedState.BodyStates
-                    .Where(_ => _.Body is Projectile && _.LifeSpan == 0)
+                    .Where(_ =>
+                        _.Body is Projectile &&
+                        _ is BodyStateExt &&
+                        (_ as BodyStateExt).LifeSpan <= 0)
                     .Select(_ => _.Body.Id)
                     .ToList();
 
@@ -4060,7 +4063,7 @@ namespace Simulator.Laboratory.ViewModel
 
                 bodyStatesOfCannonsThatMayShoot.ForEach(bodyState =>
                 {
-                    propagatedState.AddBodyState(new BodyState(
+                    propagatedState.AddBodyState(new BodyStateExt(
                         new Projectile(
                             nextProjectileId++,
                             radiusOfProjectiles,

@@ -339,27 +339,12 @@ namespace Simulator.Application
                     forceMap[bs] += bs.Body.Mass * bs.EffectiveCustomForce;
                 });
             }
-
-            var query = from bs in state.BodyStates
-                let acceleration = idsOfHandledBodies.Contains(bs.Body.Id) ? new Vector2D(0, 0) : forceMap[bs] / bs.Body.Mass
-                let nextNaturalVelocity = bs.NaturalVelocity + timeLeftInCurrentIncrement * acceleration
-                let nextPosition = bs.Position + timeLeftInCurrentIncrement * bs.Velocity
-                let nextOrientation = bs.Orientation + timeLeftInCurrentIncrement * bs.RotationalSpeed
-                select new { bs, nextPosition, nextNaturalVelocity, nextOrientation };
-
-            return query.ToDictionary(
-                x => new BodyState(x.bs.Body, x.nextPosition)
-                {
-                    Orientation = x.nextOrientation,
-                    RotationalSpeed = x.bs.RotationalSpeed,
-                    Life = x.bs.Life,
-                    LifeSpan = Math.Max(0, x.bs.LifeSpan - 1),
-                    CoolDown = Math.Max(0, x.bs.CoolDown - 1),
-                    NaturalVelocity = x.nextNaturalVelocity,
-                    ArtificialVelocity = x.bs.ArtificialVelocity,
-                    CustomForce = x.bs.CustomForce
-                },
-                x => x.bs.Clone());
+            
+            return state.BodyStates.ToDictionary(
+                _ => _.Propagate(
+                    timeLeftInCurrentIncrement,
+                    idsOfHandledBodies.Contains(_.Body.Id) ? new Vector2D(0, 0) : forceMap[_]),
+                _ => _.Clone());
         }
 
         private static void IdentifyFirstCollisionBetweenTwoBodies(
