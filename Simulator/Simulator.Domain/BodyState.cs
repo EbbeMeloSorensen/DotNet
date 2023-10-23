@@ -1,5 +1,4 @@
-﻿using System;
-using Craft.Math;
+﻿using Craft.Math;
 
 namespace Simulator.Domain
 {
@@ -15,7 +14,6 @@ namespace Simulator.Domain
         public double Orientation { get; set; }
         public double RotationalSpeed { get; set; }
         public int Life { get; set; }
-        public int CoolDown { get; set; }
 
         public Vector2D EffectiveCustomForce => CustomForce.Rotate(-Orientation);
         public Vector2D EffectiveArtificialVelocity => ArtificialVelocity.Rotate(-Orientation);
@@ -48,12 +46,11 @@ namespace Simulator.Domain
                 CustomForce = CustomForce,
                 Orientation = Orientation,
                 RotationalSpeed = RotationalSpeed,
-                Life = Life,
-                CoolDown = CoolDown
+                Life = Life
             };
         }
 
-        public BodyState Propagate(
+        public virtual BodyState Propagate(
             double time,
             Vector2D force)
         {
@@ -70,7 +67,6 @@ namespace Simulator.Domain
                 Orientation = nextOrientation,
                 RotationalSpeed = RotationalSpeed,
                 Life = Life,
-                CoolDown = Math.Max(0, CoolDown - 1),
                 CustomForce = CustomForce
             };
         }

@@ -6,6 +6,7 @@ namespace Simulator.Domain
     public class BodyStateExt : BodyState
     {
         public int LifeSpan { get; set; }
+        public int CoolDown { get; set; }
 
         protected BodyStateExt(Body body) : base(body)
         {
@@ -32,7 +33,7 @@ namespace Simulator.Domain
             };
         }
 
-        public BodyStateExt Propagate(
+        public override BodyState Propagate(
             double time,
             Vector2D force)
         {

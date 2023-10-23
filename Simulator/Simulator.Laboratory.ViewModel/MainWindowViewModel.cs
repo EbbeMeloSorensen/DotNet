@@ -4035,7 +4035,7 @@ namespace Simulator.Laboratory.ViewModel
 
                     if (cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons)
                     {
-                        propagatedState.AddBodyState(new BodyState(
+                        propagatedState.AddBodyState(new BodyStateExt(
                             new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
                         {
                             CoolDown = cannonCoolDown
@@ -4049,7 +4049,6 @@ namespace Simulator.Laboratory.ViewModel
                 var disposableProjectiles = propagatedState.BodyStates
                     .Where(_ =>
                         _.Body is Projectile &&
-                        _ is BodyStateExt &&
                         (_ as BodyStateExt).LifeSpan <= 0)
                     .Select(_ => _.Body.Id)
                     .ToList();
@@ -4058,7 +4057,9 @@ namespace Simulator.Laboratory.ViewModel
 
                 // Determine if some of the cannons shoot
                 var bodyStatesOfCannonsThatMayShoot = propagatedState.BodyStates
-                    .Where(_ => _.Body is Cannon && _.CoolDown == 0)
+                    .Where(_ => 
+                        _.Body is Cannon && 
+                        (_ as BodyStateExt).CoolDown <= 0)
                     .ToList();
 
                 bodyStatesOfCannonsThatMayShoot.ForEach(bodyState =>
@@ -4075,7 +4076,7 @@ namespace Simulator.Laboratory.ViewModel
                             LifeSpan = projectileLifespan
                         });
 
-                    bodyState.CoolDown = cannonCoolDown;
+                    (bodyState as BodyStateExt).CoolDown = cannonCoolDown;
                 });
 
                 return new PostPropagationResponse();
