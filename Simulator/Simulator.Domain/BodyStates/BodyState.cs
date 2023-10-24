@@ -1,6 +1,6 @@
 ﻿using Craft.Math;
 
-namespace Simulator.Domain
+namespace Simulator.Domain.BodyStates
 {
     public class BodyState
     {
@@ -31,7 +31,7 @@ namespace Simulator.Domain
         {
             Body = body;
             Position = position;
-            
+
             NaturalVelocity = _zeroVector;
             ArtificialVelocity = _zeroVector;
             CustomForce = _zeroVector;

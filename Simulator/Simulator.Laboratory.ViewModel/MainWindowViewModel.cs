@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
 using Simulator.ViewModel;
+using Simulator.Domain.BodyStates;
 
 namespace Simulator.Laboratory.ViewModel
 {

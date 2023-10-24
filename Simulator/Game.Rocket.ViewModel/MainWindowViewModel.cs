@@ -14,6 +14,7 @@ using Simulator.Application;
 using Simulator.ViewModel;
 using Game.Rocket.ViewModel.Bodies;
 using Game.Rocket.ViewModel.ShapeViewModels;
+using Simulator.Domain.BodyStates;
 
 namespace Game.Rocket.ViewModel
 {

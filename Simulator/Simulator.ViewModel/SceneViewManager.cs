@@ -5,6 +5,7 @@ using System.Windows.Media;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Simulator.Domain;
+using Simulator.Domain.BodyStates;
 using Simulator.Domain.Boundaries;
 using LineSegment = Simulator.Domain.Boundaries.LineSegment;
 

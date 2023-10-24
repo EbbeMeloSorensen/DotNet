@@ -1,7 +1,7 @@
 ﻿using Craft.Math;
 using System;
 
-namespace Simulator.Domain
+namespace Simulator.Domain.BodyStates
 {
     public class BodyStateExt : BodyState
     {
@@ -13,7 +13,7 @@ namespace Simulator.Domain
         }
 
         public BodyStateExt(
-            Body body, 
+            Body body,
             Vector2D position) : base(body, position)
         {
         }
