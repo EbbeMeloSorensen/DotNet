@@ -104,7 +104,7 @@ namespace Game.FlappyBird.ViewModel
         private Scene GenerateScene()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(
+            initialState.AddBodyState(new BodyStateClassic(
                 new CircularBody(1, 0.2, 1, true), 
                 new Vector2D(1, -0.1))
                 {

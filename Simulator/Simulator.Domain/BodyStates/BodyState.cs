@@ -2,7 +2,7 @@
 
 namespace Simulator.Domain.BodyStates
 {
-    public class BodyState
+    public abstract class BodyState
     {
         private static readonly Vector2D _zeroVector = new Vector2D(0, 0);
 
@@ -13,7 +13,6 @@ namespace Simulator.Domain.BodyStates
         public Vector2D CustomForce { get; set; }
         public double Orientation { get; set; }
         public double RotationalSpeed { get; set; }
-        public int Life { get; set; }
 
         public Vector2D EffectiveCustomForce => CustomForce.Rotate(-Orientation);
         public Vector2D EffectiveArtificialVelocity => ArtificialVelocity.Rotate(-Orientation);
@@ -37,38 +36,10 @@ namespace Simulator.Domain.BodyStates
             CustomForce = _zeroVector;
         }
 
-        public virtual BodyState Clone()
-        {
-            return new BodyState(Body, Position)
-            {
-                NaturalVelocity = NaturalVelocity,
-                ArtificialVelocity = ArtificialVelocity,
-                CustomForce = CustomForce,
-                Orientation = Orientation,
-                RotationalSpeed = RotationalSpeed,
-                Life = Life
-            };
-        }
+        public abstract BodyState Clone();
 
-        public virtual BodyState Propagate(
+        public abstract BodyState Propagate(
             double time,
-            Vector2D force)
-        {
-            var acceleration = force / Body.Mass;
-            var nextNaturalVelocity = NaturalVelocity + time * acceleration;
-            var nextPosition = Position + time * Velocity;
-            var nextOrientation = Orientation + time * RotationalSpeed;
-
-            return new BodyState(Body)
-            {
-                Position = nextPosition,
-                NaturalVelocity = nextNaturalVelocity,
-                ArtificialVelocity = ArtificialVelocity,
-                Orientation = nextOrientation,
-                RotationalSpeed = RotationalSpeed,
-                Life = Life,
-                CustomForce = CustomForce
-            };
-        }
+            Vector2D force);
     }
 }

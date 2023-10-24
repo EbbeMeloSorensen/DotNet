@@ -191,7 +191,7 @@ namespace Game.Rocket.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 50,
-                    BodyState = new BodyState(new Meteor(i, 0.15, 1, true), new Vector2D(-0.8, -0.8)) { Life = 5, NaturalVelocity = new Vector2D(0.8, 0.2) }
+                    BodyState = new BodyStateClassic(new Meteor(i, 0.15, 1, true), new Vector2D(-0.8, -0.8)) { Life = 5, NaturalVelocity = new Vector2D(0.8, 0.2) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -236,10 +236,10 @@ namespace Game.Rocket.ViewModel
                         var velocity2 = (0.8 + (2 * random.NextDouble() - 1) * 0.2) *
                                         new Vector2D(Math.Cos(angle), Math.Sin(angle));
 
-                        propagatedState.AddBodyState(new BodyState(new Fragment(nextFragmentId++, 0.1, 0.1, true),
+                        propagatedState.AddBodyState(new BodyStateClassic(new Fragment(nextFragmentId++, 0.1, 0.1, true),
                             rocket.Position){NaturalVelocity = velocity1});
 
-                        propagatedState.AddBodyState(new BodyState(new Fragment(nextFragmentId++, 0.1, 0.1, true),
+                        propagatedState.AddBodyState(new BodyStateClassic(new Fragment(nextFragmentId++, 0.1, 0.1, true),
                             rocket.Position){NaturalVelocity = 2 * velocity2 });
                     });
 
@@ -247,7 +247,7 @@ namespace Game.Rocket.ViewModel
                     response.IndexOfLastState = propagatedState.Index + 200;
                 }
 
-                var hitEnemies = new HashSet<BodyState>();
+                var hitEnemies = new HashSet<BodyStateClassic>();
 
                 bodyCollisionReports.ForEach(bcr =>
                 {
@@ -262,13 +262,13 @@ namespace Game.Rocket.ViewModel
                         if (bcr.Body1 is Projectile)
                         {
                             propagatedState.RemoveBodyStates(new List<int> { bcr.Body1.Id });
-                            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id);
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id) as BodyStateClassic;
                             hitEnemies.Add(bodyState);
                         }
                         else
                         {
                             propagatedState.RemoveBodyStates(new List<int> { bcr.Body2.Id });
-                            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id);
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id) as BodyStateClassic;
                             hitEnemies.Add(bodyState);
                         }
                     }
@@ -289,7 +289,7 @@ namespace Game.Rocket.ViewModel
                                 var angle = 0.125 * Math.PI + 2.0 * Math.PI * i / nMeteorFragments;
                                 var velocity = 0.5 * new Vector2D(Math.Cos(angle), Math.Sin(angle));
 
-                                propagatedState.AddBodyState(new BodyState(new Meteor(nextMeteorId++, 0.1, 0.1, true), e.Position){NaturalVelocity = velocity});
+                                propagatedState.AddBodyState(new BodyStateClassic(new Meteor(nextMeteorId++, 0.1, 0.1, true), e.Position){NaturalVelocity = velocity});
                             });
                         }
                     }
@@ -306,7 +306,7 @@ namespace Game.Rocket.ViewModel
                         projectileSpeed * Math.Cos(rocket.Orientation),
                         projectileSpeed * -Math.Sin(rocket.Orientation));
 
-                    propagatedState.AddBodyState(new BodyState(new Projectile(nextProjectileId, 0.025, 1, true), rocket.Position){NaturalVelocity = projectileVelocity });
+                    propagatedState.AddBodyState(new BodyStateClassic(new Projectile(nextProjectileId, 0.025, 1, true), rocket.Position){NaturalVelocity = projectileVelocity });
                 }
 
                 // Add an enemy?
@@ -578,7 +578,7 @@ namespace Game.Rocket.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
             {
                 NaturalVelocity = new Vector2D(0, 0),
                 Orientation = 0.5 * Math.PI
@@ -620,7 +620,7 @@ namespace Game.Rocket.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
             {
                 NaturalVelocity = new Vector2D(0, 0),
                 Orientation = 0.5 * Math.PI
@@ -664,7 +664,7 @@ namespace Game.Rocket.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyState(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
             {
                 NaturalVelocity = new Vector2D(0, 0),
                 Orientation = 0.5 * Math.PI
