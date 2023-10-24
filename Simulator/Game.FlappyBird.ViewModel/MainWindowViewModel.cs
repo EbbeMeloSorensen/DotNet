@@ -6,6 +6,7 @@ using Craft.Math;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
+using Simulator.Domain.BodyStates;
 using Simulator.Application;
 using Simulator.ViewModel;
 
