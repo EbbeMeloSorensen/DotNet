@@ -114,7 +114,6 @@ namespace Simulator.Laboratory.ViewModel
 
                 return new TaggedEllipseViewModel
                 {
-                    //Point = new Point2D(bs.Position.X, bs.Position.Y),
                     Width = 2 * circularBody.Radius,
                     Height = 2 * circularBody.Radius,
                     Tag = bs.Life.ToString()
