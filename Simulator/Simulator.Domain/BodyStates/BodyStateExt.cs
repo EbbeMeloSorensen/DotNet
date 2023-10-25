@@ -1,5 +1,5 @@
-﻿using Craft.Math;
-using System;
+﻿using System;
+using Craft.Math;
 
 namespace Simulator.Domain.BodyStates
 {
@@ -8,7 +8,8 @@ namespace Simulator.Domain.BodyStates
         public int LifeSpan { get; set; }
         public int CoolDown { get; set; }
 
-        protected BodyStateExt(Body body) : base(body)
+        protected BodyStateExt(
+            Body body) : base(body)
         {
         }
 
@@ -24,7 +25,7 @@ namespace Simulator.Domain.BodyStates
             {
                 NaturalVelocity = NaturalVelocity,
                 ArtificialVelocity = ArtificialVelocity,
-                CustomForce = CustomForce,
+                //CustomForce = CustomForce,
                 Orientation = Orientation,
                 RotationalSpeed = RotationalSpeed,
                 CoolDown = CoolDown,
@@ -49,7 +50,7 @@ namespace Simulator.Domain.BodyStates
                 Orientation = nextOrientation,
                 RotationalSpeed = RotationalSpeed,
                 CoolDown = Math.Max(0, CoolDown - 1),
-                CustomForce = CustomForce,
+                //CustomForce = CustomForce,
                 LifeSpan = Math.Max(0, LifeSpan - 1),
             };
         }

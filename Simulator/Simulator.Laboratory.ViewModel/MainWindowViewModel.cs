@@ -393,7 +393,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
                 var currentCustomForce = currentStateOfMainBody.CustomForce;
 
@@ -443,7 +443,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
                 var currentCustomForce = currentStateOfMainBody.CustomForce;
 
@@ -512,7 +512,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
                 var currentCustomForce = currentStateOfMainBody.CustomForce;
 

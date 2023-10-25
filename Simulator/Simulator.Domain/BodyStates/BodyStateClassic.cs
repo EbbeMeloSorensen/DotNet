@@ -4,17 +4,32 @@ namespace Simulator.Domain.BodyStates
 {
     public class BodyStateClassic : BodyState
     {
+        // Denne bruges indtil videre kun i rocket. Der er imidlertid en property ved navn
+        // EffectiveCustomForce i denne klasse, der trækker på den, og som kaldes fra Calculatoren
+        public Vector2D CustomForce { get; set; }
+
+        // Dette er en størrelse, som viewmodellen kan sætte arbitrært. Det er normalt at ændre på
+        // den i handleren PostPropagation callback funktionen, og hvis den ryger ned på 0, kan man
+        // f.eks. fjerne den fra tilstanden (som hvis en enemy ryger ned på 0) eller sågar stoppe
+        // animationen (som hvis en player ryger ned på 0)
         public int Life { get; set; }
+
+        // Custom Force defineres kun for bodies med en orientering såsom den i rocket spillet.
+        // Det er en mulighed for at tilføje en kraft ud over dem, der ellers gælder, som f.eks. drivkraften
+        // fra en raketmotor. Den bruges i Calculatoren PropagateState method 
+        public Vector2D EffectiveCustomForce => CustomForce.Rotate(-Orientation);
 
         protected BodyStateClassic(
             Body body) : base(body)
         {
+            CustomForce = _zeroVector;
         }
 
         public BodyStateClassic(
             Body body, 
             Vector2D position) : base(body, position)
         {
+            CustomForce = _zeroVector;
         }
 
         public override BodyState Clone()

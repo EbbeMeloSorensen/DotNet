@@ -337,7 +337,14 @@ namespace Simulator.Application
             {
                 state.BodyStates.ForEach(bs =>
                 {
-                    forceMap[bs] += bs.Body.Mass * bs.EffectiveCustomForce;
+                    var bsc = bs as BodyStateClassic;
+
+                    if (bsc == null)
+                    {
+                        return;
+                    }
+
+                    forceMap[bs] += bs.Body.Mass * bsc.EffectiveCustomForce;
                 });
             }
             

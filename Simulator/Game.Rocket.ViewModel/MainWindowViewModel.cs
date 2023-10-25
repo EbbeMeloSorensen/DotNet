@@ -120,7 +120,7 @@ namespace Game.Rocket.ViewModel
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
-                var currentStateOfMainBody = currentState.BodyStates.FirstOrDefault();
+                var currentStateOfMainBody = currentState.BodyStates.FirstOrDefault() as BodyStateClassic;
 
                 if (currentStateOfMainBody == null || currentStateOfMainBody.Body.Id != 1)
                 {
