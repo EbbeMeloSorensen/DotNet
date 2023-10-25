@@ -554,9 +554,9 @@ Løst og fast:
 * Det burde være muligt at undgå at gemme alle de beregnede states, f.eks. hvis man opererer med kun at tage dem, der svarer
   til det forventede index
 
-___________
+-----------
  Hændelser
-___________
+-----------
 
   Eksempler:
   * Kollision mellem body of boundary => Scenen afgør, hvad effekten er, i kraft af en callback funktion - det indkorporeres i en (beregnet) state
@@ -569,3 +569,11 @@ ___________
   * Spilleren vinder (f.eks. i Shoot'en Up, hvis man besejrer alle enemies) => 
   * Spilleren går ud af en udgang => Application skal informeres, så den kan skifte til en anden scene.
 
+
+--------
+ Tanker
+--------
+Engang tænkte du, at det var smart at operere både med "natural" velocity og "artificial" velocity,
+og så har du endda en property, der bare hedder velocity, som lægger de 2 sammen. Imidlertid så har du vel 
+ikke en eneste scene, hvor både natural velocity og artificial velocity er større end 0. Er det egentlig
+ikke unødigt komplekst? Hvor faen bruger du overhovedet Velocity, dvs den sammenlagte?
