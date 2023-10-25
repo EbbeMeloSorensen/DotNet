@@ -577,3 +577,12 @@ Engang tænkte du, at det var smart at operere både med "natural" velocity og "ar
 og så har du endda en property, der bare hedder velocity, som lægger de 2 sammen. Imidlertid så har du vel 
 ikke en eneste scene, hvor både natural velocity og artificial velocity er større end 0. Er det egentlig
 ikke unødigt komplekst? Hvor faen bruger du overhovedet Velocity, dvs den sammenlagte?
+-> Den bruges i Propagate
+-> Den bruges også i Calculator.IdentifyFirstCollisionWithABoundary til beregning af, om en body fra staten 
+   støder ind i en boundary i scenen.
+Måske skulle du bare operere med at en Body bare har en Velocity and that's it. Kræfter påvirker den via
+acceleration, og derudover kan den sættes efter forgodtbefindende... Hvis ikke der er nogen kræfter, så
+er den reelt artificial. Men men men husk lige, at den artificial velocity, som du pt opererer med - den 
+knytter sig til orientering...
+
+
