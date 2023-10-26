@@ -585,4 +585,19 @@ acceleration, og derudover kan den sættes efter forgodtbefindende... Hvis ikke d
 er den reelt artificial. Men men men husk lige, at den artificial velocity, som du pt opererer med - den 
 knytter sig til orientering...
 
+Du har faktisk et antal scener, hvor du kombinerer natural velocity og artificial velocity, f.eks. dine
+platformer scener, så det giver god mening at bruge begge dele, men det skal alligevel ryddes op.
+Humlen må være, at Calculator-klassen og evt andre brugere af BodyState-klassen ikke bør gøre sig nogen
+antagelser mht hvilke properties, BodyState har. Calculator bør derimod overlade det til virtuelle
+properties og methods på BodyState at gøre, hvad der er brug for, såsom at beregne
+
+Velocity, som kombinerer "natural" velocity og artificial velocity, bruges i BodyState.Propagate,
+og ellers bruges den kun i Calculator. Bemærk, at du i Calculator har en kommentar om at prøve
+at erstatte de der switch case ladders med noget polymorfisk, men det er måske lidt svært, når det
+jo mestendels er KOMBINATIONER af bodies, bodystates og boundaries, der afgør, hvad der skal ske...
+
+Måske skal Calculator have lov til fortsat at bruge Velocity, men hvor den bare ændrer betydning,
+således at den ER noget andet, når der haves en artificial component... du prøvede det uden at have
+held med det, men det skyldes nok andre ting.
+
 
