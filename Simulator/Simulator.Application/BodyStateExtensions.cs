@@ -83,7 +83,9 @@ namespace Simulator.Application
                 bodyState.NaturalVelocity += dotProduct1 * surfaceNormal;
             }
 
-            var effectiveArtificialVelocity = bodyState.EffectiveArtificialVelocity;
+            var effectiveArtificialVelocity =
+                bodyState.ArtificialVelocity.Rotate(-bodyState.Orientation);
+
             var dotProduct2 = Vector2D.DotProduct(effectiveArtificialVelocity, -surfaceNormal);
 
             if (dotProduct2 > 0)

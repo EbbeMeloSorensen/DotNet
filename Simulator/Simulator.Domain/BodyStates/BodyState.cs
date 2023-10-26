@@ -25,9 +25,6 @@ namespace Simulator.Domain.BodyStates
         public double Orientation { get; set; }
         public double RotationalSpeed { get; set; }
 
-        public Vector2D EffectiveArtificialVelocity => ArtificialVelocity.Rotate(-Orientation);
-        //public Vector2D Velocity => NaturalVelocity + EffectiveArtificialVelocity;
-
         protected BodyState(
             Body body)
         {
