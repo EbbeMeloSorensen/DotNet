@@ -352,7 +352,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
 
                 var newRotationalSpeed = 0.0;
@@ -998,7 +998,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
 
                 var newRotationalSpeed = 0.0;
@@ -1038,7 +1038,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
                 var currentArtificialSpeed = currentStateOfMainBody.ArtificialVelocity.Length;
 
@@ -1122,7 +1122,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
                 var currentArtificialSpeed = currentStateOfMainBody.ArtificialVelocity.Length;
 
@@ -1183,7 +1183,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
                 var currentArtificialSpeed = currentStateOfMainBody.ArtificialVelocity.Length;
 
@@ -1241,7 +1241,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
                 var currentArtificialSpeed = currentStateOfMainBody.ArtificialVelocity.Length;
 

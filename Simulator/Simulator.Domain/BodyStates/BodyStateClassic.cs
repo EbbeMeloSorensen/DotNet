@@ -14,6 +14,8 @@ namespace Simulator.Domain.BodyStates
         // animationen (som hvis en player ryger ned på 0)
         public int Life { get; set; }
 
+        public double RotationalSpeed { get; set; }
+
         // Custom Force defineres kun for bodies med en orientering såsom den i rocket spillet.
         // Det er en mulighed for at tilføje en kraft ud over dem, der ellers gælder, som f.eks. drivkraften
         // fra en raketmotor. Den bruges i Calculatoren PropagateState method 

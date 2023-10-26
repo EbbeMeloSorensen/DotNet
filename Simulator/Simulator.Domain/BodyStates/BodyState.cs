@@ -23,7 +23,6 @@ namespace Simulator.Domain.BodyStates
         public Vector2D ArtificialVelocity { get; set; }
         
         public double Orientation { get; set; }
-        public double RotationalSpeed { get; set; }
 
         protected BodyState(
             Body body)

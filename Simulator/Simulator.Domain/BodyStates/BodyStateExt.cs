@@ -26,7 +26,6 @@ namespace Simulator.Domain.BodyStates
                 NaturalVelocity = NaturalVelocity,
                 ArtificialVelocity = ArtificialVelocity,
                 Orientation = Orientation,
-                RotationalSpeed = RotationalSpeed,
                 CoolDown = CoolDown,
                 LifeSpan = LifeSpan,
             };
@@ -39,15 +38,13 @@ namespace Simulator.Domain.BodyStates
             var acceleration = force / Body.Mass;
             var nextNaturalVelocity = NaturalVelocity + time * acceleration;
             var nextPosition = Position + time * NaturalVelocity;
-            var nextOrientation = Orientation + time * RotationalSpeed;
 
             return new BodyStateExt(Body)
             {
                 Position = nextPosition,
                 NaturalVelocity = nextNaturalVelocity,
                 ArtificialVelocity = ArtificialVelocity,
-                Orientation = nextOrientation,
-                RotationalSpeed = RotationalSpeed,
+                Orientation = Orientation,
                 CoolDown = Math.Max(0, CoolDown - 1),
                 LifeSpan = Math.Max(0, LifeSpan - 1),
             };
