@@ -529,8 +529,6 @@ namespace Simulator.Application
                 var bsBefore = kvp.Value;
                 var bsAfter = kvp.Key;
 
-                var velocityBefore = bsBefore.NaturalVelocity + bsBefore.ArtificialVelocity;
-
                 foreach (var boundary in boundaries)
                 {
                     if (!boundary.Intersects(bsAfter))
@@ -545,7 +543,7 @@ namespace Simulator.Application
                     {
                         var lineSegment = boundary as ILineSegment;
 
-                        var velocityComponentTowardsBoundary = Math.Abs(lineSegment.ProjectVectorOntoSurfaceNormal(velocityBefore));
+                        var velocityComponentTowardsBoundary = Math.Abs(lineSegment.ProjectVectorOntoSurfaceNormal(bsBefore.Velocity));
 
                         var t = double.NaN;
                         Vector2D lineSegmentEndPointInvolvedInCollisionForCurrentBoundary = null;
@@ -582,7 +580,7 @@ namespace Simulator.Application
                                         t = (body.Radius + buffer - distanceFromBodyCenterToLineForLineSegment) / velocityComponentTowardsBoundary;
 
                                         // Nu regner vi så lige ud, hvor kuglens centrum ville være, hvis vi førte den tilbage med dette t
-                                        var backtrackedPosition = bsAfter.Position - velocityBefore * t;
+                                        var backtrackedPosition = bsAfter.Position - (bsBefore.Velocity) * t;
 
                                         // Nu skal vi så finde ud af, om dette punkt er tættest på liniestykket eller et af dens endepunkter
                                         var lineSegmentPart = lineSegment.ClosestPartOfLineSegment(backtrackedPosition);
@@ -596,7 +594,7 @@ namespace Simulator.Application
                                                 lineSegmentEndPointInvolvedInCollisionForCurrentBoundary = lineSegment.Point2; ;
                                                 break;
                                             case LineSegmentPart.MiddleSection:
-                                                effectiveSurfaceNormalForCurrentBoundary = Vector2D.DotProduct(velocityBefore, lineSegment.SurfaceNormal) < 0
+                                                effectiveSurfaceNormalForCurrentBoundary = Vector2D.DotProduct(bsBefore.Velocity, lineSegment.SurfaceNormal) < 0
                                                     ? lineSegment.SurfaceNormal
                                                     : -lineSegment.SurfaceNormal;
                                                 break;
@@ -614,7 +612,7 @@ namespace Simulator.Application
                                         var overshootDistance = lineSegment.CalculateOvershootDistance(bsAfter);
                                         t = (overshootDistance + buffer) / velocityComponentTowardsBoundary;
 
-                                        var backtrackedPosition = bsAfter.Position - velocityBefore * t;
+                                        var backtrackedPosition = bsAfter.Position - bsBefore.Velocity * t;
 
                                         switch (lineSegment)
                                         {
@@ -689,7 +687,7 @@ namespace Simulator.Application
                                     {
                                         t = CalculateTimeSinceIntersection(bsAfter.Position, body.Radius,
                                             lineSegmentEndPointInvolvedInCollisionForCurrentBoundary,
-                                            velocityBefore, buffer, out effectiveSurfaceNormalForCurrentBoundary);
+                                            bsBefore.Velocity, buffer, out effectiveSurfaceNormalForCurrentBoundary);
 
                                         break;
                                     }
@@ -759,7 +757,7 @@ namespace Simulator.Application
 
                         // Dette er længden af hastighedsvektoren projiceret ind på væggens normalvektor.
                         // Den er i praksis negativ, så vi gør den positiv
-                        var velocityComponentTowardsBoundary = -halfPlane.ProjectVectorOntoSurfaceNormal(velocityBefore);
+                        var velocityComponentTowardsBoundary = -halfPlane.ProjectVectorOntoSurfaceNormal(bsBefore.Velocity);
 
                         // Hvis denne evaluerer til true er kuglens hastighed parallel med væggen,
                         // så den glider så at sige langs muren
@@ -803,7 +801,7 @@ namespace Simulator.Application
                             case CircularBody body:
                                 {
                                     t = CalculateTimeSinceIntersection(
-                                        bsAfter.Position, body.Radius, boundaryPoint.Point, velocityBefore, buffer, out effectiveSurfaceNormalForCurrentBoundary);
+                                        bsAfter.Position, body.Radius, boundaryPoint.Point, bsBefore.Velocity, buffer, out effectiveSurfaceNormalForCurrentBoundary);
 
                                     break;
                                 }
