@@ -51,7 +51,7 @@ namespace Simulator.Domain.BodyStates
         {
             var acceleration = force / Body.Mass;
             var nextNaturalVelocity = NaturalVelocity + time * acceleration;
-            var nextPosition = Position + time * Velocity;
+            var nextPosition = Position + time * (NaturalVelocity + ArtificialVelocity.Rotate(-Orientation));
             var nextOrientation = Orientation + time * RotationalSpeed;
 
             return new BodyStateClassic(Body)
