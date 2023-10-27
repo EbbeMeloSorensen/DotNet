@@ -4032,6 +4032,17 @@ namespace Simulator.Laboratory.ViewModel
                 return true;
             };
 
+            var enemies = Enumerable.Range(1, 10)
+                .Select(i => new
+                {
+                    StateIndex = i * 500,
+                    BodyState = new BodyStateEnemy(new Enemy(i, 0.15, 1, true), new Vector2D(-2, -1))
+                    {
+                        NaturalVelocity = new Vector2D(0.2, 0),
+                    }
+                })
+                .ToDictionary(_ => _.StateIndex, _ => _.BodyState);
+
             scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
                 // Determine if we should add a new cannon
@@ -4055,7 +4066,7 @@ namespace Simulator.Laboratory.ViewModel
                     mousePos = null;
                 }
 
-                // Remove projectiles
+                // Remove projectiles due to lifespan
                 var disposableProjectiles = propagatedState.BodyStates
                     .Where(_ =>
                         _.Body is Projectile &&
@@ -4065,7 +4076,7 @@ namespace Simulator.Laboratory.ViewModel
 
                 propagatedState.RemoveBodyStates(disposableProjectiles);
 
-                // Determine if some of the cannons shoot
+                // Possibly add projectiles
                 var bodyStatesOfCannonsThatMayShoot = propagatedState.BodyStates
                     .Where(_ => 
                         _.Body is Cannon && 
@@ -4074,6 +4085,23 @@ namespace Simulator.Laboratory.ViewModel
 
                 bodyStatesOfCannonsThatMayShoot.ForEach(bodyState =>
                 {
+                    // This cannon can fire
+                    var temp = propagatedState.BodyStates
+                        .Where(_ => _ is BodyStateEnemy)
+                        .Select(_ => _ as BodyStateEnemy)
+                        .Select(_ => new { _, _.DistanceCovered })
+                        .OrderByDescending(_ => _.DistanceCovered)
+                        .ToList();
+
+                    var target = temp.FirstOrDefault();
+
+                    if (target == null)
+                    {
+                        return;
+                    }
+
+                    var projectileVelocity = (target._.Position - bodyState.Position).Normalize() * 5.0;
+
                     propagatedState.AddBodyState(new BodyStateProjectile(
                         new Projectile(
                             nextProjectileId++,
@@ -4082,12 +4110,18 @@ namespace Simulator.Laboratory.ViewModel
                             false),
                         bodyState.Position)
                         {
-                            NaturalVelocity = new Vector2D(0, 5),
+                            NaturalVelocity = projectileVelocity,
                             LifeSpan = projectileLifespan
                         });
 
                     (bodyState as BodyStateCannon).CoolDown = cannonCoolDown;
                 });
+
+                // Add an enemy?
+                if (enemies.ContainsKey(propagatedState.Index))
+                { 
+                    propagatedState.AddBodyState(enemies[propagatedState.Index]);
+                }
 
                 return new PostPropagationResponse();
             };
