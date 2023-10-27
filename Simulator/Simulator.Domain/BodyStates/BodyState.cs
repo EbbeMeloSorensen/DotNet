@@ -2,7 +2,7 @@
 
 namespace Simulator.Domain.BodyStates
 {
-    public abstract class BodyState
+    public class BodyState
     {
         protected static readonly Vector2D _zeroVector = new Vector2D(0, 0);
 
@@ -16,7 +16,10 @@ namespace Simulator.Domain.BodyStates
         // Dette er den "samlede" velocity, der afhænger af, hvilken bodystate, der er tale om.
         // Nogle af operatorer, der regner på staten, har brug for denne, og de skal helst ikke kende til detaljerne i
         // hvordan det regnes ud, så det bør køres polymorfisk
-        public abstract Vector2D Velocity { get; }
+        public virtual Vector2D Velocity 
+        {
+            get => NaturalVelocity; 
+        }
 
         protected BodyState(
             Body body)
@@ -36,10 +39,27 @@ namespace Simulator.Domain.BodyStates
             NaturalVelocity = _zeroVector;
         }
 
-        public abstract BodyState Clone();
+        public virtual BodyState Clone()
+        {
+            return new BodyStateClassic(Body, Position)
+            {
+                NaturalVelocity = NaturalVelocity
+            };
+        }
 
-        public abstract BodyState Propagate(
+        public virtual BodyState Propagate(
             double time,
-            Vector2D force);
+            Vector2D force)
+        {
+            var acceleration = force / Body.Mass;
+            var nextNaturalVelocity = NaturalVelocity + time * acceleration;
+            var nextPosition = Position + time * NaturalVelocity;
+
+            return new BodyState(Body)
+            {
+                Position = nextPosition,
+                NaturalVelocity = nextNaturalVelocity
+            };
+        }
     }
 }

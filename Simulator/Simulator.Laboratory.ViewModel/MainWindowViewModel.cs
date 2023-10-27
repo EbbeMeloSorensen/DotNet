@@ -3818,7 +3818,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneAddBodiesByClicking1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)));
 
             var standardGravity = 9.82;
             var gravitationalConstant = 0.0;
@@ -3870,7 +3870,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneAddBodiesByClicking2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)));
 
             var standardGravity = 0.0;
             var gravitationalConstant = 5.0;
@@ -3929,7 +3929,7 @@ namespace Simulator.Laboratory.ViewModel
             var radiusOfBalls = 0.5;
 
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, radiusOfBalls, 1, false), new Vector2D(0, 0)));
+            initialState.AddBodyState(new BodyState(new CircularBody(1, radiusOfBalls, 1, false), new Vector2D(0, 0)));
 
             var standardGravity = 0.0;
             var gravitationalConstant = 0.0;
