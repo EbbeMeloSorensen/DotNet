@@ -279,6 +279,10 @@ Done:
 * Placering af kanoner - der skal man kun sammenligne med andre kanoner og ikke projektiler
 
 Todo:
+* Flyt NaturalVelocity hen på BodyStateClassic - for mange bodies er den ikke i brug. specielt når der er interaktion. Og nogle bodies
+  bevæger sig ikke engang, f.eks. kanonerne i Tower Defense
+* Lav en specialisering af BodyState, hvor den følger en bane
+  - den bør IKKE have en NaturalVelocity, for den er ligeglad med, hvilke kræfter, der virker
 * Bedre state mascine i rocket
 * Unlock af baner i rocket
 * Når der vælges noget i Unlocked Levels, skal den starte den bane, svarende til at man vælger i den anden liste og trykker start
