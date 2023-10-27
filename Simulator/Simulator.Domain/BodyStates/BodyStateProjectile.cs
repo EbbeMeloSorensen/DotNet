@@ -1,24 +1,24 @@
 ﻿using System;
 using Craft.Math;
+using Simulator.Domain.BodyStates.Interfaces;
 
 namespace Simulator.Domain.BodyStates
 {
-    public class BodyStateExt : BodyState
+    public class BodyStateProjectile : BodyState, ILifeSpan
     {
         public int LifeSpan { get; set; }
-        public int CoolDown { get; set; }
 
-        public override Vector2D Velocity 
-        { 
-            get => NaturalVelocity; 
+        public override Vector2D Velocity
+        {
+            get => NaturalVelocity;
         }
 
-        protected BodyStateExt(
+        protected BodyStateProjectile(
             Body body) : base(body)
         {
         }
 
-        public BodyStateExt(
+        public BodyStateProjectile(
             Body body,
             Vector2D position) : base(body, position)
         {
@@ -26,11 +26,10 @@ namespace Simulator.Domain.BodyStates
 
         public override BodyState Clone()
         {
-            return new BodyStateExt(Body, Position)
+            return new BodyStateProjectile(Body, Position)
             {
                 NaturalVelocity = NaturalVelocity,
-                CoolDown = CoolDown,
-                LifeSpan = LifeSpan,
+                LifeSpan = LifeSpan
             };
         }
 
@@ -42,12 +41,11 @@ namespace Simulator.Domain.BodyStates
             var nextNaturalVelocity = NaturalVelocity + time * acceleration;
             var nextPosition = Position + time * NaturalVelocity;
 
-            return new BodyStateExt(Body)
+            return new BodyStateProjectile(Body)
             {
                 Position = nextPosition,
                 NaturalVelocity = nextNaturalVelocity,
-                CoolDown = Math.Max(0, CoolDown - 1),
-                LifeSpan = Math.Max(0, LifeSpan - 1),
+                LifeSpan = Math.Max(0, LifeSpan - 1)
             };
         }
     }

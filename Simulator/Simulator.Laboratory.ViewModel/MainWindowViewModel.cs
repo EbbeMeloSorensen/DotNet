@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
-using GalaSoft.MvvmLight;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
 using Simulator.ViewModel;
@@ -4045,7 +4045,7 @@ namespace Simulator.Laboratory.ViewModel
 
                     if (cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons)
                     {
-                        propagatedState.AddBodyState(new BodyStateExt(
+                        propagatedState.AddBodyState(new BodyStateCannon(
                             new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
                         {
                             CoolDown = cannonCoolDown
@@ -4059,7 +4059,7 @@ namespace Simulator.Laboratory.ViewModel
                 var disposableProjectiles = propagatedState.BodyStates
                     .Where(_ =>
                         _.Body is Projectile &&
-                        (_ as BodyStateExt).LifeSpan <= 0)
+                        (_ as BodyStateProjectile).LifeSpan <= 0)
                     .Select(_ => _.Body.Id)
                     .ToList();
 
@@ -4069,12 +4069,12 @@ namespace Simulator.Laboratory.ViewModel
                 var bodyStatesOfCannonsThatMayShoot = propagatedState.BodyStates
                     .Where(_ => 
                         _.Body is Cannon && 
-                        (_ as BodyStateExt).CoolDown <= 0)
+                        (_ as BodyStateCannon).CoolDown <= 0)
                     .ToList();
 
                 bodyStatesOfCannonsThatMayShoot.ForEach(bodyState =>
                 {
-                    propagatedState.AddBodyState(new BodyStateExt(
+                    propagatedState.AddBodyState(new BodyStateProjectile(
                         new Projectile(
                             nextProjectileId++,
                             radiusOfProjectiles,
@@ -4086,7 +4086,7 @@ namespace Simulator.Laboratory.ViewModel
                             LifeSpan = projectileLifespan
                         });
 
-                    (bodyState as BodyStateExt).CoolDown = cannonCoolDown;
+                    (bodyState as BodyStateCannon).CoolDown = cannonCoolDown;
                 });
 
                 return new PostPropagationResponse();
