@@ -13,15 +13,6 @@ namespace Simulator.Domain.BodyStates
         // der påvirkes af acceleration og dermed af kræfter, der virker på bodyen
         public Vector2D NaturalVelocity { get; set; }
 
-        // Dette er en velocity, som kan sættes UAFHÆNGIGT AF HVILKE KRÆFTER, der virker på en body.
-        // Den bruges både for bodies med orientering og til at styre en body med keyboardet 
-        // Den bruges bl.a. i følgende scener:
-        //   Rotation2: En kugle med orientering, der automatisk bevæger sig rundt i en cirkel
-        //   Rotation4: Hvor man STYRER en kugle med orientering
-        //   Platformer-spillene: Hvor man styrer en kasse
-        //   Shoot'em up-spillene: Hvor man styrer en kugle
-        public Vector2D ArtificialVelocity { get; set; }
-
         // Dette er den "samlede" velocity, der afhænger af, hvilken bodystate, der er tale om.
         // Nogle af operatorer, der regner på staten, har brug for denne, og de skal helst ikke kende til detaljerne i
         // hvordan det regnes ud, så det bør køres polymorfisk
@@ -33,7 +24,6 @@ namespace Simulator.Domain.BodyStates
             Body = body;
 
             NaturalVelocity = _zeroVector;
-            ArtificialVelocity = _zeroVector;
         }
 
         public BodyState(
@@ -44,7 +34,6 @@ namespace Simulator.Domain.BodyStates
             Position = position;
 
             NaturalVelocity = _zeroVector;
-            ArtificialVelocity = _zeroVector;
         }
 
         public abstract BodyState Clone();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Craft.Math;
+using Simulator.Domain.BodyStates;
 using Simulator.Domain.Boundaries;
 
 namespace Simulator.Domain
@@ -112,7 +113,7 @@ namespace Simulator.Domain
                     {
                         InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
                         {
-                            var currentStateOfMainBody = currentState.BodyStates.First();
+                            var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                             var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                             var newMovementDirection = new Vector2D(0, 0);

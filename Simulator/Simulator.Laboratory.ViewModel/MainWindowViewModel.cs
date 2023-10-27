@@ -2143,7 +2143,7 @@ namespace Simulator.Laboratory.ViewModel
                 // Player 1 er IKKE grounded men i luften. Derfor ændrer vi IKKE dens hastighed (Ghost'n Goblins style)
                 if (!grounded) return false;
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
                 var newArtificialVelocity = new Vector2D(0, 0);
                 var horizontalSpeed = 1.5;
@@ -2218,7 +2218,7 @@ namespace Simulator.Laboratory.ViewModel
                 // Player 1 er IKKE grounded men i luften. Derfor ændrer vi IKKE dens hastighed (Ghost'n Goblins style)
                 //if (!grounded) return false;
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
                 var newArtificialVelocity = new Vector2D(0, 0);
                 var horizontalSpeed = 1.5;
@@ -2294,7 +2294,7 @@ namespace Simulator.Laboratory.ViewModel
                     grounded = true;
                 }
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
                 var newArtificialVelocity = basicArtificialVelocity;
                 var horizontalSpeed = 1.5;
@@ -2371,7 +2371,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 spaceKeyWasPressed = keyboardEvents.SpaceDown && keyboardState.SpaceDown;
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);
@@ -2447,7 +2447,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 spaceKeyWasPressed = keyboardEvents.SpaceDown && keyboardState.SpaceDown;
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);
@@ -2535,7 +2535,7 @@ namespace Simulator.Laboratory.ViewModel
             var left = false;
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                currentState.BodyStates.First().ArtificialVelocity = new Vector2D(left ? -3 : 3, 0);
+                (currentState.BodyStates.First() as BodyStateClassic).ArtificialVelocity = new Vector2D(left ? -3 : 3, 0);
                 left = !left;
 
                 return true;
@@ -2584,7 +2584,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);
@@ -2747,7 +2747,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);
@@ -2907,7 +2907,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);
@@ -3062,7 +3062,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);
@@ -3314,7 +3314,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 spaceKeyIsDown = keyboardState.SpaceDown;
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);
@@ -3512,7 +3512,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);
@@ -3605,7 +3605,7 @@ namespace Simulator.Laboratory.ViewModel
                 spaceKeyWasPressed = keyboardState.SpaceDown && !currentKeyboardState.SpaceDown;
                 currentKeyboardState = keyboardState.Clone();
 
-                var currentStateOfMainBody = currentState.BodyStates.First();
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);

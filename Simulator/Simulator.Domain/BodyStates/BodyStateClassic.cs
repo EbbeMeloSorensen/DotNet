@@ -4,6 +4,15 @@ namespace Simulator.Domain.BodyStates
 {
     public class BodyStateClassic : BodyState
     {
+        // Dette er en velocity, som kan sættes UAFHÆNGIGT AF HVILKE KRÆFTER, der virker på en body.
+        // Den bruges både for bodies med orientering og til at styre en body med keyboardet 
+        // Den bruges bl.a. i følgende scener:
+        //   Rotation2: En kugle med orientering, der automatisk bevæger sig rundt i en cirkel
+        //   Rotation4: Hvor man STYRER en kugle med orientering
+        //   Platformer-spillene: Hvor man styrer en kasse
+        //   Shoot'em up-spillene: Hvor man styrer en kugle
+        public Vector2D ArtificialVelocity { get; set; }
+
         // Denne bruges indtil videre kun i rocket. Der er imidlertid en property ved navn
         // EffectiveCustomForce i denne klasse, der trækker på den, og som kaldes fra Calculatoren
         public Vector2D CustomForce { get; set; }
@@ -31,6 +40,7 @@ namespace Simulator.Domain.BodyStates
         protected BodyStateClassic(
             Body body) : base(body)
         {
+            ArtificialVelocity = _zeroVector;
             CustomForce = _zeroVector;
         }
 
@@ -38,6 +48,7 @@ namespace Simulator.Domain.BodyStates
             Body body, 
             Vector2D position) : base(body, position)
         {
+            ArtificialVelocity = _zeroVector;
             CustomForce = _zeroVector;
         }
 

@@ -29,7 +29,6 @@ namespace Simulator.Domain.BodyStates
             return new BodyStateExt(Body, Position)
             {
                 NaturalVelocity = NaturalVelocity,
-                ArtificialVelocity = ArtificialVelocity,
                 CoolDown = CoolDown,
                 LifeSpan = LifeSpan,
             };
@@ -47,7 +46,6 @@ namespace Simulator.Domain.BodyStates
             {
                 Position = nextPosition,
                 NaturalVelocity = nextNaturalVelocity,
-                ArtificialVelocity = ArtificialVelocity,
                 CoolDown = Math.Max(0, CoolDown - 1),
                 LifeSpan = Math.Max(0, LifeSpan - 1),
             };

@@ -128,7 +128,7 @@ namespace Simulator.Domain.Boundaries
                     }
                 case RectangularBody body:
                     {
-                        if (bodyState.NaturalVelocity.Y + bodyState.ArtificialVelocity.Y > 0)
+                        if (bodyState.Velocity.Y > 0)
                         {
                             return bodyState.Position.Y + body.Height / 2 - Y;
                         }

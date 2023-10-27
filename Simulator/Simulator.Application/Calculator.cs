@@ -245,7 +245,7 @@ namespace Simulator.Application
 
             state.BodyStates.ForEach(bs =>
             {
-                logger.WriteLine(LogMessageCategory.Debug, $"    Body{bs.Body.Id}: Position: ({bs.Position.X}, {bs.Position.Y}, Natural Velocity: ({bs.NaturalVelocity.X}, {bs.NaturalVelocity.Y}), Artificial Velocity: ({bs.ArtificialVelocity.X}, {bs.ArtificialVelocity.Y})", "propagation");
+                //logger.WriteLine(LogMessageCategory.Debug, $"    Body{bs.Body.Id}: Position: ({bs.Position.X}, {bs.Position.Y}, Natural Velocity: ({bs.NaturalVelocity.X}, {bs.NaturalVelocity.Y}), Artificial Velocity: ({bs.ArtificialVelocity.X}, {bs.ArtificialVelocity.Y})", "propagation");
             });
         }
 
@@ -635,7 +635,7 @@ namespace Simulator.Application
                                                     }
                                                     else
                                                     {
-                                                        effectiveSurfaceNormalForCurrentBoundary = bsBefore.NaturalVelocity.Y + bsBefore.ArtificialVelocity.Y > 0
+                                                        effectiveSurfaceNormalForCurrentBoundary = bsBefore.Velocity.Y > 0
                                                             ? new Vector2D(0, -1)
                                                             : new Vector2D(0, 1);
                                                     }
@@ -659,7 +659,7 @@ namespace Simulator.Application
                                                     }
                                                     else
                                                     {
-                                                        effectiveSurfaceNormalForCurrentBoundary = bsBefore.NaturalVelocity.X + bsBefore.ArtificialVelocity.X > 0
+                                                        effectiveSurfaceNormalForCurrentBoundary = bsBefore.Velocity.X > 0
                                                             ? new Vector2D(-1, 0)
                                                             : new Vector2D(1, 0);
                                                     }
@@ -705,8 +705,8 @@ namespace Simulator.Application
                                         var y1 = bsAfter.Position.Y + body.Height / 2;
 
                                         // Hvor lang tid siden er det at punktet intersektede med en af de lodrette akser?
-                                        var vx = bsBefore.NaturalVelocity.X + bsBefore.ArtificialVelocity.X;
-                                        var vy = bsBefore.NaturalVelocity.Y + bsBefore.ArtificialVelocity.Y;
+                                        var vx = bsBefore.Velocity.X;
+                                        var vy = bsBefore.Velocity.Y;
 
                                         var tx = double.MaxValue;
                                         var ty = double.MaxValue;
