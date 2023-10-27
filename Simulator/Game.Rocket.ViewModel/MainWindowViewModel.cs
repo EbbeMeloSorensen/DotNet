@@ -210,7 +210,7 @@ namespace Game.Rocket.ViewModel
                 var random = new Random();
                 var response = new PostPropagationResponse();
 
-                var rocket = propagatedState.TryGetBodyState(1);
+                var rocket = propagatedState.TryGetBodyState(1) as BodyStateClassic;
 
                 if (rocket == null) return response;
 
@@ -501,7 +501,10 @@ namespace Game.Rocket.ViewModel
                             {
                                 if (shapeViewModel is RocketViewModel rocketViewModel)
                                 {
-                                    rocketViewModel.Orientation = bs.Orientation;
+                                    var bsc = bs as BodyStateClassic;
+                                    var orientation = bsc == null ? 0 : bsc.Orientation;
+
+                                    rocketViewModel.Orientation = orientation;
                                     rocketViewModel.Ignited = _rocketIgnited;
                                 }
 

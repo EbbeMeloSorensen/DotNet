@@ -76,6 +76,7 @@ namespace Simulator.Application
                 return;
             }
 
+            // Possibly correct the natural velocity
             var dotProduct1 = Vector2D.DotProduct(bodyState.NaturalVelocity, -surfaceNormal);
 
             if (dotProduct1 > 0)
@@ -83,15 +84,22 @@ namespace Simulator.Application
                 bodyState.NaturalVelocity += dotProduct1 * surfaceNormal;
             }
 
+            // Possibly correct the artificial velocity
+            var bsc = bodyState as BodyStateClassic;
+
+            var orientation = bsc == null
+                ? 0
+                : bsc.Orientation;
+
             var effectiveArtificialVelocity =
-                bodyState.ArtificialVelocity.Rotate(-bodyState.Orientation);
+                bodyState.ArtificialVelocity.Rotate(-orientation);
 
             var dotProduct2 = Vector2D.DotProduct(effectiveArtificialVelocity, -surfaceNormal);
 
             if (dotProduct2 > 0)
             {
                 effectiveArtificialVelocity += dotProduct2 * surfaceNormal;
-                bodyState.ArtificialVelocity = effectiveArtificialVelocity.Rotate(bodyState.Orientation);
+                bodyState.ArtificialVelocity = effectiveArtificialVelocity.Rotate(orientation);
             }
         }
 

@@ -146,12 +146,14 @@ namespace Simulator.Laboratory.ViewModel
 
                 var circularBody = bs.Body as CircularBody;
 
+                var bsc = bs as BodyStateClassic;
+                var orientation = bsc == null ? 0 : bsc.Orientation;
+
                 return new RotatableEllipseViewModel
                 {
-                    //Point = new Point2D(bs.Position.X, bs.Position.Y),
                     Width = 2 * circularBody.Radius,
                     Height = 2 * circularBody.Radius,
-                    Orientation = bs.Orientation
+                    Orientation = orientation
                 };
             };
 
@@ -162,8 +164,11 @@ namespace Simulator.Laboratory.ViewModel
 
                 if (shapeViewModel is RotatableEllipseViewModel)
                 {
+                    var bsc = bs as BodyStateClassic;
+                    var orientation = bsc == null ? 0 : bsc.Orientation;
+
                     RotatableEllipseViewModel rotatableEllipseViewModel = shapeViewModel as RotatableEllipseViewModel;
-                    rotatableEllipseViewModel.Orientation = bs.Orientation;
+                    rotatableEllipseViewModel.Orientation = orientation;
                 }
             };
 

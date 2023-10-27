@@ -21,8 +21,11 @@ namespace Simulator.Domain.BodyStates
         //   Platformer-spillene: Hvor man styrer en kasse
         //   Shoot'em up-spillene: Hvor man styrer en kugle
         public Vector2D ArtificialVelocity { get; set; }
-        
-        public double Orientation { get; set; }
+
+        // Dette er den "samlede" velocity, der afhænger af, hvilken bodystate, der er tale om.
+        // Nogle af operatorer, der regner på staten, har brug for denne, og de skal helst ikke kende til detaljerne i
+        // hvordan det regnes ud, så det bør køres polymorfisk
+        public abstract Vector2D Velocity { get; }
 
         protected BodyState(
             Body body)

@@ -311,7 +311,12 @@ namespace Simulator.ViewModel
 
                     if (shapeViewModel is RotatableShapeViewModel)
                     {
-                        (shapeViewModel as RotatableShapeViewModel).Orientation = bs.Orientation;
+                        var bsc = bs as BodyStateClassic;
+
+                        if (bsc != null)
+                        {
+                            (shapeViewModel as RotatableShapeViewModel).Orientation = bsc.Orientation;
+                        }
                     }
 
                     _geometryEditorViewModel.AddShape(bs.Body.Id, shapeViewModel);

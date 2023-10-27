@@ -529,10 +529,7 @@ namespace Simulator.Application
                 var bsBefore = kvp.Value;
                 var bsAfter = kvp.Key;
 
-                // Den her antager lige rigeligt mht hvilke properties, der er tilgængelige
-                // Todo: Gør det mere generelt
-                var velocityBefore =
-                    bsBefore.NaturalVelocity + bsBefore.ArtificialVelocity.Rotate(-bsBefore.Orientation);
+                var velocityBefore = bsBefore.Velocity;
 
                 foreach (var boundary in boundaries)
                 {

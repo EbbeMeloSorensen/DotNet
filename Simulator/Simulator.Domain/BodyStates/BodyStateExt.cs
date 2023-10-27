@@ -8,6 +8,11 @@ namespace Simulator.Domain.BodyStates
         public int LifeSpan { get; set; }
         public int CoolDown { get; set; }
 
+        public override Vector2D Velocity 
+        { 
+            get => NaturalVelocity; 
+        }
+
         protected BodyStateExt(
             Body body) : base(body)
         {
@@ -25,7 +30,6 @@ namespace Simulator.Domain.BodyStates
             {
                 NaturalVelocity = NaturalVelocity,
                 ArtificialVelocity = ArtificialVelocity,
-                Orientation = Orientation,
                 CoolDown = CoolDown,
                 LifeSpan = LifeSpan,
             };
@@ -44,7 +48,6 @@ namespace Simulator.Domain.BodyStates
                 Position = nextPosition,
                 NaturalVelocity = nextNaturalVelocity,
                 ArtificialVelocity = ArtificialVelocity,
-                Orientation = Orientation,
                 CoolDown = Math.Max(0, CoolDown - 1),
                 LifeSpan = Math.Max(0, LifeSpan - 1),
             };
