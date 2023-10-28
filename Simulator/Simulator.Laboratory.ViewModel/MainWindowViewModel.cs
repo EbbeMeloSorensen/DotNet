@@ -87,6 +87,7 @@ namespace Simulator.Laboratory.ViewModel
             // Bemærk: Det er et ALMINDELIGT view og altså ikke et "matematisk"
             GeometryEditorViewModel = new GeometryEditorViewModel(1)
             {
+                AspectRatioLocked = true,
                 UpdateModelCallBack = Application.UpdateModel
             };
 
@@ -4024,17 +4025,26 @@ namespace Simulator.Laboratory.ViewModel
             const double radiusOfProjectiles = 0.05;
             const int cannonCoolDown = 300;
             const double rangeOfCannons = 2.5;
+            const double projectileSpeed = 10.0;
             const int projectileLifespan = 100;
-            const int enemyLife = 20;
+            const int enemySpacing = 200;
+            const int enemyLife = 10;
+            const double enemySpeed = 0.5;
+
+            const double routeTop = -1.0;
+            const double routeLeft = -1.0;
+            const double routeRight = 2.0;
+            const double routeSpacing = 1.0;
 
             var route = new Route
             {
                 WayPoints = new List<Vector2D>
                 {
-                    new Vector2D(1, -1),
-                    new Vector2D(-1, -1),
-                    new Vector2D(1, 1),
-                    new Vector2D(-1, 1)
+                    new Vector2D(routeRight, routeTop),
+                    new Vector2D(routeRight, routeTop + routeSpacing),
+                    new Vector2D(routeLeft, routeTop + routeSpacing),
+                    new Vector2D(routeLeft, routeTop + 2 * routeSpacing),
+                    new Vector2D(5, routeTop + 2 * routeSpacing)
                 }
             };
 
@@ -4060,11 +4070,15 @@ namespace Simulator.Laboratory.ViewModel
                 handleBodyCollisions,
                 0.005);
 
+            scene.AddBoundary(new LeftFacingHalfPlane(4));
+
             scene.InitializationCallback = (state, message) =>
             {
                 nextCannonId = 1000;
                 nextProjectileId = 10000;
             };
+
+            scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
             scene.CheckForCollisionBetweenBodiesCallback = (body1, body2) =>
             {
@@ -4114,11 +4128,11 @@ namespace Simulator.Laboratory.ViewModel
             var enemies = Enumerable.Range(1, 10)
                 .Select(i => new
                 {
-                    StateIndex = i * 500,
+                    StateIndex = i * enemySpacing,
                     BodyState = new BodyStateEnemy(new Enemy(i, 0.15, 1, true), new Vector2D(-2, -1))
                     {
                         Route = route,
-                        Speed = 0.2,
+                        Speed = enemySpeed,
                         NaturalVelocity = new Vector2D(0.2, 0),
                         Life = enemyLife
                     }
@@ -4132,9 +4146,14 @@ namespace Simulator.Laboratory.ViewModel
                 // Remove projectiles due to hitting enemies
                 if (boundaryCollisionReports.Any())
                 {
-                    propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id));
+                    // Remove enemies, when they get to the exit
+                    //propagatedState.RemoveBodyStates(boundaryCollisionReports
+                    //    .Where(bcr => bcr.Body is Projectile)
+                    //    .Select(bcr => bcr.Body.Id));
+
+                    // For now, the so player just looses if any enemy reaches the exit
+                    response.IndexOfLastState = propagatedState.Index;
+                    response.Outcome = "Game Over";
                 }
 
                 var hitEnemies = new HashSet<BodyStateEnemy>();
@@ -4176,6 +4195,10 @@ namespace Simulator.Laboratory.ViewModel
                     }
                 });
 
+                if (boundaryCollisionReports.Any())
+                {
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports.Select(bcr => bcr.Body.Id));
+                }
 
                 // Add a new cannon?
                 if (mousePos != null)
@@ -4198,7 +4221,7 @@ namespace Simulator.Laboratory.ViewModel
                     mousePos = null;
                 }
 
-                // Remove projectiles due to limited lifespan
+                // Remove projectiles due to limited lifespan?
                 var disposableProjectiles = propagatedState.BodyStates
                     .Where(_ =>
                         _.Body is Projectile &&
@@ -4208,7 +4231,7 @@ namespace Simulator.Laboratory.ViewModel
 
                 propagatedState.RemoveBodyStates(disposableProjectiles);
 
-                // Possibly add projectiles
+                // Add projectiles?
                 var bodyStatesOfCannonsThatMayShoot = propagatedState.BodyStates
                     .Where(_ => 
                         _.Body is Cannon && 
@@ -4234,7 +4257,7 @@ namespace Simulator.Laboratory.ViewModel
                         return;
                     }
 
-                    var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * 5.0;
+                    var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * projectileSpeed;
 
                     propagatedState.AddBodyState(new BodyStateProjectile(
                         new Projectile(

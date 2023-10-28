@@ -45,7 +45,7 @@ namespace Simulator.Domain.BodyStates
             var distanceToNextWayPoint = vectorToNextWayPoint.Length;
             var distanceIncrement = time * Speed;
 
-            if (distanceIncrement >= distanceToNextWayPoint && false)
+            if (distanceIncrement >= distanceToNextWayPoint)
             {
                 return new BodyStateEnemy(Body)
                 {
@@ -59,10 +59,7 @@ namespace Simulator.Domain.BodyStates
                 };
             }
 
-            var displacement = time * vectorToNextWayPoint.Normalize();
-
-            // overrule, because it doesn´t work
-            displacement = time * NaturalVelocity;
+            var displacement = distanceIncrement * vectorToNextWayPoint.Normalize();
 
             var nextPosition = Position + displacement;
 
