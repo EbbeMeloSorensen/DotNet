@@ -1,9 +1,14 @@
 ﻿using Craft.Math;
+using Simulator.Domain.BodyStates.Interfaces;
 
 namespace Simulator.Domain.BodyStates
 {
-    public class BodyStateEnemy : BodyState
+    public class BodyStateEnemy : BodyState, ILife
     {
+        private int _indexOfNextWayPoint;
+
+        public Route Route { get; set; }
+        public double Speed { get; set; }
         public double DistanceCovered { get; set; }
         public int Life { get; set; }
 
@@ -22,6 +27,9 @@ namespace Simulator.Domain.BodyStates
         {
             return new BodyStateEnemy(Body, Position)
             {
+                _indexOfNextWayPoint = _indexOfNextWayPoint,
+                Route = Route,
+                Speed = Speed,
                 NaturalVelocity = NaturalVelocity,
                 DistanceCovered = DistanceCovered,
                 Life = Life
@@ -32,13 +40,39 @@ namespace Simulator.Domain.BodyStates
             double time,
             Vector2D force)
         {
-            var displacement = time * NaturalVelocity;
+            var nextWayPoint = Route.WayPoints[_indexOfNextWayPoint];
+            var vectorToNextWayPoint = nextWayPoint - Position;
+            var distanceToNextWayPoint = vectorToNextWayPoint.Length;
+            var distanceIncrement = time * Speed;
+
+            if (distanceIncrement >= distanceToNextWayPoint && false)
+            {
+                return new BodyStateEnemy(Body)
+                {
+                    Position = nextWayPoint,
+                    NaturalVelocity = NaturalVelocity,
+                    _indexOfNextWayPoint = (_indexOfNextWayPoint + 1) % Route.WayPoints.Count,
+                    Route = Route,
+                    Speed = Speed,
+                    DistanceCovered = DistanceCovered + distanceToNextWayPoint,
+                    Life = Life
+                };
+            }
+
+            var displacement = time * vectorToNextWayPoint.Normalize();
+
+            // overrule, because it doesn´t work
+            displacement = time * NaturalVelocity;
+
             var nextPosition = Position + displacement;
 
             return new BodyStateEnemy(Body)
             {
                 Position = nextPosition,
                 NaturalVelocity = NaturalVelocity,
+                _indexOfNextWayPoint = _indexOfNextWayPoint,
+                Route = Route,
+                Speed = Speed,
                 DistanceCovered = DistanceCovered + displacement.Length,
                 Life = Life
             };

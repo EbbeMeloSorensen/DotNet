@@ -206,6 +206,7 @@ namespace Simulator.Laboratory.ViewModel
                 }
             };
 
+            AddScene(GenerateSceneBodyFollowingRoute());
             AddScene(GenerateSceneAddBodiesByClicking1());
             AddScene(GenerateSceneAddBodiesByClicking2());
             AddScene(GenerateSceneAddBodiesByClicking3());
@@ -4026,6 +4027,17 @@ namespace Simulator.Laboratory.ViewModel
             const int projectileLifespan = 100;
             const int enemyLife = 20;
 
+            var route = new Route
+            {
+                WayPoints = new List<Vector2D>
+                {
+                    new Vector2D(1, -1),
+                    new Vector2D(-1, -1),
+                    new Vector2D(1, 1),
+                    new Vector2D(-1, 1)
+                }
+            };
+
             var nextCannonId = 1000;
             var nextProjectileId = 10000;
 
@@ -4105,6 +4117,8 @@ namespace Simulator.Laboratory.ViewModel
                     StateIndex = i * 500,
                     BodyState = new BodyStateEnemy(new Enemy(i, 0.15, 1, true), new Vector2D(-2, -1))
                     {
+                        Route = route,
+                        Speed = 0.2,
                         NaturalVelocity = new Vector2D(0.2, 0),
                         Life = enemyLife
                     }
@@ -4245,6 +4259,51 @@ namespace Simulator.Laboratory.ViewModel
 
                 return response;
             };
+
+            return scene;
+        }
+
+        private static Scene GenerateSceneBodyFollowingRoute()
+        {
+            var initialState = new State();
+
+            var route = new Route
+            {
+                WayPoints = new List<Vector2D>
+                {
+                    new Vector2D(1, -1),
+                    new Vector2D(-1, -1),
+                    new Vector2D(1, 1),
+                    new Vector2D(-1, 1)
+                }
+            };
+            
+            initialState.AddBodyState(
+                new BodyStateEnemy(
+                    new CircularBody(1, 0.125, 1, true), 
+                    new Vector2D(0, 0))
+                    {
+                        Route = route,
+                        Speed = 1,
+                        NaturalVelocity = new Vector2D(1, 0)
+                    });
+
+            var standardGravity = 0.0;
+            var gravitationalConstant = 0.0;
+            var handleBodyCollisions = false;
+            var coefficientOfFriction = 0.0;
+
+            var scene = new Scene(
+                "Body Following route",
+                120.0,
+                new Point2D(-2, -3),
+                initialState,
+                standardGravity,
+                gravitationalConstant,
+                coefficientOfFriction,
+                1,
+                handleBodyCollisions,
+                0.005);
 
             return scene;
         }
