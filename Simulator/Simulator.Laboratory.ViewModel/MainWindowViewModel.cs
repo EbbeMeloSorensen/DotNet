@@ -61,7 +61,7 @@ namespace Simulator.Laboratory.ViewModel
             _shapeUpdateCallbacks = new Dictionary<Scene, ShapeUpdateCallback>();
 
             _logger = logger;
-            //_logger = null; // Disable logging (it should only be used for debugging purposes)
+            _logger = null; // Disable logging (it should only be used for debugging purposes)
             _logger?.WriteLine(LogMessageCategory.Information, "Simulator - Starting up");
 
             Outcome = null;
@@ -172,10 +172,44 @@ namespace Simulator.Laboratory.ViewModel
                 }
             };
 
+            // Denne bruges indtil videre kun for Tower Defense scenen
+            ShapeSelectorCallback shapeSelectorCallback3 = (bs) =>
+            {
+                if (!(bs.Body is CircularBody))
+                {
+                    throw new InvalidOperationException();
+                }
+
+                var circularBody = bs.Body as CircularBody;
+
+                var tag = bs is BodyStateEnemy enemy
+                    ? enemy.Life.ToString()
+                    : "";
+
+                return new TaggedEllipseViewModel
+                {
+                    Width = 2 * circularBody.Radius,
+                    Height = 2 * circularBody.Radius,
+                    Tag = tag
+                };
+            };
+
+            // Denne bruges indtil videre kun for Tower Defense scenen
+            ShapeUpdateCallback shapeUpdateCallback3 = (shapeViewModel, bs) =>
+            {
+                shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
+
+                if (shapeViewModel is TaggedEllipseViewModel taggedEllipseViewModel &&
+                    bs is BodyStateEnemy enemy)
+                {
+                    taggedEllipseViewModel.Tag = enemy.Life.ToString();
+                }
+            };
+
             AddScene(GenerateSceneAddBodiesByClicking1());
             AddScene(GenerateSceneAddBodiesByClicking2());
             AddScene(GenerateSceneAddBodiesByClicking3());
-            AddScene(GenerateSceneAddBodiesByClicking4(), shapeSelectorCallback1, shapeUpdateCallback1);
+            AddScene(GenerateSceneAddBodiesByClicking4(), shapeSelectorCallback3, shapeUpdateCallback3);
             AddScene(GenerateSceneShootEmUp7(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneShootEmUp8(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneFountain1());
@@ -3987,8 +4021,10 @@ namespace Simulator.Laboratory.ViewModel
         {
             const double radiusOfCannons = 0.2;
             const double radiusOfProjectiles = 0.05;
-            const int cannonCoolDown = 100;
+            const int cannonCoolDown = 300;
+            const double rangeOfCannons = 2.5;
             const int projectileLifespan = 100;
+            const int enemyLife = 20;
 
             var nextCannonId = 1000;
             var nextProjectileId = 10000;
@@ -3997,11 +4033,11 @@ namespace Simulator.Laboratory.ViewModel
 
             var standardGravity = 0.0;
             var gravitationalConstant = 0.0;
-            var handleBodyCollisions = false;
+            var handleBodyCollisions = true;
             var coefficientOfFriction = 0.0;
 
             var scene = new Scene(
-                "Add bodies that shoot in predefined direction",
+                "Tower Defense",
                 120.0,
                 new Point2D(-2, -3),
                 initialState,
@@ -4016,6 +4052,37 @@ namespace Simulator.Laboratory.ViewModel
             {
                 nextCannonId = 1000;
                 nextProjectileId = 10000;
+            };
+
+            scene.CheckForCollisionBetweenBodiesCallback = (body1, body2) =>
+            {
+                if (body1 is Enemy || body2 is Enemy)
+                {
+                    if (body1 is Projectile || body2 is Projectile)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            scene.CollisionBetweenTwoBodiesOccuredCallBack = (body1, body2) =>
+            {
+                if (body1 is Enemy || body2 is Enemy)
+                {
+                    if (body1 is Projectile || body2 is Projectile)
+                    {
+                        return OutcomeOfCollisionBetweenTwoBodies.Ignore;
+                    }
+
+                    if (body1 is Player1Circular || body2 is Player1Circular)
+                    {
+                        return OutcomeOfCollisionBetweenTwoBodies.Ignore;
+                    }
+                }
+
+                return OutcomeOfCollisionBetweenTwoBodies.Block;
             };
 
             Point2D mousePos = null;
@@ -4039,13 +4106,64 @@ namespace Simulator.Laboratory.ViewModel
                     BodyState = new BodyStateEnemy(new Enemy(i, 0.15, 1, true), new Vector2D(-2, -1))
                     {
                         NaturalVelocity = new Vector2D(0.2, 0),
+                        Life = enemyLife
                     }
                 })
                 .ToDictionary(_ => _.StateIndex, _ => _.BodyState);
 
             scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
-                // Determine if we should add a new cannon
+                var response = new PostPropagationResponse();
+
+                // Remove projectiles due to hitting enemies
+                if (boundaryCollisionReports.Any())
+                {
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports
+                        .Where(bcr => bcr.Body is Projectile)
+                        .Select(bcr => bcr.Body.Id));
+                }
+
+                var hitEnemies = new HashSet<BodyStateEnemy>();
+
+                bodyCollisionReports.ForEach(bcr =>
+                {
+                    if (bcr.Body1 is Projectile || bcr.Body2 is Projectile)
+                    {
+                        // Projectile collided with enemy
+                        if (bcr.Body1 is Projectile)
+                        {
+                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body1.Id });
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id) as BodyStateEnemy;
+                            hitEnemies.Add(bodyState);
+                        }
+                        else
+                        {
+                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body2.Id });
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id) as BodyStateEnemy;
+                            hitEnemies.Add(bodyState);
+                        }
+                    }
+                });
+
+                hitEnemies.ToList().ForEach(e =>
+                {
+                    e.Life -= 1;
+
+                    if (e.Life <= 0.1)
+                    {
+                        propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
+
+                        if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
+                        {
+                            // All enemies are dead, so player wins
+                            response.IndexOfLastState = propagatedState.Index;
+                            response.Outcome = "You Win";
+                        }
+                    }
+                });
+
+
+                // Add a new cannon?
                 if (mousePos != null)
                 {
                     var mousePosAsVector = mousePos.AsVector2D();
@@ -4066,7 +4184,7 @@ namespace Simulator.Laboratory.ViewModel
                     mousePos = null;
                 }
 
-                // Remove projectiles due to lifespan
+                // Remove projectiles due to limited lifespan
                 var disposableProjectiles = propagatedState.BodyStates
                     .Where(_ =>
                         _.Body is Projectile &&
@@ -4086,21 +4204,23 @@ namespace Simulator.Laboratory.ViewModel
                 bodyStatesOfCannonsThatMayShoot.ForEach(bodyState =>
                 {
                     // This cannon can fire
-                    var temp = propagatedState.BodyStates
+
+                    var rangeOfCannonsSquared = rangeOfCannons * rangeOfCannons;
+
+                    var target = propagatedState.BodyStates
                         .Where(_ => _ is BodyStateEnemy)
                         .Select(_ => _ as BodyStateEnemy)
-                        .Select(_ => new { _, _.DistanceCovered })
+                        .Where(_ => _.Position.SquaredDistanceTo(bodyState.Position) < rangeOfCannonsSquared)
+                        .Select(_ => new { BodyState = _, _.DistanceCovered })
                         .OrderByDescending(_ => _.DistanceCovered)
-                        .ToList();
-
-                    var target = temp.FirstOrDefault();
+                        .FirstOrDefault();
 
                     if (target == null)
                     {
                         return;
                     }
 
-                    var projectileVelocity = (target._.Position - bodyState.Position).Normalize() * 5.0;
+                    var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * 5.0;
 
                     propagatedState.AddBodyState(new BodyStateProjectile(
                         new Projectile(
@@ -4123,7 +4243,7 @@ namespace Simulator.Laboratory.ViewModel
                     propagatedState.AddBodyState(enemies[propagatedState.Index]);
                 }
 
-                return new PostPropagationResponse();
+                return response;
             };
 
             return scene;

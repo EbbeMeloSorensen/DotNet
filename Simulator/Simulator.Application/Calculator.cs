@@ -112,7 +112,7 @@ namespace Simulator.Application
                         state = new State(propagatedBodyStateMap.Keys.ToList());
                         timeLeftInCurrentIncrement = 0.0;
                         logger?.WriteLine(LogMessageCategory.Debug, $"  Iteration {iteration}, progress: 100%", "propagation");
-                        //LogState(state, logger);
+                        LogState(state, logger);
                         break;
                     case StateEvent.CollisionWithBoundary:
                         PropagateStatePartly(propagatedBodyStateMap, timeUntilCollisionWithBoundary, timeLeftInCurrentIncrement);
@@ -245,7 +245,7 @@ namespace Simulator.Application
 
             state.BodyStates.ForEach(bs =>
             {
-                //logger.WriteLine(LogMessageCategory.Debug, $"    Body{bs.Body.Id}: Position: ({bs.Position.X}, {bs.Position.Y}, Natural Velocity: ({bs.NaturalVelocity.X}, {bs.NaturalVelocity.Y}), Artificial Velocity: ({bs.ArtificialVelocity.X}, {bs.ArtificialVelocity.Y})", "propagation");
+                logger.WriteLine(LogMessageCategory.Debug, $"    Body{bs.Body.Id}: Position: ({bs.Position.X}, {bs.Position.Y}, Natural Velocity: ({bs.NaturalVelocity.X}, {bs.NaturalVelocity.Y}))", "propagation");
             });
         }
 

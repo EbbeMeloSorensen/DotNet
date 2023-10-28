@@ -5,6 +5,7 @@ namespace Simulator.Domain.BodyStates
     public class BodyStateEnemy : BodyState
     {
         public double DistanceCovered { get; set; }
+        public int Life { get; set; }
 
         protected BodyStateEnemy(
             Body body) : base(body)
@@ -21,7 +22,9 @@ namespace Simulator.Domain.BodyStates
         {
             return new BodyStateEnemy(Body, Position)
             {
-                DistanceCovered = DistanceCovered
+                NaturalVelocity = NaturalVelocity,
+                DistanceCovered = DistanceCovered,
+                Life = Life
             };
         }
 
@@ -36,7 +39,8 @@ namespace Simulator.Domain.BodyStates
             {
                 Position = nextPosition,
                 NaturalVelocity = NaturalVelocity,
-                DistanceCovered = DistanceCovered + displacement.Length
+                DistanceCovered = DistanceCovered + displacement.Length,
+                Life = Life
             };
         }
     }
