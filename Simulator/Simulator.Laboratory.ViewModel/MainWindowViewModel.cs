@@ -4027,6 +4027,7 @@ namespace Simulator.Laboratory.ViewModel
             const double rangeOfCannons = 2.5;
             const double projectileSpeed = 10.0;
             const int projectileLifespan = 100;
+            const double enemyRadius = 0.15;
             const int enemySpacing = 200;
             const int enemyLife = 10;
             const double enemySpeed = 0.5;
@@ -4050,6 +4051,7 @@ namespace Simulator.Laboratory.ViewModel
 
             var nextCannonId = 1000;
             var nextProjectileId = 10000;
+            var nextPropId = 100000;
 
             var initialState = new State();
 
@@ -4072,10 +4074,17 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.AddBoundary(new LeftFacingHalfPlane(4));
 
+            scene.Props.Add(new Prop(
+                nextPropId++, 
+                routeRight - routeLeft, 
+                enemyRadius * 2, 
+                new Vector2D(routeLeft, routeTop)));
+
             scene.InitializationCallback = (state, message) =>
             {
                 nextCannonId = 1000;
                 nextProjectileId = 10000;
+                nextPropId = 100000;
             };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -4129,7 +4138,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * enemySpacing,
-                    BodyState = new BodyStateEnemy(new Enemy(i, 0.15, 1, true), new Vector2D(-2, -1))
+                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-2, -1))
                     {
                         Route = route,
                         Speed = enemySpeed,
