@@ -14,17 +14,14 @@ namespace Craft.UIElements.GuiTest
         {
             var element = container as FrameworkElement;
 
-            if (item is RectangleViewModel)
+            return item switch
             {
-                return element.FindResource("DoorAndWindow") as DataTemplate;
-            }
-
-            if (item is EllipseViewModel)
-            {
-                return element.FindResource("Sun") as DataTemplate;
-            }
-
-            throw new ArgumentException("item doesn't correspond to any DataTemplate");
+                RotatableRectangleViewModel => element.FindResource("RotatableRectangle") as DataTemplate,
+                RectangleViewModel => element.FindResource("DoorAndWindow") as DataTemplate,
+                RotatableEllipseViewModel => element.FindResource("RotatableEllipse") as DataTemplate,
+                EllipseViewModel => element.FindResource("Sun") as DataTemplate,
+                _ => throw new ArgumentException("item doesn't correspond to any DataTemplate")
+            };
         }
     }
 }

@@ -270,9 +270,14 @@ namespace Craft.UIElements.GuiTest.Tab3
             geometryEditorViewModel.AddLabel("Danshøjvej 33", new PointD(200, 300), 120, 40, new PointD(0, 20), 0.25);
 
             // Something
-            //geometryEditorViewModel.ShapeViewModels.Add(new RotatableEllipseViewModel());
+            geometryEditorViewModel.ShapeViewModels.Add(new RotatableEllipseViewModel
+            {
+                Width = 100.0,
+                Height = 100.0,
+                Orientation = 45.0
+            });
 
-            // Something that rotates
+            // Perhaps something that rotates?
             geometryEditorViewModel.UpdateModelCallBack = () =>
             {
 
