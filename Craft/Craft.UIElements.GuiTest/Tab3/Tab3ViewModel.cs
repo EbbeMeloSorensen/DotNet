@@ -269,18 +269,34 @@ namespace Craft.UIElements.GuiTest.Tab3
             // Label
             geometryEditorViewModel.AddLabel("Danshøjvej 33", new PointD(200, 300), 120, 40, new PointD(0, 20), 0.25);
 
-            // Something
-            geometryEditorViewModel.ShapeViewModels.Add(new RotatableEllipseViewModel
+            // Windmill
+            geometryEditorViewModel.AddShape(4, new RectangleViewModel
             {
-                Width = 100.0,
-                Height = 100.0,
-                Orientation = 45.0
+                Point = new PointD(500, 125),
+                Width = 10.0,
+                Height = 250.0
             });
 
-            // Perhaps something that rotates?
+            geometryEditorViewModel.AddShape(5, new RotatableEllipseViewModel
+            {
+                Point = new PointD(500, 250),
+                Width = 100.0,
+                Height = 10.0,
+                Orientation = Math.PI / 2,
+            });
+
+            // Make the windmill rotate
             geometryEditorViewModel.UpdateModelCallBack = () =>
             {
+                var now = DateTime.Now;
+                var fraction = now.Millisecond / 1000.0;
+                var orientation = 2 * Math.PI * fraction;
 
+                geometryEditorViewModel.ShapeViewModels
+                    .Where(_ => _ is RotatableEllipseViewModel)
+                    .Select(_ => _ as RotatableEllipseViewModel)
+                    .ToList()
+                    .ForEach(_ => _.Orientation = orientation);
             };
         }
 
