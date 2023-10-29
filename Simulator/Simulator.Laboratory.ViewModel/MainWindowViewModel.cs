@@ -170,7 +170,7 @@ namespace Simulator.Laboratory.ViewModel
                     var bsc = bs as BodyStateClassic;
                     var orientation = bsc == null ? 0 : bsc.Orientation;
 
-                    RotatableEllipseViewModel rotatableEllipseViewModel = shapeViewModel as RotatableEllipseViewModel;
+                    var rotatableEllipseViewModel = shapeViewModel as RotatableEllipseViewModel;
                     rotatableEllipseViewModel.Orientation = orientation;
                 }
             };
@@ -185,16 +185,37 @@ namespace Simulator.Laboratory.ViewModel
 
                 var circularBody = bs.Body as CircularBody;
 
-                var tag = bs is BodyStateEnemy enemy
-                    ? enemy.Life.ToString()
-                    : "";
-
-                return new TaggedEllipseViewModel
+                switch (bs)
                 {
-                    Width = 2 * circularBody.Radius,
-                    Height = 2 * circularBody.Radius,
-                    Tag = tag
-                };
+                    case BodyStateEnemy enemy:
+                    {
+                        return new TaggedEllipseViewModel
+                        {
+                            Width = 2 * circularBody.Radius,
+                            Height = 2 * circularBody.Radius,
+                            Tag = enemy.Life.ToString()
+                        };
+                    }
+                    case BodyStateCannon cannon:
+                    {
+                        return new RotatableEllipseViewModel
+                        {
+                            Width = 2 * circularBody.Radius,
+                            Height = 2 * circularBody.Radius,
+                            Orientation = 0
+                        };
+                    }
+                    case BodyStateProjectile:
+                    {
+                        return new EllipseViewModel
+                        {
+                            Width = 2 * circularBody.Radius,
+                            Height = 2 * circularBody.Radius
+                        };
+                    }
+                    default:
+                        throw new ArgumentException();
+                }
             };
 
             // Denne bruges indtil videre kun for Tower Defense scenen
@@ -206,6 +227,12 @@ namespace Simulator.Laboratory.ViewModel
                     bs is BodyStateEnemy enemy)
                 {
                     taggedEllipseViewModel.Tag = enemy.Life.ToString();
+                }
+
+                if (shapeViewModel is RotatableEllipseViewModel rotatableEllipseViewModel &&
+                    bs is BodyStateCannon cannon)
+                {
+                    rotatableEllipseViewModel.Orientation = cannon.Orientation;
                 }
             };
 
@@ -4311,7 +4338,7 @@ namespace Simulator.Laboratory.ViewModel
 
                 bodyStatesOfCannonsThatMayShoot.ForEach(bodyState =>
                 {
-                    // This cannon can fire
+                    // This cannon can shoot
 
                     var rangeOfCannonsSquared = rangeOfCannons * rangeOfCannons;
 
@@ -4329,6 +4356,8 @@ namespace Simulator.Laboratory.ViewModel
                     }
 
                     var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * projectileSpeed;
+
+                    (bodyState as BodyStateCannon).Orientation = -projectileVelocity.AsPolarVector().Angle;
 
                     propagatedState.AddBodyState(new BodyStateProjectile(
                         new Projectile(

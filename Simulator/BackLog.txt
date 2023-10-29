@@ -277,10 +277,10 @@ Done:
 * Lav en general purpose samling af operatorer til f.eks. at finde tætteste body af en given type (i stedet for at have det som lokale 
   funktioner i viewmodel-klassen). Det kunne måske passende være extension methods til State
 * Placering af kanoner - der skal man kun sammenligne med andre kanoner og ikke projektiler
+* Sørg for, at man kun kan placere kanoner i særlige områder
+  - Lav ruten som et antal props
 
 Todo:
-* Sørg for, at man kun kan placere kanoner i særlige områder
-  - Lav ruten som et antal props - først som en wall og så som noget dirtroad
 * Flyt NaturalVelocity hen på BodyStateClassic eller i hvert fald hen på en nedarvet klasse - for mange bodies er den ikke i brug. 
   Specielt når der er interaktion. Og nogle bodies bevæger sig ikke engang, f.eks. kanonerne i Tower Defense
 * Lav en specialisering af BodyState, hvor den følger en bane

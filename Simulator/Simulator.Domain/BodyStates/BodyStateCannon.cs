@@ -4,8 +4,10 @@ using Simulator.Domain.BodyStates.Interfaces;
 
 namespace Simulator.Domain.BodyStates
 {
-    public class BodyStateCannon : BodyState, ICoolDown
+    public class BodyStateCannon : BodyState, IOrientation, ICoolDown
     {
+        public double Orientation { get; set; }
+
         public int CoolDown { get; set; }
 
         public override Vector2D Velocity 
@@ -29,6 +31,7 @@ namespace Simulator.Domain.BodyStates
             return new BodyStateCannon(Body, Position)
             {
                 NaturalVelocity = NaturalVelocity,
+                Orientation = Orientation,
                 CoolDown = CoolDown
             };
         }
@@ -45,6 +48,7 @@ namespace Simulator.Domain.BodyStates
             {
                 Position = nextPosition,
                 NaturalVelocity = nextNaturalVelocity,
+                Orientation = Orientation,
                 CoolDown = Math.Max(0, CoolDown - 1)
             };
         }
