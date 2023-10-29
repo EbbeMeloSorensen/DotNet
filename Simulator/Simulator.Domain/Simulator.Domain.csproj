@@ -9,8 +9,4 @@
     <ProjectReference Include="..\..\Craft\Craft.Math\Craft.Math.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Props\" />
-  </ItemGroup>
-
 </Project>

@@ -15,6 +15,7 @@ using Simulator.ViewModel;
 using Game.Rocket.ViewModel.Bodies;
 using Game.Rocket.ViewModel.ShapeViewModels;
 using Simulator.Domain.BodyStates;
+using Simulator.Domain.Props;
 
 namespace Game.Rocket.ViewModel
 {
@@ -712,7 +713,7 @@ namespace Game.Rocket.ViewModel
             bool boundaryTop = true,
             bool boundaryBottom = true)
         {
-            scene.Props.Add(new Prop(_nextWallId++, x1 - x0, y1 - y0, new Vector2D((x0 + x1) / 2, (y0 + y1) / 2), 0));
+            scene.Props.Add(new PropRectangle(_nextWallId++, x1 - x0, y1 - y0, new Vector2D((x0 + x1) / 2, (y0 + y1) / 2)));
 
             if (boundaryLeft)
             {

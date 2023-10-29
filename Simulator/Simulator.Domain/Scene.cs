@@ -4,6 +4,7 @@ using System.Linq;
 using Craft.Math;
 using Simulator.Domain.BodyStates;
 using Simulator.Domain.Boundaries;
+using Simulator.Domain.Props;
 
 namespace Simulator.Domain
 {

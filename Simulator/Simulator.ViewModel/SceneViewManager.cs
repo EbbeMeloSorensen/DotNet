@@ -7,6 +7,7 @@ using Craft.ViewModels.Geometry2D.ScrollFree;
 using Simulator.Domain;
 using Simulator.Domain.BodyStates;
 using Simulator.Domain.Boundaries;
+using Simulator.Domain.Props;
 using LineSegment = Simulator.Domain.Boundaries.LineSegment;
 
 namespace Simulator.ViewModel
@@ -211,22 +212,35 @@ namespace Simulator.ViewModel
 
             _application.Engine.Scene.Props.ForEach(p =>
             {
-                ShapeViewModel viewModel = p.Orientation < 0.000001
-                    ? new RectangleViewModel
+                switch (p)
+                {
+                    case PropRectangle propRectangle:
                     {
-                        Width = p.Width,
-                        Height = p.Height,
-                        Point = p.Position.AsPointD()
-                    }
-                    : new RotatableRectangleViewModel
-                    {
-                        Width = p.Width,
-                        Height = p.Height,
-                        Point = p.Position.AsPointD(),
-                        Orientation = p.Orientation
-                    };
+                        _geometryEditorViewModel.AddShape(p.Id, new RectangleViewModel
+                        {
+                            Width = propRectangle.Width,
+                            Height = propRectangle.Height,
+                            Point = propRectangle.Position.AsPointD()
+                        });
 
-                _geometryEditorViewModel.AddShape(p.Id, viewModel);
+                        break;
+                    }
+                    case PropCircle propCircle:
+                    {
+                        _geometryEditorViewModel.AddShape(p.Id, new EllipseViewModel
+                        {
+                            Width = propCircle.Diameter,
+                            Height = propCircle.Diameter,
+                            Point = propCircle.Position.AsPointD()
+                        });
+
+                        break;
+                    }
+                    default:
+                    {
+                        throw new ArgumentException();
+                    }
+                }
             });
 
             _propIds = _application.Engine.Scene.Props.Select(p => p.Id).ToArray();

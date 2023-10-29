@@ -14,6 +14,7 @@ using Simulator.Domain;
 using Simulator.Domain.Boundaries;
 using Simulator.ViewModel;
 using Simulator.Domain.BodyStates;
+using Simulator.Domain.Props;
 
 namespace Simulator.Laboratory.ViewModel
 {
@@ -4341,12 +4342,25 @@ namespace Simulator.Laboratory.ViewModel
             double width,
             int propId)
         {
-            var x0 = Math.Min(start.X, end.X) - width / 2;
-            var x1 = Math.Max(start.X, end.X) + width / 2;
-            var y0 = Math.Min(start.Y, end.Y) - width / 2;
-            var y1 = Math.Max(start.Y, end.Y) + width / 2;
+            if (start.X == end.X)
+            {
+                var x = start.X;
+                var y0 = Math.Min(start.Y, end.Y);
+                var y1 = Math.Max(start.Y, end.Y);
 
-            scene.Props.Add(new Prop(propId, x1 - x0, y1 - y0, new Vector2D((x0 + x1) / 2, (y0 + y1) / 2)));
+                scene.Props.Add(new PropRectangle(propId, width, y1 - y0, new Vector2D(x, (y0 + y1) / 2)));
+            }
+            else if (start.Y == end.Y)
+            {
+                var x0 = Math.Min(start.X, end.X);
+                var x1 = Math.Max(start.X, end.X);
+                var y = start.Y;
+                scene.Props.Add(new PropRectangle(propId, x1 - x0, width, new Vector2D((x0 + x1) / 2, y)));
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private static void AddPath(
@@ -4356,9 +4370,15 @@ namespace Simulator.Laboratory.ViewModel
             int firstPropId)
         {
             var propId = firstPropId;
+
             path.WayPoints.AdjacenPairs().ToList().ForEach(_ =>
             {
                 AddPathSegment(scene, _.Item1, _.Item2, width, propId++);
+            });
+
+            path.WayPoints.ForEach(_ =>
+            {
+                scene.Props.Add(new PropCircle(propId, width, _));
             });
         }
     }
