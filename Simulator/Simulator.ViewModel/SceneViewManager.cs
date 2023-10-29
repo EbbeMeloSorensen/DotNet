@@ -209,14 +209,24 @@ namespace Simulator.ViewModel
                 }
             });
 
-            _application.Engine.Scene.Props.ForEach(p => 
+            _application.Engine.Scene.Props.ForEach(p =>
             {
-                _geometryEditorViewModel.AddShape(p.Id, new RectangleViewModel
-                {
-                    Width = p.Width,
-                    Height = p.Height,
-                    Point = p.Position.AsPointD()
-                });
+                ShapeViewModel viewModel = p.Orientation < 0.000001
+                    ? new RectangleViewModel
+                    {
+                        Width = p.Width,
+                        Height = p.Height,
+                        Point = p.Position.AsPointD()
+                    }
+                    : new RotatableRectangleViewModel
+                    {
+                        Width = p.Width,
+                        Height = p.Height,
+                        Point = p.Position.AsPointD(),
+                        Orientation = p.Orientation
+                    };
+
+                _geometryEditorViewModel.AddShape(p.Id, viewModel);
             });
 
             _propIds = _application.Engine.Scene.Props.Select(p => p.Id).ToArray();

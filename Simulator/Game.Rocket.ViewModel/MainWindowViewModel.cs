@@ -712,7 +712,7 @@ namespace Game.Rocket.ViewModel
             bool boundaryTop = true,
             bool boundaryBottom = true)
         {
-            scene.Props.Add(new Prop(_nextWallId++, x1 - x0, y1 - y0, new Vector2D((x0 + x1) / 2, (y0 + y1) / 2)));
+            scene.Props.Add(new Prop(_nextWallId++, x1 - x0, y1 - y0, new Vector2D((x0 + x1) / 2, (y0 + y1) / 2), 0));
 
             if (boundaryLeft)
             {

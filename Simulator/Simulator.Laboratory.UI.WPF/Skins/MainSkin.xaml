@@ -2,8 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:local="clr-namespace:Simulator.Laboratory.UI.WPF">
+
     <SolidColorBrush Color="LightGray" x:Key="BackgroundBrush"/>
+
     <local:CustomizedShapeTemplateSelector x:Key="ShapeTemplateSelector"/>
+    
     <DataTemplate x:Key="TaggedEllipse">
         <Canvas>
             <Ellipse Fill="Purple" Width="{Binding Width}" Height="{Binding Height}">
@@ -23,4 +26,20 @@
             </TextBlock>
         </Canvas>
     </DataTemplate>
+
+    <DataTemplate x:Key="RotatableRectangle">
+        <Canvas>
+            <Rectangle Fill="SandyBrown" Width="{Binding Width}" Height="{Binding Height}">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <MatrixTransform Matrix="{Binding RotationMatrix}"/>
+                        <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </Canvas>
+    </DataTemplate>
+
 </ResourceDictionary>

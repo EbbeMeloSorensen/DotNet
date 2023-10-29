@@ -38,13 +38,13 @@
 
     <DataTemplate x:Key="RotatableRectangle">
         <Canvas>
-            <Ellipse Fill="Orange" Width="{Binding Width}" Height="{Binding Height}">
-                <Ellipse.RenderTransform>
+            <Rectangle Fill="Orange" Width="{Binding Width}" Height="{Binding Height}">
+                <Rectangle.RenderTransform>
                     <MatrixTransform Matrix="{Binding 
                             Path=DataContext.TransformationMatrix, 
                             RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-                </Ellipse.RenderTransform>
-            </Ellipse>
+                </Rectangle.RenderTransform>
+            </Rectangle>
         </Canvas>
     </DataTemplate>
 
