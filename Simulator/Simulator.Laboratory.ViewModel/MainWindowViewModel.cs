@@ -1758,27 +1758,46 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneBouncingBall1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)){NaturalVelocity = new Vector2D(0, -5) });
+            var ballRadius = 0.1;
+            var standardGravity = 10.0;
+            var initialBallPosition = new Vector2D(0, -1);
+            var initialDistanceFromCeiling = 0.000001;
+            initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition));
 
-            var scene = new Scene("Bouncing ball I", 120.0, new Point2D(-2, -3), initialState, 9.82, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Bouncing ball I", 120.0, new Point2D(-2, -3), initialState, standardGravity, 0, 0, 1, false);
+
+            scene.AddBoundary(new HalfPlane(initialBallPosition - new Vector2D(0, ballRadius + initialDistanceFromCeiling), new Vector2D(0, 1)));
+            scene.AddBoundary(new HalfPlane(new Vector2D(0, 0), new Vector2D(0, -1)));
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
                 return OutcomeOfCollisionBetweenBodyAndBoundary.Reflect;
             };
 
-            scene.AddBoundary(new HalfPlane(new Vector2D(1, 0.1), new Vector2D(0, -1)));
+            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            {
+                var response = new PostPropagationResponse();
+
+                // Make sure we didn't hit the ceiling
+                if (boundaryCollisionReports.Any(_ => _.EffectiveSurfaceNormal.Y > 0))
+                {
+                    response.IndexOfLastState = propagatedState.Index;
+                    response.Outcome = "Whoops - hitting the ceiling - that should not occur";
+                }
+
+                return response;
+            };
+
             return scene;
         }
 
         private static Scene GenerateSceneBouncingBall2()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 0) });
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 0) });
 
-            //var scene = new Scene("Bouncing ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.0003);
-            var scene = new Scene("Bouncing ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.001);
-            scene.FinalStateIndex = 700;
+            var scene = new Scene("Bouncing ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false);
+            //scene.FinalStateIndex = 700;
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
