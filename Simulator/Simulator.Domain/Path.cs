@@ -3,7 +3,7 @@ using Craft.Math;
 
 namespace Simulator.Domain
 {
-    public class Route
+    public class Path
     {
         public List<Vector2D> WayPoints { get; set; }
     }

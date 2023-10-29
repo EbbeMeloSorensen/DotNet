@@ -20,6 +20,10 @@ namespace Simulator.Laboratory.UI.WPF
                     {
                         return element.FindResource("TaggedEllipse") as DataTemplate;
                     }
+                case RotatableRectangleViewModel rotatableRectangleViewModel:
+                {
+                    return element.FindResource("RotatableRectangle") as DataTemplate;
+                }
                 case RotatableEllipseViewModel rotatableEllipseViewModel:
                     {
                         return element.FindResource("RotatableEllipse") as DataTemplate;

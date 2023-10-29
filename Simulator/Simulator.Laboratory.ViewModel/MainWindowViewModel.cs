@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,6 +8,7 @@ using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
+using Craft.Utils.Linq;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
@@ -207,11 +209,11 @@ namespace Simulator.Laboratory.ViewModel
                 }
             };
 
-            AddScene(GenerateSceneBodyFollowingRoute());
+            AddScene(GenerateSceneBodyFollowingPath());
             AddScene(GenerateSceneAddBodiesByClicking1());
             AddScene(GenerateSceneAddBodiesByClicking2());
             AddScene(GenerateSceneAddBodiesByClicking3());
-            AddScene(GenerateSceneAddBodiesByClicking4(), shapeSelectorCallback3, shapeUpdateCallback3);
+            AddScene(GenerateSceneTowerDefense(), shapeSelectorCallback3, shapeUpdateCallback3);
             AddScene(GenerateSceneShootEmUp7(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneShootEmUp8(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneFountain1());
@@ -4019,7 +4021,52 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneAddBodiesByClicking4()
+        private static Scene GenerateSceneBodyFollowingPath()
+        {
+            var initialState = new State();
+
+            var path = new Path
+            {
+                WayPoints = new List<Vector2D>
+                {
+                    new Vector2D(1, -1),
+                    new Vector2D(-1, -1),
+                    new Vector2D(1, 1),
+                    new Vector2D(-1, 1)
+                }
+            };
+
+            initialState.AddBodyState(
+                new BodyStateEnemy(
+                    new CircularBody(1, 0.125, 1, true),
+                    new Vector2D(0, 0))
+                {
+                    Path = path,
+                    Speed = 1,
+                    NaturalVelocity = new Vector2D(1, 0)
+                });
+
+            var standardGravity = 0.0;
+            var gravitationalConstant = 0.0;
+            var handleBodyCollisions = false;
+            var coefficientOfFriction = 0.0;
+
+            var scene = new Scene(
+                "Body Following route",
+                120.0,
+                new Point2D(-2, -3),
+                initialState,
+                standardGravity,
+                gravitationalConstant,
+                coefficientOfFriction,
+                1,
+                handleBodyCollisions,
+                0.005);
+
+            return scene;
+        }
+
+        private static Scene GenerateSceneTowerDefense()
         {
             const double radiusOfCannons = 0.2;
             const double radiusOfProjectiles = 0.05;
@@ -4032,20 +4079,16 @@ namespace Simulator.Laboratory.ViewModel
             const int enemyLife = 10;
             const double enemySpeed = 0.5;
 
-            const double routeTop = -1.0;
-            const double routeLeft = -1.0;
-            const double routeRight = 2.0;
-            const double routeSpacing = 1.0;
-
-            var route = new Route
+            var path = new Path
             {
                 WayPoints = new List<Vector2D>
                 {
-                    new Vector2D(routeRight, routeTop),
-                    new Vector2D(routeRight, routeTop + routeSpacing),
-                    new Vector2D(routeLeft, routeTop + routeSpacing),
-                    new Vector2D(routeLeft, routeTop + 2 * routeSpacing),
-                    new Vector2D(5, routeTop + 2 * routeSpacing)
+                    new Vector2D(-2, -1),
+                    new Vector2D(2, -1),
+                    new Vector2D(2, 0),
+                    new Vector2D(-1, 0),
+                    new Vector2D(-1, 1 * 1),
+                    new Vector2D(5, 1 * 1)
                 }
             };
 
@@ -4074,11 +4117,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.AddBoundary(new LeftFacingHalfPlane(4));
 
-            scene.Props.Add(new Prop(
-                nextPropId++, 
-                routeRight - routeLeft, 
-                enemyRadius * 2, 
-                new Vector2D(routeLeft, routeTop)));
+            AddPath(scene, path, enemyRadius * 2.5, nextPropId);
 
             scene.InitializationCallback = (state, message) =>
             {
@@ -4138,9 +4177,9 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * enemySpacing,
-                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-2, -1))
+                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-3, -1))
                     {
-                        Route = route,
+                        Path = path,
                         Speed = enemySpeed,
                         NaturalVelocity = new Vector2D(0.2, 0),
                         Life = enemyLife
@@ -4295,49 +4334,32 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBodyFollowingRoute()
+        private static void AddPathSegment(
+            Scene scene,
+            Vector2D start,
+            Vector2D end,
+            double width,
+            int propId)
         {
-            var initialState = new State();
+            var x0 = Math.Min(start.X, end.X) - width / 2;
+            var x1 = Math.Max(start.X, end.X) + width / 2;
+            var y0 = Math.Min(start.Y, end.Y) - width / 2;
+            var y1 = Math.Max(start.Y, end.Y) + width / 2;
 
-            var route = new Route
+            scene.Props.Add(new Prop(propId, x1 - x0, y1 - y0, new Vector2D((x0 + x1) / 2, (y0 + y1) / 2)));
+        }
+
+        private static void AddPath(
+            Scene scene,
+            Path path,
+            double width,
+            int firstPropId)
+        {
+            var propId = firstPropId;
+            path.WayPoints.AdjacenPairs().ToList().ForEach(_ =>
             {
-                WayPoints = new List<Vector2D>
-                {
-                    new Vector2D(1, -1),
-                    new Vector2D(-1, -1),
-                    new Vector2D(1, 1),
-                    new Vector2D(-1, 1)
-                }
-            };
-            
-            initialState.AddBodyState(
-                new BodyStateEnemy(
-                    new CircularBody(1, 0.125, 1, true), 
-                    new Vector2D(0, 0))
-                    {
-                        Route = route,
-                        Speed = 1,
-                        NaturalVelocity = new Vector2D(1, 0)
-                    });
-
-            var standardGravity = 0.0;
-            var gravitationalConstant = 0.0;
-            var handleBodyCollisions = false;
-            var coefficientOfFriction = 0.0;
-
-            var scene = new Scene(
-                "Body Following route",
-                120.0,
-                new Point2D(-2, -3),
-                initialState,
-                standardGravity,
-                gravitationalConstant,
-                coefficientOfFriction,
-                1,
-                handleBodyCollisions,
-                0.005);
-
-            return scene;
+                AddPathSegment(scene, _.Item1, _.Item2, width, propId++);
+            });
         }
     }
 }

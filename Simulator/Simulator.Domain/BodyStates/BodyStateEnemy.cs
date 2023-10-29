@@ -7,7 +7,7 @@ namespace Simulator.Domain.BodyStates
     {
         private int _indexOfNextWayPoint;
 
-        public Route Route { get; set; }
+        public Path Path { get; set; }
         public double Speed { get; set; }
         public double DistanceCovered { get; set; }
         public int Life { get; set; }
@@ -28,7 +28,7 @@ namespace Simulator.Domain.BodyStates
             return new BodyStateEnemy(Body, Position)
             {
                 _indexOfNextWayPoint = _indexOfNextWayPoint,
-                Route = Route,
+                Path = Path,
                 Speed = Speed,
                 NaturalVelocity = NaturalVelocity,
                 DistanceCovered = DistanceCovered,
@@ -40,7 +40,7 @@ namespace Simulator.Domain.BodyStates
             double time,
             Vector2D force)
         {
-            var nextWayPoint = Route.WayPoints[_indexOfNextWayPoint];
+            var nextWayPoint = Path.WayPoints[_indexOfNextWayPoint];
             var vectorToNextWayPoint = nextWayPoint - Position;
             var distanceToNextWayPoint = vectorToNextWayPoint.Length;
             var distanceIncrement = time * Speed;
@@ -51,8 +51,8 @@ namespace Simulator.Domain.BodyStates
                 {
                     Position = nextWayPoint,
                     NaturalVelocity = NaturalVelocity,
-                    _indexOfNextWayPoint = (_indexOfNextWayPoint + 1) % Route.WayPoints.Count,
-                    Route = Route,
+                    _indexOfNextWayPoint = (_indexOfNextWayPoint + 1) % Path.WayPoints.Count,
+                    Path = Path,
                     Speed = Speed,
                     DistanceCovered = DistanceCovered + distanceToNextWayPoint,
                     Life = Life
@@ -68,7 +68,7 @@ namespace Simulator.Domain.BodyStates
                 Position = nextPosition,
                 NaturalVelocity = NaturalVelocity,
                 _indexOfNextWayPoint = _indexOfNextWayPoint,
-                Route = Route,
+                Path = Path,
                 Speed = Speed,
                 DistanceCovered = DistanceCovered + displacement.Length,
                 Life = Life
