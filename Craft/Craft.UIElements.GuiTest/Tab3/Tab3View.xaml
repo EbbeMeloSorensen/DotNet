@@ -27,10 +27,11 @@
                         </Grid.RowDefinitions>
                         <scrollFree:GeometryEditorView
                             Grid.Row="0" DataContext="{Binding GeometryEditorViewModel1}"/>
+                        <CheckBox Grid.Row="1" Content="Windmill rotates" IsChecked="{Binding WindMillInHouseDrawingsRotates}"/>
                         <StackPanel Grid.Row="1" Margin="10">
-                            <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"
                                     Command="{Binding ZoomInForGeometryEditor1Command}" >Zoom In</Button>
-                            <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" 
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" 
                                     Command="{Binding ZoomOutForGeometryEditor1Command}" >Zoom Out</Button>
                         </StackPanel>
                         <TextBlock Grid.Row="2" TextWrapping="Wrap">
@@ -47,10 +48,11 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <scrollFree:GeometryEditorView Grid.Row="0" DataContext="{Binding GeometryEditorViewModel2}"/>
+                        <CheckBox Grid.Row="1" Content="Windmill rotates" IsChecked="{Binding WindMillInHouseDrawingsRotates}"/>
                         <StackPanel Grid.Row="1" Margin="10">
-                            <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"
                                     Command="{Binding ZoomInForGeometryEditor2Command}" >Zoom In</Button>
-                            <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" 
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" 
                                     Command="{Binding ZoomOutForGeometryEditor2Command}" >Zoom Out</Button>
                         </StackPanel>
                         <TextBlock Grid.Row="2" TextWrapping="Wrap">

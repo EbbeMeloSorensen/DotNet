@@ -28,6 +28,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         private double _y0 = -1.0;
         private double _y1 = 1.0;
 
+        private bool _windMillInHouseDrawingsRotates;
         private int _worldWindowUpdateCountForGeometryEditorViewModel4;
         private int _worldWindowMajorUpdateCountForGeometryEditorViewModel4;
         private int _worldWindowUpdateCountForCoordinateSystemViewModel;
@@ -41,6 +42,16 @@ namespace Craft.UIElements.GuiTest.Tab3
         private RelayCommand _zoomOutForGeometryEditor1Command;
         private RelayCommand _zoomInForGeometryEditor2Command;
         private RelayCommand _zoomOutForGeometryEditor2Command;
+
+        public bool WindMillInHouseDrawingsRotates
+        {
+            get { return _windMillInHouseDrawingsRotates; }
+            set
+            {
+                _windMillInHouseDrawingsRotates = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public int WorldWindowUpdateCountForGeometryEditorViewModel4
         {
@@ -282,12 +293,17 @@ namespace Craft.UIElements.GuiTest.Tab3
                 Point = new PointD(500, 250),
                 Width = 100.0,
                 Height = 10.0,
-                Orientation = Math.PI / 2,
+                Orientation = Math.PI / 4,
             });
 
             // Make the windmill rotate
             geometryEditorViewModel.UpdateModelCallBack = () =>
             {
+                if (!WindMillInHouseDrawingsRotates)
+                {
+                    return;
+                }
+
                 var now = DateTime.Now;
                 var fraction = now.Millisecond / 1000.0;
                 var orientation = 2 * Math.PI * fraction;
