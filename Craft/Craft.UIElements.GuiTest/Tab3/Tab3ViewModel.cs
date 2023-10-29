@@ -268,6 +268,15 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             // Label
             geometryEditorViewModel.AddLabel("Danshøjvej 33", new PointD(200, 300), 120, 40, new PointD(0, 20), 0.25);
+
+            // Something
+            //geometryEditorViewModel.ShapeViewModels.Add(new RotatableEllipseViewModel());
+
+            // Something that rotates
+            geometryEditorViewModel.UpdateModelCallBack = () =>
+            {
+
+            };
         }
 
         private void DrawACoordinateSystem(

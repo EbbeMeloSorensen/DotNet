@@ -17,25 +17,25 @@ namespace Simulator.Laboratory.UI.WPF
             switch (item)
             {
                 case TaggedEllipseViewModel taggedEllipseViewModel:
-                    {
-                        return element.FindResource("TaggedEllipse") as DataTemplate;
-                    }
+                {
+                    return element.FindResource("TaggedEllipse") as DataTemplate;
+                }
+                case RotatableEllipseViewModel rotatableEllipseViewModel:
+                {
+                    return element.FindResource("RotatableEllipse") as DataTemplate;
+                }
+                case EllipseViewModel ellipseViewModel:
+                {
+                    return element.FindResource("Ellipse") as DataTemplate;
+                }
                 case RotatableRectangleViewModel rotatableRectangleViewModel:
                 {
                     return element.FindResource("RotatableRectangle") as DataTemplate;
                 }
-                case RotatableEllipseViewModel rotatableEllipseViewModel:
-                    {
-                        return element.FindResource("RotatableEllipse") as DataTemplate;
-                    }
-                case EllipseViewModel ellipseViewModel:
-                    {
-                        return element.FindResource("Ellipse") as DataTemplate;
-                    }
                 case RectangleViewModel rectangleViewModel:
-                    {
-                        return element.FindResource("Rectangle") as DataTemplate;
-                    }
+                {
+                    return element.FindResource("Rectangle") as DataTemplate;
+                }
                 default:
                 {
                     throw new ArgumentException("item doesn't correspond to any DataTemplate");
