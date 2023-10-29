@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -4072,9 +4071,9 @@ namespace Simulator.Laboratory.ViewModel
             const double radiusOfCannons = 0.2;
             const double radiusOfProjectiles = 0.05;
             const int cannonCoolDown = 300;
-            const double rangeOfCannons = 2.5;
+            const double rangeOfCannons = 1.0;
             const double projectileSpeed = 10.0;
-            const int projectileLifespan = 100;
+            const int projectileLifespan = 50;
             const double enemyRadius = 0.15;
             const int enemySpacing = 200;
             const int enemyLife = 10;
@@ -4260,11 +4259,15 @@ namespace Simulator.Laboratory.ViewModel
 
                     if (cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons)
                     {
-                        propagatedState.AddBodyState(new BodyStateCannon(
-                            new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
+                        // Not close to other cannons, but what about the path?
+                        if (scene.Props.Min(_ => _.DistanceToPoint(mousePosAsVector) - radiusOfCannons > 0.0))
                         {
-                            CoolDown = cannonCoolDown
-                        });
+                            propagatedState.AddBodyState(new BodyStateCannon(
+                                new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
+                            {
+                                CoolDown = cannonCoolDown
+                            });
+                        }
                     }
 
                     mousePos = null;
