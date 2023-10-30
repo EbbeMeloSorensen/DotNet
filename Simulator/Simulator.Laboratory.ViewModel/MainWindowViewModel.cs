@@ -63,7 +63,7 @@ namespace Simulator.Laboratory.ViewModel
             _shapeUpdateCallbacks = new Dictionary<Scene, ShapeUpdateCallback>();
 
             _logger = logger;
-            _logger = null; // Disable logging (it should only be used for debugging purposes)
+            //_logger = null; // Disable logging (it should only be used for debugging purposes)
             _logger?.WriteLine(LogMessageCategory.Information, "Simulator - Starting up");
 
             Outcome = null;
@@ -236,6 +236,9 @@ namespace Simulator.Laboratory.ViewModel
                 }
             };
 
+            AddScene(GenerateSceneBouncingBall1());
+            AddScene(GenerateSceneBouncingBall2());
+            AddScene(GenerateSceneBouncingBall3());
             AddScene(GenerateSceneBodyFollowingPath());
             AddScene(GenerateSceneAddBodiesByClicking1());
             AddScene(GenerateSceneAddBodiesByClicking2());
@@ -284,8 +287,6 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateSceneBallInteractionLargeScene1());
             AddScene(GenerateSceneBallInteractionLargeScene2());
             AddScene(GenerateSceneBrickInteraction1());
-            AddScene(GenerateSceneBouncingBall1());
-            AddScene(GenerateSceneBouncingBall2());
             AddScene(GenerateScenePoolTableWithOneBall());
             AddScene(GenerateScenePoolTableWithOneBallAndThreeBoundaryPoints());
             AddScene(GenerateScenePoolTableWithTwoBallsAnd1LineSegment());
@@ -1784,17 +1785,58 @@ namespace Simulator.Laboratory.ViewModel
 
         private static Scene GenerateSceneBouncingBall1()
         {
+            // Dette er et simpelt eksempel, hvor vi opererer med en høj deltaværdi. Det er således let at vurdere, om den numeriske
+            // fremskrivning af boldens position afviger fra den analytiske (Du har lavet et xcel-ark, der sammenligner, og for dette scene
+            // stemmer de fuldt overens)
+
             var initialState = new State();
             var ballRadius = 0.1;
             var standardGravity = 10.0;
-            var initialBallPosition = new Vector2D(0, -1);
+            var initialBallPosition = new Vector2D(0, 0);
+
+            initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition) { NaturalVelocity = new Vector2D(0, -10)});
+
+            var scene = new Scene("Bouncing ball I", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, 0.05);
+
+            scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
+
+            scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
+            {
+                return OutcomeOfCollisionBetweenBodyAndBoundary.Block;
+            };
+
+            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            {
+                var response = new PostPropagationResponse();
+
+                if (boundaryCollisionReports.Any())
+                {
+                    response.IndexOfLastState = propagatedState.Index;
+                    response.Outcome = "Halting";
+                }
+
+                return response;
+            };
+
+            return scene;
+        }
+
+        private static Scene GenerateSceneBouncingBall2()
+        {
+            // Den her minder om den forrige, men her starter bolden lige under loftet, og så skal den helst ikke ramme loftet igen
+
+            var initialState = new State();
+            var ballRadius = 0.1;
+            var standardGravity = 10.0;
+            var initialBallPosition = new Vector2D(0, -5);
             var initialDistanceFromCeiling = 0.000001;
+
             initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition));
 
-            var scene = new Scene("Bouncing ball I", 120.0, new Point2D(-2, -3), initialState, standardGravity, 0, 0, 1, false);
+            var scene = new Scene("Bouncing ball II", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, 0.05);
 
             scene.AddBoundary(new HalfPlane(initialBallPosition - new Vector2D(0, ballRadius + initialDistanceFromCeiling), new Vector2D(0, 1)));
-            scene.AddBoundary(new HalfPlane(new Vector2D(0, 0), new Vector2D(0, -1)));
+            scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1805,7 +1847,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 var response = new PostPropagationResponse();
 
-                // Make sure we didn't hit the ceiling
+                // Make sure we don't hit the ceiling
                 if (boundaryCollisionReports.Any(_ => _.EffectiveSurfaceNormal.Y > 0))
                 {
                     response.IndexOfLastState = propagatedState.Index;
@@ -1818,13 +1860,12 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBouncingBall2()
+        private static Scene GenerateSceneBouncingBall3()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 0) });
 
-            var scene = new Scene("Bouncing ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false);
-            //scene.FinalStateIndex = 700;
+            var scene = new Scene("Bouncing ball III", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {

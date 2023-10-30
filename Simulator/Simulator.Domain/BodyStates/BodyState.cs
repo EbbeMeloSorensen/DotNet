@@ -25,7 +25,6 @@ namespace Simulator.Domain.BodyStates
             Body body)
         {
             Body = body;
-
             NaturalVelocity = _zeroVector;
         }
 
@@ -35,13 +34,12 @@ namespace Simulator.Domain.BodyStates
         {
             Body = body;
             Position = position;
-
             NaturalVelocity = _zeroVector;
         }
 
         public virtual BodyState Clone()
         {
-            return new BodyStateClassic(Body, Position)
+            return new BodyState(Body, Position)
             {
                 NaturalVelocity = NaturalVelocity
             };
@@ -51,9 +49,14 @@ namespace Simulator.Domain.BodyStates
             double time,
             Vector2D force)
         {
+            // Todo: Consider calcualting an average acceleration, like you do with velocity
+
             var acceleration = force / Body.Mass;
             var nextNaturalVelocity = NaturalVelocity + time * acceleration;
-            var nextPosition = Position + time * NaturalVelocity;
+
+            // Notice that we propagate the body using the average of the former and the next velocity
+            //var nextPosition = Position + time * nextNaturalVelocity; // Old - leads to big discrepancy between numerical and analytical result
+            var nextPosition = Position + time * (NaturalVelocity + nextNaturalVelocity) / 2;
 
             return new BodyState(Body)
             {

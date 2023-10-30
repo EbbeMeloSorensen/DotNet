@@ -70,6 +70,8 @@ namespace Simulator.Domain.BodyStates
             double time,
             Vector2D force)
         {
+            // Todo: Propagate in a manner similar to that of the base class BodyState, i.e. where you average the velocity
+
             var acceleration = force / Body.Mass;
             var nextNaturalVelocity = NaturalVelocity + time * acceleration;
             var nextPosition = Position + time * (NaturalVelocity + ArtificialVelocity.Rotate(-Orientation));

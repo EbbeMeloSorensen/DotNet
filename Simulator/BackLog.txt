@@ -281,6 +281,8 @@ Done:
   - Lav ruten som et antal props
 
 Todo:
+* Prøv lige at ændre calculatoren, så den bruger gennemsnit af før/efter hastighed, når den fremskriver en position. For de scener,
+  hvor accelerationen ændrer sig, giver det sikkert også mening at opdatere hastigheden under anvendelse af en gennemsnitlig acceleration
 * Flyt NaturalVelocity hen på BodyStateClassic eller i hvert fald hen på en nedarvet klasse - for mange bodies er den ikke i brug. 
   Specielt når der er interaktion. Og nogle bodies bevæger sig ikke engang, f.eks. kanonerne i Tower Defense
 * Lav en specialisering af BodyState, hvor den følger en bane

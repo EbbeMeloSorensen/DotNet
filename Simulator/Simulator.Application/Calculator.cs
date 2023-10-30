@@ -759,6 +759,7 @@ namespace Simulator.Application
 
                         // Dette er længden af hastighedsvektoren projiceret ind på væggens normalvektor.
                         // Den er i praksis negativ, så vi gør den positiv
+                        // BEMÆRK: DET HER VIRKER NOK IKKE LÆNGERE, NÅR NU DU PROPAGERER MED ET GENNEMSNIT AF VELOCITY BEFORE OG VELOCITY AFTER
                         var velocityComponentTowardsBoundary = -halfPlane.ProjectVectorOntoSurfaceNormal(velocityBefore);
 
                         // Hvis denne evaluerer til true er kuglens hastighed parallel med væggen,
