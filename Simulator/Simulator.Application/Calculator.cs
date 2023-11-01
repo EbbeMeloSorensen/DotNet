@@ -529,7 +529,8 @@ namespace Simulator.Application
                 var bsBefore = kvp.Value;
                 var bsAfter = kvp.Key;
 
-                var velocityBefore = bsBefore.Velocity;
+                var velocityBefore = bsBefore.Velocity; // Brug IKKE den her - reelt er bodyen propgageret frem under anvendelse af et gennemsnit af hastighed før og efter
+                var effectiveVelocity = (bsAfter.Position - bsBefore.Position) / timeLeftInCurrentIncrement;
 
                 foreach (var boundary in boundaries)
                 {
@@ -760,7 +761,8 @@ namespace Simulator.Application
                         // Dette er længden af hastighedsvektoren projiceret ind på væggens normalvektor.
                         // Den er i praksis negativ, så vi gør den positiv
                         // BEMÆRK: DET HER VIRKER NOK IKKE LÆNGERE, NÅR NU DU PROPAGERER MED ET GENNEMSNIT AF VELOCITY BEFORE OG VELOCITY AFTER
-                        var velocityComponentTowardsBoundary = -halfPlane.ProjectVectorOntoSurfaceNormal(velocityBefore);
+                        //var velocityComponentTowardsBoundary = -halfPlane.ProjectVectorOntoSurfaceNormal(velocityBefore);
+                        var velocityComponentTowardsBoundary = -halfPlane.ProjectVectorOntoSurfaceNormal(effectiveVelocity);
 
                         // Hvis denne evaluerer til true er kuglens hastighed parallel med væggen,
                         // så den glider så at sige langs muren
@@ -889,8 +891,13 @@ namespace Simulator.Application
             foreach (var kvp in propagatedBodyStateMap)
             {
                 kvp.Value.Position += fraction * (kvp.Key.Position - kvp.Value.Position);
-                kvp.Key.NaturalVelocity = kvp.Value.NaturalVelocity; // Hvad Fanden er rationalet for det her lige? SATANS OGSÅ, MAND!!
-                                                                     // Du vurderede, at det var uhensigtsmæssigt at ændre på hastigheden, hvis den kun propagerede delvist..
+                //kvp.Key.NaturalVelocity = kvp.Value.NaturalVelocity; // Hvad Fanden er rationalet for det her lige? SATANS OGSÅ, MAND!!
+                // Du vurderede, at det var uhensigtsmæssigt at ændre på hastigheden, hvis den kun propagerede delvist..
+                // men det lader jo altså til at have nogle implikationer, som du ikke er skide glad for..
+
+                // For eksemplet med den hoppende bold vil jeg altså mene, at du må være bedst tjent med at håndtere hastighed ligesom position
+                // Så må du tage hånd om evt problemer på en anden måde
+                kvp.Value.NaturalVelocity += fraction * (kvp.Key.NaturalVelocity - kvp.Value.NaturalVelocity);
             }
         }
 
