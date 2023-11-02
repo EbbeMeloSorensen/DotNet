@@ -28,64 +28,28 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!--Comment in to view some diagnostics-->
-            <Label Grid.Row="0" Grid.Column="0" Content="Buffer"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="Magnification"/>
             <TextBox Grid.Row="0" Grid.Column="1" Margin="1" IsReadOnly="True"
                      VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding Engine.StateSequenceCount}"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="Last Index Generated"/>
+                     Text="{Binding GeometryEditorViewModel.Scaling.Width}"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="WorldWindow Left"/>
             <TextBox Grid.Row="1" Grid.Column="1" Margin="1" IsReadOnly="True"
                      VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding Engine.LastIndexGenerated}"/>
-            <Label Grid.Row="2" Grid.Column="0" Content="Last Index Requested"/>
+                     Text="{Binding GeometryEditorViewModel.WorldWindowUpperLeft.X}"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="WorldWindow Top"/>
             <TextBox Grid.Row="2" Grid.Column="1" Margin="1" IsReadOnly="True"
                      VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding LastIndexRequested}"/>
-            <Label Grid.Row="3" Grid.Column="0" Content="Last Index Consumed"/>
+                     Text="{Binding GeometryEditorViewModel.WorldWindowUpperLeft.Y}"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="Aux"/>
             <TextBox Grid.Row="3" Grid.Column="1" Margin="1" IsReadOnly="True"
                      VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding LastIndexConsumed}"/>
-            <Label Grid.Row="4" Grid.Column="0" Content="Index Difference"/>
-            <TextBox Grid.Row="4" Grid.Column="1" Margin="1" IsReadOnly="True"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding IndexDifference}"/>
-            <Label Grid.Row="5" Grid.Column="0" Content="Index Difference, Averaged"/>
-            <TextBox Grid.Row="5" Grid.Column="1" Margin="1" IsReadOnly="True"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding IndexDifferenceAveraged}"/>
-            <Label Grid.Row="6" Grid.Column="0" Content="Frame Skip Count"/>
-            <TextBox Grid.Row="6" Grid.Column="1" Margin="1" IsReadOnly="True"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding FrameSkipCount}"/>
-            <Label Grid.Row="7" Grid.Column="0" Content="Magnification"/>
-            <TextBox Grid.Row="7" Grid.Column="1" Margin="1" IsReadOnly="True"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding GeometryEditorViewModel.Magnification}"/>
-            <Label Grid.Row="8" Grid.Column="0" Content="WorldWindow Left"/>
-            <TextBox Grid.Row="8" Grid.Column="1" Margin="1" IsReadOnly="True"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding GeometryEditorViewModel.WorldWindowUpperLeft.X}"/>
-            <Label Grid.Row="9" Grid.Column="0" Content="WorldWindow Top"/>
-            <TextBox Grid.Row="9" Grid.Column="1" Margin="1" IsReadOnly="True"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding GeometryEditorViewModel.WorldWindowUpperLeft.Y}"/>
-            <Label Grid.Row="10" Grid.Column="0" Content="Keyboard"/>
-            <TextBox Grid.Row="10" Grid.Column="1" Margin="1" IsReadOnly="True"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding DiagnosticText}"/>
+                     Text="{Binding Aux}"/>
         </Grid>
 
         <StackPanel Grid.Row="1" Grid.Column="0">

@@ -17,6 +17,9 @@ using Simulator.Domain.Props;
 
 namespace Simulator.Laboratory.ViewModel
 {
+    public delegate void UpdateAuxField(
+        string text);
+
     public class MainWindowViewModel : ViewModelBase
     {
         private Dictionary<Scene, ShapeSelectorCallback> _shapeSelectorCallbacks;
@@ -25,6 +28,7 @@ namespace Simulator.Laboratory.ViewModel
         private ILogger _logger;
         private SceneViewManager _sceneViewManager;
         private string _outcome;
+        private string _aux;
 
         public Application.Application Application { get; }
         public SceneListViewModel SceneListViewModel { get; }
@@ -52,6 +56,16 @@ namespace Simulator.Laboratory.ViewModel
             set
             {
                 _outcome = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Aux
+        {
+            get { return _aux; }
+            set
+            {
+                _aux = value;
                 RaisePropertyChanged();
             }
         }
@@ -236,8 +250,13 @@ namespace Simulator.Laboratory.ViewModel
                 }
             };
 
+            var updateAuxField = new UpdateAuxField((text) =>
+            {
+                Aux = text;
+            });
+
             AddScene(GenerateSceneBouncingBall1());
-            AddScene(GenerateSceneBouncingBall2());
+            AddScene(GenerateSceneBouncingBall2(updateAuxField));
             AddScene(GenerateSceneBouncingBall3());
             AddScene(GenerateSceneBodyFollowingPath());
             AddScene(GenerateSceneAddBodiesByClicking1());
@@ -1821,7 +1840,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBouncingBall2()
+        private static Scene GenerateSceneBouncingBall2(
+            UpdateAuxField updateAuxField)
         {
             // Den her minder om den forrige, men her starter bolden lige under loftet, og så skal den helst ikke ramme loftet igen
 
@@ -1837,6 +1857,17 @@ namespace Simulator.Laboratory.ViewModel
 
             //scene.AddBoundary(new HalfPlane(initialBallPosition - new Vector2D(0, ballRadius + initialDistanceFromCeiling), new Vector2D(0, 1)));
             scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                var potentialEnergy = currentState.BodyStates.Sum(_ => _.Body.Mass * standardGravity * -_.Position.Y);
+                var kineticEnergy = currentState.BodyStates.Sum(_ => 0.5 * _.Body.Mass * Math.Pow(_.NaturalVelocity.Length, 2));
+                var totalEnergy = potentialEnergy + kineticEnergy;
+
+                updateAuxField(totalEnergy.ToString());
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
