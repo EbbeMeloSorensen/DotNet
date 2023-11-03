@@ -243,6 +243,8 @@ namespace Simulator.Application
                 return;
             }
 
+            logger.WriteLine(LogMessageCategory.Debug, $"  Energy: {state.CalculateTotalEnergy(10.0)}", "propagation");
+
             state.BodyStates.ForEach(bs =>
             {
                 logger.WriteLine(LogMessageCategory.Debug, $"    Body{bs.Body.Id}: Position: ({bs.Position.X}, {bs.Position.Y}, Natural Velocity: ({bs.NaturalVelocity.X}, {bs.NaturalVelocity.Y}))", "propagation");
@@ -351,7 +353,8 @@ namespace Simulator.Application
             return state.BodyStates.ToDictionary(
                 _ => _.Propagate(
                     timeLeftInCurrentIncrement,
-                    idsOfHandledBodies.Contains(_.Body.Id) ? new Vector2D(0, 0) : forceMap[_]),
+                    //idsOfHandledBodies.Contains(_.Body.Id) ? new Vector2D(0, 0) : forceMap[_]), // Slået fra, fordi det laver ravage for "bouncing ball 2"-scenen
+                    forceMap[_]),
                 _ => _.Clone());
         }
 
@@ -539,7 +542,8 @@ namespace Simulator.Application
                         continue;
                     }
 
-                    var buffer = 0.000001; // Backtrack an additional micro meter to ensure we don't have intersection due to rounding errors
+                    //var buffer = 0.000001; // Backtrack an additional micro meter to ensure we don't have intersection due to rounding errors
+                    var buffer = 0.0;
                     Vector2D effectiveSurfaceNormalForCurrentBoundary = null;
 
                     if (boundary is ILineSegment)

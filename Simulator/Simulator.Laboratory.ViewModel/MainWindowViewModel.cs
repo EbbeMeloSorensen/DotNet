@@ -1860,11 +1860,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                var potentialEnergy = currentState.BodyStates.Sum(_ => _.Body.Mass * standardGravity * -_.Position.Y);
-                var kineticEnergy = currentState.BodyStates.Sum(_ => 0.5 * _.Body.Mass * Math.Pow(_.NaturalVelocity.Length, 2));
-                var totalEnergy = potentialEnergy + kineticEnergy;
-
-                updateAuxField(totalEnergy.ToString());
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
 
                 return false;
             };

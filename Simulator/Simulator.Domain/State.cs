@@ -72,5 +72,14 @@ namespace Simulator.Domain
         {
             return BodyStates.Count == 0 ? null : BodyStates.First().Position;
         }
+
+        public double CalculateTotalEnergy(
+            double standardGravity)
+        {
+            var potentialEnergy = BodyStates.Sum(_ => _.Body.Mass * standardGravity * -_.Position.Y);
+            var kineticEnergy = BodyStates.Sum(_ => 0.5 * _.Body.Mass * Math.Pow(_.Velocity.Length, 2));
+
+            return potentialEnergy + kineticEnergy;
+        }
     }
 }

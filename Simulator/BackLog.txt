@@ -281,6 +281,47 @@ Done:
   - Lav ruten som et antal props
 
 Todo:
+* Fix problemet med at energien pludselig hopper fra 50 til 55 for scenen "Bouncing Ball 2"
+  Kollisionen detekteres umiddelbart efter iterationen. Position og hastighed propageres korrekt (hvor den effektivt bruger "før"-tilstanden),
+  men når man så skal reflektere hastigheden, bruger den efter tilstanden, som jo er for høj.
+  Løsningen må vel være, at man faktisk bør MANIPULERE propagatedBodyStateMap, når man kører partiel propagering.. hvad er det lige du gør nu?
+  --> metoden PropagateStatePartly manipulerer faktisk propagatedBodyStateMap, men den manipulerer vel at mærke kun "før"-tilstanden.
+  ... og hvorfor pokker skulle det i øvrigt være relevant? Hvad bruger den før-tilstanden til efterfølgende?
+    ... var det ikke mere naturligt at manipulere "efter"-tilstanden - før-tilstanden burde jo ligesom have udspillet sin rolle der.
+      I øvrigt.. du bør vel holde fast i princippet om at du skal have tilstanden ved de der fast tidspunkter.. (af hensyn til consumeren)
+  --> Der er sgu noget, der tyder på, at det slet ikke gør nogen forskel at du manipulerer start-tilstanden.... fordi den slet ikke bruges efterfølgende.....
+    by the way, hvorfor opererer du med, at før-tilstanden gemmes i values og ikke i keys?
+	--> måske er det netop fordi du gerne vil manipulere dem, og det er lissom ikke naturligt at manipulere nøgler....
+	Observation: Efter iteration 60, så er bolden i en højde af -0,5 og har en hastighed på 10 m/s - det er jo så forkert, idet hastigheden burde være
+	burde være -9,5- og højden burde i øvrigt være -0,4875, idet deb burde være blevet beregnet ud fra et gennemsnit af før-og efter-hastigheden snarere end
+	bare med efter-hastigheden. Så du bryder med dit Euler-princip, når du håndterer kollision - måske skulle du tegne et sekvens-diagram
+	propagatedBodystateMap beregnes åbenbart FORKERT i anden iteration..
+	Det relaterer sig til at accelerationen vurderes at være 0 (selv om dn burde være 10), og det er igen fordi kraften vurderes at være 0,
+	hvilket jo så er forkert.
+	Tilsyneladende relaterer det sig til, at pågældende body markeres som værend HÅNDTERET ("handled") og det udvirker så, at man sætter kraften til 0
+	frem for at bruge den værdi, der er i force mappet. Derfor opfører algoritmen sig effektivt sådan, at bolden ikke er påvirket af tyngdefkraften i
+	pågældende iteration, og så er det klart, at energien stiger..
+	...Hvad var din ide med den der konstruktion om at bodies skulle kunne markeres som håndterede? Det var vist nok den der scene, du bøvlede en del
+	med, hvor et antal bolde rammer en kant samtidigt.
+	-------> Prøv lige at opere med, at man altså skal bruge kraften fra force-mappet uanset om bolden er "håndteret"
+	Man kan i hvert fald sige om handled, at den tjener det formål at sørge for, at kræfter effektivt ikke virker på bodies, der er handled.
+	..så kan jeg så ikke huske, hvad der er det sunde rationale for det..
+	Prøv lige helt at slå brugen af den der "handled" collection fra, og se hvad der sker.
+	--->Sjovt nok så fungerer Bouncing Ball 2 nu så fint, men bouncing ball 1 går i uendelig løkke..... well - så er det i hvert fald let at reproducere
+	----->Det er også relativt let at forklare. Før skete der det for scenen, at når bolden ramte gulvet, så sagde scenen, at den bare skulle blokere.
+	      Derfor blev dens hastighed sat til 0, og den blev markeret som værende håndteret, således at den ikke forstyrrede resten af beregningerne, hvad 
+		  den jo vil gøre, hvis den er påvirket af en kraft, som så giver den en hastighed, der udvirker en forskydning, som gør, at den vurderes at støde
+		  ind i noget - og så har vi den uendelige løkke...
+		  Så handled-konstruktionen giver i nogle henseender fin mening, men i andre går det galt.
+		  Du skal også holde øje med den scene, der bare handler om en bold, der ligger på gulvet i et gravity felt. Her er det fint med en test for at 
+		  den ikke går i uendelig løkke.
+		  Hvad skal der ske for en bold, der rammer gulvet og bare blokeres?
+		  -> Den skal have nulstillet sin hastighed i retning af det, den blokeres af
+		  -> Det skal sikres, at den ikke inden for rammerne af samme increment flytter sig mere.
+		  .. Måske er det gjort med bare at sige, at hvis den er håndteret OG dens hastighed er 0, så skal kræfter, der virker på den, ignoreres
+		  .... Det vil så muligvis influere på håndteringen af bolde, der støder ind i hinanden...
+
+
 * Prøv lige at ændre calculatoren, så den bruger gennemsnit af før/efter hastighed, når den fremskriver en position. For de scener,
   hvor accelerationen ændrer sig, giver det sikkert også mening at opdatere hastigheden under anvendelse af en gennemsnitlig acceleration
 * Flyt NaturalVelocity hen på BodyStateClassic eller i hvert fald hen på en nedarvet klasse - for mange bodies er den ikke i brug. 
