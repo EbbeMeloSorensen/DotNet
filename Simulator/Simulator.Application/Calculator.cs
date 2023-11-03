@@ -26,6 +26,11 @@ namespace Simulator.Application
             out List<BoundaryCollisionReport> boundaryCollisionReports,
             out List<BodyCollisionReport> bodyCollisionReports) // Dictionary of body id vs effective normal vectors of boundary collisions that took place in the propagation
         {
+            if (state.Index == 60)
+            {
+                var a = 0;
+            }
+
             if (scene == null)
             {
                 throw new InvalidOperationException("Please set a scene before calling Engine.PropagateState");
@@ -44,6 +49,12 @@ namespace Simulator.Application
             var iteration = 1;
             while (timeLeftInCurrentIncrement > 1E-12)
             {
+                if (iteration > 100)
+                {
+                    // Something wrong
+                    var a = 0;
+                }
+
                 // Beregn positionsforskydninger givet de gældende kræfter (hvor vi vel at mærke ikke tager højde for boundaries)
                 var propagatedBodyStateMap = CalculatePropagatedBodyStateMap(
                     state,
@@ -136,7 +147,7 @@ namespace Simulator.Application
                                     {
                                         propagatedBodyStateMap[bodyState].ReflectVelocity(boundary, lineSegmentEndPointInvolvedInCollision, effectiveSurfaceNormalForBoundary);
                                         state = new State(propagatedBodyStateMap.Values.ToList());
-                                        idsOfHandledBodies.Add(bodyState.Body.Id);
+                                        //idsOfHandledBodies.Add(bodyState.Body.Id);
                                         break;
                                     }
                                 default:
@@ -353,8 +364,8 @@ namespace Simulator.Application
             return state.BodyStates.ToDictionary(
                 _ => _.Propagate(
                     timeLeftInCurrentIncrement,
-                    //idsOfHandledBodies.Contains(_.Body.Id) ? new Vector2D(0, 0) : forceMap[_]), // Slået fra, fordi det laver ravage for "bouncing ball 2"-scenen
-                    forceMap[_]),
+                    idsOfHandledBodies.Contains(_.Body.Id) ? new Vector2D(0, 0) : forceMap[_]),
+                    //forceMap[_]),
                 _ => _.Clone());
         }
 
@@ -532,7 +543,7 @@ namespace Simulator.Application
                 var bsBefore = kvp.Value;
                 var bsAfter = kvp.Key;
 
-                var velocityBefore = bsBefore.Velocity; // Brug IKKE den her - reelt er bodyen propgageret frem under anvendelse af et gennemsnit af hastighed før og efter
+                //var velocityBefore = bsBefore.Velocity; // Brug IKKE den her - reelt er bodyen propgageret frem under anvendelse af et gennemsnit af hastighed før og efter
                 var effectiveVelocity = (bsAfter.Position - bsBefore.Position) / timeLeftInCurrentIncrement;
 
                 foreach (var boundary in boundaries)
@@ -542,15 +553,15 @@ namespace Simulator.Application
                         continue;
                     }
 
-                    //var buffer = 0.000001; // Backtrack an additional micro meter to ensure we don't have intersection due to rounding errors
-                    var buffer = 0.0;
+                    var buffer = 0.000001; // Backtrack an additional micro meter to ensure we don't have intersection due to rounding errors
+                    //var buffer = 0.0;
                     Vector2D effectiveSurfaceNormalForCurrentBoundary = null;
 
                     if (boundary is ILineSegment)
                     {
                         var lineSegment = boundary as ILineSegment;
 
-                        var velocityComponentTowardsBoundary = Math.Abs(lineSegment.ProjectVectorOntoSurfaceNormal(velocityBefore));
+                        var velocityComponentTowardsBoundary = Math.Abs(lineSegment.ProjectVectorOntoSurfaceNormal(effectiveVelocity));
 
                         var t = double.NaN;
                         Vector2D lineSegmentEndPointInvolvedInCollisionForCurrentBoundary = null;
@@ -587,7 +598,7 @@ namespace Simulator.Application
                                         t = (body.Radius + buffer - distanceFromBodyCenterToLineForLineSegment) / velocityComponentTowardsBoundary;
 
                                         // Nu regner vi så lige ud, hvor kuglens centrum ville være, hvis vi førte den tilbage med dette t
-                                        var backtrackedPosition = bsAfter.Position - velocityBefore * t;
+                                        var backtrackedPosition = bsAfter.Position - effectiveVelocity * t;
 
                                         // Nu skal vi så finde ud af, om dette punkt er tættest på liniestykket eller et af dens endepunkter
                                         var lineSegmentPart = lineSegment.ClosestPartOfLineSegment(backtrackedPosition);
@@ -601,7 +612,7 @@ namespace Simulator.Application
                                                 lineSegmentEndPointInvolvedInCollisionForCurrentBoundary = lineSegment.Point2; ;
                                                 break;
                                             case LineSegmentPart.MiddleSection:
-                                                effectiveSurfaceNormalForCurrentBoundary = Vector2D.DotProduct(velocityBefore, lineSegment.SurfaceNormal) < 0
+                                                effectiveSurfaceNormalForCurrentBoundary = Vector2D.DotProduct(effectiveVelocity, lineSegment.SurfaceNormal) < 0
                                                     ? lineSegment.SurfaceNormal
                                                     : -lineSegment.SurfaceNormal;
                                                 break;
@@ -619,7 +630,7 @@ namespace Simulator.Application
                                         var overshootDistance = lineSegment.CalculateOvershootDistance(bsAfter);
                                         t = (overshootDistance + buffer) / velocityComponentTowardsBoundary;
 
-                                        var backtrackedPosition = bsAfter.Position - velocityBefore * t;
+                                        var backtrackedPosition = bsAfter.Position - effectiveVelocity * t;
 
                                         switch (lineSegment)
                                         {
@@ -694,7 +705,7 @@ namespace Simulator.Application
                                     {
                                         t = CalculateTimeSinceIntersection(bsAfter.Position, body.Radius,
                                             lineSegmentEndPointInvolvedInCollisionForCurrentBoundary,
-                                            velocityBefore, buffer, out effectiveSurfaceNormalForCurrentBoundary);
+                                            effectiveVelocity, buffer, out effectiveSurfaceNormalForCurrentBoundary);
 
                                         break;
                                     }
@@ -766,7 +777,7 @@ namespace Simulator.Application
                         // Den er i praksis negativ, så vi gør den positiv
                         // BEMÆRK: DET HER VIRKER NOK IKKE LÆNGERE, NÅR NU DU PROPAGERER MED ET GENNEMSNIT AF VELOCITY BEFORE OG VELOCITY AFTER
                         //var velocityComponentTowardsBoundary = -halfPlane.ProjectVectorOntoSurfaceNormal(velocityBefore);
-                        var velocityComponentTowardsBoundary = -halfPlane.ProjectVectorOntoSurfaceNormal(effectiveVelocity);
+                        var velocityComponentTowardsBoundary = Math.Abs(halfPlane.ProjectVectorOntoSurfaceNormal(effectiveVelocity));
 
                         // Hvis denne evaluerer til true er kuglens hastighed parallel med væggen,
                         // så den glider så at sige langs muren
@@ -779,7 +790,7 @@ namespace Simulator.Application
 
                         // Tiden er lig med den "dybde", som kuglen har opnået divideret med størrelsen
                         // af dens hastighed i retning af væggen
-                        var t = -halfPlane.DistanceToBody(bsAfter) / velocityComponentTowardsBoundary;
+                        var t = (buffer - halfPlane.DistanceToBody(bsAfter)) / velocityComponentTowardsBoundary;
 
                         if (!double.IsNaN(timeSinceFirstCollisionWithBoundary) &&
                             !(t > timeSinceFirstCollisionWithBoundary)) continue;
@@ -810,7 +821,7 @@ namespace Simulator.Application
                             case CircularBody body:
                                 {
                                     t = CalculateTimeSinceIntersection(
-                                        bsAfter.Position, body.Radius, boundaryPoint.Point, velocityBefore, buffer, out effectiveSurfaceNormalForCurrentBoundary);
+                                        bsAfter.Position, body.Radius, boundaryPoint.Point, effectiveVelocity, buffer, out effectiveSurfaceNormalForCurrentBoundary);
 
                                     break;
                                 }

@@ -77,7 +77,7 @@ namespace Simulator.Laboratory.ViewModel
             _shapeUpdateCallbacks = new Dictionary<Scene, ShapeUpdateCallback>();
 
             _logger = logger;
-            //_logger = null; // Disable logging (it should only be used for debugging purposes)
+            _logger = null; // Disable logging (it should only be used for debugging purposes)
             _logger?.WriteLine(LogMessageCategory.Information, "Simulator - Starting up");
 
             Outcome = null;
@@ -255,9 +255,10 @@ namespace Simulator.Laboratory.ViewModel
                 Aux = text;
             });
 
-            AddScene(GenerateSceneBouncingBall1());
+            AddScene(GenerateSceneBouncingBall1(updateAuxField));
             AddScene(GenerateSceneBouncingBall2(updateAuxField));
-            AddScene(GenerateSceneBouncingBall3());
+            AddScene(GenerateSceneBouncingBall3(updateAuxField));
+            AddScene(GenerateSceneBouncingBall4(updateAuxField));
             AddScene(GenerateSceneBodyFollowingPath());
             AddScene(GenerateSceneAddBodiesByClicking1());
             AddScene(GenerateSceneAddBodiesByClicking2());
@@ -275,15 +276,15 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateSceneRocket2(), shapeSelectorCallback2, shapeUpdateCallback2);
             AddScene(GenerateSceneRocket3(), shapeSelectorCallback2, shapeUpdateCallback2);
             AddScene(GenerateSceneRocket4(), shapeSelectorCallback2, shapeUpdateCallback2);
-            AddScene(GenerateSceneBallTrain1());
-            AddScene(GenerateSceneBallTrain2());
-            AddScene(GenerateSceneBallTrain3());
-            AddScene(GenerateSceneBallTrain4());
-            AddScene(GenerateSceneMovingBall1());
-            AddScene(GenerateSceneMovingBall2());
-            AddScene(GenerateSceneMovingBall3());
-            AddScene(GenerateSceneMovingBall4());
-            AddScene(GenerateSceneMovingBall5());
+            AddScene(GenerateSceneBallTrain1(updateAuxField));
+            AddScene(GenerateSceneBallTrain2(updateAuxField));
+            AddScene(GenerateSceneBallTrain3(updateAuxField));
+            AddScene(GenerateSceneBallTrain4(updateAuxField));
+            AddScene(GenerateSceneMovingBall1(updateAuxField));
+            AddScene(GenerateSceneMovingBall2(updateAuxField));
+            AddScene(GenerateSceneMovingBall3(updateAuxField));
+            AddScene(GenerateSceneMovingBall4(updateAuxField));
+            AddScene(GenerateSceneMovingBall5(updateAuxField));
             AddScene(GenerateSceneMovingBrick1());
             AddScene(GenerateSceneMovingBrick2());
             AddScene(GenerateSceneMovingBrick3());
@@ -344,6 +345,7 @@ namespace Simulator.Laboratory.ViewModel
             PropertyChangedEventArgs e)
         {
             var scene = (sender as ObservableObject<Scene>)?.Object;
+            Aux = "";
 
             if (scene != null)
             {
@@ -647,11 +649,19 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBallTrain1()
+        private static Scene GenerateSceneBallTrain1(
+            UpdateAuxField updateAuxField)
         {
             var initialState = new State();
 
-            var scene = new Scene("Ball train I (no gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Ball train I (no gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.005);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -676,7 +686,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 60,
-                    BodyState = new BodyStateClassic(new CircularBody(i, 0.1, 1, true), new Vector2D(0.5, -0.75)){NaturalVelocity = new Vector2D(1, 0) }
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(0.5, -0.75)){NaturalVelocity = new Vector2D(1, 0) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -693,11 +703,19 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBallTrain2()
+        private static Scene GenerateSceneBallTrain2(
+            UpdateAuxField updateAuxField)
         {
             var initialState = new State();
 
-            var scene = new Scene("Ball train II (no gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Ball train II (no gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.005);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -728,7 +746,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 60,
-                    BodyState = new BodyStateClassic(new CircularBody(i, 0.1, 1, true), new Vector2D(0.5, -0.75)){NaturalVelocity = new Vector2D(1, 0) }
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(0.5, -0.75)){NaturalVelocity = new Vector2D(1, 0) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -745,11 +763,21 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBallTrain3()
+        private static Scene GenerateSceneBallTrain3(
+            UpdateAuxField updateAuxField)
         {
+            var standardGravity = 9.82;
+
             var initialState = new State();
 
-            var scene = new Scene("Ball train III (with gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Ball train III (with gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, standardGravity, 0, 0, 1, true, 0.005);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -767,7 +795,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 150,
-                    BodyState = new BodyStateClassic(new CircularBody(i, 0.1, 1, true), new Vector2D(-0.8, 0)){NaturalVelocity = new Vector2D(0.3, 0) }
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(-0.8, 0)){NaturalVelocity = new Vector2D(0.3, 0) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -784,11 +812,20 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBallTrain4()
+        private static Scene GenerateSceneBallTrain4(
+            UpdateAuxField updateAuxField)
         {
+            var standardGravity = 9.82;
             var initialState = new State();
 
-            var scene = new Scene("Ball train IV (with gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Ball train IV (with gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, standardGravity, 0, 0, 1, true, 0.005);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -808,7 +845,7 @@ namespace Simulator.Laboratory.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * 20,
-                    BodyState = new BodyStateClassic(new CircularBody(i, 0.1, 1, true), new Vector2D(-0.8, 0.8)){NaturalVelocity = new Vector2D(2.7, -4) }
+                    BodyState = new BodyState(new CircularBody(i, 0.1, 1, true), new Vector2D(-0.8, 0.8)){NaturalVelocity = new Vector2D(2.7, -4) }
                 })
                 .ToDictionary(x => x.StateIndex, x => x.BodyState);
 
@@ -825,13 +862,20 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall1()
+        private static Scene GenerateSceneMovingBall1(
+            UpdateAuxField updateAuxField)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
 
-            //var scene = new Scene("Moving ball I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
-            var scene = new Scene("Moving ball I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Moving ball I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -844,12 +888,20 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall2()
+        private static Scene GenerateSceneMovingBall2(
+            UpdateAuxField updateAuxField)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
-            var scene = new Scene("Moving ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -864,12 +916,20 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall3()
+        private static Scene GenerateSceneMovingBall3(
+            UpdateAuxField updateAuxField)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
-            var scene = new Scene("Moving ball III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving ball III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -884,12 +944,20 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall4()
+        private static Scene GenerateSceneMovingBall4(
+            UpdateAuxField updateAuxField)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
 
-            var scene = new Scene("Moving ball IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving ball IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -904,12 +972,20 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall5()
+        private static Scene GenerateSceneMovingBall5(
+            UpdateAuxField updateAuxField)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
+            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
 
-            var scene = new Scene("Moving ball V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving ball V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1804,40 +1880,48 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBouncingBall1()
+        private static Scene GenerateSceneBouncingBall1(
+            UpdateAuxField updateAuxField)
         {
             // Dette er et simpelt eksempel, hvor vi opererer med en høj deltaværdi. Det er således let at vurdere, om den numeriske
             // fremskrivning af boldens position afviger fra den analytiske (Du har lavet et xcel-ark, der sammenligner, og for dette scene
             // stemmer de fuldt overens)
 
-            var initialState = new State();
             var ballRadius = 0.1;
             var standardGravity = 10.0;
             var initialBallPosition = new Vector2D(0, 0);
 
+            var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition) { NaturalVelocity = new Vector2D(0, -10)});
 
-            var scene = new Scene("Bouncing ball I", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, 0.05);
+            var scene = new Scene("Auto: Bouncing ball I", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, 0.05);
 
             scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
                 return OutcomeOfCollisionBetweenBodyAndBoundary.Block;
             };
 
-            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
-            {
-                var response = new PostPropagationResponse();
+            //scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            //{
+            //    var response = new PostPropagationResponse();
 
-                if (boundaryCollisionReports.Any())
-                {
-                    response.IndexOfLastState = propagatedState.Index;
-                    response.Outcome = "Halting";
-                }
+            //    if (boundaryCollisionReports.Any())
+            //    {
+            //        response.IndexOfLastState = propagatedState.Index;
+            //        response.Outcome = "Halting";
+            //    }
 
-                return response;
-            };
+            //    return response;
+            //};
 
             return scene;
         }
@@ -1847,15 +1931,18 @@ namespace Simulator.Laboratory.ViewModel
         {
             // Den her minder om den forrige, men her starter bolden lige under loftet, og så skal den helst ikke ramme loftet igen
 
-            var initialState = new State();
-            var ballRadius = 0.1;
+            var ballRadius = 0.3;
             var standardGravity = 10.0;
+            //var standardGravity = 9.82;
             var initialBallPosition = new Vector2D(0, -5);
             var initialDistanceFromCeiling = 0.000001;
+            var deltaT = 0.05;
+            //var deltaT = 0.001;
 
+            var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition));
 
-            var scene = new Scene("Bouncing ball II", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, 0.05);
+            var scene = new Scene("Auto: Bouncing ball II", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, deltaT);
 
             scene.AddBoundary(new HalfPlane(initialBallPosition - new Vector2D(0, ballRadius + initialDistanceFromCeiling), new Vector2D(0, 1)));
             scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
@@ -1876,6 +1963,12 @@ namespace Simulator.Laboratory.ViewModel
             {
                 var response = new PostPropagationResponse();
 
+                //if (boundaryCollisionReports.Any())
+                //{
+                //    response.IndexOfLastState = propagatedState.Index + 3;
+                //    response.Outcome = "Halting";
+                //}
+
                 // Make sure we don't hit the ceiling
                 if (boundaryCollisionReports.Any(_ => _.EffectiveSurfaceNormal.Y > 0))
                 {
@@ -1889,12 +1982,88 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBouncingBall3()
+        private static Scene GenerateSceneBouncingBall3(
+            UpdateAuxField updateAuxField)
         {
-            var initialState = new State();
-            initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 0) });
+            // Den her minder om den forrige. Eneste forskel er, at den hopper på en boundary, som er et LineSegment 
 
-            var scene = new Scene("Bouncing ball III", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false);
+            var ballRadius = 0.3;
+            var standardGravity = 10.0;
+            var initialBallPosition = new Vector2D(0, -5);
+            var initialDistanceFromCeiling = 0.000001;
+            var deltaT = 0.05;
+
+            var initialState = new State();
+            initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition));
+
+            var scene = new Scene("Auto: Bouncing ball III", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, deltaT);
+
+            scene.AddBoundary(new HalfPlane(initialBallPosition - new Vector2D(0, ballRadius + initialDistanceFromCeiling), new Vector2D(0, 1)));
+            //scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
+
+            scene.AddBoundary(new LineSegment(new Vector2D(-1, ballRadius), new Vector2D(1, ballRadius)));
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+
+                return false;
+            };
+
+            scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
+            {
+                return OutcomeOfCollisionBetweenBodyAndBoundary.Reflect;
+            };
+
+            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            {
+                var response = new PostPropagationResponse();
+
+                //if (boundaryCollisionReports.Any())
+                //{
+                //    response.IndexOfLastState = propagatedState.Index + 10;
+                //    response.Outcome = "Halting";
+                //}
+
+                // Make sure we don't hit the ceiling
+                if (boundaryCollisionReports.Any(_ => _.EffectiveSurfaceNormal.Y > 0))
+                {
+                    response.IndexOfLastState = propagatedState.Index;
+                    response.Outcome = "Whoops - hitting the ceiling - that should not occur";
+                }
+
+                return response;
+            };
+
+            return scene;
+        }
+
+        private static Scene GenerateSceneBouncingBall4(
+            UpdateAuxField updateAuxField)
+        {
+            //var ballRadius = 0.1;
+            var ballRadius = 0.125;
+            //var standardGravity = 10.0;
+            var standardGravity = 9.82;
+            //var initialBallPosition = new Vector2D(0, -5);
+            var initialBallPosition = new Vector2D(1, -0.125);
+            //var initialBallVelocity = new Vector2D(0, 0);
+            var initialBallVelocity = new Vector2D(2, 0);
+            //var deltaT = 0.05;
+            var deltaT = 0.001;
+
+            var initialState = new State();
+            //initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 0) });
+            initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition) {NaturalVelocity = initialBallVelocity });
+
+            var scene = new Scene("Auto: Bouncing ball IV", 120.0, new Point2D(-1.4, -1.3), initialState, standardGravity, 0, 0, 1, false, deltaT);
+
+            scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
+            {
+                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+
+                return false;
+            };
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1903,7 +2072,12 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.AddBoundary(new HalfPlane(new Vector2D(3, -0.3), new Vector2D(-1, 0)));
             scene.AddBoundary(new HalfPlane(new Vector2D(3, 1), new Vector2D(0, -1)));
+
+            // Hvis gulvet er her, taber den en lille smule energi ved hvert stød
             scene.AddBoundary(new HalfPlane(new Vector2D(-1, 1), new Vector2D(1, 0)));
+
+            //scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
+
             return scene;
         }
 
