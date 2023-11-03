@@ -314,6 +314,8 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateSceneSimultaneousCollisionsWithBoundary());
             AddScene(GenerateSceneNewtonsCradle1());
             AddScene(GenerateSceneNewtonsCradle2());
+            AddScene(GenerateSceneNewtonsCradle3());
+            AddScene(GenerateSceneNewtonsCradle4());
             AddScene(GenerateScenePoolTableWithThreeBalls());
             AddScene(GenerateScenePoolTableWithThreeBallsAndFriction());
             AddScene(GenerateSceneOrbit1());
@@ -2028,11 +2030,8 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneNewtonsCradle1()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)){NaturalVelocity = new Vector2D(3, 0) });
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)) { NaturalVelocity = new Vector2D(3, 0) });
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.1, 1, true), new Vector2D(1, 0)));
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(3, 0.1, 1, true), new Vector2D(1.2, 0)));
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(4, 0.1, 1, true), new Vector2D(1.4, 0)));
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(5, 0.1, 1, true), new Vector2D(1.6, 0)));
 
             var scene = new Scene("Newtons cradle I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
 
@@ -2053,13 +2052,61 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneNewtonsCradle2()
         {
             var initialState = new State();
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)) { NaturalVelocity = new Vector2D(3, 0) });
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.1, 1, true), new Vector2D(1, 0)));
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(3, 0.1, 1, true), new Vector2D(1.2, 0)));
+
+            var scene = new Scene("Newtons cradle II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+
+            scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
+            {
+                return OutcomeOfCollisionBetweenBodyAndBoundary.Reflect;
+            };
+
+            scene.CollisionBetweenTwoBodiesOccuredCallBack = (body1, body2) =>
+            {
+                return OutcomeOfCollisionBetweenTwoBodies.ElasticCollision;
+            };
+
+            scene.AddEnclosureOfHalfPlanes(-1, 3, -0.3, 1);
+            return scene;
+        }
+
+        private static Scene GenerateSceneNewtonsCradle3()
+        {
+            var initialState = new State();
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)){NaturalVelocity = new Vector2D(3, 0) });
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.1, 1, true), new Vector2D(1, 0)));
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(3, 0.1, 1, true), new Vector2D(1.2, 0)));
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(4, 0.1, 1, true), new Vector2D(1.4, 0)));
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(5, 0.1, 1, true), new Vector2D(1.6, 0)));
+
+            var scene = new Scene("Newtons cradle III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+
+            scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
+            {
+                return OutcomeOfCollisionBetweenBodyAndBoundary.Reflect;
+            };
+
+            scene.CollisionBetweenTwoBodiesOccuredCallBack = (body1, body2) =>
+            {
+                return OutcomeOfCollisionBetweenTwoBodies.ElasticCollision;
+            };
+
+            scene.AddEnclosureOfHalfPlanes(-1, 3, -0.3, 1);
+            return scene;
+        }
+
+        private static Scene GenerateSceneNewtonsCradle4()
+        {
+            var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)){NaturalVelocity = new Vector2D(3, 0) });
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.1, 1, true), new Vector2D(0.2, 0)){NaturalVelocity = new Vector2D(3, 0) });
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(3, 0.1, 1, true), new Vector2D(1.2, 0)));
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(4, 0.1, 1, true), new Vector2D(1.4, 0)));
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(5, 0.1, 1, true), new Vector2D(1.6, 0)));
 
-            var scene = new Scene("Newtons cradle II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+            var scene = new Scene("Newtons cradle IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
