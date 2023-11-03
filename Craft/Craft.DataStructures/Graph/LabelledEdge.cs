@@ -6,6 +6,12 @@
 
         public LabelledEdge(
             int vertexId1,
+            int vertexId2) : base(vertexId1, vertexId2)
+        {
+        }
+
+        public LabelledEdge(
+            int vertexId1,
             int vertexId2,
             string label) : base(vertexId1, vertexId2)
         {
