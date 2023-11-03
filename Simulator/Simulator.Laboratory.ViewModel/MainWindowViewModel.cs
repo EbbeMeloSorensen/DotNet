@@ -1855,7 +1855,7 @@ namespace Simulator.Laboratory.ViewModel
 
             var scene = new Scene("Bouncing ball II", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, 0.05);
 
-            //scene.AddBoundary(new HalfPlane(initialBallPosition - new Vector2D(0, ballRadius + initialDistanceFromCeiling), new Vector2D(0, 1)));
+            scene.AddBoundary(new HalfPlane(initialBallPosition - new Vector2D(0, ballRadius + initialDistanceFromCeiling), new Vector2D(0, 1)));
             scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
