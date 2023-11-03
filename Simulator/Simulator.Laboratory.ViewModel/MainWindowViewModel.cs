@@ -263,7 +263,7 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateSceneAddBodiesByClicking1());
             AddScene(GenerateSceneAddBodiesByClicking2());
             AddScene(GenerateSceneAddBodiesByClicking3());
-            AddScene(GenerateSceneTowerDefense(), shapeSelectorCallback3, shapeUpdateCallback3);
+            AddScene(GenerateSceneTowerDefense(updateAuxField), shapeSelectorCallback3, shapeUpdateCallback3);
             AddScene(GenerateSceneShootEmUp7(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneShootEmUp8(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneFountain1());
@@ -2404,7 +2404,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(1, -0.1)){NaturalVelocity = new Vector2D(1.5, -3) });
 
-            var scene = new Scene("Flappy Bird", 120.0, new Point2D(-1.4, -1.3),
+            var scene = new Scene("Game: Flappy Bird", 120.0, new Point2D(-1.4, -1.3),
                 initialState, 9.82, 0, 0, 1, false, 0.005, SceneViewMode.MaintainFocusInVicinityOfPoint,
                 double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0, 1E200, 0.25);
 
@@ -3372,7 +3372,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 999999, false), new Vector2D(2, 2.5)) { Life = 10 });
 
-            var scene = new Scene("Shoot 'em up VII (with enemies)", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Game: Shoot 'em up VII (with enemies)", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
 
             var rateOfFire = 20;
             var nFragments = 8;
@@ -4401,10 +4401,14 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneTowerDefense()
+        private static Scene GenerateSceneTowerDefense(
+            UpdateAuxField updateAuxField)
         {
+            const double initialBalance = 300.0;
             const double radiusOfCannons = 0.2;
             const double radiusOfProjectiles = 0.05;
+            const double priceOfCannon = 50.0;
+            const double priceForKilledEnemy = 20.0;
             const int cannonCoolDown = 300;
             const double rangeOfCannons = 1.0;
             const double projectileSpeed = 10.0;
@@ -4437,9 +4441,10 @@ namespace Simulator.Laboratory.ViewModel
             var gravitationalConstant = 0.0;
             var handleBodyCollisions = true;
             var coefficientOfFriction = 0.0;
+            var balance = 200.0;
 
             var scene = new Scene(
-                "Tower Defense",
+                "Game: Tower Defense",
                 120.0,
                 new Point2D(-2, -3),
                 initialState,
@@ -4456,6 +4461,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InitializationCallback = (state, message) =>
             {
+                balance = initialBalance;
                 nextCannonId = 1000;
                 nextProjectileId = 10000;
                 nextPropId = 100000;
@@ -4498,6 +4504,8 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
+                updateAuxField($"$: {balance}");
+
                 if (mouseClickPosition == null)
                 {
                     mousePos = null;
@@ -4534,7 +4542,7 @@ namespace Simulator.Laboratory.ViewModel
                     //    .Where(bcr => bcr.Body is Projectile)
                     //    .Select(bcr => bcr.Body.Id));
 
-                    // For now, the so player just looses if any enemy reaches the exit
+                    // For now, the player just looses if any enemy reaches the exit
                     response.IndexOfLastState = propagatedState.Index;
                     response.Outcome = "Game Over";
                 }
@@ -4567,6 +4575,7 @@ namespace Simulator.Laboratory.ViewModel
 
                     if (e.Life <= 0.1)
                     {
+                        balance += priceForKilledEnemy;
                         propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
 
                         if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
@@ -4592,17 +4601,17 @@ namespace Simulator.Laboratory.ViewModel
                         .Where(_ => _.Body is Cannon)
                         .Select(_ => _.Position);
 
-                    if (cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons)
+                    if (balance >= priceOfCannon &&
+                        cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons &&
+                        scene.Props.Min(_ => _.DistanceToPoint(mousePosAsVector) - radiusOfCannons > 0.0))
                     {
-                        // Not close to other cannons, but what about the path?
-                        if (scene.Props.Min(_ => _.DistanceToPoint(mousePosAsVector) - radiusOfCannons > 0.0))
+                        propagatedState.AddBodyState(new BodyStateCannon(
+                            new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
                         {
-                            propagatedState.AddBodyState(new BodyStateCannon(
-                                new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
-                            {
-                                CoolDown = cannonCoolDown
-                            });
-                        }
+                            CoolDown = cannonCoolDown
+                        });
+
+                        balance -= priceOfCannon;
                     }
 
                     mousePos = null;
