@@ -9,6 +9,8 @@ using Simulator.Domain.Boundaries;
 
 namespace Simulator.Application
 {
+    // Denne klasse er stateless. Den indeholder den matematik, der bruges til at fremskrive tilstanden for et fysisk system og
+    // bruges af Engine-klassen, som i øvrigt er den, der holder staten
     public static class Calculator
     {
         private enum StateEvent
@@ -26,7 +28,7 @@ namespace Simulator.Application
             out List<BoundaryCollisionReport> boundaryCollisionReports,
             out List<BodyCollisionReport> bodyCollisionReports) // Dictionary of body id vs effective normal vectors of boundary collisions that took place in the propagation
         {
-            if (state.Index == 60)
+            if (state.Index == 1114)
             {
                 var a = 0;
             }
@@ -123,6 +125,7 @@ namespace Simulator.Application
                         state = new State(propagatedBodyStateMap.Keys.ToList());
                         timeLeftInCurrentIncrement = 0.0;
                         logger?.WriteLine(LogMessageCategory.Debug, $"  Iteration {iteration}, progress: 100%", "propagation");
+                        logger?.WriteLine(LogMessageCategory.Debug, "    Result:", "propagation");
                         LogState(state, logger);
                         break;
                     case StateEvent.CollisionWithBoundary:
@@ -164,7 +167,8 @@ namespace Simulator.Application
                         timeLeftInCurrentIncrement -= timeElapsed;
                         logger?.WriteLine(LogMessageCategory.Debug, $"  Body{bodyState.Body.Id} collided with boundary after {timeUntilCollisionWithBoundary} seconds. Time Left: {timeLeftInCurrentIncrement} seconds", "propagation");
                         logger?.WriteLine(LogMessageCategory.Debug, $"  Iteration {iteration} progress: {100 * (deltaT - timeLeftInCurrentIncrement) / deltaT:F5}%", "propagation");
-                        //LogState(state, logger);
+                        logger?.WriteLine(LogMessageCategory.Debug, "    Result:", "propagation");
+                        LogState(state, logger);
                         break;
                     case StateEvent.CollisionBetweenBodies:
                         PropagateStatePartly(propagatedBodyStateMap, timeUntilCollisionBetweenBodies, timeLeftInCurrentIncrement);
@@ -254,11 +258,12 @@ namespace Simulator.Application
                 return;
             }
 
-            logger.WriteLine(LogMessageCategory.Debug, $"  Energy: {state.CalculateTotalEnergy(10.0)}", "propagation");
+            logger.WriteLine(LogMessageCategory.Debug, $"      Energy: {state.CalculateTotalEnergy(10.0)}", "propagation");
+            logger.WriteLine(LogMessageCategory.Debug, $"      Bodies:", "propagation");
 
             state.BodyStates.ForEach(bs =>
             {
-                logger.WriteLine(LogMessageCategory.Debug, $"    Body{bs.Body.Id}: Position: ({bs.Position.X}, {bs.Position.Y}, Natural Velocity: ({bs.NaturalVelocity.X}, {bs.NaturalVelocity.Y}))", "propagation");
+                logger.WriteLine(LogMessageCategory.Debug, $"        Body{bs.Body.Id}: Position: ({bs.Position.X}, {bs.Position.Y}, Natural Velocity: ({bs.NaturalVelocity.X}, {bs.NaturalVelocity.Y}))", "propagation");
             });
         }
 
@@ -360,12 +365,18 @@ namespace Simulator.Application
                     forceMap[bs] += bs.Body.Mass * bsc.EffectiveCustomForce;
                 });
             }
-            
+
+            //return state.BodyStates.ToDictionary(
+            //    _ => _.Propagate(
+            //        timeLeftInCurrentIncrement,
+            //        idsOfHandledBodies.Contains(_.Body.Id) ? new Vector2D(0, 0) : forceMap[_]),
+            //        //forceMap[_]),
+            //    _ => _.Clone());
+
             return state.BodyStates.ToDictionary(
-                _ => _.Propagate(
-                    timeLeftInCurrentIncrement,
-                    idsOfHandledBodies.Contains(_.Body.Id) ? new Vector2D(0, 0) : forceMap[_]),
-                    //forceMap[_]),
+                _ => idsOfHandledBodies.Contains(_.Body.Id)
+                    ? _.Clone()
+                    : _.Propagate(timeLeftInCurrentIncrement, forceMap[_]),
                 _ => _.Clone());
         }
 
