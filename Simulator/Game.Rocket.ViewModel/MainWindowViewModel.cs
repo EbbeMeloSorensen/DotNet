@@ -16,6 +16,7 @@ using Game.Rocket.ViewModel.Bodies;
 using Game.Rocket.ViewModel.ShapeViewModels;
 using Simulator.Domain.BodyStates;
 using Simulator.Domain.Props;
+using ApplicationState = Craft.DataStructures.State;
 
 namespace Game.Rocket.ViewModel
 {
@@ -328,18 +329,21 @@ namespace Game.Rocket.ViewModel
             };
 
             Application = new Application(_logger);
-            Application.AddApplicationState(new Craft.DataStructures.State("Welcome Screen"));
-            Application.AddApplicationState(new Level("Level 1a")
+
+            var welcomeScreen = new ApplicationState("Welcome Screen");
+
+            var level1a = new Level("Level 1a")
             {
                 Scene = GenerateScene1(
-                    initializationCallback, 
-                    interactionCallBack, 
-                    collisionBetweenBodyAndBoundaryOccuredCallBack, 
+                    initializationCallback,
+                    interactionCallBack,
+                    collisionBetweenBodyAndBoundaryOccuredCallBack,
                     checkForCollisionBetweenBodiesCallback,
                     collisionBetweenTwoBodiesOccuredCallBack,
-                    postPropagationCallBack) 
-            });
-            Application.AddApplicationState(new Level("Level 1b")
+                    postPropagationCallBack)
+            };
+
+            var level1b = new Level("Level 1b")
             {
                 Scene = GenerateScene2(
                     initializationCallback,
@@ -348,9 +352,11 @@ namespace Game.Rocket.ViewModel
                     checkForCollisionBetweenBodiesCallback,
                     collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
-            });
-            Application.AddApplicationState(new Craft.DataStructures.State("Level 1 Cleared"));
-            Application.AddApplicationState(new Level("Level 2")
+            };
+
+            var level1Cleared = new ApplicationState("Level 1 Cleared");
+
+            var level2 = new Level("Level 2")
             {
                 Scene = GenerateScene3(
                     initializationCallback,
@@ -359,9 +365,24 @@ namespace Game.Rocket.ViewModel
                     checkForCollisionBetweenBodiesCallback,
                     collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
-            });
-            Application.AddApplicationState(new Craft.DataStructures.State("Game Over"));
-            Application.AddApplicationState(new Craft.DataStructures.State("You Win"));
+            };
+
+            var gameOver = new ApplicationState("Game Over");
+            var youWin = new ApplicationState("You Win");
+
+            Application.AddApplicationState(welcomeScreen);
+            Application.AddApplicationState(level1a);
+            Application.AddApplicationState(level1b);
+            Application.AddApplicationState(level1Cleared);
+            Application.AddApplicationState(level2);
+            Application.AddApplicationState(gameOver);
+            Application.AddApplicationState(youWin);
+
+            // Todo (1): Tilføj de overgange, der gør sig gældende i state machinen
+            // Noget alla det her:
+            //Application.AddApplicationStateTransition(welcomeScreen, level1a)
+
+            // Todo (2): Brug de overgange i stedet for den der switch case ladder nedenfor
 
             Application.KeyEventOccured += (s, e) =>
             {
@@ -378,21 +399,47 @@ namespace Game.Rocket.ViewModel
                     case "Welcome Screen":
                     {
                         ApplicationStateListViewModel.CurrentApplicationState = Application.GetApplicationState("Level 1a");
-                        StartOrResumeAnimationCommand.Execute(null);
+
+                        if (ApplicationStateListViewModel.CurrentApplicationState is Level)
+                        {
+                            StartOrResumeAnimationCommand.Execute(null);
+                        }
+                        else
+                        {
+                            _sceneViewManager.ActiveScene = null;
+                        }
+
                         break;
                     }
                     case "Level 1 Cleared":
                     {
-                        var level = Application.GetApplicationState("Level 2") as Level;
-                        ApplicationStateListViewModel.CurrentApplicationState = level;
-                        StartOrResumeAnimationCommand.Execute(null);
+                        ApplicationStateListViewModel.CurrentApplicationState = Application.GetApplicationState("Level 2");
+
+                        if (ApplicationStateListViewModel.CurrentApplicationState is Level)
+                        {
+                            StartOrResumeAnimationCommand.Execute(null);
+                        }
+                        else
+                        {
+                            _sceneViewManager.ActiveScene = null;
+                        }
+
                         break;
                     }
                     case "Game Over":
                     case "You Win":
                     {
                         ApplicationStateListViewModel.CurrentApplicationState = Application.GetApplicationState("Welcome Screen");
-                        _sceneViewManager.ActiveScene = null;
+
+                        if (ApplicationStateListViewModel.CurrentApplicationState is Level)
+                        {
+                            StartOrResumeAnimationCommand.Execute(null);
+                        }
+                        else
+                        {
+                            _sceneViewManager.ActiveScene = null;
+                        }
+
                         break;
                     }
                 }
