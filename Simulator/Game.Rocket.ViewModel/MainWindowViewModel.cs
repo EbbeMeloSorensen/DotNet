@@ -27,13 +27,11 @@ namespace Game.Rocket.ViewModel
         private ILogger _logger;   
         private SceneViewManager _sceneViewManager;
         private bool _rocketIgnited;
-        private bool _startButtonVisible;
         private bool _geometryEditorVisible = true;        
 
         public Application Application { get; }
 
         public ApplicationStateListViewModel ApplicationStateListViewModel { get; }
-        public UnlockedLevelsViewModel UnlockedLevelsViewModel { get; }
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
 
         private RelayCommand _startOrResumeAnimationCommand;
@@ -41,16 +39,6 @@ namespace Game.Rocket.ViewModel
         public RelayCommand StartOrResumeAnimationCommand =>
             _startOrResumeAnimationCommand ?? (_startOrResumeAnimationCommand =
                 new RelayCommand(StartOrResumeAnimation, CanStartOrResumeAnimation));
-
-        public bool StartButtonVisible     
-        {
-            get { return _startButtonVisible; }
-            set
-            {
-                _startButtonVisible = value;
-                RaisePropertyChanged();
-            }
-        }
 
         public bool GeometryEditorVisible
         {
@@ -398,7 +386,6 @@ namespace Game.Rocket.ViewModel
                     case "Level 1 Cleared":
                     {
                         var level = Application.GetApplicationState("Level 2") as Level;
-                        UnlockedLevelsViewModel.UnlockLevel(level);
                         ApplicationStateListViewModel.CurrentApplicationState = level;
                         StartOrResumeAnimationCommand.Execute(null);
                         break;
@@ -436,13 +423,6 @@ namespace Game.Rocket.ViewModel
             ApplicationStateListViewModel = new ApplicationStateListViewModel(Application);
             ApplicationStateListViewModel.SelectedApplicationState.PropertyChanged += 
                 SelectedApplicationState_PropertyChanged1;
-
-            UnlockedLevelsViewModel = new UnlockedLevelsViewModel();
-            UnlockedLevelsViewModel.ApplicationStateListViewModel.AddApplicationState(
-                Application.GetApplicationState("Level 1a"));
-
-            UnlockedLevelsViewModel.ApplicationStateListViewModel.SelectedApplicationState.PropertyChanged +=
-                SelectedApplicationState_PropertyChanged2;
 
             GeometryEditorViewModel = new GeometryEditorViewModel(1)
             {
