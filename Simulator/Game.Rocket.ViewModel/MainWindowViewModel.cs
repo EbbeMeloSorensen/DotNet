@@ -445,7 +445,6 @@ namespace Game.Rocket.ViewModel
             UnlockedLevelsViewModel.ApplicationStateListViewModel.SelectedApplicationState.PropertyChanged +=
                 SelectedApplicationState_PropertyChanged2;
 
-            // Bemærk: Det er et ALMINDELIGT view og altså ikke et "matematisk"
             GeometryEditorViewModel = new GeometryEditorViewModel(1)
             {
                 UpdateModelCallBack = Application.UpdateModel
