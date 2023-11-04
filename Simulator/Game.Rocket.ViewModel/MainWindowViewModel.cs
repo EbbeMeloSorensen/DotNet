@@ -378,9 +378,17 @@ namespace Game.Rocket.ViewModel
             Application.AddApplicationState(gameOver);
             Application.AddApplicationState(youWin);
 
-            // Todo (1): Tilføj de overgange, der gør sig gældende i state machinen
-            // Noget alla det her:
-            //Application.AddApplicationStateTransition(welcomeScreen, level1a)
+            // Todo (1): Tilføj de overgange, der gør sig gældende
+            Application.AddApplicationStateTransition(welcomeScreen, level1a);
+            Application.AddApplicationStateTransition(level1a, gameOver);
+            Application.AddApplicationStateTransition(level1a, level1b);
+            Application.AddApplicationStateTransition(level1b, gameOver);
+            Application.AddApplicationStateTransition(level1b, level1Cleared);
+            Application.AddApplicationStateTransition(level1Cleared, level2);
+            Application.AddApplicationStateTransition(level2, gameOver);
+            Application.AddApplicationStateTransition(level2, youWin);
+            Application.AddApplicationStateTransition(gameOver, welcomeScreen);
+            Application.AddApplicationStateTransition(youWin, welcomeScreen);
 
             // Todo (2): Brug de overgange i stedet for den der switch case ladder nedenfor
 

@@ -102,6 +102,12 @@ namespace Simulator.Application
             ApplicationStates.Add(applicationState);
         }
 
+        public void AddApplicationStateTransition(
+            ApplicationState from,
+            ApplicationState to)
+        {
+        }
+
         public ApplicationState GetApplicationState(
             string applicationStateName)
         {
