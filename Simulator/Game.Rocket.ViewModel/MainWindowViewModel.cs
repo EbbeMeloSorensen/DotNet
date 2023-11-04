@@ -21,8 +21,9 @@ namespace Game.Rocket.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private static int _nextWallId = 100000;
+
         private const int _initialMagnification = 174;
-        private int _nextWallId = 100000;
 
         private ILogger _logger;   
         private SceneViewManager _sceneViewManager;
@@ -533,7 +534,7 @@ namespace Game.Rocket.ViewModel
             RefreshButtons();
         }
 
-        private Scene GenerateScene1(
+        private static Scene GenerateScene1(
             InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -575,7 +576,7 @@ namespace Game.Rocket.ViewModel
             return scene;
         }
 
-        private Scene GenerateScene2(
+        private static Scene GenerateScene2(
             InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -619,7 +620,7 @@ namespace Game.Rocket.ViewModel
             return scene;
         }
 
-        private Scene GenerateScene3(
+        private static Scene GenerateScene3(
             InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -662,7 +663,7 @@ namespace Game.Rocket.ViewModel
         }
 
         // Scene building helpers
-        private void AddWall(
+        private static void AddWall(
             Scene scene,
             double x0,
             double x1,
