@@ -340,7 +340,6 @@ namespace Game.Rocket.ViewModel
 
             Application = new Application(_logger);
             Application.AddApplicationState(new ApplicationState { Name = "Welcome Screen" });
-            Application.AddApplicationState(new ApplicationState { Name = "Unlocked Levels" });
             Application.AddApplicationState(new Level
             {
                 Name = "Level 1a",
@@ -587,7 +586,7 @@ namespace Game.Rocket.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Scene 1", _initialMagnification,
+            var scene = new Scene("Scene 1a", _initialMagnification,
                 new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
@@ -629,7 +628,7 @@ namespace Game.Rocket.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Scene 1", _initialMagnification,
+            var scene = new Scene("Scene 1b", _initialMagnification,
                 new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0.5, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
@@ -673,7 +672,7 @@ namespace Game.Rocket.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Scene 1", _initialMagnification,
+            var scene = new Scene("Scene 2", _initialMagnification,
                 new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0.5, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
