@@ -327,10 +327,9 @@ namespace Game.Rocket.ViewModel
             };
 
             Application = new Application(_logger);
-            Application.AddApplicationState(new ApplicationState { Name = "Welcome Screen" });
-            Application.AddApplicationState(new Level
+            Application.AddApplicationState(new ApplicationState("Welcome Screen"));
+            Application.AddApplicationState(new Level("Level 1a")
             {
-                Name = "Level 1a",
                 Scene = GenerateScene1(
                     initializationCallback, 
                     interactionCallBack, 
@@ -339,9 +338,8 @@ namespace Game.Rocket.ViewModel
                     collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack) 
             });
-            Application.AddApplicationState(new ApplicationStateWithScene
+            Application.AddApplicationState(new Level("Level 1b")
             {
-                Name = "Level 1b",
                 Scene = GenerateScene2(
                     initializationCallback,
                     interactionCallBack,
@@ -350,10 +348,9 @@ namespace Game.Rocket.ViewModel
                     collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
             });
-            Application.AddApplicationState(new ApplicationState { Name = "Level 1 Cleared" });
-            Application.AddApplicationState(new Level
+            Application.AddApplicationState(new ApplicationState("Level 1 Cleared"));
+            Application.AddApplicationState(new Level("Level 2")
             {
-                Name = "Level 2",
                 Scene = GenerateScene3(
                     initializationCallback,
                     interactionCallBack,
@@ -362,8 +359,8 @@ namespace Game.Rocket.ViewModel
                     collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
             });
-            Application.AddApplicationState(new ApplicationState { Name = "Game Over" });
-            Application.AddApplicationState(new ApplicationState { Name = "You Win" });
+            Application.AddApplicationState(new ApplicationState("Game Over"));
+            Application.AddApplicationState(new ApplicationState("You Win"));
 
             Application.KeyEventOccured += (s, e) =>
             {
@@ -411,9 +408,9 @@ namespace Game.Rocket.ViewModel
                 var applicationState = Application.GetApplicationState(Application.Engine.Outcome);
                 ApplicationStateListViewModel.CurrentApplicationState = applicationState;
 
-                if (applicationState is ApplicationStateWithScene applicationStateWithScene)
+                if (applicationState is Level level)
                 {
-                    _sceneViewManager.ActiveScene = applicationStateWithScene.Scene;
+                    _sceneViewManager.ActiveScene = level.Scene;
                     StartOrResumeAnimationCommand.Execute(null);
                 }
 
@@ -529,26 +526,11 @@ namespace Game.Rocket.ViewModel
 
             Application.CurrentApplicationState = applicationState;
 
-            if (!(applicationState is ApplicationStateWithScene applicationStateWithScene)) return;
-
-            _sceneViewManager.ActiveScene = applicationStateWithScene.Scene;
-
-            RefreshButtons();
-        }
-
-        private void SelectedApplicationState_PropertyChanged2(
-            object sender,
-            PropertyChangedEventArgs e)
-        {
-            if (!((sender as ObservableObject<ApplicationState>)?.Object is Level level))
-            {
-                throw new InvalidOperationException();
-            }
-
-            ApplicationStateListViewModel.CurrentApplicationState = level;
+            if (!(applicationState is Level level)) return;
 
             _sceneViewManager.ActiveScene = level.Scene;
-            StartOrResumeAnimationCommand.Execute(null);
+
+            RefreshButtons();
         }
 
         private Scene GenerateScene1(
