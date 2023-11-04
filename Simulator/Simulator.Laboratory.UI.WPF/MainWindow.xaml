@@ -28,6 +28,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -46,10 +47,14 @@
             <TextBox Grid.Row="2" Grid.Column="1" Margin="1" IsReadOnly="True"
                      VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
                      Text="{Binding GeometryEditorViewModel.WorldWindowUpperLeft.Y}"/>
-            <Label Grid.Row="3" Grid.Column="0" Content="Aux"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="Aux1"/>
             <TextBox Grid.Row="3" Grid.Column="1" Margin="1" IsReadOnly="True"
                      VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                     Text="{Binding Aux}"/>
+                     Text="{Binding Aux1}"/>
+            <Label Grid.Row="4" Grid.Column="0" Content="Aux2"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="1" IsReadOnly="True"
+                     VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                     Text="{Binding Aux2}"/>
         </Grid>
 
         <StackPanel Grid.Row="1" Grid.Column="0">

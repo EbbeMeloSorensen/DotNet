@@ -17,8 +17,9 @@ using Simulator.Domain.Props;
 
 namespace Simulator.Laboratory.ViewModel
 {
-    public delegate void UpdateAuxField(
-        string text);
+    public delegate void UpdateAuxFields(
+        string aux1,
+        string aux2);
 
     public class MainWindowViewModel : ViewModelBase
     {
@@ -28,7 +29,8 @@ namespace Simulator.Laboratory.ViewModel
         private ILogger _logger;
         private SceneViewManager _sceneViewManager;
         private string _outcome;
-        private string _aux;
+        private string _aux1;
+        private string _aux2;
 
         public Application.Application Application { get; }
         public SceneListViewModel SceneListViewModel { get; }
@@ -60,12 +62,22 @@ namespace Simulator.Laboratory.ViewModel
             }
         }
 
-        public string Aux
+        public string Aux1
         {
-            get { return _aux; }
+            get { return _aux1; }
             set
             {
-                _aux = value;
+                _aux1 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Aux2
+        {
+            get { return _aux2; }
+            set
+            {
+                _aux2 = value;
                 RaisePropertyChanged();
             }
         }
@@ -250,47 +262,65 @@ namespace Simulator.Laboratory.ViewModel
                 }
             };
 
-            var updateAuxField = new UpdateAuxField((text) =>
+            var updateAuxFields = new UpdateAuxFields((aux1, aux2) =>
             {
-                Aux = text;
+                Aux1 = aux1;
+                Aux2 = aux2;
             });
 
-            AddScene(GenerateSceneBouncingBall1(updateAuxField));
-            AddScene(GenerateSceneBouncingBall2(updateAuxField));
-            AddScene(GenerateSceneBouncingBall3(updateAuxField));
-            AddScene(GenerateSceneBouncingBall4(updateAuxField));
+            // Games
+            AddScene(GenerateSceneTowerDefense_Game(updateAuxFields), shapeSelectorCallback3, shapeUpdateCallback3);
+            AddScene(GenerateSceneShootEmUp7_Game(), shapeSelectorCallback1, shapeUpdateCallback1);
+            AddScene(GenerateSceneFlappyBird_Game(updateAuxFields));
+            AddScene(GenerateSceneDodgeball_Game(updateAuxFields));
+
+            // One circular body colliding with boundaries, no gravity
+            AddScene(GenerateSceneMovingBall1_Auto(updateAuxFields));
+            AddScene(GenerateSceneMovingBall2_Auto(updateAuxFields));
+            AddScene(GenerateSceneMovingBall3_Auto(updateAuxFields));
+            AddScene(GenerateSceneMovingBall4_Auto(updateAuxFields));
+            AddScene(GenerateSceneMovingBall5_Auto(updateAuxFields));
+
+            // One rectangular body colliding with boundaries, no gravity
+            AddScene(GenerateSceneMovingBrick1_Auto());
+            AddScene(GenerateSceneMovingBrick2_Auto());
+            AddScene(GenerateSceneMovingBrick3_Auto());
+            AddScene(GenerateSceneMovingBrick4_Auto());
+            AddScene(GenerateSceneMovingBrick5_Auto());
+            AddScene(GenerateSceneMovingBrick6_Auto());
+
+            // One circular body colliding with boundaries, with gravity
+            AddScene(GenerateSceneBouncingBall1_Auto(updateAuxFields));
+            AddScene(GenerateSceneBouncingBall2_Auto(updateAuxFields));
+            AddScene(GenerateSceneBouncingBall3_Auto(updateAuxFields));
+            AddScene(GenerateSceneBouncingBall4_Auto(updateAuxFields));
+
+            // Various effects with a sequence of circular bodies
+            AddScene(GenerateSceneFountain1_Auto());
+            AddScene(GenerateSceneFountain2_Auto());
+            AddScene(GenerateSceneFountain3_Auto());
+            AddScene(GenerateSceneFountain4_Auto());
+            AddScene(GenerateSceneFountain5_Auto());
+            AddScene(GenerateSceneFountain6_Auto());
+
+            // A simulation corresponding to a game, but without interaction
+            AddScene(GenerateSceneShootEmUp8_Auto(), shapeSelectorCallback1, shapeUpdateCallback1);
+
+            // Various effects with interactively adding bodies to the scene
+            AddScene(GenerateSceneAddBodiesByClicking1_Interactive());
+            AddScene(GenerateSceneAddBodiesByClicking2_Interactive());
+            AddScene(GenerateSceneAddBodiesByClicking3_Interactive());
+
+            AddScene(GenerateSceneBallTrain1(updateAuxFields));
+            AddScene(GenerateSceneBallTrain2(updateAuxFields));
+            AddScene(GenerateSceneBallTrain3(updateAuxFields));
+            AddScene(GenerateSceneBallTrain4(updateAuxFields));
+
             AddScene(GenerateSceneBodyFollowingPath());
-            AddScene(GenerateSceneAddBodiesByClicking1());
-            AddScene(GenerateSceneAddBodiesByClicking2());
-            AddScene(GenerateSceneAddBodiesByClicking3());
-            AddScene(GenerateSceneTowerDefense(updateAuxField), shapeSelectorCallback3, shapeUpdateCallback3);
-            AddScene(GenerateSceneShootEmUp7(), shapeSelectorCallback1, shapeUpdateCallback1);
-            AddScene(GenerateSceneShootEmUp8(), shapeSelectorCallback1, shapeUpdateCallback1);
-            AddScene(GenerateSceneFountain1());
-            AddScene(GenerateSceneFountain2());
-            AddScene(GenerateSceneFountain3());
-            AddScene(GenerateSceneFountain4());
-            AddScene(GenerateSceneFountain5());
-            AddScene(GenerateSceneFountain6());
             AddScene(GenerateSceneRocket1(), shapeSelectorCallback2, shapeUpdateCallback2);
             AddScene(GenerateSceneRocket2(), shapeSelectorCallback2, shapeUpdateCallback2);
             AddScene(GenerateSceneRocket3(), shapeSelectorCallback2, shapeUpdateCallback2);
             AddScene(GenerateSceneRocket4(), shapeSelectorCallback2, shapeUpdateCallback2);
-            AddScene(GenerateSceneBallTrain1(updateAuxField));
-            AddScene(GenerateSceneBallTrain2(updateAuxField));
-            AddScene(GenerateSceneBallTrain3(updateAuxField));
-            AddScene(GenerateSceneBallTrain4(updateAuxField));
-            AddScene(GenerateSceneMovingBall1(updateAuxField));
-            AddScene(GenerateSceneMovingBall2(updateAuxField));
-            AddScene(GenerateSceneMovingBall3(updateAuxField));
-            AddScene(GenerateSceneMovingBall4(updateAuxField));
-            AddScene(GenerateSceneMovingBall5(updateAuxField));
-            AddScene(GenerateSceneMovingBrick1());
-            AddScene(GenerateSceneMovingBrick2());
-            AddScene(GenerateSceneMovingBrick3());
-            AddScene(GenerateSceneMovingBrick4());
-            AddScene(GenerateSceneMovingBrick5());
-            AddScene(GenerateSceneMovingBrick6());
             AddScene(GenerateSceneRotation1(), shapeSelectorCallback2, shapeUpdateCallback2);
             AddScene(GenerateSceneRotation2(), shapeSelectorCallback2, shapeUpdateCallback2);
             AddScene(GenerateSceneRotation3(), shapeSelectorCallback2, shapeUpdateCallback2);
@@ -322,7 +352,6 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateSceneOrbit1());
             AddScene(GenerateSceneOrbit2());
             AddScene(GenerateSceneMoonAndEarth());
-            AddScene(GenerateSceneFlappyBird());
             AddScene(GenerateScenePlatformer1());
             AddScene(GenerateScenePlatformer2());
             AddScene(GenerateScenePlatformer3());
@@ -333,7 +362,6 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateSceneShootEmUp4());
             AddScene(GenerateSceneShootEmUp5());
             AddScene(GenerateSceneShootEmUp6());
-            AddScene(GenerateSceneDodgeball());
             AddScene(GenerateSceneRambo());
             AddScene(GenerateSceneMultipleOutcomes());
             AddScene(GenerateSceneMazeRoom1());
@@ -345,7 +373,7 @@ namespace Simulator.Laboratory.ViewModel
             PropertyChangedEventArgs e)
         {
             var scene = (sender as ObservableObject<Scene>)?.Object;
-            Aux = "";
+            Aux1 = "";
 
             if (scene != null)
             {
@@ -650,7 +678,7 @@ namespace Simulator.Laboratory.ViewModel
         }
 
         private static Scene GenerateSceneBallTrain1(
-            UpdateAuxField updateAuxField)
+            UpdateAuxFields updateAuxFields)
         {
             var initialState = new State();
 
@@ -658,7 +686,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(0)}", "");
 
                 return false;
             };
@@ -704,7 +732,7 @@ namespace Simulator.Laboratory.ViewModel
         }
 
         private static Scene GenerateSceneBallTrain2(
-            UpdateAuxField updateAuxField)
+            UpdateAuxFields updateAuxFields)
         {
             var initialState = new State();
 
@@ -712,7 +740,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(0)}", "");
 
                 return false;
             };
@@ -764,7 +792,7 @@ namespace Simulator.Laboratory.ViewModel
         }
 
         private static Scene GenerateSceneBallTrain3(
-            UpdateAuxField updateAuxField)
+            UpdateAuxFields updateAuxFields)
         {
             var standardGravity = 9.82;
 
@@ -774,7 +802,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(standardGravity)}", "");
 
                 return false;
             };
@@ -813,7 +841,7 @@ namespace Simulator.Laboratory.ViewModel
         }
 
         private static Scene GenerateSceneBallTrain4(
-            UpdateAuxField updateAuxField)
+            UpdateAuxFields updateAuxFields)
         {
             var standardGravity = 9.82;
             var initialState = new State();
@@ -822,7 +850,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(standardGravity)}", "");
 
                 return false;
             };
@@ -862,8 +890,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall1(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneMovingBall1_Auto(
+            UpdateAuxFields updateAuxFields)
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
@@ -872,7 +900,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(0)}", "");
 
                 return false;
             };
@@ -888,8 +916,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall2(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneMovingBall2_Auto(
+            UpdateAuxFields updateAuxFields)
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
@@ -898,7 +926,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(0)}", "");
 
                 return false;
             };
@@ -916,8 +944,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall3(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneMovingBall3_Auto(
+            UpdateAuxFields updateAuxFields)
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
@@ -926,7 +954,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(0)}", "");
 
                 return false;
             };
@@ -944,8 +972,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall4(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneMovingBall4_Auto(
+            UpdateAuxFields updateAuxFields)
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
@@ -954,7 +982,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(0)}", "");
 
                 return false;
             };
@@ -972,8 +1000,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBall5(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneMovingBall5_Auto(
+            UpdateAuxFields updateAuxFields)
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
@@ -982,7 +1010,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(0)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(0)}", "");
 
                 return false;
             };
@@ -1000,12 +1028,12 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBrick1()
+        private static Scene GenerateSceneMovingBrick1_Auto()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
-            var scene = new Scene("Moving brick I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1020,12 +1048,12 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBrick2()
+        private static Scene GenerateSceneMovingBrick2_Auto()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.5, 0.3, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 1) });
 
-            var scene = new Scene("Moving brick II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1044,12 +1072,12 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBrick3()
+        private static Scene GenerateSceneMovingBrick3_Auto()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
-            var scene = new Scene("Moving brick III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1064,12 +1092,12 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBrick4()
+        private static Scene GenerateSceneMovingBrick4_Auto()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, 1)){NaturalVelocity = new Vector2D(1, 0) });
 
-            var scene = new Scene("Moving brick IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1082,12 +1110,12 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBrick5()
+        private static Scene GenerateSceneMovingBrick5_Auto()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.4, 1, true), new Vector2D(1, 0.25)){NaturalVelocity = new Vector2D(1, 1) });
 
-            var scene = new Scene("Moving brick V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1102,12 +1130,12 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneMovingBrick6()
+        private static Scene GenerateSceneMovingBrick6_Auto()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.3, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, -1.4) });
 
-            var scene = new Scene("Moving brick VI", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick VI", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1599,11 +1627,11 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneFountain1()
+        private static Scene GenerateSceneFountain1_Auto()
         {
             var initialState = new State();
 
-            var scene = new Scene("Fountain I (diposal)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain I (diposal)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1637,11 +1665,11 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneFountain2()
+        private static Scene GenerateSceneFountain2_Auto()
         {
             var initialState = new State();
 
-            var scene = new Scene("Fountain II (blocking)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain II (blocking)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1670,11 +1698,11 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneFountain3()
+        private static Scene GenerateSceneFountain3_Auto()
         {
             var initialState = new State();
 
-            var scene = new Scene("Fountain III (blocking)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain III (blocking)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             Enumerable.Range(1, 10).ToList().ForEach(i =>
             {
@@ -1698,11 +1726,11 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneFountain4()
+        private static Scene GenerateSceneFountain4_Auto()
         {
             var initialState = new State();
 
-            var scene = new Scene("Fountain IV (bouncing)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain IV (bouncing)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Reflect;
 
@@ -1731,11 +1759,11 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneFountain5()
+        private static Scene GenerateSceneFountain5_Auto()
         {
             var initialState = new State();
 
-            var scene = new Scene("Fountain V (limited lifetime)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain V (limited lifetime)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Reflect;
 
@@ -1782,11 +1810,11 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneFountain6()
+        private static Scene GenerateSceneFountain6_Auto()
         {
             var initialState = new State();
 
-            var scene = new Scene("Fountain VI (fireworks)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain VI (fireworks)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             Dictionary<int, IEnumerable<int>> split = null;
             Dictionary<int, IEnumerable<int>> die = null;
@@ -1880,8 +1908,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBouncingBall1(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneBouncingBall1_Auto(
+            UpdateAuxFields updateAuxFields)
         {
             // Dette er et simpelt eksempel, hvor vi opererer med en høj deltaværdi. Det er således let at vurdere, om den numeriske
             // fremskrivning af boldens position afviger fra den analytiske (Du har lavet et xcel-ark, der sammenligner, og for dette scene
@@ -1900,7 +1928,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(standardGravity)}", "");
 
                 return false;
             };
@@ -1926,8 +1954,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBouncingBall2(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneBouncingBall2_Auto(
+            UpdateAuxFields updateAuxFields)
         {
             // Den her minder om den forrige, men her starter bolden lige under loftet, og så skal den helst ikke ramme loftet igen
 
@@ -1949,7 +1977,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(standardGravity)}", "");
 
                 return false;
             };
@@ -1982,8 +2010,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBouncingBall3(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneBouncingBall3_Auto(
+            UpdateAuxFields updateAuxFields)
         {
             // Den her minder om den forrige. Eneste forskel er, at den hopper på en boundary, som er et LineSegment 
 
@@ -2005,7 +2033,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(standardGravity)}", "");
 
                 return false;
             };
@@ -2038,8 +2066,8 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneBouncingBall4(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneBouncingBall4_Auto(
+            UpdateAuxFields updateAuxFields)
         {
             //var ballRadius = 0.1;
             var ballRadius = 0.125;
@@ -2060,7 +2088,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
-                updateAuxField($"E: {currentState.CalculateTotalEnergy(standardGravity)}");
+                updateAuxFields($"E: {currentState.CalculateTotalEnergy(standardGravity)}", "");
 
                 return false;
             };
@@ -2399,10 +2427,11 @@ namespace Simulator.Laboratory.ViewModel
             return new Scene("Moon and Earth", 7E-07, new Point2D(-21E7, -22E7), initialState, 0, 6.674E-11, 0, 315360, false, 360, SceneViewMode.FocusOnCenterOfMass);
         }
 
-        private static Scene GenerateSceneFlappyBird()
+        private static Scene GenerateSceneFlappyBird_Game(
+            UpdateAuxFields updateAuxFields)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(1, -0.1)){NaturalVelocity = new Vector2D(1.5, -3) });
+            initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, -0.1)){NaturalVelocity = new Vector2D(1.5, -3) });
 
             var scene = new Scene("Game: Flappy Bird", 120.0, new Point2D(-1.4, -1.3),
                 initialState, 9.82, 0, 0, 1, false, 0.005, SceneViewMode.MaintainFocusInVicinityOfPoint,
@@ -2421,7 +2450,7 @@ namespace Simulator.Laboratory.ViewModel
                         ? "You Win"
                         : "Game Over";
 
-                    response.IndexOfLastState = propagatedState.Index + 150;
+                    response.IndexOfLastState = propagatedState.Index;
                 }
 
                 return response;
@@ -2429,6 +2458,8 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
+                updateAuxFields($"Distance: {currentState.BodyStates.First().Position.X:N1}", "");
+
                 if (!keyboardState.UpArrowDown) return false;
 
                 currentState.BodyStates.First().NaturalVelocity = new Vector2D(1.5, -3);
@@ -3367,7 +3398,7 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneShootEmUp7()
+        private static Scene GenerateSceneShootEmUp7_Game()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 999999, false), new Vector2D(2, 2.5)) { Life = 10 });
@@ -3618,12 +3649,12 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneShootEmUp8()
+        private static Scene GenerateSceneShootEmUp8_Auto()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 999999, false), new Vector2D(1, 2)) { Life = 10 });
 
-            var scene = new Scene("Shoot 'em up VIII (automatic)", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Shoot 'em up", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
 
             var rateOfFire = 20;
             var nFragments = 8;
@@ -3756,11 +3787,9 @@ namespace Simulator.Laboratory.ViewModel
                 return true;
             };
 
-            //var extraBodies = Enumerable.Range(2, 4)
             var extraBodies = Enumerable.Range(2, 10)
                 .Select(i => new
                 {
-                    //StateIndex = i * 50,
                     StateIndex = i * 20,
                     BodyState = new BodyStateClassic(new Enemy(i, 0.15, 1, true), new Vector2D(-0.8, -0.8))
                     {
@@ -3842,7 +3871,6 @@ namespace Simulator.Laboratory.ViewModel
                 });
 
                 // Add a projectile from main body?
-                //if (spaceKeyIsDown && (propagatedState.Index - stateIndexOfFirstShotInBurst) % rateOfFire == 0)
                 if ((propagatedState.Index - stateIndexOfFirstShotInBurst) % rateOfFire == 0)
                 {
                     propagatedState.AddBodyState(new BodyStateClassic(new Projectile(nextProjectileId++, 0.05, 1, true), propagatedState.BodyStates.First().Position){NaturalVelocity = new Vector2D(0, -4) });
@@ -3862,12 +3890,15 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneDodgeball()
+        private static Scene GenerateSceneDodgeball_Game(
+            UpdateAuxFields updateAuxFields)
         {
+            var deltaT = 0.005;
+
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.075, 1, true), new Vector2D(1, 2)));
 
-            var scene = new Scene("Dodgeball", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Game: Dodgeball", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, deltaT);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => body is Enemy
                 ? OutcomeOfCollisionBetweenBodyAndBoundary.Reflect
@@ -3885,6 +3916,8 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
+                updateAuxFields($"Time: {currentState.Index * deltaT:N2} seconds", "");
+
                 var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
@@ -4188,7 +4221,7 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneAddBodiesByClicking1()
+        private static Scene GenerateSceneAddBodiesByClicking1_Interactive()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)));
@@ -4199,7 +4232,7 @@ namespace Simulator.Laboratory.ViewModel
             var coefficientOfFriction = 0.0;
 
             var scene = new Scene(
-                "Add bodies by clicking - falling balls", 
+                "Interactive: Add bodies by clicking - falling balls", 
                 120.0, 
                 new Point2D(-2, -3), 
                 initialState,
@@ -4240,7 +4273,7 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneAddBodiesByClicking2()
+        private static Scene GenerateSceneAddBodiesByClicking2_Interactive()
         {
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)));
@@ -4251,7 +4284,7 @@ namespace Simulator.Laboratory.ViewModel
             var coefficientOfFriction = 0.0;
 
             var scene = new Scene(
-                "Add bodies by clicking - bouncing planets",
+                "Interactive: Add bodies by clicking - bouncing planets",
                 120.0,
                 new Point2D(-2, -3),
                 initialState,
@@ -4297,7 +4330,7 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneAddBodiesByClicking3()
+        private static Scene GenerateSceneAddBodiesByClicking3_Interactive()
         {
             var radiusOfBalls = 0.5;
 
@@ -4310,7 +4343,7 @@ namespace Simulator.Laboratory.ViewModel
             var coefficientOfFriction = 0.0;
 
             var scene = new Scene(
-                "Add bodies by clicking - no overlap",
+                "Interactive: Add bodies by clicking - no overlap",
                 120.0,
                 new Point2D(-2, -3),
                 initialState,
@@ -4401,10 +4434,11 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateSceneTowerDefense(
-            UpdateAuxField updateAuxField)
+        private static Scene GenerateSceneTowerDefense_Game(
+            UpdateAuxFields updateAuxFields)
         {
             const double initialBalance = 300.0;
+            const double initialHealth = 100.0;
             const double radiusOfCannons = 0.2;
             const double radiusOfProjectiles = 0.05;
             const double priceOfCannon = 50.0;
@@ -4441,7 +4475,8 @@ namespace Simulator.Laboratory.ViewModel
             var gravitationalConstant = 0.0;
             var handleBodyCollisions = true;
             var coefficientOfFriction = 0.0;
-            var balance = 200.0;
+            var balance = initialBalance;
+            var health = initialHealth;
 
             var scene = new Scene(
                 "Game: Tower Defense",
@@ -4462,6 +4497,7 @@ namespace Simulator.Laboratory.ViewModel
             scene.InitializationCallback = (state, message) =>
             {
                 balance = initialBalance;
+                health = initialHealth;
                 nextCannonId = 1000;
                 nextProjectileId = 10000;
                 nextPropId = 100000;
@@ -4504,7 +4540,7 @@ namespace Simulator.Laboratory.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                updateAuxField($"$: {balance}");
+                updateAuxFields($"Life: {health}", $"$: {balance}");
 
                 if (mouseClickPosition == null)
                 {
@@ -4538,13 +4574,17 @@ namespace Simulator.Laboratory.ViewModel
                 if (boundaryCollisionReports.Any())
                 {
                     // Remove enemies, when they get to the exit
-                    //propagatedState.RemoveBodyStates(boundaryCollisionReports
-                    //    .Where(bcr => bcr.Body is Projectile)
-                    //    .Select(bcr => bcr.Body.Id));
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports
+                        .Where(bcr => bcr.Body is Enemy)
+                        .Select(bcr => bcr.Body.Id));
 
-                    // For now, the player just looses if any enemy reaches the exit
-                    response.IndexOfLastState = propagatedState.Index;
-                    response.Outcome = "Game Over";
+                    health -= boundaryCollisionReports.Count * 30.0;
+
+                    if (health <= 0)
+                    {
+                        response.IndexOfLastState = propagatedState.Index;
+                        response.Outcome = "Game Over";
+                    }
                 }
 
                 var hitEnemies = new HashSet<BodyStateEnemy>();
