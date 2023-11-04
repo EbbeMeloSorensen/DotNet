@@ -35,7 +35,7 @@ namespace Simulator.Application
     public class Application : INotifyPropertyChanged
     {
         public const double MinTimeBetweenRefresh = 0.005; // 5 milliseconds
-        private ApplicationState _currentApplicationState;
+        private Craft.DataStructures.State _currentApplicationState;
 
         private ILogger _logger;
 
@@ -53,9 +53,9 @@ namespace Simulator.Application
         public bool AnimationRunning { get; private set; }
         public bool AnimationComplete { get; private set; }
 
-        public List<ApplicationState> ApplicationStates { get; }
+        public List<Craft.DataStructures.State> ApplicationStates { get; }
 
-        public ApplicationState CurrentApplicationState
+        public Craft.DataStructures.State CurrentApplicationState
         {
             get { return _currentApplicationState; }
             set
@@ -87,11 +87,11 @@ namespace Simulator.Application
             Engine = new Engine(logger);
             Stopwatch = new Stopwatch();
 
-            ApplicationStates = new List<ApplicationState>();
+            ApplicationStates = new List<Craft.DataStructures.State>();
         }
 
         public void AddApplicationState(
-            ApplicationState applicationState)
+            Craft.DataStructures.State applicationState)
         {
             if (ApplicationStates.Any(s => s.Name == applicationState.Name))
             {
@@ -101,7 +101,7 @@ namespace Simulator.Application
             ApplicationStates.Add(applicationState);
         }
 
-        public ApplicationState GetApplicationState(
+        public Craft.DataStructures.State GetApplicationState(
             string applicationStateName)
         {
             return ApplicationStates.Single(@as => @as.Name == applicationStateName);

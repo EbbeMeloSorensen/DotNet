@@ -14,12 +14,12 @@ namespace Game.Rocket.UI.WPF.ValueConverters
             object parameter,
             CultureInfo culture)
         {
-            if (!(value is ApplicationState))
+            if (!(value is Craft.DataStructures.State))
             {
                 return Visibility.Hidden;
             }
 
-            var valueAsApplicationState = (ApplicationState)value;
+            var valueAsApplicationState = (Craft.DataStructures.State)value;
             var parameterAsString = parameter as string;
 
             return valueAsApplicationState != null && valueAsApplicationState.Name == parameterAsString

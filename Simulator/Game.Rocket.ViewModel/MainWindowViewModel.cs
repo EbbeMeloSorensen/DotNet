@@ -327,7 +327,7 @@ namespace Game.Rocket.ViewModel
             };
 
             Application = new Application(_logger);
-            Application.AddApplicationState(new ApplicationState("Welcome Screen"));
+            Application.AddApplicationState(new Craft.DataStructures.State("Welcome Screen"));
             Application.AddApplicationState(new Level("Level 1a")
             {
                 Scene = GenerateScene1(
@@ -348,7 +348,7 @@ namespace Game.Rocket.ViewModel
                     collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
             });
-            Application.AddApplicationState(new ApplicationState("Level 1 Cleared"));
+            Application.AddApplicationState(new Craft.DataStructures.State("Level 1 Cleared"));
             Application.AddApplicationState(new Level("Level 2")
             {
                 Scene = GenerateScene3(
@@ -359,8 +359,8 @@ namespace Game.Rocket.ViewModel
                     collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
             });
-            Application.AddApplicationState(new ApplicationState("Game Over"));
-            Application.AddApplicationState(new ApplicationState("You Win"));
+            Application.AddApplicationState(new Craft.DataStructures.State("Game Over"));
+            Application.AddApplicationState(new Craft.DataStructures.State("You Win"));
 
             Application.KeyEventOccured += (s, e) =>
             {
@@ -517,7 +517,7 @@ namespace Game.Rocket.ViewModel
             object sender,
             PropertyChangedEventArgs e)
         {
-            var applicationState = (sender as ObservableObject<ApplicationState>)?.Object;
+            var applicationState = (sender as ObservableObject<Craft.DataStructures.State>)?.Object;
 
             if (applicationState == null)
             {

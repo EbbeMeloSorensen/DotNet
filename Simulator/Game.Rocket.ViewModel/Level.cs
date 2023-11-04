@@ -1,9 +1,8 @@
-﻿using Simulator.Application;
-using Simulator.Domain;
+﻿using Simulator.Domain;
 
 namespace Game.Rocket.ViewModel
 {
-    public class Level : ApplicationState
+    public class Level : Craft.DataStructures.State
     {
         public Scene Scene { get; set; }
 

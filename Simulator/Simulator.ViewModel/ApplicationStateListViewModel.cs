@@ -7,13 +7,13 @@ namespace Simulator.ViewModel
 {
     public class ApplicationStateListViewModel : ViewModelBase
     {
-        private ApplicationState _currentApplicationState;
+        private Craft.DataStructures.State _currentApplicationState;
 
-        public ObservableObject<ApplicationState> SelectedApplicationState { get; }
+        public ObservableObject<Craft.DataStructures.State> SelectedApplicationState { get; }
 
-        public ObservableCollection<ApplicationState> ApplicationStates { get; }
+        public ObservableCollection<Craft.DataStructures.State> ApplicationStates { get; }
 
-        public ApplicationState CurrentApplicationState
+        public Craft.DataStructures.State CurrentApplicationState
         {
             get { return _currentApplicationState; }
             set
@@ -26,8 +26,8 @@ namespace Simulator.ViewModel
 
         public ApplicationStateListViewModel()
         {
-            ApplicationStates = new ObservableCollection<ApplicationState>();
-            SelectedApplicationState = new ObservableObject<ApplicationState>();
+            ApplicationStates = new ObservableCollection<Craft.DataStructures.State>();
+            SelectedApplicationState = new ObservableObject<Craft.DataStructures.State>();
         }
 
         public ApplicationStateListViewModel(
@@ -38,7 +38,7 @@ namespace Simulator.ViewModel
         }
 
         public void AddApplicationState(
-            ApplicationState applicationState)
+            Craft.DataStructures.State applicationState)
         {
             ApplicationStates.Add(applicationState);
         }
