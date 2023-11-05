@@ -4,7 +4,7 @@ using System.Linq;
 namespace Craft.DataStructures.Graph
 {
     // A state machine is a graph that has a node which is currently active.
-    public class StateMachine : GraphAdjacencyList<State, LabelledEdge>
+    public class StateMachine : GraphAdjacencyList<State, EmptyEdge>
     {
         private int _currentStateIndex;
 
@@ -31,24 +31,23 @@ namespace Craft.DataStructures.Graph
 
         public void AddTransition(
             State from,
-            State to,
-            string name = null)
+            State to)
         {
-            AddEdge(new LabelledEdge(from.Id, to.Id, name));
+            AddEdge(new EmptyEdge(from.Id, to.Id));
         }
 
         public IEnumerable<string> ExitsFromCurrentState()
         {
             return OutgoingEdges(_currentStateIndex)
-                .Select(_ => (_ as LabelledEdge).Label);
+                .Select(_ => Vertices[_.VertexId2].Name);
         }
 
         public void SwitchState(
             string transitionName = null)
         {
-            _currentStateIndex = transitionName == null 
-                ? OutgoingEdges(_currentStateIndex).Single().VertexId2 
-                : OutgoingEdges(_currentStateIndex).Single(_ => (_ as LabelledEdge).Label == transitionName).VertexId2;
+            _currentStateIndex = transitionName == null
+                ? OutgoingEdges(_currentStateIndex).Single().VertexId2
+                : OutgoingEdges(_currentStateIndex).Single(_ => Vertices[_.VertexId2].Name == transitionName).VertexId2;
 
             CurrentState = Vertices[_currentStateIndex];
         }

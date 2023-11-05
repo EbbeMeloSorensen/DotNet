@@ -54,24 +54,24 @@ public class StateMachineTest
         var lockableDoor = new StateMachine(closed);
         lockableDoor.AddState(open);
         lockableDoor.AddState(locked);
-        lockableDoor.AddTransition(closed, open, "open");
-        lockableDoor.AddTransition(closed, locked, "lock");
-        lockableDoor.AddTransition(open, closed, "close");
-        lockableDoor.AddTransition(locked, closed, "unlock");
+        lockableDoor.AddTransition(closed, open);
+        lockableDoor.AddTransition(closed, locked);
+        lockableDoor.AddTransition(open, closed);
+        lockableDoor.AddTransition(locked, closed);
 
         // Act/Assert
         lockableDoor.CurrentState.Name.Should().Be("Closed");
         lockableDoor.ExitsFromCurrentState().Count().Should().Be(2);
 
-        lockableDoor.SwitchState("open");
+        lockableDoor.SwitchState("Open");
         lockableDoor.CurrentState.Name.Should().Be("Open");
         lockableDoor.ExitsFromCurrentState().Count().Should().Be(1);
 
-        lockableDoor.SwitchState("close");
+        lockableDoor.SwitchState("Closed");
         lockableDoor.CurrentState.Name.Should().Be("Closed");
         lockableDoor.ExitsFromCurrentState().Count().Should().Be(2);
 
-        lockableDoor.SwitchState("lock");
+        lockableDoor.SwitchState("Locked");
         lockableDoor.CurrentState.Name.Should().Be("Locked");
         lockableDoor.ExitsFromCurrentState().Count().Should().Be(1);
 

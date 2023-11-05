@@ -378,7 +378,6 @@ namespace Game.Rocket.ViewModel
             Application.AddApplicationState(gameOver);
             Application.AddApplicationState(youWin);
 
-            // Todo (1): Tilføj de overgange, der gør sig gældende
             Application.AddApplicationStateTransition(welcomeScreen, level1a);
             Application.AddApplicationStateTransition(level1a, gameOver);
             Application.AddApplicationStateTransition(level1a, level1b);
