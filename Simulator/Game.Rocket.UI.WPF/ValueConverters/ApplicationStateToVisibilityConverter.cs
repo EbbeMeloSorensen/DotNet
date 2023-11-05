@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using Simulator.Application;
+using ApplicationState = Craft.DataStructures.StateV1;
 
 namespace Game.Rocket.UI.WPF.ValueConverters
 {
@@ -14,12 +14,12 @@ namespace Game.Rocket.UI.WPF.ValueConverters
             object parameter,
             CultureInfo culture)
         {
-            if (!(value is Craft.DataStructures.State))
+            if (!(value is ApplicationState))
             {
                 return Visibility.Hidden;
             }
 
-            var valueAsApplicationState = (Craft.DataStructures.State)value;
+            var valueAsApplicationState = (ApplicationState)value;
             var parameterAsString = parameter as string;
 
             return valueAsApplicationState != null && valueAsApplicationState.Name == parameterAsString

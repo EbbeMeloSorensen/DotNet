@@ -4,18 +4,18 @@ using Xunit;
 
 namespace Craft.DataStructures.UnitTest
 {
-    public class StateMachineTest
+    public class StateMachineV1Test
     {
         [Fact]
         public void FunWithStateMachineForTrafficLight()
         {
             // Arrange
-            var red = new State("Red");
-            var redAndYellow = new State("Red and Yellow");
-            var green = new State("Green");
-            var yellow = new State("Yellow");
+            var red = new StateV1("Red");
+            var redAndYellow = new StateV1("Red and Yellow");
+            var green = new StateV1("Green");
+            var yellow = new StateV1("Yellow");
 
-            var states = new List<State>
+            var states = new List<StateV1>
             {
                 red,
                 redAndYellow,
@@ -23,7 +23,7 @@ namespace Craft.DataStructures.UnitTest
                 yellow
             };
 
-            var trafficLight = new StateMachine(states);
+            var trafficLight = new StateMachineV1(states);
 
             trafficLight.AddTransition(red, redAndYellow);
             trafficLight.AddTransition(redAndYellow, green);
@@ -31,38 +31,38 @@ namespace Craft.DataStructures.UnitTest
             trafficLight.AddTransition(yellow, red);
 
             // Act/Assert
-            trafficLight.State.Name.Should().Be("Red");
+            trafficLight.StateV1.Name.Should().Be("Red");
             trafficLight.ExitsFromCurrentState.Count.Should().Be(1);
 
             trafficLight.SwitchState();
-            trafficLight.State.Name.Should().Be("Red and Yellow");
+            trafficLight.StateV1.Name.Should().Be("Red and Yellow");
 
             trafficLight.SwitchState();
-            trafficLight.State.Name.Should().Be("Green");
+            trafficLight.StateV1.Name.Should().Be("Green");
 
             trafficLight.SwitchState();
-            trafficLight.State.Name.Should().Be("Yellow");
+            trafficLight.StateV1.Name.Should().Be("Yellow");
 
             trafficLight.SwitchState();
-            trafficLight.State.Name.Should().Be("Red");
+            trafficLight.StateV1.Name.Should().Be("Red");
         }
 
         [Fact]
         public void FunWithStateMachineForLockableDoor()
         {
             // Arrange
-            var closed = new State("Closed");
-            var open = new State("Open");
-            var locked = new State("Locked");
+            var closed = new StateV1("Closed");
+            var open = new StateV1("Open");
+            var locked = new StateV1("Locked");
 
-            var states = new List<State>
+            var states = new List<StateV1>
             {
                 closed,
                 open,
                 locked
             };
 
-            var trafficLight = new StateMachine(states);
+            var trafficLight = new StateMachineV1(states);
 
             trafficLight.AddTransition(open, closed);
             trafficLight.AddTransition(closed, open, "open");
@@ -70,23 +70,23 @@ namespace Craft.DataStructures.UnitTest
             trafficLight.AddTransition(locked, closed);
 
             // Act/Assert
-            trafficLight.State.Name.Should().Be("Closed");
+            trafficLight.StateV1.Name.Should().Be("Closed");
             trafficLight.ExitsFromCurrentState.Count.Should().Be(2);
 
             trafficLight.SwitchState("open");
-            trafficLight.State.Name.Should().Be("Open");
+            trafficLight.StateV1.Name.Should().Be("Open");
             trafficLight.ExitsFromCurrentState.Count.Should().Be(1);
 
             trafficLight.SwitchState();
-            trafficLight.State.Name.Should().Be("Closed");
+            trafficLight.StateV1.Name.Should().Be("Closed");
             trafficLight.ExitsFromCurrentState.Count.Should().Be(2);
 
             trafficLight.SwitchState("lock");
-            trafficLight.State.Name.Should().Be("Locked");
+            trafficLight.StateV1.Name.Should().Be("Locked");
             trafficLight.ExitsFromCurrentState.Count.Should().Be(1);
 
             trafficLight.SwitchState();
-            trafficLight.State.Name.Should().Be("Closed");
+            trafficLight.StateV1.Name.Should().Be("Closed");
         }
     }
 }

@@ -16,7 +16,7 @@ using Game.Rocket.ViewModel.Bodies;
 using Game.Rocket.ViewModel.ShapeViewModels;
 using Simulator.Domain.BodyStates;
 using Simulator.Domain.Props;
-using ApplicationState = Craft.DataStructures.State;
+using ApplicationState = Craft.DataStructures.StateV1;
 
 namespace Game.Rocket.ViewModel
 {
@@ -573,7 +573,7 @@ namespace Game.Rocket.ViewModel
             object sender,
             PropertyChangedEventArgs e)
         {
-            var applicationState = (sender as ObservableObject<Craft.DataStructures.State>)?.Object;
+            var applicationState = (sender as ObservableObject<ApplicationState>)?.Object;
 
             if (applicationState == null)
             {

@@ -1,10 +1,10 @@
 ﻿namespace Craft.DataStructures
 {
-    public class State
+    public class StateV1
     {
         public string Name { get; }
 
-        public State(
+        public StateV1(
             string name)
         {
             Name = name;

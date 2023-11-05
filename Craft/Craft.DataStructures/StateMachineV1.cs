@@ -4,21 +4,21 @@ using Craft.DataStructures.Graph;
 
 namespace Craft.DataStructures
 {
-    public class StateMachine
+    public class StateMachineV1
     {
         private GraphAdjacencyList<LabelledVertex, LabelledEdge> _graph;
-        private Dictionary<State, int> _vertexIdMap;
-        private Dictionary<int, State> _stateMap;
+        private Dictionary<StateV1, int> _vertexIdMap;
+        private Dictionary<int, StateV1> _stateMap;
         private int _currentIndex;
 
-        public State State => _stateMap[_currentIndex];
+        public StateV1 StateV1 => _stateMap[_currentIndex];
 
         public List<string> ExitsFromCurrentState => _graph.GetAdjacentEdges(_currentIndex)
             .Select(_ => _.Label)
             .ToList();
 
-        public StateMachine(
-            IEnumerable<State> states)
+        public StateMachineV1(
+            IEnumerable<StateV1> states)
         {
             _graph = new GraphAdjacencyList<LabelledVertex, LabelledEdge>(
                 states.Select(_ => new LabelledVertex(_.Name)), true);
@@ -37,15 +37,15 @@ namespace Craft.DataStructures
         }
 
         public void AddState(
-            State state)
+            StateV1 stateV1)
         {
             //_graph.
 
         }
 
         public void AddTransition(
-            State from,
-            State to,
+            StateV1 from,
+            StateV1 to,
             string label = null)
         {
             _graph.AddEdge(new LabelledEdge(_vertexIdMap[from], _vertexIdMap[to], label));

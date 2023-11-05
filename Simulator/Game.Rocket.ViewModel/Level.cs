@@ -2,7 +2,7 @@
 
 namespace Game.Rocket.ViewModel
 {
-    public class Level : Craft.DataStructures.State
+    public class Level : Craft.DataStructures.StateV1
     {
         public Scene Scene { get; set; }
 
