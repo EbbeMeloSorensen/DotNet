@@ -30,6 +30,30 @@ namespace Craft.Algorithms.UnitTest
         }
 
         [Fact]
+        public void TestDijkstraAlgorithmOnGraphAdjancencyList()
+        {
+            // Arrange
+            var graph = new GraphAdjacencyList<EmptyVertex, EdgeWithCost>(false);
+            graph.AddVertex(new EmptyVertex());
+            graph.AddVertex(new EmptyVertex());
+            graph.AddVertex(new EmptyVertex());
+            graph.AddEdge(new EdgeWithCost(0, 1, 5));
+            graph.AddEdge(new EdgeWithCost(0, 2, 10));
+            graph.AddEdge(new EdgeWithCost(1, 2, 3));
+
+            // Act
+            graph.ComputeDistances(
+                new[] { 0 },
+                null,
+                double.MaxValue,
+                out var distances,
+                out var previous);
+
+            // Assert
+            distances.SequenceEqual(new[] { 0.0, 5, 8 }).Should().BeTrue();
+        }
+
+        [Fact]
         public void TestDijkstraAlgorithmOnGraphMatrix4Connectivity_1SourceVertex_1()
         {
             // Arrange

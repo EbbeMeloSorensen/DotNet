@@ -36,6 +36,13 @@ namespace Craft.DataStructures
             _currentIndex = 0;
         }
 
+        public void AddState(
+            State state)
+        {
+            //_graph.
+
+        }
+
         public void AddTransition(
             State from,
             State to,

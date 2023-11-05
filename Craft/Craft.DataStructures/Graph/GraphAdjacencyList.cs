@@ -14,11 +14,13 @@ namespace Craft.DataStructures.Graph
         where TE : IEdge
     {
         private static readonly ConstructorInfo _edgeConstructorInfo;
-        private List<Tuple<int, TE>>[] _adjacencyList;
+        private List<Tuple<int, TE>>[] _adjacencyList; // Todo: Udfordr lige dit rationale for at gøre det sådan her i stedet for at bruge et dictionary
+                                                       // Bemærk, at den altså ER et array (af lister) - du har nok tænkt, at det har en god performance..
+        private int _vertexCount;
 
         public bool IsDirected { get; }
 
-        public int VertexCount => Vertices.Count;
+        public int VertexCount => _vertexCount;
 
         public List<TV> Vertices { get; }
 
@@ -35,20 +37,41 @@ namespace Craft.DataStructures.Graph
         }
 
         public GraphAdjacencyList(
+            bool directed)
+        {
+            IsDirected = directed;
+            Vertices = new List<TV>();
+            Edges = new List<TE>();
+
+            _adjacencyList = Array.Empty<List<Tuple<int, TE>>>();
+        }
+
+        public GraphAdjacencyList(
             IEnumerable<TV> vertices,
             bool directed)
         {
             IsDirected = directed;
             Vertices = vertices.ToList();
+            _vertexCount = Vertices.Count;
 
             // Traverse vertices and assign each of them a unique Id
-            for (var i = 0; i < Vertices.Count; i++)
+            for (var i = 0; i < _vertexCount; i++)
             {
                 Vertices[i].Id = i;
             }
 
             Edges = new List<TE>();
-            _adjacencyList = new List<Tuple<int, TE>>[Vertices.Count];
+            _adjacencyList = new List<Tuple<int, TE>>[_vertexCount];
+        }
+
+        public void AddVertex(
+            TV vertex)
+        {
+            vertex.Id = _vertexCount++;
+            Vertices.Add(vertex);
+
+            // I og med at _adjacencyList er et array, er dette næppe særligt hensigtsmæssigt
+            _adjacencyList = _adjacencyList.Append(new List<Tuple<int, TE>>()).ToArray();
         }
 
         public void AddEdge(
