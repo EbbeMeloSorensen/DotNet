@@ -16,7 +16,7 @@ using Game.Rocket.ViewModel.Bodies;
 using Game.Rocket.ViewModel.ShapeViewModels;
 using Simulator.Domain.BodyStates;
 using Simulator.Domain.Props;
-using ApplicationState = Craft.DataStructures.StateV1;
+using ApplicationState = Craft.DataStructures.Graph.State;
 
 namespace Game.Rocket.ViewModel
 {

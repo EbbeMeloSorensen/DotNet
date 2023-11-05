@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using ApplicationState = Craft.DataStructures.StateV1;
+using ApplicationState = Craft.DataStructures.Graph.State;
 
 namespace Game.Rocket.UI.WPF.ValueConverters
 {

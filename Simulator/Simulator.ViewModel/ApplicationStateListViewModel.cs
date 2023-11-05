@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Craft.Utils;
 using GalaSoft.MvvmLight;
-using ApplicationState = Craft.DataStructures.StateV1;
+using ApplicationState = Craft.DataStructures.Graph.State;
 
 namespace Simulator.ViewModel
 {

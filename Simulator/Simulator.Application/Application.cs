@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using Craft.Logging;
 using Craft.Math;
 using Simulator.Domain;
-using ApplicationState = Craft.DataStructures.StateV1;
+using ApplicationState = Craft.DataStructures.Graph.State;
 
 namespace Simulator.Application
 {
