@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
@@ -17,6 +18,7 @@ using Game.Rocket.ViewModel.ShapeViewModels;
 using Simulator.Domain.BodyStates;
 using Simulator.Domain.Props;
 using ApplicationState = Craft.DataStructures.Graph.State;
+using Application = Simulator.Application.Application;
 
 namespace Game.Rocket.ViewModel
 {
@@ -24,7 +26,8 @@ namespace Game.Rocket.ViewModel
     {
         private static int _nextWallId = 100000;
 
-        private const int _initialMagnification = 174;
+        //private const int _initialMagnification = 174;
+        private const int _initialMagnification = 240;
 
         private ILogger _logger;   
         private SceneViewManager _sceneViewManager;
@@ -328,8 +331,6 @@ namespace Game.Rocket.ViewModel
                 return response;
             };
 
-            Application = new Application(_logger);
-
             var welcomeScreen = new ApplicationState("Welcome Screen");
 
             var level1a = new Level("Level 1a")
@@ -369,6 +370,8 @@ namespace Game.Rocket.ViewModel
 
             var gameOver = new ApplicationState("Game Over");
             var youWin = new ApplicationState("You Win");
+
+            Application = new Application(_logger);
 
             Application.AddApplicationState(welcomeScreen);
             Application.AddApplicationState(level1a);
@@ -621,8 +624,6 @@ namespace Game.Rocket.ViewModel
             AddWall(scene, -1.9 - margin, 5.25 + margin, 3, 3 + margin, false, false, false, false);
             AddWall(scene, -1.9 - margin, -1.9, -1, 3, false, false, false, false);
             AddWall(scene, 5.25, 5.25 + margin, -1, 3, false, false, false, false);
-            //AddWall(scene, -1, -0.5, 2, 3);
-            //AddWall(scene, 0.5, 1, -1, 0);
 
             // Add exits
             scene.AddBoundary(new LineSegment(new Vector2D(4, -0.95), new Vector2D(5.25, -0.95), "Level 1b") { Visible = true });

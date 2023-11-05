@@ -368,9 +368,54 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                                     WorldWindowUpperLeft = new Point(0, 0);
                                 }
                             }
+                            else if (_initialWorldWindowFocus.HasValue &&
+                                     _initialWorldWindowSize.HasValue)
+                            {
+                                if (_fitAspectRatio)
+                                {
+                                    // Her skal World Window fylde hele viewporten ud
+                                    throw new NotImplementedException();
+
+                                    //Scaling = new Size(
+                                    //    ViewPortSize.Width / (_initialWorldWindowSize.Value.Width),
+                                    //    ViewPortSize.Height / _initialWorldWindowSize.Value.Height);
+
+                                    //WorldWindowUpperLeft = new Point(
+                                    //    _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
+                                    //    _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y - ViewPortSize.Height / Scaling.Height);
+                                }
+                                else
+                                {
+                                    if (ViewPortSize.Width / ViewPortSize.Height <=
+                                        _initialWorldWindowSize.Value.Width / _initialWorldWindowSize.Value.Height)
+                                    {
+                                        // Dette er hvis World Window skal afgrænses af Viewportens VENSTRE og HØJRE side
+                                        throw new NotImplementedException();
+
+                                        //var scaling = ViewPortSize.Width / _initialWorldWindowSize.Value.Width;
+                                        //Scaling = new Size(scaling, scaling);
+
+                                        //WorldWindowUpperLeft = new Point(
+                                        //    _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
+                                        //    -_initialWorldWindowFocus.Value.Y - WorldWindowSize.Height / 2);
+                                    }
+                                    else
+                                    {
+                                        // Dette er hvis World Window skal afgrænses af Viewportens NEDERSTE OG ØVERSTE side
+                                        throw new NotImplementedException();
+
+                                        //var scaling = ViewPortSize.Height / _initialWorldWindowSize.Value.Height;
+                                        //Scaling = new Size(scaling, scaling);
+
+                                        //WorldWindowUpperLeft = new Point(
+                                        //    _initialWorldWindowFocus.Value.X - WorldWindowSize.Width / 2 + 1000,
+                                        //    _initialWorldWindowSize.Value.Height / 2 - _initialWorldWindowFocus.Value.Y - ViewPortSize.Height / scaling);
+                                    }
+                                }
+                            }
                             else
                             {
-                                throw new NotImplementedException();
+                                throw new ArgumentException("Invalid specification of World Window");
                             }
                         }
                         else
