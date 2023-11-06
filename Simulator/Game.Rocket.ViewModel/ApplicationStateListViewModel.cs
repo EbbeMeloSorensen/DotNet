@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using Craft.Utils;
+﻿using Craft.Utils;
 using GalaSoft.MvvmLight;
+using System.Collections.ObjectModel;
 using ApplicationState = Craft.DataStructures.Graph.State;
 
-namespace Simulator.ViewModel
+namespace Game.Rocket.ViewModel
 {
     public class ApplicationStateListViewModel : ViewModelBase
     {

@@ -281,6 +281,7 @@ Done:
   - Lav ruten som et antal props
 
 Todo:
+* Erstat den der 
 * Gør det muligt at skrue hastigheden op, så man kan teste uden at vente en evighed
 * Fix problemet med at energien pludselig hopper fra 50 til 55 for scenen "Bouncing Ball 2"
   Kollisionen detekteres umiddelbart efter iterationen. Position og hastighed propageres korrekt (hvor den effektivt bruger "før"-tilstanden),
