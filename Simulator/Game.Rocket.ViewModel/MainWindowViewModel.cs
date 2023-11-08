@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
@@ -17,6 +18,7 @@ using Simulator.Domain.BodyStates;
 using Simulator.Domain.Props;
 using ApplicationState = Craft.DataStructures.Graph.State;
 using Application = Simulator.Application.Application;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Game.Rocket.ViewModel
 {
@@ -404,7 +406,25 @@ namespace Game.Rocket.ViewModel
             {
                 if (Application.State.Object is Level level)
                 {
+                    // Dette kald udvirker, at WorldWindow bliver sat
                     _sceneViewManager.ActiveScene = level.Scene;
+
+                    // Prøv lige at override her
+                    var x0 = -1.9 - 0.3;
+                    var x1 = 5.25 + 0.3;
+                    var y0 = -1 - 0.3;
+                    var y1 = 3 + 0.3;
+
+                    var worldWindowFocus = new Point(
+                        (x1 + x0) / 2,
+                        (y1 + y0) / 2);
+
+                    var worldWindowSize = new Size(
+                        x1 - x0,
+                        y1 - y0);
+
+                    GeometryEditorViewModel.InitializeWorldWindow(worldWindowFocus, worldWindowSize, false);
+
                     StartOrResumeAnimationCommand.Execute(null);
                 }
                 else
@@ -506,32 +526,6 @@ namespace Game.Rocket.ViewModel
         {
             return Application.CanStartOrResumeAnimation;
         }
-
-        //private void RefreshButtons()
-        //{
-        //    StartOrResumeAnimationCommand.RaiseCanExecuteChanged();
-        //}
-
-        // Den her skal hellere abonnere på et observable object ejst 
-        //private void SelectedApplicationState_PropertyChanged1(
-        //    object sender,
-        //    PropertyChangedEventArgs e)
-        //{
-        //    var applicationState = (sender as ObservableObject<ApplicationState>)?.Object;
-
-        //    if (applicationState == null)
-        //    {
-        //        return;
-        //    }
-
-        //    Application.CurrentApplicationState = applicationState;
-
-        //    if (!(applicationState is Level level)) return;
-
-        //    _sceneViewManager.ActiveScene = level.Scene;
-
-        //    RefreshButtons();
-        //}
 
         private static Scene GenerateScene1(
             InitializationCallback initializationCallback,
