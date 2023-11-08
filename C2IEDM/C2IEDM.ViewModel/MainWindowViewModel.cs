@@ -460,6 +460,7 @@ public class MainWindowViewModel : ViewModelBase
             true,
             0,
             40,
+            1,
             timeAtOrigo);
 
         HistoricalTimeViewModel.GeometryEditorViewModel.YAxisLocked = true;
@@ -495,6 +496,7 @@ public class MainWindowViewModel : ViewModelBase
             true,
             0,
             40,
+            1,
             timeAtOrigo);
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.YAxisLocked = true;
@@ -551,7 +553,7 @@ public class MainWindowViewModel : ViewModelBase
 
         // Calculate y coordinate of the principal axis (so we can make the lines stop there)
         var y2 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
-             DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * DatabaseWriteTimesViewModel.Y2 /
+             DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * DatabaseWriteTimesViewModel.GeometryEditorViewModel.MarginBottomOffset /
              DatabaseWriteTimesViewModel.GeometryEditorViewModel.ViewPortSize.Height;
 
         // Clear lines
