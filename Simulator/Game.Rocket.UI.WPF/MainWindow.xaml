@@ -36,7 +36,7 @@
         <!--Welcome Screen-->
         <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock.Visibility>
-                <Binding Path="Application.CurrentApplicationState" 
+                <Binding Path="Application.State.Object" 
                          Converter="{StaticResource ApplicationStateToVisibilityConverter}">
                     <Binding.ConverterParameter>
                         <system:String>Welcome Screen</system:String>
@@ -51,7 +51,7 @@
         <!--Level 1 Cleared-->
         <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock.Visibility>
-                <Binding Path="Application.CurrentApplicationState" 
+                <Binding Path="Application.State.Object" 
                          Converter="{StaticResource ApplicationStateToVisibilityConverter}">
                     <Binding.ConverterParameter>
                         <system:String>Level 1 Cleared</system:String>
@@ -66,7 +66,7 @@
         <!--Game Over-->
         <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock.Visibility>
-                <Binding Path="Application.CurrentApplicationState" 
+                <Binding Path="Application.State.Object" 
                          Converter="{StaticResource ApplicationStateToVisibilityConverter}">
                     <Binding.ConverterParameter>
                         <system:String>Game Over</system:String>
@@ -79,7 +79,7 @@
         <!--You Win-->
         <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock.Visibility>
-                <Binding Path="Application.CurrentApplicationState" 
+                <Binding Path="Application.State.Object" 
                          Converter="{StaticResource ApplicationStateToVisibilityConverter}">
                     <Binding.ConverterParameter>
                         <system:String>You Win</system:String>

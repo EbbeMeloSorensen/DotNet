@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Craft.DataStructures.Graph;
 using Craft.Logging;
 using Craft.Math;
+using Craft.Utils;
 using Simulator.Domain;
 using ApplicationState = Craft.DataStructures.Graph.State;
+using State = Simulator.Domain.State;
 
 namespace Simulator.Application
 {
@@ -33,10 +35,11 @@ namespace Simulator.Application
     public delegate void CurrentStateChangedCallback(
         State currentState);
 
-    public class Application : INotifyPropertyChanged
+    public class Application //: INotifyPropertyChanged
     {
         public const double MinTimeBetweenRefresh = 0.005; // 5 milliseconds
-        private ApplicationState _currentApplicationState;
+        //private ApplicationState _currentApplicationState;
+        private StateMachine _stateMachine;
 
         private ILogger _logger;
 
@@ -54,17 +57,24 @@ namespace Simulator.Application
         public bool AnimationRunning { get; private set; }
         public bool AnimationComplete { get; private set; }
 
-        public List<ApplicationState> ApplicationStates { get; }
+        public ObservableObject<ApplicationState> State { get; }
 
-        public ApplicationState CurrentApplicationState
-        {
-            get { return _currentApplicationState; }
-            set
-            {
-                _currentApplicationState = value;
-                OnPropertyChanged();
-            }
-        }
+        //public ApplicationState State
+        //{
+        //    get => _stateMachine.CurrentState;
+        //}
+
+        //public List<ApplicationState> ApplicationStates { get; }
+
+        //public ApplicationState CurrentApplicationState
+        //{
+        //    get { return _currentApplicationState; }
+        //    set
+        //    {
+        //        _currentApplicationState = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
         public CurrentStateChangedCallback CurrentStateChangedCallback { get; set; }
 
@@ -78,7 +88,8 @@ namespace Simulator.Application
         public event EventHandler AnimationCompleted;
 
         public Application(
-            ILogger logger)
+            ILogger logger,
+            ApplicationState initialState = null)
         {
             _logger = logger;
 
@@ -88,31 +99,38 @@ namespace Simulator.Application
             Engine = new Engine(logger);
             Stopwatch = new Stopwatch();
 
-            ApplicationStates = new List<ApplicationState>();
+            //ApplicationStates = new List<ApplicationState>();
+
+            if (initialState != null)
+            {
+                _stateMachine = new StateMachine(initialState);
+                State = new ObservableObject<ApplicationState>{Object = initialState};
+            }
         }
 
         public void AddApplicationState(
             ApplicationState applicationState)
         {
-            if (ApplicationStates.Any(s => s.Name == applicationState.Name))
+            if (_stateMachine.Vertices.Any(_ => _.Name == applicationState.Name))
             {
                 throw new InvalidOperationException("The name of the application state has to be unique");
             }
 
-            ApplicationStates.Add(applicationState);
+            _stateMachine.AddVertex(applicationState);
         }
 
         public void AddApplicationStateTransition(
             ApplicationState from,
             ApplicationState to)
         {
+            _stateMachine.AddTransition(from, to);
         }
 
-        public ApplicationState GetApplicationState(
-            string applicationStateName)
-        {
-            return ApplicationStates.Single(@as => @as.Name == applicationStateName);
-        }
+        //public ApplicationState GetApplicationState(
+        //    string applicationStateName)
+        //{
+        //    return ApplicationStates.Single(@as => @as.Name == applicationStateName);
+        //}
 
         public void HandleKeyEvent(
             KeyboardKey keyboardKey,
@@ -279,11 +297,19 @@ namespace Simulator.Application
             FrameSkipCount = 0;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        //protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
+
+        public void SwitchState(
+            string name = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _stateMachine.SwitchState(name);
+
+            State.Object = _stateMachine.CurrentState;
         }
 
         private int DetermineCurrentIndex(

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
@@ -26,7 +24,6 @@ namespace Game.Rocket.ViewModel
     {
         private static int _nextWallId = 100000;
 
-        //private const int _initialMagnification = 174;
         private const int _initialMagnification = 240;
 
         private ILogger _logger;   
@@ -36,7 +33,6 @@ namespace Game.Rocket.ViewModel
 
         public Application Application { get; }
 
-        public ApplicationStateListViewModel ApplicationStateListViewModel { get; }
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
 
         private RelayCommand _startOrResumeAnimationCommand;
@@ -371,9 +367,8 @@ namespace Game.Rocket.ViewModel
             var gameOver = new ApplicationState("Game Over");
             var youWin = new ApplicationState("You Win");
 
-            Application = new Application(_logger);
+            Application = new Application(_logger, welcomeScreen);
 
-            Application.AddApplicationState(welcomeScreen);
             Application.AddApplicationState(level1a);
             Application.AddApplicationState(level1b);
             Application.AddApplicationState(level1Cleared);
@@ -392,92 +387,39 @@ namespace Game.Rocket.ViewModel
             Application.AddApplicationStateTransition(gameOver, welcomeScreen);
             Application.AddApplicationStateTransition(youWin, welcomeScreen);
 
-            // Todo (2): Brug de overgange i stedet for den der switch case ladder nedenfor
-
+            // If the user hits the space key while the application is in a state that is not a level then switch application state
             Application.KeyEventOccured += (s, e) =>
             {
                 if (e.KeyboardKey != KeyboardKey.Space ||
-                    e.KeyEventType != KeyEventType.KeyPressed)
+                    e.KeyEventType != KeyEventType.KeyPressed ||
+                    Application.State is Level)
                 {
                     return;
                 }
 
-                // If a key is pressed while the application is in state that is not a scene, then it may
-                // result in transition to another application state
-                switch (Application.CurrentApplicationState.Name)
+                Application.SwitchState();
+            };
+
+            Application.State.PropertyChanged += (s, e) =>
+            {
+                if (Application.State.Object is Level level)
                 {
-                    case "Welcome Screen":
+                    _sceneViewManager.ActiveScene = level.Scene;
+                    StartOrResumeAnimationCommand.Execute(null);
+                }
+                else
+                {
+                    if (Application.State.Object == welcomeScreen)
                     {
-                        ApplicationStateListViewModel.CurrentApplicationState = Application.GetApplicationState("Level 1a");
-
-                        if (ApplicationStateListViewModel.CurrentApplicationState is Level)
-                        {
-                            StartOrResumeAnimationCommand.Execute(null);
-                        }
-                        else
-                        {
-                            _sceneViewManager.ActiveScene = null;
-                        }
-
-                        break;
-                    }
-                    case "Level 1 Cleared":
-                    {
-                        ApplicationStateListViewModel.CurrentApplicationState = Application.GetApplicationState("Level 2");
-
-                        if (ApplicationStateListViewModel.CurrentApplicationState is Level)
-                        {
-                            StartOrResumeAnimationCommand.Execute(null);
-                        }
-                        else
-                        {
-                            _sceneViewManager.ActiveScene = null;
-                        }
-
-                        break;
-                    }
-                    case "Game Over":
-                    case "You Win":
-                    {
-                        ApplicationStateListViewModel.CurrentApplicationState = Application.GetApplicationState("Welcome Screen");
-
-                        if (ApplicationStateListViewModel.CurrentApplicationState is Level)
-                        {
-                            StartOrResumeAnimationCommand.Execute(null);
-                        }
-                        else
-                        {
-                            _sceneViewManager.ActiveScene = null;
-                        }
-
-                        break;
+                        _sceneViewManager.ActiveScene = null;
                     }
                 }
             };
 
             Application.AnimationCompleted += (s, e) =>
             {
-                // The outcome should be the name of another application state
-                if (string.IsNullOrEmpty(Application.Engine.Outcome))
-                {
-                    throw new InvalidOperationException("Animation completed without an outcome, which is illegal in this context");
-                }
-
-                var applicationState = Application.GetApplicationState(Application.Engine.Outcome);
-                ApplicationStateListViewModel.CurrentApplicationState = applicationState;
-
-                if (applicationState is Level level)
-                {
-                    _sceneViewManager.ActiveScene = level.Scene;
-                    StartOrResumeAnimationCommand.Execute(null);
-                }
-
-                RefreshButtons();
+                Application.SwitchState(Application.Engine.Outcome);
             };
-
-            ApplicationStateListViewModel = new ApplicationStateListViewModel(Application);
-            ApplicationStateListViewModel.SelectedApplicationState.PropertyChanged += 
-                SelectedApplicationState_PropertyChanged1;
 
             GeometryEditorViewModel = new GeometryEditorViewModel(1)
             {
@@ -552,13 +494,12 @@ namespace Game.Rocket.ViewModel
 
         public void HandleLoaded()
         {
-            ApplicationStateListViewModel.CurrentApplicationState = Application.ApplicationStates.First();
+            //ApplicationStateListViewModel.CurrentApplicationState = Application.ApplicationStates.First();
         }
 
         private void StartOrResumeAnimation()
         {
             Application.StartOrResumeAnimation();
-            RefreshButtons();
         }
 
         private bool CanStartOrResumeAnimation()
@@ -566,30 +507,31 @@ namespace Game.Rocket.ViewModel
             return Application.CanStartOrResumeAnimation;
         }
 
-        private void RefreshButtons()
-        {
-            StartOrResumeAnimationCommand.RaiseCanExecuteChanged();
-        }
+        //private void RefreshButtons()
+        //{
+        //    StartOrResumeAnimationCommand.RaiseCanExecuteChanged();
+        //}
 
-        private void SelectedApplicationState_PropertyChanged1(
-            object sender,
-            PropertyChangedEventArgs e)
-        {
-            var applicationState = (sender as ObservableObject<ApplicationState>)?.Object;
+        // Den her skal hellere abonnere på et observable object ejst 
+        //private void SelectedApplicationState_PropertyChanged1(
+        //    object sender,
+        //    PropertyChangedEventArgs e)
+        //{
+        //    var applicationState = (sender as ObservableObject<ApplicationState>)?.Object;
 
-            if (applicationState == null)
-            {
-                return;
-            }
+        //    if (applicationState == null)
+        //    {
+        //        return;
+        //    }
 
-            Application.CurrentApplicationState = applicationState;
+        //    Application.CurrentApplicationState = applicationState;
 
-            if (!(applicationState is Level level)) return;
+        //    if (!(applicationState is Level level)) return;
 
-            _sceneViewManager.ActiveScene = level.Scene;
+        //    _sceneViewManager.ActiveScene = level.Scene;
 
-            RefreshButtons();
-        }
+        //    RefreshButtons();
+        //}
 
         private static Scene GenerateScene1(
             InitializationCallback initializationCallback,
