@@ -166,20 +166,11 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         public Tab3ViewModel()
         {
-            GeometryEditorViewModel1 = new GeometryEditorViewModel(1, 1, 1);
+            GeometryEditorViewModel1 = new GeometryEditorViewModel();
+            GeometryEditorViewModel1.InitializeWorldWindow(new Size(1, 1)); // Det burde ikke være nødvendigt at kalde denne
 
-            // Denne bruger vi, hvis vi er ok med at koordinatsystemets origo er sammenfaldende med viewets nederste venstre hjørne
-            //GeometryEditorViewModel2 = new GeometryEditorViewModel(
-            //    -1, 
-            //    1, 
-            //    1);
-
-            // Denne bruger vi, hvis vi gerne vil specificere, hvilket World punkt man skal fokusere på
-            GeometryEditorViewModel2 = new GeometryEditorViewModel(
-                -1,
-                1,
-                1,
-                new Point(300, 112.5));
+            GeometryEditorViewModel2 = new GeometryEditorViewModel(-1);
+            GeometryEditorViewModel2.InitializeWorldWindow(new Point(300, 112.5));
 
             var worldWindowFocus = new Point(
                 (_x1 + _x0) / 2,
@@ -481,8 +472,9 @@ namespace Craft.UIElements.GuiTest.Tab3
             Point worldWindowFocus,
             Size worldWindowSize)
         {
-            GeometryEditorViewModel3 = new GeometryEditorViewModel(
-                -1,
+            GeometryEditorViewModel3 = new GeometryEditorViewModel(-1);
+
+            GeometryEditorViewModel3.InitializeWorldWindow(
                 worldWindowFocus,
                 worldWindowSize,
                 false);
@@ -526,8 +518,9 @@ namespace Craft.UIElements.GuiTest.Tab3
             Point worldWindowFocus,
             Size worldWindowSize)
         {
-            GeometryEditorViewModel4 = new GeometryEditorViewModel(
-                -1,
+            GeometryEditorViewModel4 = new GeometryEditorViewModel(-1);
+
+            GeometryEditorViewModel4.InitializeWorldWindow(
                 worldWindowFocus,
                 worldWindowSize,
                 false);

@@ -251,13 +251,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _worldWindowExpansionFactor = worldWindowExpansionFactor;
 
             GeometryEditorViewModel = 
-                new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, fitAspectRatio)
+                new GeometryEditorViewModel(-1)
                 {
                     MarginLeft = marginX,
                     MarginBottom = marginY,
                     ShowMarginLeft = marginX > 0,
                     ShowMarginBottom = marginY > 0
                 };
+
+            GeometryEditorViewModel.InitializeWorldWindow(worldWindowFocus, worldWindowSize, fitAspectRatio);
 
             GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {

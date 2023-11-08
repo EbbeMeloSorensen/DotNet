@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
+using System.Printing;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
@@ -275,47 +276,25 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // invoked each time a frame refresh is needed
         public UpdateModelCallBack UpdateModelCallBack { get; set; }
 
-        public GeometryEditorViewModel(
-            int yAxisFactor) : this(yAxisFactor, 1, 1)
-        {
-        }
+        //public GeometryEditorViewModel(
+        //    int yAxisFactor,
+        //    Point worldWindowFocus,
+        //    Size worldWindowSize,
+        //    bool fitAspectRatio) : this(yAxisFactor)
+        //{
+        //    _yAxisFactor = yAxisFactor;
+        //    _initialWorldWindowFocus = worldWindowFocus;
+        //    _initialWorldWindowSize = worldWindowSize;
+        //    _fitAspectRatio = fitAspectRatio;
+        //}
 
         public GeometryEditorViewModel(
-            int yAxisFactor,
-            double scalingX,
-            double scalingY) : this()
+            int yAxisFactor = 1)
         {
             _yAxisFactor = yAxisFactor;
-            _initialScalingX = scalingX;
-            _initialScalingY = scalingY;
-        }
+            _initialScalingX = 1;
+            _initialScalingY = 1;
 
-        public GeometryEditorViewModel(
-            int yAxisFactor,
-            double scalingX,
-            double scalingY,
-            Point worldWindowFocus) : this()
-        {
-            _yAxisFactor = yAxisFactor;
-            _initialScalingX = scalingX;
-            _initialScalingY = scalingY;
-            _initialWorldWindowFocus = worldWindowFocus;
-        }
-
-        public GeometryEditorViewModel(
-            int yAxisFactor,
-            Point worldWindowFocus,
-            Size worldWindowSize,
-            bool fitAspectRatio) : this()
-        {
-            _yAxisFactor = yAxisFactor;
-            _initialWorldWindowFocus = worldWindowFocus;
-            _initialWorldWindowSize = worldWindowSize;
-            _fitAspectRatio = fitAspectRatio;
-        }
-
-        protected GeometryEditorViewModel()
-        {
             _backgroundBrush = new SolidColorBrush(Colors.WhiteSmoke);
             _marginBrush = new SolidColorBrush(Colors.White);
             _defaultBrush = new SolidColorBrush(Colors.Black);
@@ -343,12 +322,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             switch (e.PropertyName)
             {
                 case "ViewPortSize":
-                    if (WorldWindowSize.Width < 0.000000001 &&
-                        WorldWindowSize.Height < 0.000000001 &&
-                        ViewPortSize.Width != 0 &&
-                        ViewPortSize.Height != 0)
+                    if (WorldWindowSize.Width < double.Epsilon &&
+                        WorldWindowSize.Height < double.Epsilon)
                     {
-                        // Her er viewporten initialiseret for første gang, og så kan vi sætte World Window og skalering
+                        // Her initialiserer vi World Window og skalering for første gang
                         InitializeScalingAndWorldWindow();
                         OnWorldWindowMajorUpdateOccured();
                     }
@@ -359,8 +336,66 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        public void InitializeScalingAndWorldWindow()
+        public void InitializeWorldWindow(
+            Point focus)
         {
+            _initialScalingX = 1.0;
+            _initialScalingY = 1.0;
+            _initialWorldWindowFocus = focus;
+            _initialWorldWindowSize = null;
+            _fitAspectRatio = false;
+
+            InitializeScalingAndWorldWindow();
+        }
+
+        public void InitializeWorldWindow(
+            Size scaling)
+        {
+            _initialScalingX = scaling.Width;
+            _initialScalingY = scaling.Height;
+            _initialWorldWindowFocus = null;
+            _initialWorldWindowSize = null;
+            _fitAspectRatio = false;
+
+            InitializeScalingAndWorldWindow();
+        }
+
+        public void InitializeWorldWindow(
+            Size scaling,
+            Point focus)
+        {
+            _initialScalingX = scaling.Width;
+            _initialScalingY = scaling.Height;
+            _initialWorldWindowFocus = focus;
+            _initialWorldWindowSize = null;
+            _fitAspectRatio = false;
+
+            InitializeScalingAndWorldWindow();
+        }
+
+
+        public void InitializeWorldWindow(
+            Point focus,
+            Size size,
+            bool fitAspectRatio)
+        {
+            _initialScalingX = null;
+            _initialScalingY = null;
+            _initialWorldWindowFocus = focus;
+            _initialWorldWindowSize = size;
+            _fitAspectRatio = fitAspectRatio;
+
+            InitializeScalingAndWorldWindow();
+        }
+
+        private void InitializeScalingAndWorldWindow()
+        {
+            if (ViewPortSize.Width < double.Epsilon)
+            {
+                // Det giver kun mening, hvis viewporten er initialiseret
+                return;
+            }
+
             if (_yAxisFactor == 1)
             {
                 // Dette er passende for et ALMINDELIGT view
