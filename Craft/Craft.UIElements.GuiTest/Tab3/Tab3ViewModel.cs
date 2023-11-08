@@ -167,7 +167,6 @@ namespace Craft.UIElements.GuiTest.Tab3
         public Tab3ViewModel()
         {
             GeometryEditorViewModel1 = new GeometryEditorViewModel();
-            GeometryEditorViewModel1.InitializeWorldWindow(new Size(1, 1)); // Det burde ikke være nødvendigt at kalde denne
 
             GeometryEditorViewModel2 = new GeometryEditorViewModel(-1);
             GeometryEditorViewModel2.InitializeWorldWindow(new Point(300, 112.5));

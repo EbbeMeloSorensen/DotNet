@@ -392,9 +392,9 @@ namespace Game.Rocket.ViewModel
             {
                 if (e.KeyboardKey != KeyboardKey.Space ||
                     e.KeyEventType != KeyEventType.KeyPressed ||
-                    Application.State is Level)
-                {
-                    return;
+                    Application.State.Object is Level)
+                { 
+                     return;
                 }
 
                 Application.SwitchState();

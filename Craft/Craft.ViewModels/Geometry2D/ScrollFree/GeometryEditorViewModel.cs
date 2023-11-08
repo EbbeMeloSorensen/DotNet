@@ -276,18 +276,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // invoked each time a frame refresh is needed
         public UpdateModelCallBack UpdateModelCallBack { get; set; }
 
-        //public GeometryEditorViewModel(
-        //    int yAxisFactor,
-        //    Point worldWindowFocus,
-        //    Size worldWindowSize,
-        //    bool fitAspectRatio) : this(yAxisFactor)
-        //{
-        //    _yAxisFactor = yAxisFactor;
-        //    _initialWorldWindowFocus = worldWindowFocus;
-        //    _initialWorldWindowSize = worldWindowSize;
-        //    _fitAspectRatio = fitAspectRatio;
-        //}
-
         public GeometryEditorViewModel(
             int yAxisFactor = 1)
         {

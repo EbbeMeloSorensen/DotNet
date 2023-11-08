@@ -433,10 +433,12 @@ public class MainWindowViewModel : ViewModelBase
             Math.Abs(worldWindowBoundingBoxNorthWest.X - worldWindowBoundingBoxSouthEast.X),
             Math.Abs(worldWindowBoundingBoxNorthWest.Y - worldWindowBoundingBoxSouthEast.Y));
 
-        MapViewModel = new GeometryEditorViewModel(-1, worldWindowFocus, worldWindowSize, false)
+        MapViewModel = new GeometryEditorViewModel(-1)
         {
             AspectRatioLocked = true
         };
+
+        MapViewModel.InitializeWorldWindow(worldWindowFocus, worldWindowSize, false);
 
         MapViewModel.MouseClickOccured += (s, e) =>
         {
