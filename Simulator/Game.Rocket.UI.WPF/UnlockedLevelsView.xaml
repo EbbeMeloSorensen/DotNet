@@ -19,14 +19,31 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Column="0"
+        <ListBox Grid.Row="0" 
+                 Grid.Column="0"
                  HorizontalContentAlignment="Stretch"
                  ItemsSource="{Binding UnlockedLevels}"
-                 ItemTemplate="{StaticResource levelTemplate}"/>
+                 ItemTemplate="{StaticResource levelTemplate}"
+                 SelectedItem="{Binding SelectedLevel, Mode=TwoWay}"/>
+
+        <Button Grid.Row="1" 
+                Grid.Column="0" 
+                Width="150" 
+                Height="100" 
+                Margin="0, 20, 0, 0"
+                FontSize="30"
+                Content="Start"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Command="{Binding StartLevelCommand}"/>
     </Grid>
 </UserControl>

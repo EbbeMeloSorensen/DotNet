@@ -63,6 +63,11 @@ namespace Game.Rocket.ViewModel
 
             UnlockedLevelsViewModel = new UnlockedLevelsViewModel();
 
+            UnlockedLevelsViewModel.LevelSelected += (s, e) =>
+            {
+                Application.SwitchState(e.Level.Name);
+            };
+
             // General purpose interaction callbacks that works for all scenes
             var spaceKeyIsDown = false;
             var stateIndexOfFirstShotInBurst = -1000;
@@ -325,6 +330,10 @@ namespace Game.Rocket.ViewModel
                     }
                     else
                     {
+                        // Todo: Determine if the rocket collided with a landing platform
+
+                        //var lineSegment = boundaryCollisionReport.Boundary as LineSegment;
+
                         response.Outcome = boundaryCollisionReport.Boundary.Tag;
                         response.IndexOfLastState = propagatedState.Index + 1;
                     }
@@ -628,6 +637,8 @@ namespace Game.Rocket.ViewModel
             CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
+            var standardGravity = 0.5;
+
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
             {
@@ -636,7 +647,7 @@ namespace Game.Rocket.ViewModel
             });
 
             var scene = new Scene("Scene 1b", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0.5, 0, 0, 1, true, 0.005)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
@@ -672,6 +683,8 @@ namespace Game.Rocket.ViewModel
             CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
+            var standardGravity = 0.5;
+
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
             {
@@ -680,7 +693,7 @@ namespace Game.Rocket.ViewModel
             });
 
             var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, true, 0.005)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
@@ -698,8 +711,11 @@ namespace Game.Rocket.ViewModel
             AddWall(scene, -1.9 - margin, -1.9, -1, 3, false, false, false, false);
             AddWall(scene, 5.25, 5.25 + margin, -1, 3, false, false, false, false);
 
+            AddWall(scene, -1.9, 1, 1.5, 2, false, true, true, true);
+            AddWall(scene, 2, 5.25, 0, 0.5, true, false, true, true);
+
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(4, -0.95), new Vector2D(5.25, -0.95), "Level 2 Cleared") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(4.5, 2.5), new Vector2D(5, 2.5), "Level 2 Cleared") { Visible = true });
 
             return scene;
         }
@@ -712,6 +728,8 @@ namespace Game.Rocket.ViewModel
             CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
+            var standardGravity = 0.5;
+
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
             {
@@ -720,7 +738,7 @@ namespace Game.Rocket.ViewModel
             });
 
             var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0.5, 0, 0, 1, true, 0.005)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
@@ -790,7 +808,7 @@ namespace Game.Rocket.ViewModel
             {
                 if (_.Item1.Name == "Unlocked Levels Screen")
                 {
-                    UnlockedLevelsViewModel.UnlockedLevels.Add(_.Item2 as Level);
+                    UnlockedLevelsViewModel.AddLevel(_.Item2 as Level);
                 }
 
                 Application.AddApplicationStateTransition(_.Item1, _.Item2);
