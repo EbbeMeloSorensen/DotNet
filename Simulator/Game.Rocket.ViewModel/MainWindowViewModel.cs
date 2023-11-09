@@ -9,16 +9,15 @@ using Craft.Math;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Simulator.Domain;
+using Simulator.Domain.BodyStates;
 using Simulator.Domain.Boundaries;
+using Simulator.Domain.Props;
 using Simulator.Application;
 using Simulator.ViewModel;
 using Game.Rocket.ViewModel.Bodies;
 using Game.Rocket.ViewModel.ShapeViewModels;
-using Simulator.Domain.BodyStates;
-using Simulator.Domain.Props;
 using ApplicationState = Craft.DataStructures.Graph.State;
 using Application = Simulator.Application.Application;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace Game.Rocket.ViewModel
 {
