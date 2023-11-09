@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using Simulator.Laboratory.ViewModel;
 using Craft.ViewModels.Geometry2D.ScrollFree;
+using Simulator.Laboratory.ViewModel.ShapeViewModels;
 
 namespace Simulator.Laboratory.UI.WPF
 {

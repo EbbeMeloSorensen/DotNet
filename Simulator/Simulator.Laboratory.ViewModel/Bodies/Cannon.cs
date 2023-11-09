@@ -1,6 +1,6 @@
 ﻿using Simulator.Domain;
 
-namespace Simulator.Laboratory.ViewModel
+namespace Simulator.Laboratory.ViewModel.Bodies
 {
     public class Cannon : CircularBody
     {

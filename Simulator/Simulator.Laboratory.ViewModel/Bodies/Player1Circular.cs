@@ -1,10 +1,10 @@
 ﻿using Simulator.Domain;
 
-namespace Simulator.Laboratory.ViewModel
+namespace Simulator.Laboratory.ViewModel.Bodies
 {
-    public class Enemy : CircularBody
+    public class Player1Circular : CircularBody
     {
-        public Enemy(
+        public Player1Circular(
             int id,
             double radius,
             double mass,

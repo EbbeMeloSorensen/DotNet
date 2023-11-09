@@ -1,6 +1,6 @@
 ﻿using Craft.ViewModels.Geometry2D.ScrollFree;
 
-namespace Simulator.Laboratory.ViewModel
+namespace Simulator.Laboratory.ViewModel.ShapeViewModels
 {
     public class TaggedEllipseViewModel : EllipseViewModel
     {
