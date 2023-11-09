@@ -130,7 +130,7 @@ namespace Simulator.Application
                         break;
                     case StateEvent.CollisionWithBoundary:
                         PropagateStatePartly(propagatedBodyStateMap, timeUntilCollisionWithBoundary, timeLeftInCurrentIncrement);
-                        boundaryCollisionReports.Add(new BoundaryCollisionReport(bodyState.Body, boundary, effectiveSurfaceNormalForBoundary));
+                        boundaryCollisionReports.Add(new BoundaryCollisionReport(bodyState, boundary, effectiveSurfaceNormalForBoundary));
 
                         // Figure out what should happen with the body that collided with a boundary by asking the scene
                         if (scene.CollisionBetweenBodyAndBoundaryOccuredCallBack != null)

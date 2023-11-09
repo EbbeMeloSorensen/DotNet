@@ -219,8 +219,8 @@ namespace Game.Rocket.ViewModel
                 if (boundaryCollisionReports.Any())
                 {
                     propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id));
+                        .Where(bcr => bcr.BodyState.Body is Projectile)
+                        .Select(bcr => bcr.BodyState.Body.Id));
                 }
 
                 // Local function
@@ -320,7 +320,7 @@ namespace Game.Rocket.ViewModel
 
                 // Check if the rocket collided with anything
                 var boundaryCollisionReport = boundaryCollisionReports
-                    .FirstOrDefault(bcr => bcr.Body is Bodies.Rocket);
+                    .FirstOrDefault(bcr => bcr.BodyState.Body is Bodies.Rocket);
 
                 if (boundaryCollisionReport != null)
                 {
@@ -330,12 +330,54 @@ namespace Game.Rocket.ViewModel
                     }
                     else
                     {
-                        // Todo: Determine if the rocket collided with a landing platform
+                        // Determine if the collided with an exit or landed safely on a landing platform
 
-                        //var lineSegment = boundaryCollisionReport.Boundary as LineSegment;
+                        var tag = boundaryCollisionReport.Boundary.Tag;
 
-                        response.Outcome = boundaryCollisionReport.Boundary.Tag;
-                        response.IndexOfLastState = propagatedState.Index + 1;
+                        if (tag.Length >= 8 && tag.Substring(0, 8) == "Platform")
+                        {
+                            // A platform
+
+                            var lineSegment = boundaryCollisionReport.Boundary as LineSegment;
+                            var bodyState = (boundaryCollisionReport.BodyState as BodyStateClassic);
+
+                            var platformCenterX = (lineSegment.Point1.X + lineSegment.Point2.X) / 2;
+                            var rocketOrientation = bodyState.Orientation;
+                            var rocketVelocity = bodyState.NaturalVelocity;
+
+                            if (Math.Abs(platformCenterX - bodyState.Position.X) > 0.4)
+                            {
+                                // Not on center of platform
+                                DetonateRocket();
+                            }
+                            else if (Math.Abs(rocketOrientation - Math.PI / 2) > 0.2)
+                            {
+                                // Bad orientation
+                                DetonateRocket();
+                            }
+                            else if (boundaryCollisionReport.EffectiveSurfaceNormal.Y != -1.0)
+                            {
+                                // Didnt land on top of the platform
+                                DetonateRocket();
+                            }
+                            else if (rocketVelocity.Length > 0.75)
+                            {
+                                // Speed too high
+                                DetonateRocket();
+                            }
+                            else
+                            {
+                                // Safe landing
+                                response.Outcome = tag.Substring(9);
+                                response.IndexOfLastState = propagatedState.Index + 1;
+                            }
+                        }
+                        else
+                        {
+                            // Just a regular exit
+                            response.Outcome = tag;
+                            response.IndexOfLastState = propagatedState.Index + 1;
+                        }
                     }
                 }
 
@@ -500,8 +542,8 @@ namespace Game.Rocket.ViewModel
             };
 
             // Aktiver nogle, så du ikke hele tiden skal gennemføre level 1
-            UnlockLevels(level1Cleared);
-            UnlockLevels(level2Cleared);
+            //UnlockLevels(level1Cleared);
+            //UnlockLevels(level2Cleared);
 
             GeometryEditorViewModel = new GeometryEditorViewModel()
             {
@@ -715,7 +757,7 @@ namespace Game.Rocket.ViewModel
             AddWall(scene, 2, 5.25, 0, 0.5, true, false, true, true);
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(4.5, 2.5), new Vector2D(5, 2.5), "Level 2 Cleared") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(4.5, 2.5), new Vector2D(5, 2.5), "Platform-Level 2 Cleared") { Visible = true });
 
             return scene;
         }

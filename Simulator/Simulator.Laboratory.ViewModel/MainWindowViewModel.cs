@@ -1651,7 +1651,7 @@ namespace Simulator.Laboratory.ViewModel
             {
                 if (boundaryCollisionReports.Any())
                 {
-                    propagatedState.RemoveBodyStates(boundaryCollisionReports.Select(bcr => bcr.Body.Id));
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports.Select(bcr => bcr.BodyState.Body.Id));
                 }
 
                 if (extraBodies.ContainsKey(propagatedState.Index))
@@ -2538,7 +2538,7 @@ namespace Simulator.Laboratory.ViewModel
                     //collisions.ContainsKey(1) &&
                     //collisions[1].Any(bcr => Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                     .SelectMany(x => x.Value)
-                    .Any(bcr => bcr.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
+                    .Any(bcr => bcr.BodyState.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                 {
                     // Yes, collided with ground since last refresh
                     grounded = true;
@@ -2613,7 +2613,7 @@ namespace Simulator.Laboratory.ViewModel
                     //collisions.ContainsKey(1) &&
                     //collisions[1].Any(bcr => Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                     .SelectMany(x => x.Value)
-                    .Any(bcr => bcr.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
+                    .Any(bcr => bcr.BodyState.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                 {
                     // Yes, collided with ground since last refresh
                     grounded = true;
@@ -2692,7 +2692,7 @@ namespace Simulator.Laboratory.ViewModel
                     //.ContainsKey(1) &&
                     //collisions[1].Any(bcr => Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                     .SelectMany(x => x.Value)
-                    .Any(bcr => bcr.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
+                    .Any(bcr => bcr.BodyState.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                 {
                     // Yes, collided with ground since last refresh
                     grounded = true;
@@ -2901,8 +2901,8 @@ namespace Simulator.Laboratory.ViewModel
                 if (boundaryCollisionReports.Any())
                 {
                     var idsOfDisposableBodies = boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id)
+                        .Where(bcr => bcr.BodyState.Body is Projectile)
+                        .Select(bcr => bcr.BodyState.Body.Id)
                         .ToArray();
 
                     if (idsOfDisposableBodies.Any())
@@ -2952,8 +2952,8 @@ namespace Simulator.Laboratory.ViewModel
                 if (boundaryCollisionReports.Any())
                 {
                     propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id));
+                        .Where(bcr => bcr.BodyState.Body is Projectile)
+                        .Select(bcr => bcr.BodyState.Body.Id));
                 }
 
                 if (propagatedState.Index % 2 == 0)
@@ -3093,8 +3093,8 @@ namespace Simulator.Laboratory.ViewModel
                 if (boundaryCollisionReports.Any())
                 {
                     propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id));
+                        .Where(bcr => bcr.BodyState.Body is Projectile)
+                        .Select(bcr => bcr.BodyState.Body.Id));
                 }
 
                 // Add a projectile from main body?
@@ -3238,8 +3238,8 @@ namespace Simulator.Laboratory.ViewModel
                 if (boundaryCollisionReports.Any())
                 {
                     propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id));
+                        .Where(bcr => bcr.BodyState.Body is Projectile)
+                        .Select(bcr => bcr.BodyState.Body.Id));
                 }
 
                 bodyCollisionReports.ForEach(bcr =>
@@ -3555,8 +3555,8 @@ namespace Simulator.Laboratory.ViewModel
                 if (boundaryCollisionReports.Any())
                 {
                     propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id));
+                        .Where(bcr => bcr.BodyState.Body is Projectile)
+                        .Select(bcr => bcr.BodyState.Body.Id));
                 }
 
                 var hitEnemies = new HashSet<BodyStateClassic>();
@@ -3807,8 +3807,8 @@ namespace Simulator.Laboratory.ViewModel
                 if (boundaryCollisionReports.Any())
                 {
                     propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id));
+                        .Where(bcr => bcr.BodyState.Body is Projectile)
+                        .Select(bcr => bcr.BodyState.Body.Id));
                 }
 
                 var hitEnemies = new HashSet<BodyStateClassic>();
@@ -4066,8 +4066,8 @@ namespace Simulator.Laboratory.ViewModel
                 if (boundaryCollisionReports.Any())
                 {
                     propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Projectile)
-                        .Select(bcr => bcr.Body.Id));
+                        .Where(bcr => bcr.BodyState.Body is Projectile)
+                        .Select(bcr => bcr.BodyState.Body.Id));
                 }
 
                 if (spaceKeyWasPressed)
@@ -4575,8 +4575,8 @@ namespace Simulator.Laboratory.ViewModel
                 {
                     // Remove enemies, when they get to the exit
                     propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.Body is Enemy)
-                        .Select(bcr => bcr.Body.Id));
+                        .Where(bcr => bcr.BodyState.Body is Enemy)
+                        .Select(bcr => bcr.BodyState.Body.Id));
 
                     health -= boundaryCollisionReports.Count * 30.0;
 
@@ -4629,7 +4629,7 @@ namespace Simulator.Laboratory.ViewModel
 
                 if (boundaryCollisionReports.Any())
                 {
-                    propagatedState.RemoveBodyStates(boundaryCollisionReports.Select(bcr => bcr.Body.Id));
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports.Select(bcr => bcr.BodyState.Body.Id));
                 }
 
                 // Add a new cannon?
