@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game.Rocket.UI.WPF"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        xmlns:uiElements="clr-namespace:Simulator.UIElements;assembly=Simulator.UIElements"
         xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="Rocket" Height="600" Width="800"
@@ -24,6 +23,18 @@
                          Converter="{StaticResource BooleanToVisibilityConverter}"/>
             </scrollFree:GeometryEditorView.Visibility>
         </scrollFree:GeometryEditorView>
+
+        <Grid>
+            <Grid.Visibility>
+                <Binding Path="Application.State.Object" 
+                         Converter="{StaticResource ApplicationStateToVisibilityConverter}">
+                    <Binding.ConverterParameter>
+                        <system:String>Unlocked</system:String>
+                    </Binding.ConverterParameter>
+                </Binding>
+            </Grid.Visibility>
+            <local:UnlockedLevelsView DataContext="{Binding UnlockedLevelsViewModel}"/>
+        </Grid>
 
         <!--Welcome Screen-->
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">

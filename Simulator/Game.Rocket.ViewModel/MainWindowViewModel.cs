@@ -36,6 +36,7 @@ namespace Game.Rocket.ViewModel
 
         public Application Application { get; }
 
+        public UnlockedLevelsViewModel UnlockedLevelsViewModel { get; }
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
 
         private RelayCommand _startOrResumeAnimationCommand;
@@ -59,6 +60,8 @@ namespace Game.Rocket.ViewModel
         {
             _logger = logger;
             _logger = null; // Disable logging (it should only be used for debugging purposes)
+
+            UnlockedLevelsViewModel = new UnlockedLevelsViewModel();
 
             // General purpose interaction callbacks that works for all scenes
             var spaceKeyIsDown = false;
@@ -414,9 +417,13 @@ namespace Game.Rocket.ViewModel
             {
                 {level1Cleared, new List<Tuple<ApplicationState, ApplicationState>>
                 {
-                    new Tuple<ApplicationState, ApplicationState>(welcomeScreen, unlockedLevelsScreen),
-                    new Tuple<ApplicationState, ApplicationState>(unlockedLevelsScreen, level1a),
-                    new Tuple<ApplicationState, ApplicationState>(unlockedLevelsScreen, level2)
+                    new (welcomeScreen, unlockedLevelsScreen),
+                    new (unlockedLevelsScreen, level1a),
+                    new (unlockedLevelsScreen, level2)
+                }},
+                {level2Cleared, new List<Tuple<ApplicationState, ApplicationState>>
+                {
+                    new (unlockedLevelsScreen, level3)
                 }}
             };
 
@@ -425,7 +432,8 @@ namespace Game.Rocket.ViewModel
             {
                 if (e.KeyboardKey != KeyboardKey.Space ||
                     e.KeyEventType != KeyEventType.KeyPressed ||
-                    Application.State.Object is Level)
+                    Application.State.Object is Level ||
+                    Application.State.Object == unlockedLevelsScreen)
                 { 
                      return;
                 }
@@ -488,7 +496,7 @@ namespace Game.Rocket.ViewModel
                 }
             };
 
-            GeometryEditorViewModel = new GeometryEditorViewModel(1)
+            GeometryEditorViewModel = new GeometryEditorViewModel()
             {
                 UpdateModelCallBack = Application.UpdateModel
             };

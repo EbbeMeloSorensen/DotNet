@@ -298,13 +298,6 @@ namespace Simulator.Application
             FrameSkipCount = 0;
         }
 
-        //public event PropertyChangedEventHandler PropertyChanged;
-
-        //protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
-
         public void SwitchState(
             string name = null)
         {
