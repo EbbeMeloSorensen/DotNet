@@ -283,7 +283,11 @@ Done:
   unlocked, går man fra Welcome screen til unlocked levels screen.
 
 Todo:
-* 
+* Lav en variant af platformer scenerne, hvor man f.eks skifter farve, når den bevæger sig. Brug evt princippet fra Rocket, hvor du viser
+  en flamme fra raketmotoren, når man trykker pil opad. Princippet for raketten er, at man har klassen RocketViewModel, som nedarver fra 
+  RotatableEllipseViewModel, hvor den så tilføjer en boolsk property, der angiver, om den er ignited.
+
+
 * Gør det smidigt at sikre, at der er overensstemmelse mellem outcomes fra en scene og den state maskine, der gør sig gældende. 
   Måske skal du ikke bruge strings til navigation.
 * Gør det muligt at skrue hastigheden op, så man kan teste uden at vente en evighed

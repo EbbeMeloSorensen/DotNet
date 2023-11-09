@@ -23,6 +23,10 @@ namespace Simulator.Laboratory.ViewModel
 
     public class MainWindowViewModel : ViewModelBase
     {
+        // Vi har et antal shape selector callbacks og shape selector callbacks
+        // hvor nogle bruges i nogle scener og andre bruges i andre scener.
+        // Når brugeren vælger en ny scene, tildeles de rette shape selector og shape update callback funktioner
+        // til Scene View Manageren
         private Dictionary<Scene, ShapeSelectorCallback> _shapeSelectorCallbacks;
         private Dictionary<Scene, ShapeUpdateCallback> _shapeUpdateCallbacks;
 
@@ -189,8 +193,10 @@ namespace Simulator.Laboratory.ViewModel
             // Denne bruges indtil videre kun for Rotation og Rocket scenerne
             ShapeUpdateCallback shapeUpdateCallback2 = (shapeViewModel, bs) =>
             {
+                // Her opdaterer vi POSITIONEN af shapeviewmodellen
                 shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
 
+                // Her opdaterer vi ORIENTERINGEN af shapeviewmodellen
                 if (shapeViewModel is RotatableEllipseViewModel)
                 {
                     var bsc = bs as BodyStateClassic;
@@ -247,11 +253,11 @@ namespace Simulator.Laboratory.ViewModel
             // Denne bruges indtil videre kun for Tower Defense scenen
             ShapeUpdateCallback shapeUpdateCallback3 = (shapeViewModel, bs) =>
             {
-                shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
-
                 if (shapeViewModel is TaggedEllipseViewModel taggedEllipseViewModel &&
                     bs is BodyStateEnemy enemy)
                 {
+                    // Opdater position og life indikator for enemy
+                    taggedEllipseViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
                     taggedEllipseViewModel.Tag = enemy.Life.ToString();
                 }
 
@@ -260,6 +266,23 @@ namespace Simulator.Laboratory.ViewModel
                 {
                     rotatableEllipseViewModel.Orientation = cannon.Orientation;
                 }
+            };
+
+            // Denne bruges indtil videre kun for Platformer 4 scenen
+            ShapeSelectorCallback shapeSelectorCallback4 = (bs) =>
+            {
+                if (!(bs.Body is RectangularBody))
+                {
+                    throw new InvalidOperationException();
+                }
+
+                var rectangularBody = bs.Body as RectangularBody;
+
+                return new RectangleViewModel()
+                {
+                    Width = rectangularBody.Width,
+                    Height = rectangularBody.Height,
+                };
             };
 
             var updateAuxFields = new UpdateAuxFields((aux1, aux2) =>
@@ -355,6 +378,7 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateScenePlatformer1());
             AddScene(GenerateScenePlatformer2());
             AddScene(GenerateScenePlatformer3());
+            AddScene(GenerateScenePlatformer4(), shapeSelectorCallback4);
             AddScene(GenerateSceneCollisionRegistrationTest());
             AddScene(GenerateSceneShootEmUp1());
             AddScene(GenerateSceneShootEmUp2());
@@ -2591,7 +2615,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0)));
 
-            var scene = new Scene("Platformer (Moving while jumping)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
+            var scene = new Scene("Platformer II (Moving while jumping)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2670,7 +2694,7 @@ namespace Simulator.Laboratory.ViewModel
             bodyState.ArtificialVelocity = basicArtificialVelocity;
             initialState.AddBodyState(bodyState);
 
-            var scene = new Scene("Platformer (Storm)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
+            var scene = new Scene("Platformer III (Storm)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2713,6 +2737,79 @@ namespace Simulator.Laboratory.ViewModel
                 }
 
                 if (keyboardState.UpArrowDown && grounded)
+                {
+                    currentStateOfMainBody.NaturalVelocity = new Vector2D(0, -4);
+                    grounded = false;
+                    return true;
+                }
+
+                if ((newArtificialVelocity - currentArtificialVelocity).Length < 0.01)
+                {
+                    return false;
+                }
+
+                currentStateOfMainBody.ArtificialVelocity = newArtificialVelocity;
+
+                return true;
+            };
+
+            scene.AddBoundary(new UpFacingHalfPlane(1));
+            scene.AddBoundary(new HorizontalLineSegment(0.5, 2, 4));
+            scene.AddBoundary(new HorizontalLineSegment(0, 5, 6));
+            scene.AddBoundary(new HorizontalLineSegment(-0.5, 7, 10));
+
+            return scene;
+        }
+
+        private static Scene GenerateScenePlatformer4()
+        {
+            var initialState = new State();
+            initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0)));
+
+            var scene = new Scene("Platformer IV (Walking)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
+                SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
+
+            scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
+
+            var grounded = false;
+
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
+            {
+                // Find ud af, om figuren står på jorden eller ej
+                // Vi vil gerne undersøge, hvad der er sket af kollisioner siden sidst, specielt om player 1 har kollideret med "ground", 
+                // hvor effektiv surface normal har været opad
+                if (collisions.Count == 0)
+                {
+                    // No collisions with ground since last refresh - must be due to jump or walking off edge
+                    grounded = false;
+                }
+                else if (
+                    !grounded && collisions
+                    .SelectMany(x => x.Value)
+                    .Any(bcr => bcr.BodyState.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
+                {
+                    // Yes, collided with ground since last refresh
+                    grounded = true;
+                }
+
+                // Player 1 er IKKE grounded men i luften. Derfor ændrer vi IKKE dens hastighed (Ghost'n Goblins style)
+                if (!grounded) return false;
+
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
+                var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
+                var newArtificialVelocity = new Vector2D(0, 0);
+                var horizontalSpeed = 1.5;
+
+                if (keyboardState.RightArrowDown)
+                {
+                    newArtificialVelocity += new Vector2D(horizontalSpeed, 0);
+                }
+                else if (keyboardState.LeftArrowDown)
+                {
+                    newArtificialVelocity += new Vector2D(-horizontalSpeed, 0);
+                }
+
+                if (keyboardState.UpArrowDown)
                 {
                     currentStateOfMainBody.NaturalVelocity = new Vector2D(0, -4);
                     grounded = false;
@@ -3995,7 +4092,7 @@ namespace Simulator.Laboratory.ViewModel
         private static Scene GenerateSceneRambo()
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Player1Rectangular(1, 0.25, 0.25, 1, true), new Vector2D(0, 1)));
+            initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.25, 0.25, 1, true), new Vector2D(0, 1)));
 
             var scene = new Scene("Rambo", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, -0.6, -0.6, 9.6, 9.6);
