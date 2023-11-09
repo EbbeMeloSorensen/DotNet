@@ -10,6 +10,7 @@ using Craft.Utils;
 using Simulator.Domain;
 using ApplicationState = Craft.DataStructures.Graph.State;
 using State = Simulator.Domain.State;
+using System.Collections.Generic;
 
 namespace Simulator.Application
 {
@@ -126,11 +127,9 @@ namespace Simulator.Application
             _stateMachine.AddTransition(from, to);
         }
 
-        public void RemoveApplicationStateTransition(
-            ApplicationState from,
-            ApplicationState to)
+        public IEnumerable<string> ExitsFromCurrentApplicationState()
         {
-            _stateMachine.RemoveTransition(from, to);
+            return _stateMachine.ExitsFromCurrentState();
         }
 
         public void HandleKeyEvent(

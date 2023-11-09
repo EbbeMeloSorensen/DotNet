@@ -336,7 +336,7 @@ namespace Game.Rocket.ViewModel
             var welcomeScreen = new ApplicationState("Welcome Screen");
             var unlockedLevelsScreen = new ApplicationState("Unlocked Levels Screen");
 
-            var level1a = new Level("Level 1a")
+            var level1a = new Level("Level 1")
             {
                 Scene = GenerateScene1a(
                     initializationCallback,
@@ -438,7 +438,15 @@ namespace Game.Rocket.ViewModel
                      return;
                 }
 
-                Application.SwitchState();
+                if (Application.State.Object == welcomeScreen &&
+                    Application.ExitsFromCurrentApplicationState().Contains("Unlocked Levels Screen"))
+                {
+                    Application.SwitchState("Unlocked Levels Screen");
+                }
+                else
+                {
+                    Application.SwitchState();
+                }
             };
 
             Application.State.PropertyChanged += (s, e) =>
@@ -479,22 +487,12 @@ namespace Game.Rocket.ViewModel
             {
                 Application.SwitchState(Application.Engine.Outcome);
 
-                if (_transitionActivationMap.ContainsKey(Application.State.Object))
-                {
-                    _transitionActivationMap[Application.State.Object].ForEach(_ =>
-                    {
-                        Application.AddApplicationStateTransition(_.Item1, _.Item2);
-                    });
-
-                    _transitionActivationMap.Remove(Application.State.Object);
-
-                    // Dette er for at sikre, at den går fra welcome screen til unlocked Levels screen, efter at man har gennemført level1
-                    if (Application.State.Object == level1Cleared)
-                    {
-                        Application.RemoveApplicationStateTransition(welcomeScreen, level1a);
-                    }
-                }
+                UnlockLevels(Application.State.Object);
             };
+
+            // Aktiver nogle, så du ikke hele tiden skal gennemføre level 1
+            UnlockLevels(level1Cleared);
+            UnlockLevels(level2Cleared);
 
             GeometryEditorViewModel = new GeometryEditorViewModel()
             {
@@ -781,6 +779,24 @@ namespace Game.Rocket.ViewModel
             {
                 scene.AddBoundary(new HorizontalLineSegment(y1, x0, x1));
             }
+        }
+
+        private void UnlockLevels(
+            ApplicationState applicationState)
+        {
+            if (!_transitionActivationMap.ContainsKey(applicationState)) return;
+
+            _transitionActivationMap[applicationState].ForEach(_ =>
+            {
+                if (_.Item1.Name == "Unlocked Levels Screen")
+                {
+                    UnlockedLevelsViewModel.UnlockedLevels.Add(_.Item2 as Level);
+                }
+
+                Application.AddApplicationStateTransition(_.Item1, _.Item2);
+            });
+
+            _transitionActivationMap.Remove(applicationState);
         }
     }
 }

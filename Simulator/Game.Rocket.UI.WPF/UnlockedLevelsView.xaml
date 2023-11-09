@@ -6,5 +6,27 @@
              xmlns:local="clr-namespace:Game.Rocket.UI.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Button Content="{Binding Greeting}"/>
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="levelTemplate">
+            <Border BorderBrush="Green" BorderThickness="2">
+                <StackPanel Margin="4">
+                    <TextBlock Foreground="Red" FontSize="20" TextAlignment="Center" Text="{Binding Name}"/>
+                    <TextBlock FontSize="16" TextAlignment="Right" Text="Level Title"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListBox Grid.Column="0"
+                 HorizontalContentAlignment="Stretch"
+                 ItemsSource="{Binding UnlockedLevels}"
+                 ItemTemplate="{StaticResource levelTemplate}"/>
+    </Grid>
 </UserControl>
