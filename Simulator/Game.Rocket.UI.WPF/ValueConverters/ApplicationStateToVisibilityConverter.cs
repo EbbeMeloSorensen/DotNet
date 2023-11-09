@@ -22,7 +22,7 @@ namespace Game.Rocket.UI.WPF.ValueConverters
             var valueAsApplicationState = (ApplicationState)value;
             var parameterAsString = parameter as string;
 
-            return valueAsApplicationState != null && valueAsApplicationState.Name == parameterAsString
+            return valueAsApplicationState != null && valueAsApplicationState.Name.Contains(parameterAsString)
                 ? Visibility.Visible
                 : Visibility.Collapsed;
         }

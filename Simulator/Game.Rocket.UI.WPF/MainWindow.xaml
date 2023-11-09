@@ -40,19 +40,19 @@
             <Run FontSize="50" Text="Press space to start"/>
         </TextBlock>
 
-        <!--Level 1 Cleared-->
+        <!--Level Cleared-->
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock.Visibility>
                 <Binding Path="Application.State.Object" 
                          Converter="{StaticResource ApplicationStateToVisibilityConverter}">
                     <Binding.ConverterParameter>
-                        <system:String>Level 1 Cleared</system:String>
+                        <system:String>Cleared</system:String>
                     </Binding.ConverterParameter>
                 </Binding>
             </TextBlock.Visibility>
-            <Run FontSize="50" Text="Level 1 cleared"/>
+            <Run FontSize="50" Text="Level cleared"/>
             <LineBreak/>
-            <Run FontSize="25" Text="Press space to proceed to level 2"/>
+            <Run FontSize="25" Text="Press space to proceed"/>
         </TextBlock>
 
         <!--Game Over-->

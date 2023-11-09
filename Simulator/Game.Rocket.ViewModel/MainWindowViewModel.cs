@@ -332,7 +332,7 @@ namespace Game.Rocket.ViewModel
 
             var level1a = new Level("Level 1a")
             {
-                Scene = GenerateScene1(
+                Scene = GenerateScene1a(
                     initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -343,7 +343,7 @@ namespace Game.Rocket.ViewModel
 
             var level1b = new Level("Level 1b")
             {
-                Scene = GenerateScene2(
+                Scene = GenerateScene1b(
                     initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -355,6 +355,19 @@ namespace Game.Rocket.ViewModel
             var level1Cleared = new ApplicationState("Level 1 Cleared");
 
             var level2 = new Level("Level 2")
+            {
+                Scene = GenerateScene2(
+                    initializationCallback,
+                    interactionCallBack,
+                    collisionBetweenBodyAndBoundaryOccuredCallBack,
+                    checkForCollisionBetweenBodiesCallback,
+                    collisionBetweenTwoBodiesOccuredCallBack,
+                    postPropagationCallBack)
+            };
+
+            var level2Cleared = new ApplicationState("Level 2 Cleared");
+
+            var level3 = new Level("Level 3")
             {
                 Scene = GenerateScene3(
                     initializationCallback,
@@ -374,6 +387,8 @@ namespace Game.Rocket.ViewModel
             Application.AddApplicationState(level1b);
             Application.AddApplicationState(level1Cleared);
             Application.AddApplicationState(level2);
+            Application.AddApplicationState(level2Cleared);
+            Application.AddApplicationState(level3);
             Application.AddApplicationState(gameOver);
             Application.AddApplicationState(youWin);
 
@@ -384,7 +399,10 @@ namespace Game.Rocket.ViewModel
             Application.AddApplicationStateTransition(level1b, level1Cleared);
             Application.AddApplicationStateTransition(level1Cleared, level2);
             Application.AddApplicationStateTransition(level2, gameOver);
-            Application.AddApplicationStateTransition(level2, youWin);
+            Application.AddApplicationStateTransition(level2, level2Cleared);
+            Application.AddApplicationStateTransition(level2Cleared, level3);
+            Application.AddApplicationStateTransition(level3, gameOver);
+            Application.AddApplicationStateTransition(level3, youWin);
             Application.AddApplicationStateTransition(gameOver, welcomeScreen);
             Application.AddApplicationStateTransition(youWin, welcomeScreen);
 
@@ -526,7 +544,7 @@ namespace Game.Rocket.ViewModel
             return Application.CanStartOrResumeAnimation;
         }
 
-        private static Scene GenerateScene1(
+        private static Scene GenerateScene1a(
             InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -566,7 +584,7 @@ namespace Game.Rocket.ViewModel
             return scene;
         }
 
-        private static Scene GenerateScene2(
+        private static Scene GenerateScene1b(
             InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -606,6 +624,46 @@ namespace Game.Rocket.ViewModel
 
             // Add exits
             scene.AddBoundary(new LineSegment(new Vector2D(4, -0.95), new Vector2D(5.25, -0.95), "Level 1 Cleared") { Visible = true });
+
+            return scene;
+        }
+
+        private static Scene GenerateScene2(
+            InitializationCallback initializationCallback,
+            InteractionCallBack interactionCallBack,
+            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
+            CheckForCollisionBetweenBodiesCallback checkForCollisionBetweenBodiesCallback,
+            CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack,
+            PostPropagationCallBack postPropagationCallBack)
+        {
+            var initialState = new State();
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
+            {
+                NaturalVelocity = new Vector2D(0, 0),
+                Orientation = 0.5 * Math.PI
+            });
+
+            var scene = new Scene("Scene 2", _initialMagnification,
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, true, 0.005)
+            {
+                IncludeCustomForces = true,
+                InitializationCallback = initializationCallback,
+                CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
+                CheckForCollisionBetweenBodiesCallback = checkForCollisionBetweenBodiesCallback,
+                CollisionBetweenTwoBodiesOccuredCallBack = collisionBetweenTwoBodiesOccuredCallBack,
+                PostPropagationCallBack = postPropagationCallBack,
+                InteractionCallBack = interactionCallBack
+            };
+
+            var margin = 0.3;
+            scene.AddRectangularBoundary(-1.9, 5.25, -1, 3);
+            AddWall(scene, -1.9 - margin, 5.25 + margin, -1 - margin, -1, false, false, false, false);
+            AddWall(scene, -1.9 - margin, 5.25 + margin, 3, 3 + margin, false, false, false, false);
+            AddWall(scene, -1.9 - margin, -1.9, -1, 3, false, false, false, false);
+            AddWall(scene, 5.25, 5.25 + margin, -1, 3, false, false, false, false);
+
+            // Add exits
+            scene.AddBoundary(new LineSegment(new Vector2D(4, -0.95), new Vector2D(5.25, -0.95), "Level 2 Cleared") { Visible = true });
 
             return scene;
         }
