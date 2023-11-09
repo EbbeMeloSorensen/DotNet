@@ -62,5 +62,32 @@ namespace Craft.DataStructures.UnitTest
             graph.GetAdjacentEdges(3).Count().Should().Be(2);
             graph.GetAdjacentEdges(0).First().Label.Should().Be("wife");
         }
+
+        [Fact]
+        public void RemovalOfEdges()
+        {
+            // Arrange
+            var graph = new GraphAdjacencyList<LabelledVertex, LabelledEdge>(true);
+
+            // Act
+            graph.AddVertex(new LabelledVertex("Ebbe"));
+            graph.AddVertex(new LabelledVertex("Ana"));
+            graph.AddVertex(new LabelledVertex("Anton"));
+            graph.AddVertex(new LabelledVertex("Cecilie"));
+            graph.AddEdge(new LabelledEdge(0, 1, "wife"));
+            graph.AddEdge(new LabelledEdge(2, 0, "parent"));
+            graph.AddEdge(new LabelledEdge(2, 1, "parent"));
+            graph.AddEdge(new LabelledEdge(3, 0, "parent"));
+            graph.AddEdge(new LabelledEdge(3, 1, "parent"));
+
+            graph.RemoveEdges(0, 1);
+
+            // Assert
+            graph.Vertices.Count.Should().Be(4);
+            graph.GetAdjacentEdges(0).Count().Should().Be(0);
+            graph.GetAdjacentEdges(1).Count().Should().Be(0);
+            graph.GetAdjacentEdges(2).Count().Should().Be(2);
+            graph.GetAdjacentEdges(3).Count().Should().Be(2);
+        }
     }
 }

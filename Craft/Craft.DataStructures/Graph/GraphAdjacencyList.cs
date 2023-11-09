@@ -22,9 +22,9 @@ namespace Craft.DataStructures.Graph
 
         public int VertexCount => _vertexCount;
 
-        public List<TV> Vertices { get; }
+        public List<TV> Vertices { get; private set; }
 
-        public List<TE> Edges { get; }
+        public List<TE> Edges { get; private set; }
 
         static GraphAdjacencyList()
         {
@@ -112,6 +112,22 @@ namespace Craft.DataStructures.Graph
             }
 
             _adjacencyList[edge.VertexId1].Add(new Tuple<int, TE>(edge.VertexId2, edge));
+        }
+
+        public void RemoveEdges(
+            int vertexId1,
+            int vertexId2)
+        {
+            if (_adjacencyList[vertexId1] != null)
+            {
+                _adjacencyList[vertexId1] = _adjacencyList[vertexId1]
+                    .Where(_ => _.Item1 != vertexId2)
+                    .ToList();
+
+                Edges = Edges
+                    .Where(_ => _.VertexId1 == vertexId1 && _.VertexId2 == vertexId2)
+                    .ToList();
+            }
         }
 
         // Det her er ikke særligt pænt... Du skal kunne opdatere en vertex i grafen uden at fucke vertex id'er op

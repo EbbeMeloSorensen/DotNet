@@ -36,6 +36,13 @@ namespace Craft.DataStructures.Graph
             AddEdge(new EmptyEdge(from.Id, to.Id));
         }
 
+        public void RemoveTransition(
+            State from,
+            State to)
+        {
+            RemoveEdges(from.Id, to.Id);
+        }
+
         public IEnumerable<string> ExitsFromCurrentState()
         {
             return OutgoingEdges(_currentStateIndex)

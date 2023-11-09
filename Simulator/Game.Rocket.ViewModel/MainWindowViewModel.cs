@@ -30,7 +30,9 @@ namespace Game.Rocket.ViewModel
         private ILogger _logger;   
         private SceneViewManager _sceneViewManager;
         private bool _rocketIgnited;
-        private bool _geometryEditorVisible = true;        
+        private bool _geometryEditorVisible = true;
+
+        private Dictionary<ApplicationState, List<Tuple<ApplicationState, ApplicationState>>> _transitionActivationMap;
 
         public Application Application { get; }
 
@@ -329,6 +331,7 @@ namespace Game.Rocket.ViewModel
             };
 
             var welcomeScreen = new ApplicationState("Welcome Screen");
+            var unlockedLevelsScreen = new ApplicationState("Unlocked Levels Screen");
 
             var level1a = new Level("Level 1a")
             {
@@ -383,6 +386,7 @@ namespace Game.Rocket.ViewModel
 
             Application = new Application(_logger, welcomeScreen);
 
+            Application.AddApplicationState(unlockedLevelsScreen);
             Application.AddApplicationState(level1a);
             Application.AddApplicationState(level1b);
             Application.AddApplicationState(level1Cleared);
@@ -405,6 +409,16 @@ namespace Game.Rocket.ViewModel
             Application.AddApplicationStateTransition(level3, youWin);
             Application.AddApplicationStateTransition(gameOver, welcomeScreen);
             Application.AddApplicationStateTransition(youWin, welcomeScreen);
+
+            _transitionActivationMap = new Dictionary<ApplicationState, List<Tuple<ApplicationState, ApplicationState>>>
+            {
+                {level1Cleared, new List<Tuple<ApplicationState, ApplicationState>>
+                {
+                    new Tuple<ApplicationState, ApplicationState>(welcomeScreen, unlockedLevelsScreen),
+                    new Tuple<ApplicationState, ApplicationState>(unlockedLevelsScreen, level1a),
+                    new Tuple<ApplicationState, ApplicationState>(unlockedLevelsScreen, level2)
+                }}
+            };
 
             // If the user hits the space key while the application is in a state that is not a level then switch application state
             Application.KeyEventOccured += (s, e) =>
@@ -456,6 +470,22 @@ namespace Game.Rocket.ViewModel
             Application.AnimationCompleted += (s, e) =>
             {
                 Application.SwitchState(Application.Engine.Outcome);
+
+                if (_transitionActivationMap.ContainsKey(Application.State.Object))
+                {
+                    _transitionActivationMap[Application.State.Object].ForEach(_ =>
+                    {
+                        Application.AddApplicationStateTransition(_.Item1, _.Item2);
+                    });
+
+                    _transitionActivationMap.Remove(Application.State.Object);
+
+                    // Dette er for at sikre, at den går fra welcome screen til unlocked Levels screen, efter at man har gennemført level1
+                    if (Application.State.Object == level1Cleared)
+                    {
+                        Application.RemoveApplicationStateTransition(welcomeScreen, level1a);
+                    }
+                }
             };
 
             GeometryEditorViewModel = new GeometryEditorViewModel(1)

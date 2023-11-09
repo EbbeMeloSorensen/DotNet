@@ -126,11 +126,12 @@ namespace Simulator.Application
             _stateMachine.AddTransition(from, to);
         }
 
-        //public ApplicationState GetApplicationState(
-        //    string applicationStateName)
-        //{
-        //    return ApplicationStates.Single(@as => @as.Name == applicationStateName);
-        //}
+        public void RemoveApplicationStateTransition(
+            ApplicationState from,
+            ApplicationState to)
+        {
+            _stateMachine.RemoveTransition(from, to);
+        }
 
         public void HandleKeyEvent(
             KeyboardKey keyboardKey,
