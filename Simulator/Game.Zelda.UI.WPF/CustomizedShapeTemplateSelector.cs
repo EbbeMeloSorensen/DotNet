@@ -20,18 +20,6 @@ namespace Game.Zelda.UI.WPF
                     {
                         return element.FindResource("Rocket") as DataTemplate;
                     }
-                case MeteorViewModel _:
-                    {
-                        return element.FindResource("Meteor") as DataTemplate;
-                    }
-                case FragmentViewModel _:
-                    {
-                        return element.FindResource("Fragment") as DataTemplate;
-                    }
-                case ProjectileViewModel _:
-                    {
-                        return element.FindResource("Projectile") as DataTemplate;
-                    }
                 case RectangleViewModel _:
                     {
                         return element.FindResource("Wall") as DataTemplate;

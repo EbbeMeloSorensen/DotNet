@@ -1,21 +1,20 @@
-﻿using Craft.Logging;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Windows;
+using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Game.Zelda.ViewModel.Bodies;
-using Game.Zelda.ViewModel.ShapeViewModels;
-using Simulator.Application;
 using Simulator.Domain;
 using Simulator.Domain.BodyStates;
 using Simulator.Domain.Boundaries;
 using Simulator.Domain.Props;
+using Simulator.Application;
 using Simulator.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+using Game.Zelda.ViewModel.ShapeViewModels;
 using Application = Simulator.Application.Application;
 using ApplicationState = Craft.DataStructures.Graph.State;
 
@@ -68,49 +67,17 @@ namespace Game.Zelda.ViewModel
                 Application.SwitchState(e.Level.Name);
             };
 
-            // General purpose interaction callbacks that works for all scenes
-            var spaceKeyIsDown = false;
-            var stateIndexOfFirstShotInBurst = -1000;
-            var stateIndexOfLastShotInBurst = -1000;
-            var nextProjectileId = 1000;
-            var disposeProjectilesMap = new Dictionary<int, int>();
-            var rateOfFire = 30;
-            var nextFragmentId = 1000;
-            var nextMeteorId = 10000;
-
             InitializationCallback initializationCallback = (state, message) =>
             {
-                spaceKeyIsDown = false;
-                stateIndexOfFirstShotInBurst = -1000;
-                stateIndexOfLastShotInBurst = -1000;
-                nextProjectileId = 1000;
-                disposeProjectilesMap.Clear();
-                nextFragmentId = 100;
-                nextMeteorId = 10000;
             };
 
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
-                return body is Meteor
-                    ? OutcomeOfCollisionBetweenBodyAndBoundary.Reflect
-                    : OutcomeOfCollisionBetweenBodyAndBoundary.Block;
+                return OutcomeOfCollisionBetweenBodyAndBoundary.Block;
             };
 
             CheckForCollisionBetweenBodiesCallback checkForCollisionBetweenBodiesCallback = (body1, body2) =>
             {
-                if (body1 is Meteor || body2 is Meteor)
-                {
-                    if (body1 is Projectile || body2 is Projectile)
-                    {
-                        return true;
-                    }
-
-                    if (body1 is Bodies.Rocket || body2 is Bodies.Rocket)
-                    {
-                        return true;
-                    }
-                }
-
                 return false;
             };
 
@@ -119,8 +86,6 @@ namespace Game.Zelda.ViewModel
 
             InteractionCallBack interactionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                spaceKeyIsDown = keyboardState.SpaceDown;
-
                 var currentStateOfMainBody = currentState.BodyStates.FirstOrDefault() as BodyStateClassic;
 
                 if (currentStateOfMainBody == null || currentStateOfMainBody.Body.Id != 1)
@@ -164,159 +129,16 @@ namespace Game.Zelda.ViewModel
                     return false;
                 }
 
-                if (keyboardEvents.SpaceDown)
-                {
-                    if (keyboardState.SpaceDown)
-                    {
-                        if (currentState.Index > stateIndexOfLastShotInBurst + rateOfFire)
-                        {
-                            stateIndexOfFirstShotInBurst = currentState.Index + 1;
-                        }
-                    }
-                    else
-                    {
-                        stateIndexOfLastShotInBurst = stateIndexOfFirstShotInBurst;
-                        while (stateIndexOfLastShotInBurst < currentState.Index)
-                        {
-                            stateIndexOfLastShotInBurst += rateOfFire;
-                        }
-
-                        stateIndexOfLastShotInBurst -= rateOfFire;
-                    }
-                }
-
                 return true;
             };
 
-            var extraBodies = Enumerable.Range(2, 1)
-                .Select(i => new
-                {
-                    StateIndex = i * 50,
-                    BodyState = new BodyStateClassic(new Meteor(i, 0.15, 1, true), new Vector2D(-0.8, -0.8)) { Life = 5, NaturalVelocity = new Vector2D(0.8, 0.2) }
-                })
-                .ToDictionary(x => x.StateIndex, x => x.BodyState);
-
-            var nRocketFragments = 16;
-            var nMeteorFragments = 4;
-
             PostPropagationCallBack postPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
-                // Remove projectile due to expiration?
-                if (disposeProjectilesMap.ContainsKey(propagatedState.Index))
-                {
-                    var projectile = propagatedState.TryGetBodyState(disposeProjectilesMap[propagatedState.Index]);
-                    propagatedState?.RemoveBodyState(projectile);
-                }
-
-                var random = new Random();
                 var response = new PostPropagationResponse();
 
                 var rocket = propagatedState.TryGetBodyState(1) as BodyStateClassic;
 
                 if (rocket == null) return response;
-
-                // Remove projectile due to collision with boundary?
-                if (boundaryCollisionReports.Any())
-                {
-                    propagatedState.RemoveBodyStates(boundaryCollisionReports
-                        .Where(bcr => bcr.BodyState.Body is Projectile)
-                        .Select(bcr => bcr.BodyState.Body.Id));
-                }
-
-                // Local function
-                void DetonateRocket()
-                {
-                    propagatedState.RemoveBodyState(rocket);
-
-                    Enumerable.Range(1, nRocketFragments).ToList().ForEach(i =>
-                    {
-                        var angle = 0.125 * Math.PI + 2.0 * Math.PI * i / nRocketFragments +
-                                    (2 * random.NextDouble() - 1) * 0.1;
-                        var velocity1 = (0.6 + (2 * random.NextDouble() - 1) * 0.2) *
-                                        new Vector2D(Math.Cos(angle), Math.Sin(angle));
-                        var velocity2 = (0.8 + (2 * random.NextDouble() - 1) * 0.2) *
-                                        new Vector2D(Math.Cos(angle), Math.Sin(angle));
-
-                        propagatedState.AddBodyState(new BodyStateClassic(new Fragment(nextFragmentId++, 0.1, 0.1, true),
-                            rocket.Position)
-                        { NaturalVelocity = velocity1 });
-
-                        propagatedState.AddBodyState(new BodyStateClassic(new Fragment(nextFragmentId++, 0.1, 0.1, true),
-                            rocket.Position)
-                        { NaturalVelocity = 2 * velocity2 });
-                    });
-
-                    response.Outcome = "Game Over";
-                    response.IndexOfLastState = propagatedState.Index + 200;
-                }
-
-                var hitEnemies = new HashSet<BodyStateClassic>();
-
-                bodyCollisionReports.ForEach(bcr =>
-                {
-                    if (bcr.Body1 is Bodies.Rocket || bcr.Body2 is Bodies.Rocket)
-                    {
-                        // Rocket collided with meteor
-                        DetonateRocket();
-                    }
-                    else if (bcr.Body1 is Projectile || bcr.Body2 is Projectile)
-                    {
-                        // Projectile collided with meteor
-                        if (bcr.Body1 is Projectile)
-                        {
-                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body1.Id });
-                            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id) as BodyStateClassic;
-                            hitEnemies.Add(bodyState);
-                        }
-                        else
-                        {
-                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body2.Id });
-                            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id) as BodyStateClassic;
-                            hitEnemies.Add(bodyState);
-                        }
-                    }
-                });
-
-                hitEnemies.ToList().ForEach(e =>
-                {
-                    e.Life -= 1;
-
-                    if (e.Life <= 0.1)
-                    {
-                        propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
-
-                        if (e.Body.Mass > 0.9)
-                        {
-                            Enumerable.Range(1, nMeteorFragments).ToList().ForEach(i =>
-                            {
-                                var angle = 0.125 * Math.PI + 2.0 * Math.PI * i / nMeteorFragments;
-                                var velocity = 0.5 * new Vector2D(Math.Cos(angle), Math.Sin(angle));
-
-                                propagatedState.AddBodyState(new BodyStateClassic(new Meteor(nextMeteorId++, 0.1, 0.1, true), e.Position) { NaturalVelocity = velocity });
-                            });
-                        }
-                    }
-                });
-
-                // Add a projectile from rocket?
-                if (spaceKeyIsDown && (propagatedState.Index - stateIndexOfFirstShotInBurst) % rateOfFire == 0)
-                {
-                    nextProjectileId++;
-                    disposeProjectilesMap[propagatedState.Index + 100] = nextProjectileId;
-                    var projectileSpeed = 4;
-
-                    var projectileVelocity = new Vector2D(
-                        projectileSpeed * Math.Cos(rocket.Orientation),
-                        projectileSpeed * -Math.Sin(rocket.Orientation));
-
-                    propagatedState.AddBodyState(new BodyStateClassic(new Projectile(nextProjectileId, 0.025, 1, true), rocket.Position) { NaturalVelocity = projectileVelocity });
-                }
-
-                // Add an enemy?
-                if (extraBodies.ContainsKey(propagatedState.Index))
-                {
-                    propagatedState.AddBodyState(extraBodies[propagatedState.Index]);
-                }
 
                 if (!boundaryCollisionReports.Any()) return response;
 
@@ -326,60 +148,10 @@ namespace Game.Zelda.ViewModel
 
                 if (boundaryCollisionReport != null)
                 {
-                    if (string.IsNullOrEmpty(boundaryCollisionReport.Boundary.Tag))
+                    if (!string.IsNullOrEmpty(boundaryCollisionReport.Boundary.Tag))
                     {
-                        DetonateRocket();
-                    }
-                    else
-                    {
-                        // Determine if the collided with an exit or landed safely on a landing platform
-
-                        var tag = boundaryCollisionReport.Boundary.Tag;
-
-                        if (tag.Length >= 8 && tag.Substring(0, 8) == "Platform")
-                        {
-                            // A platform
-
-                            var lineSegment = boundaryCollisionReport.Boundary as LineSegment;
-                            var bodyState = (boundaryCollisionReport.BodyState as BodyStateClassic);
-
-                            var platformCenterX = (lineSegment.Point1.X + lineSegment.Point2.X) / 2;
-                            var rocketOrientation = bodyState.Orientation;
-                            var rocketVelocity = bodyState.NaturalVelocity;
-
-                            if (Math.Abs(platformCenterX - bodyState.Position.X) > 0.4)
-                            {
-                                // Not on center of platform
-                                DetonateRocket();
-                            }
-                            else if (Math.Abs(rocketOrientation - Math.PI / 2) > 0.2)
-                            {
-                                // Bad orientation
-                                DetonateRocket();
-                            }
-                            else if (boundaryCollisionReport.EffectiveSurfaceNormal.Y != -1.0)
-                            {
-                                // Didnt land on top of the platform
-                                DetonateRocket();
-                            }
-                            else if (rocketVelocity.Length > 0.75)
-                            {
-                                // Speed too high
-                                DetonateRocket();
-                            }
-                            else
-                            {
-                                // Safe landing
-                                response.Outcome = tag.Substring(9);
-                                response.IndexOfLastState = propagatedState.Index + 1;
-                            }
-                        }
-                        else
-                        {
-                            // Just a regular exit
-                            response.Outcome = tag;
-                            response.IndexOfLastState = propagatedState.Index + 1;
-                        }
+                        response.Outcome = boundaryCollisionReport.Boundary.Tag;
+                        response.IndexOfLastState = propagatedState.Index + 1;
                     }
                 }
 
@@ -395,8 +167,6 @@ namespace Game.Zelda.ViewModel
                     initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
-                    checkForCollisionBetweenBodiesCallback,
-                    collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
             };
 
@@ -406,8 +176,6 @@ namespace Game.Zelda.ViewModel
                     initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
-                    checkForCollisionBetweenBodiesCallback,
-                    collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
             };
 
@@ -419,8 +187,6 @@ namespace Game.Zelda.ViewModel
                     initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
-                    checkForCollisionBetweenBodiesCallback,
-                    collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
             };
 
@@ -432,8 +198,6 @@ namespace Game.Zelda.ViewModel
                     initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
-                    checkForCollisionBetweenBodiesCallback,
-                    collisionBetweenTwoBodiesOccuredCallBack,
                     postPropagationCallBack)
             };
 
@@ -567,30 +331,6 @@ namespace Game.Zelda.ViewModel
                                     Height = 2 * rocket.Radius,
                                 };
                             }
-                        case Projectile projectile:
-                            {
-                                return new ProjectileViewModel()
-                                {
-                                    Width = 2 * projectile.Radius,
-                                    Height = 2 * projectile.Radius,
-                                };
-                            }
-                        case Fragment fragment:
-                            {
-                                return new FragmentViewModel
-                                {
-                                    Width = 2 * fragment.Radius,
-                                    Height = 2 * fragment.Radius
-                                };
-                            }
-                        case Meteor meteor:
-                            {
-                                return new MeteorViewModel
-                                {
-                                    Width = 2 * meteor.Radius,
-                                    Height = 2 * meteor.Radius
-                                };
-                            }
                     }
 
                     throw new InvalidOperationException("Unknown Body Type - cannot select ShapeViewModel");
@@ -637,8 +377,6 @@ namespace Game.Zelda.ViewModel
             InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
-            CheckForCollisionBetweenBodiesCallback checkForCollisionBetweenBodiesCallback,
-            CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
@@ -649,13 +387,11 @@ namespace Game.Zelda.ViewModel
             });
 
             var scene = new Scene("Scene 1a", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, true, 0.005)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
-                CheckForCollisionBetweenBodiesCallback = checkForCollisionBetweenBodiesCallback,
-                CollisionBetweenTwoBodiesOccuredCallBack = collisionBetweenTwoBodiesOccuredCallBack,
                 PostPropagationCallBack = postPropagationCallBack,
                 InteractionCallBack = interactionCallBack
             };
@@ -677,8 +413,6 @@ namespace Game.Zelda.ViewModel
             InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
-            CheckForCollisionBetweenBodiesCallback checkForCollisionBetweenBodiesCallback,
-            CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
             var standardGravity = 0.5;
@@ -691,13 +425,11 @@ namespace Game.Zelda.ViewModel
             });
 
             var scene = new Scene("Scene 1b", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, true, 0.005)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
-                CheckForCollisionBetweenBodiesCallback = checkForCollisionBetweenBodiesCallback,
-                CollisionBetweenTwoBodiesOccuredCallBack = collisionBetweenTwoBodiesOccuredCallBack,
                 PostPropagationCallBack = postPropagationCallBack,
                 InteractionCallBack = interactionCallBack
             };
@@ -723,8 +455,6 @@ namespace Game.Zelda.ViewModel
             InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
-            CheckForCollisionBetweenBodiesCallback checkForCollisionBetweenBodiesCallback,
-            CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
             var standardGravity = 0.5;
@@ -737,13 +467,11 @@ namespace Game.Zelda.ViewModel
             });
 
             var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, true, 0.005)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
-                CheckForCollisionBetweenBodiesCallback = checkForCollisionBetweenBodiesCallback,
-                CollisionBetweenTwoBodiesOccuredCallBack = collisionBetweenTwoBodiesOccuredCallBack,
                 PostPropagationCallBack = postPropagationCallBack,
                 InteractionCallBack = interactionCallBack
             };
@@ -759,7 +487,7 @@ namespace Game.Zelda.ViewModel
             AddWall(scene, 2, 5.25, 0, 0.5, true, false, true, true);
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(4.5, 2.5), new Vector2D(5, 2.5), "Platform-Level 2 Cleared") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(4.5, 2.5), new Vector2D(5, 2.5), "Level 2 Cleared") { Visible = true });
 
             return scene;
         }
@@ -768,8 +496,6 @@ namespace Game.Zelda.ViewModel
             InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
-            CheckForCollisionBetweenBodiesCallback checkForCollisionBetweenBodiesCallback,
-            CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
             var standardGravity = 0.5;
@@ -782,13 +508,11 @@ namespace Game.Zelda.ViewModel
             });
 
             var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, true, 0.005)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
-                CheckForCollisionBetweenBodiesCallback = checkForCollisionBetweenBodiesCallback,
-                CollisionBetweenTwoBodiesOccuredCallBack = collisionBetweenTwoBodiesOccuredCallBack,
                 PostPropagationCallBack = postPropagationCallBack,
                 InteractionCallBack = interactionCallBack
             };
