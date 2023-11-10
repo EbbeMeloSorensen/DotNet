@@ -3,7 +3,7 @@ using Simulator.Domain.BodyStates.Interfaces;
 
 namespace Simulator.Domain.BodyStates
 {
-    public class BodyStateClassic : BodyState, IOrientation, ILife
+    public class BodyStateClassic : BodyState, IArtificial, IOrientation, ILife
     {
         // Dette er en velocity, som kan sættes UAFHÆNGIGT AF HVILKE KRÆFTER, der virker på en body.
         // Den bruges både for bodies med orientering og til at styre en body med keyboardet 

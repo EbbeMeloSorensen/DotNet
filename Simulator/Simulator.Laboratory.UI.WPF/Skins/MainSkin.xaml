@@ -42,4 +42,27 @@
         </Canvas>
     </DataTemplate>
 
+    <DataTemplate x:Key="Walker">
+        <Canvas>
+            <!--<Rectangle Fill="DarkSlateGray" Width="{Binding Width}" Height="{Binding Height}">
+                <Rectangle.RenderTransform>
+                    <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>-->
+            <Image Source="{Binding ImagePath}" 
+                   Width="{Binding Width}" 
+                   Height="{Binding Height}">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+        </Canvas>
+    </DataTemplate>
+
 </ResourceDictionary>

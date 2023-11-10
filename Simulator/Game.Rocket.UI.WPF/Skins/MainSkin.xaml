@@ -5,6 +5,7 @@
     <SolidColorBrush Color="DimGray" x:Key="BackgroundBrush"/>
     <local:CustomizedShapeTemplateSelector x:Key="ShapeTemplateSelector"/>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
     <DataTemplate x:Key="Wall">
         <Rectangle Width="{Binding Width}" Height="{Binding Height}">
             <Rectangle.Fill>
@@ -17,6 +18,7 @@
             </Rectangle.RenderTransform>
         </Rectangle>
     </DataTemplate>
+
     <DataTemplate x:Key="Rocket">
         <Canvas>
             <!--<Ellipse Fill="Black" Width="{Binding Width}" Height="{Binding Height}">
@@ -53,6 +55,7 @@
             </Image>
         </Canvas>
     </DataTemplate>
+
     <DataTemplate x:Key="Fragment">
         <Canvas>
             <Image Source="..\Images\Fragment.png" Width="{Binding Width}" Height="{Binding Height}">
@@ -66,6 +69,7 @@
             </Image>
         </Canvas>
     </DataTemplate>
+
     <DataTemplate x:Key="Projectile">
         <Canvas>
             <Image Source="..\Images\Projectile.png" Width="{Binding Width}" Height="{Binding Height}">
@@ -79,6 +83,7 @@
             </Image>
         </Canvas>
     </DataTemplate>
+
     <DataTemplate x:Key="Meteor">
         <Canvas>
             <Image Source="..\Images\Meteor.png" Width="{Binding Width}" Height="{Binding Height}">
@@ -92,5 +97,7 @@
             </Image>
         </Canvas>
     </DataTemplate>
+
     <valueConverters:ApplicationStateToVisibilityConverter x:Key="ApplicationStateToVisibilityConverter"/>
+
 </ResourceDictionary>

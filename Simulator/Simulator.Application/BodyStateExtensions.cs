@@ -1,6 +1,7 @@
 ﻿using Craft.Math;
 using Simulator.Domain;
 using Simulator.Domain.BodyStates;
+using Simulator.Domain.BodyStates.Interfaces;
 using Simulator.Domain.Boundaries;
 
 namespace Simulator.Application
@@ -68,15 +69,13 @@ namespace Simulator.Application
             this BodyState bodyState,
             Vector2D surfaceNormal)
         {
-            var bsc = bodyState as BodyStateClassic;
-
             if (surfaceNormal == null)
             {
                 bodyState.NaturalVelocity = new Vector2D(0, 0);
 
-                if (bsc != null)
+                if (bodyState is IArtificial)
                 {
-                    bsc.ArtificialVelocity = new Vector2D(0, 0);
+                    (bodyState as IArtificial).ArtificialVelocity = new Vector2D(0, 0);
                 }
 
                 return;
@@ -90,21 +89,32 @@ namespace Simulator.Application
                 bodyState.NaturalVelocity += dotProduct1 * surfaceNormal;
             }
 
-            if (bsc == null)
+            if (bodyState is IArtificial bsa)
             {
-                return;
-            }
+                // Correct the artificial velocity
 
-            // Correct the artificial velocity
-            var effectiveArtificialVelocity =
-                bsc.ArtificialVelocity.Rotate(-bsc.Orientation);
+                if (bodyState is IOrientation bso)
+                {
+                    var effectiveArtificialVelocity =
+                        bsa.ArtificialVelocity.Rotate(-bso.Orientation);
 
-            var dotProduct2 = Vector2D.DotProduct(effectiveArtificialVelocity, -surfaceNormal);
+                    var dotProduct2 = Vector2D.DotProduct(effectiveArtificialVelocity, -surfaceNormal);
 
-            if (dotProduct2 > 0)
-            {
-                effectiveArtificialVelocity += dotProduct2 * surfaceNormal;
-                bsc.ArtificialVelocity = effectiveArtificialVelocity.Rotate(bsc.Orientation);
+                    if (dotProduct2 > 0)
+                    {
+                        effectiveArtificialVelocity += dotProduct2 * surfaceNormal;
+                        bsa.ArtificialVelocity = effectiveArtificialVelocity.Rotate(bso.Orientation);
+                    }
+                }
+                else
+                {
+                    var dotProduct2 = Vector2D.DotProduct(bsa.ArtificialVelocity, -surfaceNormal);
+
+                    if (dotProduct2 > 0)
+                    {
+                        bsa.ArtificialVelocity += dotProduct2 * surfaceNormal;
+                    }
+                }
             }
         }
 

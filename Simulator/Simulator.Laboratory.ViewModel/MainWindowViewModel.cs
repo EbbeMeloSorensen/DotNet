@@ -280,11 +280,27 @@ namespace Simulator.Laboratory.ViewModel
 
                 var rectangularBody = bs.Body as RectangularBody;
 
-                return new RectangleViewModel()
+                return new WalkerViewModel()
                 {
+                    ImagePath = @"..\Images\cat1.png",
                     Width = rectangularBody.Width,
                     Height = rectangularBody.Height,
                 };
+            };
+
+            // Denne bruges indtil videre kun for Platformer 4 scenen
+            ShapeUpdateCallback shapeUpdateCallback4 = (shapeViewModel, bs) =>
+            {
+                shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
+
+                if (shapeViewModel is WalkerViewModel walkerViewModel &&
+                    bs is BodyStateWalker bsc)
+                {
+                    var nImages = 8;
+                    var imageNumber = Math.Floor(bsc.Cycle * nImages) + 1;
+
+                    walkerViewModel.ImagePath = @"..\Images\" + $"cat{imageNumber}.png";
+                }
             };
 
             var updateAuxFields = new UpdateAuxFields((aux1, aux2) =>
@@ -380,7 +396,7 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateScenePlatformer1());
             AddScene(GenerateScenePlatformer2());
             AddScene(GenerateScenePlatformer3());
-            AddScene(GenerateScenePlatformer4(), shapeSelectorCallback4);
+            AddScene(GenerateScenePlatformer4(), shapeSelectorCallback4, shapeUpdateCallback4);
             AddScene(GenerateSceneCollisionRegistrationTest());
             AddScene(GenerateSceneShootEmUp1());
             AddScene(GenerateSceneShootEmUp2());
@@ -2765,10 +2781,13 @@ namespace Simulator.Laboratory.ViewModel
 
         private static Scene GenerateScenePlatformer4()
         {
-            var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0)));
+            var imageWidth = 102;
+            var imageHeight = 114;
 
-            var scene = new Scene("Platformer IV (Walking)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
+            var initialState = new State();
+            initialState.AddBodyState(new BodyStateWalker(new RectangularBody(1, 0.2, 0.2 * imageHeight / imageWidth, 1, true), new Vector2D(3, 0)));
+
+            var scene = new Scene("Platformer IV (Walking)", 432.0, new Point2D(2.194, -0.226), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2797,7 +2816,7 @@ namespace Simulator.Laboratory.ViewModel
                 // Player 1 er IKKE grounded men i luften. Derfor ændrer vi IKKE dens hastighed (Ghost'n Goblins style)
                 if (!grounded) return false;
 
-                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateWalker;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
                 var newArtificialVelocity = new Vector2D(0, 0);
                 var horizontalSpeed = 1.5;

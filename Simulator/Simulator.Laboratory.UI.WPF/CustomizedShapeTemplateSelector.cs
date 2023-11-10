@@ -16,6 +16,7 @@ namespace Simulator.Laboratory.UI.WPF
 
             return item switch
             {
+                WalkerViewModel => element.FindResource("Walker") as DataTemplate,
                 TaggedEllipseViewModel => element.FindResource("TaggedEllipse") as DataTemplate,
                 RotatableEllipseViewModel => element.FindResource("RotatableEllipse") as DataTemplate,
                 EllipseViewModel => element.FindResource("Ellipse") as DataTemplate,

@@ -366,13 +366,6 @@ namespace Simulator.Application
                 });
             }
 
-            //return state.BodyStates.ToDictionary(
-            //    _ => _.Propagate(
-            //        timeLeftInCurrentIncrement,
-            //        idsOfHandledBodies.Contains(_.Body.Id) ? new Vector2D(0, 0) : forceMap[_]),
-            //        //forceMap[_]),
-            //    _ => _.Clone());
-
             return state.BodyStates.ToDictionary(
                 _ => idsOfHandledBodies.Contains(_.Body.Id)
                     ? _.Clone()
