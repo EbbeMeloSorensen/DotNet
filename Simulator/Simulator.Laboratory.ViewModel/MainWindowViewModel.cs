@@ -255,11 +255,12 @@ namespace Simulator.Laboratory.ViewModel
             // Denne bruges indtil videre kun for Tower Defense scenen
             ShapeUpdateCallback shapeUpdateCallback3 = (shapeViewModel, bs) =>
             {
+                shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
+
                 if (shapeViewModel is TaggedEllipseViewModel taggedEllipseViewModel &&
                     bs is BodyStateEnemy enemy)
                 {
                     // Opdater position og life indikator for enemy
-                    taggedEllipseViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
                     taggedEllipseViewModel.Tag = enemy.Life.ToString();
                 }
 
