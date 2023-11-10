@@ -346,6 +346,7 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateSceneShootEmUp7_Game(), shapeSelectorCallback1, shapeUpdateCallback1);
             AddScene(GenerateSceneFlappyBird_Game(updateAuxFields));
             AddScene(GenerateSceneDodgeball_Game(updateAuxFields));
+            AddScene(GenerateScenePlatformer4_Game(), shapeSelectorCallback4, shapeUpdateCallback4);
 
             // One circular body colliding with boundaries, no gravity
             AddScene(GenerateSceneMovingBall1_Auto(updateAuxFields));
@@ -428,7 +429,6 @@ namespace Simulator.Laboratory.ViewModel
             AddScene(GenerateScenePlatformer1());
             AddScene(GenerateScenePlatformer2());
             AddScene(GenerateScenePlatformer3());
-            AddScene(GenerateScenePlatformer4(), shapeSelectorCallback4, shapeUpdateCallback4);
             AddScene(GenerateSceneCollisionRegistrationTest());
             AddScene(GenerateSceneShootEmUp1());
             AddScene(GenerateSceneShootEmUp2());
@@ -2842,7 +2842,7 @@ namespace Simulator.Laboratory.ViewModel
             return scene;
         }
 
-        private static Scene GenerateScenePlatformer4()
+        private static Scene GenerateScenePlatformer4_Game()
         {
             var imageWidth = 102;
             var imageHeight = 114;
@@ -2850,7 +2850,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateWalker(new RectangularBody(1, 0.2, 0.2 * imageHeight / imageWidth, 1, true), new Vector2D(3, 0)));
 
-            var scene = new Scene("Platformer IV (Walking)", 432.0, new Point2D(2.194, -0.226), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
+            var scene = new Scene("Game: Platformer IV (Walking)", 432.0, new Point2D(2.194, -0.226), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
