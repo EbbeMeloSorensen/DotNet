@@ -56,6 +56,9 @@
                    Height="{Binding Height}">
                 <Image.RenderTransform>
                     <TransformGroup>
+                        <TranslateTransform X="-0.1"/>
+                        <ScaleTransform ScaleX="{Binding ScaleX}"/>
+                        <TranslateTransform X="0.1"/>
                         <MatrixTransform Matrix="{Binding 
                             Path=DataContext.TransformationMatrix, 
                             RelativeSource={RelativeSource AncestorType=UserControl}}"/>

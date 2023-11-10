@@ -2,10 +2,10 @@
 
 namespace Simulator.Laboratory.ViewModel.ShapeViewModels
 {
-    // Denne skal knytte sig til en Cyclic Bodystate
     public class WalkerViewModel : RectangleViewModel
     {
         private string _imagePath;
+        private double _scaleX;
 
         public string ImagePath
         {
@@ -13,6 +13,16 @@ namespace Simulator.Laboratory.ViewModel.ShapeViewModels
             set
             {
                 _imagePath = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double ScaleX
+        {
+            get => _scaleX;
+            set
+            {
+                _scaleX = value;
                 RaisePropertyChanged();
             }
         }

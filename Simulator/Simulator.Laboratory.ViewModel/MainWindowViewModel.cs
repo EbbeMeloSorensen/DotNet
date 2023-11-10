@@ -285,6 +285,7 @@ namespace Simulator.Laboratory.ViewModel
                     ImagePath = @"..\Images\cat1.png",
                     Width = rectangularBody.Width,
                     Height = rectangularBody.Height,
+                    ScaleX = 1.0
                 };
             };
 
@@ -294,12 +295,26 @@ namespace Simulator.Laboratory.ViewModel
                 shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
 
                 if (shapeViewModel is WalkerViewModel walkerViewModel &&
-                    bs is BodyStateWalker bsc)
+                    bs is BodyStateWalker bsw)
                 {
-                    var nImages = 8;
-                    var imageNumber = Math.Floor(bsc.Cycle * nImages) + 1;
+                    var imageNumber = 1;
+
+                    if (Math.Abs(bsw.ArtificialVelocity.X) > 0.01)
+                    {
+                        var nImages = 8;
+                        imageNumber = (int) Math.Floor(bsw.Cycle * nImages) + 1;
+                    }
 
                     walkerViewModel.ImagePath = @"..\Images\" + $"cat{imageNumber}.png";
+
+                    if (bsw.Velocity.X > 0.01)
+                    {
+                        walkerViewModel.ScaleX = 1.0;
+                    }
+                    else if (bsw.Velocity.X < -0.01)
+                    {
+                        walkerViewModel.ScaleX = -1.0;
+                    }
                 }
             };
 
@@ -2558,7 +2573,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0)));
 
-            var scene = new Scene("Platformer I (Ghost'n Goblins style)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
+            var scene = new Scene("Platformer I (Ghost'n Goblins style)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2577,8 +2592,6 @@ namespace Simulator.Laboratory.ViewModel
                 }
                 else if (
                     !grounded && collisions
-                    //collisions.ContainsKey(1) &&
-                    //collisions[1].Any(bcr => Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                     .SelectMany(x => x.Value)
                     .Any(bcr => bcr.BodyState.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                 {
@@ -2586,28 +2599,51 @@ namespace Simulator.Laboratory.ViewModel
                     grounded = true;
                 }
 
-                // Player 1 er IKKE grounded men i luften. Derfor ændrer vi IKKE dens hastighed (Ghost'n Goblins style)
-                if (!grounded) return false;
-
                 var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
                 var newArtificialVelocity = new Vector2D(0, 0);
-                var horizontalSpeed = 1.5;
 
-                if (keyboardState.RightArrowDown)
-                {
-                    newArtificialVelocity += new Vector2D(horizontalSpeed, 0);
-                }
-                else if (keyboardState.LeftArrowDown)
-                {
-                    newArtificialVelocity += new Vector2D(-horizontalSpeed, 0);
-                }
-
-                if (keyboardState.UpArrowDown)
+                if (keyboardState.UpArrowDown && grounded)
                 {
                     currentStateOfMainBody.NaturalVelocity = new Vector2D(0, -4);
                     grounded = false;
                     return true;
+                }
+
+                var horizontalSpeed = 1.5;
+
+                if (grounded)
+                {
+                    // Når den er grounded, bumper den hele tiden ind i jorden, hvilket nulstiller dens fart og effektivt halverer den
+                    // det kompenserer vi for ved at gange med 2
+                    horizontalSpeed *= 2;
+
+                    // Når den er grounded, har man mulighed for at ændre retning
+                    if (keyboardState.RightArrowDown)
+                    {
+                        newArtificialVelocity += new Vector2D(horizontalSpeed, 0);
+                    }
+                    else if (keyboardState.LeftArrowDown)
+                    {
+                        newArtificialVelocity += new Vector2D(-horizontalSpeed, 0);
+                    }
+                }
+                else
+                {
+                    // Hvis man er i luften, skal man operere med den ukorrigerede artificial velocity,
+                    // og den skal pege i samme retninge som før
+                    if (currentArtificialVelocity.X > 0.001)
+                    {
+                        newArtificialVelocity = new Vector2D(horizontalSpeed, 0);
+                    }
+                    else if (currentArtificialVelocity.X < -0.001)
+                    {
+                        newArtificialVelocity = new Vector2D(-horizontalSpeed, 0);
+                    }
+                    else
+                    {
+                        newArtificialVelocity = new Vector2D(0, 0);
+                    }
                 }
 
                 if ((newArtificialVelocity - currentArtificialVelocity).Length < 0.01)
@@ -2633,7 +2669,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0)));
 
-            var scene = new Scene("Platformer II (Moving while jumping)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
+            var scene = new Scene("Platformer II (Moving while jumping)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2652,8 +2688,6 @@ namespace Simulator.Laboratory.ViewModel
                 }
                 else if (
                     !grounded && collisions
-                    //collisions.ContainsKey(1) &&
-                    //collisions[1].Any(bcr => Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                     .SelectMany(x => x.Value)
                     .Any(bcr => bcr.BodyState.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                 {
@@ -2661,13 +2695,25 @@ namespace Simulator.Laboratory.ViewModel
                     grounded = true;
                 }
 
-                // Player 1 er IKKE grounded men i luften. Derfor ændrer vi IKKE dens hastighed (Ghost'n Goblins style)
-                //if (!grounded) return false;
-
                 var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
                 var newArtificialVelocity = new Vector2D(0, 0);
+
+                if (keyboardState.UpArrowDown && grounded)
+                {
+                    currentStateOfMainBody.NaturalVelocity = new Vector2D(0, -4);
+                    grounded = false;
+                    return true;
+                }
+
                 var horizontalSpeed = 1.5;
+
+                if (grounded)
+                {
+                    // Når den er grounded, bumper den hele tiden ind i jorden, hvilket nulstiller dens fart og effektivt halverer den
+                    // det kompenserer vi for ved at gange med 2
+                    horizontalSpeed *= 2;
+                }
 
                 if (keyboardState.RightArrowDown)
                 {
@@ -2676,13 +2722,6 @@ namespace Simulator.Laboratory.ViewModel
                 else if (keyboardState.LeftArrowDown)
                 {
                     newArtificialVelocity += new Vector2D(-horizontalSpeed, 0);
-                }
-
-                if (keyboardState.UpArrowDown && grounded)
-                {
-                    currentStateOfMainBody.NaturalVelocity = new Vector2D(0, -4);
-                    grounded = false;
-                    return true;
                 }
 
                 if ((newArtificialVelocity - currentArtificialVelocity).Length < 0.01)
@@ -2731,8 +2770,6 @@ namespace Simulator.Laboratory.ViewModel
                 }
                 else if (
                     !grounded && collisions
-                    //.ContainsKey(1) &&
-                    //collisions[1].Any(bcr => Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                     .SelectMany(x => x.Value)
                     .Any(bcr => bcr.BodyState.Body.Id == 1 && Math.Abs(bcr.EffectiveSurfaceNormal.Y + 1) < 0.000001))
                 {
@@ -2743,7 +2780,23 @@ namespace Simulator.Laboratory.ViewModel
                 var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
                 var newArtificialVelocity = basicArtificialVelocity;
+
+                if (keyboardState.UpArrowDown && grounded)
+                {
+                    currentStateOfMainBody.NaturalVelocity = new Vector2D(0, -4);
+                    grounded = false;
+                    return true;
+                }
+
                 var horizontalSpeed = 1.5;
+
+                if (grounded)
+                {
+                    // Når den er grounded, bumper den hele tiden ind i jorden, hvilket nulstiller dens fart og effektivt halverer den
+                    // det kompenserer vi for ved at gange med 2
+                    newArtificialVelocity *= 2;
+                    horizontalSpeed *= 2;
+                }
 
                 if (keyboardState.RightArrowDown)
                 {
@@ -2752,13 +2805,6 @@ namespace Simulator.Laboratory.ViewModel
                 else if (keyboardState.LeftArrowDown)
                 {
                     newArtificialVelocity += new Vector2D(-horizontalSpeed, 0);
-                }
-
-                if (keyboardState.UpArrowDown && grounded)
-                {
-                    currentStateOfMainBody.NaturalVelocity = new Vector2D(0, -4);
-                    grounded = false;
-                    return true;
                 }
 
                 if ((newArtificialVelocity - currentArtificialVelocity).Length < 0.01)
@@ -2787,7 +2833,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateWalker(new RectangularBody(1, 0.2, 0.2 * imageHeight / imageWidth, 1, true), new Vector2D(3, 0)));
 
-            var scene = new Scene("Platformer IV (Walking)", 432.0, new Point2D(2.194, -0.226), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
+            var scene = new Scene("Platformer IV (Walking)", 432.0, new Point2D(2.194, -0.226), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2813,28 +2859,51 @@ namespace Simulator.Laboratory.ViewModel
                     grounded = true;
                 }
 
-                // Player 1 er IKKE grounded men i luften. Derfor ændrer vi IKKE dens hastighed (Ghost'n Goblins style)
-                if (!grounded) return false;
-
                 var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateWalker;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
                 var newArtificialVelocity = new Vector2D(0, 0);
-                var horizontalSpeed = 1.5;
 
-                if (keyboardState.RightArrowDown)
-                {
-                    newArtificialVelocity += new Vector2D(horizontalSpeed, 0);
-                }
-                else if (keyboardState.LeftArrowDown)
-                {
-                    newArtificialVelocity += new Vector2D(-horizontalSpeed, 0);
-                }
-
-                if (keyboardState.UpArrowDown)
+                if (keyboardState.UpArrowDown && grounded)
                 {
                     currentStateOfMainBody.NaturalVelocity = new Vector2D(0, -4);
                     grounded = false;
                     return true;
+                }
+
+                var horizontalSpeed = 1.5;
+
+                if (grounded)
+                {
+                    // Når den er grounded, bumper den hele tiden ind i jorden, hvilket nulstiller dens fart og effektivt halverer den
+                    // det kompenserer vi for ved at gange med 2
+                    horizontalSpeed *= 2;
+
+                    // Når den er grounded, har man mulighed for at ændre retning
+                    if (keyboardState.RightArrowDown)
+                    {
+                        newArtificialVelocity += new Vector2D(horizontalSpeed, 0);
+                    }
+                    else if (keyboardState.LeftArrowDown)
+                    {
+                        newArtificialVelocity += new Vector2D(-horizontalSpeed, 0);
+                    }
+                }
+                else
+                {
+                    // Hvis man er i luften, skal man operere med den ukorrigerede artificial velocity,
+                    // og den skal pege i samme retninge som før
+                    if (currentArtificialVelocity.X > 0.001)
+                    {
+                        newArtificialVelocity = new Vector2D(horizontalSpeed, 0);
+                    }
+                    else if (currentArtificialVelocity.X < -0.001)
+                    {
+                        newArtificialVelocity = new Vector2D(-horizontalSpeed, 0);
+                    }
+                    else
+                    {
+                        newArtificialVelocity = new Vector2D(0, 0);
+                    }
                 }
 
                 if ((newArtificialVelocity - currentArtificialVelocity).Length < 0.01)
