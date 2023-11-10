@@ -297,23 +297,39 @@ namespace Simulator.Laboratory.ViewModel
                 if (shapeViewModel is WalkerViewModel walkerViewModel &&
                     bs is BodyStateWalker bsw)
                 {
-                    var imageNumber = 1;
-
-                    if (Math.Abs(bsw.ArtificialVelocity.X) > 0.01)
+                    if (bs.Velocity.Y > 0.01)
                     {
-                        var nImages = 8;
-                        imageNumber = (int) Math.Floor(bsw.Cycle * nImages) + 1;
+                        walkerViewModel.ImagePath = @"..\Images\cat_jump1.png";
                     }
-
-                    walkerViewModel.ImagePath = @"..\Images\" + $"cat{imageNumber}.png";
-
-                    if (bsw.Velocity.X > 0.01)
+                    else if (bs.Velocity.Y < -0.01)
                     {
-                        walkerViewModel.ScaleX = 1.0;
+                        walkerViewModel.ImagePath = @"..\Images\cat_jump2.png";
                     }
-                    else if (bsw.Velocity.X < -0.01)
+                    else if (Math.Abs(bs.Velocity.X) < 0.1)
                     {
-                        walkerViewModel.ScaleX = -1.0;
+                        walkerViewModel.ImagePath = @"..\Images\cat_stand.png";
+                    }
+                    else
+                    {
+                        var imageNumber = 1;
+
+                        if (Math.Abs(bsw.ArtificialVelocity.X) > 0.01)
+                        {
+                            var nImages = 8;
+                            imageNumber = (int)Math.Floor(bsw.Cycle * nImages) + 1;
+                        }
+
+                        walkerViewModel.ImagePath = @"..\Images\" + $"cat_walk{imageNumber}.png";
+
+                        if (bsw.Velocity.X > 0.01)
+                        {
+                            walkerViewModel.ScaleX = 1.0;
+                        }
+                        else if (bsw.Velocity.X < -0.01)
+                        {
+                            walkerViewModel.ScaleX = -1.0;
+                        }
+
                     }
                 }
             };
@@ -2870,7 +2886,7 @@ namespace Simulator.Laboratory.ViewModel
                     return true;
                 }
 
-                var horizontalSpeed = 1.5;
+                var horizontalSpeed = 1.0;
 
                 if (grounded)
                 {
@@ -2917,8 +2933,8 @@ namespace Simulator.Laboratory.ViewModel
             };
 
             scene.AddBoundary(new UpFacingHalfPlane(1));
-            scene.AddBoundary(new HorizontalLineSegment(0.5, 2, 4));
-            scene.AddBoundary(new HorizontalLineSegment(0, 5, 6));
+            scene.AddBoundary(new HorizontalLineSegment(0.5, 2, 4.5));
+            scene.AddBoundary(new HorizontalLineSegment(0, 5, 6.5));
             scene.AddBoundary(new HorizontalLineSegment(-0.5, 7, 10));
 
             return scene;

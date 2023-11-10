@@ -44,7 +44,7 @@ namespace Simulator.Domain.BodyStates
             var acceleration = force / Body.Mass;
             var nextNaturalVelocity = NaturalVelocity + time * acceleration;
             var nextPosition = Position + time * (NaturalVelocity + ArtificialVelocity);
-            var nextCycle = Cycle + 0.005;
+            var nextCycle = Cycle + 0.003;
 
             if (nextCycle >= 1.0)
             {
