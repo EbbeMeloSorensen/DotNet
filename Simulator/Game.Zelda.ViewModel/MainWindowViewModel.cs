@@ -368,6 +368,14 @@ namespace Game.Zelda.ViewModel
                 InteractionCallBack = interactionCallBack
             };
 
+            scene.InitializationCallback = (state, message) =>
+            {
+                if (message == "Scene 1b")
+                {
+                    state.BodyStates.First().Position = new Vector2D(1, 1);
+                }
+            };
+
             scene.AddRectangularBoundary(x0, x1, y0, y1);
             AddWall(scene, x0 - margin, x1 + margin, y0 - margin, y0, false, false, false, false);
             AddWall(scene, x0 - margin, x1 + margin, y1, y1 + margin, false, false, false, false);
@@ -390,8 +398,8 @@ namespace Game.Zelda.ViewModel
 
             var x0 = 0.0;
             var x1 = 16.0;
-            var y0 = 8.0;
-            var y1 = 16.0;
+            var y0 = -8.0;
+            var y1 = 0;
             var margin = 0.3;
 
             var scene = new Scene("Scene 1b",
@@ -405,6 +413,14 @@ namespace Game.Zelda.ViewModel
                 InteractionCallBack = interactionCallBack
             };
 
+            scene.InitializationCallback = (state, message) =>
+            {
+                if (message == "Scene 1a")
+                {
+                    state.BodyStates.First().Position = new Vector2D(1, -1);
+                }
+            };
+
             scene.AddRectangularBoundary(x0, x1, y0, y1);
             AddWall(scene, x0 - margin, x1 + margin, y0 - margin, y0, false, false, false, false);
             AddWall(scene, x0 - margin, x1 + margin, y1, y1 + margin, false, false, false, false);
@@ -412,8 +428,8 @@ namespace Game.Zelda.ViewModel
             AddWall(scene, x1, x1 + margin, y0, y1, false, false, false, false);
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(3, 15.95), new Vector2D(4, 15.95), "Level 1 Cleared") { Visible = true });
-            scene.AddBoundary(new LineSegment(new Vector2D(0.5, 15.95), new Vector2D(1.5, 15.95), "Level 1") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(3, -0.05), new Vector2D(4, -0.05), "Level 1 Cleared") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(0.5, -0.05), new Vector2D(1.5, -0.05), "Level 1") { Visible = true });
 
             return scene;
         }

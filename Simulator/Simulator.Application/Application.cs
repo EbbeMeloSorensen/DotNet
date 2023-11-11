@@ -300,6 +300,11 @@ namespace Simulator.Application
         public void SwitchState(
             string name = null)
         {
+            if (Engine.Scene != null)
+            {
+                Engine.PreviousScene = Engine.Scene.Name;
+            }
+
             _stateMachine.SwitchState(name);
 
             State.Object = _stateMachine.CurrentState;
