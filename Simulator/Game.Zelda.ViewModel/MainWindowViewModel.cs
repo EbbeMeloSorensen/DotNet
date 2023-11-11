@@ -107,7 +107,7 @@ namespace Game.Zelda.ViewModel
 
                 if (newMovementDirection.Length > 0.01)
                 {
-                    var speed = 2;
+                    var speed = 2.5;
                     newArtificialVelocity = speed * newMovementDirection.Normalize();
                 }
 
@@ -372,7 +372,7 @@ namespace Game.Zelda.ViewModel
             {
                 if (message == "Scene 1b")
                 {
-                    state.BodyStates.First().Position = new Vector2D(1, 1);
+                    state.BodyStates.First().Position = new Vector2D(1, 0.6);
                 }
             };
 
@@ -417,7 +417,7 @@ namespace Game.Zelda.ViewModel
             {
                 if (message == "Scene 1a")
                 {
-                    state.BodyStates.First().Position = new Vector2D(1, -1);
+                    state.BodyStates.First().Position = new Vector2D(1, -0.6);
                 }
             };
 

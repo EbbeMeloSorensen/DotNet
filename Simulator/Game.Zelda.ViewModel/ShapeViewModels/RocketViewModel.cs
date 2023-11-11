@@ -23,7 +23,7 @@ namespace Game.Zelda.ViewModel.ShapeViewModels
 
         static RocketViewModel()
         {
-            _correctionMatrix = new System.Windows.Media.Matrix(2, 0, 0, 2, -0.05, 0.01);
+            _correctionMatrix = new System.Windows.Media.Matrix(1.8, 0, 0, 1.8, 0.0, -0.03);
         }
 
         protected override void UpdateRotationMatrix()
