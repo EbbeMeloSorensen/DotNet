@@ -646,8 +646,8 @@ namespace Game.Rocket.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Scene 1a", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, true, 0.005)
+            var scene = new Scene("Scene 1a", 
+                new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
@@ -688,8 +688,8 @@ namespace Game.Rocket.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Scene 1b", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, true, 0.005)
+            var scene = new Scene("Scene 1b", 
+                new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, standardGravity, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
@@ -734,8 +734,8 @@ namespace Game.Rocket.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, true, 0.005)
+            var scene = new Scene("Scene 2", 
+                new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, standardGravity, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,
@@ -779,8 +779,8 @@ namespace Game.Rocket.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, true, 0.005)
+            var scene = new Scene("Scene 2", 
+                new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, standardGravity, 0, 0, 1, true, 0.005)
             {
                 IncludeCustomForces = true,
                 InitializationCallback = initializationCallback,

@@ -70,13 +70,6 @@ namespace Game.Zelda.UI.WPF
             }
         }
 
-        private void MainWindow_OnLoaded(
-            object sender,
-            RoutedEventArgs e)
-        {
-            ViewModel.HandleLoaded();
-        }
-
         private void MainWindow_OnClosing(
             object sender,
             CancelEventArgs e)

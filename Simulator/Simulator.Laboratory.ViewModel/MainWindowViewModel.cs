@@ -543,7 +543,7 @@ namespace Simulator.Laboratory.ViewModel
                 CustomForce = new Vector2D(1, 0)
             });
 
-            var scene = new Scene("Rocket, loose, in space (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rocket, loose, in space (Interaction)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
             scene.IncludeCustomForces = true;
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
@@ -584,7 +584,7 @@ namespace Simulator.Laboratory.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Rocket, controlled, in space (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rocket, controlled, in space (Interaction)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
             scene.IncludeCustomForces = true;
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
@@ -634,7 +634,7 @@ namespace Simulator.Laboratory.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Rocket, controlled, lunar surface (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.62, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rocket, controlled, lunar surface (Interaction)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 1.62, 0, 0, 1, false, 0.005);
             scene.IncludeCustomForces = true;
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
@@ -684,7 +684,7 @@ namespace Simulator.Laboratory.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Rocket, escape from lunar base", 120.0, new Point2D(-1.4, -1.3), initialState, 1.62, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rocket, escape from lunar base", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 1.62, 0, 0, 1, false, 0.005);
             scene.IncludeCustomForces = true;
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -756,7 +756,7 @@ namespace Simulator.Laboratory.ViewModel
         {
             var initialState = new State();
 
-            var scene = new Scene("Auto: Ball train I (no gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Ball train I (no gravity)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.005);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -810,7 +810,7 @@ namespace Simulator.Laboratory.ViewModel
         {
             var initialState = new State();
 
-            var scene = new Scene("Auto: Ball train II (no gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Ball train II (no gravity)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.005);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -872,7 +872,7 @@ namespace Simulator.Laboratory.ViewModel
 
             var initialState = new State();
 
-            var scene = new Scene("Auto: Ball train III (with gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, standardGravity, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Ball train III (with gravity)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, standardGravity, 0, 0, 1, true, 0.005);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -920,7 +920,7 @@ namespace Simulator.Laboratory.ViewModel
             var standardGravity = 9.82;
             var initialState = new State();
 
-            var scene = new Scene("Auto: Ball train IV (with gravity)", 120.0, new Point2D(-1.4, -1.3), initialState, standardGravity, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Ball train IV (with gravity)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, standardGravity, 0, 0, 1, true, 0.005);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -970,7 +970,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
 
-            var scene = new Scene("Auto: Moving ball I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false);
+            var scene = new Scene("Auto: Moving ball I", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -996,7 +996,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
-            var scene = new Scene("Auto: Moving ball II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false);
+            var scene = new Scene("Auto: Moving ball II", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -1024,7 +1024,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
-            var scene = new Scene("Auto: Moving ball III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false);
+            var scene = new Scene("Auto: Moving ball III", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -1052,7 +1052,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
 
-            var scene = new Scene("Auto: Moving ball IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false);
+            var scene = new Scene("Auto: Moving ball IV", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -1080,7 +1080,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0) });
 
-            var scene = new Scene("Auto: Moving ball V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving ball V", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -1107,7 +1107,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
-            var scene = new Scene("Auto: Moving brick I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick I", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1127,7 +1127,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.5, 0.3, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 1) });
 
-            var scene = new Scene("Auto: Moving brick II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick II", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1151,7 +1151,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, 0.5) });
 
-            var scene = new Scene("Auto: Moving brick III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick III", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1171,7 +1171,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.2, 1, true), new Vector2D(1, 1)){NaturalVelocity = new Vector2D(1, 0) });
 
-            var scene = new Scene("Auto: Moving brick IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick IV", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1189,7 +1189,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.4, 1, true), new Vector2D(1, 0.25)){NaturalVelocity = new Vector2D(1, 1) });
 
-            var scene = new Scene("Auto: Moving brick V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick V", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1209,7 +1209,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.4, 0.3, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(1.5, -1.4) });
 
-            var scene = new Scene("Auto: Moving brick VI", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Auto: Moving brick VI", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -1237,7 +1237,7 @@ namespace Simulator.Laboratory.ViewModel
                 RotationalSpeed = Math.PI
             });
 
-            var scene = new Scene("Rotation I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rotation I", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             return scene;
         }
@@ -1252,7 +1252,7 @@ namespace Simulator.Laboratory.ViewModel
                 ArtificialVelocity = new Vector2D(1, 0)
             });
 
-            var scene = new Scene("Rotation II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rotation II", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
             return scene;
         }
 
@@ -1264,7 +1264,7 @@ namespace Simulator.Laboratory.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Rotation III (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rotation III (Interaction)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
@@ -1304,7 +1304,7 @@ namespace Simulator.Laboratory.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Rotation IV (Interaction)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rotation IV (Interaction)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
@@ -1356,7 +1356,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
-            var scene = new Scene("Ball resting in gravity field", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Ball resting in gravity field", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 9.82, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1369,7 +1369,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
-            var scene = new Scene("Ball interaction I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Ball interaction I", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1386,7 +1386,7 @@ namespace Simulator.Laboratory.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Rotation V (Interaction, constrained)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rotation V (Interaction, constrained)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1447,7 +1447,7 @@ namespace Simulator.Laboratory.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Rotation VI (Interaction, constrained)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rotation VI (Interaction, constrained)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1505,7 +1505,7 @@ namespace Simulator.Laboratory.ViewModel
                 Orientation = 0.5 * Math.PI
             });
 
-            var scene = new Scene("Rotation VII (Interaction, constrained)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Rotation VII (Interaction, constrained)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1561,7 +1561,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1.03, -0.125)));
 
-            var scene = new Scene("Ball interaction II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Ball interaction II", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1576,7 +1576,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(1, 0.0)));
 
-            var scene = new Scene("Ball interaction III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Ball interaction III", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1591,7 +1591,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
-            var scene = new Scene("Ball interaction IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Ball interaction IV", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1607,7 +1607,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
-            var scene = new Scene("Ball interaction V", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Ball interaction V", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1637,7 +1637,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0)));
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(3, 0.125, 1, true), new Vector2D(1, 0)));
 
-            var scene = new Scene("Ball interaction, large scene I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005, SceneViewMode.FocusOnFirstBody, -0.5, -0.5, 9.5, 9.5);
+            var scene = new Scene("Ball interaction, large scene I", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005, SceneViewMode.FocusOnFirstBody, -0.5, -0.5, 9.5, 9.5);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1664,7 +1664,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0)));
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(3, 0.125, 1, true), new Vector2D(1, 0)));
 
-            var scene = new Scene("Ball interaction, large scene II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005,
+            var scene = new Scene("Ball interaction, large scene II", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, -0.5, -0.5, 9.5, 9.5, 0.25, 0.25, 0.5, 0.5);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -1690,7 +1690,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.3, 0.3, 1, true), new Vector2D(1.5, 0.5)));
 
-            var scene = new Scene("Brick interaction I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Brick interaction I", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1705,7 +1705,7 @@ namespace Simulator.Laboratory.ViewModel
         {
             var initialState = new State();
 
-            var scene = new Scene("Auto: Fountain I (diposal)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain I (diposal)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1743,7 +1743,7 @@ namespace Simulator.Laboratory.ViewModel
         {
             var initialState = new State();
 
-            var scene = new Scene("Auto: Fountain II (blocking)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain II (blocking)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -1776,7 +1776,7 @@ namespace Simulator.Laboratory.ViewModel
         {
             var initialState = new State();
 
-            var scene = new Scene("Auto: Fountain III (blocking)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain III (blocking)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             Enumerable.Range(1, 10).ToList().ForEach(i =>
             {
@@ -1804,7 +1804,7 @@ namespace Simulator.Laboratory.ViewModel
         {
             var initialState = new State();
 
-            var scene = new Scene("Auto: Fountain IV (bouncing)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain IV (bouncing)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Reflect;
 
@@ -1837,7 +1837,7 @@ namespace Simulator.Laboratory.ViewModel
         {
             var initialState = new State();
 
-            var scene = new Scene("Auto: Fountain V (limited lifetime)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain V (limited lifetime)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Reflect;
 
@@ -1888,7 +1888,7 @@ namespace Simulator.Laboratory.ViewModel
         {
             var initialState = new State();
 
-            var scene = new Scene("Auto: Fountain VI (fireworks)", 120.0, new Point2D(-1.4, -1.3), initialState, 9.82, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Auto: Fountain VI (fireworks)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 9.82, 0, 0, 1, false, 0.002);
 
             Dictionary<int, IEnumerable<int>> split = null;
             Dictionary<int, IEnumerable<int>> die = null;
@@ -1996,7 +1996,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition) { NaturalVelocity = new Vector2D(0, -10)});
 
-            var scene = new Scene("Auto: Bouncing ball I", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, 0.05);
+            var scene = new Scene("Auto: Bouncing ball I", new Point2D(-4.7, -8), new Point2D(5, 3), initialState, standardGravity, 0, 0, 1, false, 0.05);
 
             scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
 
@@ -2044,7 +2044,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition));
 
-            var scene = new Scene("Auto: Bouncing ball II", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, deltaT);
+            var scene = new Scene("Auto: Bouncing ball II", new Point2D(-4.7, -8), new Point2D(5, 3), initialState, standardGravity, 0, 0, 1, false, deltaT);
 
             scene.AddBoundary(new HalfPlane(initialBallPosition - new Vector2D(0, ballRadius + initialDistanceFromCeiling), new Vector2D(0, 1)));
             scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
@@ -2098,7 +2098,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition));
 
-            var scene = new Scene("Auto: Bouncing ball III", 60.0, new Point2D(-4.7, -8), initialState, standardGravity, 0, 0, 1, false, deltaT);
+            var scene = new Scene("Auto: Bouncing ball III", new Point2D(-4.7, -8), new Point2D(5, 3), initialState, standardGravity, 0, 0, 1, false, deltaT);
 
             scene.AddBoundary(new HalfPlane(initialBallPosition - new Vector2D(0, ballRadius + initialDistanceFromCeiling), new Vector2D(0, 1)));
             //scene.AddBoundary(new HalfPlane(new Vector2D(0, ballRadius), new Vector2D(0, -1)));
@@ -2158,7 +2158,7 @@ namespace Simulator.Laboratory.ViewModel
             //initialState.AddBodyState(new BodyState(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 0) });
             initialState.AddBodyState(new BodyState(new CircularBody(1, ballRadius, 1, true), initialBallPosition) {NaturalVelocity = initialBallVelocity });
 
-            var scene = new Scene("Auto: Bouncing ball IV", 120.0, new Point2D(-1.4, -1.3), initialState, standardGravity, 0, 0, 1, false, deltaT);
+            var scene = new Scene("Auto: Bouncing ball IV", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, standardGravity, 0, 0, 1, false, deltaT);
 
             scene.InteractionCallBack += (state, events, position, collisions, currentState) =>
             {
@@ -2188,7 +2188,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 1) });
 
-            var scene = new Scene("Pool table, 1 ball", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.001);
+            var scene = new Scene("Pool table, 1 ball", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2204,7 +2204,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 1) });
 
-            var scene = new Scene("Pool table, 1 ball, 3 boundary points", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.001);
+            var scene = new Scene("Pool table, 1 ball, 3 boundary points", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2224,7 +2224,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 1) });
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.125, 1, true), new Vector2D(1, 0.7)){NaturalVelocity = new Vector2D(2, 1) });
 
-            var scene = new Scene("Pool table, 2 balls, 1 boundary line segment", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.001);
+            var scene = new Scene("Pool table, 2 balls, 1 boundary line segment", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2241,7 +2241,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)){NaturalVelocity = new Vector2D(2, 1) });
 
-            var scene = new Scene("Pool table, 1 ball, 1 boundary line segment", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.001);
+            var scene = new Scene("Pool table, 1 ball, 1 boundary line segment", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2259,7 +2259,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 0)){NaturalVelocity = new Vector2D(2, 0) });
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.125, 1, true), new Vector2D(2, 0)));
 
-            var scene = new Scene("Pool table, 2 balls", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+            var scene = new Scene("Pool table, 2 balls", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2287,7 +2287,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(7, 0.1, 1, true), new Vector2D(1.0, 0)) { NaturalVelocity = new Vector2D(0.2, -1) });
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(8, 0.1, 1, true), new Vector2D(1.3, 0)) { NaturalVelocity = new Vector2D(0.2, -1) });
 
-            var scene = new Scene("Simultaneous collisions with boundary", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+            var scene = new Scene("Simultaneous collisions with boundary", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2309,7 +2309,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, 0)) { NaturalVelocity = new Vector2D(3, 0) });
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.1, 1, true), new Vector2D(1, 0)));
 
-            var scene = new Scene("Newtons cradle I", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+            var scene = new Scene("Newtons cradle I", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2332,7 +2332,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.1, 1, true), new Vector2D(1, 0)));
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(3, 0.1, 1, true), new Vector2D(1.2, 0)));
 
-            var scene = new Scene("Newtons cradle II", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+            var scene = new Scene("Newtons cradle II", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2357,7 +2357,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(4, 0.1, 1, true), new Vector2D(1.4, 0)));
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(5, 0.1, 1, true), new Vector2D(1.6, 0)));
 
-            var scene = new Scene("Newtons cradle III", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+            var scene = new Scene("Newtons cradle III", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2382,7 +2382,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(4, 0.1, 1, true), new Vector2D(1.4, 0)));
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(5, 0.1, 1, true), new Vector2D(1.6, 0)));
 
-            var scene = new Scene("Newtons cradle IV", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+            var scene = new Scene("Newtons cradle IV", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2405,7 +2405,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0.3)){NaturalVelocity = new Vector2D(1, 2) });
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(3, 0.125, 1, true), new Vector2D(2, 0.6)){NaturalVelocity = new Vector2D(-1, 1) });
 
-            var scene = new Scene("Pool table, 3 balls", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, 0.001);
+            var scene = new Scene("Pool table, 3 balls", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2428,7 +2428,7 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 0.125, 1, true), new Vector2D(0, 0.3)));
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(3, 0.125, 1, true), new Vector2D(2, 0.6)));
 
-            var scene = new Scene("Pool table, 3 balls, friction", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0.5, 1, true, 0.001);
+            var scene = new Scene("Pool table, 3 balls, friction", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0.5, 1, true, 0.001);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
@@ -2464,7 +2464,8 @@ namespace Simulator.Laboratory.ViewModel
             //        new BodyStateClassic(new CircularBody(id, 10, 20, true), new Vector2D(posX, posY), new Vector2D(velocityX, velocityY)));
             //});
 
-            var scene = new Scene("Orbit I", 1.0, new Point2D(20, 115), initialState, 0, 1.5E4, 0, 0.5, false, 0.005, SceneViewMode.FocusOnCenterOfMass);
+            // TOdo: FIx the world window
+            var scene = new Scene("Orbit I", new Point2D(20, 115), new Point2D(40, 120), initialState, 0, 1.5E4, 0, 0.5, false, 0.005, SceneViewMode.FocusOnCenterOfMass);
             return scene;
         }
 
@@ -2488,7 +2489,7 @@ namespace Simulator.Laboratory.ViewModel
                     new BodyStateClassic(new CircularBody(id, 10, 20, true), new Vector2D(posX, posY)){NaturalVelocity = new Vector2D(velocityX, velocityY) });
             });
 
-            var scene = new Scene("Orbit II", 1.0, new Point2D(20, 115), initialState, 0, 1.5E4, 0, 0.5, false, 0.005, SceneViewMode.FocusOnCenterOfMass);
+            var scene = new Scene("Orbit II", new Point2D(20, 115), new Point2D(5, 3), initialState, 0, 1.5E4, 0, 0.5, false, 0.005, SceneViewMode.FocusOnCenterOfMass);
             return scene;
         }
 
@@ -2498,7 +2499,8 @@ namespace Simulator.Laboratory.ViewModel
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 6371000, 5.972E+24, true), new Vector2D(0, 0)));
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(2, 1737100, 7.34767309E+22, true), new Vector2D(385000000, 0)){NaturalVelocity = new Vector2D(0, -1022) });
 
-            return new Scene("Moon and Earth", 7E-07, new Point2D(-21E7, -22E7), initialState, 0, 6.674E-11, 0, 315360, false, 360, SceneViewMode.FocusOnCenterOfMass);
+            // Todo: Fix World Window
+            return new Scene("Moon and Earth", new Point2D(-21E7, -22E7), new Point2D(5, 3), initialState, 0, 6.674E-11, 0, 315360, false, 360, SceneViewMode.FocusOnCenterOfMass);
         }
 
         private static Scene GenerateSceneFlappyBird_Game(
@@ -2507,7 +2509,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.1, 1, true), new Vector2D(0, -0.1)){NaturalVelocity = new Vector2D(1.5, -3) });
 
-            var scene = new Scene("Game: Flappy Bird", 120.0, new Point2D(-1.4, -1.3),
+            var scene = new Scene("Game: Flappy Bird", new Point2D(-1.4, -1.3), new Point2D(5, 3),
                 initialState, 9.82, 0, 0, 1, false, 0.005, SceneViewMode.MaintainFocusInVicinityOfPoint,
                 double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0, 1E200, 0.25);
 
@@ -2590,7 +2592,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0)));
 
-            var scene = new Scene("Platformer I (Ghost'n Goblins style)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
+            var scene = new Scene("Platformer I (Ghost'n Goblins style)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2686,7 +2688,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.2, 0.4, 1, true), new Vector2D(3, 0)));
 
-            var scene = new Scene("Platformer II (Moving while jumping)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
+            var scene = new Scene("Platformer II (Moving while jumping)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2768,7 +2770,7 @@ namespace Simulator.Laboratory.ViewModel
             bodyState.ArtificialVelocity = basicArtificialVelocity;
             initialState.AddBodyState(bodyState);
 
-            var scene = new Scene("Platformer III (Storm)", 120.0, new Point2D(-1.4, -1.3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
+            var scene = new Scene("Platformer III (Storm)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.002,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2850,7 +2852,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateWalker(new RectangularBody(1, 0.2, 0.2 * imageHeight / imageWidth, 1, true), new Vector2D(3, 0)));
 
-            var scene = new Scene("Game: Platformer IV (Walking)", 432.0, new Point2D(2.194, -0.226), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
+            var scene = new Scene("Game: Platformer IV (Walking)", new Point2D(2.194, -0.226), new Point2D(5, 3), initialState, 1.0 * 9.82, 0, 0, 1, false, 0.001,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0.25, 1E200);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -2946,7 +2948,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.3, 0.3, 1, false), new Vector2D(-0.000000001, 0.000000000)){NaturalVelocity = new Vector2D(1.001, 1.001) });
 
-            var scene = new Scene("Collision Registration Test", 120.0, new Point2D(-1.4, -1.3), initialState, 0.1 * 9.82, 0, 0, 1, false, 0.005, SceneViewMode.Stationary,
+            var scene = new Scene("Collision Registration Test", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0.1 * 9.82, 0, 0, 1, false, 0.005, SceneViewMode.Stationary,
                 double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0, 1E200, 0.25);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body =>
@@ -2968,7 +2970,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 2)));
 
-            var scene = new Scene("Shoot 'em up I (Semi-automatic fire, shots not collected)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Shoot 'em up I (Semi-automatic fire, shots not collected)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             var spaceKeyWasPressed = false;
 
@@ -3044,7 +3046,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 1, true), new Vector2D(1, 2)));
 
-            var scene = new Scene("Shoot 'em up II (Semi-automatic fire, shots collected)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Shoot 'em up II (Semi-automatic fire, shots collected)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -3135,7 +3137,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 1, true), new Vector2D(0, 0)));
 
-            var scene = new Scene("Shoot 'em up III (Jitter)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Shoot 'em up III (Jitter)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -3178,7 +3180,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 1, true), new Vector2D(1, 2)));
 
-            var scene = new Scene("Shoot 'em up IV (continuous fire)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Shoot 'em up IV (continuous fire)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -3319,7 +3321,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 1, false), new Vector2D(1, 2)));
 
-            var scene = new Scene("Shoot 'em up IV (with enemies)", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Shoot 'em up IV (with enemies)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 1, 0, 0, 1, true, 0.005);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => body is Enemy
                 ? OutcomeOfCollisionBetweenBodyAndBoundary.Reflect
@@ -3492,7 +3494,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 1, true), new Vector2D(1, 2)));
 
-            var scene = new Scene("Shoot 'em up VI (continuous fire, limited projectile lifetime)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
+            var scene = new Scene("Shoot 'em up VI (continuous fire, limited projectile lifetime)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005);
 
             var spaceKeyIsDown = false;
             var stateIndexOfFirstShotInBurst = -1000;
@@ -3606,7 +3608,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 999999, false), new Vector2D(2, 2.5)) { Life = 10 });
 
-            var scene = new Scene("Game: Shoot 'em up VII (with enemies)", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Game: Shoot 'em up VII (with enemies)", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 1, 0, 0, 1, true, 0.005);
 
             var rateOfFire = 20;
             var nFragments = 8;
@@ -3857,7 +3859,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.125, 999999, false), new Vector2D(1, 2)) { Life = 10 });
 
-            var scene = new Scene("Auto: Shoot 'em up", 120.0, new Point2D(-1.4, -1.3), initialState, 1, 0, 0, 1, true, 0.005);
+            var scene = new Scene("Auto: Shoot 'em up", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 1, 0, 0, 1, true, 0.005);
 
             var rateOfFire = 20;
             var nFragments = 8;
@@ -4101,7 +4103,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Player1Circular(1, 0.075, 1, true), new Vector2D(1, 2)));
 
-            var scene = new Scene("Game: Dodgeball", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, true, deltaT);
+            var scene = new Scene("Game: Dodgeball", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, true, deltaT);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => body is Enemy
                 ? OutcomeOfCollisionBetweenBodyAndBoundary.Reflect
@@ -4200,7 +4202,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new RectangularBody(1, 0.25, 0.25, 1, true), new Vector2D(0, 1)));
 
-            var scene = new Scene("Rambo", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005,
+            var scene = new Scene("Rambo", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.005,
                 SceneViewMode.MaintainFocusInVicinityOfPoint, -0.6, -0.6, 9.6, 9.6);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
@@ -4315,7 +4317,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
-            var scene = new Scene("Multiple outcomes", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Multiple outcomes", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.002);
 
             scene.CollisionBetweenBodyAndBoundaryOccuredCallBack = body => OutcomeOfCollisionBetweenBodyAndBoundary.Block;
 
@@ -4347,7 +4349,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, 1)));
 
-            var scene = new Scene("Maze, room 1", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Maze, room 1", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.002);
 
             scene.InitializationCallback = (state, message) =>
             {
@@ -4388,7 +4390,7 @@ namespace Simulator.Laboratory.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new CircularBody(1, 0.125, 1, true), new Vector2D(1, -0.125)));
 
-            var scene = new Scene("Maze, room 2", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.002);
+            var scene = new Scene("Maze, room 2", new Point2D(-1.4, -1.3), new Point2D(5, 3), initialState, 0, 0, 0, 1, false, 0.002);
 
             scene.InitializationCallback = (state, message) =>
             {
@@ -4436,8 +4438,8 @@ namespace Simulator.Laboratory.ViewModel
 
             var scene = new Scene(
                 "Interactive: Add bodies by clicking - falling balls", 
-                120.0, 
-                new Point2D(-2, -3), 
+                new Point2D(-2, -3),
+                new Point2D(5, 3),
                 initialState,
                 standardGravity, 
                 gravitationalConstant,
@@ -4488,8 +4490,8 @@ namespace Simulator.Laboratory.ViewModel
 
             var scene = new Scene(
                 "Interactive: Add bodies by clicking - bouncing planets",
-                120.0,
                 new Point2D(-2, -3),
+                new Point2D(5, 3),
                 initialState,
                 standardGravity,
                 gravitationalConstant,
@@ -4547,8 +4549,8 @@ namespace Simulator.Laboratory.ViewModel
 
             var scene = new Scene(
                 "Interactive: Add bodies by clicking - no overlap",
-                120.0,
                 new Point2D(-2, -3),
+                new Point2D(5, 3),
                 initialState,
                 standardGravity,
                 gravitationalConstant,
@@ -4624,8 +4626,8 @@ namespace Simulator.Laboratory.ViewModel
 
             var scene = new Scene(
                 "Body Following route",
-                120.0,
                 new Point2D(-2, -3),
+                new Point2D(5, 3),
                 initialState,
                 standardGravity,
                 gravitationalConstant,
@@ -4683,8 +4685,8 @@ namespace Simulator.Laboratory.ViewModel
 
             var scene = new Scene(
                 "Game: Tower Defense",
-                120.0,
                 new Point2D(-2, -3),
+                new Point2D(5, 3),
                 initialState,
                 standardGravity,
                 gravitationalConstant,

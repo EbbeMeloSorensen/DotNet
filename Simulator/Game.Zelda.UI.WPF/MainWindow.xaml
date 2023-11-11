@@ -12,7 +12,6 @@
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}"
         KeyDown="MainWindow_OnKeyDown"
         KeyUp="MainWindow_OnKeyUp"
-        Loaded="MainWindow_OnLoaded"
         Closing="MainWindow_OnClosing">
     <Grid>
 

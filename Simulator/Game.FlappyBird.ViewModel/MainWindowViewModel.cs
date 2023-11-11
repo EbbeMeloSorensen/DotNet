@@ -112,7 +112,7 @@ namespace Game.FlappyBird.ViewModel
                 });
             
 
-            var scene = new Scene("Flappy Bird", 207.0, new Point2D(-1.0421360596707818, -1.0484053497942387),
+            var scene = new Scene("Flappy Bird", new Point2D(-1.0421360596707818, -1.0484053497942387), new Point2D(5, 3),
                 initialState, 9.82, 0, 0, 1, false, 0.005, SceneViewMode.MaintainFocusInVicinityOfPoint,
                 double.MinValue, double.MinValue, double.MaxValue, double.MaxValue, 0, 1E200, 0.25);
 

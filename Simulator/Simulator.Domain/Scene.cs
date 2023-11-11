@@ -67,8 +67,8 @@ namespace Simulator.Domain
         private StandardInteractionCallback _standardInteractionCallback;
 
         public string Name { get; }
-        public double InitialMagnification { get; }
         public Point2D InitialWorldWindowUpperLeft { get; }
+        public Point2D InitialWorldWindowLowerRight { get; }
         public List<IBoundary> Boundaries { get; }
         public List<Prop> Props { get; }
         public State InitialState { get; }
@@ -169,8 +169,8 @@ namespace Simulator.Domain
 
         public Scene(
             string name,
-            double initialMagnification,
             Point2D initialWorldWindowUpperLeft,
+            Point2D initialWorldWindowLowerRight,
             State initialState,
             double standardGravity = 9.82,
             double gravitationalConstant = 6.674E-11,
@@ -189,8 +189,8 @@ namespace Simulator.Domain
             double correctionYFraction = 0.5)
         {
             Name = name;
-            InitialMagnification = initialMagnification;
             InitialWorldWindowUpperLeft = initialWorldWindowUpperLeft;
+            InitialWorldWindowLowerRight = initialWorldWindowLowerRight;
             InitialState = initialState;
             Boundaries = new List<IBoundary>();
             Props = new List<Prop>();

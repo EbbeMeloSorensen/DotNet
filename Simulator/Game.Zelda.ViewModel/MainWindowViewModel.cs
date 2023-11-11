@@ -107,7 +107,7 @@ namespace Game.Zelda.ViewModel
 
                 if (newMovementDirection.Length > 0.01)
                 {
-                    var speed = 1;
+                    var speed = 2;
                     newArtificialVelocity = speed * newMovementDirection.Normalize();
                 }
 
@@ -204,6 +204,7 @@ namespace Game.Zelda.ViewModel
             Application.AddApplicationStateTransition(welcomeScreen, level1a);
             Application.AddApplicationStateTransition(level1a, gameOver);
             Application.AddApplicationStateTransition(level1a, level1b);
+            Application.AddApplicationStateTransition(level1b, level1a);
             Application.AddApplicationStateTransition(level1b, gameOver);
             Application.AddApplicationStateTransition(level1b, level1Cleared);
             Application.AddApplicationStateTransition(level1Cleared, level2);
@@ -257,22 +258,11 @@ namespace Game.Zelda.ViewModel
                 {
                     // Dette kald udvirker, at WorldWindow bliver sat
                     _sceneViewManager.ActiveScene = level.Scene;
-
-                    // Prøv lige at override her
-                    var x0 = -1.9 - 0.3;
-                    var x1 = 5.25 + 0.3;
-                    var y0 = -1 - 0.3;
-                    var y1 = 3 + 0.3;
-
-                    var worldWindowFocus = new Point(
-                        (x1 + x0) / 2,
-                        (y1 + y0) / 2);
-
-                    var worldWindowSize = new Size(
-                        x1 - x0,
-                        y1 - y0);
-
-                    GeometryEditorViewModel.InitializeWorldWindow(worldWindowFocus, worldWindowSize, false);
+                    
+                    GeometryEditorViewModel.InitializeWorldWindow(
+                        level.Scene.InitialWorldWindowFocus(),
+                        level.Scene.InitialWorldWindowSize(),
+                        false);
 
                     StartOrResumeAnimationCommand.Execute(null);
                 }
@@ -343,11 +333,6 @@ namespace Game.Zelda.ViewModel
                 });
         }
 
-        public void HandleLoaded()
-        {
-            //ApplicationStateListViewModel.CurrentApplicationState = Application.ApplicationStates.First();
-        }
-
         private void StartOrResumeAnimation()
         {
             Application.StartOrResumeAnimation();
@@ -364,10 +349,18 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.5, 1, true), new Vector2D(5, 3.75)));
 
-            var scene = new Scene("Scene 1a", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, false)
+            var x0 = 0.0;
+            var x1 = 16.0;
+            var y0 = 0.0;
+            var y1 = 8.0;
+            var margin = 0.3;
+
+            var scene = new Scene("Scene 1a", 
+                new Point2D(x0 - margin, y0 - margin), 
+                new Point2D(x1 + margin, y1 + margin), 
+                initialState, 0, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -375,15 +368,14 @@ namespace Game.Zelda.ViewModel
                 InteractionCallBack = interactionCallBack
             };
 
-            var margin = 0.3;
-            scene.AddRectangularBoundary(-1.9, 5.25, -1, 3);
-            AddWall(scene, -1.9 - margin, 5.25 + margin, -1 - margin, -1, false, false, false, false);
-            AddWall(scene, -1.9 - margin, 5.25 + margin, 3, 3 + margin, false, false, false, false);
-            AddWall(scene, -1.9 - margin, -1.9, -1, 3, false, false, false, false);
-            AddWall(scene, 5.25, 5.25 + margin, -1, 3, false, false, false, false);
+            scene.AddRectangularBoundary(x0, x1, y0, y1);
+            AddWall(scene, x0 - margin, x1 + margin, y0 - margin, y0, false, false, false, false);
+            AddWall(scene, x0 - margin, x1 + margin, y1, y1 + margin, false, false, false, false);
+            AddWall(scene, x0 - margin, x0, y0, y1, false, false, false, false);
+            AddWall(scene, x1, x1 + margin, y0, y1, false, false, false, false);
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(-1.9, -0.95), new Vector2D(-1, -0.95), "Level 1b") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(0.5, 0.05), new Vector2D(1.5, 0.05), "Level 1b") { Visible = true });
 
             return scene;
         }
@@ -394,10 +386,18 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.5, 1, true), new Vector2D(1, 15)));
 
-            var scene = new Scene("Scene 1b", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, false)
+            var x0 = 0.0;
+            var x1 = 16.0;
+            var y0 = 8.0;
+            var y1 = 16.0;
+            var margin = 0.3;
+
+            var scene = new Scene("Scene 1b",
+                new Point2D(x0 - margin, y0 - margin),
+                new Point2D(x1 + margin, y1 + margin),
+                initialState, 0, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -405,15 +405,15 @@ namespace Game.Zelda.ViewModel
                 InteractionCallBack = interactionCallBack
             };
 
-            var margin = 0.3;
-            scene.AddRectangularBoundary(-1.9, 5.25, -1, 3);
-            AddWall(scene, -1.9 - margin, 5.25 + margin, -1 - margin, -1, false, false, false, false);
-            AddWall(scene, -1.9 - margin, 5.25 + margin, 3, 3 + margin, false, false, false, false);
-            AddWall(scene, -1.9 - margin, -1.9, -1, 3, false, false, false, false);
-            AddWall(scene, 5.25, 5.25 + margin, -1, 3, false, false, false, false);
+            scene.AddRectangularBoundary(x0, x1, y0, y1);
+            AddWall(scene, x0 - margin, x1 + margin, y0 - margin, y0, false, false, false, false);
+            AddWall(scene, x0 - margin, x1 + margin, y1, y1 + margin, false, false, false, false);
+            AddWall(scene, x0 - margin, x0, y0, y1, false, false, false, false);
+            AddWall(scene, x1, x1 + margin, y0, y1, false, false, false, false);
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(-0.5, 2.95), new Vector2D(0, 2.95), "Level 1 Cleared") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(3, 15.95), new Vector2D(4, 15.95), "Level 1 Cleared") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(0.5, 15.95), new Vector2D(1.5, 15.95), "Level 1") { Visible = true });
 
             return scene;
         }
@@ -426,8 +426,8 @@ namespace Game.Zelda.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
-            var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, false)
+            var scene = new Scene("Scene 2", 
+                new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
@@ -459,8 +459,8 @@ namespace Game.Zelda.ViewModel
             var initialState = new State();
             initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
-            var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, false)
+            var scene = new Scene("Scene 2", 
+                new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,

@@ -120,10 +120,6 @@ namespace Simulator.ViewModel
 
         private void PrepareAnimation()
         {
-            _geometryEditorViewModel.Scaling = new Size(
-                _application.Engine.Scene.InitialMagnification,
-                _application.Engine.Scene.InitialMagnification);
-
             _geometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(
                 _application.Engine.Scene.WorldWindowUpperLeftLimit.X,
                 _application.Engine.Scene.WorldWindowUpperLeftLimit.Y);
@@ -132,9 +128,15 @@ namespace Simulator.ViewModel
                 _application.Engine.Scene.WorldWindowBottomRightLimit.X,
                 _application.Engine.Scene.WorldWindowBottomRightLimit.Y);
 
-            _geometryEditorViewModel.WorldWindowUpperLeft = new Point(
-                _application.Engine.Scene.InitialWorldWindowUpperLeft.X,
-                _application.Engine.Scene.InitialWorldWindowUpperLeft.Y);
+            var x0 = _application.Engine.Scene.InitialWorldWindowUpperLeft.X;
+            var y0 = _application.Engine.Scene.InitialWorldWindowUpperLeft.Y;
+            var x1 = _application.Engine.Scene.InitialWorldWindowLowerRight.X;
+            var y1 = _application.Engine.Scene.InitialWorldWindowLowerRight.Y;
+
+            var focus = new Point((x0 + x1) / 2, (y0 + y1) / 2);
+            var size = new Size(x1 - x0, y1 - y0);
+
+            _geometryEditorViewModel.InitializeWorldWindow(focus, size, false);
 
             var lineThickness = 0.01;
 
