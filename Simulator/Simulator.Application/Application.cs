@@ -100,8 +100,6 @@ namespace Simulator.Application
             Engine = new Engine(logger);
             Stopwatch = new Stopwatch();
 
-            //ApplicationStates = new List<ApplicationState>();
-
             if (initialState != null)
             {
                 _stateMachine = new StateMachine(initialState);

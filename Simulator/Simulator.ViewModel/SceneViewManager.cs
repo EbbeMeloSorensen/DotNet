@@ -46,6 +46,13 @@ namespace Simulator.ViewModel
                                     // - Engingen sættes til at producere states ud fra den initielle tilstand i den nye scene
                                     // - GeometryEditoren populeres med shapes, lines osv fra den nye scene
                                     // - World Window for GeometryEditoren sættes som anvist af den nye scene
+
+                // Du kunne jo prøve at skille det ad, så f.eks. det med at placere world window foregår separat.
+                // Du kunne også bare sige, at det at flytte WorldWindow så at sige er en del af animationen - den må bare ikke begynde
+                // at consume states før vinduet er placeret. FAktisk så må den ikke begynde StopWatch, før vinduet er placeret
+
+                // Man kunne også lade SceneViewManager publicere et event om at animationen er klargjort, hvilket så også gerne skunne indebære,
+                // at World Window er placeret..
             }
         }
 
