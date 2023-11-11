@@ -283,10 +283,11 @@ Done:
   unlocked, går man fra Welcome screen til unlocked levels screen.
 * Lav en variant af platformer scenerne, hvor det ser ud som om den går, når den bevæger sig. Brug evt princippet fra Rocket, hvor du viser
   en flamme fra raketmotoren, når man trykker pil opad.
-
-Todo:
 * Lav det sådan at placering af body i en scene afhænger af, hvor man kommer fra. Du gør allerede noget af sin art i Maze-scenerne, hvor du bruger 
   Initialize callback funktionen
+
+Todo:
+* Lav det sådan at den "slider" fra en scene til en anden. Brug det samme som i time series kontrollen, hvor den fokuserer på et bestemt punkt
 * Gør det smidigt at sikre, at der er overensstemmelse mellem outcomes fra en scene og den state maskine, der gør sig gældende. 
   Måske skal du ikke bruge strings til navigation.
 * Gør det muligt at skrue hastigheden op, så man kan teste uden at vente en evighed
