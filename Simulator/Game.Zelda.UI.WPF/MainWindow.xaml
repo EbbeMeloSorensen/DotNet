@@ -46,7 +46,7 @@
                     </Binding.ConverterParameter>
                 </Binding>
             </TextBlock.Visibility>
-            <Run FontSize="100" Text="Rocket Game"/>
+            <Run FontSize="100" Text="Zelda.."/>
             <LineBreak/>
             <Run FontSize="50" Text="Press space to start"/>
         </TextBlock>

@@ -2970,7 +2970,6 @@ namespace Simulator.Laboratory.ViewModel
 
             var scene = new Scene("Shoot 'em up I (Semi-automatic fire, shots not collected)", 120.0, new Point2D(-1.4, -1.3), initialState, 0, 0, 0, 1, false, 0.005);
 
-            //var currentKeyboardState = new Keyboard();
             var spaceKeyWasPressed = false;
 
             // Denne callback funktion er som udgangspunkt identisk med DungeonCrawler8Directions,

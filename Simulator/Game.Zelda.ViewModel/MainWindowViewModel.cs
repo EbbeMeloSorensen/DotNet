@@ -67,67 +67,56 @@ namespace Game.Zelda.ViewModel
                 Application.SwitchState(e.Level.Name);
             };
 
-            InitializationCallback initializationCallback = (state, message) =>
-            {
-            };
-
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack = body =>
             {
                 return OutcomeOfCollisionBetweenBodyAndBoundary.Block;
             };
 
-            CheckForCollisionBetweenBodiesCallback checkForCollisionBetweenBodiesCallback = (body1, body2) =>
-            {
-                return false;
-            };
-
-            CollisionBetweenTwoBodiesOccuredCallBack collisionBetweenTwoBodiesOccuredCallBack =
-                (body1, body2) => OutcomeOfCollisionBetweenTwoBodies.Ignore;
+            var spaceKeyWasPressed = false;
 
             InteractionCallBack interactionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                var currentStateOfMainBody = currentState.BodyStates.FirstOrDefault() as BodyStateClassic;
+                spaceKeyWasPressed = keyboardEvents.SpaceDown && keyboardState.SpaceDown;
 
-                if (currentStateOfMainBody == null || currentStateOfMainBody.Body.Id != 1)
-                {
-                    return false;
-                }
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
+                var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
-                var currentRotationalSpeed = currentStateOfMainBody.RotationalSpeed;
-                var currentCustomForce = currentStateOfMainBody.CustomForce;
-
-                var newRotationalSpeed = 0.0;
-                var newCustomForce = new Vector2D(0, 0);
+                var newMovementDirection = new Vector2D(0, 0);
 
                 if (keyboardState.LeftArrowDown)
                 {
-                    newRotationalSpeed += Math.PI;
+                    newMovementDirection += new Vector2D(-1, 0);
                 }
 
                 if (keyboardState.RightArrowDown)
                 {
-                    newRotationalSpeed -= Math.PI;
+                    newMovementDirection += new Vector2D(1, 0);
                 }
 
                 if (keyboardState.UpArrowDown)
                 {
-                    _rocketIgnited = true;
-                    newCustomForce = new Vector2D(3, 0);
+                    newMovementDirection += new Vector2D(0, -1);
                 }
-                else
+
+                if (keyboardState.DownArrowDown)
                 {
-                    _rocketIgnited = false;
+                    newMovementDirection += new Vector2D(0, 1);
                 }
 
-                currentStateOfMainBody.RotationalSpeed = newRotationalSpeed;
-                currentStateOfMainBody.CustomForce = newCustomForce;
+                var newArtificialVelocity = new Vector2D(0, 0);
 
-                if (Math.Abs(newRotationalSpeed - currentRotationalSpeed) < 0.01 &&
-                    (newCustomForce - currentCustomForce).Length < 0.01 &&
-                    !keyboardEvents.SpaceDown)
+                if (newMovementDirection.Length > 0.01)
+                {
+                    var speed = 1;
+                    newArtificialVelocity = speed * newMovementDirection.Normalize();
+                }
+
+                if ((newArtificialVelocity - currentArtificialVelocity).Length < 0.01 && !spaceKeyWasPressed)
                 {
                     return false;
                 }
+
+                currentStateOfMainBody.ArtificialVelocity = newArtificialVelocity;
 
                 return true;
             };
@@ -164,7 +153,6 @@ namespace Game.Zelda.ViewModel
             var level1a = new Level("Level 1")
             {
                 Scene = GenerateScene1a(
-                    initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
                     postPropagationCallBack)
@@ -173,7 +161,6 @@ namespace Game.Zelda.ViewModel
             var level1b = new Level("Level 1b")
             {
                 Scene = GenerateScene1b(
-                    initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
                     postPropagationCallBack)
@@ -184,7 +171,6 @@ namespace Game.Zelda.ViewModel
             var level2 = new Level("Level 2")
             {
                 Scene = GenerateScene2(
-                    initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
                     postPropagationCallBack)
@@ -195,7 +181,6 @@ namespace Game.Zelda.ViewModel
             var level3 = new Level("Level 3")
             {
                 Scene = GenerateScene3(
-                    initializationCallback,
                     interactionCallBack,
                     collisionBetweenBodyAndBoundaryOccuredCallBack,
                     postPropagationCallBack)
@@ -374,23 +359,17 @@ namespace Game.Zelda.ViewModel
         }
 
         private static Scene GenerateScene1a(
-            InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
-            {
-                NaturalVelocity = new Vector2D(0, 0),
-                Orientation = 0.5 * Math.PI
-            });
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 1a", _initialMagnification,
                 new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
-                InitializationCallback = initializationCallback,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
                 PostPropagationCallBack = postPropagationCallBack,
                 InteractionCallBack = interactionCallBack
@@ -404,31 +383,23 @@ namespace Game.Zelda.ViewModel
             AddWall(scene, 5.25, 5.25 + margin, -1, 3, false, false, false, false);
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(4, -0.95), new Vector2D(5.25, -0.95), "Level 1b") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(-1.9, -0.95), new Vector2D(-1, -0.95), "Level 1b") { Visible = true });
 
             return scene;
         }
 
         private static Scene GenerateScene1b(
-            InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
-            var standardGravity = 0.5;
-
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
-            {
-                NaturalVelocity = new Vector2D(0, 0),
-                Orientation = 0.5 * Math.PI
-            });
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 1b", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, false)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
-                InitializationCallback = initializationCallback,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
                 PostPropagationCallBack = postPropagationCallBack,
                 InteractionCallBack = interactionCallBack
@@ -440,37 +411,25 @@ namespace Game.Zelda.ViewModel
             AddWall(scene, -1.9 - margin, 5.25 + margin, 3, 3 + margin, false, false, false, false);
             AddWall(scene, -1.9 - margin, -1.9, -1, 3, false, false, false, false);
             AddWall(scene, 5.25, 5.25 + margin, -1, 3, false, false, false, false);
-            AddWall(scene, -1, -0.5, 2, 3);
-            AddWall(scene, 0.5, 1, -1, 0);
-            AddWall(scene, 2, 2.5, 2, 3);
-            AddWall(scene, 3.5, 4, -1, 0);
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(4, -0.95), new Vector2D(5.25, -0.95), "Level 1 Cleared") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(-0.5, 2.95), new Vector2D(0, 2.95), "Level 1 Cleared") { Visible = true });
 
             return scene;
         }
 
         private static Scene GenerateScene2(
-            InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
-            var standardGravity = 0.5;
-
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
-            {
-                NaturalVelocity = new Vector2D(0, 0),
-                Orientation = 0.5 * Math.PI
-            });
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, false)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
-                InitializationCallback = initializationCallback,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
                 PostPropagationCallBack = postPropagationCallBack,
                 InteractionCallBack = interactionCallBack
@@ -493,25 +452,17 @@ namespace Game.Zelda.ViewModel
         }
 
         private static Scene GenerateScene3(
-            InitializationCallback initializationCallback,
             InteractionCallBack interactionCallBack,
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
             PostPropagationCallBack postPropagationCallBack)
         {
-            var standardGravity = 0.5;
-
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5))
-            {
-                NaturalVelocity = new Vector2D(0, 0),
-                Orientation = 0.5 * Math.PI
-            });
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 2", _initialMagnification,
-                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, standardGravity, 0, 0, 1, false)
+                new Point2D(-1.9321428571428569, -1.0321428571428573), initialState, 0, 0, 0, 1, false)
             {
                 IncludeCustomForces = true,
-                InitializationCallback = initializationCallback,
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
                 PostPropagationCallBack = postPropagationCallBack,
                 InteractionCallBack = interactionCallBack
