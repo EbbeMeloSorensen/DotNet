@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Windows;
 using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
@@ -23,8 +22,6 @@ namespace Game.Zelda.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private static int _nextWallId = 100000;
-
-        private const int _initialMagnification = 240;
 
         private ILogger _logger;
         private SceneViewManager _sceneViewManager;
@@ -254,16 +251,14 @@ namespace Game.Zelda.ViewModel
 
             Application.State.PropertyChanged += (s, e) =>
             {
+                // Applikationen har skiftet tilstand (det, der vedligeholdes af state maskinen)
                 if (Application.State.Object is Level level)
                 {
                     // Dette kald udvirker, at WorldWindow bliver sat
                     _sceneViewManager.ActiveScene = level.Scene;
-                    
-                    GeometryEditorViewModel.InitializeWorldWindow(
-                        level.Scene.InitialWorldWindowFocus(),
-                        level.Scene.InitialWorldWindowSize(),
-                        false);
 
+                    // Hvis vi gerne vil vente med at starte animationen, til world vinduet er slidet hen,
+                    // så skal vi nok vente med dette kald..
                     StartOrResumeAnimationCommand.Execute(null);
                 }
                 else

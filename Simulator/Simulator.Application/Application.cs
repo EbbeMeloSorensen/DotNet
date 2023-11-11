@@ -206,6 +206,7 @@ namespace Simulator.Application
         {
             if (!AnimationRunning)
             {
+                // Here, we may adjust the position of the World Window
                 return;
             }
 
@@ -216,6 +217,8 @@ namespace Simulator.Application
 
             if (Stopwatch.IsRunning)
             {
+                // Try consuming a state from the queue of the engine
+
                 LastIndexRequested = DetermineCurrentIndex(out var secondsElapsed);
                 IndexDifference = LastIndexRequested - LastIndexConsumed;
 

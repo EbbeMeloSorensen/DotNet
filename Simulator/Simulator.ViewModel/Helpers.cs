@@ -1,10 +1,18 @@
 ﻿using System.Windows;
+using Craft.Math;
+using Craft.Utils;
 using Simulator.Domain;
 
-namespace Game.Zelda.ViewModel
+namespace Simulator.ViewModel
 {
     public static class Helpers
     {
+        public static PointD AsPointD(
+            this Vector2D vector)
+        {
+            return new PointD(vector.X, vector.Y);
+        }
+
         public static Point InitialWorldWindowFocus(
             this Scene scene)
         {

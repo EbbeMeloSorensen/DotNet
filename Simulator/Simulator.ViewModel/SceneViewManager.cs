@@ -35,11 +35,17 @@ namespace Simulator.ViewModel
             {
                 _activeScene = value;
                 _application.Engine.Scene = value;
-                Reset();
+
+                Reset(); // Dette gør, at:
+                         // - Enginen resettes
+                         // - GeometryEditoren cleares for alt, hvad den indeholder af shapes, lines osv.
 
                 if (value == null) return;
 
-                PrepareAnimation();
+                PrepareAnimation(); // Dette gør, at:
+                                    // - Engingen sættes til at producere states ud fra den initielle tilstand i den nye scene
+                                    // - GeometryEditoren populeres med shapes, lines osv fra den nye scene
+                                    // - World Window for GeometryEditoren sættes som anvist af den nye scene
             }
         }
 
@@ -84,7 +90,6 @@ namespace Simulator.ViewModel
                         {
                             return new RectangleViewModel
                             {
-                                //Point = new Point2D(bs.Position.X, bs.Position.Y),
                                 Width = body.Width,
                                 Height = body.Height
                             };
@@ -93,7 +98,6 @@ namespace Simulator.ViewModel
                         {
                             return new EllipseViewModel
                             {
-                                //Point = new Point2D(bs.Position.X, bs.Position.Y),
                                 Width = 2 * body.Radius,
                                 Height = 2 * body.Radius
                             };
@@ -120,23 +124,20 @@ namespace Simulator.ViewModel
 
         private void PrepareAnimation()
         {
+            var scene = _application.Engine.Scene;
+
             _geometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(
-                _application.Engine.Scene.WorldWindowUpperLeftLimit.X,
-                _application.Engine.Scene.WorldWindowUpperLeftLimit.Y);
+                scene.WorldWindowUpperLeftLimit.X,
+                scene.WorldWindowUpperLeftLimit.Y);
 
             _geometryEditorViewModel.WorldWindowBottomRightLimit = new Point(
-                _application.Engine.Scene.WorldWindowBottomRightLimit.X,
-                _application.Engine.Scene.WorldWindowBottomRightLimit.Y);
+                scene.WorldWindowBottomRightLimit.X,
+                scene.WorldWindowBottomRightLimit.Y);
 
-            var x0 = _application.Engine.Scene.InitialWorldWindowUpperLeft.X;
-            var y0 = _application.Engine.Scene.InitialWorldWindowUpperLeft.Y;
-            var x1 = _application.Engine.Scene.InitialWorldWindowLowerRight.X;
-            var y1 = _application.Engine.Scene.InitialWorldWindowLowerRight.Y;
-
-            var focus = new Point((x0 + x1) / 2, (y0 + y1) / 2);
-            var size = new Size(x1 - x0, y1 - y0);
-
-            _geometryEditorViewModel.InitializeWorldWindow(focus, size, false);
+            _geometryEditorViewModel.InitializeWorldWindow(
+                scene.InitialWorldWindowFocus(),
+                scene.InitialWorldWindowSize(), 
+                false);
 
             var lineThickness = 0.01;
 

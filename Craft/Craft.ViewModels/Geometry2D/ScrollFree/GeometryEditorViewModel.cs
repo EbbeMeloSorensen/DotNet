@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
-using System.Printing;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {

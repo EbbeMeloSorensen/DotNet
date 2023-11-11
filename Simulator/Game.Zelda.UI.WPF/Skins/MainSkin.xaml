@@ -21,13 +21,13 @@
 
     <DataTemplate x:Key="Rocket">
         <Canvas>
-            <Ellipse Fill="Black" Width="{Binding Width}" Height="{Binding Height}">
+            <!--<Ellipse Fill="Black" Width="{Binding Width}" Height="{Binding Height}">
                 <Ellipse.RenderTransform>
                     <MatrixTransform Matrix="{Binding 
                         Path=DataContext.TransformationMatrix, 
                         RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </Ellipse.RenderTransform>
-            </Ellipse>
+            </Ellipse>-->
             <Image Source="..\Images\Rocket.png" 
                    Width="{Binding Width}" 
                    Height="{Binding Height}">
