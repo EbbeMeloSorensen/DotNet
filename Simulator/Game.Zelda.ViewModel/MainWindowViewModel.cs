@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows;
 using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
@@ -27,6 +29,8 @@ namespace Game.Zelda.ViewModel
         private SceneViewManager _sceneViewManager;
         private bool _rocketIgnited;
         private bool _geometryEditorVisible = true;
+        private Vector2D _worldWindowTranslation;
+        private Stopwatch _stopwatch;
 
         private Dictionary<ApplicationState, List<Tuple<ApplicationState, ApplicationState>>> _transitionActivationMap;
 
@@ -56,6 +60,7 @@ namespace Game.Zelda.ViewModel
         {
             _logger = logger;
             _logger = null; // Disable logging (it should only be used for debugging purposes)
+            _stopwatch = new Stopwatch();
 
             UnlockedLevelsViewModel = new UnlockedLevelsViewModel();
 
@@ -254,12 +259,31 @@ namespace Game.Zelda.ViewModel
                 // Applikationen har skiftet tilstand (det, der vedligeholdes af state maskinen)
                 if (Application.State.Object is Level level)
                 {
+                    if (Application.PreviousState is Level)
+                    {
+                        // Nu vil vi så gerne "slide" fra, hvor World Window pt er, og hen til det fokus, der gør sig gældende for næste levels scene
+                        var previousWorldWindowFocus = GeometryEditorViewModel.WorldWindowFocus;
+                        var nextWorldWindowFocus = level.Scene.InitialWorldWindowFocus();
+
+                        _worldWindowTranslation = new Vector2D(
+                            nextWorldWindowFocus.X - previousWorldWindowFocus.X,
+                            nextWorldWindowFocus.Y - previousWorldWindowFocus.Y);
+
+                        _stopwatch.Start();
+
+                        // (I starten så lever vi med at den bare nuker nuværende scene,
+                        // men senere vil vi gerne vente til den faktisk er landet på næste level
+                    }
+                    else
+                    {
+                        GeometryEditorViewModel.InitializeWorldWindow(
+                            level.Scene.InitialWorldWindowFocus(),
+                            level.Scene.InitialWorldWindowSize(),
+                            false);
+                    }
+
                     // Dette kald udvirker, at WorldWindow bliver sat
                     _sceneViewManager.ActiveScene = level.Scene;
-
-                    // Hvis vi gerne vil vente med at starte animationen, til world vinduet er slidet hen,
-                    // så skal vi nok vente med dette kald..
-                    StartOrResumeAnimationCommand.Execute(null);
                 }
                 else
                 {
@@ -283,7 +307,7 @@ namespace Game.Zelda.ViewModel
 
             GeometryEditorViewModel = new GeometryEditorViewModel()
             {
-                UpdateModelCallBack = Application.UpdateModel
+                UpdateModelCallBack = UpdateModel
             };
 
             _sceneViewManager = new SceneViewManager(
@@ -328,6 +352,43 @@ namespace Game.Zelda.ViewModel
                 });
         }
 
+        private void UpdateModel()
+        {
+            if (Application.AnimationRunning)
+            {
+                Application.UpdateModel();
+            }
+            else
+            {
+                if (_sceneViewManager.ActiveScene != null)
+                {
+                    if (_stopwatch.IsRunning)
+                    {
+                        var slideDuration = 0.5;
+                        var fraction = Math.Max(0.0, 1.0 - _stopwatch.Elapsed.TotalSeconds / slideDuration);
+
+                        var wwFocus = new Point(
+                            _sceneViewManager.ActiveScene.InitialWorldWindowFocus().X - _worldWindowTranslation.X * fraction,
+                            _sceneViewManager.ActiveScene.InitialWorldWindowFocus().Y - _worldWindowTranslation.Y * fraction);
+
+                        GeometryEditorViewModel.InitializeWorldWindow(
+                            wwFocus,
+                            _sceneViewManager.ActiveScene.InitialWorldWindowSize(),
+                            false);
+
+                        if (fraction > 0.0) return;
+
+                        _stopwatch.Stop();
+                        _stopwatch.Reset();
+                    }
+                    else
+                    {
+                        StartOrResumeAnimationCommand.Execute(null);
+                    }
+                }
+            }
+        }
+
         private void StartOrResumeAnimation()
         {
             Application.StartOrResumeAnimation();
@@ -363,22 +424,33 @@ namespace Game.Zelda.ViewModel
                 InteractionCallBack = interactionCallBack
             };
 
+            var doorWidth = 1.2;
+            var boundariesVisible = false;
+
             scene.InitializationCallback = (state, message) =>
             {
                 if (message == "Scene 1b")
                 {
-                    state.BodyStates.First().Position = new Vector2D(1, 0.6);
+                    state.BodyStates.First().Position = new Vector2D(doorWidth / 2, 0.5);
                 }
             };
 
-            scene.AddRectangularBoundary(x0, x1, y0, y1);
-            AddWall(scene, x0 - margin, x1 + margin, y0 - margin, y0, false, false, false, false);
-            AddWall(scene, x0 - margin, x1 + margin, y1, y1 + margin, false, false, false, false);
-            AddWall(scene, x0 - margin, x0, y0, y1, false, false, false, false);
-            AddWall(scene, x1, x1 + margin, y0, y1, false, false, false, false);
+            scene.AddBoundary(new RightFacingHalfPlane(x0) { Visible = boundariesVisible });
+            scene.AddBoundary(new LeftFacingHalfPlane(x1) { Visible = boundariesVisible });
+            scene.AddBoundary(new UpFacingHalfPlane(y1) { Visible = boundariesVisible });
+            scene.AddBoundary(new LineSegment(new Vector2D(doorWidth, -margin), new Vector2D(doorWidth, 0)) { Visible = boundariesVisible });
+            scene.AddBoundary(new LineSegment(new Vector2D(doorWidth, 0), new Vector2D(x1, 0)) { Visible = boundariesVisible });
+
+            AddWall(scene, x0 + doorWidth, x1 + margin, y0 - margin, y0, false, false, false, false); // Øverste mur
+            AddWall(scene, x0 - margin, x1 + margin, y1, y1 + margin, false, false, false, false); // Nederste mur
+            AddWall(scene, x0 - margin, x0, y0 - margin, y1, false, false, false, false); // venstre mur
+            AddWall(scene, x1, x1 + margin, y0, y1, false, false, false, false); // højre mur
+
+            AddWall(scene, 8, 8 + margin, y0, 3.2, true, true, false, true); // Ekstra mur
+            AddWall(scene, 8, 8 + margin, 4.8, y1, true, true, false, true); // Ekstra mur
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(0.5, 0.05), new Vector2D(1.5, 0.05), "Level 1b") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(0, -0.5), new Vector2D(doorWidth, -0.5), "Level 1b") { Visible = boundariesVisible });
 
             return scene;
         }
@@ -408,23 +480,34 @@ namespace Game.Zelda.ViewModel
                 InteractionCallBack = interactionCallBack
             };
 
+            var doorWidth = 1.2;
+            var boundariesVisible = false;
+
             scene.InitializationCallback = (state, message) =>
             {
                 if (message == "Scene 1a")
                 {
-                    state.BodyStates.First().Position = new Vector2D(1, -0.6);
+                    state.BodyStates.First().Position = new Vector2D(doorWidth / 2, -0.5);
                 }
             };
 
-            scene.AddRectangularBoundary(x0, x1, y0, y1);
-            AddWall(scene, x0 - margin, x1 + margin, y0 - margin, y0, false, false, false, false);
-            AddWall(scene, x0 - margin, x1 + margin, y1, y1 + margin, false, false, false, false);
-            AddWall(scene, x0 - margin, x0, y0, y1, false, false, false, false);
-            AddWall(scene, x1, x1 + margin, y0, y1, false, false, false, false);
+            scene.AddBoundary(new RightFacingHalfPlane(x0) { Visible = boundariesVisible });
+            scene.AddBoundary(new LeftFacingHalfPlane(x1) { Visible = boundariesVisible });
+            scene.AddBoundary(new DownFacingHalfPlane(y0) { Visible = boundariesVisible });
+            scene.AddBoundary(new LineSegment(new Vector2D(doorWidth, y1 + margin), new Vector2D(doorWidth, y1)) { Visible = boundariesVisible });
+            scene.AddBoundary(new LineSegment(new Vector2D(doorWidth, y1), new Vector2D(x1, y1)) { Visible = boundariesVisible });
+
+            AddWall(scene, x0 - margin, x1 + margin, y0 - margin, y0, false, false, false, false); // Øverste mur
+            AddWall(scene, x0 + doorWidth, x1 + margin, y1, y1 + margin, false, false, false, false); // Nederste mur
+            AddWall(scene, x0 - margin, x0, y0, y1 + margin, false, false, false, false); // Venstre mur
+            AddWall(scene, x1, x1 + margin, y0, y1, false, false, false, false); // Højre mur
+
+            AddWall(scene, x0, x0 + 7, -4, -4 + margin, false, true, true, true); // Ekstra mur
+            AddWall(scene, x0 + 9, x1, -4, -4 + margin, true, false, true, true); // Ekstra mur
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(3, -0.05), new Vector2D(4, -0.05), "Level 1 Cleared") { Visible = true });
-            scene.AddBoundary(new LineSegment(new Vector2D(0.5, -0.05), new Vector2D(1.5, -0.05), "Level 1") { Visible = true });
+            //scene.AddBoundary(new LineSegment(new Vector2D(3, -0.05), new Vector2D(4, -0.05), "Level 1 Cleared") { Visible = true });
+            scene.AddBoundary(new LineSegment(new Vector2D(0, 0.5), new Vector2D(doorWidth, 0.5), "Level 1") { Visible = boundariesVisible });
 
             return scene;
         }
@@ -494,7 +577,7 @@ namespace Game.Zelda.ViewModel
             return scene;
         }
 
-        // Scene building helpers
+        // Scene building helper
         private static void AddWall(
             Scene scene,
             double x0,

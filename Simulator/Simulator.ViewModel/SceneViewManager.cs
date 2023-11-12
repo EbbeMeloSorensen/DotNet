@@ -49,10 +49,15 @@ namespace Simulator.ViewModel
 
                 // Du kunne jo prøve at skille det ad, så f.eks. det med at placere world window foregår separat.
                 // Du kunne også bare sige, at det at flytte WorldWindow så at sige er en del af animationen - den må bare ikke begynde
-                // at consume states før vinduet er placeret. FAktisk så må den ikke begynde StopWatch, før vinduet er placeret
+                // at consume states før vinduet er placeret. Faktisk så må den ikke begynde StopWatch, før vinduet er placeret
 
                 // Man kunne også lade SceneViewManager publicere et event om at animationen er klargjort, hvilket så også gerne skunne indebære,
                 // at World Window er placeret..
+
+                // Den skal fortælle GeometryEditoren, at den skal slide hen til en given placering, og når den så er der, skal den rejse et event over for
+                // MainWindowViewModel om at den er klar. Tænk lige over arbejdsfordeling. Det er nok hensigtsmæssigt, hvis sliding ligger EKSTERNT i
+                // forhold til GeometryEditorViewModel (senere kan du måske overveje at bygge det ind - eller i hvert fald bygge det ind i en genbrugelig
+                // komponent)
             }
         }
 
@@ -127,6 +132,13 @@ namespace Simulator.ViewModel
         {
             Reset();
             PrepareAnimation();
+
+            var scene = _application.Engine.Scene;
+
+            _geometryEditorViewModel.InitializeWorldWindow(
+                scene.InitialWorldWindowFocus(),
+                scene.InitialWorldWindowSize(),
+                false);
         }
 
         private void PrepareAnimation()
@@ -141,10 +153,11 @@ namespace Simulator.ViewModel
                 scene.WorldWindowBottomRightLimit.X,
                 scene.WorldWindowBottomRightLimit.Y);
 
-            _geometryEditorViewModel.InitializeWorldWindow(
-                scene.InitialWorldWindowFocus(),
-                scene.InitialWorldWindowSize(), 
-                false);
+            // Vi vil helst ikke gøre det allerede her, da vi så ikke kan "slide"
+            //_geometryEditorViewModel.InitializeWorldWindow(
+            //    scene.InitialWorldWindowFocus(),
+            //    scene.InitialWorldWindowSize(),
+            //    false);
 
             var lineThickness = 0.01;
 
@@ -256,7 +269,7 @@ namespace Simulator.ViewModel
             _propIds = _application.Engine.Scene.Props.Select(p => p.Id).ToArray();
 
             var initialState = _application.Engine.SpawnNewThread();
-            RepositionWorldWindowIfRequired(initialState);
+            //RepositionWorldWindowIfRequired(initialState); // Vær opmærksom på den her i arbejdet med at slide World Window
             UpdateCurrentState(initialState);
         }
 

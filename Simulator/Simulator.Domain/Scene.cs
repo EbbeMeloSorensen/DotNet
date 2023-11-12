@@ -232,12 +232,13 @@ namespace Simulator.Domain
             double x0,
             double x1,
             double y0,
-            double y1)
+            double y1,
+            bool visible = true)
         {
-            AddBoundary(new HorizontalLineSegment(y0, x0, x1));
-            AddBoundary(new HorizontalLineSegment(y1, x0, x1));
-            AddBoundary(new VerticalLineSegment(x0, y0, y1));
-            AddBoundary(new VerticalLineSegment(x1, y0, y1));
+            AddBoundary(new HorizontalLineSegment(y0, x0, x1) { Visible = visible });
+            AddBoundary(new HorizontalLineSegment(y1, x0, x1) { Visible = visible });
+            AddBoundary(new VerticalLineSegment(x0, y0, y1) { Visible = visible });
+            AddBoundary(new VerticalLineSegment(x1, y0, y1) { Visible = visible });
         }
     }
 }

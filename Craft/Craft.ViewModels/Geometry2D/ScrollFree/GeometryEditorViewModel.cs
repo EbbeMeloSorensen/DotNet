@@ -52,7 +52,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        public virtual Size ViewPortSize
+        public Size ViewPortSize
         {
             get { return _viewPortSize; }
             set
@@ -98,7 +98,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public Point WorldWindowBottomRightLimit { get; set; }
 
-        public virtual Point WorldWindowUpperLeft
+        public Point WorldWindowUpperLeft
         {
             get { return _worldWindowUpperLeft; }
             set
@@ -265,6 +265,17 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public IEnumerable<int> AllShapeIds
         {
             get { return _shapeViewModelMap.Keys; }
+        }
+
+        public Point WorldWindowFocus
+        {
+            get => new(
+                WorldWindowUpperLeft.X + WorldWindowSize.Width / 2,
+                WorldWindowUpperLeft.Y + WorldWindowSize.Height / 2);
+            set =>
+                WorldWindowUpperLeft = new Point(
+                    value.X - WorldWindowSize.Width / 2, 
+                    value.Y - WorldWindowSize.Height / 2);
         }
 
         public event EventHandler<WorldWindowUpdatedEventArgs> WorldWindowUpdateOccured;

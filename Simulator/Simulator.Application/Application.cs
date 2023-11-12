@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Craft.DataStructures.Graph;
 using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
+using Craft.DataStructures.Graph;
 using Simulator.Domain;
 using ApplicationState = Craft.DataStructures.Graph.State;
 using State = Simulator.Domain.State;
-using System.Collections.Generic;
 
 namespace Simulator.Application
 {
@@ -36,10 +34,9 @@ namespace Simulator.Application
     public delegate void CurrentStateChangedCallback(
         State currentState);
 
-    public class Application //: INotifyPropertyChanged
+    public class Application
     {
         public const double MinTimeBetweenRefresh = 0.005; // 5 milliseconds
-        //private ApplicationState _currentApplicationState;
         private StateMachine _stateMachine;
 
         private ILogger _logger;
@@ -59,23 +56,7 @@ namespace Simulator.Application
         public bool AnimationComplete { get; private set; }
 
         public ObservableObject<ApplicationState> State { get; }
-
-        //public ApplicationState State
-        //{
-        //    get => _stateMachine.CurrentState;
-        //}
-
-        //public List<ApplicationState> ApplicationStates { get; }
-
-        //public ApplicationState CurrentApplicationState
-        //{
-        //    get { return _currentApplicationState; }
-        //    set
-        //    {
-        //        _currentApplicationState = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
+        public ApplicationState PreviousState { get; private set; }
 
         public CurrentStateChangedCallback CurrentStateChangedCallback { get; set; }
 
@@ -204,12 +185,12 @@ namespace Simulator.Application
         {
             if (!AnimationRunning)
             {
-                // Here, we may adjust the position of the World Window
                 return;
             }
 
             if (Engine.Scene == null)
             {
+                // Dette er en påmindelse om at man skal huske at give enginen en scene før man starter enginen
                 throw new InvalidOperationException("Scene Required when refreshing view for a running animation");
             }
 
@@ -305,6 +286,8 @@ namespace Simulator.Application
             {
                 Engine.PreviousScene = Engine.Scene.Name;
             }
+
+            PreviousState = _stateMachine.CurrentState;
 
             _stateMachine.SwitchState(name);
 

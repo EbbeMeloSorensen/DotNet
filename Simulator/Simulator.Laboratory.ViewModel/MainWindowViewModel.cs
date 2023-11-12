@@ -471,6 +471,12 @@ namespace Simulator.Laboratory.ViewModel
             }
 
             _sceneViewManager.ActiveScene = scene;
+
+            GeometryEditorViewModel.InitializeWorldWindow(
+                scene.InitialWorldWindowFocus(),
+                scene.InitialWorldWindowSize(),
+                false);
+
             RefreshButtons();
             Outcome = null;
         }
