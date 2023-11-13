@@ -329,13 +329,11 @@ namespace Game.Zelda.ViewModel
                 {
                     switch (bs.Body)
                     {
-                        case Bodies.Zelda rocket:
+                        case Bodies.Zelda zelda:
                             {
-                                return new ZeldaViewModel
-                                {
-                                    Width = 2 * rocket.Radius,
-                                    Height = 2 * rocket.Radius,
-                                };
+                                return new ZeldaViewModel(
+                                    2 * zelda.Radius,
+                                    2 * zelda.Radius);
                             }
                     }
 
@@ -343,22 +341,6 @@ namespace Game.Zelda.ViewModel
                 },
                 (shapeViewModel, bs) =>
                 {
-                    switch (bs.Body)
-                    {
-                        case Bodies.Zelda _:
-                            {
-                                if (shapeViewModel is ZeldaViewModel rocketViewModel)
-                                {
-                                    var bsc = bs as BodyStateClassic;
-                                    var orientation = bsc == null ? 0 : bsc.Orientation;
-
-                                    rocketViewModel.Orientation = orientation;
-                                }
-
-                                break;
-                            }
-                    }
-
                     shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
                 });
         }

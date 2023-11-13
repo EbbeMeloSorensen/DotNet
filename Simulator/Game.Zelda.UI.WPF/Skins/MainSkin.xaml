@@ -28,18 +28,18 @@
                         RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <!--<Image Source="..\Images\Rocket.png" 
+            <Image Source="..\Images\Zelda.png" 
                    Width="{Binding Width}" 
                    Height="{Binding Height}">
                 <Image.RenderTransform>
                     <TransformGroup>
-                        <MatrixTransform Matrix="{Binding RotationMatrix}"/>
+                        <MatrixTransform Matrix="{Binding LocalTransformationMatrix}"/>
                         <MatrixTransform Matrix="{Binding 
                             Path=DataContext.TransformationMatrix, 
                             RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                     </TransformGroup>
                 </Image.RenderTransform>
-            </Image>-->
+            </Image>
         </Canvas>
     </DataTemplate>
 
