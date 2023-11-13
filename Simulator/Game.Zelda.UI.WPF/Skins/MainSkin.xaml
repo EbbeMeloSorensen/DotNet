@@ -19,7 +19,7 @@
         </Rectangle>
     </DataTemplate>
 
-    <DataTemplate x:Key="Rocket">
+    <DataTemplate x:Key="Zelda">
         <Canvas>
             <Ellipse Fill="Black" Width="{Binding Width}" Height="{Binding Height}">
                 <Ellipse.RenderTransform>

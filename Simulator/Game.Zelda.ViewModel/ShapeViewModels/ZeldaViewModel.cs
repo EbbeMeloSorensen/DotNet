@@ -2,7 +2,7 @@
 
 namespace Game.Zelda.ViewModel.ShapeViewModels
 {
-    public class RocketViewModel : RotatableEllipseViewModel
+    public class ZeldaViewModel : RotatableEllipseViewModel
     {
         private static readonly System.Windows.Media.Matrix _correctionMatrix;
 
@@ -21,7 +21,7 @@ namespace Game.Zelda.ViewModel.ShapeViewModels
 
         private System.Windows.Media.Matrix CorrectionMatrix => _correctionMatrix;
 
-        static RocketViewModel()
+        static ZeldaViewModel()
         {
             _correctionMatrix = new System.Windows.Media.Matrix(1.8, 0, 0, 1.8, 0.0, -0.03);
         }

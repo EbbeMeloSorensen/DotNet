@@ -2,9 +2,9 @@
 
 namespace Game.Zelda.ViewModel.Bodies
 {
-    public class Rocket : CircularBody
+    public class Zelda : CircularBody
     {
-        public Rocket(
+        public Zelda(
             int id,
             double radius,
             double mass,

@@ -16,9 +16,9 @@ namespace Game.Zelda.UI.WPF
 
             switch (item)
             {
-                case RocketViewModel _:
+                case ZeldaViewModel _:
                     {
-                        return element.FindResource("Rocket") as DataTemplate;
+                        return element.FindResource("Zelda") as DataTemplate;
                     }
                 case RectangleViewModel _:
                     {

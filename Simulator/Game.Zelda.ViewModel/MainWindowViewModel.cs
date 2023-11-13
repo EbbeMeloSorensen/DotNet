@@ -28,7 +28,6 @@ namespace Game.Zelda.ViewModel
 
         private ILogger _logger;
         private SceneViewManager _sceneViewManager;
-        private bool _rocketIgnited;
         private bool _geometryEditorVisible = true;
         private Vector2D _worldWindowTranslation;
         private Stopwatch _stopwatch;
@@ -128,15 +127,15 @@ namespace Game.Zelda.ViewModel
             {
                 var response = new PostPropagationResponse();
 
-                var rocket = propagatedState.TryGetBodyState(1) as BodyStateClassic;
+                var zelda = propagatedState.TryGetBodyState(1) as BodyStateClassic;
 
-                if (rocket == null) return response;
+                if (zelda == null) return response;
 
                 if (!boundaryCollisionReports.Any()) return response;
 
-                // Check if the rocket collided with anything
+                // Check if Zelda collided with anything
                 var boundaryCollisionReport = boundaryCollisionReports
-                    .FirstOrDefault(bcr => bcr.BodyState.Body is Bodies.Rocket);
+                    .FirstOrDefault(bcr => bcr.BodyState.Body is Bodies.Zelda);
 
                 if (boundaryCollisionReport != null)
                 {
@@ -330,9 +329,9 @@ namespace Game.Zelda.ViewModel
                 {
                     switch (bs.Body)
                     {
-                        case Bodies.Rocket rocket:
+                        case Bodies.Zelda rocket:
                             {
-                                return new RocketViewModel
+                                return new ZeldaViewModel
                                 {
                                     Width = 2 * rocket.Radius,
                                     Height = 2 * rocket.Radius,
@@ -346,15 +345,14 @@ namespace Game.Zelda.ViewModel
                 {
                     switch (bs.Body)
                     {
-                        case Bodies.Rocket _:
+                        case Bodies.Zelda _:
                             {
-                                if (shapeViewModel is RocketViewModel rocketViewModel)
+                                if (shapeViewModel is ZeldaViewModel rocketViewModel)
                                 {
                                     var bsc = bs as BodyStateClassic;
                                     var orientation = bsc == null ? 0 : bsc.Orientation;
 
                                     rocketViewModel.Orientation = orientation;
-                                    rocketViewModel.Ignited = _rocketIgnited;
                                 }
 
                                 break;
@@ -418,7 +416,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.5, 1, true), new Vector2D(5, 3.75)));
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(5, 3.75)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -478,7 +476,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.5, 1, true), new Vector2D(1, 15)));
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -569,7 +567,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.5, 1, true), new Vector2D(1, 15)));
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -621,7 +619,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 2", 
                 new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)
@@ -654,7 +652,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Rocket(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
+            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 2", 
                 new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)

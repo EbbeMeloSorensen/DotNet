@@ -6,7 +6,7 @@
 
     <local:CustomizedShapeTemplateSelector x:Key="ShapeTemplateSelector"/>
 
-    <DataTemplate x:Key="Rocket">
+    <DataTemplate x:Key="Zelda">
         <Canvas>
             <Ellipse Fill="Black" Width="{Binding Width}" Height="{Binding Height}">
                 <Ellipse.RenderTransform>
