@@ -24,6 +24,7 @@ namespace Game.Zelda.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private static int _nextWallId = 100000;
+        private static bool _boundariesVisible = false; // Set to true to inspect boundaries
 
         private ILogger _logger;
         private SceneViewManager _sceneViewManager;
@@ -109,7 +110,7 @@ namespace Game.Zelda.ViewModel
 
                 if (newMovementDirection.Length > 0.01)
                 {
-                    var speed = 2.5;
+                    var speed = 3.0;
                     newArtificialVelocity = speed * newMovementDirection.Normalize();
                 }
 
@@ -437,25 +438,23 @@ namespace Game.Zelda.ViewModel
                 InteractionCallBack = interactionCallBack
             };
 
-            var boundariesVisible = true;
-
             scene.InitializationCallback = (state, message) =>
             {
                 if (message == "Scene 1b")
                 {
-                    state.BodyStates.First().Position = new Vector2D(wallWidth / 2 + doorWidth / 2, 0.5);
+                    state.BodyStates.First().Position = new Vector2D(wallWidth / 2 + doorWidth / 2, 0.01);
                 }
             };
 
-            scene.AddBoundary(new RightFacingHalfPlane(x0 + wallWidth / 2) { Visible = boundariesVisible });
-            scene.AddBoundary(new LeftFacingHalfPlane(x1 - wallWidth / 2) { Visible = boundariesVisible });
-            scene.AddBoundary(new UpFacingHalfPlane(y1 - wallWidth / 2) { Visible = boundariesVisible });
+            scene.AddBoundary(new RightFacingHalfPlane(x0 + wallWidth / 2) { Visible = _boundariesVisible });
+            scene.AddBoundary(new LeftFacingHalfPlane(x1 - wallWidth / 2) { Visible = _boundariesVisible });
+            scene.AddBoundary(new UpFacingHalfPlane(y1 - wallWidth / 2) { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(wallWidth / 2 + doorWidth, -wallWidth / 2), 
-                new Vector2D(wallWidth / 2 + doorWidth, wallWidth / 2)) { Visible = boundariesVisible });
+                new Vector2D(wallWidth / 2 + doorWidth, wallWidth / 2)) { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(wallWidth / 2 + doorWidth, wallWidth / 2), 
-                new Vector2D(x1 - wallWidth / 2, wallWidth / 2)) { Visible = boundariesVisible });
+                new Vector2D(x1 - wallWidth / 2, wallWidth / 2)) { Visible = _boundariesVisible });
 
             AddWall(scene, x0 + wallWidth / 2 + doorWidth, x1 + wallWidth / 2, y0 - wallWidth / 2, y0 + wallWidth / 2, false, false, false, false); // Øverste mur
             AddWall(scene, x0 - wallWidth / 2, x1 + wallWidth / 2, y1 - wallWidth / 2, y1 + wallWidth / 2, false, false, false, false); // Nederste mur
@@ -466,7 +465,9 @@ namespace Game.Zelda.ViewModel
             AddWall(scene, 8, 8 + wallWidth, 4.8, y1 - wallWidth / 2, true, true, true, false); // Ekstra mur
 
             // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(wallWidth / 2, -0.5), new Vector2D(wallWidth / 2 + doorWidth, -0.5), "Level 1b") { Visible = boundariesVisible });
+            scene.AddBoundary(new LineSegment(
+                new Vector2D(wallWidth / 2, -0.5), 
+                new Vector2D(wallWidth / 2 + doorWidth, -0.5), "Level 1b") { Visible = _boundariesVisible });
 
             return scene;
         }
@@ -497,48 +498,46 @@ namespace Game.Zelda.ViewModel
                 InteractionCallBack = interactionCallBack
             };
 
-            var boundariesVisible = true;
-
             scene.InitializationCallback = (state, message) =>
             {
                 switch (message)
                 {
                     case "Scene 1a":
                     {
-                        state.BodyStates.First().Position = new Vector2D(wallWidth / 2 + doorWidth / 2, -0.5);
+                        state.BodyStates.First().Position = new Vector2D(wallWidth / 2 + doorWidth / 2, -0.01);
                         break;
                     }
                     case "Scene 1c":
                     {
-                        state.BodyStates.First().Position = new Vector2D(0.5, -2);
+                        state.BodyStates.First().Position = new Vector2D(0.01, -2);
                         break;
                     }
                 }
             };
 
-            scene.AddBoundary(new LeftFacingHalfPlane(x1 - wallWidth / 2) { Visible = boundariesVisible });
-            scene.AddBoundary(new DownFacingHalfPlane(y0 + wallWidth / 2) { Visible = boundariesVisible });
+            scene.AddBoundary(new LeftFacingHalfPlane(x1 - wallWidth / 2) { Visible = _boundariesVisible });
+            scene.AddBoundary(new DownFacingHalfPlane(y0 + wallWidth / 2) { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(wallWidth / 2 + doorWidth, -wallWidth / 2), 
-                new Vector2D(wallWidth / 2 + doorWidth, wallWidth / 2)) { Visible = boundariesVisible });
+                new Vector2D(wallWidth / 2 + doorWidth, wallWidth / 2)) { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(wallWidth / 2 + doorWidth, -wallWidth / 2), 
-                new Vector2D(x1 + wallWidth / 2, -wallWidth / 2)) { Visible = boundariesVisible });
+                new Vector2D(x1 + wallWidth / 2, -wallWidth / 2)) { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(wallWidth / 2, y0 + wallWidth / 2), 
-                new Vector2D(wallWidth / 2, -4 - wallWidth / 2)) { Visible = boundariesVisible });
+                new Vector2D(wallWidth / 2, -4 - wallWidth / 2)) { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(wallWidth / 2, -4 + wallWidth / 2), 
-                new Vector2D(wallWidth / 2, -2 - doorWidth / 2)) { Visible = boundariesVisible });
+                new Vector2D(wallWidth / 2, -2 - doorWidth / 2)) { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(wallWidth / 2, -2 + doorWidth / 2), 
-                new Vector2D(wallWidth / 2, y1 + wallWidth / 2)) { Visible = boundariesVisible });
+                new Vector2D(wallWidth / 2, y1 + wallWidth / 2)) { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(-wallWidth / 2, -2 - doorWidth / 2), 
-                new Vector2D(wallWidth / 2, -2 - doorWidth / 2)) { Visible = boundariesVisible });
+                new Vector2D(wallWidth / 2, -2 - doorWidth / 2)) { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(-wallWidth / 2, -2 + doorWidth / 2), 
-                new Vector2D(wallWidth / 2, -2 + doorWidth / 2)) { Visible = boundariesVisible });
+                new Vector2D(wallWidth / 2, -2 + doorWidth / 2)) { Visible = _boundariesVisible });
 
 
             AddWall(scene, x0 - wallWidth / 2, x1 + wallWidth / 2, y0 - wallWidth / 2, y0 + wallWidth / 2, false, false, false, false); // Øverste mur
@@ -555,11 +554,11 @@ namespace Game.Zelda.ViewModel
             scene.AddBoundary(new LineSegment(
                 new Vector2D(0, 0.5), 
                 new Vector2D(doorWidth, 0.5), 
-                "Level 1") { Visible = boundariesVisible });
+                "Level 1") { Visible = _boundariesVisible });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(-0.5, -2 - doorWidth / 2), 
                 new Vector2D(-0.5, -2 + doorWidth / 2), 
-                "Level 1c") { Visible = boundariesVisible });
+                "Level 1c") { Visible = _boundariesVisible });
 
             return scene;
         }
@@ -590,42 +589,28 @@ namespace Game.Zelda.ViewModel
                 InteractionCallBack = interactionCallBack
             };
 
-            var boundariesVisible = true;
-
             scene.InitializationCallback = (state, message) =>
             {
                 if (message == "Scene 1b")
                 {
-                    state.BodyStates.First().Position = new Vector2D(-0.5, -2);
+                    state.BodyStates.First().Position = new Vector2D(-0.01, -2);
                 }
             };
 
-            scene.AddBoundary(new RightFacingHalfPlane(x0 + wallWidth / 2) { Visible = boundariesVisible });
-            scene.AddBoundary(new UpFacingHalfPlane(y1 - wallWidth / 2) { Visible = boundariesVisible });
-            scene.AddBoundary(new DownFacingHalfPlane(y0 + wallWidth / 2) { Visible = boundariesVisible });
-            //scene.AddBoundary(new LineSegment(
-            //    new Vector2D(wallWidth / 2 + doorWidth, -wallWidth / 2),
-            //    new Vector2D(wallWidth / 2 + doorWidth, wallWidth / 2))
-            //{ Visible = boundariesVisible });
-            //scene.AddBoundary(new LineSegment(
-            //    new Vector2D(wallWidth / 2 + doorWidth, -wallWidth / 2),
-            //    new Vector2D(x1 + wallWidth / 2, -wallWidth / 2))
-            //{ Visible = boundariesVisible });
+            scene.AddBoundary(new RightFacingHalfPlane(x0 + wallWidth / 2) { Visible = _boundariesVisible });
+            scene.AddBoundary(new UpFacingHalfPlane(y1 - wallWidth / 2) { Visible = _boundariesVisible });
+            scene.AddBoundary(new DownFacingHalfPlane(y0 + wallWidth / 2) { Visible = _boundariesVisible });
 
             AddWall(scene, x0 - wallWidth / 2, x1 + wallWidth / 2, y0 - wallWidth / 2, y0 + wallWidth / 2, false, false, false, false); // Øverste mur
             AddWall(scene, x0 - wallWidth / 2, x1 + wallWidth / 2, y1 - wallWidth / 2, y1 + wallWidth / 2, false, false, false, false); // Nederste mur
             AddWall(scene, x0 - wallWidth / 2, x0 + wallWidth / 2, y0 + wallWidth / 2, y1 - wallWidth / 2, false, false, false, false); // Venstre mur
             AddWall(scene, x1 - wallWidth / 2, x1 + wallWidth / 2, y0 + wallWidth / 2, -2 - doorWidth / 2, true, false, false, true); // Højre mur, øverst
-            //AddWall(scene, x1 - wallWidth / 2, x1 + wallWidth / 2, y0 + wallWidth / 2, y1 - wallWidth / 2, false, false, false, false); // Højre mur
-
-            //AddWall(scene, x0 + wallWidth / 2, x0 + 7, -4 - wallWidth / 2, -4 + wallWidth / 2, false, true, true, true); // Ekstra mur
-            //AddWall(scene, x0 + wallWidth / 2 + 9, x1 - wallWidth / 2, -4 - wallWidth / 2, -4 + wallWidth / 2, true, false, true, true); // Ekstra mur
+            AddWall(scene, x1 - wallWidth / 2, x1 + wallWidth / 2, -2 + doorWidth / 2, y1 - wallWidth / 2, true, false, true, false); // Højre mur, nederst
 
             // Add exits
-            //scene.AddBoundary(new LineSegment(new Vector2D(3, -0.05), new Vector2D(4, -0.05), "Level 1 Cleared") { Visible = true });
             scene.AddBoundary(new LineSegment(
                 new Vector2D(0.5, -2 - doorWidth / 2), 
-                new Vector2D(0.5, -2 + doorWidth / 2), "Level 1b") { Visible = boundariesVisible });
+                new Vector2D(0.5, -2 + doorWidth / 2), "Level 1b") { Visible = _boundariesVisible });
 
             return scene;
         }
