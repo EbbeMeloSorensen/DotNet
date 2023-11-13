@@ -74,8 +74,12 @@ In progress:
 * Man skal kunne sætte World Window under runtime og ikke bare under opstart
 
 Todo:
+* Hvis man for coordinateViewModel er i det mode, hvor World Window følger en dynamisk variabel, så skal man ikke tegne
+  linien ved hvert refresh - den skal tegnes "statisk" på lige for med koordinatsystemets akser.
+* Det kunne være nice, hvis man ikke skulle "lede" efter forekomster på tidsaksen. Der kunne være et mode, hvor den hoppede til højre eller venstre 
+  og landede der, hvor der var noget
 * Fix det med at man ikke kan zoome med ctrl+leftclick
-* Når cursoren forlader et område, skal der ikke længere stå noget
+* Når cursoren forlader et område, skal der ikke længere vises nogen koordinater
 * Der skal være et mode, hvor man kontinuert opdaterer zoom, som du har kunnet før og formentlig stadig kan med nogle kontroller
 * Leg med tegning af parameterfremstillinger
 * Leg med tegning af splines af forskellig art
