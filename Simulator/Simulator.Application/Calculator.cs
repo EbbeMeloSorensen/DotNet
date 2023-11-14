@@ -547,7 +547,6 @@ namespace Simulator.Application
                 var bsBefore = kvp.Value;
                 var bsAfter = kvp.Key;
 
-                //var velocityBefore = bsBefore.Velocity; // Brug IKKE den her - reelt er bodyen propgageret frem under anvendelse af et gennemsnit af hastighed før og efter
                 var effectiveVelocity = (bsAfter.Position - bsBefore.Position) / timeLeftInCurrentIncrement;
 
                 foreach (var boundary in boundaries)
@@ -558,7 +557,6 @@ namespace Simulator.Application
                     }
 
                     var buffer = 0.000001; // Backtrack an additional micro meter to ensure we don't have intersection due to rounding errors
-                    //var buffer = 0.0;
                     Vector2D effectiveSurfaceNormalForCurrentBoundary = null;
 
                     if (boundary is ILineSegment)

@@ -285,9 +285,13 @@ Done:
   en flamme fra raketmotoren, når man trykker pil opad.
 * Lav det sådan at placering af body i en scene afhænger af, hvor man kommer fra. Du gør allerede noget af sin art i Maze-scenerne, hvor du bruger 
   Initialize callback funktionen
+* Lav det sådan at den "slider" fra en scene til en anden. Brug det samme som i time series kontrollen, hvor den fokuserer på et bestemt punkt
 
 Todo:
-* Lav det sådan at den "slider" fra en scene til en anden. Brug det samme som i time series kontrollen, hvor den fokuserer på et bestemt punkt
+* Der skal ikke bruges BodyStateClassic til Zelda
+* Lav noget general purpose funktionalitet til at checke for om en cirkel intersecter et liniestykke.
+  Husk du har en test for, om en circular body intersecter et line Segment
+
 * Gør det smidigt at sikre, at der er overensstemmelse mellem outcomes fra en scene og den state maskine, der gør sig gældende. 
   Måske skal du ikke bruge strings til navigation.
 * Gør det muligt at skrue hastigheden op, så man kan teste uden at vente en evighed

@@ -9,6 +9,7 @@ using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Game.Zelda.ViewModel.BodyStates;
 using Simulator.Domain;
 using Simulator.Domain.BodyStates;
 using Simulator.Domain.Boundaries;
@@ -80,7 +81,7 @@ namespace Game.Zelda.ViewModel
             {
                 spaceKeyWasPressed = keyboardEvents.SpaceDown && keyboardState.SpaceDown;
 
-                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateClassic;
+                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateZelda;
                 var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
 
                 var newMovementDirection = new Vector2D(0, 0);
@@ -127,7 +128,7 @@ namespace Game.Zelda.ViewModel
             {
                 var response = new PostPropagationResponse();
 
-                var zelda = propagatedState.TryGetBodyState(1) as BodyStateClassic;
+                var zelda = propagatedState.TryGetBodyState(1) as BodyStateZelda;
 
                 if (zelda == null) return response;
 
@@ -398,7 +399,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(5, 3.75)));
+            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(5, 3.75)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -458,7 +459,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
+            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -549,7 +550,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
+            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -601,7 +602,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
+            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 2", 
                 new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)
@@ -634,7 +635,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateClassic(new Bodies.Zelda(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
+            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 2", 
                 new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)

@@ -55,7 +55,7 @@ namespace Craft.Math
             return minSqrDist < double.Epsilon ? 0.0 : System.Math.Sqrt(minSqrDist);
         }
 
-        // Determines whether 2 lines intersect. 
+        // Determines whether 2 line segments intersect. 
         public static bool Intersects(
             this LineSegment2D l1, 
             LineSegment2D l2)
@@ -127,6 +127,7 @@ namespace Craft.Math
             return true;
         }
 
+        // Helper for the method IdentifyVisibleRegion in Craft.Algorithms
         // On line: 0
         // Left: 1
         // Right: 2
@@ -154,6 +155,8 @@ namespace Craft.Math
         }
 
         // From http://csharphelper.com/blog/2016/09/find-the-shortest-distance-between-a-point-and-a-line-segment-in-c/
+
+        // Calculates the distance between a line segment and a point
         public static double DistanceTo(
             this LineSegment2D l,
             Point2D p)
@@ -237,7 +240,7 @@ namespace Craft.Math
             // Calculate the t that minimizes the distance
             var t = ((p.X - l.Point1.X) * dx + (p.Y - l.Point1.Y) * dy) / (dx * dx + dy * dy);
 
-            // See if this represents one of the segment's end points or a point in the middle
+            // See if this represents one of the segment's end points or a point in the interior part of the line segment
             if (t < 0)
             {
                 dx = l.Point1.X - p.X;
@@ -257,6 +260,7 @@ namespace Craft.Math
             return dx * dx + dy * dy;
         }
 
+        // Helper for determining whether 2 line segments intersect. 
         private static int Orientation(
             Point2D p,
             Point2D q,
@@ -273,6 +277,7 @@ namespace Craft.Math
             return (val > 0) ? 1 : 2; // clock or counterclock wise 
         }
 
+        // Helper for determining whether 2 line segments intersect. 
         private static bool OnSegment(
             Point2D p,
             Point2D q,
