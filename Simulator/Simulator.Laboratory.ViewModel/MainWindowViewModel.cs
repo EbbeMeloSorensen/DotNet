@@ -4668,7 +4668,7 @@ namespace Simulator.Laboratory.ViewModel
                 WayPoints = new List<Vector2D>
                 {
                     new Vector2D(-2, -1),
-                    new Vector2D(2, -1),
+                    new Vector2D(2, -1), // Hvis du f.eks. ændrer denne til 1.5, så du får et skråt segment, så crasher det
                     new Vector2D(2, 0),
                     new Vector2D(-1, 0),
                     new Vector2D(-1, 1 * 1),
