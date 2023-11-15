@@ -45,9 +45,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "..\Craft\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{DC78580E-8456-40A5-8995-8F9D434D8D44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Zelda.ViewModel", "Game.Zelda.ViewModel\Game.Zelda.ViewModel.csproj", "{A2E1BBAB-0259-4173-9C66-80A46B8B65B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game.Zelda.ViewModel", "Game.Zelda.ViewModel\Game.Zelda.ViewModel.csproj", "{A2E1BBAB-0259-4173-9C66-80A46B8B65B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Zelda.UI.WPF", "Game.Zelda.UI.WPF\Game.Zelda.UI.WPF.csproj", "{086BC40C-6278-43D3-B5DF-2505C72F2499}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game.Zelda.UI.WPF", "Game.Zelda.UI.WPF\Game.Zelda.UI.WPF.csproj", "{086BC40C-6278-43D3-B5DF-2505C72F2499}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Domain.UnitTest", "Simulator.Domain.UnitTest\Simulator.Domain.UnitTest.csproj", "{4161A9FB-DB96-4CD0-BFE4-118427DBF3FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,6 +137,10 @@ Global
 		{086BC40C-6278-43D3-B5DF-2505C72F2499}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{086BC40C-6278-43D3-B5DF-2505C72F2499}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{086BC40C-6278-43D3-B5DF-2505C72F2499}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4161A9FB-DB96-4CD0-BFE4-118427DBF3FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4161A9FB-DB96-4CD0-BFE4-118427DBF3FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4161A9FB-DB96-4CD0-BFE4-118427DBF3FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4161A9FB-DB96-4CD0-BFE4-118427DBF3FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
