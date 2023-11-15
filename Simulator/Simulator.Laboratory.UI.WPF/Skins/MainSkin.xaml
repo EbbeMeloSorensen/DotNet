@@ -29,7 +29,7 @@
 
     <DataTemplate x:Key="RotatableRectangle">
         <Canvas>
-            <Rectangle Fill="SandyBrown" Width="{Binding Width}" Height="{Binding Height}">
+            <Rectangle Fill="DarkSlateGray" Width="{Binding Width}" Height="{Binding Height}">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <MatrixTransform Matrix="{Binding RotationMatrix}"/>

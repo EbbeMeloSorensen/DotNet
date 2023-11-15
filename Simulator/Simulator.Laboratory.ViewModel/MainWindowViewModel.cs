@@ -16,6 +16,7 @@ using Simulator.Domain.BodyStates;
 using Simulator.Domain.Props;
 using Simulator.Laboratory.ViewModel.Bodies;
 using Simulator.Laboratory.ViewModel.ShapeViewModels;
+using System.Windows;
 
 namespace Simulator.Laboratory.ViewModel
 {
@@ -4668,11 +4669,11 @@ namespace Simulator.Laboratory.ViewModel
                 WayPoints = new List<Vector2D>
                 {
                     new Vector2D(-2, -1),
-                    new Vector2D(2, -1), // Hvis du f.eks. ændrer denne til 1.5, så du får et skråt segment, så crasher det
+                    new Vector2D(1.5, -1),
                     new Vector2D(2, 0),
                     new Vector2D(-1, 0),
-                    new Vector2D(-1, 1 * 1),
-                    new Vector2D(5, 1 * 1)
+                    new Vector2D(-1.5, 1),
+                    new Vector2D(5, 1)
                 }
             };
 
@@ -4959,7 +4960,13 @@ namespace Simulator.Laboratory.ViewModel
             }
             else
             {
-                throw new NotImplementedException();
+                var v = end - start;
+                var w = v.Length;
+                var h = width;
+                var center = (start + end) / 2;
+                var orientation = -v.AsPolarVector().Angle;
+
+                scene.Props.Add(new PropRotatableRectangle(propId, w, h, center, orientation));
             }
         }
 

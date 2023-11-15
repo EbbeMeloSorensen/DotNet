@@ -248,6 +248,18 @@ namespace Simulator.ViewModel
 
                         break;
                     }
+                    case PropRotatableRectangle propRotatableRectangle:
+                        {
+                            _geometryEditorViewModel.AddShape(p.Id, new RotatableRectangleViewModel
+                            {
+                                Width = propRotatableRectangle.Width,
+                                Height = propRotatableRectangle.Height,
+                                Point = propRotatableRectangle.Position.AsPointD(),
+                                Orientation = propRotatableRectangle.Orientation
+                            });
+
+                            break;
+                        }
                     case PropCircle propCircle:
                     {
                         _geometryEditorViewModel.AddShape(p.Id, new EllipseViewModel
