@@ -31,8 +31,8 @@ namespace Simulator.Domain.Props
 
             // 1: translater punktet
             var pt1 = point - Position;
-            var cosAngle = Math.Cos(Orientation);
-            var sinAngle = Math.Sin(Orientation);
+            var cosAngle = Math.Cos(-Orientation);
+            var sinAngle = Math.Sin(-Orientation);
 
             var pt2 = new Vector2D(
                 pt1.X * cosAngle + pt1.Y * sinAngle,
