@@ -47,10 +47,10 @@ namespace Simulator.Domain.Props
             var x = point.X;
             var y = point.Y;
 
-            var x0 = Position.X - Width / 2;
-            var x1 = Position.X + Width / 2;
-            var y0 = Position.Y - Height / 2;
-            var y1 = Position.Y + Height / 2;
+            var x1 = Width / 2;
+            var x0 = -x1;
+            var y1 = Height / 2;
+            var y0 = -y1;
 
             if (x < x0)
             {
