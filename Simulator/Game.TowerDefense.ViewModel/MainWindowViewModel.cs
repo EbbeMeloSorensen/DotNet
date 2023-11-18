@@ -255,12 +255,22 @@ namespace Game.TowerDefense.ViewModel
             };
 
             // Aktiver nogle, så du ikke hele tiden skal gennemføre level 1
-            //UnlockLevels(level1Cleared);
+            UnlockLevels(level1Cleared);
             //UnlockLevels(level2Cleared);
 
             GeometryEditorViewModel = new GeometryEditorViewModel()
             {
+                AspectRatioLocked = true,
+                XAxisLocked = true,
+                YAxisLocked = true,
                 UpdateModelCallBack = UpdateModel
+            };
+
+            GeometryEditorViewModel.MouseClickOccured += (s, e) =>
+            {
+                Application.HandleMouseClickEvent(new Point2D(
+                    e.CursorWorldPosition.X,
+                    e.CursorWorldPosition.Y));
             };
 
             _sceneViewManager = new SceneViewManager(
@@ -331,7 +341,7 @@ namespace Game.TowerDefense.ViewModel
             const double projectileSpeed = 10.0;
             const int projectileLifespan = 50;
             const double enemyRadius = 0.15;
-            const int enemySpacing = 200;
+            const int enemySpacing = 1000;
             const int enemyLife = 10;
             const double enemySpeed = 0.5;
 
@@ -339,12 +349,12 @@ namespace Game.TowerDefense.ViewModel
             {
                 WayPoints = new List<Vector2D>
                 {
-                    new Vector2D(-2, -1),
-                    new Vector2D(1.5, -1),
-                    new Vector2D(2, 0),
-                    new Vector2D(-1, 0),
-                    new Vector2D(-1.5, 1),
-                    new Vector2D(5, 1)
+                    new Vector2D(-1, 2),
+                    new Vector2D(12, 2),
+                    new Vector2D(14, 4),
+                    new Vector2D(4, 4),
+                    new Vector2D(2, 6),
+                    new Vector2D(17, 6)
                 }
             };
 
@@ -369,7 +379,7 @@ namespace Game.TowerDefense.ViewModel
             var scene = new Scene("Scene 1",
                 new Point2D(x0, y0),
                 new Point2D(x1, y1),
-                initialState, 0, 0, 0, 1, false)
+                initialState, 0, 0, 0, 1, true)
             {
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack
             };
@@ -429,7 +439,7 @@ namespace Game.TowerDefense.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * enemySpacing,
-                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-3, -1))
+                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-1, 2))
                     {
                         Path = path,
                         Speed = enemySpeed,
@@ -495,7 +505,7 @@ namespace Game.TowerDefense.ViewModel
                         {
                             // All enemies are dead, so player wins
                             response.IndexOfLastState = propagatedState.Index;
-                            response.Outcome = "You Win";
+                            response.Outcome = "Level 1 Cleared";
                         }
                     }
                 });
@@ -613,7 +623,7 @@ namespace Game.TowerDefense.ViewModel
             const double projectileSpeed = 10.0;
             const int projectileLifespan = 50;
             const double enemyRadius = 0.15;
-            const int enemySpacing = 200;
+            const int enemySpacing = 1000;
             const int enemyLife = 10;
             const double enemySpeed = 0.5;
 
@@ -621,12 +631,19 @@ namespace Game.TowerDefense.ViewModel
             {
                 WayPoints = new List<Vector2D>
                 {
-                    new Vector2D(-2, -1),
-                    new Vector2D(1.5, -1),
-                    new Vector2D(2, 0),
-                    new Vector2D(-1, 0),
-                    new Vector2D(-1.5, 1),
-                    new Vector2D(5, 1)
+                    new Vector2D(-1, 3),
+                    new Vector2D(8, 3),
+                    new Vector2D(8, 1),
+                    new Vector2D(5, 1),
+                    new Vector2D(5, 7),
+                    new Vector2D(2, 7),
+                    new Vector2D(2, 5),
+                    new Vector2D(11, 5),
+                    new Vector2D(11, 2),
+                    new Vector2D(14, 2),
+                    new Vector2D(14, 7),
+                    new Vector2D(8, 7),
+                    new Vector2D(8, 9)
                 }
             };
 
@@ -651,7 +668,7 @@ namespace Game.TowerDefense.ViewModel
             var scene = new Scene("Scene 2",
                 new Point2D(x0, y0),
                 new Point2D(x1, y1),
-                initialState, 0, 0, 0, 1, false)
+                initialState, 0, 0, 0, 1, true)
             {
                 CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack
             };
@@ -711,7 +728,7 @@ namespace Game.TowerDefense.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * enemySpacing,
-                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-3, -1))
+                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-1, 3))
                     {
                         Path = path,
                         Speed = enemySpeed,
