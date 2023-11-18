@@ -11,12 +11,7 @@ namespace Game.TowerDefense.ViewModel.ShapeViewModels
 
         static CannonViewModel()
         {
-            var scaling = 1.1;
-            var rotation = Math.PI / 2;
-            var cosAngle = Math.Cos(rotation);
-            var sinAngle = Math.Sin(rotation);
-
-            _correctionMatrix = new System.Windows.Media.Matrix(scaling, 0, 0, scaling, 0.2, 0);
+            _correctionMatrix = new System.Windows.Media.Matrix(1.1, 0, 0, 1.1, 0.2, 0);
         }
 
         protected override void UpdateRotationMatrix()
