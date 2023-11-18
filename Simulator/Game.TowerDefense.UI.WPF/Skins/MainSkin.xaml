@@ -66,13 +66,25 @@
 
     <DataTemplate x:Key="TaggedEllipse">
         <Canvas>
-            <Ellipse Fill="Purple" Width="{Binding Width}" Height="{Binding Height}">
+            <!--<Ellipse Fill="Purple" Width="{Binding Width}" Height="{Binding Height}">
                 <Ellipse.RenderTransform>
                     <MatrixTransform Matrix="{Binding 
                             Path=DataContext.TransformationMatrix, 
                             RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </Ellipse.RenderTransform>
-            </Ellipse>
+            </Ellipse>-->
+            <Image Source="..\Images\Enemy.png" 
+                   Width="{Binding Width}" 
+                   Height="{Binding Height}">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <MatrixTransform Matrix="{Binding RotationMatrix}"/>
+                        <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
             <TextBlock Foreground="Red" FontSize="0.08" Text="{Binding Tag}" TextAlignment="Center" 
                        Width="{Binding Width}" Height="{Binding Height}">
                 <TextBlock.RenderTransform>

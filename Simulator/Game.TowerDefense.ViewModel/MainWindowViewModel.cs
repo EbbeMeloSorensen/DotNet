@@ -39,7 +39,7 @@ namespace Game.TowerDefense.ViewModel
         const double _rangeOfCannons = 2.0;
         const double _projectileSpeed = 10.0;
         const int _projectileLifespan = 600;
-        const double _enemyRadius = 0.15;
+        const double _enemyRadius = 0.3;
         const int _enemySpacing = 1000;
         const int _enemyLife = 10;
         const double _enemySpeed = 0.5;
