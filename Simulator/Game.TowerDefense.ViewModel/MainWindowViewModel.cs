@@ -103,13 +103,26 @@ namespace Game.TowerDefense.ViewModel
 
                 switch (bs)
                 {
-                    case BodyStateEnemy enemy:
+                    case BodyStateEnemy bsEnemy:
                         {
+                            switch (bsEnemy.Body)
+                            {
+                                case Enemy enemy:
+                                {
+                                    return new EnemyViewModel
+                                    {
+                                        Width = 2 * circularBody.Radius,
+                                        Height = 2 * circularBody.Radius,
+                                        Tag = bsEnemy.Life.ToString()
+                                    };
+                                }
+                            }
+
                             return new TaggedEllipseViewModel
                             {
                                 Width = 2 * circularBody.Radius,
                                 Height = 2 * circularBody.Radius,
-                                Tag = enemy.Life.ToString()
+                                Tag = bsEnemy.Life.ToString()
                             };
                         }
                     case BodyStateCannon cannon:

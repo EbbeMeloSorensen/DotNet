@@ -9,7 +9,8 @@
 
   <ItemGroup>
     <None Remove="Images\Cannon.png" />
-    <None Remove="Images\Enemy.png" />
+    <None Remove="Images\Enemy1.png" />
+    <None Remove="Images\Enemy2.png" />
     <None Remove="Images\Projectile.png" />
   </ItemGroup>
 
@@ -25,8 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Enemy2.png" />
     <Resource Include="Images\Projectile.png" />
-    <Resource Include="Images\Enemy.png" />
+    <Resource Include="Images\Enemy1.png" />
     <Resource Include="Images\Cannon.png" />
   </ItemGroup>
 

@@ -73,7 +73,7 @@
                             RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </Ellipse.RenderTransform>
             </Ellipse>-->
-            <Image Source="..\Images\Enemy.png" 
+            <Image Source="..\Images\Enemy1.png" 
                    Width="{Binding Width}" 
                    Height="{Binding Height}">
                 <Image.RenderTransform>
