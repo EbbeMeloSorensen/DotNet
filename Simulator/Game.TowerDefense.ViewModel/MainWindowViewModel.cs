@@ -8,7 +8,6 @@ using Game.TowerDefense.ViewModel.BodyStates;
 using Game.TowerDefense.ViewModel.ShapeViewModels;
 using Simulator.Application;
 using Simulator.Domain;
-using Simulator.Domain.BodyStates;
 using Simulator.Domain.Boundaries;
 using Simulator.Domain.Props;
 using Simulator.ViewModel;

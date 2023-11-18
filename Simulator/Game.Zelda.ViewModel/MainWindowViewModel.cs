@@ -11,7 +11,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Game.Zelda.ViewModel.BodyStates;
 using Simulator.Domain;
-using Simulator.Domain.BodyStates;
 using Simulator.Domain.Boundaries;
 using Simulator.Domain.Props;
 using Simulator.Application;
