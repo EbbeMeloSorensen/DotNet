@@ -1,11 +1,8 @@
 ﻿using Craft.Logging;
 using Craft.Math;
-using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Game.TowerDefense.ViewModel.BodyStates;
-using Game.TowerDefense.ViewModel.ShapeViewModels;
 using Simulator.Application;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
@@ -18,6 +15,7 @@ using System.Linq;
 using System.Windows;
 using Application = Simulator.Application.Application;
 using ApplicationState = Craft.DataStructures.Graph.State;
+using BodyStateCannon = Game.TowerDefense.ViewModel.BodyStates.BodyStateCannon;
 
 namespace Game.TowerDefense.ViewModel
 {
@@ -78,76 +76,77 @@ namespace Game.TowerDefense.ViewModel
 
             InteractionCallBack interactionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                spaceKeyWasPressed = keyboardEvents.SpaceDown && keyboardState.SpaceDown;
-
-                var currentStateOfMainBody = currentState.BodyStates.First() as BodyStateZelda;
-                var currentArtificialVelocity = currentStateOfMainBody.ArtificialVelocity;
-
-                var newMovementDirection = new Vector2D(0, 0);
-
-                if (keyboardState.LeftArrowDown)
-                {
-                    newMovementDirection += new Vector2D(-1, 0);
-                }
-
-                if (keyboardState.RightArrowDown)
-                {
-                    newMovementDirection += new Vector2D(1, 0);
-                }
-
-                if (keyboardState.UpArrowDown)
-                {
-                    newMovementDirection += new Vector2D(0, -1);
-                }
-
-                if (keyboardState.DownArrowDown)
-                {
-                    newMovementDirection += new Vector2D(0, 1);
-                }
-
-                var newArtificialVelocity = new Vector2D(0, 0);
-
-                if (newMovementDirection.Length > 0.01)
-                {
-                    var speed = 3.0;
-                    newArtificialVelocity = speed * newMovementDirection.Normalize();
-                }
-
-                if ((newArtificialVelocity - currentArtificialVelocity).Length < 0.01 && !spaceKeyWasPressed)
-                {
-                    return false;
-                }
-
-                currentStateOfMainBody.ArtificialVelocity = newArtificialVelocity;
-
-                return true;
+                return false;
             };
 
             PostPropagationCallBack postPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
                 var response = new PostPropagationResponse();
 
-                var zelda = propagatedState.TryGetBodyState(1) as BodyStateZelda;
-
-                if (zelda == null) return response;
-
-                if (!boundaryCollisionReports.Any()) return response;
-
-                // Check if Zelda collided with anything
-                var boundaryCollisionReport = boundaryCollisionReports
-                    .FirstOrDefault(bcr => bcr.BodyState.Body is Bodies.Zelda);
-
-                if (boundaryCollisionReport != null)
-                {
-                    if (!string.IsNullOrEmpty(boundaryCollisionReport.Boundary.Tag))
-                    {
-                        response.Outcome = boundaryCollisionReport.Boundary.Tag;
-                        response.IndexOfLastState = propagatedState.Index + 1;
-                    }
-                }
-
                 return response;
             };
+
+            // Denne bruges indtil videre kun for Tower Defense scenen
+            ShapeSelectorCallback shapeSelectorCallback3 = (bs) =>
+            {
+                if (!(bs.Body is CircularBody))
+                {
+                    throw new InvalidOperationException();
+                }
+
+                var circularBody = bs.Body as CircularBody;
+
+                switch (bs)
+                {
+                    //case BodyStateEnemy enemy:
+                    //{
+                    //    return new TaggedEllipseViewModel
+                    //    {
+                    //        Width = 2 * circularBody.Radius,
+                    //        Height = 2 * circularBody.Radius,
+                    //        Tag = enemy.Life.ToString()
+                    //    };
+                    //}
+                    case BodyStateCannon cannon:
+                    {
+                        return new RotatableEllipseViewModel
+                        {
+                            Width = 2 * circularBody.Radius,
+                            Height = 2 * circularBody.Radius,
+                            Orientation = 0
+                        };
+                    }
+                    //case BodyStateProjectile:
+                    //{
+                    //    return new EllipseViewModel
+                    //    {
+                    //        Width = 2 * circularBody.Radius,
+                    //        Height = 2 * circularBody.Radius
+                    //    };
+                    //}
+                    default:
+                        throw new ArgumentException();
+                }
+            };
+
+            // Denne bruges indtil videre kun for Tower Defense scenen
+            //ShapeUpdateCallback shapeUpdateCallback3 = (shapeViewModel, bs) =>
+            //{
+            //    shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
+
+            //    if (shapeViewModel is TaggedEllipseViewModel taggedEllipseViewModel &&
+            //        bs is BodyStateEnemy enemy)
+            //    {
+            //        // Opdater position og life indikator for enemy
+            //        taggedEllipseViewModel.Tag = enemy.Life.ToString();
+            //    }
+
+            //    if (shapeViewModel is RotatableEllipseViewModel rotatableEllipseViewModel &&
+            //        bs is BodyStateCannon cannon)
+            //    {
+            //        rotatableEllipseViewModel.Orientation = cannon.Orientation;
+            //    }
+            //};
 
             var welcomeScreen = new ApplicationState("Welcome Screen");
             var unlockedLevelsScreen = new ApplicationState("Unlocked Levels Screen");
@@ -325,24 +324,8 @@ namespace Game.TowerDefense.ViewModel
             _sceneViewManager = new SceneViewManager(
                 Application,
                 GeometryEditorViewModel,
-                (bs) =>
-                {
-                    switch (bs.Body)
-                    {
-                        case Bodies.Zelda zelda:
-                            {
-                                return new ZeldaViewModel(
-                                    2 * zelda.Radius,
-                                    2 * zelda.Radius);
-                            }
-                    }
-
-                    throw new InvalidOperationException("Unknown Body Type - cannot select ShapeViewModel");
-                },
-                (shapeViewModel, bs) =>
-                {
-                    shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
-                });
+                null,  // Erstat med Shape selector callback
+                null); // Erstat med Shape update callback
         }
 
         private void UpdateModel()
@@ -398,7 +381,6 @@ namespace Game.TowerDefense.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(5, 3.75)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -461,7 +443,6 @@ namespace Game.TowerDefense.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -561,7 +542,6 @@ namespace Game.TowerDefense.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -614,7 +594,6 @@ namespace Game.TowerDefense.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 2",
                 new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)
@@ -647,7 +626,6 @@ namespace Game.TowerDefense.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.125, 1, true), new Vector2D(-1.5, -0.5)));
 
             var scene = new Scene("Scene 2",
                 new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)

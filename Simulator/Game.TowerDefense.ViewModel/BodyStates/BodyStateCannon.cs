@@ -1,38 +1,40 @@
-﻿using Craft.Math;
+﻿using System;
+using Craft.Math;
 using Simulator.Domain;
-using Simulator.Domain.BodyStates;
 using Simulator.Domain.BodyStates.Interfaces;
+using Simulator.Domain.BodyStates;
 
 namespace Game.TowerDefense.ViewModel.BodyStates
 {
-    public class BodyStateZelda : BodyState, IArtificial
+    public class BodyStateCannon : BodyState, IOrientation, ICoolDown
     {
-        public Vector2D ArtificialVelocity { get; set; }
+        public double Orientation { get; set; }
+
+        public int CoolDown { get; set; }
 
         public override Vector2D Velocity
         {
-            get => NaturalVelocity + ArtificialVelocity;
+            get => NaturalVelocity;
         }
 
-        protected BodyStateZelda(
+        protected BodyStateCannon(
             Body body) : base(body)
         {
-            ArtificialVelocity = _zeroVector;
         }
 
-        public BodyStateZelda(
+        public BodyStateCannon(
             Body body,
             Vector2D position) : base(body, position)
         {
-            ArtificialVelocity = _zeroVector;
         }
 
         public override BodyState Clone()
         {
-            return new BodyStateZelda(Body, Position)
+            return new BodyStateCannon(Body, Position)
             {
                 NaturalVelocity = NaturalVelocity,
-                ArtificialVelocity = ArtificialVelocity
+                Orientation = Orientation,
+                CoolDown = CoolDown
             };
         }
 
@@ -42,13 +44,14 @@ namespace Game.TowerDefense.ViewModel.BodyStates
         {
             var acceleration = force / Body.Mass;
             var nextNaturalVelocity = NaturalVelocity + time * acceleration;
-            var nextPosition = Position + time * ((NaturalVelocity + nextNaturalVelocity) / 2 + ArtificialVelocity);
+            var nextPosition = Position + time * NaturalVelocity;
 
-            return new BodyStateZelda(Body)
+            return new BodyStateCannon(Body)
             {
                 Position = nextPosition,
                 NaturalVelocity = nextNaturalVelocity,
-                ArtificialVelocity = ArtificialVelocity
+                Orientation = Orientation,
+                CoolDown = Math.Max(0, CoolDown - 1)
             };
         }
     }
