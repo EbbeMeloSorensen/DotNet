@@ -6,9 +6,7 @@ public class Projectile : CircularBody
 {
     public Projectile(
         int id,
-        double radius,
-        double mass,
-        bool affectedByGravity) : base(id, radius, mass, affectedByGravity)
+        double radius) : base(id, radius, 1, false)
     {
     }
 }

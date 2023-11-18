@@ -452,7 +452,7 @@ namespace Game.TowerDefense.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * _enemySpacing,
-                    BodyState = new BodyStateEnemy(new Enemy(i, _enemyRadius, 1, true), new Vector2D(-1, 2))
+                    BodyState = new BodyStateEnemy(new Enemy(i, _enemyRadius), new Vector2D(-1, 2))
                     {
                         Path = path,
                         Speed = _enemySpeed,
@@ -596,9 +596,7 @@ namespace Game.TowerDefense.ViewModel
                     propagatedState.AddBodyState(new BodyStateProjectile(
                         new Projectile(
                             nextProjectileId++,
-                            _radiusOfProjectiles,
-                            1,
-                            false),
+                            _radiusOfProjectiles),
                         bodyState.Position)
                     {
                         NaturalVelocity = projectileVelocity,
@@ -727,7 +725,7 @@ namespace Game.TowerDefense.ViewModel
                 .Select(i => new
                 {
                     StateIndex = i * _enemySpacing,
-                    BodyState = new BodyStateEnemy(new Enemy(i, _enemyRadius, 1, true), new Vector2D(-1, 3))
+                    BodyState = new BodyStateEnemy(new Enemy(i, _enemyRadius), new Vector2D(-1, 3))
                     {
                         Path = path,
                         Speed = _enemySpeed,
@@ -871,9 +869,7 @@ namespace Game.TowerDefense.ViewModel
                     propagatedState.AddBodyState(new BodyStateProjectile(
                         new Projectile(
                             nextProjectileId++,
-                            _radiusOfProjectiles,
-                            1,
-                            false),
+                            _radiusOfProjectiles),
                         bodyState.Position)
                     {
                         NaturalVelocity = projectileVelocity,
