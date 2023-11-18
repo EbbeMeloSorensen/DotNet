@@ -8,8 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\Wall.png" />
-    <None Remove="Images\Zelda.png" />
+    <None Remove="Images\Cannon.png" />
+    <None Remove="Images\Enemy.png" />
+    <None Remove="Images\Projectile.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,8 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\Zelda.png" />
-    <Resource Include="Images\Wall.png" />
+    <Resource Include="Images\Projectile.png" />
+    <Resource Include="Images\Enemy.png" />
+    <Resource Include="Images\Cannon.png" />
   </ItemGroup>
 
 </Project>

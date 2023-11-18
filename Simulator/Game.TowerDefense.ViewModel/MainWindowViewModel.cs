@@ -12,10 +12,12 @@ using Craft.Math;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Simulator.Application;
 using Simulator.Domain;
+using Simulator.Domain.Boundaries;
 using Simulator.Domain.Props;
 using Simulator.ViewModel;
 using Simulator.ViewModel.ShapeViewModels;
 using Game.TowerDefense.ViewModel.Bodies;
+using Game.TowerDefense.ViewModel.ShapeViewModels;
 using Application = Simulator.Application.Application;
 using ApplicationState = Craft.DataStructures.Graph.State;
 using BodyStateCannon = Game.TowerDefense.ViewModel.BodyStates.BodyStateCannon;
@@ -26,8 +28,21 @@ namespace Game.TowerDefense.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private static int _nextWallId = 100000;
-        private static bool _boundariesVisible = false; // Set to true to inspect boundaries
+        // Constants that apply to every level
+        const double _initialBalance = 300.0;
+        const double _initialHealth = 100.0;
+        const double _radiusOfCannons = 0.4;
+        const double _radiusOfProjectiles = 0.05;
+        const double _priceOfCannon = 50.0;
+        const double _priceForKilledEnemy = 20.0;
+        const int _cannonCoolDown = 1000;
+        const double _rangeOfCannons = 2.0;
+        const double _projectileSpeed = 10.0;
+        const int _projectileLifespan = 600;
+        const double _enemyRadius = 0.15;
+        const int _enemySpacing = 1000;
+        const int _enemyLife = 10;
+        const double _enemySpeed = 0.5;
 
         private ILogger _logger;
         private SceneViewManager _sceneViewManager;
@@ -99,7 +114,7 @@ namespace Game.TowerDefense.ViewModel
                         }
                     case BodyStateCannon cannon:
                     {
-                        return new RotatableEllipseViewModel
+                        return new CannonViewModel
                         {
                             Width = 2 * circularBody.Radius,
                             Height = 2 * circularBody.Radius,
@@ -108,7 +123,7 @@ namespace Game.TowerDefense.ViewModel
                     }
                     case BodyStateProjectile:
                         {
-                            return new EllipseViewModel
+                            return new ProjectileViewModel
                             {
                                 Width = 2 * circularBody.Radius,
                                 Height = 2 * circularBody.Radius
@@ -255,7 +270,7 @@ namespace Game.TowerDefense.ViewModel
             };
 
             // Aktiver nogle, så du ikke hele tiden skal gennemføre level 1
-            UnlockLevels(level1Cleared);
+            //UnlockLevels(level1Cleared);
             //UnlockLevels(level2Cleared);
 
             GeometryEditorViewModel = new GeometryEditorViewModel()
@@ -330,21 +345,6 @@ namespace Game.TowerDefense.ViewModel
         private static Scene GenerateScene1(
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack)
         {
-            const double initialBalance = 300.0;
-            const double initialHealth = 100.0;
-            const double radiusOfCannons = 0.2;
-            const double radiusOfProjectiles = 0.05;
-            const double priceOfCannon = 50.0;
-            const double priceForKilledEnemy = 20.0;
-            const int cannonCoolDown = 300;
-            const double rangeOfCannons = 1.0;
-            const double projectileSpeed = 10.0;
-            const int projectileLifespan = 50;
-            const double enemyRadius = 0.15;
-            const int enemySpacing = 1000;
-            const int enemyLife = 10;
-            const double enemySpeed = 0.5;
-
             var path = new Path
             {
                 WayPoints = new List<Vector2D>
@@ -368,8 +368,8 @@ namespace Game.TowerDefense.ViewModel
             var gravitationalConstant = 0.0;
             var handleBodyCollisions = true;
             var coefficientOfFriction = 0.0;
-            var balance = initialBalance;
-            var health = initialHealth;
+            var balance = _initialBalance;
+            var health = _initialHealth;
 
             var x0 = 0.0;
             var x1 = 16.0;
@@ -386,8 +386,8 @@ namespace Game.TowerDefense.ViewModel
 
             scene.InitializationCallback = (state, message) =>
             {
-                balance = initialBalance;
-                health = initialHealth;
+                balance = _initialBalance;
+                health = _initialHealth;
                 nextCannonId = 1000;
                 nextProjectileId = 10000;
                 nextPropId = 100000;
@@ -438,13 +438,13 @@ namespace Game.TowerDefense.ViewModel
             var enemies = Enumerable.Range(1, 10)
                 .Select(i => new
                 {
-                    StateIndex = i * enemySpacing,
-                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-1, 2))
+                    StateIndex = i * _enemySpacing,
+                    BodyState = new BodyStateEnemy(new Enemy(i, _enemyRadius, 1, true), new Vector2D(-1, 2))
                     {
                         Path = path,
-                        Speed = enemySpeed,
+                        Speed = _enemySpeed,
                         NaturalVelocity = new Vector2D(0.2, 0),
-                        Life = enemyLife
+                        Life = _enemyLife
                     }
                 })
                 .ToDictionary(_ => _.StateIndex, _ => _.BodyState);
@@ -498,7 +498,7 @@ namespace Game.TowerDefense.ViewModel
 
                     if (e.Life <= 0.1)
                     {
-                        balance += priceForKilledEnemy;
+                        balance += _priceForKilledEnemy;
                         propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
 
                         if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
@@ -524,17 +524,17 @@ namespace Game.TowerDefense.ViewModel
                         .Where(_ => _.Body is Cannon)
                         .Select(_ => _.Position);
 
-                    if (balance >= priceOfCannon &&
-                        cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons &&
-                        scene.Props.Min(_ => _.DistanceToPoint(mousePosAsVector) - radiusOfCannons > 0.0))
+                    if (balance >= _priceOfCannon &&
+                        cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * _radiusOfCannons &&
+                        scene.Props.Min(_ => _.DistanceToPoint(mousePosAsVector) - _radiusOfCannons > 0.0))
                     {
                         propagatedState.AddBodyState(new BodyStateCannon(
-                            new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
+                            new Cannon(nextCannonId++, _radiusOfCannons), mousePosAsVector)
                         {
-                            CoolDown = cannonCoolDown
+                            CoolDown = _cannonCoolDown
                         });
 
-                        balance -= priceOfCannon;
+                        balance -= _priceOfCannon;
                     }
 
                     mousePos = null;
@@ -561,7 +561,7 @@ namespace Game.TowerDefense.ViewModel
                 {
                     // This cannon can shoot
 
-                    var rangeOfCannonsSquared = rangeOfCannons * rangeOfCannons;
+                    var rangeOfCannonsSquared = _rangeOfCannons * _rangeOfCannons;
 
                     var target = propagatedState.BodyStates
                         .Where(_ => _ is BodyStateEnemy)
@@ -576,23 +576,23 @@ namespace Game.TowerDefense.ViewModel
                         return;
                     }
 
-                    var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * projectileSpeed;
+                    var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * _projectileSpeed;
 
                     (bodyState as BodyStateCannon).Orientation = -projectileVelocity.AsPolarVector().Angle;
 
                     propagatedState.AddBodyState(new BodyStateProjectile(
                         new Projectile(
                             nextProjectileId++,
-                            radiusOfProjectiles,
+                            _radiusOfProjectiles,
                             1,
                             false),
                         bodyState.Position)
                     {
                         NaturalVelocity = projectileVelocity,
-                        LifeSpan = projectileLifespan
+                        LifeSpan = _projectileLifespan
                     });
 
-                    (bodyState as BodyStateCannon).CoolDown = cannonCoolDown;
+                    (bodyState as BodyStateCannon).CoolDown = _cannonCoolDown;
                 });
 
                 // Add an enemy?
@@ -604,7 +604,8 @@ namespace Game.TowerDefense.ViewModel
                 return response;
             };
 
-            AddPath(scene, path, enemyRadius * 2.5, nextPropId);
+            AddPath(scene, path, _enemyRadius * 2.5, nextPropId);
+            scene.AddBoundary(new LeftFacingHalfPlane(17));
 
             return scene;
         }
@@ -612,21 +613,6 @@ namespace Game.TowerDefense.ViewModel
         private static Scene GenerateScene2(
             CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack)
         {
-            const double initialBalance = 300.0;
-            const double initialHealth = 100.0;
-            const double radiusOfCannons = 0.2;
-            const double radiusOfProjectiles = 0.05;
-            const double priceOfCannon = 50.0;
-            const double priceForKilledEnemy = 20.0;
-            const int cannonCoolDown = 300;
-            const double rangeOfCannons = 1.0;
-            const double projectileSpeed = 10.0;
-            const int projectileLifespan = 50;
-            const double enemyRadius = 0.15;
-            const int enemySpacing = 1000;
-            const int enemyLife = 10;
-            const double enemySpeed = 0.5;
-
             var path = new Path
             {
                 WayPoints = new List<Vector2D>
@@ -657,8 +643,8 @@ namespace Game.TowerDefense.ViewModel
             var gravitationalConstant = 0.0;
             var handleBodyCollisions = true;
             var coefficientOfFriction = 0.0;
-            var balance = initialBalance;
-            var health = initialHealth;
+            var balance = _initialBalance;
+            var health = _initialHealth;
 
             var x0 = 0.0;
             var x1 = 16.0;
@@ -675,8 +661,8 @@ namespace Game.TowerDefense.ViewModel
 
             scene.InitializationCallback = (state, message) =>
             {
-                balance = initialBalance;
-                health = initialHealth;
+                balance = _initialBalance;
+                health = _initialHealth;
                 nextCannonId = 1000;
                 nextProjectileId = 10000;
                 nextPropId = 100000;
@@ -727,13 +713,13 @@ namespace Game.TowerDefense.ViewModel
             var enemies = Enumerable.Range(1, 10)
                 .Select(i => new
                 {
-                    StateIndex = i * enemySpacing,
-                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-1, 3))
+                    StateIndex = i * _enemySpacing,
+                    BodyState = new BodyStateEnemy(new Enemy(i, _enemyRadius, 1, true), new Vector2D(-1, 3))
                     {
                         Path = path,
-                        Speed = enemySpeed,
+                        Speed = _enemySpeed,
                         NaturalVelocity = new Vector2D(0.2, 0),
-                        Life = enemyLife
+                        Life = _enemyLife
                     }
                 })
                 .ToDictionary(_ => _.StateIndex, _ => _.BodyState);
@@ -787,7 +773,7 @@ namespace Game.TowerDefense.ViewModel
 
                     if (e.Life <= 0.1)
                     {
-                        balance += priceForKilledEnemy;
+                        balance += _priceForKilledEnemy;
                         propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
 
                         if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
@@ -813,17 +799,17 @@ namespace Game.TowerDefense.ViewModel
                         .Where(_ => _.Body is Cannon)
                         .Select(_ => _.Position);
 
-                    if (balance >= priceOfCannon &&
-                        cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons &&
-                        scene.Props.Min(_ => _.DistanceToPoint(mousePosAsVector) - radiusOfCannons > 0.0))
+                    if (balance >= _priceOfCannon &&
+                        cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * _radiusOfCannons &&
+                        scene.Props.Min(_ => _.DistanceToPoint(mousePosAsVector) - _radiusOfCannons > 0.0))
                     {
                         propagatedState.AddBodyState(new BodyStateCannon(
-                            new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
+                            new Cannon(nextCannonId++, _radiusOfCannons), mousePosAsVector)
                         {
-                            CoolDown = cannonCoolDown
+                            CoolDown = _cannonCoolDown
                         });
 
-                        balance -= priceOfCannon;
+                        balance -= _priceOfCannon;
                     }
 
                     mousePos = null;
@@ -850,7 +836,7 @@ namespace Game.TowerDefense.ViewModel
                 {
                     // This cannon can shoot
 
-                    var rangeOfCannonsSquared = rangeOfCannons * rangeOfCannons;
+                    var rangeOfCannonsSquared = _rangeOfCannons * _rangeOfCannons;
 
                     var target = propagatedState.BodyStates
                         .Where(_ => _ is BodyStateEnemy)
@@ -865,23 +851,23 @@ namespace Game.TowerDefense.ViewModel
                         return;
                     }
 
-                    var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * projectileSpeed;
+                    var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * _projectileSpeed;
 
                     (bodyState as BodyStateCannon).Orientation = -projectileVelocity.AsPolarVector().Angle;
 
                     propagatedState.AddBodyState(new BodyStateProjectile(
                         new Projectile(
                             nextProjectileId++,
-                            radiusOfProjectiles,
+                            _radiusOfProjectiles,
                             1,
                             false),
                         bodyState.Position)
                     {
                         NaturalVelocity = projectileVelocity,
-                        LifeSpan = projectileLifespan
+                        LifeSpan = _projectileLifespan
                     });
 
-                    (bodyState as BodyStateCannon).CoolDown = cannonCoolDown;
+                    (bodyState as BodyStateCannon).CoolDown = _cannonCoolDown;
                 });
 
                 // Add an enemy?
@@ -893,7 +879,8 @@ namespace Game.TowerDefense.ViewModel
                 return response;
             };
 
-            AddPath(scene, path, enemyRadius * 2.5, nextPropId);
+            AddPath(scene, path, _enemyRadius * 2.5, nextPropId);
+            scene.AddBoundary(new UpFacingHalfPlane(9));
 
             return scene;
         }

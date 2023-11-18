@@ -18,7 +18,9 @@ namespace Game.TowerDefense.UI.WPF
             return item switch
             {
                 TaggedEllipseViewModel => element.FindResource("TaggedEllipse") as DataTemplate,
+                CannonViewModel => element.FindResource("Cannon") as DataTemplate,
                 RotatableEllipseViewModel => element.FindResource("RotatableEllipse") as DataTemplate,
+                ProjectileViewModel => element.FindResource("Projectile") as DataTemplate,
                 EllipseViewModel => element.FindResource("Ellipse") as DataTemplate,
                 RotatableRectangleViewModel => element.FindResource("RotatableRectangle") as DataTemplate,
                 RectangleViewModel => element.FindResource("Rectangle") as DataTemplate,
