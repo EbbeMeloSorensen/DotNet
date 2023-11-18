@@ -1,5 +1,6 @@
 ﻿using Craft.ViewModels.Geometry2D.ScrollFree;
 using Game.TowerDefense.ViewModel.ShapeViewModels;
+using Simulator.ViewModel.ShapeViewModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,21 +15,15 @@ namespace Game.TowerDefense.UI.WPF
         {
             var element = container as FrameworkElement;
 
-            switch (item)
+            return item switch
             {
-                case ZeldaViewModel _:
-                    {
-                        return element.FindResource("Zelda") as DataTemplate;
-                    }
-                case RectangleViewModel _:
-                    {
-                        return element.FindResource("Wall") as DataTemplate;
-                    }
-                default:
-                    {
-                        throw new ArgumentException("item doesn't correspond to any DataTemplate");
-                    }
-            }
+                TaggedEllipseViewModel => element.FindResource("TaggedEllipse") as DataTemplate,
+                RotatableEllipseViewModel => element.FindResource("RotatableEllipse") as DataTemplate,
+                EllipseViewModel => element.FindResource("Ellipse") as DataTemplate,
+                RotatableRectangleViewModel => element.FindResource("RotatableRectangle") as DataTemplate,
+                RectangleViewModel => element.FindResource("Rectangle") as DataTemplate,
+                _ => throw new ArgumentException("item doesn't correspond to any DataTemplate")
+            };
         }
     }
 }

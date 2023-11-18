@@ -6,40 +6,38 @@
     <local:CustomizedShapeTemplateSelector x:Key="ShapeTemplateSelector"/>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-    <DataTemplate x:Key="Wall">
-        <Rectangle Width="{Binding Width}" Height="{Binding Height}">
-            <Rectangle.Fill>
-                <ImageBrush ImageSource="..\Images\Wall.png" TileMode="Tile" Viewport="0,0 1,0.5" ViewportUnits="Absolute"/>
-            </Rectangle.Fill>
-            <Rectangle.RenderTransform>
-                <MatrixTransform Matrix="{Binding 
-                            Path=DataContext.TransformationMatrix, 
-                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-    </DataTemplate>
-
-    <DataTemplate x:Key="Zelda">
+    <DataTemplate x:Key="TaggedEllipse">
         <Canvas>
-            <Ellipse Fill="Black" Width="{Binding Width}" Height="{Binding Height}">
+            <Ellipse Fill="Purple" Width="{Binding Width}" Height="{Binding Height}">
                 <Ellipse.RenderTransform>
                     <MatrixTransform Matrix="{Binding 
-                        Path=DataContext.TransformationMatrix, 
-                        RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <Image Source="..\Images\Zelda.png" 
-                   Width="{Binding Width}" 
-                   Height="{Binding Height}">
-                <Image.RenderTransform>
+            <TextBlock Foreground="Red" FontSize="0.08" Text="{Binding Tag}" TextAlignment="Center" 
+                       Width="{Binding Width}" Height="{Binding Height}">
+                <TextBlock.RenderTransform>
+                    <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Canvas>
+    </DataTemplate>
+
+    <DataTemplate x:Key="RotatableRectangle">
+        <Canvas>
+            <Rectangle Fill="DarkSlateGray" Width="{Binding Width}" Height="{Binding Height}">
+                <Rectangle.RenderTransform>
                     <TransformGroup>
-                        <MatrixTransform Matrix="{Binding LocalTransformationMatrix}"/>
+                        <MatrixTransform Matrix="{Binding RotationMatrix}"/>
                         <MatrixTransform Matrix="{Binding 
                             Path=DataContext.TransformationMatrix, 
                             RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                     </TransformGroup>
-                </Image.RenderTransform>
-            </Image>
+                </Rectangle.RenderTransform>
+            </Rectangle>
         </Canvas>
     </DataTemplate>
 

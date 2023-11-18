@@ -16,6 +16,7 @@ using Simulator.Domain.BodyStates;
 using Simulator.Domain.Props;
 using Simulator.Laboratory.ViewModel.Bodies;
 using Simulator.Laboratory.ViewModel.ShapeViewModels;
+using Simulator.ViewModel.ShapeViewModels;
 
 namespace Simulator.Laboratory.ViewModel
 {

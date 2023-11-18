@@ -7,7 +7,7 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
-        Title="Zelda" Height="600" Width="800"
+        Title="Tower Defense" Height="600" Width="800"
         WindowState="Maximized"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}"
         KeyDown="MainWindow_OnKeyDown"
@@ -45,7 +45,7 @@
                     </Binding.ConverterParameter>
                 </Binding>
             </TextBlock.Visibility>
-            <Run FontSize="100" Text="Zelda.."/>
+            <Run FontSize="100" Text="Tower Defense.."/>
             <LineBreak/>
             <Run FontSize="50" Text="Press space to start"/>
         </TextBlock>

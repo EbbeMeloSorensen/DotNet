@@ -1,21 +1,26 @@
-﻿using Craft.Logging;
-using Craft.Math;
-using Craft.ViewModels.Geometry2D.ScrollFree;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Simulator.Application;
-using Simulator.Domain;
-using Simulator.Domain.Boundaries;
-using Simulator.Domain.Props;
-using Simulator.ViewModel;
-using System;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Craft.Utils;
+using Craft.Utils.Linq;
+using Craft.Logging;
+using Craft.Math;
+using Craft.ViewModels.Geometry2D.ScrollFree;
+using Simulator.Application;
+using Simulator.Domain;
+using Simulator.Domain.Props;
+using Simulator.ViewModel;
+using Simulator.ViewModel.ShapeViewModels;
+using Game.TowerDefense.ViewModel.Bodies;
 using Application = Simulator.Application.Application;
 using ApplicationState = Craft.DataStructures.Graph.State;
 using BodyStateCannon = Game.TowerDefense.ViewModel.BodyStates.BodyStateCannon;
+using BodyStateEnemy = Game.TowerDefense.ViewModel.BodyStates.BodyStateEnemy;
+using BodyStateProjectile = Game.TowerDefense.ViewModel.BodyStates.BodyStateProjectile;
 
 namespace Game.TowerDefense.ViewModel
 {
@@ -72,22 +77,7 @@ namespace Game.TowerDefense.ViewModel
                 return OutcomeOfCollisionBetweenBodyAndBoundary.Block;
             };
 
-            var spaceKeyWasPressed = false;
-
-            InteractionCallBack interactionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
-            {
-                return false;
-            };
-
-            PostPropagationCallBack postPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
-            {
-                var response = new PostPropagationResponse();
-
-                return response;
-            };
-
-            // Denne bruges indtil videre kun for Tower Defense scenen
-            ShapeSelectorCallback shapeSelectorCallback3 = (bs) =>
+            ShapeSelectorCallback shapeSelectorCallback = (bs) =>
             {
                 if (!(bs.Body is CircularBody))
                 {
@@ -98,15 +88,15 @@ namespace Game.TowerDefense.ViewModel
 
                 switch (bs)
                 {
-                    //case BodyStateEnemy enemy:
-                    //{
-                    //    return new TaggedEllipseViewModel
-                    //    {
-                    //        Width = 2 * circularBody.Radius,
-                    //        Height = 2 * circularBody.Radius,
-                    //        Tag = enemy.Life.ToString()
-                    //    };
-                    //}
+                    case BodyStateEnemy enemy:
+                        {
+                            return new TaggedEllipseViewModel
+                            {
+                                Width = 2 * circularBody.Radius,
+                                Height = 2 * circularBody.Radius,
+                                Tag = enemy.Life.ToString()
+                            };
+                        }
                     case BodyStateCannon cannon:
                     {
                         return new RotatableEllipseViewModel
@@ -116,63 +106,44 @@ namespace Game.TowerDefense.ViewModel
                             Orientation = 0
                         };
                     }
-                    //case BodyStateProjectile:
-                    //{
-                    //    return new EllipseViewModel
-                    //    {
-                    //        Width = 2 * circularBody.Radius,
-                    //        Height = 2 * circularBody.Radius
-                    //    };
-                    //}
+                    case BodyStateProjectile:
+                        {
+                            return new EllipseViewModel
+                            {
+                                Width = 2 * circularBody.Radius,
+                                Height = 2 * circularBody.Radius
+                            };
+                        }
                     default:
                         throw new ArgumentException();
                 }
             };
 
-            // Denne bruges indtil videre kun for Tower Defense scenen
-            //ShapeUpdateCallback shapeUpdateCallback3 = (shapeViewModel, bs) =>
-            //{
-            //    shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
+            ShapeUpdateCallback shapeUpdateCallback = (shapeViewModel, bs) =>
+            {
+                shapeViewModel.Point = new PointD(bs.Position.X, bs.Position.Y);
 
-            //    if (shapeViewModel is TaggedEllipseViewModel taggedEllipseViewModel &&
-            //        bs is BodyStateEnemy enemy)
-            //    {
-            //        // Opdater position og life indikator for enemy
-            //        taggedEllipseViewModel.Tag = enemy.Life.ToString();
-            //    }
+                if (shapeViewModel is TaggedEllipseViewModel taggedEllipseViewModel &&
+                    bs is BodyStateEnemy enemy)
+                {
+                    // Opdater position og life indikator for enemy
+                    taggedEllipseViewModel.Tag = enemy.Life.ToString();
+                }
 
-            //    if (shapeViewModel is RotatableEllipseViewModel rotatableEllipseViewModel &&
-            //        bs is BodyStateCannon cannon)
-            //    {
-            //        rotatableEllipseViewModel.Orientation = cannon.Orientation;
-            //    }
-            //};
+                if (shapeViewModel is RotatableEllipseViewModel rotatableEllipseViewModel &&
+                    bs is BodyStateCannon cannon)
+                {
+                    rotatableEllipseViewModel.Orientation = cannon.Orientation;
+                }
+            };
 
             var welcomeScreen = new ApplicationState("Welcome Screen");
             var unlockedLevelsScreen = new ApplicationState("Unlocked Levels Screen");
 
-            var level1a = new Level("Level 1")
+            var level1 = new Level("Level 1")
             {
-                Scene = GenerateScene1a(
-                    interactionCallBack,
-                    collisionBetweenBodyAndBoundaryOccuredCallBack,
-                    postPropagationCallBack)
-            };
-
-            var level1b = new Level("Level 1b")
-            {
-                Scene = GenerateScene1b(
-                    interactionCallBack,
-                    collisionBetweenBodyAndBoundaryOccuredCallBack,
-                    postPropagationCallBack)
-            };
-
-            var level1c = new Level("Level 1c")
-            {
-                Scene = GenerateScene1c(
-                    interactionCallBack,
-                    collisionBetweenBodyAndBoundaryOccuredCallBack,
-                    postPropagationCallBack)
+                Scene = GenerateScene1(
+                    collisionBetweenBodyAndBoundaryOccuredCallBack)
             };
 
             var level1Cleared = new ApplicationState("Level 1 Cleared");
@@ -180,19 +151,7 @@ namespace Game.TowerDefense.ViewModel
             var level2 = new Level("Level 2")
             {
                 Scene = GenerateScene2(
-                    interactionCallBack,
-                    collisionBetweenBodyAndBoundaryOccuredCallBack,
-                    postPropagationCallBack)
-            };
-
-            var level2Cleared = new ApplicationState("Level 2 Cleared");
-
-            var level3 = new Level("Level 3")
-            {
-                Scene = GenerateScene3(
-                    interactionCallBack,
-                    collisionBetweenBodyAndBoundaryOccuredCallBack,
-                    postPropagationCallBack)
+                    collisionBetweenBodyAndBoundaryOccuredCallBack)
             };
 
             var gameOver = new ApplicationState("Game Over");
@@ -201,31 +160,18 @@ namespace Game.TowerDefense.ViewModel
             Application = new Application(_logger, welcomeScreen);
 
             Application.AddApplicationState(unlockedLevelsScreen);
-            Application.AddApplicationState(level1a);
-            Application.AddApplicationState(level1b);
-            Application.AddApplicationState(level1c);
+            Application.AddApplicationState(level1);
             Application.AddApplicationState(level1Cleared);
             Application.AddApplicationState(level2);
-            Application.AddApplicationState(level2Cleared);
-            Application.AddApplicationState(level3);
             Application.AddApplicationState(gameOver);
             Application.AddApplicationState(youWin);
 
-            Application.AddApplicationStateTransition(welcomeScreen, level1a);
-            Application.AddApplicationStateTransition(level1a, gameOver);
-            Application.AddApplicationStateTransition(level1a, level1b);
-            Application.AddApplicationStateTransition(level1b, gameOver);
-            Application.AddApplicationStateTransition(level1b, level1a);
-            Application.AddApplicationStateTransition(level1b, level1c);
-            Application.AddApplicationStateTransition(level1c, gameOver);
-            Application.AddApplicationStateTransition(level1c, level1b);
-            Application.AddApplicationStateTransition(level1c, level1Cleared);
+            Application.AddApplicationStateTransition(welcomeScreen, level1);
+            Application.AddApplicationStateTransition(level1, gameOver);
+            Application.AddApplicationStateTransition(level1, level1Cleared);
             Application.AddApplicationStateTransition(level1Cleared, level2);
             Application.AddApplicationStateTransition(level2, gameOver);
-            Application.AddApplicationStateTransition(level2, level2Cleared);
-            Application.AddApplicationStateTransition(level2Cleared, level3);
-            Application.AddApplicationStateTransition(level3, gameOver);
-            Application.AddApplicationStateTransition(level3, youWin);
+            Application.AddApplicationStateTransition(level2, youWin);
             Application.AddApplicationStateTransition(gameOver, welcomeScreen);
             Application.AddApplicationStateTransition(youWin, welcomeScreen);
 
@@ -234,12 +180,8 @@ namespace Game.TowerDefense.ViewModel
                 {level1Cleared, new List<Tuple<ApplicationState, ApplicationState>>
                 {
                     new (welcomeScreen, unlockedLevelsScreen),
-                    new (unlockedLevelsScreen, level1a),
+                    new (unlockedLevelsScreen, level1),
                     new (unlockedLevelsScreen, level2)
-                }},
-                {level2Cleared, new List<Tuple<ApplicationState, ApplicationState>>
-                {
-                    new (unlockedLevelsScreen, level3)
                 }}
             };
 
@@ -324,8 +266,8 @@ namespace Game.TowerDefense.ViewModel
             _sceneViewManager = new SceneViewManager(
                 Application,
                 GeometryEditorViewModel,
-                null,  // Erstat med Shape selector callback
-                null); // Erstat med Shape update callback
+                shapeSelectorCallback,  
+                shapeUpdateCallback);
         }
 
         private void UpdateModel()
@@ -375,315 +317,568 @@ namespace Game.TowerDefense.ViewModel
             return Application.CanStartOrResumeAnimation;
         }
 
-        private static Scene GenerateScene1a(
-            InteractionCallBack interactionCallBack,
-            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
-            PostPropagationCallBack postPropagationCallBack)
+        private static Scene GenerateScene1(
+            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack)
         {
+            const double initialBalance = 300.0;
+            const double initialHealth = 100.0;
+            const double radiusOfCannons = 0.2;
+            const double radiusOfProjectiles = 0.05;
+            const double priceOfCannon = 50.0;
+            const double priceForKilledEnemy = 20.0;
+            const int cannonCoolDown = 300;
+            const double rangeOfCannons = 1.0;
+            const double projectileSpeed = 10.0;
+            const int projectileLifespan = 50;
+            const double enemyRadius = 0.15;
+            const int enemySpacing = 200;
+            const int enemyLife = 10;
+            const double enemySpeed = 0.5;
+
+            var path = new Path
+            {
+                WayPoints = new List<Vector2D>
+                {
+                    new Vector2D(-2, -1),
+                    new Vector2D(1.5, -1),
+                    new Vector2D(2, 0),
+                    new Vector2D(-1, 0),
+                    new Vector2D(-1.5, 1),
+                    new Vector2D(5, 1)
+                }
+            };
+
+            var nextCannonId = 1000;
+            var nextProjectileId = 10000;
+            var nextPropId = 100000;
+
             var initialState = new State();
 
-            var wallWidth = 0.3;
-            var doorWidth = 1.2;
+            var standardGravity = 0.0;
+            var gravitationalConstant = 0.0;
+            var handleBodyCollisions = true;
+            var coefficientOfFriction = 0.0;
+            var balance = initialBalance;
+            var health = initialHealth;
+
             var x0 = 0.0;
             var x1 = 16.0;
             var y0 = 0.0;
             var y1 = 8.0;
 
-            var scene = new Scene("Scene 1a",
-                new Point2D(x0 - wallWidth / 2, y0 - wallWidth / 2),
-                new Point2D(x1 + wallWidth / 2, y1 + wallWidth / 2),
+            var scene = new Scene("Scene 1",
+                new Point2D(x0, y0),
+                new Point2D(x1, y1),
                 initialState, 0, 0, 0, 1, false)
             {
-                IncludeCustomForces = true,
-                CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
-                PostPropagationCallBack = postPropagationCallBack,
-                InteractionCallBack = interactionCallBack
+                CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack
             };
 
             scene.InitializationCallback = (state, message) =>
             {
-                if (message == "Scene 1b")
+                balance = initialBalance;
+                health = initialHealth;
+                nextCannonId = 1000;
+                nextProjectileId = 10000;
+                nextPropId = 100000;
+            };
+
+            scene.CheckForCollisionBetweenBodiesCallback = (body1, body2) =>
+            {
+                if (body1 is Enemy || body2 is Enemy)
                 {
-                    state.BodyStates.First().Position = new Vector2D(wallWidth / 2 + doorWidth / 2, 0.01);
+                    if (body1 is Projectile || body2 is Projectile)
+                    {
+                        return true;
+                    }
                 }
+
+                return false;
             };
 
-            scene.AddBoundary(new RightFacingHalfPlane(x0 + wallWidth / 2) { Visible = _boundariesVisible });
-            scene.AddBoundary(new LeftFacingHalfPlane(x1 - wallWidth / 2) { Visible = _boundariesVisible });
-            scene.AddBoundary(new UpFacingHalfPlane(y1 - wallWidth / 2) { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(wallWidth / 2 + doorWidth, -wallWidth / 2),
-                new Vector2D(wallWidth / 2 + doorWidth, wallWidth / 2))
-            { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(wallWidth / 2 + doorWidth, wallWidth / 2),
-                new Vector2D(x1 - wallWidth / 2, wallWidth / 2))
-            { Visible = _boundariesVisible });
-
-            AddWall(scene, x0 + wallWidth / 2 + doorWidth, x1 + wallWidth / 2, y0 - wallWidth / 2, y0 + wallWidth / 2, false, false, false, false); // Øverste mur
-            AddWall(scene, x0 - wallWidth / 2, x1 + wallWidth / 2, y1 - wallWidth / 2, y1 + wallWidth / 2, false, false, false, false); // Nederste mur
-            AddWall(scene, x0 - wallWidth / 2, x0 + wallWidth / 2, y0 - wallWidth / 2, y1 - wallWidth / 2, false, false, false, false); // Venstre mur
-            AddWall(scene, x1 - wallWidth / 2, x1 + wallWidth / 2, y0 + wallWidth / 2, y1 - wallWidth / 2, false, false, false, false); // Højre mur
-
-            AddWall(scene, 8, 8 + wallWidth, y0 + wallWidth / 2, 3.2, true, true, false, true); // Ekstra mur
-            AddWall(scene, 8, 8 + wallWidth, 4.8, y1 - wallWidth / 2, true, true, true, false); // Ekstra mur
-
-            // Add exits
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(wallWidth / 2, -0.5),
-                new Vector2D(wallWidth / 2 + doorWidth, -0.5), "Level 1b")
-            { Visible = _boundariesVisible });
-
-            return scene;
-        }
-
-        private static Scene GenerateScene1b(
-            InteractionCallBack interactionCallBack,
-            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
-            PostPropagationCallBack postPropagationCallBack)
-        {
-            var initialState = new State();
-
-            var wallWidth = 0.3;
-            var doorWidth = 1.2;
-            var x0 = 0.0;
-            var x1 = 16.0;
-            var y0 = -8.0;
-            var y1 = 0;
-
-            var scene = new Scene("Scene 1b",
-                new Point2D(x0 - wallWidth / 2, y0 - wallWidth / 2),
-                new Point2D(x1 + wallWidth / 2, y1 + wallWidth / 2),
-                initialState, 0, 0, 0, 1, false)
+            scene.CollisionBetweenTwoBodiesOccuredCallBack = (body1, body2) =>
             {
-                IncludeCustomForces = true,
-                CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
-                PostPropagationCallBack = postPropagationCallBack,
-                InteractionCallBack = interactionCallBack
-            };
-
-            scene.InitializationCallback = (state, message) =>
-            {
-                switch (message)
+                if (body1 is Enemy || body2 is Enemy)
                 {
-                    case "Scene 1a":
+                    if (body1 is Projectile || body2 is Projectile)
+                    {
+                        return OutcomeOfCollisionBetweenTwoBodies.Ignore;
+                    }
+                }
+
+                return OutcomeOfCollisionBetweenTwoBodies.Block;
+            };
+
+            Point2D mousePos = null;
+
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
+            {
+                //updateAuxFields($"Life: {health}", $"$: {balance}");
+
+                if (mouseClickPosition == null)
+                {
+                    mousePos = null;
+                    return false;
+                }
+
+                mousePos = mouseClickPosition.Position;
+                return true;
+            };
+
+            var enemies = Enumerable.Range(1, 10)
+                .Select(i => new
+                {
+                    StateIndex = i * enemySpacing,
+                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-3, -1))
+                    {
+                        Path = path,
+                        Speed = enemySpeed,
+                        NaturalVelocity = new Vector2D(0.2, 0),
+                        Life = enemyLife
+                    }
+                })
+                .ToDictionary(_ => _.StateIndex, _ => _.BodyState);
+
+            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            {
+                var response = new PostPropagationResponse();
+
+                // Remove projectiles due to hitting enemies
+                if (boundaryCollisionReports.Any())
+                {
+                    // Remove enemies, when they get to the exit
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports
+                        .Where(bcr => bcr.BodyState.Body is Enemy)
+                        .Select(bcr => bcr.BodyState.Body.Id));
+
+                    health -= boundaryCollisionReports.Count * 30.0;
+
+                    if (health <= 0)
+                    {
+                        response.IndexOfLastState = propagatedState.Index;
+                        response.Outcome = "Game Over";
+                    }
+                }
+
+                var hitEnemies = new HashSet<BodyStateEnemy>();
+
+                bodyCollisionReports.ForEach(bcr =>
+                {
+                    if (bcr.Body1 is Projectile || bcr.Body2 is Projectile)
+                    {
+                        // Projectile collided with enemy
+                        if (bcr.Body1 is Projectile)
                         {
-                            state.BodyStates.First().Position = new Vector2D(wallWidth / 2 + doorWidth / 2, -0.01);
-                            break;
+                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body1.Id });
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id) as BodyStateEnemy;
+                            hitEnemies.Add(bodyState);
                         }
-                    case "Scene 1c":
+                        else
                         {
-                            state.BodyStates.First().Position = new Vector2D(0.01, -2);
-                            break;
+                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body2.Id });
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id) as BodyStateEnemy;
+                            hitEnemies.Add(bodyState);
                         }
-                }
-            };
+                    }
+                });
 
-            scene.AddBoundary(new LeftFacingHalfPlane(x1 - wallWidth / 2) { Visible = _boundariesVisible });
-            scene.AddBoundary(new DownFacingHalfPlane(y0 + wallWidth / 2) { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(wallWidth / 2 + doorWidth, -wallWidth / 2),
-                new Vector2D(wallWidth / 2 + doorWidth, wallWidth / 2))
-            { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(wallWidth / 2 + doorWidth, -wallWidth / 2),
-                new Vector2D(x1 + wallWidth / 2, -wallWidth / 2))
-            { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(wallWidth / 2, y0 + wallWidth / 2),
-                new Vector2D(wallWidth / 2, -4 - wallWidth / 2))
-            { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(wallWidth / 2, -4 + wallWidth / 2),
-                new Vector2D(wallWidth / 2, -2 - doorWidth / 2))
-            { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(wallWidth / 2, -2 + doorWidth / 2),
-                new Vector2D(wallWidth / 2, y1 + wallWidth / 2))
-            { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(-wallWidth / 2, -2 - doorWidth / 2),
-                new Vector2D(wallWidth / 2, -2 - doorWidth / 2))
-            { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(-wallWidth / 2, -2 + doorWidth / 2),
-                new Vector2D(wallWidth / 2, -2 + doorWidth / 2))
-            { Visible = _boundariesVisible });
-
-
-            AddWall(scene, x0 - wallWidth / 2, x1 + wallWidth / 2, y0 - wallWidth / 2, y0 + wallWidth / 2, false, false, false, false); // Øverste mur
-            AddWall(scene, x0 + wallWidth / 2 + doorWidth, x1 + wallWidth / 2, y1 - wallWidth / 2, y1 + wallWidth / 2, false, false, false, false); // Nederste mur
-            AddWall(scene, x0 - wallWidth / 2, x0 + wallWidth / 2, y0 - wallWidth / 2, -2 - doorWidth / 2, false, false, false, false); // Venstre mur øverst
-            AddWall(scene, x0 - wallWidth / 2, x0 + wallWidth / 2, -2 + doorWidth / 2, y1 + wallWidth / 2, false, false, false, false); // Venstre mur nederst
-            AddWall(scene, x1 - wallWidth / 2, x1 + wallWidth / 2, y0 + wallWidth / 2, y1 - wallWidth / 2, false, false, false, false); // Højre mur
-
-            AddWall(scene, x0 + wallWidth / 2, x0 + 7, -4 - wallWidth / 2, -4 + wallWidth / 2, false, true, true, true); // Ekstra mur
-            AddWall(scene, x0 + wallWidth / 2 + 9, x1 - wallWidth / 2, -4 - wallWidth / 2, -4 + wallWidth / 2, true, false, true, true); // Ekstra mur
-
-            // Add exits
-            //scene.AddBoundary(new LineSegment(new Vector2D(3, -0.05), new Vector2D(4, -0.05), "Level 1 Cleared") { Visible = true });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(0, 0.5),
-                new Vector2D(doorWidth, 0.5),
-                "Level 1")
-            { Visible = _boundariesVisible });
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(-0.5, -2 - doorWidth / 2),
-                new Vector2D(-0.5, -2 + doorWidth / 2),
-                "Level 1c")
-            { Visible = _boundariesVisible });
-
-            return scene;
-        }
-
-        private static Scene GenerateScene1c(
-            InteractionCallBack interactionCallBack,
-            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
-            PostPropagationCallBack postPropagationCallBack)
-        {
-            var initialState = new State();
-
-            var wallWidth = 0.3;
-            var doorWidth = 1.2;
-            var x0 = -16.0;
-            var x1 = 0.0;
-            var y0 = -8.0;
-            var y1 = 0;
-
-            var scene = new Scene("Scene 1c",
-                new Point2D(x0 - wallWidth / 2, y0 - wallWidth / 2),
-                new Point2D(x1 + wallWidth / 2, y1 + wallWidth / 2),
-                initialState, 0, 0, 0, 1, false)
-            {
-                IncludeCustomForces = true,
-                CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
-                PostPropagationCallBack = postPropagationCallBack,
-                InteractionCallBack = interactionCallBack
-            };
-
-            scene.InitializationCallback = (state, message) =>
-            {
-                if (message == "Scene 1b")
+                hitEnemies.ToList().ForEach(e =>
                 {
-                    state.BodyStates.First().Position = new Vector2D(-0.01, -2);
+                    e.Life -= 1;
+
+                    if (e.Life <= 0.1)
+                    {
+                        balance += priceForKilledEnemy;
+                        propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
+
+                        if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
+                        {
+                            // All enemies are dead, so player wins
+                            response.IndexOfLastState = propagatedState.Index;
+                            response.Outcome = "You Win";
+                        }
+                    }
+                });
+
+                if (boundaryCollisionReports.Any())
+                {
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports.Select(bcr => bcr.BodyState.Body.Id));
                 }
+
+                // Add a new cannon?
+                if (mousePos != null)
+                {
+                    var mousePosAsVector = mousePos.AsVector2D();
+
+                    var cannonCenters = propagatedState.BodyStates
+                        .Where(_ => _.Body is Cannon)
+                        .Select(_ => _.Position);
+
+                    if (balance >= priceOfCannon &&
+                        cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons &&
+                        scene.Props.Min(_ => _.DistanceToPoint(mousePosAsVector) - radiusOfCannons > 0.0))
+                    {
+                        propagatedState.AddBodyState(new BodyStateCannon(
+                            new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
+                        {
+                            CoolDown = cannonCoolDown
+                        });
+
+                        balance -= priceOfCannon;
+                    }
+
+                    mousePos = null;
+                }
+
+                // Remove projectiles due to limited lifespan?
+                var disposableProjectiles = propagatedState.BodyStates
+                    .Where(_ =>
+                        _.Body is Projectile &&
+                        (_ as BodyStateProjectile).LifeSpan <= 0)
+                    .Select(_ => _.Body.Id)
+                    .ToList();
+
+                propagatedState.RemoveBodyStates(disposableProjectiles);
+
+                // Add projectiles?
+                var bodyStatesOfCannonsThatMayShoot = propagatedState.BodyStates
+                    .Where(_ =>
+                        _.Body is Cannon &&
+                        (_ as BodyStateCannon).CoolDown <= 0)
+                    .ToList();
+
+                bodyStatesOfCannonsThatMayShoot.ForEach(bodyState =>
+                {
+                    // This cannon can shoot
+
+                    var rangeOfCannonsSquared = rangeOfCannons * rangeOfCannons;
+
+                    var target = propagatedState.BodyStates
+                        .Where(_ => _ is BodyStateEnemy)
+                        .Select(_ => _ as BodyStateEnemy)
+                        .Where(_ => _.Position.SquaredDistanceTo(bodyState.Position) < rangeOfCannonsSquared)
+                        .Select(_ => new { BodyState = _, _.DistanceCovered })
+                        .OrderByDescending(_ => _.DistanceCovered)
+                        .FirstOrDefault();
+
+                    if (target == null)
+                    {
+                        return;
+                    }
+
+                    var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * projectileSpeed;
+
+                    (bodyState as BodyStateCannon).Orientation = -projectileVelocity.AsPolarVector().Angle;
+
+                    propagatedState.AddBodyState(new BodyStateProjectile(
+                        new Projectile(
+                            nextProjectileId++,
+                            radiusOfProjectiles,
+                            1,
+                            false),
+                        bodyState.Position)
+                    {
+                        NaturalVelocity = projectileVelocity,
+                        LifeSpan = projectileLifespan
+                    });
+
+                    (bodyState as BodyStateCannon).CoolDown = cannonCoolDown;
+                });
+
+                // Add an enemy?
+                if (enemies.ContainsKey(propagatedState.Index))
+                {
+                    propagatedState.AddBodyState(enemies[propagatedState.Index]);
+                }
+
+                return response;
             };
 
-            scene.AddBoundary(new RightFacingHalfPlane(x0 + wallWidth / 2) { Visible = _boundariesVisible });
-            scene.AddBoundary(new UpFacingHalfPlane(y1 - wallWidth / 2) { Visible = _boundariesVisible });
-            scene.AddBoundary(new DownFacingHalfPlane(y0 + wallWidth / 2) { Visible = _boundariesVisible });
-
-            AddWall(scene, x0 - wallWidth / 2, x1 + wallWidth / 2, y0 - wallWidth / 2, y0 + wallWidth / 2, false, false, false, false); // Øverste mur
-            AddWall(scene, x0 - wallWidth / 2, x1 + wallWidth / 2, y1 - wallWidth / 2, y1 + wallWidth / 2, false, false, false, false); // Nederste mur
-            AddWall(scene, x0 - wallWidth / 2, x0 + wallWidth / 2, y0 + wallWidth / 2, y1 - wallWidth / 2, false, false, false, false); // Venstre mur
-            AddWall(scene, x1 - wallWidth / 2, x1 + wallWidth / 2, y0 + wallWidth / 2, -2 - doorWidth / 2, true, false, false, true); // Højre mur, øverst
-            AddWall(scene, x1 - wallWidth / 2, x1 + wallWidth / 2, -2 + doorWidth / 2, y1 - wallWidth / 2, true, false, true, false); // Højre mur, nederst
-
-            // Add exits
-            scene.AddBoundary(new LineSegment(
-                new Vector2D(0.5, -2 - doorWidth / 2),
-                new Vector2D(0.5, -2 + doorWidth / 2), "Level 1b")
-            { Visible = _boundariesVisible });
+            AddPath(scene, path, enemyRadius * 2.5, nextPropId);
 
             return scene;
         }
 
         private static Scene GenerateScene2(
-            InteractionCallBack interactionCallBack,
-            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
-            PostPropagationCallBack postPropagationCallBack)
+            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack)
         {
-            var initialState = new State();
+            const double initialBalance = 300.0;
+            const double initialHealth = 100.0;
+            const double radiusOfCannons = 0.2;
+            const double radiusOfProjectiles = 0.05;
+            const double priceOfCannon = 50.0;
+            const double priceForKilledEnemy = 20.0;
+            const int cannonCoolDown = 300;
+            const double rangeOfCannons = 1.0;
+            const double projectileSpeed = 10.0;
+            const int projectileLifespan = 50;
+            const double enemyRadius = 0.15;
+            const int enemySpacing = 200;
+            const int enemyLife = 10;
+            const double enemySpeed = 0.5;
 
-            var scene = new Scene("Scene 2",
-                new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)
+            var path = new Path
             {
-                IncludeCustomForces = true,
-                CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
-                PostPropagationCallBack = postPropagationCallBack,
-                InteractionCallBack = interactionCallBack
+                WayPoints = new List<Vector2D>
+                {
+                    new Vector2D(-2, -1),
+                    new Vector2D(1.5, -1),
+                    new Vector2D(2, 0),
+                    new Vector2D(-1, 0),
+                    new Vector2D(-1.5, 1),
+                    new Vector2D(5, 1)
+                }
             };
 
-            var margin = 0.3;
-            scene.AddRectangularBoundary(-1.9, 5.25, -1, 3);
-            AddWall(scene, -1.9 - margin, 5.25 + margin, -1 - margin, -1, false, false, false, false);
-            AddWall(scene, -1.9 - margin, 5.25 + margin, 3, 3 + margin, false, false, false, false);
-            AddWall(scene, -1.9 - margin, -1.9, -1, 3, false, false, false, false);
-            AddWall(scene, 5.25, 5.25 + margin, -1, 3, false, false, false, false);
+            var nextCannonId = 1000;
+            var nextProjectileId = 10000;
+            var nextPropId = 100000;
 
-            AddWall(scene, -1.9, 1, 1.5, 2, false, true, true, true);
-            AddWall(scene, 2, 5.25, 0, 0.5, true, false, true, true);
-
-            // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(4.5, 2.5), new Vector2D(5, 2.5), "Level 2 Cleared") { Visible = true });
-
-            return scene;
-        }
-
-        private static Scene GenerateScene3(
-            InteractionCallBack interactionCallBack,
-            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
-            PostPropagationCallBack postPropagationCallBack)
-        {
             var initialState = new State();
 
+            var standardGravity = 0.0;
+            var gravitationalConstant = 0.0;
+            var handleBodyCollisions = true;
+            var coefficientOfFriction = 0.0;
+            var balance = initialBalance;
+            var health = initialHealth;
+
+            var x0 = 0.0;
+            var x1 = 16.0;
+            var y0 = 0.0;
+            var y1 = 8.0;
+
             var scene = new Scene("Scene 2",
-                new Point2D(-1.9321428571428569, -1.0321428571428573), new Point2D(5, 3), initialState, 0, 0, 0, 1, false)
+                new Point2D(x0, y0),
+                new Point2D(x1, y1),
+                initialState, 0, 0, 0, 1, false)
             {
-                IncludeCustomForces = true,
-                CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack,
-                PostPropagationCallBack = postPropagationCallBack,
-                InteractionCallBack = interactionCallBack
+                CollisionBetweenBodyAndBoundaryOccuredCallBack = collisionBetweenBodyAndBoundaryOccuredCallBack
             };
 
-            var margin = 0.3;
-            scene.AddRectangularBoundary(-1.9, 5.25, -1, 3);
-            AddWall(scene, -1.9 - margin, 5.25 + margin, -1 - margin, -1, false, false, false, false);
-            AddWall(scene, -1.9 - margin, 5.25 + margin, 3, 3 + margin, false, false, false, false);
-            AddWall(scene, -1.9 - margin, -1.9, -1, 3, false, false, false, false);
-            AddWall(scene, 5.25, 5.25 + margin, -1, 3, false, false, false, false);
-            var margin2 = 1;
-            AddWall(scene, -1.9 + margin2, 5.25 - margin2, -1 + margin2, 3 - margin2);
+            scene.InitializationCallback = (state, message) =>
+            {
+                balance = initialBalance;
+                health = initialHealth;
+                nextCannonId = 1000;
+                nextProjectileId = 10000;
+                nextPropId = 100000;
+            };
 
-            // Add exits
-            scene.AddBoundary(new LineSegment(new Vector2D(4, -0.95), new Vector2D(5.25, -0.95), "You Win") { Visible = true });
+            scene.CheckForCollisionBetweenBodiesCallback = (body1, body2) =>
+            {
+                if (body1 is Enemy || body2 is Enemy)
+                {
+                    if (body1 is Projectile || body2 is Projectile)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            scene.CollisionBetweenTwoBodiesOccuredCallBack = (body1, body2) =>
+            {
+                if (body1 is Enemy || body2 is Enemy)
+                {
+                    if (body1 is Projectile || body2 is Projectile)
+                    {
+                        return OutcomeOfCollisionBetweenTwoBodies.Ignore;
+                    }
+                }
+
+                return OutcomeOfCollisionBetweenTwoBodies.Block;
+            };
+
+            Point2D mousePos = null;
+
+            scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
+            {
+                //updateAuxFields($"Life: {health}", $"$: {balance}");
+
+                if (mouseClickPosition == null)
+                {
+                    mousePos = null;
+                    return false;
+                }
+
+                mousePos = mouseClickPosition.Position;
+                return true;
+            };
+
+            var enemies = Enumerable.Range(1, 10)
+                .Select(i => new
+                {
+                    StateIndex = i * enemySpacing,
+                    BodyState = new BodyStateEnemy(new Enemy(i, enemyRadius, 1, true), new Vector2D(-3, -1))
+                    {
+                        Path = path,
+                        Speed = enemySpeed,
+                        NaturalVelocity = new Vector2D(0.2, 0),
+                        Life = enemyLife
+                    }
+                })
+                .ToDictionary(_ => _.StateIndex, _ => _.BodyState);
+
+            scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
+            {
+                var response = new PostPropagationResponse();
+
+                // Remove projectiles due to hitting enemies
+                if (boundaryCollisionReports.Any())
+                {
+                    // Remove enemies, when they get to the exit
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports
+                        .Where(bcr => bcr.BodyState.Body is Enemy)
+                        .Select(bcr => bcr.BodyState.Body.Id));
+
+                    health -= boundaryCollisionReports.Count * 30.0;
+
+                    if (health <= 0)
+                    {
+                        response.IndexOfLastState = propagatedState.Index;
+                        response.Outcome = "Game Over";
+                    }
+                }
+
+                var hitEnemies = new HashSet<BodyStateEnemy>();
+
+                bodyCollisionReports.ForEach(bcr =>
+                {
+                    if (bcr.Body1 is Projectile || bcr.Body2 is Projectile)
+                    {
+                        // Projectile collided with enemy
+                        if (bcr.Body1 is Projectile)
+                        {
+                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body1.Id });
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body2.Id) as BodyStateEnemy;
+                            hitEnemies.Add(bodyState);
+                        }
+                        else
+                        {
+                            propagatedState.RemoveBodyStates(new List<int> { bcr.Body2.Id });
+                            var bodyState = propagatedState.TryGetBodyState(bcr.Body1.Id) as BodyStateEnemy;
+                            hitEnemies.Add(bodyState);
+                        }
+                    }
+                });
+
+                hitEnemies.ToList().ForEach(e =>
+                {
+                    e.Life -= 1;
+
+                    if (e.Life <= 0.1)
+                    {
+                        balance += priceForKilledEnemy;
+                        propagatedState.RemoveBodyStates(new List<int> { e.Body.Id });
+
+                        if (!propagatedState.BodyStates.Any(bs => bs.Body is Enemy))
+                        {
+                            // All enemies are dead, so player wins
+                            response.IndexOfLastState = propagatedState.Index;
+                            response.Outcome = "You Win";
+                        }
+                    }
+                });
+
+                if (boundaryCollisionReports.Any())
+                {
+                    propagatedState.RemoveBodyStates(boundaryCollisionReports.Select(bcr => bcr.BodyState.Body.Id));
+                }
+
+                // Add a new cannon?
+                if (mousePos != null)
+                {
+                    var mousePosAsVector = mousePos.AsVector2D();
+
+                    var cannonCenters = propagatedState.BodyStates
+                        .Where(_ => _.Body is Cannon)
+                        .Select(_ => _.Position);
+
+                    if (balance >= priceOfCannon &&
+                        cannonCenters.DistanceToClosestPoint(mousePosAsVector) > 2 * radiusOfCannons &&
+                        scene.Props.Min(_ => _.DistanceToPoint(mousePosAsVector) - radiusOfCannons > 0.0))
+                    {
+                        propagatedState.AddBodyState(new BodyStateCannon(
+                            new Cannon(nextCannonId++, radiusOfCannons), mousePosAsVector)
+                        {
+                            CoolDown = cannonCoolDown
+                        });
+
+                        balance -= priceOfCannon;
+                    }
+
+                    mousePos = null;
+                }
+
+                // Remove projectiles due to limited lifespan?
+                var disposableProjectiles = propagatedState.BodyStates
+                    .Where(_ =>
+                        _.Body is Projectile &&
+                        (_ as BodyStateProjectile).LifeSpan <= 0)
+                    .Select(_ => _.Body.Id)
+                    .ToList();
+
+                propagatedState.RemoveBodyStates(disposableProjectiles);
+
+                // Add projectiles?
+                var bodyStatesOfCannonsThatMayShoot = propagatedState.BodyStates
+                    .Where(_ =>
+                        _.Body is Cannon &&
+                        (_ as BodyStateCannon).CoolDown <= 0)
+                    .ToList();
+
+                bodyStatesOfCannonsThatMayShoot.ForEach(bodyState =>
+                {
+                    // This cannon can shoot
+
+                    var rangeOfCannonsSquared = rangeOfCannons * rangeOfCannons;
+
+                    var target = propagatedState.BodyStates
+                        .Where(_ => _ is BodyStateEnemy)
+                        .Select(_ => _ as BodyStateEnemy)
+                        .Where(_ => _.Position.SquaredDistanceTo(bodyState.Position) < rangeOfCannonsSquared)
+                        .Select(_ => new { BodyState = _, _.DistanceCovered })
+                        .OrderByDescending(_ => _.DistanceCovered)
+                        .FirstOrDefault();
+
+                    if (target == null)
+                    {
+                        return;
+                    }
+
+                    var projectileVelocity = (target.BodyState.Position - bodyState.Position).Normalize() * projectileSpeed;
+
+                    (bodyState as BodyStateCannon).Orientation = -projectileVelocity.AsPolarVector().Angle;
+
+                    propagatedState.AddBodyState(new BodyStateProjectile(
+                        new Projectile(
+                            nextProjectileId++,
+                            radiusOfProjectiles,
+                            1,
+                            false),
+                        bodyState.Position)
+                    {
+                        NaturalVelocity = projectileVelocity,
+                        LifeSpan = projectileLifespan
+                    });
+
+                    (bodyState as BodyStateCannon).CoolDown = cannonCoolDown;
+                });
+
+                // Add an enemy?
+                if (enemies.ContainsKey(propagatedState.Index))
+                {
+                    propagatedState.AddBodyState(enemies[propagatedState.Index]);
+                }
+
+                return response;
+            };
+
+            AddPath(scene, path, enemyRadius * 2.5, nextPropId);
 
             return scene;
-        }
-
-        // Scene building helper
-        private static void AddWall(
-            Scene scene,
-            double x0,
-            double x1,
-            double y0,
-            double y1,
-            bool boundaryLeft = true,
-            bool boundaryRight = true,
-            bool boundaryTop = true,
-            bool boundaryBottom = true)
-        {
-            scene.Props.Add(new PropRectangle(_nextWallId++, x1 - x0, y1 - y0, new Vector2D((x0 + x1) / 2, (y0 + y1) / 2)));
-
-            if (boundaryLeft)
-            {
-                scene.AddBoundary(new VerticalLineSegment(x0, y0, y1));
-            }
-
-            if (boundaryRight)
-            {
-                scene.AddBoundary(new VerticalLineSegment(x1, y0, y1));
-            }
-
-            if (boundaryTop)
-            {
-                scene.AddBoundary(new HorizontalLineSegment(y0, x0, x1));
-            }
-
-            if (boundaryBottom)
-            {
-                scene.AddBoundary(new HorizontalLineSegment(y1, x0, x1));
-            }
         }
 
         private void UnlockLevels(
@@ -702,6 +897,60 @@ namespace Game.TowerDefense.ViewModel
             });
 
             _transitionActivationMap.Remove(applicationState);
+        }
+
+        // Scene building helpers
+        private static void AddPath(
+            Scene scene,
+            Path path,
+            double width,
+            int firstPropId)
+        {
+            var propId = firstPropId;
+
+            path.WayPoints.AdjacenPairs().ToList().ForEach(_ =>
+            {
+                AddPathSegment(scene, _.Item1, _.Item2, width, propId++);
+            });
+
+            path.WayPoints.ForEach(_ =>
+            {
+                scene.Props.Add(new PropCircle(propId, width, _));
+            });
+        }
+
+        private static void AddPathSegment(
+            Scene scene,
+            Vector2D start,
+            Vector2D end,
+            double width,
+            int propId)
+        {
+            if (start.X == end.X)
+            {
+                var x = start.X;
+                var y0 = Math.Min(start.Y, end.Y);
+                var y1 = Math.Max(start.Y, end.Y);
+
+                scene.Props.Add(new PropRectangle(propId, width, y1 - y0, new Vector2D(x, (y0 + y1) / 2)));
+            }
+            else if (start.Y == end.Y)
+            {
+                var x0 = Math.Min(start.X, end.X);
+                var x1 = Math.Max(start.X, end.X);
+                var y = start.Y;
+                scene.Props.Add(new PropRectangle(propId, x1 - x0, width, new Vector2D((x0 + x1) / 2, y)));
+            }
+            else
+            {
+                var v = end - start;
+                var w = v.Length;
+                var h = width;
+                var center = (start + end) / 2;
+                var orientation = -v.AsPolarVector().Angle;
+
+                scene.Props.Add(new PropRotatableRectangle(propId, w, h, center, orientation));
+            }
         }
     }
 }
