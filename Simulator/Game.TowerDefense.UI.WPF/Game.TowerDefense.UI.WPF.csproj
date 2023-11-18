@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\Wall.png" />
+    <None Remove="Images\Zelda.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
+    <ProjectReference Include="..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
+    <ProjectReference Include="..\Game.TowerDefense.ViewModel\Game.TowerDefense.ViewModel.csproj" />
+    <ProjectReference Include="..\Simulator.UIElements\Simulator.UIElements.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Zelda.png" />
+    <Resource Include="Images\Wall.png" />
+  </ItemGroup>
+
+</Project>
