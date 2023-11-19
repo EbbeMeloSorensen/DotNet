@@ -14,14 +14,22 @@
         KeyUp="MainWindow_OnKeyUp"
         Closing="MainWindow_OnClosing">
     <Grid>
-
-        <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}">
-            <scrollFree:GeometryEditorView.Visibility>
+        <Grid>
+            <Grid.Visibility>
                 <Binding Path="DataContext.GeometryEditorVisible"
                          RelativeSource="{RelativeSource AncestorType=Window}"
                          Converter="{StaticResource BooleanToVisibilityConverter}"/>
-            </scrollFree:GeometryEditorView.Visibility>
-        </scrollFree:GeometryEditorView>
+            </Grid.Visibility>
+            <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Image Width="50" Height="50" Source="../Images/Heart.png"/>
+                <TextBox Width="50" Height="50" IsReadOnly="True" Text="{Binding Aux1}" FontSize="24"
+                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5, 0, 0, 0"/>
+                <Image Width="50" Height="50" Source="../Images/Money.png" Margin="20, 0, 0, 0"/>
+                <TextBox Width="50" Height="50" IsReadOnly="True" Text="{Binding Aux2}" FontSize="24"
+                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5, 0, 0, 0"/>
+            </StackPanel>
+        </Grid>
 
         <Grid>
             <Grid.Visibility>

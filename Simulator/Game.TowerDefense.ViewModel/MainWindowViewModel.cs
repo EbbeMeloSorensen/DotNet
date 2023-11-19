@@ -25,6 +25,10 @@ using BodyStateProjectile = Game.TowerDefense.ViewModel.BodyStates.BodyStateProj
 
 namespace Game.TowerDefense.ViewModel
 {
+    public delegate void UpdateAuxFields(
+        string aux1,
+        string aux2);
+
     public class MainWindowViewModel : ViewModelBase
     {
         // Constants that apply to every level
@@ -48,8 +52,30 @@ namespace Game.TowerDefense.ViewModel
         private bool _geometryEditorVisible = true;
         private Vector2D _worldWindowTranslation;
         private Stopwatch _stopwatch;
+        private string _aux1;
+        private string _aux2;
 
         private Dictionary<ApplicationState, List<Tuple<ApplicationState, ApplicationState>>> _transitionActivationMap;
+
+        public string Aux1
+        {
+            get { return _aux1; }
+            set
+            {
+                _aux1 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Aux2
+        {
+            get { return _aux2; }
+            set
+            {
+                _aux2 = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public Application Application { get; }
 
@@ -182,13 +208,20 @@ namespace Game.TowerDefense.ViewModel
                 }
             };
 
+            var updateAuxFields = new UpdateAuxFields((aux1, aux2) =>
+            {
+                Aux1 = aux1;
+                Aux2 = aux2;
+            });
+
             var welcomeScreen = new ApplicationState("Welcome Screen");
             var unlockedLevelsScreen = new ApplicationState("Unlocked Levels Screen");
 
             var level1 = new Level("Level 1")
             {
                 Scene = GenerateScene1(
-                    collisionBetweenBodyAndBoundaryOccuredCallBack)
+                    collisionBetweenBodyAndBoundaryOccuredCallBack,
+                    updateAuxFields)
             };
 
             var level1Cleared = new ApplicationState("Level 1 Cleared");
@@ -373,7 +406,8 @@ namespace Game.TowerDefense.ViewModel
         }
 
         private static Scene GenerateScene1(
-            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack)
+            CollisionBetweenBodyAndBoundaryOccuredCallBack collisionBetweenBodyAndBoundaryOccuredCallBack,
+            UpdateAuxFields updateAuxFields)
         {
             var path = new Path
             {
@@ -456,7 +490,7 @@ namespace Game.TowerDefense.ViewModel
 
             scene.InteractionCallBack = (keyboardState, keyboardEvents, mouseClickPosition, collisions, currentState) =>
             {
-                //updateAuxFields($"Life: {health}", $"$: {balance}");
+                updateAuxFields($"{health}", $"{balance}");
 
                 if (mouseClickPosition == null)
                 {

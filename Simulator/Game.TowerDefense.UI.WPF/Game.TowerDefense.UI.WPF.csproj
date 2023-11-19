@@ -14,6 +14,8 @@
     <None Remove="Images\Enemy3.png" />
     <None Remove="Images\Enemy4.png" />
     <None Remove="Images\Enemy5.png" />
+    <None Remove="Images\Heart.png" />
+    <None Remove="Images\Money.png" />
     <None Remove="Images\Projectile.png" />
   </ItemGroup>
 
@@ -33,6 +35,8 @@
     <Resource Include="Images\Enemy3.png" />
     <Resource Include="Images\Enemy4.png" />
     <Resource Include="Images\Enemy5.png" />
+    <Resource Include="Images\Heart.png" />
+    <Resource Include="Images\Money.png" />
     <Resource Include="Images\Projectile.png" />
     <Resource Include="Images\Enemy1.png" />
     <Resource Include="Images\Cannon.png" />
