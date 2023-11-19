@@ -132,5 +132,39 @@ namespace Game.TowerDefense.ViewModel
 
             return nextEnemyId + count;
         }
+
+        public static int AddFireDemonWave(
+            this Dictionary<int, List<BodyStateEnemy>> enemies,
+            int stateIndex,
+            Path path,
+            double speed,
+            int life,
+            int count,
+            int spacing,
+            double radius,
+            int nextEnemyId)
+        {
+            Enumerable.Range(0, count).Select(i => new
+            {
+                StateIndex = i * spacing + stateIndex,
+                BodyState = new BodyStateEnemy(new FireDemon(nextEnemyId + i, radius), path.WayPoints.First())
+                {
+                    Path = path,
+                    Speed = speed,
+                    NaturalVelocity = new Vector2D(0.2, 0),
+                    Life = life
+                }
+            }).ToList().ForEach(_ =>
+            {
+                if (!enemies.ContainsKey(_.StateIndex))
+                {
+                    enemies[_.StateIndex] = new List<BodyStateEnemy>();
+                }
+
+                enemies[_.StateIndex].Add(_.BodyState);
+            });
+
+            return nextEnemyId + count;
+        }
     }
 }

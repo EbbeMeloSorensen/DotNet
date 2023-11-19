@@ -1,18 +1,18 @@
-﻿using Simulator.ViewModel.ShapeViewModels;
+﻿using System.Windows.Media;
+using Simulator.ViewModel.ShapeViewModels;
 
 namespace Game.TowerDefense.ViewModel.ShapeViewModels;
 
-public class EnemyViewModel : TaggedEllipseViewModel
+public abstract class EnemyViewModel : TaggedEllipseViewModel
 {
-    private string _imagePath;
-
-    public string ImagePath
+    public abstract Matrix CorrectionMatrix
     {
-        get => _imagePath;
-        set
-        {
-            _imagePath = value;
-            RaisePropertyChanged();
-        }
+        get;
     }
+
+    public abstract string ImagePath
+    {
+        get;
+    }
+   
 }

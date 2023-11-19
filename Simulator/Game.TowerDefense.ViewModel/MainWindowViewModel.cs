@@ -6,24 +6,22 @@ using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
-using Craft.Utils.Linq;
 using Craft.Logging;
 using Craft.Math;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Simulator.Application;
 using Simulator.Domain;
 using Simulator.Domain.Boundaries;
-using Simulator.Domain.Props;
 using Simulator.ViewModel;
 using Simulator.ViewModel.ShapeViewModels;
 using Game.TowerDefense.ViewModel.Bodies;
+using Game.TowerDefense.ViewModel.Bodies.Enemies;
 using Game.TowerDefense.ViewModel.ShapeViewModels;
 using Application = Simulator.Application.Application;
 using ApplicationState = Craft.DataStructures.Graph.State;
 using BodyStateCannon = Game.TowerDefense.ViewModel.BodyStates.BodyStateCannon;
 using BodyStateEnemy = Game.TowerDefense.ViewModel.BodyStates.BodyStateEnemy;
 using BodyStateProjectile = Game.TowerDefense.ViewModel.BodyStates.BodyStateProjectile;
-using Game.TowerDefense.ViewModel.Bodies.Enemies;
 
 namespace Game.TowerDefense.ViewModel
 {
@@ -42,7 +40,7 @@ namespace Game.TowerDefense.ViewModel
         const int _projectileLifespan = 600;
         const double _enemyRadius = 0.3;
         const int _enemySpacing = 1000;
-        const int _enemyLife = 10;
+        const int _enemyLife = 20;
         const double _enemySpeed = 0.5;
 
         private ILogger _logger;
@@ -108,29 +106,27 @@ namespace Game.TowerDefense.ViewModel
                         {
                             switch (bsEnemy.Body)
                             {
-                                case Pig pig:
+                                case Pig:
                                 {
-                                    return new EnemyViewModel
+                                    return new PigViewModel
                                     {
                                         Width = 2 * circularBody.Radius,
                                         Height = 2 * circularBody.Radius,
-                                        ImagePath = @"..\Images\Enemy1.png",
                                         Tag = bsEnemy.Life.ToString()
                                     };
                                 }
-                                case Rabbit rabbit:
+                                case Rabbit:
                                 {
-                                    return new EnemyViewModel
+                                    return new RabbitViewModel
                                     {
                                         Width = 2 * circularBody.Radius,
                                         Height = 2 * circularBody.Radius,
-                                        ImagePath = @"..\Images\Enemy2.png",
                                         Tag = bsEnemy.Life.ToString()
                                     };
                                 }
-                                case Enemy enemy:
+                                case FireDemon:
                                 {
-                                    return new EnemyViewModel
+                                    return new FireDemonViewModel()
                                     {
                                         Width = 2 * circularBody.Radius,
                                         Height = 2 * circularBody.Radius,
@@ -474,10 +470,12 @@ namespace Game.TowerDefense.ViewModel
 
             var enemies = new Dictionary<int, List<BodyStateEnemy>>();
 
-            nextEnemyId = enemies.AddRabbitWave(1, path, _enemySpeed * 3, _enemyLife / 2, 5, _enemySpacing, _enemyRadius * 0.75, nextEnemyId);
+            nextEnemyId = enemies.AddRabbitWave(1, path, _enemySpeed * 3, _enemyLife / 2, 5, _enemySpacing, _enemyRadius * 0.8, nextEnemyId);
             nextEnemyId = enemies.AddPigWave(1, path, _enemySpeed, _enemyLife, 3, _enemySpacing, _enemyRadius, nextEnemyId);
             nextEnemyId = enemies.AddPigWave(5000, path, _enemySpeed, _enemyLife, 3, _enemySpacing, _enemyRadius, nextEnemyId);
             nextEnemyId = enemies.AddPigWave(10000, path, _enemySpeed, _enemyLife, 5, _enemySpacing, _enemyRadius, nextEnemyId);
+            nextEnemyId = enemies.AddRabbitWave(10000, path, _enemySpeed * 3, _enemyLife / 2, 5, _enemySpacing, _enemyRadius * 0.8, nextEnemyId);
+            nextEnemyId = enemies.AddFireDemonWave(20000, path, _enemySpeed * 0.75, _enemyLife * 10, 1, _enemySpacing, _enemyRadius, nextEnemyId);
 
             scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
