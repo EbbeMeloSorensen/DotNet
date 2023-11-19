@@ -1,6 +1,6 @@
 ﻿using Simulator.Domain;
 
-namespace Game.TowerDefense.ViewModel.Bodies;
+namespace Game.TowerDefense.ViewModel.Bodies.Enemies;
 
 public class Enemy : CircularBody
 {

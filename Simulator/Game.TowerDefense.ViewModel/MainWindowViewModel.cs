@@ -23,6 +23,7 @@ using ApplicationState = Craft.DataStructures.Graph.State;
 using BodyStateCannon = Game.TowerDefense.ViewModel.BodyStates.BodyStateCannon;
 using BodyStateEnemy = Game.TowerDefense.ViewModel.BodyStates.BodyStateEnemy;
 using BodyStateProjectile = Game.TowerDefense.ViewModel.BodyStates.BodyStateProjectile;
+using Game.TowerDefense.ViewModel.Bodies.Enemies;
 
 namespace Game.TowerDefense.ViewModel
 {
@@ -107,6 +108,26 @@ namespace Game.TowerDefense.ViewModel
                         {
                             switch (bsEnemy.Body)
                             {
+                                case Pig pig:
+                                {
+                                    return new EnemyViewModel
+                                    {
+                                        Width = 2 * circularBody.Radius,
+                                        Height = 2 * circularBody.Radius,
+                                        ImagePath = @"..\Images\Enemy1.png",
+                                        Tag = bsEnemy.Life.ToString()
+                                    };
+                                }
+                                case Rabbit rabbit:
+                                {
+                                    return new EnemyViewModel
+                                    {
+                                        Width = 2 * circularBody.Radius,
+                                        Height = 2 * circularBody.Radius,
+                                        ImagePath = @"..\Images\Enemy2.png",
+                                        Tag = bsEnemy.Life.ToString()
+                                    };
+                                }
                                 case Enemy enemy:
                                 {
                                     return new EnemyViewModel
@@ -372,8 +393,9 @@ namespace Game.TowerDefense.ViewModel
             };
 
             var nextCannonId = 1000;
-            var nextProjectileId = 10000;
-            var nextPropId = 100000;
+            var nextPropId = 10000;
+            var nextEnemyId = 100000;
+            var nextProjectileId = 1000000;
 
             var initialState = new State();
 
@@ -401,9 +423,11 @@ namespace Game.TowerDefense.ViewModel
             {
                 balance = _initialBalance;
                 health = _initialHealth;
+
                 nextCannonId = 1000;
-                nextProjectileId = 10000;
-                nextPropId = 100000;
+                nextPropId = 10000;
+                nextEnemyId = 100000;
+                nextProjectileId = 1000000;
             };
 
             scene.CheckForCollisionBetweenBodiesCallback = (body1, body2) =>
@@ -448,19 +472,12 @@ namespace Game.TowerDefense.ViewModel
                 return true;
             };
 
-            var enemies = Enumerable.Range(1, 10)
-                .Select(i => new
-                {
-                    StateIndex = i * _enemySpacing,
-                    BodyState = new BodyStateEnemy(new Enemy(i, _enemyRadius), new Vector2D(-1, 2))
-                    {
-                        Path = path,
-                        Speed = _enemySpeed,
-                        NaturalVelocity = new Vector2D(0.2, 0),
-                        Life = _enemyLife
-                    }
-                })
-                .ToDictionary(_ => _.StateIndex, _ => _.BodyState);
+            var enemies = new Dictionary<int, List<BodyStateEnemy>>();
+
+            nextEnemyId = enemies.AddRabbitWave(1, path, _enemySpeed * 3, _enemyLife / 2, 5, _enemySpacing, _enemyRadius * 0.75, nextEnemyId);
+            nextEnemyId = enemies.AddPigWave(1, path, _enemySpeed, _enemyLife, 3, _enemySpacing, _enemyRadius, nextEnemyId);
+            nextEnemyId = enemies.AddPigWave(5000, path, _enemySpeed, _enemyLife, 3, _enemySpacing, _enemyRadius, nextEnemyId);
+            nextEnemyId = enemies.AddPigWave(10000, path, _enemySpeed, _enemyLife, 5, _enemySpacing, _enemyRadius, nextEnemyId);
 
             scene.PostPropagationCallBack = (propagatedState, boundaryCollisionReports, bodyCollisionReports) =>
             {
@@ -609,13 +626,13 @@ namespace Game.TowerDefense.ViewModel
                 // Add an enemy?
                 if (enemies.ContainsKey(propagatedState.Index))
                 {
-                    propagatedState.AddBodyState(enemies[propagatedState.Index]);
+                    enemies[propagatedState.Index].ForEach(_ => propagatedState.AddBodyState(_));
                 }
 
                 return response;
             };
 
-            AddPath(scene, path, _enemyRadius * 2.5, nextPropId);
+            scene.AddPath(path, _enemyRadius * 2.5, nextPropId);
             scene.AddBoundary(new LeftFacingHalfPlane(17));
 
             return scene;
@@ -888,7 +905,7 @@ namespace Game.TowerDefense.ViewModel
                 return response;
             };
 
-            AddPath(scene, path, _enemyRadius * 2.5, nextPropId);
+            scene.AddPath(path, _enemyRadius * 2.5, nextPropId);
             scene.AddBoundary(new UpFacingHalfPlane(9));
 
             return scene;
@@ -910,60 +927,6 @@ namespace Game.TowerDefense.ViewModel
             });
 
             _transitionActivationMap.Remove(applicationState);
-        }
-
-        // Scene building helpers
-        private static void AddPath(
-            Scene scene,
-            Path path,
-            double width,
-            int firstPropId)
-        {
-            var propId = firstPropId;
-
-            path.WayPoints.AdjacenPairs().ToList().ForEach(_ =>
-            {
-                AddPathSegment(scene, _.Item1, _.Item2, width, propId++);
-            });
-
-            path.WayPoints.ForEach(_ =>
-            {
-                scene.Props.Add(new PropCircle(propId, width, _));
-            });
-        }
-
-        private static void AddPathSegment(
-            Scene scene,
-            Vector2D start,
-            Vector2D end,
-            double width,
-            int propId)
-        {
-            if (start.X == end.X)
-            {
-                var x = start.X;
-                var y0 = Math.Min(start.Y, end.Y);
-                var y1 = Math.Max(start.Y, end.Y);
-
-                scene.Props.Add(new PropRectangle(propId, width, y1 - y0, new Vector2D(x, (y0 + y1) / 2)));
-            }
-            else if (start.Y == end.Y)
-            {
-                var x0 = Math.Min(start.X, end.X);
-                var x1 = Math.Max(start.X, end.X);
-                var y = start.Y;
-                scene.Props.Add(new PropRectangle(propId, x1 - x0, width, new Vector2D((x0 + x1) / 2, y)));
-            }
-            else
-            {
-                var v = end - start;
-                var w = v.Length;
-                var h = width;
-                var center = (start + end) / 2;
-                var orientation = -v.AsPolarVector().Angle;
-
-                scene.Props.Add(new PropRotatableRectangle(propId, w, h, center, orientation));
-            }
         }
     }
 }
