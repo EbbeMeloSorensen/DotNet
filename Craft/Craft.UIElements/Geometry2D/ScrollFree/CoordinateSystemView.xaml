@@ -55,6 +55,22 @@
                 </Line.Visibility>
             </Line>
 
+            <!-- Vertical line representing dynamic x value - THAT DOESN'T FLICKER -->
+            <Line Stroke="Purple"
+                  StrokeThickness="1"
+                  X1="{Binding DynamicXValueViewPortWhenLocked}"
+                  X2="{Binding DynamicXValueViewPortWhenLocked}"
+                  Y1="0"
+                  Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
+                <Line.Visibility>
+                    <Binding Path="LockWorldWindowOnDynamicXValue" Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Line.Visibility>
+            </Line>
+
             <!-- Vertical axis -->
             <Line Stroke="Black"
                   StrokeThickness="1"

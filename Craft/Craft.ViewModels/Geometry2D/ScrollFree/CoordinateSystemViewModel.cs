@@ -21,6 +21,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private bool _showStaticXValue;
         private double? _dynamicXValue;
         private double _dynamicXValueViewPort;
+        private double _dynamicXValueViewPortWhenLocked;
         private bool _showDynamicXValue;
         private bool _lockWorldWindowOnDynamicXValue;
         private double _worldWindowExpansionFactor;
@@ -110,6 +111,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public double DynamicXValueViewPortWhenLocked
+        {
+            get => _dynamicXValueViewPortWhenLocked;
+            set
+            {
+                _dynamicXValueViewPortWhenLocked = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public double DynamicXValueViewPort
         {
             get => _dynamicXValueViewPort;
@@ -121,7 +132,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 {
                     if (LockWorldWindowOnDynamicXValue)
                     {
-                        ShowDynamicXValue = true;
+                        ShowDynamicXValue = false;
 
                         // Position the World Window so that the x value of interest is in the middle
                         GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
@@ -270,6 +281,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 UpdateCoordinateSystemForGeometryEditorViewModel();
                 UpdateStaticXValueViewPort();
+
+                DynamicXValueViewPortWhenLocked = GeometryEditorViewModel.ViewPortSize.Width / 2;
             };
 
             GeometryEditorViewModel.PropertyChanged += (s, e) =>
@@ -278,7 +291,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     e.PropertyName != "WorldWindowUpperLeft" ||
                     IsWorldWindowEnclosedByExpandedWorldWindow()) return;
 
-                UpdateCoordinateSystemForGeometryEditorViewModel();
                 GeometryEditorViewModel.OnWorldWindowMajorUpdateOccured();
             };
         }
