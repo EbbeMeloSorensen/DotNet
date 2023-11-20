@@ -23,7 +23,7 @@
 
             </Rectangle>
 
-            <!-- Vertical line representing dynamic x value -->
+            <!-- Vertical line representing static x value -->
             <Line Stroke="DarkOrange"
                   StrokeThickness="1"
                   X1="{Binding StaticXValueViewPort}"
