@@ -37,6 +37,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         private string _timeAtMousePositionAsText1;
         private string _timeAtMousePositionAsText2;
         private Stopwatch _stopwatch;
+        private List<DateTime> _timeStampsOfInterest;
 
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
@@ -191,6 +192,14 @@ namespace Craft.UIElements.GuiTest.Tab3
             DrawAHouse(GeometryEditorViewModel2);
 
             DrawACoordinateSystem(GeometryEditorViewModel3);
+
+            var now = DateTime.UtcNow;
+            _timeStampsOfInterest = new List<DateTime>
+            {
+                now,
+                now - TimeSpan.FromMinutes(30),
+                now - TimeSpan.FromMinutes(45),
+            };
 
             _stopwatch = new Stopwatch();
             _stopwatch.Start();
@@ -569,8 +578,10 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 1)
             {
-                LockWorldWindowOnDynamicXValue = true,
-                StaticXValue = 4.0
+                LockWorldWindowOnDynamicXValue = false,
+                StaticXValue = 4.0,
+                ShowXAxisLabels = true,
+                ShowYAxisLabels = true
             };
 
             CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
@@ -584,7 +595,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 WorldWindowMajorUpdateCountForCoordinateSystemViewModel++;
 
                 // Få lige grid tegning på plads, og tag så kurven bagefter
-                return;
+                //return;
 
                 // Update the function curve
                 // Todo: Use the expanded world window owned by the coordinate system view model instead of just assuming it is expanded by a factor of 1
@@ -668,29 +679,46 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void InitializeTimeSeriesViewModel2()
         {
-            var timeSpan = TimeSpan.FromHours(1);
+            var timeSpan = TimeSpan.FromDays(1);
+            //var timeSpan = TimeSpan.FromHours(1);
+            //var timeSpan = TimeSpan.FromMinutes(1);
             var utcNow = DateTime.UtcNow;
             var timeAtOrigo = utcNow.Date;
             var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1);
             var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
 
+            var thirtySecondsFromNowAsScalar = (DateTime.UtcNow + TimeSpan.FromSeconds(30) - timeAtOrigo).TotalDays;
+
             TimeSeriesViewModel2 = new TimeSeriesViewModel(
                 new Point(xFocus, 0),
                 new Size(timeSpan.TotalDays, 3),
                 true,
-                25,
-                60,
+                0,
+                40,
                 1,
-                timeAtOrigo);
+                timeAtOrigo)
+            {
+                //LockWorldWindowOnDynamicXValue = true,
+                LockWorldWindowOnDynamicXValue = false,
+                StaticXValue = thirtySecondsFromNowAsScalar
+            };
 
             TimeSeriesViewModel2.GeometryEditorViewModel.YAxisLocked = true;
+            TimeSeriesViewModel2.ShowVerticalGridLines = true;
             TimeSeriesViewModel2.ShowHorizontalGridLines = false;
+            TimeSeriesViewModel2.ShowVerticalAxis = false;
 
             TimeSeriesViewModel2.TimeAtMousePosition.PropertyChanged += (s, e) =>
             {
                 TimeAtMousePositionAsText2 = TimeSeriesViewModel2.TimeAtMousePosition.Object.HasValue
                     ? TimeSeriesViewModel2.TimeAtMousePosition.Object.Value.ToString()
                     : "";
+            };
+
+            TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
+            {
+                // Når man dragger, så skal man træde ud af det mode, hvor den følger tiden
+                TimeSeriesViewModel2.LockWorldWindowOnDynamicXValue = false;
             };
 
             TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
@@ -702,22 +730,32 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 TimeSeriesViewModel2.GeometryEditorViewModel.ClearLines();
 
-                var timeStampsOfInterest = new List<DateTime>
-                {
-                    DateTime.UtcNow,
-                    DateTime.UtcNow - TimeSpan.FromMinutes(30),
-                    DateTime.UtcNow - TimeSpan.FromMinutes(45),
-                };
-
+                // Det er ikke helt uproblematisk det her - linien forsvinder, hvis man zoomer nok ind...
+                // DU bør nok generelt lave det sådan at man konverteer til punkter i viewporten og så tegner det med en liniebredde defineret der.
                 var lineThickness = 2.0 / TimeSeriesViewModel2.GeometryEditorViewModel.Scaling.Width;
 
-                var lineViewModels = timeStampsOfInterest
+                var lineViewModels = _timeStampsOfInterest
                     .Select(_ => (_ - TimeSeriesViewModel2.TimeAtOrigo).TotalDays)
                     .Where(_ => _ > x0 && _ < x1)
                     .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), lineThickness, _curveBrush))
                     .ToList();
 
                 lineViewModels.ForEach(_ => TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(_));
+            };
+
+            TimeSeriesViewModel2.GeometryEditorViewModel.UpdateModelCallBack = () =>
+            {
+                /////////////////////////////////////////////////////////////////////////////////////////
+                // Her er vi, når der fra User Controllen kommer en anmodning om at der skal gentegnes //
+                // dvs det sker ret tit...                                                             //
+                // NÅR det sker, har man mulighed for at opdatere DynamicXValue, hvilket så kan        //
+                // udvirke, at WorldWindow flyttes                                                     //
+                /////////////////////////////////////////////////////////////////////////////////////////
+
+                // Update the x value of interest
+                // Sæt den til current time
+                var nowAsScalar = (DateTime.UtcNow - TimeSeriesViewModel2.TimeAtOrigo).TotalDays;
+                TimeSeriesViewModel2.DynamicXValue = nowAsScalar;
             };
         }
     }
