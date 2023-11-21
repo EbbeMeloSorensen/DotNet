@@ -56,6 +56,7 @@ namespace DMI.Data.Studio.ViewModel
                 true,
                 25,
                 60,
+                1.0,
                 _timeAtOrigo);
 
             ScatterChartViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured +=
