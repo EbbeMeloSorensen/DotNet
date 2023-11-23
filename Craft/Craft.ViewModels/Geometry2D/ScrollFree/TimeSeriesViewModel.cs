@@ -244,6 +244,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             // Find ud af x-værdien for første linie
             var x = Math.Floor(x0 / lineSpacingX_World) * lineSpacingX_World;
+
+            if (lineSpacingX_World > 1.0)
+            {
+                // Her ligger x på midnat mellem 2 dage, men vi skal sikre, at den ligger på midnat mellem 2 MÅNEDER,
+                // så man sætter hak konsistent, f.eks. 1, 6, 11, 16 frem for 2, 7, 12, 17
+                var timeCorrespondingToX = 0.0;
+            }
+
             var timeSpan = RoundSeconds(TimeSpan.FromDays(x));
             var t = TimeAtOrigo + timeSpan; 
 
