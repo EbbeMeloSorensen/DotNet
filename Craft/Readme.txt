@@ -21,3 +21,20 @@ Så spørgsmålet er: Hvornår er det en fordel at vælge .Net 6.0 og hvornår er det 
 Iagttagelse: Man kan GODT eksekvere en WPF applikation fra Visual Studio Code. I hvert fald når:
 * Man arbejder på en Windows pc
 * Applikationen baserer sig på .Net 6.0
+
+Pr definition så svarer origo (x = 0) til seneste midnat, der er passeret (ved ikke om det er hensigtsmæssigt)
+og pr definition så svarer x = 1 til kommende midnat
+
+Hvis du regner om fra et tidspunkt til en x værdi, gør du således:
+x = (t - t_origo) / TimeSpan.FromDays(1)
+
+og fra x til tid således:
+t = t_origo + TimeSpan.FromDays(x)
+
+1 2 3 4 5 6 7 .. 30 31 1
+
+1 3 5 7 9 .. 29 1
+
+1 6 11 16 21 26 31
+
+1 11 21 31 

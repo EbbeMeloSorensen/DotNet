@@ -76,6 +76,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var showMinutes = false;
             var showHours = false;
             var showDays = false;
+            var modulo = 1;
 
             if (lineSpacingX_World_Min < 1.0 / 24.0 / 60.0 / 60.0)
             {
@@ -221,22 +222,19 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 // Operer med en linie pr 2 dage
                 lineSpacingX_World = 1.0 * 2.0;
-                delta = TimeSpan.FromDays(2);
-                showDays = true;
+                modulo = 2;
             }
             else if (lineSpacingX_World_Min < 1.0 * 5.0)
             {
                 // Operer med en linie pr 5 dage
                 lineSpacingX_World = 1.0 * 5.0;
-                delta = TimeSpan.FromDays(5);
-                showDays = true;
+                modulo = 5;
             }
             else if (lineSpacingX_World_Min < 1.0 * 10.0)
             {
                 // Operer med en linie pr 10 dage
                 lineSpacingX_World = 1.0 * 10.0;
-                delta = TimeSpan.FromDays(10);
-                showDays = true;
+                modulo = 10;
             }
 
             var labelWidth = lineSpacingX_World * GeometryEditorViewModel.Scaling.Width;
@@ -249,85 +247,98 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 // Her ligger x på midnat mellem 2 dage, men vi skal sikre, at den ligger på midnat mellem 2 MÅNEDER,
                 // så man sætter hak konsistent, f.eks. 1, 6, 11, 16 frem for 2, 7, 12, 17
-                var timeCorrespondingToX = 0.0;
-            }
+                var timeCorrespondingToX = TimeAtOrigo + TimeSpan.FromDays(x);
+                var timeCorrespondingStartOfMonth = new DateTime(timeCorrespondingToX.Year, timeCorrespondingToX.Month, 1);
+                x = (timeCorrespondingStartOfMonth - TimeAtOrigo) / TimeSpan.FromDays(1);
 
-            var timeSpan = RoundSeconds(TimeSpan.FromDays(x));
-            var t = TimeAtOrigo + timeSpan; 
+                var timeSpan = RoundSeconds(TimeSpan.FromDays(x));
+                var t = TimeAtOrigo + timeSpan;
+                delta = TimeSpan.FromDays(1);
 
-            while (x < x1)
-            {
-                if (x > x0 + dx)
+                while (x < x1)
                 {
-                    if (ShowVerticalGridLines)
+                    if (x > x0 + dx)
                     {
-                        GeometryEditorViewModel.AddLine(
-                            new PointD(x, y0 + dy),
-                            new PointD(x, y1),
-                            thickness,
-                            _gridBrush);
+                        var month = t.Date.Month;
+                        var day = t.Date.Day;
+                        var hour = t.Hour;
+                        var minute = t.Minute;
+                        var second = t.Second;
+
+                        var label = $"{day}/{month}";
+
+                        if (day == 1 || (day + 1 ) % modulo == 0)
+                        {
+                            GeometryEditorViewModel.AddLabel(
+                                label,
+                                new PointD(x, y0 + dy),
+                                labelWidth,
+                                labelHeight,
+                                new PointD(0, labelHeight / 2),
+                                0.0);
+                        }
                     }
 
-                    var month = t.Date.Month;
-                    var day = t.Date.Day;
-                    var hour = t.Hour;
-                    var minute = t.Minute;
-                    var second = t.Second;
-
-                    string label = "x";
-
-                    if (showSeconds)
-                    {
-                        label = $"{hour}:{minute.ToString().PadLeft(2, '0')}:{second.ToString().PadLeft(2, '0')}";
-                    }
-                    else if (showMinutes)
-                    {
-                        label = $"{hour}:{minute.ToString().PadLeft(2, '0')}";
-                    }
-                    else if (showHours)
-                    {
-                        label = $"{hour}:00";
-                    }
-                    else if (showDays)
-                    {
-                        label = $"{day}/{month}";
-                    }
-
-                    GeometryEditorViewModel.AddLabel(
-                        label,
-                        new PointD(x, y0 + dy),
-                        labelWidth,
-                        labelHeight,
-                        new PointD(0, labelHeight / 2),
-                        0.0);
-
-                    // Denne blev brugt til at skrive en overordnet label ved hvert månedsskifte
-                    if (day == 1 && false)  
-                    {
-                        var monthText = t.Date.ToString("MMM", CultureInfo.InvariantCulture);
-
-                        GeometryEditorViewModel.AddLabel(
-                            monthText,
-                            new PointD(x, y0 + dy),
-                            labelWidth,
-                            labelHeight,
-                            new PointD(0, 1.5 * labelHeight),
-                            0.0);
-
-                        var yearText = t.Year.ToString();
-
-                        GeometryEditorViewModel.AddLabel(
-                            yearText,
-                            new PointD(x, y0 + dy),
-                            labelWidth,
-                            labelHeight,
-                            new PointD(0, 2.5 * labelHeight),
-                            0.0);
-                    }
+                    x += 1;
+                    t += delta;
                 }
+            }
+            else
+            {
+                // Bemærk: x kan godt være negativ her - det afspejler bare, at World Window går hen over origo
+                var timeSpan = RoundSeconds(TimeSpan.FromDays(x));
+                var t = TimeAtOrigo + timeSpan;
 
-                x += lineSpacingX_World;
-                t += delta;
+                while (x < x1)
+                {
+                    if (x > x0 + dx)
+                    {
+                        if (ShowVerticalGridLines)
+                        {
+                            GeometryEditorViewModel.AddLine(
+                                new PointD(x, y0 + dy),
+                                new PointD(x, y1),
+                                thickness,
+                                _gridBrush);
+                        }
+
+                        var month = t.Date.Month;
+                        var day = t.Date.Day;
+                        var hour = t.Hour;
+                        var minute = t.Minute;
+                        var second = t.Second;
+
+                        var label = "x";
+
+                        if (showSeconds)
+                        {
+                            label = $"{hour}:{minute.ToString().PadLeft(2, '0')}:{second.ToString().PadLeft(2, '0')}";
+                        }
+                        else if (showMinutes)
+                        {
+                            label = $"{hour}:{minute.ToString().PadLeft(2, '0')}";
+                        }
+                        else if (showHours)
+                        {
+                            label = $"{hour}:00";
+                        }
+                        else if (showDays)
+                        {
+                            label = $"{day}/{month}";
+                        }
+
+                        GeometryEditorViewModel.AddLabel(
+                            label,
+                            new PointD(x, y0 + dy),
+                            labelWidth,
+                            labelHeight,
+                            new PointD(0, labelHeight / 2),
+                            0.0);
+                    }
+
+                    x += lineSpacingX_World;
+                    t += delta;
+                }
             }
         }
 

@@ -650,7 +650,10 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 60,
                 1,
-                timeAtOrigo);
+                timeAtOrigo)
+            {
+                ShowVerticalGridLines = true
+            };
 
             TimeSeriesViewModel1.GeometryEditorViewModel.YAxisLocked = true;
 
