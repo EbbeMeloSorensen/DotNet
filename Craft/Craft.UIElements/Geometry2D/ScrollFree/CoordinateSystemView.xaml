@@ -39,7 +39,7 @@
                 </Line.Visibility>
             </Line>
 
-            <!-- Vertical line representing dynamic x value -->
+            <!-- Vertical line representing dynamic x value when not tracking the value -->
             <Line Stroke="Purple"
                   StrokeThickness="1"
                   X1="{Binding DynamicXValueViewPort}"
@@ -55,7 +55,7 @@
                 </Line.Visibility>
             </Line>
 
-            <!-- Vertical line representing dynamic x value - THAT DOESN'T FLICKER -->
+            <!-- Vertical line representing dynamic x value when tracking the value (flickerfree) -->
             <Line Stroke="Purple"
                   StrokeThickness="1"
                   X1="{Binding DynamicXValueViewPortWhenLocked}"

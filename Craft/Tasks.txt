@@ -35,8 +35,6 @@ Done:
 * Når man aktiverer tracking af den der value of interest, så hopper labels hen det forkert sted (fixed)
 * Labels bør tegnes af CoordinateSystemViewet (og også de der margener - indtil videre har du dem kun i den bagvedliggende GeometryEditorViewModel, fordi du vil have labels foran)
   -> Mnjoooh - du har fundet en fin løsning, hvor de stadig tegnes af GeometryEditorViewModel, og hvor du bruger en value converter, der tillader override af x eller y værdi med en viewport koordinat
-
-In progress:
 * Når man er i tracking mode, svarer det til panorering, hvor der f.eks. ikke tegnes nye gridlines. 
   Derfor driver den på et tidspunkt ud i det tomme område, hvor der ikke er tegnet noget.
   Løsning: Den skal vedligeholde en variabel, der beskriver, hvor tæt den er på det vindue, der fremkommer ved at udvide world window i forbindelse 
@@ -47,6 +45,12 @@ In progress:
   under anvendelse af GeometryEditorViewModellens general purpose funktionalitet, så måske er det meget naturligt, at det er den, der afgør,
   hvornår der skal gentegnes. Men hold lige fat i ideen - du vil jo f.eks. gerne lave noget Zelda-style sceneskift, som ikke afhænger af 
   CoordinateViewModellen..
+
+In progress:
+* Mht at fokusere på en dynamisk værdi, så skal det ikke nødvendigvis være i midten
+* Når der tegnes en collection af linier, så skal det ske i viewport-koordinater, for det er ikke til at styre med transformation og thickness for linierne
+  - det må gerne foregå på samme måde som det gør med labels, så det gentegnes, når man bevæger sig uden for World Window
+* 
 
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines
 * Prøv i handleren for tick eventet at sætte World Window således at XValue Of Interest er i midten
