@@ -70,13 +70,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var lineSpacingX_ViewPort_Min = 75.0;
             var lineSpacingX_World_Min = lineSpacingX_ViewPort_Min / GeometryEditorViewModel.Scaling.Width;
 
-            double lineSpacingX_World = 1.0;
-            TimeSpan delta = TimeSpan.FromDays(1);
+            var lineSpacingX_World = 1.0;
+            var delta = TimeSpan.FromDays(1);
             var showSeconds = false;
             var showMinutes = false;
             var showHours = false;
-            var showDays = false;
             var modulo = 1;
+            var maxDayLabel = 29;
+
+            var x0ext = x0 - (x1 - x0);
+            var x1ext = x1 + (x1 - x0);
 
             if (lineSpacingX_World_Min < 1.0 / 24.0 / 60.0 / 60.0)
             {
@@ -215,8 +218,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 // Operer med en linie pr dag
                 lineSpacingX_World = 1.0;
-                delta = TimeSpan.FromDays(1);
-                showDays = true;
+                modulo = 1;
+                maxDayLabel = 31;
             }
             else if (lineSpacingX_World_Min < 1.0 * 2.0)
             {
@@ -236,97 +239,108 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 lineSpacingX_World = 1.0 * 10.0;
                 modulo = 10;
             }
+            else if (lineSpacingX_World_Min < 1.0 * 15.0)
+            {
+                // Operer med en linie pr 15 dage
+                lineSpacingX_World = 1.0 * 15.0;
+                modulo = 15;
+            }
+            else if (lineSpacingX_World_Min < 1.0 * 365.25 / 12)
+            {
+                // Operer med en linie pr måned
+                lineSpacingX_World = 1.0 * 365.25 / 12;
+                modulo = 1;
+            }
+            else if (lineSpacingX_World_Min < 365.25 / 6)
+            {
+                // Operer med en linie pr 2 måneder
+                lineSpacingX_World = 365.25 / 6;
+                modulo = 2;
+            }
+            else if (lineSpacingX_World_Min < 365.25 / 4)
+            {
+                // Operer med en linie pr 3 måneder
+                lineSpacingX_World = 365.25 / 4;
+                modulo = 3;
+            }
+            else if (lineSpacingX_World_Min < 365.25 / 3)
+            {
+                // Operer med en linie pr 4 måneder
+                lineSpacingX_World = 365.25 / 3;
+                modulo = 4;
+            }
+            else if (lineSpacingX_World_Min < 365.25 / 2)
+            {
+                // Operer med en linie pr 6 måneder
+                lineSpacingX_World = 365.25 / 2;
+                modulo = 6;
+            }
+            else if (lineSpacingX_World_Min < 365.25)
+            {
+                // Operer med en linie pr år
+                lineSpacingX_World = 365.25;
+                modulo = 1;
+            }
+            else if (lineSpacingX_World_Min < 365.25 * 2)
+            {
+                // Operer med en linie pr 2 år
+                lineSpacingX_World = 365.25 * 2;
+                modulo = 2;
+            }
+            else if (lineSpacingX_World_Min < 365.25 * 5)
+            {
+                // Operer med en linie pr 5 år
+                lineSpacingX_World = 365.25 * 5;
+                modulo = 5;
+            }
+            else if (lineSpacingX_World_Min < 365.25 * 10)
+            {
+                // Operer med en linie pr 10 år
+                lineSpacingX_World = 365.25 * 10;
+                modulo = 10;
+            }
+            else if (lineSpacingX_World_Min < 365.25 * 20)
+            {
+                // Operer med en linie pr 20 år
+                lineSpacingX_World = 365.25 * 20;
+                modulo = 20;
+            }
+            else if (lineSpacingX_World_Min < 365.25 * 50)
+            {
+                // Operer med en linie pr 50 år
+                lineSpacingX_World = 365.25 * 50;
+                modulo = 50;
+            }
+            else if (lineSpacingX_World_Min < 365.25 * 100)
+            {
+                // Operer med en linie pr 100 år
+                lineSpacingX_World = 365.25 * 100;
+                modulo = 100;
+            }
 
             var labelWidth = lineSpacingX_World * GeometryEditorViewModel.Scaling.Width;
             var labelHeight = 20.0;
 
-            // Find ud af x-værdien for første linie
-            var x = Math.Floor(x0 / lineSpacingX_World) * lineSpacingX_World;
+            // Find den største værdi for x, der ligger til venstre for World Window, og som repræsenterer en grid line
+            var x = Math.Floor(x0ext / lineSpacingX_World) * lineSpacingX_World;
 
-            if (lineSpacingX_World > 1.0)
+            if (lineSpacingX_World > 365.24)
             {
-                // Her ligger x på midnat mellem 2 dage, men vi skal sikre, at den ligger på midnat mellem 2 MÅNEDER,
-                // så man sætter hak konsistent, f.eks. 1, 6, 11, 16 frem for 2, 7, 12, 17
-                var timeCorrespondingToX = TimeAtOrigo + TimeSpan.FromDays(x);
-                var timeCorrespondingStartOfMonth = new DateTime(timeCorrespondingToX.Year, timeCorrespondingToX.Month, 1);
-                x = (timeCorrespondingStartOfMonth - TimeAtOrigo) / TimeSpan.FromDays(1);
+                // Her opererer vi med at grid lines og labels knytter sig til ÅR
 
-                var timeSpan = RoundSeconds(TimeSpan.FromDays(x));
-                var t = TimeAtOrigo + timeSpan;
-                delta = TimeSpan.FromDays(1);
+                var t = TimeAtOrigo + TimeSpan.FromDays(x);
+                var t1 = TimeAtOrigo + TimeSpan.FromDays(x1ext);
 
-                while (x < x1)
+                while (t < t1)
                 {
-                    if (x > x0 + dx)
+                    x = (t - TimeAtOrigo) / TimeSpan.FromDays(1);
+
+                    var year = t.Date.Year;
+
+                    var label = $"{year}";
+
+                    if (year % modulo == 0)
                     {
-                        var month = t.Date.Month;
-                        var day = t.Date.Day;
-                        var hour = t.Hour;
-                        var minute = t.Minute;
-                        var second = t.Second;
-
-                        var label = $"{day}/{month}";
-
-                        if (day == 1 || (day + 1 ) % modulo == 0)
-                        {
-                            GeometryEditorViewModel.AddLabel(
-                                label,
-                                new PointD(x, y0 + dy),
-                                labelWidth,
-                                labelHeight,
-                                new PointD(0, labelHeight / 2),
-                                0.0);
-                        }
-                    }
-
-                    x += 1;
-                    t += delta;
-                }
-            }
-            else
-            {
-                // Bemærk: x kan godt være negativ her - det afspejler bare, at World Window går hen over origo
-                var timeSpan = RoundSeconds(TimeSpan.FromDays(x));
-                var t = TimeAtOrigo + timeSpan;
-
-                while (x < x1)
-                {
-                    if (x > x0 + dx)
-                    {
-                        if (ShowVerticalGridLines)
-                        {
-                            GeometryEditorViewModel.AddLine(
-                                new PointD(x, y0 + dy),
-                                new PointD(x, y1),
-                                thickness,
-                                _gridBrush);
-                        }
-
-                        var month = t.Date.Month;
-                        var day = t.Date.Day;
-                        var hour = t.Hour;
-                        var minute = t.Minute;
-                        var second = t.Second;
-
-                        var label = "x";
-
-                        if (showSeconds)
-                        {
-                            label = $"{hour}:{minute.ToString().PadLeft(2, '0')}:{second.ToString().PadLeft(2, '0')}";
-                        }
-                        else if (showMinutes)
-                        {
-                            label = $"{hour}:{minute.ToString().PadLeft(2, '0')}";
-                        }
-                        else if (showHours)
-                        {
-                            label = $"{hour}:00";
-                        }
-                        else if (showDays)
-                        {
-                            label = $"{day}/{month}";
-                        }
-
                         GeometryEditorViewModel.AddLabel(
                             label,
                             new PointD(x, y0 + dy),
@@ -336,6 +350,111 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             0.0);
                     }
 
+                    t = t.AddYears(1);
+                }
+            }
+            else if (lineSpacingX_World > 30.0)
+            {
+                // Her opererer vi med at grid lines og labels knytter sig til MÅNEDER
+
+                // Find det tidspunkt, der svarer til seneste ÅRSSKIFTE i forhold til den grid line, der kandiderer til at blive den første
+                // (vi vil sikre, at der altid er en gridline for årsskifte og derudover for "legitime" måneder i året, såsom 1, 3, 5 osv)
+                var timeCorrespondingToX = TimeAtOrigo + TimeSpan.FromDays(x);
+                var t = new DateTime(timeCorrespondingToX.Year, 1, 1);
+                var t1 = TimeAtOrigo + TimeSpan.FromDays(x1ext);
+
+                while (t < t1)
+                {
+                    x = (t - TimeAtOrigo) / TimeSpan.FromDays(1);
+
+                    var year = t.Date.Year;
+                    var month = t.Date.Month;
+
+                    var label = $"{month}/{year}";
+
+                    if (month == 1 || (month - 1) % modulo == 0)
+                    {
+                        GeometryEditorViewModel.AddLabel(
+                            label,
+                            new PointD(x, y0 + dy),
+                            labelWidth,
+                            labelHeight,
+                            new PointD(0, labelHeight / 2),
+                            0.0);
+                    }
+
+                    t = t.AddMonths(1);
+                }
+            }
+            else if (lineSpacingX_World > 0.99)
+            {
+                // Her opererer vi med at grid lines og labels knytter sig til DAGE
+
+                // Find det tidspunkt, der svarer til seneste MÅNEDSSKIFTE i forhold til den grid line, der kandiderer til at blive den første
+                // (vi vil sikre, at der altid er en gridline for månedsskifte og derudover for "legitime" dage i måneden, såsom 1, 6, 11, 16 osv)
+                var timeCorrespondingToX = TimeAtOrigo + TimeSpan.FromDays(x);
+                var t = new DateTime(timeCorrespondingToX.Year, timeCorrespondingToX.Month, 1);
+                var t1 = TimeAtOrigo + TimeSpan.FromDays(x1ext);
+
+                while (t < t1)
+                {
+                    x = (t - TimeAtOrigo) / TimeSpan.FromDays(1);
+
+                    var month = t.Date.Month;
+                    var day = t.Date.Day;
+
+                    var label = $"{day}/{month}";
+
+                    if (day == 1 || (day - 1 ) % modulo == 0 && day <= maxDayLabel)
+                    {
+                        GeometryEditorViewModel.AddLabel(
+                            label,
+                            new PointD(x, y0 + dy),
+                            labelWidth,
+                            labelHeight,
+                            new PointD(0, labelHeight / 2),
+                            0.0);
+                    }
+
+                    t = t.AddDays(1);
+                }
+            }
+            else
+            {
+                // Her opererer vi med at grid lines og labels knytter sig til TIMER eller mindre enheder
+
+                // Bemærk: x kan godt være negativ her - det afspejler bare, at World Window går hen over origo
+                var t = TimeAtOrigo + RoundSeconds(TimeSpan.FromDays(x));
+
+                while (x < x1ext)
+                {
+                    var hour = t.Hour;
+                    var minute = t.Minute;
+                    var second = t.Second;
+
+                    var label = "x";
+
+                    if (showSeconds)
+                    {
+                        label = $"{hour}:{minute.ToString().PadLeft(2, '0')}:{second.ToString().PadLeft(2, '0')}";
+                    }
+                    else if (showMinutes)
+                    {
+                        label = $"{hour}:{minute.ToString().PadLeft(2, '0')}";
+                    }
+                    else if (showHours)
+                    {
+                        label = $"{hour}:00";
+                    }
+
+                    GeometryEditorViewModel.AddLabel(
+                        label,
+                        new PointD(x, y0 + dy),
+                        labelWidth,
+                        labelHeight,
+                        new PointD(0, labelHeight / 2),
+                        0.0);
+
                     x += lineSpacingX_World;
                     t += delta;
                 }
@@ -343,6 +462,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         }
 
         // Helper for rounding Timespan to closest timespan where second is zero
+        // Det er for at kompensere for afrundingsfejl i forbindelse med konvertering fra x-værdier på x-aksen og tidspunkter
         private static TimeSpan RoundSeconds(TimeSpan span)
         {
             return TimeSpan.FromSeconds(Math.Round(span.TotalSeconds));
