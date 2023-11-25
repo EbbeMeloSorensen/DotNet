@@ -160,7 +160,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         public GeometryEditorViewModel GeometryEditorViewModel2 { get; private set; }
         public GeometryEditorViewModel GeometryEditorViewModel3 { get; private set; }
         public GeometryEditorViewModel GeometryEditorViewModel4 { get; private set; }
-        public CoordinateSystemViewModel CoordinateSystemViewModel { get; private set; }
+        public CoordinateSystemViewModel CoordinateSystemViewModel1 { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel1 { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel2 { get; private set; }
         public ImageEditorViewModel ImageEditorViewModel { get; }
@@ -570,7 +570,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             Point worldWindowFocus,
             Size worldWindowSize)
         {
-            CoordinateSystemViewModel = new CoordinateSystemViewModel(
+            CoordinateSystemViewModel1 = new CoordinateSystemViewModel(
                 worldWindowFocus,
                 worldWindowSize,
                 false,
@@ -584,13 +584,13 @@ namespace Craft.UIElements.GuiTest.Tab3
                 ShowYAxisLabels = true
             };
 
-            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
+            CoordinateSystemViewModel1.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
                 WorldWindowUpdateCountForCoordinateSystemViewModel++;
-                CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue = false;
+                CoordinateSystemViewModel1.LockWorldWindowOnDynamicXValue = false;
             };
 
-            CoordinateSystemViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+            CoordinateSystemViewModel1.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
                 WorldWindowMajorUpdateCountForCoordinateSystemViewModel++;
 
@@ -610,11 +610,11 @@ namespace Craft.UIElements.GuiTest.Tab3
                     points.Add(new PointD(x, Math.Sin(0.1 * x) * Math.Sin(3 * x))); // (high frequency sinus enveloped by low frequency sinus)
                 }
 
-                CoordinateSystemViewModel.GeometryEditorViewModel.ClearPolylines();
-                CoordinateSystemViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
+                CoordinateSystemViewModel1.GeometryEditorViewModel.ClearPolylines();
+                CoordinateSystemViewModel1.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
             };
 
-            CoordinateSystemViewModel.GeometryEditorViewModel.UpdateModelCallBack = () =>
+            CoordinateSystemViewModel1.GeometryEditorViewModel.UpdateModelCallBack = () =>
             {
                 /////////////////////////////////////////////////////////////////////////////////////////
                 // Her er vi, når der fra User Controllen kommer en anmodning om at der skal gentegnes //
@@ -625,12 +625,12 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 // Update the x value of interest
                 var secondsElapsed = 0.001 * _stopwatch.Elapsed.TotalMilliseconds;
-                CoordinateSystemViewModel.DynamicXValue = -2.0 + secondsElapsed;
+                CoordinateSystemViewModel1.DynamicXValue = -2.0 + secondsElapsed;
             };
 
-            CoordinateSystemViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
+            CoordinateSystemViewModel1.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
             {
-                CoordinateSystemViewModel.StaticXValue = e.CursorWorldPosition.X;
+                CoordinateSystemViewModel1.StaticXValue = e.CursorWorldPosition.X;
             };
         }
 
@@ -682,12 +682,11 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void InitializeTimeSeriesViewModel2()
         {
-            var timeSpan = TimeSpan.FromDays(1);
-            //var timeSpan = TimeSpan.FromHours(1);
-            //var timeSpan = TimeSpan.FromMinutes(1);
+            //var timeSpan = TimeSpan.FromDays(1);
+            var timeSpan = TimeSpan.FromMinutes(1);
             var utcNow = DateTime.UtcNow;
-            var timeAtOrigo = utcNow.Date;
-            var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1);
+            var timeAtOrigo = utcNow.Date; // Sådan her er det altid pr definition (så bør TimeSeriesViewmodellen nojk )
+            var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1); // Focus on
             var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
 
             var thirtySecondsFromNowAsScalar = (DateTime.UtcNow + TimeSpan.FromSeconds(30) - timeAtOrigo).TotalDays;
@@ -701,7 +700,6 @@ namespace Craft.UIElements.GuiTest.Tab3
                 1,
                 timeAtOrigo)
             {
-                //LockWorldWindowOnDynamicXValue = true,
                 LockWorldWindowOnDynamicXValue = false,
                 StaticXValue = thirtySecondsFromNowAsScalar
             };

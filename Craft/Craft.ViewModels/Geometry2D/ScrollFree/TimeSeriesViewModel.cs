@@ -44,6 +44,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var dy = GeometryEditorViewModel.MarginBottom / GeometryEditorViewModel.Scaling.Height;
             var thickness = 1 / GeometryEditorViewModel.Scaling.Width;
 
+            _expandedWorldWindowUpperLeft = new Point(
+                x0 - _worldWindowExpansionFactor * (x1 - x0),
+                y0 - _worldWindowExpansionFactor * (y1 - y0));
+
+            _expandedWorldWindowSize = new Size(
+                (1 + 2 * _worldWindowExpansionFactor) * (x1 - x0),
+                (1 + 2 * _worldWindowExpansionFactor) * (y1 - y0));
+
             GeometryEditorViewModel.ClearLines();
             GeometryEditorViewModel.ClearLabels();
 

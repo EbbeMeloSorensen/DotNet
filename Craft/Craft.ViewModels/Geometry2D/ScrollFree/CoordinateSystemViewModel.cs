@@ -24,9 +24,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private double _dynamicXValueViewPortWhenLocked;
         private bool _showDynamicXValue;
         private bool _lockWorldWindowOnDynamicXValue;
-        private double _worldWindowExpansionFactor;
-        private Point _expandedWorldWindowUpperLeft;
-        private Size _expandedWorldWindowSize;
+        protected double _worldWindowExpansionFactor;
+        protected Point _expandedWorldWindowUpperLeft;
+        protected Size _expandedWorldWindowSize;
 
         public double? StaticXValue
         {

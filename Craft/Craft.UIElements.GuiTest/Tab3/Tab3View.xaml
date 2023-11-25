@@ -231,7 +231,7 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <scrollFree:CoordinateSystemView Grid.Row="0" DataContext="{Binding CoordinateSystemViewModel}" />
+                        <scrollFree:CoordinateSystemView Grid.Row="0" DataContext="{Binding CoordinateSystemViewModel1}" />
                         <Grid Grid.Row="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -250,19 +250,19 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <CheckBox Grid.Row="0" Grid.Column="0" Content="Show horizontal grid lines"
-                                      IsChecked="{Binding CoordinateSystemViewModel.ShowHorizontalGridLines}"/>
+                                      IsChecked="{Binding CoordinateSystemViewModel1.ShowHorizontalGridLines}"/>
                             <CheckBox Grid.Row="1" Grid.Column="0" Content="Show vertical grid lines"
-                                      IsChecked="{Binding CoordinateSystemViewModel.ShowVerticalGridLines}"/>
+                                      IsChecked="{Binding CoordinateSystemViewModel1.ShowVerticalGridLines}"/>
                             <CheckBox Grid.Row="2" Grid.Column="0" Content="Show x axis labels"
-                                      IsChecked="{Binding CoordinateSystemViewModel.ShowXAxisLabels}"/>
+                                      IsChecked="{Binding CoordinateSystemViewModel1.ShowXAxisLabels}"/>
                             <CheckBox Grid.Row="3" Grid.Column="0" Content="Show y axis labels"
-                                      IsChecked="{Binding CoordinateSystemViewModel.ShowYAxisLabels}"/>
+                                      IsChecked="{Binding CoordinateSystemViewModel1.ShowYAxisLabels}"/>
                             <CheckBox Grid.Row="4" Grid.Column="0" Content="Focus on x value of interest"
-                                      IsChecked="{Binding CoordinateSystemViewModel.LockWorldWindowOnDynamicXValue}"/>
+                                      IsChecked="{Binding CoordinateSystemViewModel1.LockWorldWindowOnDynamicXValue}"/>
                             <CheckBox Grid.Row="0" Grid.Column="2" Content="Lock X Axis"
-                                      IsChecked="{Binding CoordinateSystemViewModel.GeometryEditorViewModel.XAxisLocked}"/>
+                                      IsChecked="{Binding CoordinateSystemViewModel1.GeometryEditorViewModel.XAxisLocked}"/>
                             <CheckBox Grid.Row="1" Grid.Column="2" Content="Lock Y Axis"
-                                      IsChecked="{Binding CoordinateSystemViewModel.GeometryEditorViewModel.YAxisLocked}"/>
+                                      IsChecked="{Binding CoordinateSystemViewModel1.GeometryEditorViewModel.YAxisLocked}"/>
                             <TextBlock Grid.Row="0" Grid.Column="4" Text="World Window Updates:"/>
                             <TextBox Grid.Row="0" Grid.Column="5" 
                                      Text="{Binding WorldWindowUpdateCountForCoordinateSystemViewModel, Mode=OneWay}"/>
@@ -314,13 +314,19 @@
                         </Grid.RowDefinitions>
                         <scrollFree:CoordinateSystemView Grid.Row="0" DataContext="{Binding TimeSeriesViewModel2}" />
                         <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Margin="3" Text="Time:"/>
-                            <TextBox Grid.Column="1" Margin="1" IsReadOnly="True"
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Time:"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="1" IsReadOnly="True"
                                      Text="{Binding TimeAtMousePositionAsText2}"/>
+                            <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Focus on current time"
+                                      IsChecked="{Binding TimeSeriesViewModel2.LockWorldWindowOnDynamicXValue}"/>
                         </Grid>
                         <TextBlock Grid.Row="2" TextWrapping="Wrap">
                             Here, we have a CoordinateSystemView with an underlying TimeSerieViewModel initialized
