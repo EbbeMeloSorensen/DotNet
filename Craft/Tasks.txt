@@ -45,13 +45,11 @@ Done:
   under anvendelse af GeometryEditorViewModellens general purpose funktionalitet, så måske er det meget naturligt, at det er den, der afgør,
   hvornår der skal gentegnes. Men hold lige fat i ideen - du vil jo f.eks. gerne lave noget Zelda-style sceneskift, som ikke afhænger af 
   CoordinateViewModellen..
+* Mht at fokusere på en dynamisk værdi, så skal det ikke nødvendigvis være i midten
 
 In progress:
-* Mht at fokusere på en dynamisk værdi, så skal det ikke nødvendigvis være i midten
 * Når der tegnes en collection af linier, så skal det ske i viewport-koordinater, for det er ikke til at styre med transformation og thickness for linierne
   - det må gerne foregå på samme måde som det gør med labels, så det gentegnes, når man bevæger sig uden for World Window
-* 
-
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines
 * Prøv i handleren for tick eventet at sætte World Window således at XValue Of Interest er i midten
   - Når man panorerer i vinduet, skal den holde op med at autoopdatere world vinduet (OK)

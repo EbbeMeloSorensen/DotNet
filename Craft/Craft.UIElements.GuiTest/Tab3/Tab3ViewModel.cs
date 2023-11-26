@@ -701,7 +701,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 timeAtOrigo)
             {
                 LockWorldWindowOnDynamicXValue = false,
-                StaticXValue = thirtySecondsFromNowAsScalar
+                StaticXValue = thirtySecondsFromNowAsScalar,
+                Fraction = 0.9
             };
 
             TimeSeriesViewModel2.GeometryEditorViewModel.YAxisLocked = true;

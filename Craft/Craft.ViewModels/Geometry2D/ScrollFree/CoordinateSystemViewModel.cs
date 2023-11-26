@@ -27,7 +27,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected double _worldWindowExpansionFactor;
         protected Point _expandedWorldWindowUpperLeft;
         protected Size _expandedWorldWindowSize;
-        private double _fraction = 0.9;
+        
+        public double Fraction { get; set; }
 
         public double? StaticXValue
         {
@@ -137,7 +138,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                         // Position the World Window so that the x value of interest is in the middle
                         GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
-                            DynamicXValue.Value - _fraction * GeometryEditorViewModel.WorldWindowSize.Width,
+                            DynamicXValue.Value - Fraction * GeometryEditorViewModel.WorldWindowSize.Width,
                             GeometryEditorViewModel.WorldWindowUpperLeft.Y);
                     }
                     else
@@ -261,6 +262,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _showHorizontalGridLines = true;
             _showVerticalGridLines = true;
             _worldWindowExpansionFactor = worldWindowExpansionFactor;
+            Fraction = 0.5;
 
             GeometryEditorViewModel = 
                 new GeometryEditorViewModel(-1)
@@ -283,7 +285,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 UpdateCoordinateSystemForGeometryEditorViewModel();
                 UpdateStaticXValueViewPort();
 
-                DynamicXValueViewPortWhenLocked = _fraction * GeometryEditorViewModel.ViewPortSize.Width;
+                DynamicXValueViewPortWhenLocked = Fraction * GeometryEditorViewModel.ViewPortSize.Width;
             };
 
             GeometryEditorViewModel.PropertyChanged += (s, e) =>

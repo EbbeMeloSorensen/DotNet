@@ -260,7 +260,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public ObservableCollection<LineViewModel> LineViewModels { get; }
 
-        public ObservableCollection<LabelViewModel> LabelViewModels { get; private set; }
+        public ObservableCollection<LabelViewModel> LabelViewModels { get; }
 
         public IEnumerable<int> AllShapeIds
         {
