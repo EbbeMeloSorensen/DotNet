@@ -315,7 +315,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             // We want margins and thickness to be independent on scaling
             var dx = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
             var dy = GeometryEditorViewModel.MarginBottom / GeometryEditorViewModel.Scaling.Height;
-            var thickness = 1 / GeometryEditorViewModel.Scaling.Width;
 
             _expandedWorldWindowUpperLeft = new Point(
                 x0 - _worldWindowExpansionFactor * (x1 - x0),
@@ -333,12 +332,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             if (ShowHorizontalGridLines || ShowYAxisLabels)
             {
-                DrawHorizontalGridLinesAndOrLabels(x0, dx, thickness);
+                DrawHorizontalGridLinesAndOrLabels(x0, dx, 1.0);
             }
 
             if (ShowVerticalGridLines || ShowXAxisLabels)
             {
-                DrawVerticalGridLinesAndOrLabels(y0, dy, thickness);
+                DrawVerticalGridLinesAndOrLabels(y0, dy, 1.0);
             }
         }
 

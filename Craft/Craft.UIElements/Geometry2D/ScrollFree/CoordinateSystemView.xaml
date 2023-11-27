@@ -24,7 +24,7 @@
             </Rectangle>
 
             <!-- Dette skulle gerne blive til en collection af lodrette streger-->
-            <ItemsControl ItemsSource="{Binding CoordinateViewModels}">
+            <!--<ItemsControl ItemsSource="{Binding CoordinateViewModels}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas/>
@@ -49,7 +49,7 @@
                         </Line>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            </ItemsControl>-->
 
             <!-- Vertical line representing static x value -->
             <Line Stroke="DarkOrange"

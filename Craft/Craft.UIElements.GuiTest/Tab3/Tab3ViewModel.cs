@@ -20,7 +20,6 @@ namespace Craft.UIElements.GuiTest.Tab3
         private Brush _coordinateSystemBrush = new SolidColorBrush(Colors.Gray);
         private Brush _gridBrush = new SolidColorBrush(Colors.Gray) {Opacity = 0.25};
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
-        private double _curveThickness = 0.05;
 
         // Initielt World Window (afgrænset højre og venstre)
         private double _x0 = -3.0;
@@ -210,7 +209,6 @@ namespace Craft.UIElements.GuiTest.Tab3
         {
             // Frame
             var frameBrush = new SolidColorBrush(Colors.DarkRed);
-            var frameThickness = 3.0;
 
             geometryEditorViewModel.AddPolygon(new List<PointD>
                 {
@@ -220,21 +218,21 @@ namespace Craft.UIElements.GuiTest.Tab3
                     new PointD(400, 200),
                     new PointD(400, 0)
                 },
-                frameThickness,
+                3.0,
                 frameBrush);
 
             // Door
             var doorAndWindowFrameBrush = new SolidColorBrush(Colors.GhostWhite);
-            var doorAndWindowFrameThickness = 2;
 
-            geometryEditorViewModel.AddPolyline(new List<PointD>
+            geometryEditorViewModel.AddPolyline(
+                new List<PointD>
                 {
                     new PointD(50, 0),
                     new PointD(50, 150),
                     new PointD(150, 150),
                     new PointD(150, 0)
                 },
-                doorAndWindowFrameThickness,
+                2.0,
                 doorAndWindowFrameBrush);
 
             geometryEditorViewModel.AddShape(1, new RectangleViewModel
@@ -246,10 +244,15 @@ namespace Craft.UIElements.GuiTest.Tab3
             });
 
             // Window
-            geometryEditorViewModel.AddLine(new PointD(250, 75), new PointD(250, 150), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
-            geometryEditorViewModel.AddLine(new PointD(250, 150), new PointD(350, 150), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
-            geometryEditorViewModel.AddLine(new PointD(350, 150), new PointD(350, 75), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
-            geometryEditorViewModel.AddLine(new PointD(350, 75), new PointD(250, 75), doorAndWindowFrameThickness, doorAndWindowFrameBrush);
+            geometryEditorViewModel.AddPolyline(new List<PointD>
+            {
+                new PointD(250, 75),
+                new PointD(250, 150),
+                new PointD(350, 150),
+                new PointD(350, 75),
+                new PointD(250, 75)
+            }, 2.0, doorAndWindowFrameBrush);
+
             geometryEditorViewModel.AddShape(2, new RectangleViewModel
             {
                 Point = new PointD(300, 112.5),
@@ -318,29 +321,26 @@ namespace Craft.UIElements.GuiTest.Tab3
         private void DrawACoordinateSystem(
             GeometryEditorViewModel geometryEditorViewModel)
         {
-            // Coordinate System
-            var coordinateSystemThickness = 0.05;
-
             // X Axis
-            geometryEditorViewModel.AddLine(new PointD(-6, 0), new PointD(6, 0), coordinateSystemThickness, _coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(5.7, -0.2), new PointD(6, 0), coordinateSystemThickness, _coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(5.7, 0.2), new PointD(6, 0), coordinateSystemThickness, _coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(-6, 0), new PointD(6, 0), 1.0, _coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(5.7, -0.2), new PointD(6, 0), 1.0, _coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(5.7, 0.2), new PointD(6, 0), 1.0, _coordinateSystemBrush);
 
             // Y Axis
-            geometryEditorViewModel.AddLine(new PointD(0, -6), new PointD(0, 6), coordinateSystemThickness, _coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(-0.2, 5.7), new PointD(0, 6), coordinateSystemThickness, _coordinateSystemBrush);
-            geometryEditorViewModel.AddLine(new PointD(0, 6), new PointD(0.2, 5.7), coordinateSystemThickness, _coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(0, -6), new PointD(0, 6), 1.0, _coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(-0.2, 5.7), new PointD(0, 6), 1.0, _coordinateSystemBrush);
+            geometryEditorViewModel.AddLine(new PointD(0, 6), new PointD(0.2, 5.7), 1.0, _coordinateSystemBrush);
 
             // Axis ticks
             for (var n = 1; n <= 5; n++)
             {
-                geometryEditorViewModel.AddLine(new PointD(n, -0.1), new PointD(n, 0.1), coordinateSystemThickness, _coordinateSystemBrush);
-                geometryEditorViewModel.AddLine(new PointD(-n, -0.1), new PointD(-n, 0.1), coordinateSystemThickness, _coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(n, -0.1), new PointD(n, 0.1), 1.0, _coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(-n, -0.1), new PointD(-n, 0.1), 1.0, _coordinateSystemBrush);
                 geometryEditorViewModel.AddLabel(n.ToString(), new PointD(n, -0.1), 40, 40, new PointD(0, 20), 0);
                 geometryEditorViewModel.AddLabel((-n).ToString(), new PointD(-n, -0.1), 40, 40, new PointD(0, 20), 0);
 
-                geometryEditorViewModel.AddLine(new PointD(-0.1, n), new PointD(0.1, n), coordinateSystemThickness, _coordinateSystemBrush);
-                geometryEditorViewModel.AddLine(new PointD(-0.1, -n), new PointD(0.1, -n), coordinateSystemThickness, _coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(-0.1, n), new PointD(0.1, n), 1.0, _coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(-0.1, -n), new PointD(0.1, -n), 1.0, _coordinateSystemBrush);
                 geometryEditorViewModel.AddLabel(n.ToString(), new PointD(-0.1, n), 40, 40, new PointD(-20, 0), 0);
                 geometryEditorViewModel.AddLabel((-n).ToString(), new PointD(-0.1, -n), 40, 40, new PointD(-20, 0), 0);
             }
@@ -348,10 +348,10 @@ namespace Craft.UIElements.GuiTest.Tab3
             // Draw a window for diagnostics
             if (false)
             {
-                geometryEditorViewModel.AddLine(new PointD(_x0, _y0), new PointD(_x1, _y0), coordinateSystemThickness, _coordinateSystemBrush);
-                geometryEditorViewModel.AddLine(new PointD(_x1, _y0), new PointD(_x1, _y1), coordinateSystemThickness, _coordinateSystemBrush);
-                geometryEditorViewModel.AddLine(new PointD(_x1, _y1), new PointD(_x0, _y1), coordinateSystemThickness, _coordinateSystemBrush);
-                geometryEditorViewModel.AddLine(new PointD(_x0, _y1), new PointD(_x0, _y0), coordinateSystemThickness, _coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(_x0, _y0), new PointD(_x1, _y0), 1.0, _coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(_x1, _y0), new PointD(_x1, _y1), 1.0, _coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(_x1, _y1), new PointD(_x0, _y1), 1.0, _coordinateSystemBrush);
+                geometryEditorViewModel.AddLine(new PointD(_x0, _y1), new PointD(_x0, _y0), 1.0, _coordinateSystemBrush);
             }
         }
         
@@ -381,10 +381,8 @@ namespace Craft.UIElements.GuiTest.Tab3
             double y0,
             double y1)
         {
-            // We want thickness to be independent on scaling
             var dx = 20 / GeometryEditorViewModel4.Scaling.Width;
             var dy = 20 / GeometryEditorViewModel4.Scaling.Height;
-            var thickness = 1 / GeometryEditorViewModel4.Scaling.Width;
 
             GeometryEditorViewModel4.ClearLines();
             GeometryEditorViewModel4.ClearLabels();
@@ -406,7 +404,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                         GeometryEditorViewModel4.AddLine(
                             new PointD(x, y0 + dy),
                             new PointD(x, y1),
-                            thickness,
+                            1.0,
                             _gridBrush);
                     }
                     
@@ -415,7 +413,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                         GeometryEditorViewModel4.AddLine(
                             new PointD(x, y0 + dy * 0.8),
                             new PointD(x, y0 + dy * 1.2),
-                            thickness,
+                            1.0,
                             _coordinateSystemBrush);
                     }
 
@@ -448,7 +446,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                         GeometryEditorViewModel4.AddLine(
                             new PointD(x0 + dx, y),
                             new PointD(x1, y),
-                            thickness,
+                            1.0,
                             _gridBrush);
                     }
 
@@ -457,7 +455,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                         GeometryEditorViewModel4.AddLine(
                             new PointD(x0 + dx * 0.8, y),
                             new PointD(x0 + dx * 1.2, y),
-                            thickness,
+                            1.0,
                             _coordinateSystemBrush);
                     }
 
@@ -511,7 +509,10 @@ namespace Craft.UIElements.GuiTest.Tab3
                 }
 
                 GeometryEditorViewModel3.ClearPolylines();
-                GeometryEditorViewModel3.AddPolyline(points, _curveThickness, _curveBrush);
+
+                var curveThickness = 0.03;
+
+                GeometryEditorViewModel3.AddPolyline(points, curveThickness, _curveBrush);
             };
 
             GeometryEditorViewModel3.MousePositionWorld.PropertyChanged += (s, e) =>
@@ -562,7 +563,9 @@ namespace Craft.UIElements.GuiTest.Tab3
                 }
 
                 GeometryEditorViewModel4.ClearPolylines();
-                GeometryEditorViewModel4.AddPolyline(points, _curveThickness, _curveBrush);
+
+                var curveThickness = 0.03;
+                GeometryEditorViewModel4.AddPolyline(points, curveThickness, _curveBrush);
             };
         }
 
@@ -611,7 +614,9 @@ namespace Craft.UIElements.GuiTest.Tab3
                 }
 
                 CoordinateSystemViewModel1.GeometryEditorViewModel.ClearPolylines();
-                CoordinateSystemViewModel1.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
+
+                var curveThickness = 0.03;
+                CoordinateSystemViewModel1.GeometryEditorViewModel.AddPolyline(points, curveThickness, _curveBrush);
             };
 
             CoordinateSystemViewModel1.GeometryEditorViewModel.UpdateModelCallBack = () =>
@@ -676,7 +681,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 }
 
                 TimeSeriesViewModel1.GeometryEditorViewModel.ClearPolylines();
-                TimeSeriesViewModel1.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
+                var curveThickness = 0.03;
+                TimeSeriesViewModel1.GeometryEditorViewModel.AddPolyline(points, curveThickness, _curveBrush);
             };
         }
 
@@ -734,12 +740,11 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 // Det er ikke helt uproblematisk det her - linien forsvinder, hvis man zoomer nok ind...
                 // DU bør nok generelt lave det sådan at man konverteer til punkter i viewporten og så tegner det med en liniebredde defineret der.
-                var lineThickness = 2.0 / TimeSeriesViewModel2.GeometryEditorViewModel.Scaling.Width;
 
                 var lineViewModels = _timeStampsOfInterest
                     .Select(_ => (_ - TimeSeriesViewModel2.TimeAtOrigo).TotalDays)
                     .Where(_ => _ > x0 && _ < x1)
-                    .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), lineThickness, _curveBrush))
+                    .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), 1.0, _curveBrush))
                     .ToList();
 
                 lineViewModels.ForEach(_ => TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(_));
