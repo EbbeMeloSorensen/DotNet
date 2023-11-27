@@ -116,10 +116,10 @@ namespace Craft.Algorithms.GuiTest.Tab2
             int initialImageHeight) : base(initialImageWidth, initialImageHeight)
         {
             _brush1 = new SolidColorBrush(Colors.Black);
-            _brush2 = new SolidColorBrush(Colors.LightGray);
-            _brush3 = new SolidColorBrush(Colors.Cyan);
-            _brush4 = new SolidColorBrush(Colors.YellowGreen);
-            _brush5 = new SolidColorBrush(Colors.IndianRed);
+            _brush2 = new SolidColorBrush(Colors.ForestGreen);
+            _brush3 = new SolidColorBrush(Colors.Orange);
+            _brush4 = new SolidColorBrush(Colors.DeepSkyBlue);
+            _brush5 = new SolidColorBrush(Colors.Magenta);
 
             ScrollableOffset = new PointD(0, 0);
             ScrollOffset = new PointD(0, 0);
