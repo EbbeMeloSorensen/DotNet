@@ -59,6 +59,8 @@ In progress:
         en thickness defineret i viewport koordinater. Bemærk, at det jo så skal gælde for GeometryEditorViewModel generelt snarere end at være specielt
         for coordinate system view modellen. Måske kunne du gribe det sådan an, at der i GeometryEditorViewModel altid skal tegnes et kvadrat med hjørner i 
         (0, 0) og (1, 1)
+     .. Husk, du bruger et væld af teknikker i situationer, hvor gerne vil undgå at skalere. F.eks. for points, som du jo gerne vil vise i samme størrelse
+        uanset hvad scaling er sat til. Du har nok gavn af at dokumentere det i et eller andet omfang.
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines
 * Prøv i handleren for tick eventet at sætte World Window således at XValue Of Interest er i midten
   - Når man panorerer i vinduet, skal den holde op med at autoopdatere world vinduet (OK)

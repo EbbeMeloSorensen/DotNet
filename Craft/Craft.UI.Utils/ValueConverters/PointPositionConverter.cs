@@ -22,7 +22,13 @@ namespace Craft.UI.Utils.ValueConverters
             var coordinate = (double)values[0];
             var upperLeft = (double)values[1];
             var scale = (double)values[2];
-            var extent = (double)values[3];
+            
+            var extent = values.Length >= 4 ? (double)values[3] : 0;
+
+            if (values.Length == 3)
+            {
+                var a = 0;
+            }
 
             return (coordinate - upperLeft) * scale - extent / 2;
         }
