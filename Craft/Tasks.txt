@@ -54,6 +54,7 @@ In progress:
      event under panorering. Det er ikke hensigtsmæssigt at cleare/genpopulere den der observable collection of coordinates så ofte - så er det væsentligt 
      bedre at lade data templaten basere sig på en transformation, lige som det i øvrigt allerede foregår for koordinatakse labels (I øvrigt bør koordinatakse
      labels altså håndteres af Coordinate System View Modellen og ikke GeometryEditorViewModellen)
+     .. Mht beregning af X for de lodrette linier, så skal der bindes til noget i stil med hvad der allerede sker for labels eller måske mere simpelt
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines
 * Prøv i handleren for tick eventet at sætte World Window således at XValue Of Interest er i midten
   - Når man panorerer i vinduet, skal den holde op med at autoopdatere world vinduet (OK)
