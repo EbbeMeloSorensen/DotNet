@@ -55,6 +55,10 @@ In progress:
      bedre at lade data templaten basere sig på en transformation, lige som det i øvrigt allerede foregår for koordinatakse labels (I øvrigt bør koordinatakse
      labels altså håndteres af Coordinate System View Modellen og ikke GeometryEditorViewModellen)
      .. Mht beregning af X for de lodrette linier, så skal der bindes til noget i stil med hvad der allerede sker for labels eller måske mere simpelt
+     .. Du burde altså lave nogle mere generelle konstruktioner, der også dækker f.eks. gridlines, så de ikke skal tegnes skaleres, men bare tegnes med
+        en thickness defineret i viewport koordinater. Bemærk, at det jo så skal gælde for GeometryEditorViewModel generelt snarere end at være specielt
+        for coordinate system view modellen. Måske kunne du gribe det sådan an, at der i GeometryEditorViewModel altid skal tegnes et kvadrat med hjørner i 
+        (0, 0) og (1, 1)
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines
 * Prøv i handleren for tick eventet at sætte World Window således at XValue Of Interest er i midten
   - Når man panorerer i vinduet, skal den holde op med at autoopdatere world vinduet (OK)
