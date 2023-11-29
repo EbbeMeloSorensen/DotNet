@@ -708,13 +708,15 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 LockWorldWindowOnDynamicXValue = false,
                 StaticXValue = thirtySecondsFromNowAsScalar,
+                ShowXAxisLabels = true,
+                ShowYAxisLabels = false,
+                ShowVerticalGridLines = false,
+                ShowHorizontalGridLines = false,
+                ShowVerticalAxis = false,
                 Fraction = 0.9
             };
 
             TimeSeriesViewModel2.GeometryEditorViewModel.YAxisLocked = true;
-            TimeSeriesViewModel2.ShowVerticalGridLines = true;
-            TimeSeriesViewModel2.ShowHorizontalGridLines = false;
-            TimeSeriesViewModel2.ShowVerticalAxis = false;
 
             TimeSeriesViewModel2.TimeAtMousePosition.PropertyChanged += (s, e) =>
             {
@@ -735,11 +737,6 @@ namespace Craft.UIElements.GuiTest.Tab3
                 var x1 = e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width;
                 var y0 = e.WorldWindowUpperLeft.Y;
                 var y1 = e.WorldWindowUpperLeft.Y + e.WorldWindowSize.Height;
-
-                TimeSeriesViewModel2.GeometryEditorViewModel.ClearLines();
-
-                // Det er ikke helt uproblematisk det her - linien forsvinder, hvis man zoomer nok ind...
-                // DU bør nok generelt lave det sådan at man konverteer til punkter i viewporten og så tegner det med en liniebredde defineret der.
 
                 var lineViewModels = _timeStampsOfInterest
                     .Select(_ => (_ - TimeSeriesViewModel2.TimeAtOrigo).TotalDays)

@@ -42,7 +42,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             // We want margins and thickness to be independent on scaling
             var dx = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
             var dy = GeometryEditorViewModel.MarginBottom / GeometryEditorViewModel.Scaling.Height;
-            var thickness = 1 / GeometryEditorViewModel.Scaling.Width;
+            var thickness = 1;
 
             _expandedWorldWindowUpperLeft = new Point(
                 x0 - _worldWindowExpansionFactor * (x1 - x0),
@@ -55,12 +55,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             GeometryEditorViewModel.ClearLines();
             GeometryEditorViewModel.ClearLabels();
 
-            if (ShowHorizontalGridLines)
+            if (ShowHorizontalGridLines || ShowYAxisLabels)
             {
                 DrawHorizontalGridLinesAndOrLabels(x0, dx, thickness);
             }
 
-            if (ShowVerticalGridLines)
+            if (ShowVerticalGridLines || ShowXAxisLabels)
             {
                 DrawVerticalGridLinesAndOrLabels(x0, y0, x1, y1, dx, dy, thickness);
             }
@@ -455,13 +455,25 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         label = $"{hour}:00";
                     }
 
-                    GeometryEditorViewModel.AddLabel(
-                        label,
-                        new PointD(x, y0 + dy),
-                        labelWidth,
-                        labelHeight,
-                        new PointD(0, labelHeight / 2),
-                        0.0);
+                    if (ShowVerticalGridLines)
+                    {
+                        GeometryEditorViewModel.AddLine(
+                            new PointD(x, _expandedWorldWindowUpperLeft.Y),
+                            new PointD(x, _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height),
+                            thickness,
+                            _gridBrush);
+                    }
+
+                    if (ShowXAxisLabels)
+                    {
+                        GeometryEditorViewModel.AddLabel(
+                            label,
+                            new PointD(x, y0 + dy),
+                            labelWidth,
+                            labelHeight,
+                            new PointD(0, labelHeight / 2),
+                            0.0);
+                    }
 
                     x += lineSpacingX_World;
                     t += delta;
