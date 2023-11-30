@@ -232,12 +232,14 @@ public class MainWindowViewModel : ViewModelBase
 
         _displayHistoricalTimeControls = new ObservableObject<bool>
         {
-            Object = false
+            //Object = false
+            Object = true
         };
 
         _displayDatabaseTimeControls = new ObservableObject<bool>
         {
-            Object = false
+            //Object = false
+            Object = true
         };
 
         _displayHistoricalTimeControls.PropertyChanged += (s, e) =>
@@ -463,11 +465,18 @@ public class MainWindowViewModel : ViewModelBase
             0,
             40,
             1,
-            timeAtOrigo);
+            timeAtOrigo)
+        {
+            ShowHorizontalGridLines = false,
+            ShowVerticalGridLines = false,
+            ShowHorizontalAxis = true,
+            ShowVerticalAxis = false,
+            ShowXAxisLabels = true,
+            ShowYAxisLabels = false,
+            Fraction = 0.9
+        };
 
         HistoricalTimeViewModel.GeometryEditorViewModel.YAxisLocked = true;
-        HistoricalTimeViewModel.ShowHorizontalGridLines = false;
-        HistoricalTimeViewModel.ShowVerticalAxis = false;
 
         HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
         {
@@ -486,7 +495,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private void InitializeDatabaseWriteTimesViewModel()
     {
-        var timeSpan = TimeSpan.FromHours(1);
+        var timeSpan = TimeSpan.FromMinutes(5);
         var utcNow = DateTime.UtcNow;
         var timeAtOrigo = utcNow.Date;
         var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1);
@@ -499,16 +508,37 @@ public class MainWindowViewModel : ViewModelBase
             0,
             40,
             1,
-            timeAtOrigo);
+            timeAtOrigo)
+        {
+            LockWorldWindowOnDynamicXValue = true,
+            ShowHorizontalGridLines = false,
+            ShowVerticalGridLines = false,
+            ShowHorizontalAxis = true,
+            ShowVerticalAxis = false,
+            ShowXAxisLabels = true,
+            ShowYAxisLabels = false,
+            Fraction = 0.9
+        };
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.YAxisLocked = true;
-        DatabaseWriteTimesViewModel.ShowHorizontalGridLines = false;
-        DatabaseWriteTimesViewModel.ShowVerticalAxis = false;
+
+        DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
+        {
+            DatabaseWriteTimesViewModel.LockWorldWindowOnDynamicXValue = false;
+        };
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
         {
             RefreshDatabaseTimeSeriesView();
         };
+
+        DatabaseWriteTimesViewModel.GeometryEditorViewModel.UpdateModelCallBack = () =>
+        {
+            // Update the x value of interest (set it to current time)
+            var nowAsScalar = (DateTime.UtcNow - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays;
+            DatabaseWriteTimesViewModel.DynamicXValue = nowAsScalar;
+        };
+
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
@@ -518,6 +548,10 @@ public class MainWindowViewModel : ViewModelBase
             }
 
             _databaseTimeOfInterest.Object = DatabaseWriteTimesViewModel.TimeAtMousePosition.Object;
+
+            // Highlight the position of the time of interest
+            DatabaseWriteTimesViewModel.StaticXValue = 
+                (_databaseTimeOfInterest.Object.Value - DatabaseWriteTimesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
 
             if (!_databaseTimeOfInterest.Object.HasValue)
             {
