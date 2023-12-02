@@ -595,7 +595,7 @@ public class MainWindowViewModel : ViewModelBase
         // Clear lines
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.ClearLines();
 
-        var lineThickness = 2.0 / DatabaseWriteTimesViewModel.GeometryEditorViewModel.Scaling.Width;
+        var lineThickness = 1.0;
 
         var lineViewModels = _databaseWriteTimes
             .Select(_ => (_ - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays)
@@ -630,8 +630,8 @@ public class MainWindowViewModel : ViewModelBase
     private void DrawMapOfDenmark()
     {
         // Load GML file of Denmark
-        //var fileName = @".\Data\Denmark.gml";
-        var fileName = @".\Data\DenmarkAndGreenland.gml";
+        var fileName = @".\Data\Denmark.gml";
+        //var fileName = @".\Data\DenmarkAndGreenland.gml";
         DataIOHandler.ExtractGeometricPrimitivesFromGMLFile(fileName, out var polygons);
 
         // Add the regions of Denmark to the map as polygons
