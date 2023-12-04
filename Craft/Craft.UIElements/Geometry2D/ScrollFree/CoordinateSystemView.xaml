@@ -23,37 +23,9 @@
 
             </Rectangle>
 
-            <!-- Dette skulle gerne blive til en collection af lodrette streger-->
-            <!--<ItemsControl ItemsSource="{Binding CoordinateViewModels}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Line Stroke="DarkGreen"
-                              StrokeThickness="1" 
-                              X1="0" 
-                              Y1="0">
-                            <Line.X2>
-                                <Binding Path="DataContext.GeometryEditorViewModel.MarginBottomOffset" 
-                                         RelativeSource="{RelativeSource AncestorType=UserControl}">
-                                </Binding>
-                            </Line.X2>
-                            <Line.Y2>
-                                <Binding Path="DataContext.GeometryEditorViewModel.MarginBottomOffset" 
-                                         RelativeSource="{RelativeSource AncestorType=UserControl}">
-                                </Binding>
-                            </Line.Y2>
-                        </Line>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>-->
-
             <!-- Vertical line representing static x value -->
             <Line Stroke="DarkOrange"
-                  StrokeThickness="1"
+                  StrokeThickness="1.5"
                   X1="{Binding StaticXValueViewPort}"
                   X2="{Binding StaticXValueViewPort}"
                   Y1="0"
@@ -69,7 +41,7 @@
 
             <!-- Vertical line representing dynamic x value when not tracking the value -->
             <Line Stroke="Purple"
-                  StrokeThickness="1"
+                  StrokeThickness="1.5"
                   X1="{Binding DynamicXValueViewPort}"
                   X2="{Binding DynamicXValueViewPort}"
                   Y1="0"

@@ -31,7 +31,6 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
     private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
-    private readonly Brush _currentTimeBrush = new SolidColorBrush(Colors.Black);
     private readonly Brush _observingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
     private readonly Brush _controlBackgroundBrushCurrent = new SolidColorBrush(Colors.WhiteSmoke);
     private readonly Brush _controlBackgroundBrushHistoric = new SolidColorBrush(Colors.BurlyWood);
@@ -199,6 +198,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             if (!_historicalTimeOfInterest.Object.HasValue)
             {
+                // Vi vil gerne se situationen, som den gør sig gældende nu. Derfor opererer vi også essentielt med seneste version af databasen
                 _databaseTimeOfInterest.Object = null;
             }
 
@@ -288,6 +288,16 @@ public class MainWindowViewModel : ViewModelBase
         {
             ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
         }
+
+        _historicalTimeOfInterest.PropertyChanged += (s, e) =>
+        {
+            if (!_historicalTimeOfInterest.Object.HasValue)
+            {
+                HistoricalTimeViewModel.StaticXValue = null;
+                DatabaseWriteTimesViewModel.LockWorldWindowOnDynamicXValue = true;
+                DatabaseWriteTimesViewModel.StaticXValue = null;
+            }
+        };
     }
 
     private void CreateObservingFacility(
@@ -467,6 +477,7 @@ public class MainWindowViewModel : ViewModelBase
             1,
             timeAtOrigo)
         {
+            LockWorldWindowOnDynamicXValue = false,
             ShowHorizontalGridLines = false,
             ShowVerticalGridLines = false,
             ShowHorizontalAxis = true,
@@ -480,6 +491,7 @@ public class MainWindowViewModel : ViewModelBase
 
         HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
         {
+            // Todo: Refresh a view of historical changes
         };
 
         HistoricalTimeViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
@@ -490,6 +502,10 @@ public class MainWindowViewModel : ViewModelBase
             }
 
             _historicalTimeOfInterest.Object = HistoricalTimeViewModel.TimeAtMousePosition.Object;
+
+            // Highlight the position of the time of interest
+            HistoricalTimeViewModel.StaticXValue =
+                (_historicalTimeOfInterest.Object.Value - HistoricalTimeViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
         };
     }
 
@@ -515,7 +531,8 @@ public class MainWindowViewModel : ViewModelBase
             ShowVerticalGridLines = false,
             ShowHorizontalAxis = true,
             ShowVerticalAxis = false,
-            ShowXAxisLabels = true,
+            ShowXAxisLabels = true, // Why is this so heavy the first time?
+            //ShowXAxisLabels = false,
             ShowYAxisLabels = false,
             Fraction = 0.9
         };
@@ -524,6 +541,7 @@ public class MainWindowViewModel : ViewModelBase
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
         {
+            // Når brugeren dragger, træder vi ud af det mode, hvor World Window løbende opdateres
             DatabaseWriteTimesViewModel.LockWorldWindowOnDynamicXValue = false;
         };
 
@@ -535,10 +553,10 @@ public class MainWindowViewModel : ViewModelBase
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.UpdateModelCallBack = () =>
         {
             // Update the x value of interest (set it to current time)
+            // Dette udvirker, at World Window følger med current time
             var nowAsScalar = (DateTime.UtcNow - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays;
             DatabaseWriteTimesViewModel.DynamicXValue = nowAsScalar;
         };
-
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
@@ -553,20 +571,12 @@ public class MainWindowViewModel : ViewModelBase
             DatabaseWriteTimesViewModel.StaticXValue = 
                 (_databaseTimeOfInterest.Object.Value - DatabaseWriteTimesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
 
-            if (!_databaseTimeOfInterest.Object.HasValue)
-            {
-                // Dette burde ikke forekomme i praksis
-                return;
-            }
-
             // Der skal altid gælde, at historisk tid er ældre end eller lig med databasetid
             if (!_historicalTimeOfInterest.Object.HasValue ||
                 _historicalTimeOfInterest.Object.Value > _databaseTimeOfInterest.Object.Value)
             {
                 _historicalTimeOfInterest.Object = _databaseTimeOfInterest.Object.Value;
             }
-
-            RefreshDatabaseTimeSeriesView();
         };
     }
 
@@ -595,7 +605,7 @@ public class MainWindowViewModel : ViewModelBase
         // Clear lines
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.ClearLines();
 
-        var lineThickness = 1.0;
+        var lineThickness = 1.5;
 
         var lineViewModels = _databaseWriteTimes
             .Select(_ => (_ - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays)
@@ -613,17 +623,7 @@ public class MainWindowViewModel : ViewModelBase
             {
                 DatabaseWriteTimesViewModel.GeometryEditorViewModel.LineViewModels.Add(
                     new LineViewModel(new PointD(xTimeOfInterest, y0), new PointD(xTimeOfInterest, y2), lineThickness, _timeOfInterestBrush));
-
             }
-        }
-
-        // Todo: Erstat det her med en linie i selve Geometry ViewModel, der hurtigt kan ændre placering
-        var xCurrentTime = (DateTime.UtcNow - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays;
-        if (xCurrentTime > x0 && xCurrentTime < x1)
-        {
-            DatabaseWriteTimesViewModel.GeometryEditorViewModel.LineViewModels.Add(
-                new LineViewModel(new PointD(xCurrentTime, y0), new PointD(xCurrentTime, y2), lineThickness, _currentTimeBrush));
-
         }
     }
 
