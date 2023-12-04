@@ -85,12 +85,15 @@ In progress:
 * Grid lines og kurver skal have samme tykkelse uanset magnification
 * Lav CoordinateSystemViewModel sådan at WorldWindow starter ved koordinatakserne og ikke helt ude i kanten
 * Man skal kunne sætte World Window under runtime og ikke bare under opstart
-
-Todo:
 * Hvis man for coordinateViewModel er i det mode, hvor World Window følger en dynamisk variabel, så skal man ikke tegne
   linien ved hvert refresh - den skal tegnes "statisk" på lige for med koordinatsystemets akser.
+
+Todo:
+* Du bør strømline det der med MinorWindowUpdate og MajorWindowUpdate. Der er brug for at identificere, at brugeren interagerer - pt er det jo sådan,
+  at MajowUpdate sker af sig selv (når man er i det mode, hvor world window bevæger sig) og i den forbindelse skal man FORBLIVE i slide mode, men når
+  der kommer en major update pga at man bruger musens rullehjul for at zoome, så skal den TRÆDE UD af slide mode.
 * Det kunne være nice, hvis man ikke skulle "lede" efter forekomster på tidsaksen. Der kunne være et mode, hvor den hoppede til højre eller venstre 
-  og landede der, hvor der var noget
+  og landede der, hvor der var noget. Prøv at lave noget med historiske hændelser..
 * Fix det med at man ikke kan zoome med ctrl+leftclick
 * Når cursoren forlader et område, skal der ikke længere vises nogen koordinater
 * Der skal være et mode, hvor man kontinuert opdaterer zoom, som du har kunnet før og formentlig stadig kan med nogle kontroller
