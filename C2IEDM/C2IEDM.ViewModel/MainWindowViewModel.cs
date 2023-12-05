@@ -475,7 +475,8 @@ public class MainWindowViewModel : ViewModelBase
             0,
             40,
             1,
-            timeAtOrigo)
+            timeAtOrigo,
+            _logger)
         {
             LockWorldWindowOnDynamicXValue = false,
             ShowHorizontalGridLines = false,
@@ -524,9 +525,11 @@ public class MainWindowViewModel : ViewModelBase
             0,
             40,
             1,
-            timeAtOrigo)
+            timeAtOrigo,
+            _logger)
         {
-            LockWorldWindowOnDynamicXValue = true,
+            //LockWorldWindowOnDynamicXValue = true,
+            LockWorldWindowOnDynamicXValue = false,
             ShowHorizontalGridLines = false,
             ShowVerticalGridLines = false,
             ShowHorizontalAxis = true,

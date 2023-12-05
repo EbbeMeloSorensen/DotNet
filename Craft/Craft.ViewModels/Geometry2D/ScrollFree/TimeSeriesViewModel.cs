@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
+using Craft.Logging;
 using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class TimeSeriesViewModel : CoordinateSystemViewModel
     {
+        private ILogger _logger;
+
         public DateTime TimeAtOrigo { get; }
 
         public ObservableObject<DateTime?> TimeAtMousePosition { get; }
@@ -18,8 +21,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double marginX,
             double marginY,
             double expansionFactor,
-            DateTime timeAtOrigo) : base(worldWindowFocus, worldWindowSize, fitAspectRatio, marginX, marginY, expansionFactor)
+            DateTime timeAtOrigo,
+            ILogger logger) : base(worldWindowFocus, worldWindowSize, fitAspectRatio, marginX, marginY, expansionFactor)
         {
+            _logger = logger;
             TimeAtOrigo = timeAtOrigo;
 
             TimeAtMousePosition = new ObservableObject<DateTime?>();
@@ -332,6 +337,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             // Find den største værdi for x, der ligger til venstre for World Window, og som repræsenterer en grid line
             var x = Math.Floor(x0ext / lineSpacingX_World) * lineSpacingX_World;
 
+            var labelCount = 0;
+
             if (lineSpacingX_World > 365.24)
             {
                 // Her opererer vi med at grid lines og labels knytter sig til ÅR
@@ -356,6 +363,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             labelHeight,
                             new PointD(0, labelHeight / 2),
                             0.0);
+
+                        labelCount++;
                     }
 
                     t = t.AddYears(1);
@@ -389,6 +398,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             labelHeight,
                             new PointD(0, labelHeight / 2),
                             0.0);
+
+                        labelCount++;
                     }
 
                     t = t.AddMonths(1);
@@ -422,6 +433,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             labelHeight,
                             new PointD(0, labelHeight / 2),
                             0.0);
+
+                        labelCount++;
                     }
 
                     t = t.AddDays(1);
@@ -473,12 +486,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             labelHeight,
                             new PointD(0, labelHeight / 2),
                             0.0);
+
+                        labelCount++;
                     }
 
                     x += lineSpacingX_World;
                     t += delta;
                 }
             }
+
+            _logger?.WriteLine(LogMessageCategory.Information, $"Added {labelCount} labels");
         }
 
         // Helper for rounding Timespan to closest timespan where second is zero

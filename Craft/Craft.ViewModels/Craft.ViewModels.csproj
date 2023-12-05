@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Craft.DataStructures\Craft.DataStructures.csproj" />
+    <ProjectReference Include="..\Craft.Logging\Craft.Logging.csproj" />
     <ProjectReference Include="..\Craft.Utils\Craft.Utils.csproj" />
   </ItemGroup>
 
