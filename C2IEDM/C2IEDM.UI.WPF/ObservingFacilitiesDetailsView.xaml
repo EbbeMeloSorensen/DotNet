@@ -30,7 +30,6 @@
         <Grid Background="#00000000">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
@@ -69,6 +68,8 @@
                 <Button Grid.Row ="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="3,3,3,3" Width="50" Content="Update" HorizontalAlignment="Right"
                     Command="{Binding ApplyChangesCommand}" />
             </Grid>
+
+            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Bamse" Height="300" Background="Red"/>
         </Grid>
     </Border>
 </UserControl>

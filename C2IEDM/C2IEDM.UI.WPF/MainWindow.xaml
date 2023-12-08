@@ -49,6 +49,9 @@
                           IsChecked="{Binding DisplayHistoricalTimeControls}" />
                 <MenuItem IsCheckable="True" Header="Database Time" 
                           IsChecked="{Binding DisplayDatabaseTimeControls}" />
+                <Separator/>
+                <MenuItem IsCheckable="True" Header="Log" 
+                          IsChecked="{Binding DisplayLog}" />
             </MenuItem>
         </Menu>
 
@@ -101,7 +104,7 @@
             </Border>
 
             <!-- Details view -->
-            <Grid Grid.Row="0" Grid.Column="2" Margin="10" VerticalAlignment="Top" Height="115"
+            <Grid Grid.Row="0" Grid.Column="2" Margin="10" VerticalAlignment="Top" Height="200"
                   Background="{Binding ControlBackgroundBrush}">
                 <local:ObservingFacilitiesDetailsView
                     DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>
@@ -167,7 +170,16 @@
                 </TabControl>
             </Expander>
 
-            <Grid Grid.Row="0" Grid.Column="1" Visibility="Hidden">
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Grid.Visibility>
+                    <Binding Path="DisplayLog"
+                             Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Grid.Visibility>
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>

@@ -125,6 +125,8 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
+    public GeospatialLocationsViewModel GeospatialLocationsViewModel { get; }
+
     public RelayCommand ApplyChangesCommand
     {
         get { return _applyChangesCommand ?? (_applyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges)); }
@@ -138,6 +140,8 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         _observingFacilities = observingFacilities;
 
         _observingFacilities.PropertyChanged += Initialize;
+
+        GeospatialLocationsViewModel = new GeospatialLocationsViewModel();
     }
 
     private void Initialize(

@@ -42,6 +42,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
     private string _statusBarText;
     private bool _displayMessageInMap;
+    private bool _displayLog;
     private int _selectedTabIndexForRetrospectionTimeLines;
     private Window _owner;
 
@@ -120,6 +121,16 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public bool DisplayLog
+    {
+        get => _displayLog;
+        set
+        {
+            _displayLog = value;
+            RaisePropertyChanged();
+        }
+    }
+
     public int SelectedTabIndexForRetrospectionTimeLines
     {
         get => _selectedTabIndexForRetrospectionTimeLines;
@@ -193,6 +204,8 @@ public class MainWindowViewModel : ViewModelBase
         {
             Object = null
         };
+
+        DisplayLog = false;
 
         _historicalTimeOfInterest.PropertyChanged += (s, e) =>
         {
