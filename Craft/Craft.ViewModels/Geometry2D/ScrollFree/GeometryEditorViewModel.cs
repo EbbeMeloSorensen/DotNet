@@ -325,7 +325,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     {
                         // Her initialiserer vi World Window og skalering for første gang
                         InitializeScalingAndWorldWindow();
-                        OnWorldWindowMajorUpdateOccured();
+                        //OnWorldWindowMajorUpdateOccured();
                     }
                         
                     MarginBottomOffset = ViewPortSize.Height - MarginBottom;

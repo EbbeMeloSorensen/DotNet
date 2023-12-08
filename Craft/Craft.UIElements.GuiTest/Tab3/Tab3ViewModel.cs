@@ -655,7 +655,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 60,
                 1,
-                timeAtOrigo)
+                timeAtOrigo,
+                null)
             {
                 ShowVerticalGridLines = true
             };
@@ -704,7 +705,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 0,
                 40,
                 1,
-                timeAtOrigo)
+                timeAtOrigo,
+                null)
             {
                 LockWorldWindowOnDynamicXValue = false,
                 StaticXValue = thirtySecondsFromNowAsScalar,

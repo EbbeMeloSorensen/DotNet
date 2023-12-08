@@ -307,6 +307,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         protected virtual void UpdateCoordinateSystemForGeometryEditorViewModel()
         {
+            if (GeometryEditorViewModel.WorldWindowSize.Width < 0.000000001 ||
+                GeometryEditorViewModel.WorldWindowSize.Height < 0.000000001)
+            {
+                return;
+            }
+
             var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
             var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
             var y0 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y - GeometryEditorViewModel.WorldWindowSize.Height;

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:C2IEDM.UI.WPF"
         xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
+        xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="C2IEDM" Height="450" Width="800"
         WindowState="Maximized"
@@ -66,10 +67,11 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <!-- Map view -->
-            <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" DataContext="{Binding MapViewModel}" />
+            <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="4" DataContext="{Binding MapViewModel}" />
 
             <!-- Master view (Observing Facility List with toolbar and filter) -->
             <Border Grid.Row="0" Grid.Column="0" Margin="10"
@@ -120,7 +122,9 @@
             </Border>
 
             <!--Retrospection controls--> 
-            <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" IsExpanded="True" ExpandDirection="Up" Margin="10, 0, 10, 0" >
+            <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" 
+                      IsExpanded="True" ExpandDirection="Up" 
+                      Margin="10, 0, 20, 0" >
                 <Expander.Visibility>
                     <Binding 
                         Path="DisplayRetrospectionControls"
@@ -162,6 +166,17 @@
                     </TabItem>
                 </TabControl>
             </Expander>
+
+            <Grid Grid.Row="0" Grid.Column="1" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="1" LastChildFill="True" Height="200">
+                    <logging:LogView DataContext="{Binding LogViewModel}"/>
+                </DockPanel>
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>
