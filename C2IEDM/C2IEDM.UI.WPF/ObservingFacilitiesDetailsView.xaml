@@ -65,11 +65,12 @@
                         DisplayDateStart="{Binding DisplayDateStart_DateClosed}" 
                         DisplayDateEnd="{Binding DisplayDateEnd_DateClosed}" 
                         SelectedDate ="{Binding SharedDateClosed, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Grid.Row ="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="3,3,3,3" Width="50" Content="Update" HorizontalAlignment="Right"
+                <Button Grid.Row ="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="3,3,3,6" Width="50" Content="Update" HorizontalAlignment="Right"
                     Command="{Binding ApplyChangesCommand}" />
             </Grid>
 
-            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Bamse" Height="300" Background="Red"/>
+            <local:GeospatialLocationsView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+                                           DataContext="{Binding GeospatialLocationsViewModel}"/>
         </Grid>
     </Border>
 </UserControl>

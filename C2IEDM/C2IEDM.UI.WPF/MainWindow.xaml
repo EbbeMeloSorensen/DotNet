@@ -104,7 +104,7 @@
             </Border>
 
             <!-- Details view -->
-            <Grid Grid.Row="0" Grid.Column="2" Margin="10" VerticalAlignment="Top" Height="200"
+            <Grid Grid.Row="0" Grid.Column="2" Margin="10" VerticalAlignment="Top"
                   Background="{Binding ControlBackgroundBrush}">
                 <local:ObservingFacilitiesDetailsView
                     DataContext="{Binding ObservingFacilitiesDetailsViewModel}"/>

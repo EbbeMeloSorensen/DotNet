@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
@@ -11,6 +10,7 @@ using Craft.UI.Utils;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
 using C2IEDM.Application;
+using Craft.ViewModels.Dialogs;
 
 namespace C2IEDM.ViewModel;
 
@@ -134,6 +134,7 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
 
     public ObservingFacilitiesDetailsViewModel(
         IUnitOfWorkFactory unitOfWorkFactory,
+        IDialogService applicationDialogService,
         ObjectCollection<ObservingFacility> observingFacilities)
     {
         _unitOfWorkFactory = unitOfWorkFactory;
@@ -141,7 +142,10 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
 
         _observingFacilities.PropertyChanged += Initialize;
 
-        GeospatialLocationsViewModel = new GeospatialLocationsViewModel();
+        GeospatialLocationsViewModel = new GeospatialLocationsViewModel(
+            unitOfWorkFactory,
+            applicationDialogService,
+            observingFacilities);
     }
 
     private void Initialize(

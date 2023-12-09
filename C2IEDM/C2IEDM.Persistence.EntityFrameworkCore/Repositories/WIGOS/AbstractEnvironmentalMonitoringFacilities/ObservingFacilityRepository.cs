@@ -21,6 +21,26 @@ public class ObservingFacilityRepository : Repository<ObservingFacility>, IObser
         throw new NotImplementedException();
     }
 
+    public ObservingFacility Get(
+        Guid id)
+    {
+        return DbContext.ObservingFacilities.SingleOrDefault(_ => _.Id == id) ?? throw new InvalidOperationException();
+    }
+
+    public Tuple<ObservingFacility, List<GeospatialLocation>> GetIncludingGeospatialLocations(
+        Guid id)
+    {
+        var observingFacility = Get(id);
+
+        var geospatialLocations = DbContext.GeospatialLocations
+            .Where(_ =>
+                _.Superseded == DateTime.MaxValue &&
+                _.AbstractEnvironmentalMonitoringFacilityObjectId == observingFacility.ObjectId)
+            .ToList();
+
+        return new Tuple<ObservingFacility, List<GeospatialLocation>>(observingFacility, geospatialLocations);
+    }
+
     public Dictionary<ObservingFacility, List<GeospatialLocation>> FindIncludingGeospatialLocations(
         Expression<Func<ObservingFacility, bool>> predicate)
     {

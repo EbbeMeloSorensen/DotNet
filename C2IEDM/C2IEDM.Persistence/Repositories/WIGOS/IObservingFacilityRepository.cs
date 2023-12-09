@@ -7,6 +7,12 @@ namespace C2IEDM.Persistence.Repositories.WIGOS;
 
 public interface IObservingFacilityRepository : IRepository<ObservingFacility>
 {
+    ObservingFacility Get(
+        Guid id);
+
+    Tuple<ObservingFacility, List<GeospatialLocation>> GetIncludingGeospatialLocations(
+        Guid id);
+
     Dictionary<ObservingFacility, List<GeospatialLocation>> FindIncludingGeospatialLocations(
         Expression<Func<ObservingFacility, bool>> predicate);
 

@@ -263,7 +263,7 @@ public class MainWindowViewModel : ViewModelBase
 
         InitializeLogViewModel(logger);
         InitializeObservingFacilityListViewModel(unitOfWorkFactory, applicationDialogService);
-        InitializeObservingFacilitiesDetailsViewModel(unitOfWorkFactory);
+        InitializeObservingFacilitiesDetailsViewModel(unitOfWorkFactory, applicationDialogService);
         InitializeMapViewModel();
         InitializeDatabaseWriteTimesViewModel();
         InitializeHistoricalTimeViewModel();
@@ -431,10 +431,12 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     private void InitializeObservingFacilitiesDetailsViewModel(
-        IUnitOfWorkFactory unitOfWorkFactory)
+        IUnitOfWorkFactory unitOfWorkFactory,
+        IDialogService applicationDialogService)
     {
         ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
             unitOfWorkFactory,
+            applicationDialogService,
             ObservingFacilityListViewModel.SelectedObservingFacilities);
 
         ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += (s, e) =>
