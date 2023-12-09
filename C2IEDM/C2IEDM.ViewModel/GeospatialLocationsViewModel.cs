@@ -84,20 +84,16 @@ namespace C2IEDM.ViewModel
 
         private void CreateGeospatialLocation(object owner)
         {
-            var a = 0;
-            /*
-            var dialogViewModel = new DefinePersonAssociationDialogViewModel(
-                _unitOfWorkFactory,
-                _applicationDialogService,
-                _activePerson,
-                null,
-                null);
+            var dialogViewModel = new DefineGeospatialLocationDialogViewModel();
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
                 return;
             }
 
+            throw new NotImplementedException();
+
+            /*
             if (_activePerson != null)
             {
                 using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())

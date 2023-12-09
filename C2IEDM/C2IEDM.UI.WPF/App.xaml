@@ -17,6 +17,9 @@
             <DataTemplate DataType="{x:Type viewModelLocal:CreateObservingFacilityDialogViewModel}">
                 <local:CreateObservingFacilityDialogView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModelLocal:DefineGeospatialLocationDialogViewModel}">
+                <local:DefineGeospatialLocationDialogView/>
+            </DataTemplate>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />

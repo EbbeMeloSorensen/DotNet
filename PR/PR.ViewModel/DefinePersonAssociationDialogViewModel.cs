@@ -2,11 +2,10 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using GalaSoft.MvvmLight.Command;
 using Craft.UI.Utils;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
-using GalaSoft.MvvmLight.Command;
-using PR.Application;
 using PR.Domain.Entities;
 using PR.Persistence;
 
