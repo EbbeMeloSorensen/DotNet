@@ -13,6 +13,9 @@ Done
 * Details view skal vises pænere - i højre side i portræt format lige som i sms
 
 In progress:
+* selection control som for person list view i PR (overvej også at refaktorere selection control for person association list)
+* Når man vælger en observing facility, skal den vise hele dens collection af steder, hvor den har stået
+* Man skal kunne tilføje en ekstra lokation for en eksisterende tidsserie
 * Sørg for at den foreslår nogle rimelige muligheder, hvis man prøver at ændre Establishing Date
 * Sørg for at vedligeholde hjælpestreger for database tidslinien
   - Én for Now

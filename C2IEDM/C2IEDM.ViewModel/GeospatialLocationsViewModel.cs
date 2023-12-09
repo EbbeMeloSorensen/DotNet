@@ -1,12 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Linq;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using GalaSoft.MvvmLight;
-using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
-using C2IEDM.Persistence;
+using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
-using C2IEDM.Domain.Entities;
-using System.Linq;
+using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using C2IEDM.Persistence;
+using System.Windows;
+using System;
 
 namespace C2IEDM.ViewModel
 {
@@ -18,6 +20,7 @@ namespace C2IEDM.ViewModel
         private ObjectCollection<ObservingFacility> _observingFacilities;
         private ObservingFacility _activeObservingFacility;
         private ObservableCollection<GeospatialLocationViewModel> _geospatialLocationViewModels;
+        private RelayCommand<object> _createGeospatialLocationCommand;
 
         public ObservableCollection<GeospatialLocationViewModel> GeospatialLocationViewModels
         {
@@ -26,6 +29,15 @@ namespace C2IEDM.ViewModel
             {
                 _geospatialLocationViewModels = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public RelayCommand<object> CreateGeospatialLocationCommand
+        {
+            get
+            {
+                return _createGeospatialLocationCommand ?? (
+                    _createGeospatialLocationCommand = new RelayCommand<object>(CreateGeospatialLocation, CanCreateGeospatialLocation));
             }
         }
 
@@ -68,6 +80,47 @@ namespace C2IEDM.ViewModel
                 GeospatialLocationViewModels = new ObservableCollection<GeospatialLocationViewModel>(
                     observingFacility.Item2.Select(_ => new GeospatialLocationViewModel{ GeospatialLocation = _}));
             }
+        }
+
+        private void CreateGeospatialLocation(object owner)
+        {
+            var a = 0;
+            /*
+            var dialogViewModel = new DefinePersonAssociationDialogViewModel(
+                _unitOfWorkFactory,
+                _applicationDialogService,
+                _activePerson,
+                null,
+                null);
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            if (_activePerson != null)
+            {
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    unitOfWork.PersonAssociations.Add(new PersonAssociation
+                    {
+                        SubjectPersonId = dialogViewModel.SubjectPerson.Id,
+                        ObjectPersonId = dialogViewModel.ObjectPerson.Id,
+                        Description = dialogViewModel.Description,
+                        Created = DateTime.UtcNow
+                    });
+
+                    unitOfWork.Complete();
+                }
+
+                Populate();
+            }
+            */
+        }
+
+        private bool CanCreateGeospatialLocation(object owner)
+        {
+            return true;
         }
     }
 }

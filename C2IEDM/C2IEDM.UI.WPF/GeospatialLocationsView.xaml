@@ -6,7 +6,20 @@
              xmlns:local="clr-namespace:C2IEDM.UI.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ListBox Height="200" DisplayMemberPath="DisplayText" Margin="3" SelectionMode="Extended"
-             ItemsSource="{Binding GeospatialLocationViewModels}">
-    </ListBox>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ListBox Grid.Row="0" Height="200" DisplayMemberPath="DisplayText" Margin="3" SelectionMode="Extended"
+                 ItemsSource="{Binding GeospatialLocationViewModels}">
+        </ListBox>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Margin="3,0,3,3" Content="New.." 
+                    Command="{Binding CreateGeospatialLocationCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        </StackPanel>
+    </Grid>
 </UserControl>
