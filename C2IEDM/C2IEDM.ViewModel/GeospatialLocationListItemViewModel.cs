@@ -4,7 +4,7 @@ using Craft.Utils;
 
 namespace C2IEDM.ViewModel
 {
-    public class GeospatialLocationViewModel : ViewModelBase
+    public class GeospatialLocationListItemViewModel : ViewModelBase
     {
         private GeospatialLocation _geospatialLocation;
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -14,8 +15,53 @@ namespace C2IEDM.ViewModel
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
 
+        private DateTime _from;
+        private DateTime? _to;
+        private double _latitude;
+        private double _longitude;
+
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
+
+        public DateTime From
+        {
+            get { return _from; }
+            set
+            {
+                _from = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public DateTime? To
+        {
+            get { return _to; }
+            set
+            {
+                _to = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double Latitude
+        {
+            get { return _latitude; }
+            set
+            {
+                _latitude = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double Longitude
+        {
+            get { return _longitude; }
+            set
+            {
+                _longitude = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public RelayCommand<object> OKCommand
         {
@@ -33,21 +79,20 @@ namespace C2IEDM.ViewModel
             {
                 var errorMessage = string.Empty;
 
-                //if (_state == StateOfView.Updated)
-                //{
-                //    switch (columnName)
-                //    {
-                //        case "Description":
-                //        {
-                //            if (Description.Length > 10 /*255*/)
-                //            {
-                //                errorMessage = "Description cannot exceed 255 characters";
-                //            }
-
-                //            break;
-                //        }
-                //    }
-                //}
+                if (_state == StateOfView.Updated)
+                {
+                    switch (columnName)
+                    {
+                        case "Latitude":
+                        {
+                            break;
+                        }
+                        case "Longitude":
+                        {
+                            break;
+                        }
+                    }
+                }
 
                 ValidationMessages
                     .First(e => e.PropertyName == columnName).ErrorMessage = errorMessage;
@@ -64,7 +109,10 @@ namespace C2IEDM.ViewModel
                 {
                     _validationMessages = new ObservableCollection<ValidationError>
                     {
-                        //new ValidationError {PropertyName = "Description"},
+                        new ValidationError {PropertyName = "Latitude"},
+                        new ValidationError {PropertyName = "Longitude"},
+                        new ValidationError {PropertyName = "From"},
+                        new ValidationError {PropertyName = "To"},
                     };
                 }
 
@@ -82,6 +130,12 @@ namespace C2IEDM.ViewModel
             }
         }
 
+        public DefineGeospatialLocationDialogViewModel()
+        {
+            var currentDate = DateTime.Now.Date;
+            From = currentDate;
+        }
+
         private void UpdateState(StateOfView state)
         {
             _state = state;
@@ -90,7 +144,10 @@ namespace C2IEDM.ViewModel
 
         private void RaisePropertyChanges()
         {
-            //RaisePropertyChanged("Description");
+            RaisePropertyChanged("Latitude");
+            RaisePropertyChanged("Longitude");
+            RaisePropertyChanged("From");
+            RaisePropertyChanged("To");
         }
 
         private void OK(object parameter)

@@ -7,6 +7,50 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Button Content="Satan" Height="200" Width="200"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Padding="3" Text="From:"/>
+            <DatePicker Grid.Row="0" Grid.Column="1" Padding="3" 
+                        SelectedDate="{Binding From}"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Padding="3" Text="To:"/>
+            <DatePicker Grid.Row="1" Grid.Column="1" Padding="3" 
+                        SelectedDate="{Binding To}"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Padding="3" Text="Latitude:"/>
+            <TextBox Grid.Row="2" Grid.Column="1"
+                     Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                     Text="{Binding Latitude, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Padding="3" Text="Longitude:"/>
+            <TextBox Grid.Row="3" Grid.Column="1"
+                     Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                     Text="{Binding Longitude, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Content="Cancel" Width="75" Margin="3"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Content="OK" Width="75" Margin="3" IsDefault="True"
+                    Command="{Binding OKCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
