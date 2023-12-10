@@ -121,7 +121,7 @@
                         </Binding.ConverterParameter>
                     </Binding>
                 </Border.Visibility>
-                <TextBlock Text="Click the map to place observing facility" Margin="10, 10, 10, 10"/>
+                <TextBlock Text="{Binding MessageInMap}" Margin="10, 10, 10, 10"/>
             </Border>
 
             <!--Retrospection controls--> 

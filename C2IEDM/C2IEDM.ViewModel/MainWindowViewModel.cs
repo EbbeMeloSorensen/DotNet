@@ -40,6 +40,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ObservableObject<bool> _displayRetrospectionControls;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
+    private string _messageInMap;
     private string _statusBarText;
     private bool _displayMessageInMap;
     private bool _displayLog;
@@ -107,6 +108,16 @@ public class MainWindowViewModel : ViewModelBase
         set
         {
             _statusBarText = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public string MessageInMap
+    {
+        get => _messageInMap;
+        set
+        {
+            _messageInMap = value;
             RaisePropertyChanged();
         }
     }
@@ -317,6 +328,7 @@ public class MainWindowViewModel : ViewModelBase
         object owner)
     {
         _owner = owner as Window;
+        MessageInMap = "Click the map to place new observing facility";
         DisplayMessageInMap = true;
     }
 
