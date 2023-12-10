@@ -41,7 +41,6 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     private RelayCommand _applyChangesCommand;
 
     public event EventHandler<ObservingFacilitiesEventArgs> ObservingFacilitiesUpdated;
-    // Coming soon: nyt event om at brugeren har trykket på new geospatial location
 
     public string SharedName
     {

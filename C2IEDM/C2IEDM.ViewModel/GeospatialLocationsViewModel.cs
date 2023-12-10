@@ -27,6 +27,8 @@ namespace C2IEDM.ViewModel
         private RelayCommand<object> _createGeospatialLocationCommand;
         private RelayCommand<object> _updateSelectedGeospatialLocationCommand;
 
+        public event EventHandler NewGeospatialLocationCalledByUser;
+
         public ObjectCollection<GeospatialLocation> SelectedGeospatialLocations { get; private set; }
 
         public ObservableCollection<GeospatialLocationListItemViewModel> GeospatialLocationListItemViewModels
@@ -127,6 +129,12 @@ namespace C2IEDM.ViewModel
         private void CreateGeospatialLocation(
             object owner)
         {
+            OnNewGeospatialLocationCalledByUser();
+
+            return;
+
+            // Old (Now we are leaving it to the main view model to handle it)
+
             var dialogViewModel = new DefineGeospatialLocationDialogViewModel();
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
@@ -204,8 +212,7 @@ namespace C2IEDM.ViewModel
             dialogViewModel.Latitude = point.Coordinate1;
             dialogViewModel.Longitude = point.Coordinate2;
             dialogViewModel.From = point.From;
-            //dialogViewModel.To = point.To;
-            dialogViewModel.To = null;
+            dialogViewModel.To = point.To;
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
@@ -220,6 +227,17 @@ namespace C2IEDM.ViewModel
         {
             return SelectedGeospatialLocations.Objects != null &&
                    SelectedGeospatialLocations.Objects.Count() == 1;
+        }
+
+        private void OnNewGeospatialLocationCalledByUser()
+        {
+            var handler = NewGeospatialLocationCalledByUser;
+
+            // Event will be null if there are no subscribers
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
     }
 }

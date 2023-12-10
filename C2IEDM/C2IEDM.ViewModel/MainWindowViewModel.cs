@@ -18,6 +18,13 @@ namespace C2IEDM.ViewModel;
 
 public class MainWindowViewModel : ViewModelBase
 {
+    private enum MapOperation
+    {
+        None,
+        CreateObservingFacility,
+        CreateGeospatialLocation
+    }
+
     private ILogger _logger;
     private readonly Application.Application _application;
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -46,6 +53,7 @@ public class MainWindowViewModel : ViewModelBase
     private bool _displayLog;
     private int _selectedTabIndexForRetrospectionTimeLines;
     private Window _owner;
+    private MapOperation _mapOperation;
 
     private RelayCommand<object> _createObservingFacilityCommand;
     private RelayCommand<object> _deleteSelectedObservingFacilitiesCommand;
@@ -332,6 +340,14 @@ public class MainWindowViewModel : ViewModelBase
         DisplayMessageInMap = true;
     }
 
+    private void CreateGeospatialLocation(
+        object owner)
+    {
+        _owner = owner as Window;
+        MessageInMap = "Click the map to indicate new position of observing facility";
+        DisplayMessageInMap = true;
+    }
+
     private bool CanCreateObservingFacility(
         object owner)
     {
@@ -457,6 +473,11 @@ public class MainWindowViewModel : ViewModelBase
             _databaseWriteTimes.Add(e.ObservingFacilities.First().Created);
             RefreshDatabaseTimeSeriesView();
         };
+
+        ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.NewGeospatialLocationCalledByUser += (s, e) =>
+        {
+            CreateGeospatialLocation(_owner);
+        };
     }
 
     private void InitializeMapViewModel()
@@ -481,7 +502,26 @@ public class MainWindowViewModel : ViewModelBase
 
         MapViewModel.MouseClickOccured += (s, e) =>
         {
-            CreateNewObservingFacility();
+            if (!DisplayMessageInMap || !MapViewModel.MousePositionWorld.Object.HasValue)
+            {
+                return;
+            }
+
+            DisplayMessageInMap = false;
+
+            switch (_mapOperation)
+            {
+                case MapOperation.CreateObservingFacility:
+                {
+                    CreateNewObservingFacility();
+                    break;
+                }
+                case MapOperation.CreateGeospatialLocation:
+                {
+                    throw new InvalidOperationException();
+                    break;
+                }
+            }
         };
 
         UpdateMapColoring();
@@ -770,13 +810,6 @@ public class MainWindowViewModel : ViewModelBase
 
     private void CreateNewObservingFacility()
     {
-        if (!DisplayMessageInMap || !MapViewModel.MousePositionWorld.Object.HasValue)
-        {
-            return;
-        }
-
-        DisplayMessageInMap = false;
-
         var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
 
         if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
