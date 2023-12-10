@@ -8,8 +8,8 @@ using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
-using C2IEDM.Persistence;
 using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
+using C2IEDM.Persistence;
 
 namespace C2IEDM.ViewModel;
 

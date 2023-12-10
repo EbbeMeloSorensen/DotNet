@@ -11,6 +11,7 @@ using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 using C2IEDM.Persistence;
+using Point = C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point;
 
 namespace C2IEDM.ViewModel
 {
@@ -20,10 +21,11 @@ namespace C2IEDM.ViewModel
         private readonly IDialogService _applicationDialogService;
 
         private ObjectCollection<ObservingFacility> _observingFacilities;
-        private ObservingFacility _activeObservingFacility;
+        private ObservingFacility _selectedObservingFacility;
         private ObservableCollection<GeospatialLocationListItemViewModel> _geospatialLocationListItemViewModels;
         private RelayCommand _deleteSelectedGeospatialLocationsCommand;
         private RelayCommand<object> _createGeospatialLocationCommand;
+        private RelayCommand<object> _updateSelectedGeospatialLocationCommand;
 
         public ObjectCollection<GeospatialLocation> SelectedGeospatialLocations { get; private set; }
 
@@ -57,6 +59,15 @@ namespace C2IEDM.ViewModel
             }
         }
 
+        public RelayCommand<object> UpdateSelectedGeospatialLocationCommand
+        {
+            get
+            {
+                return _updateSelectedGeospatialLocationCommand ?? (
+                    _updateSelectedGeospatialLocationCommand = new RelayCommand<object>(UpdateSelectedGeospatialLocation, CanUpdateSelectedGeospatialLocation));
+            }
+        }
+
         public GeospatialLocationsViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
@@ -78,6 +89,7 @@ namespace C2IEDM.ViewModel
             {
                 SelectedGeospatialLocations.Objects = SelectedGeospatialLocationListItemViewModels.Select(_ => _.GeospatialLocation);
                 DeleteSelectedGeospatialLocationsCommand.RaiseCanExecuteChanged();
+                UpdateSelectedGeospatialLocationCommand.RaiseCanExecuteChanged();
             };
 
             _observingFacilities.PropertyChanged += Initialize;
@@ -89,13 +101,13 @@ namespace C2IEDM.ViewModel
 
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)
             {
-                _activeObservingFacility = temp.Objects.Single();
+                _selectedObservingFacility = temp.Objects.Single();
                 Populate();
                 //IsVisible = true;
             }
             else
             {
-                _activeObservingFacility = null;
+                _selectedObservingFacility = null;
                 //IsVisible = false;
             }
         }
@@ -105,7 +117,7 @@ namespace C2IEDM.ViewModel
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var observingFacility =
-                    unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(_activeObservingFacility.Id);
+                    unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(_selectedObservingFacility.Id);
 
                 GeospatialLocationListItemViewModels = new ObservableCollection<GeospatialLocationListItemViewModel>(
                     observingFacility.Item2.Select(_ => new GeospatialLocationListItemViewModel{ GeospatialLocation = _}));
@@ -131,8 +143,8 @@ namespace C2IEDM.ViewModel
                 point.Coordinate1 = dialogViewModel.Latitude;
                 point.Coordinate2 = dialogViewModel.Longitude;
                 point.CoordinateSystem = "WGS_84";
-                point.AbstractEnvironmentalMonitoringFacilityId = _activeObservingFacility.Id;
-                point.AbstractEnvironmentalMonitoringFacilityObjectId = _activeObservingFacility.ObjectId;
+                point.AbstractEnvironmentalMonitoringFacilityId = _selectedObservingFacility.Id;
+                point.AbstractEnvironmentalMonitoringFacilityObjectId = _selectedObservingFacility.ObjectId;
 
                 unitOfWork.Points_Wigos.Add(point);
 
@@ -142,7 +154,8 @@ namespace C2IEDM.ViewModel
             Populate();
         }
 
-        private bool CanCreateGeospatialLocation(object owner)
+        private bool CanCreateGeospatialLocation(
+            object owner)
         {
             return true;
         }
@@ -156,6 +169,33 @@ namespace C2IEDM.ViewModel
         {
             return SelectedGeospatialLocations.Objects != null &&
                    SelectedGeospatialLocations.Objects.Any();
+        }
+
+        private void UpdateSelectedGeospatialLocation(
+            object owner)
+        {
+            var dialogViewModel = new DefineGeospatialLocationDialogViewModel();
+
+            var point = SelectedGeospatialLocations.Objects.Single() as Point;
+            dialogViewModel.Latitude = point.Coordinate1;
+            dialogViewModel.Longitude = point.Coordinate2;
+            dialogViewModel.From = point.From;
+            //dialogViewModel.To = point.To;
+            dialogViewModel.To = null;
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        private bool CanUpdateSelectedGeospatialLocation(
+            object owner)
+        {
+            return SelectedGeospatialLocations.Objects != null &&
+                   SelectedGeospatialLocations.Objects.Count() == 1;
         }
     }
 }

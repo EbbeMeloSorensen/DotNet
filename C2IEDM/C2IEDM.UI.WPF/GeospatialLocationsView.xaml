@@ -25,6 +25,9 @@
             <Button Margin="3,0,3,3" Content="New.." 
                     Command="{Binding CreateGeospatialLocationCommand}" 
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Margin="3,0,3,3" Content="Edit.." 
+                    Command="{Binding UpdateSelectedGeospatialLocationCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             <Button Margin="3,0,3,3" Content="Delete" 
                     Command="{Binding DeleteSelectedGeospatialLocationsCommand}"/>
         </StackPanel>
