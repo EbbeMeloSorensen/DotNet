@@ -861,7 +861,6 @@ public class MainWindowViewModel : ViewModelBase
             : DateTime.MaxValue;
 
         var latitude = dialogViewModel.Latitude;
-
         var longitude = dialogViewModel.Longitude;
 
         var now = DateTime.UtcNow;

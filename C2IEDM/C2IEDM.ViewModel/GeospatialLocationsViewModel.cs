@@ -12,6 +12,7 @@ using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 using C2IEDM.Persistence;
 using Point = C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point;
+using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
 
 namespace C2IEDM.ViewModel
 {
@@ -165,19 +166,53 @@ namespace C2IEDM.ViewModel
                 return;
             }
 
+            var from = new DateTime(
+                dialogViewModel.From.Year,
+                dialogViewModel.From.Month,
+                dialogViewModel.From.Day,
+                dialogViewModel.From.Hour,
+                dialogViewModel.From.Minute,
+                dialogViewModel.From.Second,
+                DateTimeKind.Utc);
+
+            var to = dialogViewModel.To.HasValue
+                ? dialogViewModel.To == DateTime.MaxValue
+                    ? DateTime.MaxValue
+                    : new DateTime(
+                        dialogViewModel.To.Value.Year,
+                        dialogViewModel.To.Value.Month,
+                        dialogViewModel.To.Value.Day,
+                        dialogViewModel.To.Value.Hour,
+                        dialogViewModel.To.Value.Minute,
+                        dialogViewModel.To.Value.Second,
+                        DateTimeKind.Utc)
+                : DateTime.MaxValue;
+
+            var latitude = dialogViewModel.Latitude;
+            var longitude = dialogViewModel.Longitude;
+
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var geospatialLocation = unitOfWork.GeospatialLocations.Get(point.Id);
                 var now = DateTime.UtcNow;
                 geospatialLocation.Superseded = now;
 
+                unitOfWork.GeospatialLocations.Update(geospatialLocation);
+
                 var newGeospatialLocation = new Point(Guid.NewGuid(), now)
                 {
-                    From = dialogViewModel.From,
+                    From = from,
+                    To = to,
+                    Coordinate1 = latitude,
+                    Coordinate2 = longitude,
+                    CoordinateSystem = "WGS_84"
                 };
+
+                unitOfWork.GeospatialLocations.Add(newGeospatialLocation);
+                unitOfWork.Complete();
             }
 
-            throw new NotImplementedException();
+            Populate();
         }
 
         private bool CanUpdateSelectedGeospatialLocation(
