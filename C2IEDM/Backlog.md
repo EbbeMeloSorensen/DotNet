@@ -11,10 +11,14 @@ Done
 * Ret fejlen med at det crasher, hvis man selecter flere observing facilities, der er opstillet på forskellige dage
 * Introducer det mode, hvor Find-knappen ikke vises, men kaldes hver gang der sker en ændring i filteret
 * Details view skal vises pænere - i højre side i portræt format lige som i sms
+* selection control som for person list view i PR
+* Når man vælger en observing facility, skal den vise hele dens collection af steder, hvor den har stået
 
 In progress:
-* selection control som for person list view i PR (overvej også at refaktorere selection control for person association list)
-* Når man vælger en observing facility, skal den vise hele dens collection af steder, hvor den har stået
+* Lav et event, som ObservingFacilitiesDetailsViewModel kan bruge til at signalere til main view model, at brugeren har
+  klikket på New, så main kan tage sig af det (ved at bede brugeren om at klikke i map viewet)
+* Det skal fremgå tydeligt af detaljeviewet, om man har valgt én eller flere observing facilities
+* Hvis man vælger FLERE observing facilities, skal den IKKE vise sektionen med geospatial locations
 * Man skal kunne tilføje en ekstra lokation for en eksisterende tidsserie
 * Sørg for at den foreslår nogle rimelige muligheder, hvis man prøver at ændre Establishing Date
 * Sørg for at vedligeholde hjælpestreger for database tidslinien

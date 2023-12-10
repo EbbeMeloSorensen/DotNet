@@ -13,6 +13,7 @@ Done:
 * Implementer en måde at konvertere fra det gamle sæt til det nye
 
 Todo:
+* Refaktorer Selection control i PersonAssociations Viewet, så det foregår på samme måde som i PersonList viewet
 * Mulighed for at eksportere selection til en graphml fil
   - hvor kendes selection? Den bor i PersonListViewModel
   - Du skal nok bruge Repository.GetPeopleIncludingAssociations, som tilsyneladende allerede er lavet - men hvad bruges den til pt?
