@@ -138,16 +138,40 @@ namespace C2IEDM.ViewModel
             {
                 var now = DateTime.UtcNow;
 
-                var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now);
-                point.From = dialogViewModel.From;
-                point.Coordinate1 = dialogViewModel.Latitude;
-                point.Coordinate2 = dialogViewModel.Longitude;
-                point.CoordinateSystem = "WGS_84";
-                point.AbstractEnvironmentalMonitoringFacilityId = _selectedObservingFacility.Id;
-                point.AbstractEnvironmentalMonitoringFacilityObjectId = _selectedObservingFacility.ObjectId;
+                var from = new DateTime(
+                    dialogViewModel.From.Year,
+                    dialogViewModel.From.Month,
+                    dialogViewModel.From.Day,
+                    dialogViewModel.From.Hour,
+                    dialogViewModel.From.Minute,
+                    dialogViewModel.From.Second,
+                    DateTimeKind.Utc);
+
+                var to = dialogViewModel.To.HasValue
+                    ? dialogViewModel.To == DateTime.MaxValue
+                        ? DateTime.MaxValue
+                        : new DateTime(
+                            dialogViewModel.To.Value.Year,
+                            dialogViewModel.To.Value.Month,
+                            dialogViewModel.To.Value.Day,
+                            dialogViewModel.To.Value.Hour,
+                            dialogViewModel.To.Value.Minute,
+                            dialogViewModel.To.Value.Second,
+                            DateTimeKind.Utc)
+                    : DateTime.MaxValue;
+
+                var point = new Point(Guid.NewGuid(), now)
+                {
+                    From = from,
+                    To = to,
+                    Coordinate1 = dialogViewModel.Latitude,
+                    Coordinate2 = dialogViewModel.Longitude,
+                    CoordinateSystem = "WGS_84",
+                    AbstractEnvironmentalMonitoringFacilityId = _selectedObservingFacility.Id,
+                    AbstractEnvironmentalMonitoringFacilityObjectId = _selectedObservingFacility.ObjectId
+                };
 
                 unitOfWork.Points_Wigos.Add(point);
-
                 unitOfWork.Complete();
             }
 
