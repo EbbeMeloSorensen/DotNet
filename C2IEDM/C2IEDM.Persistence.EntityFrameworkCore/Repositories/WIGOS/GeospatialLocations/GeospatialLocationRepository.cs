@@ -7,6 +7,8 @@ namespace C2IEDM.Persistence.EntityFrameworkCore.Repositories.WIGOS.GeospatialLo
 
 public class GeospatialLocationRepository : Repository<GeospatialLocation>, IGeospatialLocationRepository
 {
+    private C2IEDMDbContextBase DbContext => Context as C2IEDMDbContextBase;
+
     public GeospatialLocationRepository(DbContext context) : base(context)
     {
     }
@@ -17,6 +19,11 @@ public class GeospatialLocationRepository : Repository<GeospatialLocation>, IGeo
 
         context.RemoveRange(context.GeospatialLocations);
         context.SaveChanges();
+    }
+
+    public GeospatialLocation Get(Guid id)
+    {
+        return DbContext.GeospatialLocations.SingleOrDefault(_ => _.Id == id) ?? throw new InvalidOperationException();
     }
 
     public override void Update(GeospatialLocation entity)

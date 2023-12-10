@@ -165,6 +165,18 @@ namespace C2IEDM.ViewModel
                 return;
             }
 
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var geospatialLocation = unitOfWork.GeospatialLocations.Get(point.Id);
+                var now = DateTime.UtcNow;
+                geospatialLocation.Superseded = now;
+
+                var newGeospatialLocation = new Point(Guid.NewGuid(), now)
+                {
+                    From = dialogViewModel.From,
+                };
+            }
+
             throw new NotImplementedException();
         }
 
