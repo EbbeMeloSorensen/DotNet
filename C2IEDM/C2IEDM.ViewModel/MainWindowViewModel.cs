@@ -336,6 +336,7 @@ public class MainWindowViewModel : ViewModelBase
         object owner)
     {
         _owner = owner as Window;
+        _mapOperation = MapOperation.CreateObservingFacility;
         MessageInMap = "Click the map to place new observing facility";
         DisplayMessageInMap = true;
     }
@@ -344,6 +345,7 @@ public class MainWindowViewModel : ViewModelBase
         object owner)
     {
         _owner = owner as Window;
+        _mapOperation = MapOperation.CreateGeospatialLocation;
         MessageInMap = "Click the map to indicate new position of observing facility";
         DisplayMessageInMap = true;
     }
@@ -476,7 +478,7 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.NewGeospatialLocationCalledByUser += (s, e) =>
         {
-            CreateGeospatialLocation(_owner);
+            CreateGeospatialLocation(e.Owner);
         };
     }
 
@@ -518,7 +520,7 @@ public class MainWindowViewModel : ViewModelBase
                 }
                 case MapOperation.CreateGeospatialLocation:
                 {
-                    throw new InvalidOperationException();
+                    CreateNewGeospatialLocation();
                     break;
                 }
             }
@@ -898,5 +900,64 @@ public class MainWindowViewModel : ViewModelBase
 
         _databaseWriteTimes.Add(now);
         RefreshDatabaseTimeSeriesView();
+    }
+
+    private void CreateNewGeospatialLocation()
+    {
+        var mousePositionInMap = MapViewModel.MousePositionWorld.Object.Value;
+
+        var dialogViewModel = new DefineGeospatialLocationDialogViewModel
+        {
+            Latitude = Math.Round(mousePositionInMap.X, 4),
+            Longitude = -Math.Round(mousePositionInMap.Y, 4)
+        };
+
+        if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
+        {
+            return;
+        }
+
+        var from = new DateTime(
+            dialogViewModel.From.Year,
+            dialogViewModel.From.Month,
+            dialogViewModel.From.Day,
+            dialogViewModel.From.Hour,
+            dialogViewModel.From.Minute,
+            dialogViewModel.From.Second,
+            DateTimeKind.Utc);
+
+        var to = dialogViewModel.To.HasValue
+            ? dialogViewModel.To == DateTime.MaxValue
+                ? DateTime.MaxValue
+                : new DateTime(
+                    dialogViewModel.To.Value.Year,
+                    dialogViewModel.To.Value.Month,
+                    dialogViewModel.To.Value.Day,
+                    dialogViewModel.To.Value.Hour,
+                    dialogViewModel.To.Value.Minute,
+                    dialogViewModel.To.Value.Second,
+                    DateTimeKind.Utc)
+            : DateTime.MaxValue;
+
+        var selectedObservingFacility = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Single();
+
+        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+        {
+            var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), DateTime.UtcNow)
+            {
+                From = from,
+                To = to,
+                Coordinate1 = dialogViewModel.Latitude,
+                Coordinate2 = dialogViewModel.Longitude,
+                CoordinateSystem = "WGS_84",
+                AbstractEnvironmentalMonitoringFacilityId = selectedObservingFacility.Id,
+                AbstractEnvironmentalMonitoringFacilityObjectId = selectedObservingFacility.ObjectId
+            };
+
+            unitOfWork.Points_Wigos.Add(point);
+            unitOfWork.Complete();
+        }
+
+        ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
     }
 }

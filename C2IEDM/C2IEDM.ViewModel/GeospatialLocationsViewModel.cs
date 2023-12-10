@@ -27,7 +27,7 @@ namespace C2IEDM.ViewModel
         private RelayCommand<object> _createGeospatialLocationCommand;
         private RelayCommand<object> _updateSelectedGeospatialLocationCommand;
 
-        public event EventHandler NewGeospatialLocationCalledByUser;
+        public event EventHandler<CommandInvokedEventArgs> NewGeospatialLocationCalledByUser;
 
         public ObjectCollection<GeospatialLocation> SelectedGeospatialLocations { get; private set; }
 
@@ -114,7 +114,7 @@ namespace C2IEDM.ViewModel
             }
         }
 
-        private void Populate()
+        public void Populate()
         {
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -129,61 +129,7 @@ namespace C2IEDM.ViewModel
         private void CreateGeospatialLocation(
             object owner)
         {
-            OnNewGeospatialLocationCalledByUser();
-
-            return;
-
-            // Old (Now we are leaving it to the main view model to handle it)
-
-            var dialogViewModel = new DefineGeospatialLocationDialogViewModel();
-
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-            {
-                return;
-            }
-
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var now = DateTime.UtcNow;
-
-                var from = new DateTime(
-                    dialogViewModel.From.Year,
-                    dialogViewModel.From.Month,
-                    dialogViewModel.From.Day,
-                    dialogViewModel.From.Hour,
-                    dialogViewModel.From.Minute,
-                    dialogViewModel.From.Second,
-                    DateTimeKind.Utc);
-
-                var to = dialogViewModel.To.HasValue
-                    ? dialogViewModel.To == DateTime.MaxValue
-                        ? DateTime.MaxValue
-                        : new DateTime(
-                            dialogViewModel.To.Value.Year,
-                            dialogViewModel.To.Value.Month,
-                            dialogViewModel.To.Value.Day,
-                            dialogViewModel.To.Value.Hour,
-                            dialogViewModel.To.Value.Minute,
-                            dialogViewModel.To.Value.Second,
-                            DateTimeKind.Utc)
-                    : DateTime.MaxValue;
-
-                var point = new Point(Guid.NewGuid(), now)
-                {
-                    From = from,
-                    To = to,
-                    Coordinate1 = dialogViewModel.Latitude,
-                    Coordinate2 = dialogViewModel.Longitude,
-                    CoordinateSystem = "WGS_84",
-                    AbstractEnvironmentalMonitoringFacilityId = _selectedObservingFacility.Id,
-                    AbstractEnvironmentalMonitoringFacilityObjectId = _selectedObservingFacility.ObjectId
-                };
-
-                unitOfWork.Points_Wigos.Add(point);
-                unitOfWork.Complete();
-            }
-
-            Populate();
+            OnNewGeospatialLocationCalledByUser(owner);
         }
 
         private bool CanCreateGeospatialLocation(
@@ -229,14 +175,15 @@ namespace C2IEDM.ViewModel
                    SelectedGeospatialLocations.Objects.Count() == 1;
         }
 
-        private void OnNewGeospatialLocationCalledByUser()
+        private void OnNewGeospatialLocationCalledByUser(
+            object owner)
         {
             var handler = NewGeospatialLocationCalledByUser;
 
             // Event will be null if there are no subscribers
             if (handler != null)
             {
-                handler(this, EventArgs.Empty);
+                handler(this, new CommandInvokedEventArgs(owner) );
             }
         }
     }
