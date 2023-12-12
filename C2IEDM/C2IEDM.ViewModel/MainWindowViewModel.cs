@@ -224,7 +224,8 @@ public class MainWindowViewModel : ViewModelBase
             Object = null
         };
 
-        DisplayLog = false;
+        //DisplayLog = false;
+        DisplayLog = true; // Set to true when diagnosing application behaviour
 
         _historicalTimeOfInterest.PropertyChanged += (s, e) =>
         {
@@ -327,6 +328,7 @@ public class MainWindowViewModel : ViewModelBase
 
         if (_autoRefresh.Object)
         {
+            _logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (1)");
             ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
         }
 
@@ -420,6 +422,7 @@ public class MainWindowViewModel : ViewModelBase
         _databaseWriteTimes.Clear();
         RefreshDatabaseTimeSeriesView();
 
+        _logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (2)");
         ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
 
         var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was cleared", false);
@@ -465,6 +468,7 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilityListViewModel.ObservingFacilityDataExtracts.PropertyChanged += (s, e) =>
         {
+            _logger?.WriteLine(LogMessageCategory.Information, "Updating Map points");
             UpdateMapPoints();
         };
     }
@@ -786,6 +790,7 @@ public class MainWindowViewModel : ViewModelBase
 
         if (_autoRefresh.Object)
         {
+            _logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (3)");
             ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
         }
     }
