@@ -96,5 +96,47 @@
                 Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
             </Line>
         </Canvas>
+
+        <Button Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" IsEnabled="True"
+                Command="{Binding PanLeftCommand}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border Background="LightGray" BorderBrush="DimGray" BorderThickness="1" >
+                            <Path Fill="DimGray" Stretch="Uniform" Margin="0, 3, 3, 3" Data="M 0 0.5 L 0.5 0 L 0.5 1 Z"/>
+                        </Border>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+            <Button.Visibility>
+                <Binding Path="ShowPanningButtons" Converter="{StaticResource BooleanToVisibilityConverter}">
+                    <Binding.ConverterParameter>
+                        <system:Boolean>True</system:Boolean>
+                    </Binding.ConverterParameter>
+                </Binding>
+            </Button.Visibility>
+        </Button>
+
+        <Button Width="30" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5"
+                Command="{Binding PanRightCommand}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border Background="LightGray" BorderBrush="DimGray" BorderThickness="1" >
+                            <Path Fill="DimGray" Stretch="Uniform" Margin="3, 3, 0, 3" Data="M 1 0.5 L 0.5 0 L 0.5 1 Z"/>
+                        </Border>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+            <Button.Visibility>
+                <Binding Path="ShowPanningButtons" Converter="{StaticResource BooleanToVisibilityConverter}">
+                    <Binding.ConverterParameter>
+                        <system:Boolean>True</system:Boolean>
+                    </Binding.ConverterParameter>
+                </Binding>
+            </Button.Visibility>
+        </Button>
     </Grid>
 </UserControl>

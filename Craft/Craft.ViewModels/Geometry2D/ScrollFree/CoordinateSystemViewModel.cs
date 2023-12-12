@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Globalization;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
-using System.Collections.ObjectModel;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
@@ -25,10 +26,13 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private double _dynamicXValueViewPortWhenLocked;
         private bool _showDynamicXValue;
         private bool _lockWorldWindowOnDynamicXValue;
+        private bool _showPanningButtons;
         protected double _worldWindowExpansionFactor;
         protected Point _expandedWorldWindowUpperLeft;
         protected Size _expandedWorldWindowSize;
-        
+        private RelayCommand _panLeftCommand;
+        private RelayCommand _panRightCommand;
+
         public double Fraction { get; set; }
 
         public double? StaticXValue
@@ -184,6 +188,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public bool ShowPanningButtons
+        {
+            get => _showPanningButtons;
+            set
+            {
+                _showPanningButtons = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool ShowHorizontalAxis
         {
             get { return _showHorizontalAxis; }
@@ -248,9 +262,28 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public event EventHandler PanLeftClicked;
+        public event EventHandler PanRightClicked;
+
         public ObservableCollection<CoordinateViewModel> CoordinateViewModels { get; }
 
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
+
+        public RelayCommand PanLeftCommand
+        {
+            get
+            {
+                return _panLeftCommand ?? (_panLeftCommand = new RelayCommand(OnPanLeftClicked));
+            }
+        }
+
+        public RelayCommand PanRightCommand
+        {
+            get
+            {
+                return _panRightCommand ?? (_panRightCommand = new RelayCommand(OnPanRightClicked));
+            }
+        }
 
         public CoordinateSystemViewModel(
             Point worldWindowFocus,
@@ -474,6 +507,30 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 GeometryEditorViewModel.WorldWindowUpperLeft.Y > _expandedWorldWindowUpperLeft.Y &&
                 GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width < _expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width &&
                 GeometryEditorViewModel.WorldWindowUpperLeft.Y + GeometryEditorViewModel.WorldWindowSize.Height < _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height;
+        }
+
+        private void OnPanLeftClicked()
+        {
+            var handler = PanLeftClicked;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+
+            GeometryEditorViewModel.OnWorldWindowMajorUpdateOccured();
+        }
+
+        private void OnPanRightClicked()
+        {
+            var handler = PanRightClicked;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+
+            GeometryEditorViewModel.OnWorldWindowMajorUpdateOccured();
         }
     }
 }

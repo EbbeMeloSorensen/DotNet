@@ -715,7 +715,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 ShowVerticalGridLines = false,
                 ShowHorizontalGridLines = false,
                 ShowVerticalAxis = false,
-                Fraction = 0.9
+                Fraction = 0.9,
+                ShowPanningButtons = true
             };
 
             TimeSeriesViewModel2.GeometryEditorViewModel.YAxisLocked = true;
@@ -762,6 +763,20 @@ namespace Craft.UIElements.GuiTest.Tab3
                 // Sæt den til current time
                 var nowAsScalar = (DateTime.UtcNow - TimeSeriesViewModel2.TimeAtOrigo).TotalDays;
                 TimeSeriesViewModel2.DynamicXValue = nowAsScalar;
+            };
+
+            TimeSeriesViewModel2.PanLeftClicked += (s, e) =>
+            {
+                TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                    TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.X - TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowSize.Width,
+                    TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+            };
+
+            TimeSeriesViewModel2.PanRightClicked += (s, e) =>
+            {
+                TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                    TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.X + TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowSize.Width,
+                    TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
             };
         }
     }
