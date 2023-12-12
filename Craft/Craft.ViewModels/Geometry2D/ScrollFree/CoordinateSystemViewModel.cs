@@ -265,8 +265,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public event EventHandler PanLeftClicked;
         public event EventHandler PanRightClicked;
 
-        public ObservableCollection<CoordinateViewModel> CoordinateViewModels { get; }
-
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
 
         public RelayCommand PanLeftCommand
@@ -299,10 +297,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _showVerticalGridLines = true;
             _worldWindowExpansionFactor = worldWindowExpansionFactor;
             Fraction = 0.5;
-
-            CoordinateViewModels = new ObservableCollection<CoordinateViewModel>();
-            CoordinateViewModels.Add(new CoordinateViewModel { Coordinate = 0 });
-            //CoordinateViewModels.Add(new CoordinateViewModel { Coordinate = 1 });
 
             GeometryEditorViewModel = 
                 new GeometryEditorViewModel(-1)

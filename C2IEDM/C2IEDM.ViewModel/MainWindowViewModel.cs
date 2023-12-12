@@ -224,8 +224,8 @@ public class MainWindowViewModel : ViewModelBase
             Object = null
         };
 
-        //DisplayLog = false;
-        DisplayLog = true; // Set to true when diagnosing application behaviour
+        DisplayLog = false;
+        //DisplayLog = true; // Set to true when diagnosing application behaviour
 
         _historicalTimeOfInterest.PropertyChanged += (s, e) =>
         {
@@ -611,15 +611,14 @@ public class MainWindowViewModel : ViewModelBase
             timeAtOrigo,
             _logger)
         {
-            //LockWorldWindowOnDynamicXValue = true,
-            LockWorldWindowOnDynamicXValue = false,
+            LockWorldWindowOnDynamicXValue = true,
             ShowHorizontalGridLines = false,
             ShowVerticalGridLines = false,
             ShowHorizontalAxis = true,
             ShowVerticalAxis = false,
-            ShowXAxisLabels = true, // Why is this so heavy the first time?
-            //ShowXAxisLabels = false,
+            ShowXAxisLabels = true,
             ShowYAxisLabels = false,
+            ShowPanningButtons = true,
             Fraction = 0.9
         };
 
@@ -663,6 +662,17 @@ public class MainWindowViewModel : ViewModelBase
             {
                 _historicalTimeOfInterest.Object = _databaseTimeOfInterest.Object.Value;
             }
+        };
+
+        DatabaseWriteTimesViewModel.PanLeftClicked += (s, e) =>
+        {
+            DatabaseWriteTimesViewModel.LockWorldWindowOnDynamicXValue = false;
+            var timeStampInFocus = new DateTime(2023, 12, 11, 19, 3, 0, DateTimeKind.Utc);
+            var xValueInFocus = (timeStampInFocus - DatabaseWriteTimesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+
+            DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus = new Point(
+                xValueInFocus,
+                DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.Y);
         };
     }
 
