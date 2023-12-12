@@ -135,7 +135,6 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     public ObservingFacilitiesDetailsViewModel(
         IUnitOfWorkFactory unitOfWorkFactory,
         IDialogService applicationDialogService,
-        ObservableObject<DateTime?> historicalTimeOfInterest,
         ObservableObject<DateTime?> databaseTimeOfInterest,
         ObjectCollection<ObservingFacility> observingFacilities)
     {
@@ -147,7 +146,6 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         GeospatialLocationsViewModel = new GeospatialLocationsViewModel(
             unitOfWorkFactory,
             applicationDialogService,
-            historicalTimeOfInterest,
             databaseTimeOfInterest,
             observingFacilities);
     }

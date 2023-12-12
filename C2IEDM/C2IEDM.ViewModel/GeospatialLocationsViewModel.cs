@@ -20,7 +20,6 @@ namespace C2IEDM.ViewModel
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
-        private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
         private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
 
         private ObjectCollection<ObservingFacility> _observingFacilities;
@@ -76,14 +75,12 @@ namespace C2IEDM.ViewModel
         public GeospatialLocationsViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
-            ObservableObject<DateTime?> historicalTimeOfInterest,
             ObservableObject<DateTime?> databaseTimeOfInterest,
             ObjectCollection<ObservingFacility> observingFacilities)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _observingFacilities = observingFacilities;
-            _historicalTimeOfInterest = historicalTimeOfInterest;
             _databaseTimeOfInterest = databaseTimeOfInterest;
 
             SelectedGeospatialLocations = new ObjectCollection<GeospatialLocation>

@@ -480,7 +480,6 @@ public class MainWindowViewModel : ViewModelBase
         ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
             unitOfWorkFactory,
             applicationDialogService,
-            _historicalTimeOfInterest,
             _databaseTimeOfInterest,
             ObservingFacilityListViewModel.SelectedObservingFacilities);
 
