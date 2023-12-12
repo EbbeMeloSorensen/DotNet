@@ -2,6 +2,7 @@
 using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 using C2IEDM.Persistence.Repositories.WIGOS;
 using Craft.Persistence.EntityFrameworkCore;
+using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 
 namespace C2IEDM.Persistence.EntityFrameworkCore.Repositories.WIGOS.GeospatialLocations;
 
@@ -21,17 +22,23 @@ public class GeospatialLocationRepository : Repository<GeospatialLocation>, IGeo
         context.SaveChanges();
     }
 
-    public GeospatialLocation Get(Guid id)
+    public GeospatialLocation Get(
+        Guid id)
     {
         return DbContext.GeospatialLocations.SingleOrDefault(_ => _.Id == id) ?? throw new InvalidOperationException();
     }
 
-    public override void Update(GeospatialLocation entity)
+    public override void Update(
+        GeospatialLocation geospatialLocation)
     {
-        throw new NotImplementedException();
+        var geospatialLocationFromRepository = Get(geospatialLocation.Id);
+
+        // I praksis er det kun superseded, vi har lov til at ændre, men sørg lige for at metoden virker generelt
+        geospatialLocationFromRepository.Superseded = geospatialLocation.Superseded;
     }
 
-    public override void UpdateRange(IEnumerable<GeospatialLocation> entities)
+    public override void UpdateRange(
+        IEnumerable<GeospatialLocation> entities)
     {
         throw new NotImplementedException();
     }

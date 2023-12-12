@@ -159,7 +159,7 @@ namespace C2IEDM.ViewModel
             dialogViewModel.Latitude = point.Coordinate1;
             dialogViewModel.Longitude = point.Coordinate2;
             dialogViewModel.From = point.From;
-            dialogViewModel.To = point.To;
+            dialogViewModel.To = point.To == DateTime.MaxValue ? null : point.To;
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
@@ -199,16 +199,19 @@ namespace C2IEDM.ViewModel
 
                 unitOfWork.GeospatialLocations.Update(geospatialLocation);
 
-                var newGeospatialLocation = new Point(Guid.NewGuid(), now)
+                var newPoint = new Point(Guid.NewGuid(), now)
                 {
+                    AbstractEnvironmentalMonitoringFacilityId = _selectedObservingFacility.Id,
+                    AbstractEnvironmentalMonitoringFacilityObjectId = _selectedObservingFacility.ObjectId,
                     From = from,
                     To = to,
                     Coordinate1 = latitude,
                     Coordinate2 = longitude,
-                    CoordinateSystem = "WGS_84"
+                    CoordinateSystem = "WGS_84",
+
                 };
 
-                unitOfWork.GeospatialLocations.Add(newGeospatialLocation);
+                unitOfWork.GeospatialLocations.Add(newPoint);
                 unitOfWork.Complete();
             }
 

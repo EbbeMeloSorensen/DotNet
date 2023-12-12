@@ -241,6 +241,8 @@ public class MainWindowViewModel : ViewModelBase
 
         _databaseTimeOfInterest.PropertyChanged += (s, e) =>
         {
+            // Todo: Sikr, at historical time of interest ikke er større end database time of interest
+
             UpdateMapColoring();
             RefreshDatabaseTimeSeriesView();
             UpdateControlBackground();
@@ -295,10 +297,17 @@ public class MainWindowViewModel : ViewModelBase
             {
                 using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
                 {
-                    var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
-                    var timeStampsOfInterest = observingFacilities.Select(_ => _.Created).ToList();
-                    timeStampsOfInterest.AddRange(observingFacilities.Select(_ => _.Superseded));
-                    _databaseWriteTimes = timeStampsOfInterest.Distinct().ToList();
+                    _databaseWriteTimes = new List<DateTime>();
+
+                    var observingFacilities = unitOfWork.ObservingFacilities.GetAll().ToList();
+                    var timeStampsForObservingFacilities = observingFacilities.Select(_ => _.Created).ToList();
+                    timeStampsForObservingFacilities.AddRange(observingFacilities.Select(_ => _.Superseded));
+                    _databaseWriteTimes.AddRange(timeStampsForObservingFacilities.Distinct());
+
+                    var geospatialLocations = unitOfWork.GeospatialLocations.GetAll().ToList();
+                    var timeStampsForGeospatialLocations = geospatialLocations.Select(_ => _.Created).ToList();
+                    timeStampsForGeospatialLocations.AddRange(geospatialLocations.Select(_ => _.Superseded));
+                    _databaseWriteTimes.AddRange(timeStampsForGeospatialLocations.Distinct());
                 }
             }
             catch (InvalidOperationException ex)
@@ -729,6 +738,22 @@ public class MainWindowViewModel : ViewModelBase
                 if (_ is not Domain.Entities.WIGOS.GeospatialLocations.Point point)
                 {
                     return;
+                }
+
+                if (_historicalTimeOfInterest.Object.HasValue)
+                {
+                    if (_historicalTimeOfInterest.Object.Value < _.From ||
+                        _historicalTimeOfInterest.Object.Value >= _.To)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    if (_.To < DateTime.MaxValue)
+                    {
+                        return;
+                    }
                 }
 
                 MapViewModel.PointViewModels.Add(new PointViewModel(

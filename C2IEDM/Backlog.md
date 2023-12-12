@@ -13,10 +13,11 @@ Done
 * Details view skal vises pænere - i højre side i portræt format lige som i sms
 * selection control som for person list view i PR
 * Når man vælger en observing facility, skal den vise hele dens collection af steder, hvor den har stået
-
-In progress:
 * Lav et event, som ObservingFacilitiesDetailsViewModel kan bruge til at signalere til main view model, at brugeren har
   klikket på New, så main kan tage sig af det (ved at bede brugeren om at klikke i map viewet)
+
+In progress:
+* For en station skal skal kun vise den position, der passer med time of interest
 * Det skal fremgå tydeligt af detaljeviewet, om man har valgt én eller flere observing facilities
 * Hvis man vælger FLERE observing facilities, skal den IKKE vise sektionen med geospatial locations
 * Man skal kunne tilføje en ekstra lokation for en eksisterende tidsserie

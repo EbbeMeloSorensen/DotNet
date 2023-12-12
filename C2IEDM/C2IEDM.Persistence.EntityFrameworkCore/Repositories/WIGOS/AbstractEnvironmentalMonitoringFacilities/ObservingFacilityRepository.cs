@@ -86,9 +86,15 @@ public class ObservingFacilityRepository : Repository<ObservingFacility>, IObser
         return result;
     }
 
-    public override void Update(ObservingFacility entity)
+    public override void Update(
+        ObservingFacility observingFacility)
     {
-        throw new NotImplementedException();
+        // Todo: Test this
+        var observingFacilityFromRepository = Get(observingFacility.Id);
+
+        observingFacilityFromRepository.Name = observingFacility.Name;
+        observingFacilityFromRepository.DateEstablished = observingFacility.DateEstablished;
+        observingFacilityFromRepository.DateClosed= observingFacility.DateClosed;
     }
 
     public override void UpdateRange(
