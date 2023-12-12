@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -12,7 +13,6 @@ using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 using C2IEDM.Persistence;
 using Point = C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point;
-using System.Linq.Expressions;
 
 namespace C2IEDM.ViewModel
 {
@@ -122,10 +122,10 @@ namespace C2IEDM.ViewModel
         {
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>();
-
-                // Todo: Add proper predicates
-                geospatialLocationPredicates.Add(_ => _.Superseded == DateTime.MaxValue);
+                var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>
+                {
+                    Application.Helpers.GeospatialLocationFilterAsExpression(_databaseTimeOfInterest.Object)
+                };
 
                 var observingFacility =
                     unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(

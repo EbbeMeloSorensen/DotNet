@@ -17,6 +17,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
 {
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
+    private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
+    private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
     private ObservableCollection<ObservingFacilityListItemViewModel> _observingFacilityListItemViewModels;
     private Sorting _sorting;
     private bool _displayFindButton;
@@ -82,6 +84,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         _unitOfWorkFactory = unitOfWorkFactory;
         _applicationDialogService = applicationDialogService;
+        _historicalTimeOfInterest = historicalTimeOfInterest;
+        _databaseTimeOfInterest = databaseTimeOfInterest;
         _sorting = Sorting.Name;
 
         ObservingFacilityFilterViewModel = new ObservingFacilityFilterViewModel(
@@ -195,8 +199,12 @@ public class ObservingFacilityListViewModel : ViewModelBase
         {
             var observingFacilityDictionary = unitOfWork.ObservingFacilities
                 .FindIncludingGeospatialLocations(
-                    ObservingFacilityFilterViewModel.ObservationFacilityFilterAsExpression(),
-                    ObservingFacilityFilterViewModel.GeospatialLocationFilterAsExpression());
+                    Application.Helpers.ObservationFacilityFilterAsExpression(
+                        _historicalTimeOfInterest.Object,
+                        _databaseTimeOfInterest.Object,
+                        ObservingFacilityFilterViewModel.NameFilter.ToUpper()),
+                    Application.Helpers.GeospatialLocationFilterAsExpression(
+                        _databaseTimeOfInterest.Object));
 
             ObservingFacilityDataExtracts.Objects = observingFacilityDictionary
                 .Select(_ =>
@@ -218,7 +226,10 @@ public class ObservingFacilityListViewModel : ViewModelBase
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
             return unitOfWork.ObservingFacilities.Count(
-                ObservingFacilityFilterViewModel.ObservationFacilityFilterAsExpression());
+                Application.Helpers.ObservationFacilityFilterAsExpression(
+                    _historicalTimeOfInterest.Object,
+                    _databaseTimeOfInterest.Object,
+                    ObservingFacilityFilterViewModel.NameFilter.ToUpper()));
         }
     }
 
