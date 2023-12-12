@@ -303,11 +303,13 @@ public class MainWindowViewModel : ViewModelBase
                     var observingFacilities = unitOfWork.ObservingFacilities.GetAll().ToList();
                     var timeStampsForObservingFacilities = observingFacilities.Select(_ => _.Created).ToList();
                     timeStampsForObservingFacilities.AddRange(observingFacilities.Select(_ => _.Superseded));
+                    timeStampsForObservingFacilities = timeStampsForObservingFacilities.Where(_ => _ < DateTime.MaxValue).ToList();
                     _databaseWriteTimes.AddRange(timeStampsForObservingFacilities.Distinct());
 
                     var geospatialLocations = unitOfWork.GeospatialLocations.GetAll().ToList();
                     var timeStampsForGeospatialLocations = geospatialLocations.Select(_ => _.Created).ToList();
                     timeStampsForGeospatialLocations.AddRange(geospatialLocations.Select(_ => _.Superseded));
+                    timeStampsForGeospatialLocations = timeStampsForGeospatialLocations.Where(_ => _ < DateTime.MaxValue).ToList();
                     _databaseWriteTimes.AddRange(timeStampsForGeospatialLocations.Distinct());
                 }
             }
@@ -667,8 +669,44 @@ public class MainWindowViewModel : ViewModelBase
         DatabaseWriteTimesViewModel.PanLeftClicked += (s, e) =>
         {
             DatabaseWriteTimesViewModel.LockWorldWindowOnDynamicXValue = false;
-            var timeStampInFocus = new DateTime(2023, 12, 11, 19, 3, 0, DateTimeKind.Utc);
-            var xValueInFocus = (timeStampInFocus - DatabaseWriteTimesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+
+            // Identify the database write time that is to the left of the current focus
+
+            var currentTimeInFocus = DatabaseWriteTimesViewModel.TimeAtOrigo +
+                TimeSpan.FromDays(DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.X);
+
+            var earlierDatabaseWriteTimes = _databaseWriteTimes.Where(_ => _ < currentTimeInFocus);
+
+            if (!earlierDatabaseWriteTimes.Any())
+            {
+                return;
+            }
+
+            var newTimeInFocus = earlierDatabaseWriteTimes.Max();
+            var xValueInFocus = (newTimeInFocus - DatabaseWriteTimesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+
+            DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus = new Point(
+                xValueInFocus,
+                DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.Y);
+        };
+
+        DatabaseWriteTimesViewModel.PanRightClicked += (s, e) =>
+        {
+            // Identify the database write time that is to the right of the current focus
+
+            var currentTimeInFocus = DatabaseWriteTimesViewModel.TimeAtOrigo +
+                                     TimeSpan.FromDays(DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.X);
+
+            var laterDatabaseWriteTimes = _databaseWriteTimes.Where(_ => _ > currentTimeInFocus);
+
+            if (!laterDatabaseWriteTimes.Any())
+            {
+                DatabaseWriteTimesViewModel.LockWorldWindowOnDynamicXValue = true;
+                return;
+            }
+
+            var newTimeInFocus = laterDatabaseWriteTimes.Min();
+            var xValueInFocus = (newTimeInFocus - DatabaseWriteTimesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
 
             DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus = new Point(
                 xValueInFocus,
