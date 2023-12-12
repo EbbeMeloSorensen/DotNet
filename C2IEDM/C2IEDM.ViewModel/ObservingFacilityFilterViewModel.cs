@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using GalaSoft.MvvmLight;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 using Craft.Utils;
 using GalaSoft.MvvmLight.Command;
 
@@ -165,7 +166,7 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         UpdateRetrospectionControlGroup();
     }
 
-    public Expression<Func<ObservingFacility, bool>> FilterAsExpression()
+    public Expression<Func<ObservingFacility, bool>> ObservationFacilityFilterAsExpression()
     {
         if (_historicalTimeOfInterest.Object.HasValue &&
             _databaseTimeOfInterest.Object.HasValue)
@@ -200,6 +201,19 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
             _.Superseded == DateTime.MaxValue &&                // Kun rækker, der er gældende
             _.DateClosed == DateTime.MaxValue &&                // Kun rækker, hvis virkningstidsinterval skærer historical time of interest, dvs stationer, der er aktive i dag
             _.Name.ToUpper().Contains(_nameFilterInUppercase);
+    }
+
+    public Expression<Func<GeospatialLocation, bool>> GeospatialLocationFilterAsExpression()
+    {
+        if (_databaseTimeOfInterest.Object.HasValue)
+        {
+            return _ =>
+                _.Created <= _databaseTimeOfInterest.Object.Value && // Kun rækker skrevet før pågældende tidspunkt
+                _.Superseded > _databaseTimeOfInterest.Object.Value; // Kun rækker, der er "gældende" (eller var gældende på pågældende tidspunkt)
+        }
+
+        return _ =>
+            _.Superseded == DateTime.MaxValue; // Kun rækker, der er gældende
     }
 
     private void UpdateFilterControls()

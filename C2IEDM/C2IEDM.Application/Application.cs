@@ -118,10 +118,15 @@ public class Application
 
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var predicates = new List<Expression<Func<ObservingFacility, bool>>>();
+                // Todo: Kommuniker nogle passende predicates ned
+                var observingFacilityPredicates = new List<Expression<Func<ObservingFacility, bool>>>();
+                var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>();
 
                 observingFacilityDictionary = 
-                    unitOfWork.ObservingFacilities.FindIncludingGeospatialLocations(predicates).ToList();
+                    unitOfWork.ObservingFacilities.FindIncludingGeospatialLocations(
+                        observingFacilityPredicates,
+                        geospatialLocationPredicates)
+                        .ToList();
             }
 
             progressCallback?.Invoke(100, "");

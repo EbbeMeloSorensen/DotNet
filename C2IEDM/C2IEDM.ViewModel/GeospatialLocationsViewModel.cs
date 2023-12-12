@@ -12,7 +12,7 @@ using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 using C2IEDM.Persistence;
 using Point = C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point;
-using C2IEDM.Domain.Entities.Geometry.CoordinateSystems;
+using System.Linq.Expressions;
 
 namespace C2IEDM.ViewModel
 {
@@ -20,6 +20,8 @@ namespace C2IEDM.ViewModel
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
+        private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
+        private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
 
         private ObjectCollection<ObservingFacility> _observingFacilities;
         private ObservingFacility _selectedObservingFacility;
@@ -74,11 +76,15 @@ namespace C2IEDM.ViewModel
         public GeospatialLocationsViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
+            ObservableObject<DateTime?> historicalTimeOfInterest,
+            ObservableObject<DateTime?> databaseTimeOfInterest,
             ObjectCollection<ObservingFacility> observingFacilities)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _observingFacilities = observingFacilities;
+            _historicalTimeOfInterest = historicalTimeOfInterest;
+            _databaseTimeOfInterest = databaseTimeOfInterest;
 
             SelectedGeospatialLocations = new ObjectCollection<GeospatialLocation>
             {
@@ -119,8 +125,15 @@ namespace C2IEDM.ViewModel
         {
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
+                var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>();
+
+                // Todo: Add proper predicates
+                geospatialLocationPredicates.Add(_ => _.Superseded == DateTime.MaxValue);
+
                 var observingFacility =
-                    unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(_selectedObservingFacility.Id);
+                    unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(
+                        _selectedObservingFacility.Id,
+                        geospatialLocationPredicates);
 
                 GeospatialLocationListItemViewModels = new ObservableCollection<GeospatialLocationListItemViewModel>(
                     observingFacility.Item2.Select(_ => new GeospatialLocationListItemViewModel{ GeospatialLocation = _}));

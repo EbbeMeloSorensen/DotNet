@@ -11,11 +11,14 @@ public interface IObservingFacilityRepository : IRepository<ObservingFacility>
         Guid id);
 
     Tuple<ObservingFacility, List<GeospatialLocation>> GetIncludingGeospatialLocations(
-        Guid id);
+        Guid id,
+        IList<Expression<Func<GeospatialLocation, bool>>> geospatialLocationPredicates);
 
     Dictionary<ObservingFacility, List<GeospatialLocation>> FindIncludingGeospatialLocations(
-        Expression<Func<ObservingFacility, bool>> predicate);
+        Expression<Func<ObservingFacility, bool>> observingFacilityPredicate,
+        Expression<Func<GeospatialLocation, bool>> geospatialLocationPredicate);
 
     Dictionary<ObservingFacility, List<GeospatialLocation>> FindIncludingGeospatialLocations(
-        IList<Expression<Func<ObservingFacility, bool>>> predicates);
+        IList<Expression<Func<ObservingFacility, bool>>> observingFacilityPredicates,
+        IList<Expression<Func<GeospatialLocation, bool>>> geospatialLocationPredicates);
 }

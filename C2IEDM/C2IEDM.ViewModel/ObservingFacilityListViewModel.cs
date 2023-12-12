@@ -194,7 +194,9 @@ public class ObservingFacilityListViewModel : ViewModelBase
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
             var observingFacilityDictionary = unitOfWork.ObservingFacilities
-                .FindIncludingGeospatialLocations(ObservingFacilityFilterViewModel.FilterAsExpression());
+                .FindIncludingGeospatialLocations(
+                    ObservingFacilityFilterViewModel.ObservationFacilityFilterAsExpression(),
+                    ObservingFacilityFilterViewModel.GeospatialLocationFilterAsExpression());
 
             ObservingFacilityDataExtracts.Objects = observingFacilityDictionary
                 .Select(_ =>
@@ -215,7 +217,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
     {
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
-            return unitOfWork.ObservingFacilities.Count(ObservingFacilityFilterViewModel.FilterAsExpression());
+            return unitOfWork.ObservingFacilities.Count(
+                ObservingFacilityFilterViewModel.ObservationFacilityFilterAsExpression());
         }
     }
 

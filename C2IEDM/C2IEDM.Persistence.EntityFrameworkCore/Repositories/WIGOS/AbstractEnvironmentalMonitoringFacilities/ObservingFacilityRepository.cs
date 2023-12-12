@@ -28,47 +28,66 @@ public class ObservingFacilityRepository : Repository<ObservingFacility>, IObser
     }
 
     public Tuple<ObservingFacility, List<GeospatialLocation>> GetIncludingGeospatialLocations(
-        Guid id)
+        Guid id,
+        IList<Expression<Func<GeospatialLocation, bool>>> geospatialLocationPredicates)
     {
         var observingFacility = Get(id);
 
+        geospatialLocationPredicates.Add(_ => _.AbstractEnvironmentalMonitoringFacilityObjectId == observingFacility.ObjectId);
+
+        var geospatialLocationPredicate = geospatialLocationPredicates
+            .Aggregate((c, n) => c.And(n));
+
         var geospatialLocations = DbContext.GeospatialLocations
-            .Where(_ =>
-                _.Superseded == DateTime.MaxValue &&
-                _.AbstractEnvironmentalMonitoringFacilityObjectId == observingFacility.ObjectId)
+            .Where(geospatialLocationPredicate)
             .ToList();
 
         return new Tuple<ObservingFacility, List<GeospatialLocation>>(observingFacility, geospatialLocations);
     }
 
     public Dictionary<ObservingFacility, List<GeospatialLocation>> FindIncludingGeospatialLocations(
-        Expression<Func<ObservingFacility, bool>> predicate)
+        Expression<Func<ObservingFacility, bool>> observingFacilityPredicate,
+        Expression<Func<GeospatialLocation, bool>> geospatialLocationPredicate)
     {
-        var predicates = new List<Expression<Func<ObservingFacility, bool>>>
+        var observingFacilityPredicates = new List<Expression<Func<ObservingFacility, bool>>>
         {
-            predicate
+            observingFacilityPredicate
         };
 
-        return FindIncludingGeospatialLocations(predicates);
+        var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>
+        {
+            geospatialLocationPredicate
+        };
+
+        return FindIncludingGeospatialLocations(
+            observingFacilityPredicates,
+            geospatialLocationPredicates);
     }
 
     public Dictionary<ObservingFacility, List<GeospatialLocation>> FindIncludingGeospatialLocations(
-        IList<Expression<Func<ObservingFacility, bool>>> predicates)
+        IList<Expression<Func<ObservingFacility, bool>>> observingFacilityPredicates,
+        IList<Expression<Func<GeospatialLocation, bool>>> geospatialLocationPredicates)
     {
-        var predicate = predicates.Aggregate((c, n) => c.And(n));
-
-        var observingFacilities = DbContext.ObservingFacilities
-            .Where(predicate)
-            .ToList();
+        var observingFacilities = observingFacilityPredicates.Any()
+            ? DbContext.ObservingFacilities
+                .Where(observingFacilityPredicates.Aggregate((c, n) => c.And(n)))
+                .ToList()
+            : DbContext.ObservingFacilities
+                .ToList();
 
         var observingFacilityObjectIds = observingFacilities
             .Select(_ => _.ObjectId)
             .ToList();
 
+        geospatialLocationPredicates.Add(_ =>
+            observingFacilityObjectIds.Contains(_.AbstractEnvironmentalMonitoringFacilityObjectId));
+
+        //var databaseTimeOfInterest = new DateTime(2023, 12, 11, 19, 3, 0, DateTimeKind.Utc);
+
+        var geospatialLocationPredicate = geospatialLocationPredicates.Aggregate((c, n) => c.And(n));
+
         var geospatialLocations = DbContext.GeospatialLocations
-            .Where(_ => 
-                _.Superseded == DateTime.MaxValue && 
-                observingFacilityObjectIds.Contains(_.AbstractEnvironmentalMonitoringFacilityObjectId))
+            .Where(geospatialLocationPredicate)
             .ToList();
 
         var geospatialLocationGroups = geospatialLocations.
