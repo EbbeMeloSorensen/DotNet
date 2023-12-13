@@ -165,9 +165,26 @@ namespace C2IEDM.ViewModel
                 return;
             }
 
+            var objectIds = SelectedGeospatialLocations.Objects
+                .Select(_ => _.ObjectId)
+                .ToList();
 
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var geospatialLocationsForDeletion = unitOfWork.GeospatialLocations
+                    .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId))
+                    .ToList();
 
-            throw new NotImplementedException();
+                var now = DateTime.UtcNow;
+
+                geospatialLocationsForDeletion.ForEach(_ => _.Superseded = now);
+
+                unitOfWork.GeospatialLocations.UpdateRange(geospatialLocationsForDeletion);
+                unitOfWork.Complete();
+            }
+
+            // Todo: I stedet for bare at opdatere detalje viewet så sørg for at notificere main view model, så man også opdatere master liste og map view
+            Populate();
         }
 
         private bool CanDeleteSelectedGeospatialLocations(

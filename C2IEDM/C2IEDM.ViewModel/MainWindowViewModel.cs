@@ -385,12 +385,13 @@ public class MainWindowViewModel : ViewModelBase
             return;
         }
 
+        var objectIds = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects
+            .Select(_ => _.ObjectId)
+            .ToList();
+
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
             // Todo: Remember to also delete orphaned children
-
-            var objectIds = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects
-                .Select(_ => _.ObjectId).ToList();
 
             var observingFacilitiesForDeletion = unitOfWork.ObservingFacilities
                 .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId))

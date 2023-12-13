@@ -38,8 +38,18 @@ public class GeospatialLocationRepository : Repository<GeospatialLocation>, IGeo
     }
 
     public override void UpdateRange(
-        IEnumerable<GeospatialLocation> entities)
+        IEnumerable<GeospatialLocation> geospatialLocations)
     {
-        throw new NotImplementedException();
+        var updatedGeospatialLocations = geospatialLocations.ToList();
+        var ids = updatedGeospatialLocations.Select(p => p.Id);
+        var geospatialLocationsFromRepository = Find(p => ids.Contains(p.Id)).ToList();
+
+        geospatialLocationsFromRepository.ForEach(glRepo =>
+        {
+            var updatedGeospatialLocation = updatedGeospatialLocations.Single(glUpd => glUpd.Id == glRepo.Id);
+
+            // I praksis ændrer vi kun den her
+            glRepo.Superseded = updatedGeospatialLocation.Superseded;
+        });
     }
 }
