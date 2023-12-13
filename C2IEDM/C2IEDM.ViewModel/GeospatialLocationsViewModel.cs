@@ -25,11 +25,9 @@ namespace C2IEDM.ViewModel
         private ObjectCollection<ObservingFacility> _observingFacilities;
         private ObservingFacility _selectedObservingFacility;
         private ObservableCollection<GeospatialLocationListItemViewModel> _geospatialLocationListItemViewModels;
-        private RelayCommand _deleteSelectedGeospatialLocationsCommand;
+        private RelayCommand<object> _deleteSelectedGeospatialLocationsCommand;
         private RelayCommand<object> _createGeospatialLocationCommand;
         private RelayCommand<object> _updateSelectedGeospatialLocationCommand;
-
-        public event EventHandler<CommandInvokedEventArgs> NewGeospatialLocationCalledByUser;
 
         public ObjectCollection<GeospatialLocation> SelectedGeospatialLocations { get; private set; }
 
@@ -45,12 +43,12 @@ namespace C2IEDM.ViewModel
 
         public ObservableCollection<GeospatialLocationListItemViewModel> SelectedGeospatialLocationListItemViewModels { get; set; }
 
-        public RelayCommand DeleteSelectedGeospatialLocationsCommand
+        public RelayCommand<object> DeleteSelectedGeospatialLocationsCommand
         {
             get
             {
                 return _deleteSelectedGeospatialLocationsCommand ?? (
-                    _deleteSelectedGeospatialLocationsCommand = new RelayCommand(DeleteSelectedGeospatialLocations, CanDeleteSelectedGeospatialLocations));
+                    _deleteSelectedGeospatialLocationsCommand = new RelayCommand<object>(DeleteSelectedGeospatialLocations, CanDeleteSelectedGeospatialLocations));
             }
         }
 
@@ -71,6 +69,8 @@ namespace C2IEDM.ViewModel
                     _updateSelectedGeospatialLocationCommand = new RelayCommand<object>(UpdateSelectedGeospatialLocation, CanUpdateSelectedGeospatialLocation));
             }
         }
+
+        public event EventHandler<CommandInvokedEventArgs> NewGeospatialLocationCalledByUser;
 
         public GeospatialLocationsViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -149,15 +149,33 @@ namespace C2IEDM.ViewModel
             return true;
         }
 
-        private void DeleteSelectedGeospatialLocations()
+        private void DeleteSelectedGeospatialLocations(
+            object owner)
         {
+            var nSelectedGeospatialLocations = SelectedGeospatialLocations.Objects.Count();
+
+            var message = nSelectedGeospatialLocations == 1
+                ? "Delete location?"
+                : $"Delete {nSelectedGeospatialLocations} locations?";
+
+            var dialogViewModel = new MessageBoxDialogViewModel(message, true);
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
+            {
+                return;
+            }
+
+
+
             throw new NotImplementedException();
         }
 
-        private bool CanDeleteSelectedGeospatialLocations()
+        private bool CanDeleteSelectedGeospatialLocations(
+            object owber)
         {
             return SelectedGeospatialLocations.Objects != null &&
-                   SelectedGeospatialLocations.Objects.Any();
+                   SelectedGeospatialLocations.Objects.Any() &&
+                   _geospatialLocationListItemViewModels.Count != 1;
         }
 
         private void UpdateSelectedGeospatialLocation(
@@ -225,6 +243,7 @@ namespace C2IEDM.ViewModel
                 unitOfWork.Complete();
             }
 
+            // Todo: I stedet for bare at opdatere detalje viewet så sørg for at notificere main view model, så man også opdatere master liste og map view
             Populate();
         }
 

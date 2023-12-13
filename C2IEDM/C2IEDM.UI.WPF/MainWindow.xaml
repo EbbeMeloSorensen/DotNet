@@ -35,7 +35,7 @@
                 <MenuItem Header="_Exit"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Clear database" 
+                <MenuItem Header="Clear repository" 
                           Command="{Binding ClearRepositoryCommand}"
                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             </MenuItem>

@@ -56,12 +56,12 @@
                 <TextBox Margin="3" Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding SharedName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Margin="3" Grid.Row="3" Grid.Column="0" Text="Date Established:"/>
-                <DatePicker Margin="3" Grid.Row="3" Grid.Column="1"
+                <DatePicker Margin="3" Grid.Row="3" Grid.Column="1" IsEnabled="False"
                         DisplayDateStart="{Binding DisplayDateStart_DateEstablished}" 
                         DisplayDateEnd="{Binding DisplayDateEnd_DateEstablished}" 
                         SelectedDate ="{Binding SharedDateEstablished, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Margin="3" Grid.Row="4" Grid.Column="0" Text="Date Closed:"/>
-                <DatePicker Margin="3" Grid.Row="4" Grid.Column="1"
+                <DatePicker Margin="3" Grid.Row="4" Grid.Column="1" IsEnabled="False"
                         DisplayDateStart="{Binding DisplayDateStart_DateClosed}" 
                         DisplayDateEnd="{Binding DisplayDateEnd_DateClosed}" 
                         SelectedDate ="{Binding SharedDateClosed, UpdateSourceTrigger=PropertyChanged}"/>

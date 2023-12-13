@@ -372,6 +372,19 @@ public class MainWindowViewModel : ViewModelBase
     private void DeleteSelectedObservingFacilities(
         object owner)
     {
+        var nSelectedObservingFacilities = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Count();
+
+        var message = nSelectedObservingFacilities == 1
+            ? "Delete Observing Facility?"
+            : $"Delete {nSelectedObservingFacilities} Observing Facilities?";
+
+        var dialogViewModel = new MessageBoxDialogViewModel(message, true);
+
+        if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
+        {
+            return;
+        }
+
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
             // Todo: Remember to also delete orphaned children

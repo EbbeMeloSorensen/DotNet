@@ -15,9 +15,13 @@ Done
 * Når man vælger en observing facility, skal den vise hele dens collection af steder, hvor den har stået
 * Lav et event, som ObservingFacilitiesDetailsViewModel kan bruge til at signalere til main view model, at brugeren har
   klikket på New, så main kan tage sig af det (ved at bede brugeren om at klikke i map viewet)
+* For en station skal den kun vise den position, der passer med time of interest
+* Hvis der kun er én Geospatial location for en observing facility, så skal man ikke kunne slette den
 
 In progress:
-* For en station skal skal kun vise den position, der passer med time of interest
+* Brugeren skal ikke kunne ændre DateEstablished og DateClosed - de skal altid svare til de GeospatialLocations, der hører til en observing facility
+* Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer, at den ikke overlapper med de eksisterende
+* Det at slette, tilføje, eller ændre en Geospatiel Location kan godt ændre på map viewet og endda master listen, så det skal refreshes
 * Det skal fremgå tydeligt af detaljeviewet, om man har valgt én eller flere observing facilities
 * Hvis man vælger FLERE observing facilities, skal den IKKE vise sektionen med geospatial locations
 * Man skal kunne tilføje en ekstra lokation for en eksisterende tidsserie
