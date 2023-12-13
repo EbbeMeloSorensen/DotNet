@@ -19,6 +19,7 @@ Done
 * Hvis der kun er én Geospatial location for en observing facility, så skal man ikke kunne slette den
 
 In progress:
+* Lav en "unleash service technician" funktion
 * Brugeren skal ikke kunne ændre DateEstablished og DateClosed - de skal altid svare til de GeospatialLocations, der hører til en observing facility
 * Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer, at den ikke overlapper med de eksisterende
 * Det at slette, tilføje, eller ændre en Geospatiel Location kan godt ændre på map viewet og endda master listen, så det skal refreshes
