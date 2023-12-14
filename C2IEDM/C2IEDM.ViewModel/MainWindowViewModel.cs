@@ -515,6 +515,9 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.GeospatialLocationsUpdatedOrDeleted += (s, e) =>
         {
+            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+            UpdateMapPoints();
+
             // Todo: Tilføj timestamp til database locations
             // Todo: Refresh liste af observing facilities
             // Todo: Refresh map
