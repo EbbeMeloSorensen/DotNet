@@ -512,6 +512,13 @@ public class MainWindowViewModel : ViewModelBase
         {
             CreateGeospatialLocation(e.Owner);
         };
+
+        ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.GeospatialLocationsUpdatedOrDeleted += (s, e) =>
+        {
+            // Todo: Tilføj timestamp til database locations
+            // Todo: Refresh liste af observing facilities
+            // Todo: Refresh map
+        };
     }
 
     private void InitializeMapViewModel()
@@ -800,8 +807,6 @@ public class MainWindowViewModel : ViewModelBase
 
         foreach (var observingFacilityDataExtract in ObservingFacilityListViewModel.ObservingFacilityDataExtracts.Objects)
         {
-            // Todo: Vælg kun dem, der passer med historisk valgt tidspunkt
-
             observingFacilityDataExtract.GeospatialLocations.ForEach(_ =>
             {
                 if (_ is not Domain.Entities.WIGOS.GeospatialLocations.Point point)
@@ -1051,6 +1056,11 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWork.Points_Wigos.Add(point);
             unitOfWork.Complete();
         }
+
+        // Todo: Refresh Observing Facility list
+
+        // Todo: Test this
+        UpdateMapPoints();
 
         ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
     }

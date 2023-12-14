@@ -71,6 +71,7 @@ namespace C2IEDM.ViewModel
         }
 
         public event EventHandler<CommandInvokedEventArgs> NewGeospatialLocationCalledByUser;
+        public event EventHandler GeospatialLocationsUpdatedOrDeleted;
 
         public GeospatialLocationsViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -184,7 +185,9 @@ namespace C2IEDM.ViewModel
             }
 
             // Todo: I stedet for bare at opdatere detalje viewet så sørg for at notificere main view model, så man også opdatere master liste og map view
-            Populate();
+            //Populate();
+
+            OnGeospatialLocationsUpdatedOrDeleted();
         }
 
         private bool CanDeleteSelectedGeospatialLocations(
@@ -261,7 +264,8 @@ namespace C2IEDM.ViewModel
             }
 
             // Todo: I stedet for bare at opdatere detalje viewet så sørg for at notificere main view model, så man også opdatere master liste og map view
-            Populate();
+            //Populate();
+            OnGeospatialLocationsUpdatedOrDeleted();
         }
 
         private bool CanUpdateSelectedGeospatialLocation(
@@ -276,10 +280,20 @@ namespace C2IEDM.ViewModel
         {
             var handler = NewGeospatialLocationCalledByUser;
 
-            // Event will be null if there are no subscribers
             if (handler != null)
             {
                 handler(this, new CommandInvokedEventArgs(owner) );
+            }
+        }
+
+        private void OnGeospatialLocationsUpdatedOrDeleted()
+        {
+            var handler = GeospatialLocationsUpdatedOrDeleted;
+
+            // Event will be null if there are no subscribers
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
             }
         }
     }
