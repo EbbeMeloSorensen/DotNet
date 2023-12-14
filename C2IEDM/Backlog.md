@@ -17,21 +17,22 @@ Done
   klikket på New, så main kan tage sig af det (ved at bede brugeren om at klikke i map viewet)
 * For en station skal den kun vise den position, der passer med time of interest
 * Hvis der kun er én Geospatial location for en observing facility, så skal man ikke kunne slette den
+* Man skal kunne tilføje en ekstra lokation for en eksisterende tidsserie
+* Sørg for at vedligeholde hjælpestreger for database tidslinien
+  - Én for Now
+  - Én for selected time
 
 In progress:
+* Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer, at den ikke overlapper med de eksisterende
+* Der skal tilføjes streger til samlingen af database write times, når man arbejder med lokationer
+* Det at slette, tilføje, eller ændre en Geospatiel Location kan godt ændre på map viewet og endda master listen, så det skal refreshes
+* Det skal fremgå tydeligt af detaljeviewet, om man har valgt én eller flere observing facilities
+* Hvis man vælger FLERE observing facilities, skal den IKKE vise sektionen med geospatial locations
+* Sørg for at den foreslår nogle rimelige muligheder, hvis man prøver at ændre From Date eller To Date
 * Lav en "unleash service technician" funktion, så man kan placere en figur, der går rundt efter en drunkards walk og placerer stationer
 * Lav noget, så man kan se pile mellem forskellige lokationer for en station, f.eks. når man vælger dem i detalje viewet
   - man kunne f.eks. forsyne punkterne med tidsangivelser
 * Brugeren skal ikke kunne ændre DateEstablished og DateClosed - de skal altid svare til de GeospatialLocations, der hører til en observing facility
-* Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer, at den ikke overlapper med de eksisterende
-* Det at slette, tilføje, eller ændre en Geospatiel Location kan godt ændre på map viewet og endda master listen, så det skal refreshes
-* Det skal fremgå tydeligt af detaljeviewet, om man har valgt én eller flere observing facilities
-* Hvis man vælger FLERE observing facilities, skal den IKKE vise sektionen med geospatial locations
-* Man skal kunne tilføje en ekstra lokation for en eksisterende tidsserie
-* Sørg for at den foreslår nogle rimelige muligheder, hvis man prøver at ændre Establishing Date
-* Sørg for at vedligeholde hjælpestreger for database tidslinien
-  - Én for Now
-  - Én for selected time
 * Sørg for at vedligeholde hjælpestreger for de history tidslinien
   - Én for Now
   - Én for selected time

@@ -343,6 +343,8 @@ public class MainWindowViewModel : ViewModelBase
                 DatabaseWriteTimesViewModel.StaticXValue = null;
             }
         };
+
+        SelectedTabIndexForRetrospectionTimeLines = 1;
     }
 
     private void CreateObservingFacility(
