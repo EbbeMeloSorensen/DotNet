@@ -653,7 +653,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 new Size(timeSpan.TotalDays, worldWindowHeight),
                 true,
                 25,
-                60,
+                40,
                 1,
                 timeAtOrigo,
                 null)
@@ -732,6 +732,10 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 // Når man dragger, så skal man træde ud af det mode, hvor den følger tiden
                 TimeSeriesViewModel2.LockWorldWindowOnDynamicXValue = false;
+
+                // Den skal også fjerne de overordnede dato labels
+                TimeSeriesViewModel2.XAxisOverallLabel1 = "";
+                TimeSeriesViewModel2.XAxisOverallLabel2 = "";
             };
 
             TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>

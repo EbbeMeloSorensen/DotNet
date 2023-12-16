@@ -27,6 +27,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private bool _showDynamicXValue;
         private bool _lockWorldWindowOnDynamicXValue;
         private bool _showPanningButtons;
+        private string _xAxisOverallLabel1;
+        private string _xAxisOverallLabel1Alignment;
+        private string _xAxisOverallLabel2;
+        private string _xAxisOverallLabel2Alignment;
         protected double _worldWindowExpansionFactor;
         protected Point _expandedWorldWindowUpperLeft;
         protected Size _expandedWorldWindowSize;
@@ -198,6 +202,46 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public string XAxisOverallLabel1
+        {
+            get => _xAxisOverallLabel1;
+            set
+            {
+                _xAxisOverallLabel1 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string XAxisOverallLabel2
+        {
+            get => _xAxisOverallLabel2;
+            set
+            {
+                _xAxisOverallLabel2 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string XAxisOverallLabel1Alignment
+        {
+            get => _xAxisOverallLabel1Alignment;
+            set
+            {
+                _xAxisOverallLabel1Alignment = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string XAxisOverallLabel2Alignment
+        {
+            get => _xAxisOverallLabel2Alignment;
+            set
+            {
+                _xAxisOverallLabel2Alignment = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool ShowHorizontalAxis
         {
             get { return _showHorizontalAxis; }
@@ -296,6 +340,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _showHorizontalGridLines = true;
             _showVerticalGridLines = true;
             _worldWindowExpansionFactor = worldWindowExpansionFactor;
+            _xAxisOverallLabel1Alignment = "Center";
             Fraction = 0.5;
 
             GeometryEditorViewModel = 

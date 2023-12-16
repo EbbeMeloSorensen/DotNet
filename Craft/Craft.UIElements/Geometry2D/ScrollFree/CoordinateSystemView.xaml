@@ -16,11 +16,31 @@
     <Grid>
         <local:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
         <Canvas>
+            <!-- Overall labels for the x axis -->
+            <Grid Canvas.Left="{Binding GeometryEditorViewModel.MarginLeft}"
+                  Canvas.Top="{Binding GeometryEditorViewModel.MarginBottomOffset}"
+                  Height="{Binding GeometryEditorViewModel.MarginBottom}">
+                <TextBlock Background="Transparent"
+                           Width="{Binding GeometryEditorViewModel.ViewPortSize.Width}" 
+                           Height="20"
+                           Text="{Binding XAxisOverallLabel1}"
+                           TextAlignment="{Binding XAxisOverallLabel1Alignment}"
+                           VerticalAlignment="Bottom">
+                </TextBlock>
+                <TextBlock Background="Transparent"
+                           Width="{Binding GeometryEditorViewModel.ViewPortSize.Width}" 
+                           Height="20"
+                           Text="{Binding XAxisOverallLabel2}"
+                           TextAlignment="{Binding XAxisOverallLabel2Alignment}"
+                           VerticalAlignment="Bottom">
+                </TextBlock>
+            </Grid>
+
+            <!-- Little square to the lower right of origo that hides axis labels, thereby preventing them from overlapping -->
             <Rectangle Fill="{Binding GeometryEditorViewModel.MarginBrush}"
                        Canvas.Top="{Binding GeometryEditorViewModel.MarginBottomOffset}"
                        Width="{Binding GeometryEditorViewModel.MarginLeft}" 
                        Height="{Binding GeometryEditorViewModel.MarginBottom}">
-
             </Rectangle>
 
             <!-- Vertical line representing static x value -->

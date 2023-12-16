@@ -96,7 +96,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var showHours = false;
             var modulo = 1;
             var maxDayLabel = 29;
-
             var x0ext = x0 - (x1 - x0);
             var x1ext = x1 + (x1 - x0);
 
@@ -502,6 +501,51 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
 
             _logger?.WriteLine(LogMessageCategory.Information, $"TimeSeriesViewModel: Added {labelCount} labels");
+
+            GenerateOverallDateLabels(x0, x1);
+        }
+
+        private void GenerateOverallDateLabels(
+            double x0,
+            double x1)
+        {
+            var t0 = TimeAtOrigo + TimeSpan.FromDays(x0);
+            var t1 = TimeAtOrigo + TimeSpan.FromDays(x1);
+
+            if (t0.Date == t1.Date)
+            {
+                // Same day
+                //XAxisOverallLabel1 = t0.ToString("yyyy MMMM dd");
+                XAxisOverallLabel1 = t0.ToString("D");
+                XAxisOverallLabel2 = "";
+                XAxisOverallLabel1Alignment = "Center";
+            }
+            else
+            {
+                XAxisOverallLabel1 = t0.ToString("D");
+                XAxisOverallLabel2 = t1.ToString("D");
+                XAxisOverallLabel1Alignment = "Left";
+                XAxisOverallLabel2Alignment = "Right";
+            }
+            /*
+            else if (t0.Year == t1.Year && t0.Month == t1.Month)
+            {
+                // Same month
+                var monthName = t0.ToString("MMMM", CultureInfo.InvariantCulture);
+                XAxisOverallLabel1 = $"{monthName} {t0.Year}";
+                XAxisOverallLabel2 = "";
+                XAxisOverallLabel1Alignment = "Center";
+            }
+            else if (t0.Year == t1.Year)
+            {
+                // Same year
+                XAxisOverallLabel1 = $"{t0.Year}";
+            }
+            else
+            {
+                XAxisOverallLabel1 = "";
+            }
+            */
         }
 
         // Helper for rounding Timespan to closest timespan where second is zero
