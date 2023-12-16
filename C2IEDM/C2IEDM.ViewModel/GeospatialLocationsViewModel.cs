@@ -71,7 +71,7 @@ namespace C2IEDM.ViewModel
         }
 
         public event EventHandler<CommandInvokedEventArgs> NewGeospatialLocationCalledByUser;
-        public event EventHandler GeospatialLocationsUpdatedOrDeleted;
+        public event EventHandler<DatabaseWriteOperationOccuredEventArgs> GeospatialLocationsUpdatedOrDeleted;
 
         public GeospatialLocationsViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -170,14 +170,14 @@ namespace C2IEDM.ViewModel
                 .Select(_ => _.ObjectId)
                 .ToList();
 
+            var now = DateTime.UtcNow;
+
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var geospatialLocationsForDeletion = unitOfWork.GeospatialLocations
                     .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId))
                     .ToList();
-
-                var now = DateTime.UtcNow;
-
+                
                 geospatialLocationsForDeletion.ForEach(_ => _.Superseded = now);
 
                 unitOfWork.GeospatialLocations.UpdateRange(geospatialLocationsForDeletion);
@@ -187,7 +187,7 @@ namespace C2IEDM.ViewModel
             // Todo: I stedet for bare at opdatere detalje viewet så sørg for at notificere main view model, så man også opdatere master liste og map view
             //Populate();
 
-            OnGeospatialLocationsUpdatedOrDeleted();
+            OnGeospatialLocationsUpdatedOrDeleted(now);
         }
 
         private bool CanDeleteSelectedGeospatialLocations(
@@ -239,10 +239,11 @@ namespace C2IEDM.ViewModel
             var latitude = dialogViewModel.Latitude;
             var longitude = dialogViewModel.Longitude;
 
+            var now = DateTime.UtcNow;
+
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var geospatialLocation = unitOfWork.GeospatialLocations.Get(point.Id);
-                var now = DateTime.UtcNow;
                 geospatialLocation.Superseded = now;
 
                 unitOfWork.GeospatialLocations.Update(geospatialLocation);
@@ -265,7 +266,7 @@ namespace C2IEDM.ViewModel
 
             // Todo: I stedet for bare at opdatere detalje viewet så sørg for at notificere main view model, så man også opdatere master liste og map view
             //Populate();
-            OnGeospatialLocationsUpdatedOrDeleted();
+            OnGeospatialLocationsUpdatedOrDeleted(now);
         }
 
         private bool CanUpdateSelectedGeospatialLocation(
@@ -286,14 +287,15 @@ namespace C2IEDM.ViewModel
             }
         }
 
-        private void OnGeospatialLocationsUpdatedOrDeleted()
+        private void OnGeospatialLocationsUpdatedOrDeleted(
+            DateTime dateTime)
         {
             var handler = GeospatialLocationsUpdatedOrDeleted;
 
             // Event will be null if there are no subscribers
             if (handler != null)
             {
-                handler(this, EventArgs.Empty);
+                handler(this, new DatabaseWriteOperationOccuredEventArgs(dateTime));
             }
         }
     }

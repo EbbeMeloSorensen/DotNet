@@ -515,12 +515,12 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.GeospatialLocationsUpdatedOrDeleted += (s, e) =>
         {
+            // Todo: consider placing this in a general helper method
+            _databaseWriteTimes.Add(e.DateTime);
             ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+            ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
             UpdateMapPoints();
-
-            // Todo: Tilføj timestamp til database locations
-            // Todo: Refresh liste af observing facilities
-            // Todo: Refresh map
+            RefreshDatabaseTimeSeriesView();
         };
     }
 
@@ -1043,9 +1043,11 @@ public class MainWindowViewModel : ViewModelBase
 
         var selectedObservingFacility = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Single();
 
+        var now = DateTime.UtcNow;
+
         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
         {
-            var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), DateTime.UtcNow)
+            var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
             {
                 From = from,
                 To = to,
@@ -1060,11 +1062,10 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWork.Complete();
         }
 
-        // Todo: Refresh Observing Facility list
-
-        // Todo: Test this
-        UpdateMapPoints();
-
+        _databaseWriteTimes.Add(now);
+        ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
         ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
+        UpdateMapPoints();
+        RefreshDatabaseTimeSeriesView();
     }
 }
