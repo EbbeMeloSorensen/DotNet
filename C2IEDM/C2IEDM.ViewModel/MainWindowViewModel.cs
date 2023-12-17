@@ -649,7 +649,9 @@ public class MainWindowViewModel : ViewModelBase
             ShowVerticalAxis = false,
             ShowXAxisLabels = true,
             ShowYAxisLabels = false,
-            Fraction = 0.9
+            ShowPanningButtons = true,
+            Fraction = 0.9,
+            LabelForDynamicXValue = "Now"
         };
 
         HistoricalTimeViewModel.GeometryEditorViewModel.YAxisLocked = true;
@@ -700,7 +702,8 @@ public class MainWindowViewModel : ViewModelBase
             ShowXAxisLabels = true,
             ShowYAxisLabels = false,
             ShowPanningButtons = true,
-            Fraction = 0.9
+            Fraction = 0.9,
+            LabelForDynamicXValue = "Now"
         };
 
         DatabaseWriteTimesViewModel.GeometryEditorViewModel.YAxisLocked = true;
@@ -869,35 +872,60 @@ public class MainWindowViewModel : ViewModelBase
 
         foreach (var observingFacilityDataExtract in ObservingFacilityListViewModel.ObservingFacilityDataExtracts.Objects)
         {
-            observingFacilityDataExtract.GeospatialLocations.ForEach(_ =>
+            var latestGeospatialLocation = observingFacilityDataExtract.GeospatialLocations
+                .OrderByDescending(_ => _.From)
+                .First() as Domain.Entities.WIGOS.GeospatialLocations.Point;
+
+            var brush = _activeObservingFacilityBrush;
+
+            if (_historicalTimeOfInterest.Object.HasValue)
             {
-                if (_ is not Domain.Entities.WIGOS.GeospatialLocations.Point point)
+                if (_historicalTimeOfInterest.Object.Value > latestGeospatialLocation.To)
                 {
-                    // Forekommer ikke i praksis
-                    return;
+                    brush = _closedObservingFacilityBrush;
                 }
+            }
+            else if (latestGeospatialLocation.To < DateTime.MaxValue)
+            {
+                brush = _closedObservingFacilityBrush;
+            }
 
-                var brush = _activeObservingFacilityBrush;
+            MapViewModel.PointViewModels.Add(new PointViewModel(
+                new PointD(latestGeospatialLocation.Coordinate1, -latestGeospatialLocation.Coordinate2), 10, brush));
 
-                if (_historicalTimeOfInterest.Object.HasValue)
-                {
-                    if (_historicalTimeOfInterest.Object.Value < _.From ||
-                        _historicalTimeOfInterest.Object.Value >= _.To)
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    if (_.To < DateTime.MaxValue)
-                    {
-                        brush = _closedObservingFacilityBrush;
-                    }
-                }
 
-                MapViewModel.PointViewModels.Add(new PointViewModel(
-                    new PointD(point.Coordinate1, -point.Coordinate2), 10, brush));
-            });
+
+
+            // Old
+            //observingFacilityDataExtract.GeospatialLocations.ForEach(_ =>
+            //{
+            //    if (_ is not Domain.Entities.WIGOS.GeospatialLocations.Point point)
+            //    {
+            //        // Forekommer ikke i praksis
+            //        return;
+            //    }
+
+            //    var brush = _activeObservingFacilityBrush;
+
+            //    if (_historicalTimeOfInterest.Object.HasValue)
+            //    {
+            //        if (_historicalTimeOfInterest.Object.Value < _.From ||
+            //            _historicalTimeOfInterest.Object.Value >= _.To)
+            //        {
+            //            return;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (_.To < DateTime.MaxValue)
+            //        {
+            //            brush = _closedObservingFacilityBrush;
+            //        }
+            //    }
+
+            //    MapViewModel.PointViewModels.Add(new PointViewModel(
+            //        new PointD(point.Coordinate1, -point.Coordinate2), 10, brush));
+            //});
         }
     }
 
@@ -1042,11 +1070,16 @@ public class MainWindowViewModel : ViewModelBase
 
         if (observingFacility.DateClosed == DateTime.MaxValue)
         {
-            ObservingFacilityListViewModel.AddObservingFacility(observingFacility, point);
+            //ObservingFacilityListViewModel.AddObservingFacility(observingFacility, point);
         }
 
         _databaseWriteTimes.Add(now);
         RefreshDatabaseTimeSeriesView();
+
+        if (_autoRefresh.Object)
+        {
+            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+        }
     }
 
     private void CreateNewGeospatialLocation()

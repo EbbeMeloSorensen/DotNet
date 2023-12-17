@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
@@ -26,6 +25,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private double _dynamicXValueViewPortWhenLocked;
         private bool _showDynamicXValue;
         private bool _lockWorldWindowOnDynamicXValue;
+        private string _labelForDynamicXValue;
         private bool _showPanningButtons;
         private string _xAxisOverallLabel1;
         private string _xAxisOverallLabel1Alignment;
@@ -188,6 +188,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _lockWorldWindowOnDynamicXValue = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string LabelForDynamicXValue
+        {
+            get => _labelForDynamicXValue;
+            set
+            {
+                _labelForDynamicXValue = value;
                 RaisePropertyChanged();
             }
         }

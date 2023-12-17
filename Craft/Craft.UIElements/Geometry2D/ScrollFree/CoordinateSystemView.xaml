@@ -75,6 +75,19 @@
                 </Line.Visibility>
             </Line>
 
+            <!-- Label for the above line  -->
+            <TextBlock Foreground="Purple" Margin="3, 0, 0, 0"
+                       Canvas.Left="{Binding DynamicXValueViewPort}"
+                       Text="{Binding LabelForDynamicXValue}" >
+                <TextBlock.Visibility>
+                    <Binding Path="ShowDynamicXValue" Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </TextBlock.Visibility>
+            </TextBlock>
+
             <!-- Vertical line representing dynamic x value when tracking the value (flickerfree) -->
             <Line Stroke="Purple"
                   StrokeThickness="1"
@@ -90,6 +103,19 @@
                     </Binding>
                 </Line.Visibility>
             </Line>
+
+            <!-- Label for the above line  --> 
+            <TextBlock Foreground="Purple" Margin="3, 0, 0, 0"
+                       Canvas.Left="{Binding DynamicXValueViewPortWhenLocked}"
+                       Text="{Binding LabelForDynamicXValue}" >
+                <TextBlock.Visibility>
+                    <Binding Path="LockWorldWindowOnDynamicXValue" Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </TextBlock.Visibility>
+            </TextBlock>
 
             <!-- Vertical axis -->
             <Line Stroke="Black"
