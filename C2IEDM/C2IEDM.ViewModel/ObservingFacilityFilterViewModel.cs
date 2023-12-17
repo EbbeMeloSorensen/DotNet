@@ -10,6 +10,8 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
     private string _nameFilter = "";
     private bool _showActiveObservingFacilities;
     private bool _showClosedObservingFacilities;
+    private bool _showActiveObservingFacilitiesCheckboxEnabled;
+    private bool _showClosedObservingFacilitiesCheckboxEnabled;
 
     private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
     private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
@@ -30,14 +32,14 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
     private RelayCommand _clearHistoricalTimeCommand;
     private RelayCommand _clearDatabaseTimeCommand;
 
-    public bool DisplayNameFilterField 
+    public bool DisplayNameFilterField
     {
         get => _displayNameFilterField;
         set
         {
             _displayNameFilterField = value;
             RaisePropertyChanged();
-        } 
+        }
     }
 
     public bool DisplayStatusFilterSection
@@ -98,6 +100,7 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
             _showActiveObservingFacilities = value;
             _showActiveStations.Object = value;
             RaisePropertyChanged();
+            UpdateControls();
         }
     }
 
@@ -108,6 +111,27 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         {
             _showClosedObservingFacilities = value;
             _showClosedStations.Object = value;
+            RaisePropertyChanged();
+            UpdateControls();
+        }
+    }
+
+    public bool ShowActiveObservingFacilitiesCheckboxEnabled
+    {
+        get { return _showActiveObservingFacilitiesCheckboxEnabled; }
+        set
+        {
+            _showActiveObservingFacilitiesCheckboxEnabled = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool ShowClosedObservingFacilitiesCheckboxEnabled
+    {
+        get { return _showClosedObservingFacilitiesCheckboxEnabled; }
+        set
+        {
+            _showClosedObservingFacilitiesCheckboxEnabled = value;
             RaisePropertyChanged();
         }
     }
@@ -136,7 +160,8 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
     {
         get
         {
-            return _clearHistoricalTimeCommand ?? (_clearHistoricalTimeCommand = new RelayCommand(ClearHistoricalTime, CanClearHistoricalTime));
+            return _clearHistoricalTimeCommand ?? (_clearHistoricalTimeCommand =
+                new RelayCommand(ClearHistoricalTime, CanClearHistoricalTime));
         }
     }
 
@@ -144,7 +169,8 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
     {
         get
         {
-            return _clearDatabaseTimeCommand ?? (_clearDatabaseTimeCommand = new RelayCommand(ClearDatabaseTime, CanClearDatabaseTime));
+            return _clearDatabaseTimeCommand ??
+                   (_clearDatabaseTimeCommand = new RelayCommand(ClearDatabaseTime, CanClearDatabaseTime));
         }
     }
 
@@ -219,6 +245,9 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
 
         DisplayHistoricalTimeField = _displayHistoricalTimeControls.Object;
         DisplayDatabaseTimeField = _displayDatabaseTimeControls.Object;
+
+        ShowActiveObservingFacilitiesCheckboxEnabled = ShowClosedObservingFacilities;
+        ShowClosedObservingFacilitiesCheckboxEnabled = ShowActiveObservingFacilities;
     }
 
     private void ClearHistoricalTime()
@@ -241,3 +270,4 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         return _databaseTimeOfInterest.Object.HasValue;
     }
 }
+ 

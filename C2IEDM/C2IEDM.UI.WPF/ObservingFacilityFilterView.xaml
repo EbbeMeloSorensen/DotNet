@@ -57,10 +57,12 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <CheckBox Grid.Row="0" Margin="2, 2, 2, 0" Content="Active"
-                          IsChecked="{Binding ShowActiveObservingFacilities}"/>
+                <CheckBox Grid.Row="0" Margin="2, 2, 2, 0" Content="Active" 
+                          IsChecked="{Binding ShowActiveObservingFacilities}"
+                          IsEnabled="{Binding ShowActiveObservingFacilitiesCheckboxEnabled}"/>
                 <CheckBox Grid.Row="1" Margin="2, 0, 2, 2" Content="Closed"
-                          IsChecked="{Binding ShowClosedObservingFacilities}"/>
+                          IsChecked="{Binding ShowClosedObservingFacilities}"
+                          IsEnabled="{Binding ShowClosedObservingFacilitiesCheckboxEnabled}"/>
             </Grid>
         </GroupBox>
 
