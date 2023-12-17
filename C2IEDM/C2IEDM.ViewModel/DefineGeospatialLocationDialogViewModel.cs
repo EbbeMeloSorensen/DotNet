@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using Craft.UI.Utils;
@@ -15,8 +16,8 @@ namespace C2IEDM.ViewModel
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
 
-        private double _latitude;
-        private double _longitude;
+        private string _latitude;
+        private string _longitude;
 
         private DateTime _from;
         private DateTime? _to;
@@ -27,26 +28,33 @@ namespace C2IEDM.ViewModel
         private DateTime _displayDateStart_DateTo;
         private DateTime _displayDateEnd_DateTo;
 
+        private string _originalLatitude;
+        private string _originalLongitude;
+        private DateTime _originalDateFrom;
+        private DateTime? _originalDateTo;
+
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
-        public double Latitude
+        public string Latitude
         {
             get { return _latitude; }
             set
             {
                 _latitude = value;
                 RaisePropertyChanged();
+                OKCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public double Longitude
+        public string Longitude
         {
             get { return _longitude; }
             set
             {
                 _longitude = value;
                 RaisePropertyChanged();
+                OKCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -57,6 +65,8 @@ namespace C2IEDM.ViewModel
             {
                 _from = value;
                 RaisePropertyChanged();
+                OKCommand.RaiseCanExecuteChanged();
+                UpdateDatePickerRanges();
             }
         }
 
@@ -67,6 +77,8 @@ namespace C2IEDM.ViewModel
             {
                 _to = value;
                 RaisePropertyChanged();
+                OKCommand.RaiseCanExecuteChanged();
+                UpdateDatePickerRanges();
             }
         }
 
@@ -177,15 +189,35 @@ namespace C2IEDM.ViewModel
             }
         }
 
-        public DefineGeospatialLocationDialogViewModel()
+        public DefineGeospatialLocationDialogViewModel(
+            double latitude,
+            double longitude,
+            DateTime from,
+            DateTime? to)
         {
-            var currentDate = DateTime.Now.Date;
-            DisplayDateEnd_DateFrom = currentDate;
-            DisplayDateEnd_DateTo = currentDate;
-            From = currentDate;
+            Latitude = latitude.ToString(CultureInfo.InvariantCulture);
+            Longitude = longitude.ToString(CultureInfo.InvariantCulture);
+            From = from;
+            To = to;
+
+            _originalLatitude = Latitude;
+            _originalLongitude = Longitude;
+            _originalDateFrom = From;
+            _originalDateTo = To;
+
+            UpdateDatePickerRanges();
         }
 
-        private void UpdateState(StateOfView state)
+        private void UpdateDatePickerRanges()
+        {
+            var currentDate = DateTime.UtcNow.Date;
+            DisplayDateEnd_DateFrom = To.HasValue ? To.Value - TimeSpan.FromDays(1) : currentDate;
+            DisplayDateStart_DateTo = From.Date + TimeSpan.FromDays(1);
+            DisplayDateEnd_DateTo = currentDate;
+        }
+
+        private void UpdateState(
+            StateOfView state)
         {
             _state = state;
             RaisePropertyChanges();
@@ -199,7 +231,8 @@ namespace C2IEDM.ViewModel
             RaisePropertyChanged("To");
         }
 
-        private void OK(object parameter)
+        private void OK(
+            object parameter)
         {
             UpdateState(StateOfView.Updated);
 
@@ -214,25 +247,23 @@ namespace C2IEDM.ViewModel
             CloseDialogWithResult(parameter as Window, DialogResult.OK);
         }
 
-        private bool CanOK(object parameter)
+        private bool CanOK(
+            object parameter)
         {
-            return true;
-            //return
-            //    SubjectPerson != null &&
-            //    ObjectPerson != null &&
-            //    Description != null &&
-            //    !string.IsNullOrEmpty(Description) &&
-            //    (SubjectPerson != _originalSubjectPerson ||
-            //     ObjectPerson != _originalObjectPerson ||
-            //     Description != _originalDescription);
+            return Latitude != _originalLatitude || 
+                   Longitude != _originalLongitude ||
+                   From != _originalDateFrom ||
+                   To != _originalDateTo;
         }
 
-        private void Cancel(object parameter)
+        private void Cancel(
+            object parameter)
         {
             CloseDialogWithResult(parameter as Window, DialogResult.Cancel);
         }
 
-        private bool CanCancel(object parameter)
+        private bool CanCancel(
+            object parameter)
         {
             return true;
         }

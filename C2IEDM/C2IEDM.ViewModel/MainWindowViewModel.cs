@@ -999,11 +999,11 @@ public class MainWindowViewModel : ViewModelBase
     {
         var mousePositionInMap = MapViewModel.MousePositionWorld.Object.Value;
 
-        var dialogViewModel = new DefineGeospatialLocationDialogViewModel
-        {
-            Latitude = Math.Round(mousePositionInMap.X, 4),
-            Longitude = -Math.Round(mousePositionInMap.Y, 4)
-        };
+        var dialogViewModel = new DefineGeospatialLocationDialogViewModel(
+            Math.Round(mousePositionInMap.X, 4),
+            -Math.Round(mousePositionInMap.Y, 4),
+            DateTime.UtcNow.Date,
+            null);
 
         if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
         {
@@ -1042,8 +1042,8 @@ public class MainWindowViewModel : ViewModelBase
             {
                 From = from,
                 To = to,
-                Coordinate1 = dialogViewModel.Latitude,
-                Coordinate2 = dialogViewModel.Longitude,
+                Coordinate1 = double.Parse(dialogViewModel.Latitude),
+                Coordinate2 = double.Parse(dialogViewModel.Longitude),
                 CoordinateSystem = "WGS_84",
                 AbstractEnvironmentalMonitoringFacilityId = selectedObservingFacility.Id,
                 AbstractEnvironmentalMonitoringFacilityObjectId = selectedObservingFacility.ObjectId

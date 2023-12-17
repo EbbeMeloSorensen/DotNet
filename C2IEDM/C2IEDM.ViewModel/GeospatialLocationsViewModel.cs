@@ -208,13 +208,13 @@ namespace C2IEDM.ViewModel
         private void UpdateSelectedGeospatialLocation(
             object owner)
         {
-            var dialogViewModel = new DefineGeospatialLocationDialogViewModel();
-
             var point = SelectedGeospatialLocations.Objects.Single() as Point;
-            dialogViewModel.Latitude = point.Coordinate1;
-            dialogViewModel.Longitude = point.Coordinate2;
-            dialogViewModel.From = point.From;
-            dialogViewModel.To = point.To == DateTime.MaxValue ? null : point.To;
+
+            var dialogViewModel = new DefineGeospatialLocationDialogViewModel(
+                point.Coordinate1,
+                point.Coordinate2,
+                point.From,
+                point.To == DateTime.MaxValue ? null : point.To);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
@@ -243,8 +243,8 @@ namespace C2IEDM.ViewModel
                         DateTimeKind.Utc)
                 : DateTime.MaxValue;
 
-            var latitude = dialogViewModel.Latitude;
-            var longitude = dialogViewModel.Longitude;
+            var latitude = double.Parse(dialogViewModel.Latitude);
+            var longitude = double.Parse(dialogViewModel.Longitude);
 
             var now = DateTime.UtcNow;
 
