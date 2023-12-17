@@ -32,16 +32,6 @@ public class MainWindowViewModel : ViewModelBase
     private readonly List<DateTime> _databaseWriteTimes;
     private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
     private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
-    private readonly Brush _mapBrushSeaCurrent = new SolidColorBrush(new Color { R = 200, G = 200, B = 255, A = 255 });
-    private readonly Brush _mapBrushSeaHistoric = new SolidColorBrush(new Color { R = 239, G = 228, B = 176, A = 255 });
-    private readonly Brush _mapBrushLandCurrent = new SolidColorBrush(new Color { R = 100, G = 200, B = 100, A = 255 });
-    private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
-    private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
-    private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
-    private readonly Brush _observingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
-    private readonly Brush _controlBackgroundBrushCurrent = new SolidColorBrush(Colors.WhiteSmoke);
-    private readonly Brush _controlBackgroundBrushHistoric = new SolidColorBrush(Colors.BurlyWood);
-    private Brush _controlBackgroundBrush;
     private readonly ObservableObject<bool> _autoRefresh;
     private readonly ObservableObject<bool> _displayNameFilter;
     private readonly ObservableObject<bool> _displayStatusFilter;
@@ -50,6 +40,17 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ObservableObject<bool> _displayRetrospectionControls;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
+    private readonly Brush _mapBrushSeaCurrent = new SolidColorBrush(new Color { R = 200, G = 200, B = 255, A = 255 });
+    private readonly Brush _mapBrushSeaHistoric = new SolidColorBrush(new Color { R = 239, G = 228, B = 176, A = 255 });
+    private readonly Brush _mapBrushLandCurrent = new SolidColorBrush(new Color { R = 100, G = 200, B = 100, A = 255 });
+    private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
+    private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
+    private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
+    private readonly Brush _activeObservingFacilityBrush = new SolidColorBrush(Colors.Black);
+    private readonly Brush _closedObservingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
+    private readonly Brush _controlBackgroundBrushCurrent = new SolidColorBrush(Colors.WhiteSmoke);
+    private readonly Brush _controlBackgroundBrushHistoric = new SolidColorBrush(Colors.BurlyWood);
+    private Brush _controlBackgroundBrush;
     private string _messageInMap;
     private string _statusBarText;
     private bool _displayMessageInMap;
@@ -285,7 +286,7 @@ public class MainWindowViewModel : ViewModelBase
 
         _showClosedStations = new ObservableObject<bool>
         {
-            Object = true
+            Object = false
         };
 
         _displayRetrospectionControls = new ObservableObject<bool>
@@ -872,8 +873,11 @@ public class MainWindowViewModel : ViewModelBase
             {
                 if (_ is not Domain.Entities.WIGOS.GeospatialLocations.Point point)
                 {
+                    // Forekommer ikke i praksis
                     return;
                 }
+
+                var brush = _activeObservingFacilityBrush;
 
                 if (_historicalTimeOfInterest.Object.HasValue)
                 {
@@ -887,12 +891,12 @@ public class MainWindowViewModel : ViewModelBase
                 {
                     if (_.To < DateTime.MaxValue)
                     {
-                        return;
+                        brush = _closedObservingFacilityBrush;
                     }
                 }
 
                 MapViewModel.PointViewModels.Add(new PointViewModel(
-                    new PointD(point.Coordinate1, -point.Coordinate2), 10, _observingFacilityBrush));
+                    new PointD(point.Coordinate1, -point.Coordinate2), 10, brush));
             });
         }
     }
