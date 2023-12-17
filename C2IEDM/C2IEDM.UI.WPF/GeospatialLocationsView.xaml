@@ -30,7 +30,7 @@
                                   ItemsSource="{Binding GeospatialLocationListItemViewModels}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Latitude" Binding="{Binding Latitude}" Width="60"/>
-                                <DataGridTextColumn Header="Latitude" Binding="{Binding Longitude}" Width="60"/>
+                                <DataGridTextColumn Header="Longitude" Binding="{Binding Longitude}" Width="60"/>
                                 <DataGridTextColumn Header="From" Binding="{Binding From}" Width="70"/>
                                 <DataGridTextColumn Header="To" Binding="{Binding To}" Width="70"/>
                             </DataGrid.Columns>
