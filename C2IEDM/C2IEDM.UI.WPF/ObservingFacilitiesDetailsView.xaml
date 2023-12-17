@@ -33,12 +33,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Row="0" Column="0">
+            <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -69,7 +64,7 @@
                     Command="{Binding ApplyChangesCommand}" />
             </Grid>
 
-            <local:GeospatialLocationsView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+            <local:GeospatialLocationsView Grid.Row="1"  
                                            DataContext="{Binding GeospatialLocationsViewModel}"/>
         </Grid>
     </Border>

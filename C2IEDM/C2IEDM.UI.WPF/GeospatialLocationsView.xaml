@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:C2IEDM.UI.WPF"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:utils="clr-namespace:Craft.UI.Utils;assembly=Craft.UI.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -12,45 +12,53 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <TabControl Grid.Row="0" Margin="2">
+            <TabItem Header="Locations">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Text="From"/>
-            <TextBlock Grid.Column="1" Text="To"/>
-            <TextBlock Grid.Column="2" Text="Latitude"/>
-            <TextBlock Grid.Column="3" Text="Longitude"/>
-        </Grid>
+                    <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                        <DataGrid x:Name="dataGrid" Margin="2" GridLinesVisibility="All" 
+                                  AutoGenerateColumns="False" HeadersVisibility="Column" 
+                                  CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                  ItemsSource="{Binding GeospatialLocationListItemViewModels}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Latitude" Binding="{Binding Latitude}" Width="60"/>
+                                <DataGridTextColumn Header="Latitude" Binding="{Binding Longitude}" Width="60"/>
+                                <DataGridTextColumn Header="From" Binding="{Binding From}" Width="70"/>
+                                <DataGridTextColumn Header="To" Binding="{Binding To}" Width="70"/>
+                            </DataGrid.Columns>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding SelectionChangedCommand}"
+                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </DataGrid>
+                    </ScrollViewer>
 
-        <ListBox Grid.Row="1" Height="320" Margin="3" SelectionMode="Extended"
-                 ItemsSource="{Binding GeospatialLocationListItemViewModels}"
-                 HorizontalContentAlignment="Stretch">
-            <b:Interaction.Behaviors>
-                <utils:MultiSelectionBehavior SelectedItems="{Binding SelectedGeospatialLocationListItemViewModels}"/>
-            </b:Interaction.Behaviors>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding DisplayText}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Margin="3,0,3,3" Content="New.." 
-                    Command="{Binding CreateGeospatialLocationCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Margin="3,0,3,3" Content="Edit.." 
-                    Command="{Binding UpdateSelectedGeospatialLocationCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Margin="3,0,3,3" Content="Delete" 
-                    Command="{Binding DeleteSelectedGeospatialLocationsCommand}"/>
-        </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <Button Margin="3,5,3,5" Content="New.." 
+                                Command="{Binding CreateGeospatialLocationCommand}" 
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        <Button Margin="3,5,3,5" Content="Edit.." 
+                                Command="{Binding UpdateSelectedGeospatialLocationCommand}" 
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        <Button Margin="3,5,3,5" Content="Delete" 
+                                Command="{Binding DeleteSelectedGeospatialLocationsCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Time Series" Visibility="Hidden">
+                <Button> Coming soon</Button>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

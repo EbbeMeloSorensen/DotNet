@@ -13,6 +13,8 @@ using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 using C2IEDM.Persistence;
 using Point = C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point;
+using System.Collections;
+using C2IEDM.Domain.Entities;
 
 namespace C2IEDM.ViewModel
 {
@@ -25,11 +27,17 @@ namespace C2IEDM.ViewModel
         private ObjectCollection<ObservingFacility> _observingFacilities;
         private ObservingFacility _selectedObservingFacility;
         private ObservableCollection<GeospatialLocationListItemViewModel> _geospatialLocationListItemViewModels;
+        private RelayCommand<object> _selectionChangedCommand;
         private RelayCommand<object> _deleteSelectedGeospatialLocationsCommand;
         private RelayCommand<object> _createGeospatialLocationCommand;
         private RelayCommand<object> _updateSelectedGeospatialLocationCommand;
 
         public ObjectCollection<GeospatialLocation> SelectedGeospatialLocations { get; private set; }
+
+        public RelayCommand<object> SelectionChangedCommand
+        {
+            get { return _selectionChangedCommand ?? (_selectionChangedCommand = new RelayCommand<object>(SelectionChanged)); }
+        }
 
         public ObservableCollection<GeospatialLocationListItemViewModel> GeospatialLocationListItemViewModels
         {
@@ -41,7 +49,7 @@ namespace C2IEDM.ViewModel
             }
         }
 
-        public ObservableCollection<GeospatialLocationListItemViewModel> SelectedGeospatialLocationListItemViewModels { get; set; }
+        //public ObservableCollection<GeospatialLocationListItemViewModel> SelectedGeospatialLocationListItemViewModels { get; set; }
 
         public RelayCommand<object> DeleteSelectedGeospatialLocationsCommand
         {
@@ -89,15 +97,15 @@ namespace C2IEDM.ViewModel
                 Objects = new List<GeospatialLocation>()
             };
 
-            SelectedGeospatialLocationListItemViewModels =
-                new ObservableCollection<GeospatialLocationListItemViewModel>();
+            //SelectedGeospatialLocationListItemViewModels =
+            //    new ObservableCollection<GeospatialLocationListItemViewModel>();
 
-            SelectedGeospatialLocationListItemViewModels.CollectionChanged += (s, e) =>
-            {
-                SelectedGeospatialLocations.Objects = SelectedGeospatialLocationListItemViewModels.Select(_ => _.GeospatialLocation);
-                DeleteSelectedGeospatialLocationsCommand.RaiseCanExecuteChanged();
-                UpdateSelectedGeospatialLocationCommand.RaiseCanExecuteChanged();
-            };
+            //SelectedGeospatialLocationListItemViewModels.CollectionChanged += (s, e) =>
+            //{
+            //    SelectedGeospatialLocations.Objects = SelectedGeospatialLocationListItemViewModels.Select(_ => _.GeospatialLocation);
+            //    DeleteSelectedGeospatialLocationsCommand.RaiseCanExecuteChanged();
+            //    UpdateSelectedGeospatialLocationCommand.RaiseCanExecuteChanged();
+            //};
 
             _observingFacilities.PropertyChanged += Initialize;
         }
@@ -134,7 +142,7 @@ namespace C2IEDM.ViewModel
                         geospatialLocationPredicates);
 
                 GeospatialLocationListItemViewModels = new ObservableCollection<GeospatialLocationListItemViewModel>(
-                    observingFacility.Item2.Select(_ => new GeospatialLocationListItemViewModel{ GeospatialLocation = _}));
+                    observingFacility.Item2.Select(_ => new GeospatialLocationListItemViewModel(_)));
             }
         }
 
@@ -183,9 +191,6 @@ namespace C2IEDM.ViewModel
                 unitOfWork.GeospatialLocations.UpdateRange(geospatialLocationsForDeletion);
                 unitOfWork.Complete();
             }
-
-            // Todo: I stedet for bare at opdatere detalje viewet så sørg for at notificere main view model, så man også opdatere master liste og map view
-            //Populate();
 
             OnGeospatialLocationsUpdatedOrDeleted(now);
         }
@@ -264,8 +269,6 @@ namespace C2IEDM.ViewModel
                 unitOfWork.Complete();
             }
 
-            // Todo: I stedet for bare at opdatere detalje viewet så sørg for at notificere main view model, så man også opdatere master liste og map view
-            //Populate();
             OnGeospatialLocationsUpdatedOrDeleted(now);
         }
 
@@ -274,6 +277,20 @@ namespace C2IEDM.ViewModel
         {
             return SelectedGeospatialLocations.Objects != null &&
                    SelectedGeospatialLocations.Objects.Count() == 1;
+        }
+
+        private void SelectionChanged(
+            object obj)
+        {
+            var temp = (IList)obj;
+
+            var selectedGeospatialLocationListItemViewModels = 
+                temp.Cast<GeospatialLocationListItemViewModel>();
+
+            SelectedGeospatialLocations.Objects = selectedGeospatialLocationListItemViewModels.Select(_ => _.GeospatialLocation);
+
+            DeleteSelectedGeospatialLocationsCommand.RaiseCanExecuteChanged();
+            UpdateSelectedGeospatialLocationCommand.RaiseCanExecuteChanged();
         }
 
         private void OnNewGeospatialLocationCalledByUser(
