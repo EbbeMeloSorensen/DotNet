@@ -56,7 +56,8 @@
             <DatePicker Grid.Row="4" Grid.Column="1" Padding="3" 
                         DisplayDateStart="{Binding DisplayDateStart_DateTo}" 
                         DisplayDateEnd="{Binding DisplayDateEnd_DateTo}" 
-                        SelectedDate="{Binding To}"/>
+                        SelectedDate="{Binding To}"
+                        IsEnabled="{Binding DatePickerForToDateEnabled}"/>
         </Grid>
 
         <Grid Grid.Row="1" Margin="4">

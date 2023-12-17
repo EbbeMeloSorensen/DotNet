@@ -22,10 +22,12 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     private DateTime _from;
     private DateTime? _to;
 
+    // These are for limiting options for the DatePicker controls
     private DateTime _displayDateStart_DateFrom;
     private DateTime _displayDateEnd_DateFrom;
     private DateTime _displayDateStart_DateTo;
     private DateTime _displayDateEnd_DateTo;
+    private bool _datePickerForToDateEnabled;
 
     private RelayCommand<object> _okCommand;
     private RelayCommand<object> _cancelCommand;
@@ -47,6 +49,8 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         {
             _from = value;
             RaisePropertyChanged();
+            DatePickerForToDateEnabled = _from < DateTime.UtcNow.Date;
+            UpdateDatePickerRanges();
         }
     }
 
@@ -57,6 +61,7 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         {
             _to = value;
             RaisePropertyChanged();
+            UpdateDatePickerRanges();
         }
     }
 
@@ -96,6 +101,16 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         set
         {
             _displayDateEnd_DateTo = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool DatePickerForToDateEnabled
+    {
+        get => _datePickerForToDateEnabled;
+        set
+        {
+            _datePickerForToDateEnabled = value;
             RaisePropertyChanged();
         }
     }
@@ -144,11 +159,11 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         Point mousePositionWorld)
     {
         var currentDate = DateTime.Now.Date;
-        DisplayDateEnd_DateFrom = currentDate;
-        DisplayDateEnd_DateTo = currentDate;
         From = currentDate;
         Latitude = Math.Round(mousePositionWorld.X, 4);
         Longitude = -Math.Round(mousePositionWorld.Y, 4);
+
+        UpdateDatePickerRanges();
     }
 
     private void OK(object parameter)
@@ -262,5 +277,13 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     {
         _state = state;
         RaisePropertyChanges();
+    }
+
+    private void UpdateDatePickerRanges()
+    {
+        var currentDate = DateTime.UtcNow.Date;
+        DisplayDateEnd_DateFrom = To.HasValue ? To.Value - TimeSpan.FromDays(1) : currentDate;
+        DisplayDateStart_DateTo = From.Date + TimeSpan.FromDays(1);
+        DisplayDateEnd_DateTo = currentDate;
     }
 }

@@ -27,6 +27,7 @@ namespace C2IEDM.ViewModel
         private DateTime _displayDateEnd_DateFrom;
         private DateTime _displayDateStart_DateTo;
         private DateTime _displayDateEnd_DateTo;
+        private bool _datePickerForToDateEnabled;
 
         private string _originalLatitude;
         private string _originalLongitude;
@@ -66,6 +67,7 @@ namespace C2IEDM.ViewModel
                 _from = value;
                 RaisePropertyChanged();
                 OKCommand.RaiseCanExecuteChanged();
+                DatePickerForToDateEnabled = _from < DateTime.UtcNow.Date;
                 UpdateDatePickerRanges();
             }
         }
@@ -118,6 +120,16 @@ namespace C2IEDM.ViewModel
             set
             {
                 _displayDateEnd_DateTo = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DatePickerForToDateEnabled
+        {
+            get => _datePickerForToDateEnabled;
+            set
+            {
+                _datePickerForToDateEnabled = value;
                 RaisePropertyChanged();
             }
         }
