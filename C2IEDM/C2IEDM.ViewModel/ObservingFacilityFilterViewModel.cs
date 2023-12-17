@@ -15,6 +15,8 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
     private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
     private readonly ObservableObject<bool> _displayNameFilter;
     private readonly ObservableObject<bool> _displayStatusFilter;
+    private readonly ObservableObject<bool> _showActiveStations;
+    private readonly ObservableObject<bool> _showClosedStations;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
     private bool _displayNameFilterField;
@@ -94,6 +96,7 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         set
         {
             _showActiveObservingFacilities = value;
+            _showActiveStations.Object = value;
             RaisePropertyChanged();
         }
     }
@@ -104,6 +107,7 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         set
         {
             _showClosedObservingFacilities = value;
+            _showClosedStations.Object = value;
             RaisePropertyChanged();
         }
     }
@@ -149,6 +153,8 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         ObservableObject<DateTime?> databaseTimeOfInterest,
         ObservableObject<bool> displayNameFilter,
         ObservableObject<bool> displayStatusFilter,
+        ObservableObject<bool> showActiveStations,
+        ObservableObject<bool> showClosedStations,
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
     {
@@ -156,10 +162,12 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         _databaseTimeOfInterest = databaseTimeOfInterest;
         _displayNameFilter = displayNameFilter;
         _displayStatusFilter = displayStatusFilter;
+        _showActiveStations = showActiveStations;
+        _showClosedStations = showClosedStations;
         _displayHistoricalTimeControls = displayHistoricalTimeControls;
         _displayDatabaseTimeControls = displayDatabaseTimeControls;
-        _showActiveObservingFacilities = true;
-        _showClosedObservingFacilities = false;
+        _showActiveObservingFacilities = _showActiveStations.Object;
+        _showClosedObservingFacilities = _showClosedStations.Object;
 
         _historicalTimeOfInterestAsString = "Now";
         _databaseTimeOfInterestAsString = "Latest";

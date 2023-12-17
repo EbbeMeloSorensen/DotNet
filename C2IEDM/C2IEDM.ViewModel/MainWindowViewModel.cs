@@ -45,6 +45,8 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ObservableObject<bool> _autoRefresh;
     private readonly ObservableObject<bool> _displayNameFilter;
     private readonly ObservableObject<bool> _displayStatusFilter;
+    private readonly ObservableObject<bool> _showActiveStations;
+    private readonly ObservableObject<bool> _showClosedStations;
     private readonly ObservableObject<bool> _displayRetrospectionControls;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
@@ -276,6 +278,16 @@ public class MainWindowViewModel : ViewModelBase
             Object = true
         };
 
+        _showActiveStations = new ObservableObject<bool>
+        {
+            Object = true
+        };
+
+        _showClosedStations = new ObservableObject<bool>
+        {
+            Object = true
+        };
+
         _displayRetrospectionControls = new ObservableObject<bool>
         {
             Object = false
@@ -298,6 +310,22 @@ public class MainWindowViewModel : ViewModelBase
 
         _displayDatabaseTimeControls.PropertyChanged += (s, e) =>
             UpdateRetrospectionControls();
+
+        _showActiveStations.PropertyChanged += (s, e) =>
+        {
+            if (_autoRefresh.Object)
+            {
+                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+            }
+        };
+
+        _showClosedStations.PropertyChanged += (s, e) =>
+        {
+            if (_autoRefresh.Object)
+            {
+                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+            }
+        };
 
         InitializeLogViewModel(logger);
         InitializeObservingFacilityListViewModel(unitOfWorkFactory, applicationDialogService);
@@ -495,6 +523,8 @@ public class MainWindowViewModel : ViewModelBase
             _autoRefresh,
             _displayNameFilter,
             _displayStatusFilter,
+            _showActiveStations,
+            _showClosedStations,
             _displayHistoricalTimeControls,
             _displayDatabaseTimeControls);
 

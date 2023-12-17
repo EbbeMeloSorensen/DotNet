@@ -80,6 +80,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
         ObservableObject<bool> autoRefresh,
         ObservableObject<bool> displayNameFilter,
         ObservableObject<bool> displayStatusFilter,
+        ObservableObject<bool> showActiveStations,
+        ObservableObject<bool> showClosedStations,
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
     {
@@ -94,6 +96,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
             databaseTimeOfInterest, 
             displayNameFilter,
             displayStatusFilter,
+            showActiveStations,
+            showClosedStations,
             displayHistoricalTimeControls,
             displayDatabaseTimeControls);
 
@@ -204,6 +208,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
                     Application.Helpers.ObservationFacilityFilterAsExpression(
                         _historicalTimeOfInterest.Object,
                         _databaseTimeOfInterest.Object,
+                        ObservingFacilityFilterViewModel.ShowActiveObservingFacilities,
+                        ObservingFacilityFilterViewModel.ShowClosedObservingFacilities,
                         ObservingFacilityFilterViewModel.NameFilter.ToUpper()),
                     Application.Helpers.GeospatialLocationFilterAsExpression(
                         _databaseTimeOfInterest.Object));
@@ -231,6 +237,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
                 Application.Helpers.ObservationFacilityFilterAsExpression(
                     _historicalTimeOfInterest.Object,
                     _databaseTimeOfInterest.Object,
+                    ObservingFacilityFilterViewModel.ShowActiveObservingFacilities,
+                    ObservingFacilityFilterViewModel.ShowClosedObservingFacilities,
                     ObservingFacilityFilterViewModel.NameFilter.ToUpper()));
         }
     }
