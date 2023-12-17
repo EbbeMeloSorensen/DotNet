@@ -31,6 +31,7 @@ Done
 
 In progress:
 * Man skal kunne fremsøge closed observing facilities uden at hoppe tilbage i tid - så man kan ændre på deres geospatial locations
+* Man skal ikke kunne ændre på noget i et history mode, hvor historical time of interest er sat
 * Man skal kunne ændre en ToDate fra en given dato til null, dvs angive, at der ikke er nogen slutdato
 * Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer:
   - at den ikke overlapper med de eksisterende

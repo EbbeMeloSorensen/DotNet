@@ -1,23 +1,24 @@
 ﻿using System;
-using System.Linq.Expressions;
 using GalaSoft.MvvmLight;
-using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
-using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
-using Craft.Utils;
 using GalaSoft.MvvmLight.Command;
+using Craft.Utils;
 
 namespace C2IEDM.ViewModel;
 
 public class ObservingFacilityFilterViewModel : ViewModelBase
 {
     private string _nameFilter = "";
-    private string _nameFilterInUppercase = "";
+    private bool _showActiveObservingFacilities;
+    private bool _showClosedObservingFacilities;
+
     private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
     private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
     private readonly ObservableObject<bool> _displayNameFilter;
+    private readonly ObservableObject<bool> _displayStatusFilter;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
     private bool _displayNameFilterField;
+    private bool _displayStatusFilterSection;
     private bool _displayRetrospectionControlSection;
     private bool _displayHistoricalTimeField;
     private bool _displayDatabaseTimeField;
@@ -35,6 +36,16 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
             _displayNameFilterField = value;
             RaisePropertyChanged();
         } 
+    }
+
+    public bool DisplayStatusFilterSection
+    {
+        get => _displayStatusFilterSection;
+        set
+        {
+            _displayStatusFilterSection = value;
+            RaisePropertyChanged();
+        }
     }
 
     public bool DisplayRetrospectionControlSection
@@ -73,8 +84,26 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         set
         {
             _nameFilter = value;
+            RaisePropertyChanged();
+        }
+    }
 
-            _nameFilterInUppercase = _nameFilter == null ? "" : _nameFilter.ToUpper();
+    public bool ShowActiveObservingFacilities
+    {
+        get { return _showActiveObservingFacilities; }
+        set
+        {
+            _showActiveObservingFacilities = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool ShowClosedObservingFacilities
+    {
+        get { return _showClosedObservingFacilities; }
+        set
+        {
+            _showClosedObservingFacilities = value;
             RaisePropertyChanged();
         }
     }
@@ -119,14 +148,18 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
         ObservableObject<DateTime?> historicalTimeOfInterest,
         ObservableObject<DateTime?> databaseTimeOfInterest,
         ObservableObject<bool> displayNameFilter,
+        ObservableObject<bool> displayStatusFilter,
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
     {
         _historicalTimeOfInterest = historicalTimeOfInterest;
         _databaseTimeOfInterest = databaseTimeOfInterest;
         _displayNameFilter = displayNameFilter;
+        _displayStatusFilter = displayStatusFilter;
         _displayHistoricalTimeControls = displayHistoricalTimeControls;
         _displayDatabaseTimeControls = displayDatabaseTimeControls;
+        _showActiveObservingFacilities = true;
+        _showClosedObservingFacilities = false;
 
         _historicalTimeOfInterestAsString = "Now";
         _databaseTimeOfInterestAsString = "Latest";
@@ -159,20 +192,19 @@ public class ObservingFacilityFilterViewModel : ViewModelBase
             ClearDatabaseTimeCommand.RaiseCanExecuteChanged();
         };
 
-        _displayNameFilter.PropertyChanged += (s, e) => UpdateFilterControls();
-        _displayHistoricalTimeControls.PropertyChanged += (s, e) => UpdateRetrospectionControlGroup();
-        _displayDatabaseTimeControls.PropertyChanged += (s, e) => UpdateRetrospectionControlGroup();
+        _displayNameFilter.PropertyChanged += (s, e) => UpdateControls();
+        _displayStatusFilter.PropertyChanged += (s, e) => UpdateControls();
+        _displayHistoricalTimeControls.PropertyChanged += (s, e) => UpdateControls();
+        _displayDatabaseTimeControls.PropertyChanged += (s, e) => UpdateControls();
 
-        UpdateRetrospectionControlGroup();
+        UpdateControls();
     }
 
-    private void UpdateFilterControls()
+    private void UpdateControls()
     {
         DisplayNameFilterField = _displayNameFilter.Object;
-    }
+        DisplayStatusFilterSection = _displayStatusFilter.Object;
 
-    private void UpdateRetrospectionControlGroup()
-    {
         DisplayRetrospectionControlSection =
             _displayHistoricalTimeControls.Object ||
             _displayDatabaseTimeControls.Object;

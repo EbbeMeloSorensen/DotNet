@@ -33,15 +33,39 @@
                 </RowDefinition.Style>
             </RowDefinition>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Margin="1,1,3,1" Grid.Row="0" Grid.Column="0" Text="Name:"/>
-        <TextBox Margin="1,3,7,3" Grid.Row="0" Grid.Column="1" Text="{Binding NameFilter}"/>
-        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Retrospection" Margin="5, 5 5, 0">
+        <TextBlock Margin="10,10,3,1" Grid.Row="0" Grid.Column="0" Text="Name:"/>
+        <TextBox Margin="1,10,7,3" Grid.Row="0" Grid.Column="1" Text="{Binding NameFilter}"/>
+
+        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Status" Margin="5, 5 5, 0">
+            <GroupBox.Visibility>
+                <Binding Path="DisplayStatusFilterSection"
+                         Converter="{StaticResource BooleanToVisibilityConverter}">
+                    <Binding.ConverterParameter>
+                        <system:Boolean>True</system:Boolean>
+                    </Binding.ConverterParameter>
+                </Binding>
+            </GroupBox.Visibility>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <CheckBox Grid.Row="0" Margin="2, 2, 2, 0" Content="Active"
+                          IsChecked="{Binding ShowActiveObservingFacilities}"/>
+                <CheckBox Grid.Row="1" Margin="2, 0, 2, 2" Content="Closed"
+                          IsChecked="{Binding ShowClosedObservingFacilities}"/>
+            </Grid>
+        </GroupBox>
+
+
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Retrospection" Margin="5, 5 5, 0">
             <GroupBox.Visibility>
                 <Binding Path="DisplayRetrospectionControlSection"
                          Converter="{StaticResource BooleanToVisibilityConverter}">

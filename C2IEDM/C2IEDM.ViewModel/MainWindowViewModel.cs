@@ -44,6 +44,7 @@ public class MainWindowViewModel : ViewModelBase
     private Brush _controlBackgroundBrush;
     private readonly ObservableObject<bool> _autoRefresh;
     private readonly ObservableObject<bool> _displayNameFilter;
+    private readonly ObservableObject<bool> _displayStatusFilter;
     private readonly ObservableObject<bool> _displayRetrospectionControls;
     private readonly ObservableObject<bool> _displayHistoricalTimeControls;
     private readonly ObservableObject<bool> _displayDatabaseTimeControls;
@@ -76,6 +77,16 @@ public class MainWindowViewModel : ViewModelBase
         set
         {
             _displayNameFilter.Object = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool DisplayStatusFilter
+    {
+        get => _displayStatusFilter.Object;
+        set
+        {
+            _displayStatusFilter.Object = value;
             RaisePropertyChanged();
         }
     }
@@ -258,6 +269,11 @@ public class MainWindowViewModel : ViewModelBase
         _displayNameFilter = new ObservableObject<bool>
         {
             Object = false
+        };
+
+        _displayStatusFilter = new ObservableObject<bool>
+        {
+            Object = true
         };
 
         _displayRetrospectionControls = new ObservableObject<bool>
@@ -478,6 +494,7 @@ public class MainWindowViewModel : ViewModelBase
             _databaseTimeOfInterest,
             _autoRefresh,
             _displayNameFilter,
+            _displayStatusFilter,
             _displayHistoricalTimeControls,
             _displayDatabaseTimeControls);
 

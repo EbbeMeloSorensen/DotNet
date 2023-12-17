@@ -79,6 +79,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
         ObservableObject<DateTime?> databaseTimeOfInterest,
         ObservableObject<bool> autoRefresh,
         ObservableObject<bool> displayNameFilter,
+        ObservableObject<bool> displayStatusFilter,
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
     {
@@ -92,6 +93,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
             historicalTimeOfInterest,
             databaseTimeOfInterest, 
             displayNameFilter,
+            displayStatusFilter,
             displayHistoricalTimeControls,
             displayDatabaseTimeControls);
 
