@@ -520,7 +520,10 @@ public class MainWindowViewModel : ViewModelBase
             // Todo: consider placing this in a general helper method
             _databaseWriteTimes.Add(e.DateTime);
             ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
-            ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
+            if (ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any())
+            {
+                ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
+            }
             UpdateMapPoints();
             RefreshDatabaseTimeSeriesView();
         };
@@ -1055,7 +1058,10 @@ public class MainWindowViewModel : ViewModelBase
 
         _databaseWriteTimes.Add(now);
         ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
-        ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
+        if (ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any())
+        {
+            ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
+        }
         UpdateMapPoints();
         RefreshDatabaseTimeSeriesView();
     }

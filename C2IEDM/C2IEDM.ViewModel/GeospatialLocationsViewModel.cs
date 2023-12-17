@@ -14,7 +14,7 @@ using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 using C2IEDM.Persistence;
 using Point = C2IEDM.Domain.Entities.WIGOS.GeospatialLocations.Point;
 using System.Collections;
-using C2IEDM.Domain.Entities;
+using System.Globalization;
 
 namespace C2IEDM.ViewModel
 {
@@ -243,8 +243,8 @@ namespace C2IEDM.ViewModel
                         DateTimeKind.Utc)
                 : DateTime.MaxValue;
 
-            var latitude = double.Parse(dialogViewModel.Latitude);
-            var longitude = double.Parse(dialogViewModel.Longitude);
+            var latitude = double.Parse(dialogViewModel.Latitude, CultureInfo.InvariantCulture);
+            var longitude = double.Parse(dialogViewModel.Longitude, CultureInfo.InvariantCulture);
 
             var now = DateTime.UtcNow;
 
@@ -257,6 +257,7 @@ namespace C2IEDM.ViewModel
 
                 var newPoint = new Point(Guid.NewGuid(), now)
                 {
+                    ObjectId = geospatialLocation.ObjectId,
                     AbstractEnvironmentalMonitoringFacilityId = _selectedObservingFacility.Id,
                     AbstractEnvironmentalMonitoringFacilityObjectId = _selectedObservingFacility.ObjectId,
                     From = from,
@@ -264,10 +265,51 @@ namespace C2IEDM.ViewModel
                     Coordinate1 = latitude,
                     Coordinate2 = longitude,
                     CoordinateSystem = "WGS_84",
-
                 };
 
                 unitOfWork.GeospatialLocations.Add(newPoint);
+
+                // Determine if we should change the DateEstablished/DateClosed range of the observing facility
+                var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>
+                {
+                    _ => _.Superseded == DateTime.MaxValue,
+                    _ => _.ObjectId != geospatialLocation.ObjectId
+                };
+
+                var otherGeospatialLocations = 
+                    unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(
+                        _selectedObservingFacility.Id, 
+                        geospatialLocationPredicates).Item2;
+
+                var minFromDate = otherGeospatialLocations
+                    .Select(_ => _.From)
+                    .Append(newPoint.From)
+                    .Min();
+
+                var maxToDate = otherGeospatialLocations
+                    .Select(_ => _.To)
+                    .Append(newPoint.To)
+                    .Max();
+
+                if (minFromDate != _selectedObservingFacility.DateEstablished ||
+                    maxToDate != _selectedObservingFacility.DateClosed)
+                {
+                    var observingFacilityFromRepo = unitOfWork.ObservingFacilities.Get(_selectedObservingFacility.Id);
+                    observingFacilityFromRepo.Superseded = now;
+
+                    unitOfWork.ObservingFacilities.Update(observingFacilityFromRepo);
+
+                    var newObservingFacility = new ObservingFacility(Guid.NewGuid(), now)
+                    {
+                        Name = observingFacilityFromRepo.Name,
+                        ObjectId = observingFacilityFromRepo.ObjectId,
+                        DateEstablished = minFromDate,
+                        DateClosed = maxToDate
+                    };
+
+                    unitOfWork.ObservingFacilities.Add(newObservingFacility);
+                }
+
                 unitOfWork.Complete();
             }
 
