@@ -249,6 +249,11 @@ public class ObservingFacilityListViewModel : ViewModelBase
 
     private void UpdateObservingFacilityListItemViewModels()
     {
+        // Identify the ones that are selected
+        var objectIdsOfSelectedObservingFacilities = SelectedObservingFacilities.Objects
+            .Select(_ => _.ObjectId)
+            .ToList();
+
         UpdateSorting();
 
         ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(
@@ -256,6 +261,17 @@ public class ObservingFacilityListViewModel : ViewModelBase
             {
                 ObservingFacility = _.ObservingFacility
             }));
+
+        // Make sure the ones that were selected before are selected again
+        SelectedObservingFacilityListItemViewModels.Clear();
+
+        ObservingFacilityListItemViewModels.ToList().ForEach(_ =>
+        {
+            if (objectIdsOfSelectedObservingFacilities.Contains(_.ObservingFacility.ObjectId))
+            {
+                SelectedObservingFacilityListItemViewModels.Add(_);
+            }
+        });
     }
 
     private void FindObservingFacilities(

@@ -311,6 +311,8 @@ public class MainWindowViewModel : ViewModelBase
                     timeStampsForGeospatialLocations.AddRange(geospatialLocations.Select(_ => _.Superseded));
                     timeStampsForGeospatialLocations = timeStampsForGeospatialLocations.Where(_ => _ < DateTime.MaxValue).ToList();
                     _databaseWriteTimes.AddRange(timeStampsForGeospatialLocations.Distinct());
+
+                    _databaseWriteTimes = _databaseWriteTimes.Distinct().ToList();
                 }
             }
             catch (InvalidOperationException ex)
@@ -701,6 +703,9 @@ public class MainWindowViewModel : ViewModelBase
             var currentTimeInFocus = DatabaseWriteTimesViewModel.TimeAtOrigo +
                 TimeSpan.FromDays(DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.X);
 
+            // Af hensyn til afrundingsfejl, så vi sikrer, at den faktisk stepper tilbage i tid
+            currentTimeInFocus -= TimeSpan.FromMilliseconds(10);
+
             var earlierDatabaseWriteTimes = _databaseWriteTimes.Where(_ => _ < currentTimeInFocus);
 
             if (!earlierDatabaseWriteTimes.Any())
@@ -722,6 +727,9 @@ public class MainWindowViewModel : ViewModelBase
 
             var currentTimeInFocus = DatabaseWriteTimesViewModel.TimeAtOrigo +
                                      TimeSpan.FromDays(DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.X);
+
+            // Af hensyn til afrundingsfejl, så vi sikrer, at den faktisk stepper frem i tid
+            currentTimeInFocus += TimeSpan.FromMilliseconds(10);
 
             var laterDatabaseWriteTimes = _databaseWriteTimes.Where(_ => _ > currentTimeInFocus);
 
