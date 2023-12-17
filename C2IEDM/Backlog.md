@@ -21,11 +21,13 @@ Done
 * Sørg for at vedligeholde hjælpestreger for database tidslinien
   - Én for Now
   - Én for selected time
-
-In progress:
 * Når man trykker på find skal den så vidt muligt bibeholde selection, dvs de observing facilities, der var selected før, skal også være selected efter
 * Det at slette, tilføje, eller ændre en Geospatiel Location kan godt ændre på map viewet og endda master listen, så det skal refreshes
-* Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer, at den ikke overlapper med de eksisterende
+
+In progress:
+* Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer:
+  - at den ikke overlapper med de eksisterende
+  - at den ikke starter eller slutter i fremtiden
 * Der skal tilføjes streger til samlingen af database write times, når man arbejder med lokationer
 * Det skal fremgå tydeligt af detaljeviewet, om man har valgt én eller flere observing facilities
 * Hvis man vælger FLERE observing facilities, skal den IKKE vise sektionen med geospatial locations
