@@ -142,7 +142,9 @@ namespace C2IEDM.ViewModel
                         geospatialLocationPredicates);
 
                 GeospatialLocationListItemViewModels = new ObservableCollection<GeospatialLocationListItemViewModel>(
-                    observingFacility.Item2.Select(_ => new GeospatialLocationListItemViewModel(_)));
+                    observingFacility.Item2
+                        .Select(_ => new GeospatialLocationListItemViewModel(_))
+                        .OrderBy(_ => _.From));
             }
         }
 

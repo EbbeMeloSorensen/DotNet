@@ -23,13 +23,17 @@ Done
   - Én for selected time
 * Når man trykker på find skal den så vidt muligt bibeholde selection, dvs de observing facilities, der var selected før, skal også være selected efter
 * Det at slette, tilføje, eller ændre en Geospatiel Location kan godt ændre på map viewet og endda master listen, så det skal refreshes
+* Der skal tilføjes streger til samlingen af database write times, når man arbejder med lokationer - create, update delete
 
 In progress:
+* Geospatial locations for en observing facility skal sorteres kronologisk
 * Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer:
   - at den ikke overlapper med de eksisterende
   - at den ikke starter eller slutter i fremtiden
-* Der skal tilføjes streger til samlingen af database write times, når man arbejder med lokationer
+* Forskellige farver for streger i tids-linealerne
 * Det skal fremgå tydeligt af detaljeviewet, om man har valgt én eller flere observing facilities
+* 2d view med tidsakser på begge leder
+* Man skal ikke kunne steppe frem, hvis det indebærer at den lilla "now" line trækkes ind
 * Hvis man vælger FLERE observing facilities, skal den IKKE vise sektionen med geospatial locations
 * Sørg for at den foreslår nogle rimelige muligheder, hvis man prøver at ændre From Date eller To Date
 * Lav en "unleash service technician" funktion, så man kan placere en figur, der går rundt efter en drunkards walk og placerer stationer
