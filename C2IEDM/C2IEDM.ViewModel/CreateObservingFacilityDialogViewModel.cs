@@ -17,8 +17,6 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     private string _error = string.Empty;
 
     private string _name;
-    private DateTime _dateEstablished;
-    private DateTime? _dateClosed;
     private double _latitude;
     private double _longitude;
     private DateTime _from;
@@ -38,26 +36,6 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         set
         {
             _name = value;
-            RaisePropertyChanged();
-        }
-    }
-
-    public DateTime DateEstablished
-    {
-        get { return _dateEstablished; }
-        set
-        {
-            _dateEstablished = value;
-            RaisePropertyChanged();
-        }
-    }
-
-    public DateTime? DateClosed
-    {
-        get { return _dateClosed; }
-        set
-        {
-            _dateClosed = value;
             RaisePropertyChanged();
         }
     }
@@ -168,7 +146,6 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         var currentDate = DateTime.Now.Date;
         DisplayDateEnd_DateFrom = currentDate;
         DisplayDateEnd_DateTo = currentDate;
-        DateEstablished = currentDate;
         From = currentDate;
         Latitude = Math.Round(mousePositionWorld.X, 4);
         Longitude = -Math.Round(mousePositionWorld.Y, 4);
@@ -192,10 +169,6 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
         {
             To = DateTime.MaxValue;
         }
-
-        // For now, we let EstablidhedDate and ClosedDate follow the From and To dates
-        DateEstablished = From;
-        DateClosed = To;
 
         CloseDialogWithResult(parameter as Window, DialogResult.OK);
     }
@@ -265,8 +238,6 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
                 _validationMessages = new ObservableCollection<ValidationError>
                 {
                     new ValidationError {PropertyName = "Name"},
-                    new ValidationError {PropertyName = "DateEstablished"},
-                    new ValidationError {PropertyName = "DateClosed"},
                     new ValidationError {PropertyName = "Latitude"},
                     new ValidationError {PropertyName = "Longitude"},
                     new ValidationError {PropertyName = "From"},
@@ -281,8 +252,6 @@ public class CreateObservingFacilityDialogViewModel : DialogViewModelBase, IData
     private void RaisePropertyChanges()
     {
         RaisePropertyChanged("Name");
-        RaisePropertyChanged("DateEstablished");
-        RaisePropertyChanged("DateClosed");
         RaisePropertyChanged("Latitude");
         RaisePropertyChanged("Longitude");
         RaisePropertyChanged("From");

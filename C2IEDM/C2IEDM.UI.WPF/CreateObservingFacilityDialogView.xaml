@@ -26,8 +26,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="0"/>
-                <RowDefinition Height="0"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -49,19 +47,13 @@
             <TextBox Grid.Row="2" Grid.Column="1"
                      Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding Longitude, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Padding="3" Text="Date Established:"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Padding="3" Text="From:"/>
             <DatePicker Grid.Row="3" Grid.Column="1" Padding="3" 
-                        SelectedDate="{Binding DateEstablished}"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Padding="3" Text="Date Closed:"/>
-            <DatePicker Grid.Row="4" Grid.Column="1" Padding="3" 
-                        SelectedDate="{Binding DateClosed}"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Padding="3" Text="From:"/>
-            <DatePicker Grid.Row="5" Grid.Column="1" Padding="3" 
                         DisplayDateStart="{Binding DisplayDateStart_DateFrom}" 
                         DisplayDateEnd="{Binding DisplayDateEnd_DateFrom}" 
                         SelectedDate="{Binding From}"/>
-            <TextBlock Grid.Row="6" Grid.Column="0" Padding="3" Text="To:"/>
-            <DatePicker Grid.Row="6" Grid.Column="1" Padding="3" 
+            <TextBlock Grid.Row="4" Grid.Column="0" Padding="3" Text="To:"/>
+            <DatePicker Grid.Row="4" Grid.Column="1" Padding="3" 
                         DisplayDateStart="{Binding DisplayDateStart_DateTo}" 
                         DisplayDateEnd="{Binding DisplayDateEnd_DateTo}" 
                         SelectedDate="{Binding To}"/>

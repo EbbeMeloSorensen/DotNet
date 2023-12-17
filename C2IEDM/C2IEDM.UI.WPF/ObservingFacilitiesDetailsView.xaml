@@ -51,17 +51,13 @@
                 <TextBox Margin="3" Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding SharedName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Margin="3" Grid.Row="3" Grid.Column="0" Text="Date Established:"/>
-                <DatePicker Margin="3" Grid.Row="3" Grid.Column="1" IsEnabled="False"
-                        DisplayDateStart="{Binding DisplayDateStart_DateEstablished}" 
-                        DisplayDateEnd="{Binding DisplayDateEnd_DateEstablished}" 
-                        SelectedDate ="{Binding SharedDateEstablished, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Margin="3" Grid.Row="3" Grid.Column="1" IsReadOnly="True"
+                         Text="{Binding SharedDateEstablishedAsText}"/>
                 <TextBlock Margin="3" Grid.Row="4" Grid.Column="0" Text="Date Closed:"/>
-                <DatePicker Margin="3" Grid.Row="4" Grid.Column="1" IsEnabled="False"
-                        DisplayDateStart="{Binding DisplayDateStart_DateClosed}" 
-                        DisplayDateEnd="{Binding DisplayDateEnd_DateClosed}" 
-                        SelectedDate ="{Binding SharedDateClosed, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Margin="3" Grid.Row="4" Grid.Column="1" IsReadOnly="True"
+                         Text="{Binding SharedDateClosedAsText}"/>
                 <Button Grid.Row ="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="3,3,3,6" Width="50" Content="Update" HorizontalAlignment="Right"
-                    Command="{Binding ApplyChangesCommand}" />
+                        Command="{Binding ApplyChangesCommand}" />
             </Grid>
 
             <local:GeospatialLocationsView Grid.Row="1"  

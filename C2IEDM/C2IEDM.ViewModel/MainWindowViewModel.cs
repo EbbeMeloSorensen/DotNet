@@ -930,25 +930,6 @@ public class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        var dateEstablished = new DateTime(
-            dialogViewModel.DateEstablished.Year,
-            dialogViewModel.DateEstablished.Month,
-            dialogViewModel.DateEstablished.Day,
-            0, 0, 0, DateTimeKind.Utc);
-
-        var dateClosed = dialogViewModel.DateClosed.HasValue
-            ? dialogViewModel.DateClosed == DateTime.MaxValue
-                ? DateTime.MaxValue
-                : new DateTime(
-                    dialogViewModel.DateClosed.Value.Year,
-                    dialogViewModel.DateClosed.Value.Month,
-                    dialogViewModel.DateClosed.Value.Day,
-                    dialogViewModel.DateClosed.Value.Hour,
-                    dialogViewModel.DateClosed.Value.Minute,
-                    dialogViewModel.DateClosed.Value.Second, 
-                    DateTimeKind.Utc)
-            : DateTime.MaxValue;
-
         var from = new DateTime(
             dialogViewModel.From.Year,
             dialogViewModel.From.Month,
@@ -976,13 +957,15 @@ public class MainWindowViewModel : ViewModelBase
 
         var now = DateTime.UtcNow;
 
+        // Bemærk, at vi sætter DateEstablished og DateClosed svarende til From og To for den ene lokation, som
+        // den pågældende observing facility laves med
         var observingFacility = new ObservingFacility(
             Guid.NewGuid(),
             now)
         {
             Name = dialogViewModel.Name,
-            DateEstablished = dateEstablished,
-            DateClosed = dateClosed
+            DateEstablished = from,
+            DateClosed = to
         };
 
         var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)

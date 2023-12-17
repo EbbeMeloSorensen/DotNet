@@ -7,10 +7,10 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.UI.Utils;
+using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
 using C2IEDM.Application;
-using Craft.ViewModels.Dialogs;
 
 namespace C2IEDM.ViewModel;
 
@@ -30,6 +30,8 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     private string _sharedName;
     private DateTime? _sharedDateEstablished;
     private DateTime? _sharedDateClosed;
+    private string _sharedDateEstablishedAsText;
+    private string _sharedDateClosedAsText;
 
     private DateTime _displayDateStart_DateEstablished;
     private DateTime _displayDateEnd_DateEstablished;
@@ -60,6 +62,11 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         {
             _sharedDateEstablished = value;
             RaisePropertyChanged();
+
+            SharedDateEstablishedAsText = _sharedDateEstablished.HasValue 
+                ? _sharedDateEstablished.Value.AsDateString() 
+                : "";
+
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
@@ -71,7 +78,32 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         {
             _sharedDateClosed = value;
             RaisePropertyChanged();
+
+            SharedDateClosedAsText = _sharedDateClosed.HasValue
+                ? _sharedDateClosed.Value.AsDateString()
+                : "";
+
             ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
+    public string SharedDateEstablishedAsText
+    {
+        get { return _sharedDateEstablishedAsText; }
+        set
+        {
+            _sharedDateEstablishedAsText = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public string SharedDateClosedAsText
+    {
+        get { return _sharedDateClosedAsText; }
+        set
+        {
+            _sharedDateClosedAsText = value;
+            RaisePropertyChanged();
         }
     }
 
@@ -172,6 +204,12 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
             ? firstObservingFacility.Name
             : null;
 
+        var now = DateTime.Now;
+
+        // Dette er for at sikre, at den foreslår dags dato, hvis man selecter den
+        SharedDateEstablished = now;
+        SharedDateClosed = now;
+
         // If the observing facilities were established the same date then show the shared date, otherwise leave the field empty
         SharedDateEstablished = temp.Objects.All(_ => _.DateEstablished == firstObservingFacility.DateEstablished)
             ? firstObservingFacility.DateEstablished
@@ -181,15 +219,9 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         var earliestDateClosed = temp.Objects.Min(_ => _.DateClosed);
         var latestDateEstablished = temp.Objects.Max(_ => _.DateEstablished);
 
-        var now = DateTime.Now;
-
         DisplayDateStart_DateEstablished = earliestDateClosed;
         DisplayDateStart_DateClosed = latestDateEstablished;
         DisplayDateEnd_DateClosed = now;
-
-        // Dette er for at sikre, at den foreslår dags dato, hvis man selecter den
-        SharedDateEstablished = now;
-        SharedDateClosed = now;
 
         var sharedDateClosed = temp.Objects.All(_ => _.DateClosed == firstObservingFacility.DateClosed)
             ? firstObservingFacility.DateClosed

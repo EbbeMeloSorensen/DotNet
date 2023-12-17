@@ -15,13 +15,40 @@ namespace C2IEDM.ViewModel
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
 
-        private DateTime _from;
-        private DateTime? _to;
         private double _latitude;
         private double _longitude;
 
+        private DateTime _from;
+        private DateTime? _to;
+
+        // These are for limiting options for the DatePicker controls
+        private DateTime _displayDateStart_DateFrom;
+        private DateTime _displayDateEnd_DateFrom;
+        private DateTime _displayDateStart_DateTo;
+        private DateTime _displayDateEnd_DateTo;
+
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
+
+        public double Latitude
+        {
+            get { return _latitude; }
+            set
+            {
+                _latitude = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double Longitude
+        {
+            get { return _longitude; }
+            set
+            {
+                _longitude = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public DateTime From
         {
@@ -43,22 +70,42 @@ namespace C2IEDM.ViewModel
             }
         }
 
-        public double Latitude
+        public DateTime DisplayDateStart_DateFrom
         {
-            get { return _latitude; }
+            get => _displayDateStart_DateFrom;
             set
             {
-                _latitude = value;
+                _displayDateStart_DateFrom = value;
                 RaisePropertyChanged();
             }
         }
 
-        public double Longitude
+        public DateTime DisplayDateEnd_DateFrom
         {
-            get { return _longitude; }
+            get => _displayDateEnd_DateFrom;
             set
             {
-                _longitude = value;
+                _displayDateEnd_DateFrom = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public DateTime DisplayDateStart_DateTo
+        {
+            get => _displayDateStart_DateTo;
+            set
+            {
+                _displayDateStart_DateTo = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public DateTime DisplayDateEnd_DateTo
+        {
+            get => _displayDateEnd_DateTo;
+            set
+            {
+                _displayDateEnd_DateTo = value;
                 RaisePropertyChanged();
             }
         }
@@ -133,6 +180,8 @@ namespace C2IEDM.ViewModel
         public DefineGeospatialLocationDialogViewModel()
         {
             var currentDate = DateTime.Now.Date;
+            DisplayDateEnd_DateFrom = currentDate;
+            DisplayDateEnd_DateTo = currentDate;
             From = currentDate;
         }
 
