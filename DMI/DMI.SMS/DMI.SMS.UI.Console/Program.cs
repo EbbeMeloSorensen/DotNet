@@ -23,7 +23,7 @@ namespace DMI.SMS.UI.Console
             //await GenerateSQLScriptForTurningElevationAngles(application);
 
             // Override arguments
-            //args = new string[3] {"export", "-f", "test.json"};
+            args = new string[3] {"export", "-f", "test.json"};
 
             await Parser.Default.ParseArguments<
                     Lunch,

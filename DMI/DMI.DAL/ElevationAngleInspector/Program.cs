@@ -68,7 +68,7 @@ catch (PostgresException excp)
     throw excp;
 }
 
-var statdb_host = "nanoqt.dmi.dk";
+var statdb_host = "nanoq.dmi.dk";
 var statdb_user = "ebs";
 var statdb_password = "Vm6PAkPh";
 var statdb_database = "statdb";
@@ -221,6 +221,7 @@ foreach(var sms_station in sms_stations)
                 elevationAngleSetFromStatDB.leeindex_nw == sms_station.angle_nw &&
                 elevationAngleSetFromStatDB.leeindexindex == sms_station.angleindex)
             {
+                //smsReportLine.comment = $"match ({elevationAngleSetFromStatDB})";
                 smsReportLine.comment = "match";
             }
             else
