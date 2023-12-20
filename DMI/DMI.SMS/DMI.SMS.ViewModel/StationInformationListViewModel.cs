@@ -307,14 +307,30 @@ namespace DMI.SMS.ViewModel
                 BusinessRule.OverlappingCurrentRecordsWithSameStationIdExists
             };
 
-            var stationInformationViewModels = _stationInformations.Select(s => new StationInformationViewModel
+            var stationInformationViewModels = _stationInformations.Select(s => 
             {
-                StationInformation = s,
-                Brush = _conditionToBrushMap[RowCharacteristicsMap.Object[s.GdbArchiveOid].RowCondition],
-                Warning1 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForIndividualRecords).Any(),
-                Warning2 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForRecordGroupsWithSameObjectId).Any(),
-                Warning3 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForCurrentRecordGroupsWithSameStationId).Any()
+                var warning1 = 
+                    RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && 
+                    RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForIndividualRecords).Any();
+
+                return new StationInformationViewModel
+                {
+                    StationInformation = s,
+                    Brush = _conditionToBrushMap[RowCharacteristicsMap.Object[s.GdbArchiveOid].RowCondition],
+                    Warning1 = warning1,
+                    Warning2 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForRecordGroupsWithSameObjectId).Any(),
+                    Warning3 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForCurrentRecordGroupsWithSameStationId).Any()
+                };
             }).ToList();
+
+            //var stationInformationViewModels = _stationInformations.Select(s => new StationInformationViewModel
+            //{
+            //    StationInformation = s,
+            //    Brush = _conditionToBrushMap[RowCharacteristicsMap.Object[s.GdbArchiveOid].RowCondition],
+            //    Warning1 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForIndividualRecords).Any(),
+            //    Warning2 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForRecordGroupsWithSameObjectId).Any(),
+            //    Warning3 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForCurrentRecordGroupsWithSameStationId).Any()
+            //}).ToList();
 
             var objectIdOfPreviousRow = -1;
             var backgroundBrush = _backgroundBrush2;
