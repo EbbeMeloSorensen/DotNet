@@ -1,6 +1,5 @@
 ﻿using System.Configuration;
 using Microsoft.Data.SqlClient;
-using Microsoft.IdentityModel.Protocols;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer
 {

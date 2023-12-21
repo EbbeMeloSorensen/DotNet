@@ -43,6 +43,8 @@ namespace DMI.Data.Studio.ViewModel
         private bool _includeOperationIntervalBars;
         private bool _includeObservationIntervalBars;
         private bool _includeTransactionTimeIntervalBars;
+        private bool _showSMSDBList;
+        private bool _showStatDBList;
         private RelayCommand<object> _openSettingsDialogCommand;
         private RelayCommand<object> _openAboutDialogCommand;
         private RelayCommand<object> _createStationInformationCommand;
@@ -133,6 +135,26 @@ namespace DMI.Data.Studio.ViewModel
             }
         }
 
+        public bool ShowSMSDBList
+        {
+            get { return _showSMSDBList; }
+            set
+            {
+                _showSMSDBList = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowStatDBList
+        {
+            get { return _showStatDBList; }
+            set
+            {
+                _showStatDBList = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public int SelectedOveralTabIndex
         {
             get { return _selectedOveralTabIndex; }
@@ -202,8 +224,9 @@ namespace DMI.Data.Studio.ViewModel
             _applicationDialogService = applicationDialogService;
             _logger = logger;
 
-            _smsDataProvider.Initialize(logger);
-            _statDBDataProvider.Initialize(logger);
+            // Vi initialiserer det i 
+            //_smsDataProvider.Initialize(logger);
+            //_statDBDataProvider.Initialize(logger);
 
             _application = new Application.Application(
                 _smsDataProvider,
@@ -279,6 +302,8 @@ namespace DMI.Data.Studio.ViewModel
             _includeOperationIntervalBars = true;
             _includeObservationIntervalBars = false;
             _includeTransactionTimeIntervalBars = true;
+            _showSMSDBList = true;
+            _showStatDBList = false;
 
             //DrawRoughOutlineOfDenmarkOnMap();
             DrawMapOfDenmark();

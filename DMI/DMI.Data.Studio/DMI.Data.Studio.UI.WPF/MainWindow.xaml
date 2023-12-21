@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DMI.Data.Studio.UI.WPF"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:uiElementsSMS="clr-namespace:DMI.SMS.UIElements;assembly=DMI.SMS.UIElements"
         xmlns:uiElementsStatDB="clr-namespace:DMI.StatDB.UIElements;assembly=DMI.StatDB.UIElements"
         xmlns:chronology="clr-namespace:Craft.UIElements.Chronology;assembly=Craft.UIElements"
@@ -52,6 +53,11 @@
                           IsChecked="{Binding IncludeTransactionTimeIntervalBars}"/>
                 <MenuItem Header="Observation Time Intervals" IsCheckable="True"
                           IsChecked="{Binding IncludeObservationIntervalBars}"/>
+                <Separator/>
+                <MenuItem Header="SMS stations" IsCheckable="True"
+                          IsChecked="{Binding ShowSMSDBList}"/>
+                <MenuItem Header="StatDB stations" IsCheckable="True"
+                          IsChecked="{Binding ShowStatDBList}"/>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="About" 
@@ -73,11 +79,27 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <uiElementsSMS:StationInformationListView Grid.Row="0" Grid.Column="0" 
-                                                      DataContext="{Binding StationInformationListViewModel}"/>
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.Visibility>
+                    <Binding Path="ShowSMSDBList" Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Grid.Visibility>
+                <uiElementsSMS:StationInformationListView DataContext="{Binding StationInformationListViewModel}"/>
+            </Grid>
 
-            <uiElementsStatDB:StationListView Grid.Row="0" Grid.Column="1" 
-                                              DataContext="{Binding StationListViewModel}" Visibility="Collapsed"/>
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Grid.Visibility>
+                    <Binding Path="ShowStatDBList" Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Grid.Visibility>
+                <uiElementsStatDB:StationListView DataContext="{Binding StationListViewModel}"/>
+            </Grid>
 
             <TabControl Grid.Row="0" Grid.Column="2" SelectedIndex="{Binding SelectedOveralTabIndex}">
                 <TabItem Header="Selected Records">
