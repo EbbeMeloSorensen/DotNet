@@ -224,7 +224,7 @@ namespace DMI.Data.Studio.ViewModel
             _applicationDialogService = applicationDialogService;
             _logger = logger;
 
-            // Vi initialiserer det i 
+            // Vi initialiserer det i de respektive plugins
             //_smsDataProvider.Initialize(logger);
             //_statDBDataProvider.Initialize(logger);
 
