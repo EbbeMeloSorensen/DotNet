@@ -30,6 +30,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
     private readonly List<DateTime> _databaseWriteTimes;
+    private readonly List<DateTime> _historicalChangeTimes;
     private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
     private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
     private readonly ObservableObject<bool> _autoRefresh;
@@ -359,17 +360,27 @@ public class MainWindowViewModel : ViewModelBase
                     _databaseWriteTimes.AddRange(timeStampsForGeospatialLocations.Distinct());
 
                     _databaseWriteTimes = _databaseWriteTimes.Distinct().ToList();
+
+                    var historicalChangeTimeStamps = geospatialLocations.Select(_ => _.From).ToList();
+                    historicalChangeTimeStamps.AddRange(geospatialLocations.Select(_ => _.To));
+
+                    _historicalChangeTimes = historicalChangeTimeStamps
+                        .Where(_ => _ < DateTime.MaxValue)
+                        .Distinct()
+                        .ToList();
                 }
             }
             catch (InvalidOperationException ex)
             {
                 // Just swallow it for now - write it to the log later
                 _databaseWriteTimes = new List<DateTime>();
+                _historicalChangeTimes = new List<DateTime>();
             }
         }
         else
         {
             _databaseWriteTimes = new List<DateTime>();
+            _historicalChangeTimes = new List<DateTime>();
         }
 
         UpdateRetrospectionControls();
