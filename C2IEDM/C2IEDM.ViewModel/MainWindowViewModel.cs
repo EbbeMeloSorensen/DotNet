@@ -1137,6 +1137,30 @@ public class MainWindowViewModel : ViewModelBase
             };
 
             unitOfWork.Points_Wigos.Add(point);
+
+            if (point.From < selectedObservingFacility.DateEstablished ||
+                point.To > selectedObservingFacility.DateClosed)
+            {
+                var observingFacilityFromRepo = unitOfWork.ObservingFacilities.Get(selectedObservingFacility.Id);
+
+                observingFacilityFromRepo.Superseded = now;
+                unitOfWork.ObservingFacilities.Update(observingFacilityFromRepo);
+
+                var newObservingFacility = new ObservingFacility(Guid.NewGuid(), now)
+                {
+                    ObjectId = observingFacilityFromRepo.ObjectId,
+                    Name = observingFacilityFromRepo.Name,
+                    DateEstablished = point.From < observingFacilityFromRepo.DateEstablished 
+                        ? point.From 
+                        : observingFacilityFromRepo.DateEstablished,
+                    DateClosed = point.To > observingFacilityFromRepo.DateClosed
+                        ? point.To
+                        : observingFacilityFromRepo.DateClosed
+                };
+
+                unitOfWork.ObservingFacilities.Add(newObservingFacility);
+            }
+
             unitOfWork.Complete();
         }
 

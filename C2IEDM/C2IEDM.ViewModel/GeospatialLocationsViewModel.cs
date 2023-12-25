@@ -49,8 +49,6 @@ namespace C2IEDM.ViewModel
             }
         }
 
-        //public ObservableCollection<GeospatialLocationListItemViewModel> SelectedGeospatialLocationListItemViewModels { get; set; }
-
         public RelayCommand<object> DeleteSelectedGeospatialLocationsCommand
         {
             get
@@ -96,16 +94,6 @@ namespace C2IEDM.ViewModel
             {
                 Objects = new List<GeospatialLocation>()
             };
-
-            //SelectedGeospatialLocationListItemViewModels =
-            //    new ObservableCollection<GeospatialLocationListItemViewModel>();
-
-            //SelectedGeospatialLocationListItemViewModels.CollectionChanged += (s, e) =>
-            //{
-            //    SelectedGeospatialLocations.Objects = SelectedGeospatialLocationListItemViewModels.Select(_ => _.GeospatialLocation);
-            //    DeleteSelectedGeospatialLocationsCommand.RaiseCanExecuteChanged();
-            //    UpdateSelectedGeospatialLocationCommand.RaiseCanExecuteChanged();
-            //};
 
             _observingFacilities.PropertyChanged += Initialize;
         }
@@ -180,6 +168,14 @@ namespace C2IEDM.ViewModel
                 .Select(_ => _.ObjectId)
                 .ToList();
 
+            var geospatialLocationsRemaining = GeospatialLocationListItemViewModels
+                .Select(_ => _.GeospatialLocation)
+                .Where(_ => !objectIds.Contains(_.ObjectId))
+                .ToList();
+
+            var dateEstablishedAfter = geospatialLocationsRemaining.Min(_ => _.From);
+            var dateClosedAfter = geospatialLocationsRemaining.Max(_ => _.To);
+
             var now = DateTime.UtcNow;
 
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
@@ -189,6 +185,30 @@ namespace C2IEDM.ViewModel
                     .ToList();
                 
                 geospatialLocationsForDeletion.ForEach(_ => _.Superseded = now);
+
+                if (dateEstablishedAfter > _selectedObservingFacility.DateEstablished ||
+                    dateClosedAfter < _selectedObservingFacility.DateClosed)
+                {
+                    // Update active period of observing facility
+                    var observingFacilityFromRepo = unitOfWork.ObservingFacilities.Get(_selectedObservingFacility.Id);
+
+                    observingFacilityFromRepo.Superseded = now;
+                    unitOfWork.ObservingFacilities.Update(observingFacilityFromRepo);
+
+                    var newObservingFacility = new ObservingFacility(Guid.NewGuid(), now)
+                    {
+                        ObjectId = observingFacilityFromRepo.ObjectId,
+                        Name = observingFacilityFromRepo.Name,
+                        DateEstablished = dateEstablishedAfter > observingFacilityFromRepo.DateEstablished
+                            ? dateEstablishedAfter
+                            : observingFacilityFromRepo.DateEstablished,
+                        DateClosed = dateClosedAfter < observingFacilityFromRepo.DateClosed
+                            ? dateClosedAfter
+                            : observingFacilityFromRepo.DateClosed
+                    };
+
+                    unitOfWork.ObservingFacilities.Add(newObservingFacility);
+                }
 
                 unitOfWork.GeospatialLocations.UpdateRange(geospatialLocationsForDeletion);
                 unitOfWork.Complete();
@@ -202,7 +222,7 @@ namespace C2IEDM.ViewModel
         {
             return SelectedGeospatialLocations.Objects != null &&
                    SelectedGeospatialLocations.Objects.Any() &&
-                   _geospatialLocationListItemViewModels.Count != 1;
+                   SelectedGeospatialLocations.Objects.Count() != _geospatialLocationListItemViewModels.Count;
         }
 
         private void UpdateSelectedGeospatialLocation(
