@@ -875,7 +875,12 @@ public class MainWindowViewModel : ViewModelBase
 
         foreach (var observingFacilityDataExtract in ObservingFacilityListViewModel.ObservingFacilityDataExtracts.Objects)
         {
-            var latestGeospatialLocation = observingFacilityDataExtract.GeospatialLocations
+            var relevantGeospatialLocations = _historicalTimeOfInterest.Object.HasValue
+                ? observingFacilityDataExtract.GeospatialLocations
+                    .Where(_ => _.From < _historicalTimeOfInterest.Object.Value)
+                : observingFacilityDataExtract.GeospatialLocations;
+
+            var latestGeospatialLocationAmongRelevantOnes = relevantGeospatialLocations
                 .OrderByDescending(_ => _.From)
                 .First() as Domain.Entities.WIGOS.GeospatialLocations.Point;
 
@@ -883,20 +888,22 @@ public class MainWindowViewModel : ViewModelBase
 
             if (_historicalTimeOfInterest.Object.HasValue)
             {
-                if (_historicalTimeOfInterest.Object.Value > latestGeospatialLocation.To)
+                if (_historicalTimeOfInterest.Object.Value > latestGeospatialLocationAmongRelevantOnes.To)
                 {
                     brush = _closedObservingFacilityBrush;
                 }
             }
-            else if (latestGeospatialLocation.To < DateTime.MaxValue)
+            else if (latestGeospatialLocationAmongRelevantOnes.To < DateTime.MaxValue)
             {
                 brush = _closedObservingFacilityBrush;
             }
 
             MapViewModel.PointViewModels.Add(new PointViewModel(
-                new PointD(latestGeospatialLocation.Coordinate1, -latestGeospatialLocation.Coordinate2), 10, brush));
-
-
+                new PointD(
+                    latestGeospatialLocationAmongRelevantOnes.Coordinate1, 
+                    -latestGeospatialLocationAmongRelevantOnes.Coordinate2), 
+                10, 
+                brush));
 
 
             // Old
