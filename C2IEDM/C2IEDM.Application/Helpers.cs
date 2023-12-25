@@ -48,11 +48,6 @@ namespace C2IEDM.Application
                 predicates.Add(_ => _.DateClosed < timeOfInterest);
             }
 
-            if (historicalTimeOfInterest.HasValue)
-            {
-                predicates.Add(_ => _.DateClosed > historicalTimeOfInterest.Value);
-            }
-
             if (!string.IsNullOrEmpty(nameFilterInUppercase))
             {
                 predicates.Add(_ => _.Name.ToUpper().Contains(nameFilterInUppercase));
