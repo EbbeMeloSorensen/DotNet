@@ -10,11 +10,13 @@ using Craft.ViewModels.Dialogs;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Domain.Entities.WIGOS.GeospatialLocations;
 using C2IEDM.Persistence;
+using Craft.Logging;
 
 namespace C2IEDM.ViewModel;
 
 public class ObservingFacilityListViewModel : ViewModelBase
 {
+    private readonly ILogger _logger;
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
     private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
@@ -73,6 +75,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
     }
 
     public ObservingFacilityListViewModel(
+        ILogger logger,
         IUnitOfWorkFactory unitOfWorkFactory,
         IDialogService applicationDialogService,
         ObservableObject<DateTime?> historicalTimeOfInterest,
@@ -85,6 +88,7 @@ public class ObservingFacilityListViewModel : ViewModelBase
         ObservableObject<bool> displayHistoricalTimeControls,
         ObservableObject<bool> displayDatabaseTimeControls)
     {
+        _logger = logger;
         _unitOfWorkFactory = unitOfWorkFactory;
         _applicationDialogService = applicationDialogService;
         _historicalTimeOfInterest = historicalTimeOfInterest;
@@ -227,6 +231,9 @@ public class ObservingFacilityListViewModel : ViewModelBase
                     };
                 });
         }
+
+        _logger?.WriteLine(LogMessageCategory.Information,
+            $"Retrieved {ObservingFacilityDataExtracts.Objects.Count()} Observing Facilities");
     }
 
     private int CountObservingFacilitiesMatchingFilterFromRepository()

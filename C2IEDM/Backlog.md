@@ -36,6 +36,7 @@ Done
 * Man skal kunne ændre en ToDate fra en given dato til null, dvs angive, at der ikke er nogen slutdato
 
 In progress:
+* Man ser ikke noget, hvis man beder om et historical view, der er 10 seks gammelt
 * Man skal ikke kunne ændre på noget i et history mode, hvor historical time of interest er sat
 * Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer:
   - at den ikke overlapper med de eksisterende

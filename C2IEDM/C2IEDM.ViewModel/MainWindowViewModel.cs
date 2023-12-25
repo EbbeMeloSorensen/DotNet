@@ -223,10 +223,11 @@ public class MainWindowViewModel : ViewModelBase
     {
         _unitOfWorkFactory = unitOfWorkFactory;
         _applicationDialogService = applicationDialogService;
+        _logger = logger;
 
         _application = new Application.Application(
             unitOfWorkFactory,
-            logger);
+            _logger);
 
         _historicalTimeOfInterest = new ObservableObject<DateTime?>
         {
@@ -328,9 +329,9 @@ public class MainWindowViewModel : ViewModelBase
             }
         };
 
-        InitializeLogViewModel(logger);
-        InitializeObservingFacilityListViewModel(unitOfWorkFactory, applicationDialogService);
-        InitializeObservingFacilitiesDetailsViewModel(unitOfWorkFactory, applicationDialogService);
+        InitializeLogViewModel(_logger);
+        InitializeObservingFacilityListViewModel(_logger, _unitOfWorkFactory, _applicationDialogService);
+        InitializeObservingFacilitiesDetailsViewModel(_unitOfWorkFactory, _applicationDialogService);
         InitializeMapViewModel();
         InitializeDatabaseWriteTimesViewModel();
         InitializeHistoricalTimeViewModel();
@@ -513,10 +514,12 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     private void InitializeObservingFacilityListViewModel(
+        ILogger logger,
         IUnitOfWorkFactory unitOfWorkFactory,
         IDialogService applicationDialogService)
     {
         ObservingFacilityListViewModel = new ObservingFacilityListViewModel(
+            logger,
             unitOfWorkFactory,
             applicationDialogService,
             _historicalTimeOfInterest,
