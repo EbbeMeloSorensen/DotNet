@@ -35,10 +35,10 @@ Done
   - når man sletter en
 * Man skal kunne ændre en ToDate fra en given dato til null, dvs angive, at der ikke er nogen slutdato
 * Fix fejl: Man ser ikke noget, hvis man beder om et historical view, der er 10 seks gammelt
+* Man må godt lave ændringer, når man ser på historik for en database, men IKKE når man ser på en tidligere version af databasen
 
 In progress:
-* Man må godt lave ændringer, når man ser på historik for en database, men IKKE når man ser på en tidligere version af databasen
-* Der skal tegnes linier der hvor en placering ændrer sig i historical view
+* Der skal tegnes linier der hvor en placering ændrer sig i historical view - og det skal opdateres ved databaseændringer
 * Når man vælger et antal geospatial locations i details viewet, skal der tegnes bjælker til repræsentation af dem i historical view
 * De førnævnte bjælker skal kunne overlejres med smalle bjælker, der viser, hvor der er foretaget målinger - i stil med den gamle applikation - bare bedre fordi man kan zoome
 * Man skal kunne se værdierne for en tidsserie
