@@ -252,18 +252,18 @@ public class MainWindowViewModel : ViewModelBase
             }
 
             UpdateMapColoring();
+            RefreshHistoricalTimeSeriesView(false);
             UpdateControlBackground();
             UpdateStatusBar();
         };
 
         _databaseTimeOfInterest.PropertyChanged += (s, e) =>
         {
-            // Todo: Sikr, at historical time of interest ikke er større end database time of interest
-
             UpdateMapColoring();
             RefreshDatabaseTimeSeriesView();
             UpdateControlBackground();
             UpdateStatusBar();
+            UpdateCommands();
         };
 
         _autoRefresh = new ObservableObject<bool>
@@ -427,7 +427,7 @@ public class MainWindowViewModel : ViewModelBase
     private bool CanCreateObservingFacility(
         object owner)
     {
-        return true;
+        return !_databaseTimeOfInterest.Object.HasValue;
     }
 
     private void DeleteSelectedObservingFacilities(
@@ -469,13 +469,15 @@ public class MainWindowViewModel : ViewModelBase
 
             _databaseWriteTimes.Add(now);
             RefreshDatabaseTimeSeriesView();
+            RefreshHistoricalTimeSeriesView(true);
         }
     }
 
     private bool CanDeleteSelectedObservingFacilities(
         object owner)
     {
-        return ObservingFacilityListViewModel.SelectedObservingFacilities.Objects != null &&
+        return !_databaseTimeOfInterest.Object.HasValue &&
+               ObservingFacilityListViewModel.SelectedObservingFacilities.Objects != null &&
                ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any();
     }
 
@@ -495,6 +497,9 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWork.AbstractEnvironmentalMonitoringFacilities.Clear();
             unitOfWork.Complete();
         }
+
+        _historicalChangeTimes.Clear();
+        RefreshHistoricalTimeSeriesView(false);
 
         _databaseWriteTimes.Clear();
         RefreshDatabaseTimeSeriesView();
@@ -588,6 +593,7 @@ public class MainWindowViewModel : ViewModelBase
             }
             UpdateMapPoints();
             RefreshDatabaseTimeSeriesView();
+            RefreshHistoricalTimeSeriesView(true);
         };
     }
 
@@ -643,7 +649,7 @@ public class MainWindowViewModel : ViewModelBase
         var timeSpan = TimeSpan.FromDays(40);
         var utcNow = DateTime.UtcNow;
         var timeAtOrigo = utcNow.Date;
-        var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1);
+        var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromDays(2);
         var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
 
         HistoricalTimeViewModel = new TimeSeriesViewModel(
@@ -656,7 +662,7 @@ public class MainWindowViewModel : ViewModelBase
             timeAtOrigo,
             _logger)
         {
-            LockWorldWindowOnDynamicXValue = false,
+            LockWorldWindowOnDynamicXValue = true,
             ShowHorizontalGridLines = false,
             ShowVerticalGridLines = false,
             ShowHorizontalAxis = true,
@@ -664,15 +670,28 @@ public class MainWindowViewModel : ViewModelBase
             ShowXAxisLabels = true,
             ShowYAxisLabels = false,
             ShowPanningButtons = true,
-            Fraction = 0.9,
+            Fraction = 0.95,
             LabelForDynamicXValue = "Now"
         };
 
         HistoricalTimeViewModel.GeometryEditorViewModel.YAxisLocked = true;
 
+        HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
+        {
+            // Når brugeren dragger, træder vi ud af det mode, hvor World Window løbende opdateres
+            HistoricalTimeViewModel.LockWorldWindowOnDynamicXValue = false;
+        };
+
         HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
         {
-            // Todo: Refresh a view of historical changes
+            RefreshHistoricalTimeSeriesView(false);
+        };
+
+        HistoricalTimeViewModel.GeometryEditorViewModel.UpdateModelCallBack = () =>
+        {
+            // Update the x value of interest (set it to current time)
+            var nowAsScalar = (DateTime.UtcNow - HistoricalTimeViewModel.TimeAtOrigo).TotalDays;
+            HistoricalTimeViewModel.DynamicXValue = nowAsScalar;
         };
 
         HistoricalTimeViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
@@ -716,7 +735,7 @@ public class MainWindowViewModel : ViewModelBase
             ShowXAxisLabels = true,
             ShowYAxisLabels = false,
             ShowPanningButtons = true,
-            Fraction = 0.9,
+            Fraction = 0.95,
             LabelForDynamicXValue = "Now"
         };
 
@@ -814,6 +833,54 @@ public class MainWindowViewModel : ViewModelBase
                 xValueInFocus,
                 DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.Y);
         };
+    }
+
+    private void RefreshHistoricalTimeSeriesView(
+        bool recalculate)
+    {
+        // Called:
+        //   - During upstart (ok)
+        //   - When a major world window update occurs (such as after a drag) (ok)
+        //   - When the user changes the historical time of interest by clicking in the view (ok)
+
+        //   - When a new observing facility is created
+        //   - When selected observing facilities are deleted
+        //   - When the user resets the historical time of interest by clicking the Now button
+
+        // Calculate position of world window
+        var x0 = HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
+        var x1 = HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
+        var y0 = -HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y - HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowSize.Height;
+        var y1 = -HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y;
+
+        // Calculate y coordinate of the principal axis (so we can make the lines stop there)
+        var y2 = HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
+                 HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowSize.Height * HistoricalTimeViewModel.GeometryEditorViewModel.MarginBottomOffset /
+                 HistoricalTimeViewModel.GeometryEditorViewModel.ViewPortSize.Height;
+
+        // Clear lines
+        HistoricalTimeViewModel.GeometryEditorViewModel.ClearLines();
+
+        var lineThickness = 1.5;
+
+        var lineViewModels = _historicalChangeTimes
+            .Select(_ => (_ - HistoricalTimeViewModel.TimeAtOrigo).TotalDays)
+            .Where(_ => _ > x0 && _ < x1)
+            .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y2), lineThickness, _timeStampBrush))
+            .ToList();
+
+        lineViewModels.ForEach(_ => HistoricalTimeViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
+
+        if (_historicalTimeOfInterest.Object.HasValue)
+        {
+            var xTimeOfInterest = (_historicalTimeOfInterest.Object.Value - HistoricalTimeViewModel.TimeAtOrigo).TotalDays;
+
+            if (xTimeOfInterest > x0 && xTimeOfInterest < x1)
+            {
+                HistoricalTimeViewModel.GeometryEditorViewModel.LineViewModels.Add(
+                    new LineViewModel(new PointD(xTimeOfInterest, y0), new PointD(xTimeOfInterest, y2), lineThickness, _timeOfInterestBrush));
+            }
+        }
     }
 
     private void RefreshDatabaseTimeSeriesView()
@@ -1024,6 +1091,12 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private void UpdateCommands()
+    {
+        CreateObservingFacilityCommand.RaiseCanExecuteChanged();
+        DeleteSelectedObservingFacilitiesCommand.RaiseCanExecuteChanged();
+    }
+
     private void CreateNewObservingFacility()
     {
         var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
@@ -1089,10 +1162,14 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWork.Complete();
         }
 
-        if (observingFacility.DateClosed == DateTime.MaxValue)
+        _historicalChangeTimes.Add(observingFacility.DateEstablished);
+
+        if (observingFacility.DateClosed < DateTime.MaxValue)
         {
-            //ObservingFacilityListViewModel.AddObservingFacility(observingFacility, point);
+            _historicalChangeTimes.Add(observingFacility.DateClosed);
         }
+
+        RefreshHistoricalTimeSeriesView(false);
 
         _databaseWriteTimes.Add(now);
         RefreshDatabaseTimeSeriesView();
@@ -1187,10 +1264,12 @@ public class MainWindowViewModel : ViewModelBase
 
         _databaseWriteTimes.Add(now);
         ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+
         if (ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any())
         {
             ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
         }
+
         UpdateMapPoints();
         RefreshDatabaseTimeSeriesView();
     }

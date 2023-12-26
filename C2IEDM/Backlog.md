@@ -37,6 +37,7 @@ Done
 * Fix fejl: Man ser ikke noget, hvis man beder om et historical view, der er 10 seks gammelt
 
 In progress:
+* Man må godt lave ændringer, når man ser på historik for en database, men IKKE når man ser på en tidligere version af databasen
 * Der skal tegnes linier der hvor en placering ændrer sig i historical view
 * Når man vælger et antal geospatial locations i details viewet, skal der tegnes bjælker til repræsentation af dem i historical view
 * De førnævnte bjælker skal kunne overlejres med smalle bjælker, der viser, hvor der er foretaget målinger - i stil med den gamle applikation - bare bedre fordi man kan zoome
