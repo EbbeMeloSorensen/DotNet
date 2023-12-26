@@ -361,6 +361,10 @@ public class MainWindowViewModel : ViewModelBase
 
                     _databaseWriteTimes = _databaseWriteTimes.Distinct().ToList();
 
+                    geospatialLocations = unitOfWork.GeospatialLocations
+                        .Find(_ => _.Superseded == DateTime.MaxValue)
+                        .ToList();
+
                     var historicalChangeTimeStamps = geospatialLocations.Select(_ => _.From).ToList();
                     historicalChangeTimeStamps.AddRange(geospatialLocations.Select(_ => _.To));
 
