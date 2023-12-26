@@ -13,6 +13,7 @@ using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
+using System.Globalization;
 
 namespace C2IEDM.ViewModel;
 
@@ -46,7 +47,6 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Brush _mapBrushLandCurrent = new SolidColorBrush(new Color { R = 100, G = 200, B = 100, A = 255 });
     private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
     private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
-    private readonly Brush _timeOfInterestBrush = new SolidColorBrush(Colors.OrangeRed);
     private readonly Brush _activeObservingFacilityBrush = new SolidColorBrush(Colors.Black);
     private readonly Brush _closedObservingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
     private readonly Brush _controlBackgroundBrushCurrent = new SolidColorBrush(Colors.WhiteSmoke);
@@ -871,15 +871,9 @@ public class MainWindowViewModel : ViewModelBase
 
         lineViewModels.ForEach(_ => HistoricalTimeViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
 
-        if (_historicalTimeOfInterest.Object.HasValue)
+        if (!_historicalTimeOfInterest.Object.HasValue)
         {
-            var xTimeOfInterest = (_historicalTimeOfInterest.Object.Value - HistoricalTimeViewModel.TimeAtOrigo).TotalDays;
-
-            if (xTimeOfInterest > x0 && xTimeOfInterest < x1)
-            {
-                HistoricalTimeViewModel.GeometryEditorViewModel.LineViewModels.Add(
-                    new LineViewModel(new PointD(xTimeOfInterest, y0), new PointD(xTimeOfInterest, y2), lineThickness, _timeOfInterestBrush));
-            }
+            HistoricalTimeViewModel.StaticXValue = null;
         }
     }
 
@@ -918,15 +912,9 @@ public class MainWindowViewModel : ViewModelBase
 
         lineViewModels.ForEach(_ => DatabaseWriteTimesViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
 
-        if (_databaseTimeOfInterest.Object.HasValue)
+        if (!_databaseTimeOfInterest.Object.HasValue)
         {
-            var xTimeOfInterest = (_databaseTimeOfInterest.Object.Value - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays;
-
-            if (xTimeOfInterest > x0 && xTimeOfInterest < x1)
-            {
-                DatabaseWriteTimesViewModel.GeometryEditorViewModel.LineViewModels.Add(
-                    new LineViewModel(new PointD(xTimeOfInterest, y0), new PointD(xTimeOfInterest, y2), lineThickness, _timeOfInterestBrush));
-            }
+            DatabaseWriteTimesViewModel.StaticXValue = null;
         }
     }
 
@@ -1095,6 +1083,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         CreateObservingFacilityCommand.RaiseCanExecuteChanged();
         DeleteSelectedObservingFacilitiesCommand.RaiseCanExecuteChanged();
+        ObservingFacilitiesDetailsViewModel.IsReadOnly = _databaseTimeOfInterest.Object.HasValue;
     }
 
     private void CreateNewObservingFacility()
@@ -1191,6 +1180,7 @@ public class MainWindowViewModel : ViewModelBase
         var mousePositionInMap = MapViewModel.MousePositionWorld.Object.Value;
 
         var dialogViewModel = new DefineGeospatialLocationDialogViewModel(
+            DefineGeospatialLocationMode.Create,
             Math.Round(mousePositionInMap.X, 4),
             -Math.Round(mousePositionInMap.Y, 4),
             DateTime.UtcNow.Date,
@@ -1233,8 +1223,8 @@ public class MainWindowViewModel : ViewModelBase
             {
                 From = from,
                 To = to,
-                Coordinate1 = double.Parse(dialogViewModel.Latitude),
-                Coordinate2 = double.Parse(dialogViewModel.Longitude),
+                Coordinate1 = double.Parse(dialogViewModel.Latitude, CultureInfo.InvariantCulture),
+                Coordinate2 = double.Parse(dialogViewModel.Longitude, CultureInfo.InvariantCulture),
                 CoordinateSystem = "WGS_84",
                 AbstractEnvironmentalMonitoringFacilityId = selectedObservingFacility.Id,
                 AbstractEnvironmentalMonitoringFacilityObjectId = selectedObservingFacility.ObjectId

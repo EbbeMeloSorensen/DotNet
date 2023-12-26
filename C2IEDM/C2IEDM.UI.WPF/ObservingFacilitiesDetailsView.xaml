@@ -48,8 +48,10 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Margin="3" Grid.Row="2" Grid.Column="0" Text="Name:"/>
-                <TextBox Margin="3" Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
-                     Text="{Binding SharedName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Margin="3" Grid.Row="2" Grid.Column="1"
+                         IsReadOnly="{Binding IsReadOnly}"
+                         Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                         Text="{Binding SharedName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Margin="3" Grid.Row="3" Grid.Column="0" Text="Date Established:"/>
                 <TextBox Margin="3" Grid.Row="3" Grid.Column="1" IsReadOnly="True"
                          Text="{Binding SharedDateEstablishedAsText}"/>

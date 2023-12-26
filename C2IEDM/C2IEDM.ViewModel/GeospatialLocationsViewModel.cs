@@ -96,6 +96,13 @@ namespace C2IEDM.ViewModel
             };
 
             _observingFacilities.PropertyChanged += Initialize;
+
+            _databaseTimeOfInterest.PropertyChanged += (s, e) =>
+            {
+                CreateGeospatialLocationCommand.RaiseCanExecuteChanged();
+                UpdateSelectedGeospatialLocationCommand.RaiseCanExecuteChanged();
+                DeleteSelectedGeospatialLocationsCommand.RaiseCanExecuteChanged();
+            };
         }
 
         private void Initialize(object sender, PropertyChangedEventArgs e)
@@ -145,7 +152,7 @@ namespace C2IEDM.ViewModel
         private bool CanCreateGeospatialLocation(
             object owner)
         {
-            return true;
+            return !_databaseTimeOfInterest.Object.HasValue;
         }
 
         private void DeleteSelectedGeospatialLocations(
@@ -220,7 +227,8 @@ namespace C2IEDM.ViewModel
         private bool CanDeleteSelectedGeospatialLocations(
             object owber)
         {
-            return SelectedGeospatialLocations.Objects != null &&
+            return !_databaseTimeOfInterest.Object.HasValue &&
+                   //SelectedGeospatialLocations.Objects != null &&
                    SelectedGeospatialLocations.Objects.Any() &&
                    SelectedGeospatialLocations.Objects.Count() != _geospatialLocationListItemViewModels.Count;
         }
@@ -231,6 +239,7 @@ namespace C2IEDM.ViewModel
             var point = SelectedGeospatialLocations.Objects.Single() as Point;
 
             var dialogViewModel = new DefineGeospatialLocationDialogViewModel(
+                DefineGeospatialLocationMode.Update,
                 point.Coordinate1,
                 point.Coordinate2,
                 point.From,
@@ -339,7 +348,8 @@ namespace C2IEDM.ViewModel
         private bool CanUpdateSelectedGeospatialLocation(
             object owner)
         {
-            return SelectedGeospatialLocations.Objects != null &&
+            return !_databaseTimeOfInterest.Object.HasValue &&
+                   //SelectedGeospatialLocations.Objects != null &&
                    SelectedGeospatialLocations.Objects.Count() == 1;
         }
 
