@@ -1162,11 +1162,17 @@ public class MainWindowViewModel : ViewModelBase
             unitOfWork.Complete();
         }
 
-        _historicalChangeTimes.Add(observingFacility.DateEstablished);
+        if (!_historicalChangeTimes.Contains(observingFacility.DateEstablished))
+        {
+            _historicalChangeTimes.Add(observingFacility.DateEstablished);
+        }
 
         if (observingFacility.DateClosed < DateTime.MaxValue)
         {
-            _historicalChangeTimes.Add(observingFacility.DateClosed);
+            if (!_historicalChangeTimes.Contains(observingFacility.DateClosed))
+            {
+                _historicalChangeTimes.Add(observingFacility.DateClosed);
+            }
         }
 
         RefreshHistoricalTimeSeriesView(false);
