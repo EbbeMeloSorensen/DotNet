@@ -58,7 +58,9 @@ namespace DMI.StatDB.Persistence.Npgsql
                             equal.Right.ToMSSqlString();
                 case ExpressionType.NotEqual:
                     var notEqual = expression as BinaryExpression;
-                    return notEqual.Left.ToMSSqlString() + " != " +
+                    //return notEqual.Left.ToMSSqlString() + " != " +
+                    //        notEqual.Right.ToMSSqlString();
+                    return notEqual.Left.ToMSSqlString() + " is not " +
                             notEqual.Right.ToMSSqlString();
                 case ExpressionType.Not:
                     var not = expression as UnaryExpression;
@@ -82,6 +84,7 @@ namespace DMI.StatDB.Persistence.Npgsql
                         case "StationName":
                         case "Status":
                         case "GdbToDate":
+                        case "Country":
                             return _columnNameMap[memberName];
                         case "maxDate":
                             return "'9999-12-31 23:59:59'";
@@ -103,7 +106,7 @@ namespace DMI.StatDB.Persistence.Npgsql
                     return logicalAnd.Left.ToMSSqlString() + " AND " +
                             logicalAnd.Right.ToMSSqlString();
                 case ExpressionType.OrElse:
-                    var logicalOr = expression as BinaryExpression;
+                    var logicalOr = expression as BinaryExpression; 
                     return logicalOr.Left.ToMSSqlString() + " OR " +
                             logicalOr.Right.ToMSSqlString();
             }

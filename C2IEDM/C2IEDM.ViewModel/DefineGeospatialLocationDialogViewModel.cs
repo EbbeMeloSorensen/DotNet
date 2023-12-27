@@ -10,11 +10,19 @@ using Craft.ViewModels.Dialogs;
 
 namespace C2IEDM.ViewModel
 {
+    public enum DefineGeospatialLocationMode
+    {
+        Create,
+        Update
+    }
+
     public class DefineGeospatialLocationDialogViewModel : DialogViewModelBase, IDataErrorInfo
     {
         private StateOfView _state;
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
+
+        private DefineGeospatialLocationMode _mode;
 
         private string _latitude;
         private string _longitude;
@@ -202,11 +210,13 @@ namespace C2IEDM.ViewModel
         }
 
         public DefineGeospatialLocationDialogViewModel(
+            DefineGeospatialLocationMode mode,
             double latitude,
             double longitude,
             DateTime from,
             DateTime? to)
         {
+            _mode = mode;
             Latitude = latitude.ToString(CultureInfo.InvariantCulture);
             Longitude = longitude.ToString(CultureInfo.InvariantCulture);
             From = from;
@@ -262,7 +272,8 @@ namespace C2IEDM.ViewModel
         private bool CanOK(
             object parameter)
         {
-            return Latitude != _originalLatitude || 
+            return _mode == DefineGeospatialLocationMode.Create ||
+                   Latitude != _originalLatitude || 
                    Longitude != _originalLongitude ||
                    From != _originalDateFrom ||
                    To != _originalDateTo;

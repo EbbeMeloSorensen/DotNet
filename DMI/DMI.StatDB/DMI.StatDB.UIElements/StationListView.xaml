@@ -21,11 +21,16 @@
             <TextBox Text="StatDB" FontWeight="Bold" Background="LightGray"/>
         </Border>
 
-        <local:FindStationsView Grid.Row="1" DataContext="{Binding FindStationsViewModel}"/>
-
-        <Button Grid.Row="2" Content="Find" HorizontalAlignment="Right" Margin="1" Width="75"
-                Command="{Binding FindStationsCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <Expander Grid.Row="1" ExpandDirection="Down" IsExpanded="True" Header="Filter">
+            <StackPanel>
+                <local:FindStationsView DataContext="{Binding FindStationsViewModel}"/>
+                <StackPanel>
+                    <Button Content="Find" HorizontalAlignment="Right" Margin="1" Width="75"
+                            Command="{Binding FindStationsCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
 
         <ListBox Grid.Row="3" Margin="1" x:Name="StationsListBox" 
                  SelectionMode="Extended" DisplayMemberPath="DisplayText" 

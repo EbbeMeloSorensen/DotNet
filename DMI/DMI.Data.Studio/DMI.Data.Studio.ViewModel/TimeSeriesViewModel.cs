@@ -19,7 +19,7 @@ namespace DMI.Data.Studio.ViewModel
     {
         private ILogger _logger;
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
-        private double _curveThickness = 0.05;
+        private double _curveThickness = 1.0;
         private readonly ObsDB.Persistence.IUnitOfWorkFactory _obsDBUnitOfWorkFactory;
         private readonly ObjectCollection<StationInformation> _selectedStationInformations;
         private DateTime _timeAtOrigo;

@@ -17,6 +17,7 @@ Done
   klikket på New, så main kan tage sig af det (ved at bede brugeren om at klikke i map viewet)
 * For en station skal den kun vise den position, der passer med time of interest
 * Hvis der kun er én Geospatial location for en observing facility, så skal man ikke kunne slette den
+* Man må ikke kunne slette alle geospatielle lokationer
 * Man skal kunne tilføje en ekstra lokation for en eksisterende tidsserie
 * Sørg for at vedligeholde hjælpestreger for database tidslinien
   - Én for Now
@@ -27,12 +28,21 @@ Done
 * Geospatial locations for en observing facility skal sorteres kronologisk
 * Når man laver en ny observing facility og i den forbindelse specificerer from date, så skal den bruges både for
   observing facility og geospatial location
-* DateEstablished og DateClosed skal opdateres, når man arbejder med geospatial locations
 * Man skal kunne fremsøge closed observing facilities uden at hoppe tilbage i tid - så man kan ændre på deres geospatial locations
+* DateEstablished og DateClosed skal opdateres, når man arbejder med geospatial locations
+  - når man ændrer en
+  - når man laver en ny geospatiel lokation
+  - når man sletter en
+* Man skal kunne ændre en ToDate fra en given dato til null, dvs angive, at der ikke er nogen slutdato
+* Fix fejl: Man ser ikke noget, hvis man beder om et historical view, der er 10 seks gammelt
+* Man må godt lave ændringer, når man ser på historik for en database, men IKKE når man ser på en tidligere version af databasen
 
 In progress:
+* Der skal tegnes linier der hvor en placering ændrer sig i historical view - og det skal opdateres ved databaseændringer
+* Når man vælger et antal geospatial locations i details viewet, skal der tegnes bjælker til repræsentation af dem i historical view
+* De førnævnte bjælker skal kunne overlejres med smalle bjælker, der viser, hvor der er foretaget målinger - i stil med den gamle applikation - bare bedre fordi man kan zoome
+* Man skal kunne se værdierne for en tidsserie
 * Man skal ikke kunne ændre på noget i et history mode, hvor historical time of interest er sat
-* Man skal kunne ændre en ToDate fra en given dato til null, dvs angive, at der ikke er nogen slutdato
 * Input validering, når man tilføjer eller ændrer en Geospatiel location, så man sikrer:
   - at den ikke overlapper med de eksisterende
   - at den ikke starter eller slutter i fremtiden

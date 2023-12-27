@@ -7,6 +7,7 @@ Done:
 * Man skal kunne køre stationfetcher fra DMI.Data.Studio og ikke bare fra DMI.SMS
 
 Todo:
+* Hvorfor har den tilsyneladende forbindelse til nanoq-databasen fra SIA-maskinen? (den siger, at der ikke er nogen forbindelse, der matcher)
 * Lav en viewmodel med tilhørende view, der viser en TIDSSERIE for en valgt station
   - Den skal have et  
 * Lav en feature, hvor man for de valgte stationer kan generere datafiler over de rå observationer samt filer over tidsintervaller

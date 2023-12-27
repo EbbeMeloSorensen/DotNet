@@ -39,6 +39,7 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
     private DateTime _displayDateEnd_DateClosed;
 
     private bool _isVisible;
+    private bool _isReadOnly;
 
     private RelayCommand _applyChangesCommand;
 
@@ -153,6 +154,16 @@ public class ObservingFacilitiesDetailsViewModel : ViewModelBase, IDataErrorInfo
         set
         {
             _isVisible = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool IsReadOnly
+    {
+        get { return _isReadOnly; }
+        set
+        {
+            _isReadOnly = value;
             RaisePropertyChanged();
         }
     }
