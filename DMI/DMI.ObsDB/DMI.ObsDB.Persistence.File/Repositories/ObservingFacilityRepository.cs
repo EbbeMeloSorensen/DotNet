@@ -149,11 +149,13 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
                     if (stationDirectory != null)
                     {
-                        var paramDirectories = stationDirectory.GetDirectories();
+                        var files = stationDirectory.GetFiles();
 
-                        foreach (var paramDirectory in paramDirectories)
+                        foreach (var file in files)
                         {
-                            paramIds.Add(paramDirectory.Name);
+                            var paramId = file.Name.Substring(file.Name.IndexOf('_') + 1);
+                            paramId = paramId.Substring(0, paramId.Length - 9);
+                            paramIds.Add(paramId);
                         }
                     }
                 }

@@ -181,49 +181,43 @@ namespace DMI.ObsDB.Persistence.File.Repositories
 
                     if (stationDirectory != null)
                     {
-                        var paramDirectory = stationDirectory
-                            .GetDirectories(paramId)
+                        var fileName = $"{statId}_{paramId}_{yearDirectory.Name}.txt";
+
+                        var file = stationDirectory
+                            .GetFiles(fileName)
                             .SingleOrDefault();
 
-                        if (paramDirectory != null)
+                        if (file == null)
                         {
-                            var fileName = $"{statId}_{paramId}_{yearDirectory.Name}.txt";
-
-                            var file = paramDirectory
-                                .GetFiles(fileName)
-                                .SingleOrDefault();
-
-                            if (file == null)
-                            {
-                                continue;
-                            }
-
-                            var observationTimesForCurrentYear =
-                                ReadObservationsFromFile(file.FullName);
-
-                            if (year == startTime.Year)
-                            {
-                                observationTimesForCurrentYear =
-                                    observationTimesForCurrentYear
-                                        .Where(_ => _.Time >= startTime)
-                                        .ToList();
-                            }
-
-                            if (year == endTime.Year)
-                            {
-                                observationTimesForCurrentYear =
-                                    observationTimesForCurrentYear
-                                        .Where(_ => _.Time < endTime)
-                                        .ToList();
-                            }
-
-                            observationTimesForCurrentYear.ForEach(_ =>
-                            {
-                                _.TimeSeriesId = id;
-                            });
-
-                            observations.AddRange(observationTimesForCurrentYear);
+                            continue;
                         }
+
+                        var observationTimesForCurrentYear =
+                            ReadObservationsFromFile(file.FullName);
+
+                        if (year == startTime.Year)
+                        {
+                            observationTimesForCurrentYear =
+                                observationTimesForCurrentYear
+                                    .Where(_ => _.Time >= startTime)
+                                    .ToList();
+                        }
+
+                        if (year == endTime.Year)
+                        {
+                            observationTimesForCurrentYear =
+                                observationTimesForCurrentYear
+                                    .Where(_ => _.Time < endTime)
+                                    .ToList();
+                        }
+
+                        observationTimesForCurrentYear.ForEach(_ =>
+                        {
+                            _.TimeSeriesId = id;
+                        });
+
+                        observations.AddRange(observationTimesForCurrentYear);
+                        
                     }
                 }
 

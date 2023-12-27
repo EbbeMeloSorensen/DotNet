@@ -98,8 +98,8 @@ namespace DMI.ObsDB.Application
                 progressCallback?.Invoke(0, currentActivity);
                 Logger?.WriteLine(LogMessageCategory.Information, currentActivity);
 
-                //var unitOfWorkFactorySourceRepository = new Persistence.File.UnitOfWorkFactory();
-                var unitOfWorkFactorySourceRepository = new Persistence.PostgreSQL.UnitOfWorkFactory();
+                var unitOfWorkFactorySourceRepository = new Persistence.File.UnitOfWorkFactory();
+                //var unitOfWorkFactorySourceRepository = new Persistence.PostgreSQL.UnitOfWorkFactory();
 
                 using (var unitOfWorkTargetRepository = _unitOfWorkFactoryTargetRepository.GenerateUnitOfWork())
                 {
