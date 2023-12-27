@@ -43,10 +43,13 @@ namespace DMI.SMS.Persistence.Npgsql
                 string.IsNullOrEmpty(user) ||
                 string.IsNullOrEmpty(password))
             {
+                _connectionString = $"Host={host};Port={port};Username={user};Password={password};Database={database}";
                 return;
             }
-
-            _connectionString = $"Host={host};Port={port};Username={user};Password={password};Database={database}";
+            else
+            {
+                _connectionString = $"Host={host};Port={port};Username={user};Password={password};Database={database}";
+            }
         }
 
         public static string GetConnectionString()
