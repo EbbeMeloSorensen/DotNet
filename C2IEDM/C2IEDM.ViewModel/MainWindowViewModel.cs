@@ -245,8 +245,16 @@ public class MainWindowViewModel : ViewModelBase
 
         _historicalTimeOfInterest.PropertyChanged += (s, e) =>
         {
-            if (!_historicalTimeOfInterest.Object.HasValue)
+            if (_historicalTimeOfInterest.Object.HasValue)
             {
+                // Highlight the position of the time of interest
+                HistoricalTimeViewModel.StaticXValue =
+                    (_historicalTimeOfInterest.Object.Value - HistoricalTimeViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+            }
+            else
+            {
+                HistoricalTimeViewModel.StaticXValue = null;
+
                 // Vi vil gerne se situationen, som den gør sig gældende nu. Derfor opererer vi også essentielt med seneste version af databasen
                 _databaseTimeOfInterest.Object = null;
             }
@@ -700,6 +708,17 @@ public class MainWindowViewModel : ViewModelBase
 
         HistoricalTimeViewModel.GeometryEditorViewModel.MouseClickOccured += (s, e) =>
         {
+            if (_databaseTimeOfInterest.Object.HasValue &&
+                HistoricalTimeViewModel.TimeAtMousePosition.Object.Value > _databaseTimeOfInterest.Object)
+            {
+                var message = "Historical time of interest cannot be later than database time of interest";
+                var dialogViewModel = new MessageBoxDialogViewModel(message, false);
+
+                _applicationDialogService.ShowDialog(dialogViewModel, _owner);
+
+                return;
+            }
+
             if (HistoricalTimeViewModel.TimeAtMousePosition.Object > DateTime.UtcNow)
             {
                 return;
@@ -708,8 +727,8 @@ public class MainWindowViewModel : ViewModelBase
             _historicalTimeOfInterest.Object = HistoricalTimeViewModel.TimeAtMousePosition.Object;
 
             // Highlight the position of the time of interest
-            HistoricalTimeViewModel.StaticXValue =
-                (_historicalTimeOfInterest.Object.Value - HistoricalTimeViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+            //HistoricalTimeViewModel.StaticXValue =
+            //    (_historicalTimeOfInterest.Object.Value - HistoricalTimeViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
         };
     }
 

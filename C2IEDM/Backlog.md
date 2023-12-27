@@ -36,9 +36,19 @@ Done
 * Man skal kunne ændre en ToDate fra en given dato til null, dvs angive, at der ikke er nogen slutdato
 * Fix fejl: Man ser ikke noget, hvis man beder om et historical view, der er 10 seks gammelt
 * Man må godt lave ændringer, når man ser på historik for en database, men IKKE når man ser på en tidligere version af databasen
+* Når man vælger en Database Write Time og den så automatisk sætter en historical time, så skal man kunne se stregen i "historical time" viewet
+* Man skal ikke kunne sætte historical time of interest senere end database time of interest
 
 In progress:
-* Der skal tegnes linier der hvor en placering ændrer sig i historical view - og det skal opdateres ved databaseændringer
+* IMPORT AF SMS-STATIONER
+* Selection skal også vises på map viewet
+* Der skal være mulighed for at vælge stationer på map viewet
+* Når man vælger en geospatiel location, skal det vises:
+  - på map viewet - f.eks. som en tynd streg
+  - på "historical time"-viewet som en bjælke
+* Der skal vises et ur et passende sted i brugergrænsefladen
+  - det skal opdateres, når man kigger på nuværende situation og stå stille, når man kigger på en historisk situation
+* Når man klikker til højre for Now-linien i et time view, skal det svare til at man klikker på Now- og Latest-knapperne* Der skal tegnes linier der hvor en placering ændrer sig i historical view - og det skal opdateres ved databaseændringer
 * Når man vælger et antal geospatial locations i details viewet, skal der tegnes bjælker til repræsentation af dem i historical view
 * De førnævnte bjælker skal kunne overlejres med smalle bjælker, der viser, hvor der er foretaget målinger - i stil med den gamle applikation - bare bedre fordi man kan zoome
 * Man skal kunne se værdierne for en tidsserie
