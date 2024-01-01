@@ -6,8 +6,11 @@ namespace DMI.SMS.ViewModel
     public static class StringExtensions
     {
         public static string AsNanoqStationId(
-            this string stationId)
+            this string stationId,
+            bool stripPrecedingNulls = false)
         {
+            string result = null;
+
             if (stationId.Length == 4)
             {
                 stationId = stationId.PadLeft(5, '0');
@@ -15,12 +18,12 @@ namespace DMI.SMS.ViewModel
 
             if (stationId.Substring(0, 2) == "04")
             {
-                return stationId + "00";
+                result = stationId + "00";
             }
 
             if (stationId.Substring(0, 2) == "05")
             {
-                return stationId + "20";
+                result = stationId + "20";
             }
 
             if (stationId.Substring(0, 2) == "06")
@@ -28,19 +31,34 @@ namespace DMI.SMS.ViewModel
                 if (stationId == "06051" ||
                     stationId == "06116")
                 {
-                    return stationId + "01";
+                    result = stationId + "01";
                 }
-
-                return stationId + "00";
+                else
+                {
+                    result = stationId + "00";
+                }
             }
 
             if (stationId.Substring(0, 1) == "2" ||
                 stationId.Substring(0, 1) == "3")
             {
-                return stationId + "50";
+                result = stationId + "50";
             }
 
-            throw new ArgumentException("Apparently not a valid station id");
+            if (result == null)
+            {
+                throw new ArgumentException("Apparently not a valid station id");
+            }
+
+            if (stripPrecedingNulls)
+            {
+                while (result[0] == '0')
+                {
+                    result = result.Substring(1);
+                }
+            }
+
+            return result;
         }
     }
 }

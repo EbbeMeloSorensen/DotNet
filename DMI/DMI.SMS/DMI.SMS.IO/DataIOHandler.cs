@@ -149,7 +149,7 @@ namespace DMI.SMS.IO
 
             foreach (var year in years)
             {
-                var directory = new DirectoryInfo(Path.Combine(@"C:\Data\Observations", $"{year}", $"{nanoqStationId}", $"{parameter}"));
+                var directory = new DirectoryInfo(Path.Combine(@"C:\Data\Observations", $"{year}", $"{nanoqStationId}"));
 
                 if (!directory.Exists)
                 {
@@ -268,6 +268,18 @@ namespace DMI.SMS.IO
             result = ConvertToIntervals(
                 observations.Select(_ => _.Item1).ToList(),
                 maxTolerableDifferenceBetweenTwoObservationsInDays);
+
+            if (!Directory.Exists(@"C:\Data\Stations"))
+            {
+                Directory.CreateDirectory(@"C:\Data\Stations");
+            }
+
+            var stationDirectory = Path.Combine(@"C:\Data\Stations", nanoqStationId);
+
+            if (!Directory.Exists(stationDirectory))
+            {
+                Directory.CreateDirectory(stationDirectory);
+            }
 
             using (var streamWriter = new StreamWriter(fileName))
             {
