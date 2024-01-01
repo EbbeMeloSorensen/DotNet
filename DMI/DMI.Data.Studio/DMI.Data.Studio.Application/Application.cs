@@ -154,6 +154,21 @@ namespace DMI.Data.Studio.Application
             });
         }
 
+        public async Task<List<Tuple<DateTime, DateTime>>> ExtractObservationIntervals(
+            string nanoqStationId,
+            string parameter,
+            double maxTolerableDifferenceBetweenTwoObservationsInDays,
+            ProgressCallback progressCallback = null)
+        {
+            return await Task.Run(() =>
+            {
+                var fileName = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}", "intervals.txt");
+
+                var result = new List<Tuple<DateTime, DateTime>>();
+                return result;
+            });
+        }
+
         public async Task ExtractOceanographicalStations(
             DateTime? rollBackDate,
             ProgressCallback progressCallback = null)
