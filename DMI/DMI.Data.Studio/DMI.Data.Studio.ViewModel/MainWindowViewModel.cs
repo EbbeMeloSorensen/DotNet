@@ -1032,6 +1032,12 @@ namespace DMI.Data.Studio.ViewModel
                 parameter = "precip_past6h";
             }
 
+            // Den skal ikke læse fra sms data provider, men fra obsDB
+            //using (var unitOfWork = _obsDBUnitOfWorkFactory.GenerateUnitOfWork())
+            //{
+
+            //}
+
             return _smsDataProvider.ReadObservationIntervalsForStation(
                 nanoqStationId,
                 parameter,

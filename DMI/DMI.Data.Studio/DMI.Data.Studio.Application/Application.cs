@@ -144,6 +144,16 @@ namespace DMI.Data.Studio.Application
             });
         }
 
+        public async Task<int> RollADie(
+            ProgressCallback progressCallback = null)
+        {
+            return await Task.Run(() =>
+            {
+                var random = new Random();
+                return random.Next(1, 6);
+            });
+        }
+
         public async Task ExtractOceanographicalStations(
             DateTime? rollBackDate,
             ProgressCallback progressCallback = null)

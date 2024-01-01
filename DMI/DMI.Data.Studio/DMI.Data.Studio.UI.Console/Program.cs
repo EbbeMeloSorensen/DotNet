@@ -10,12 +10,27 @@ namespace DMI.Data.Studio.UI.Console
             System.Console.WriteLine("DMI.Data.Studio.UI.Console");
 
             await Parser.Default.ParseArguments<
+                    Die,
                     Lunch,
                     Extract>(args)
                 .MapResult(
+                    (Die options) => RollADie(options),
                     (Lunch options) => MakeLunch(options),
                     (Extract options) => Extract(options),
                     errs => Task.FromResult(0));
+        }
+
+        private static async Task RollADie(Die options)
+        {
+            System.Console.Write("Rolling a die...\nProgress: ");
+            var result = await GetApplication().RollADie((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+            System.Console.WriteLine($"\nResult: {result}");
         }
 
         private static async Task MakeLunch(Lunch options)
