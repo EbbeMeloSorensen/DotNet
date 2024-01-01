@@ -12,15 +12,18 @@ namespace DMI.Data.Studio.UI.Console
             await Parser.Default.ParseArguments<
                     Die,
                     Lunch,
-                    Extract>(args)
+                    Extract,
+                    Intervals>(args)
                 .MapResult(
                     (Die options) => RollADie(options),
                     (Lunch options) => MakeLunch(options),
                     (Extract options) => Extract(options),
+                    (Intervals options) => ExtractObservationIntervals(options),
                     errs => Task.FromResult(0));
         }
 
-        private static async Task RollADie(Die options)
+        private static async Task RollADie(
+            Die options)
         {
             System.Console.Write("Rolling a die...\nProgress: ");
             var result = await GetApplication().RollADie((progress, nameOfSubtask) =>
@@ -33,7 +36,8 @@ namespace DMI.Data.Studio.UI.Console
             System.Console.WriteLine($"\nResult: {result}");
         }
 
-        private static async Task MakeLunch(Lunch options)
+        private static async Task MakeLunch(
+            Lunch options)
         {
             System.Console.Write("Making lunch...\nProgress: ");
             await GetApplication().MakeBreakfast((progress, nameOfSubtask) =>
@@ -45,7 +49,8 @@ namespace DMI.Data.Studio.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        private static async Task Extract(Extract options)
+        private static async Task Extract(
+            Extract options)
         {
             var dateTime = new DateTime(2021, 5, 1);
 
@@ -81,6 +86,20 @@ namespace DMI.Data.Studio.UI.Console
                         break;
                     }
             }
+        }
+
+        private static async Task ExtractObservationIntervals(
+            Intervals options)
+        {
+            System.Console.Write("Extracting observation intervals...\nProgress: ");
+            var result = await GetApplication().RollADie((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+            System.Console.WriteLine($"\nResult: {result}");
         }
 
         private static Application.Application GetApplication()
