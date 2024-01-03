@@ -62,7 +62,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 _viewPortSize = value;
                 UpdateWorldWindowSize();
-                UpdateTransformationMatrix();
+                //UpdateTransformationMatrix(); // Udkommenteret 3. januar 2023 - lader ikke til at gøre nogen forskel
                 RaisePropertyChanged();
 
                 OnWorldWindowMajorUpdateOccured();
@@ -72,7 +72,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public Size WorldWindowSize
         {
             get { return _worldWindowSize; }
-            set
+            private set
             {
                 _worldWindowSize = value;
                 RaisePropertyChanged();
@@ -82,6 +82,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public Point MousePositionViewport
         {
             get { return _mousePositionViewport; }
+            // The setter is called by the view
             set
             {
                 _mousePositionViewport = value;
@@ -143,7 +144,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public Matrix TransformationMatrix
         {
             get { return _transformationMatrix; }
-            set
+            private set
             {
                 _transformationMatrix = value;
                 RaisePropertyChanged();
