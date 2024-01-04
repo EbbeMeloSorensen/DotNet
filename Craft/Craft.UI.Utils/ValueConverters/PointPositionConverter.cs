@@ -25,11 +25,6 @@ namespace Craft.UI.Utils.ValueConverters
             
             var extent = values.Length >= 4 ? (double)values[3] : 0;
 
-            if (values.Length == 3)
-            {
-                var a = 0;
-            }
-
             return (coordinate - upperLeft) * scale - extent / 2;
         }
 

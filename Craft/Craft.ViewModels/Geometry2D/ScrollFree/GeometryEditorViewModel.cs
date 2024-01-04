@@ -326,7 +326,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     {
                         // Her initialiserer vi World Window og skalering for første gang
                         InitializeScalingAndWorldWindow();
-                        //OnWorldWindowMajorUpdateOccured();
                     }
                         
                     MarginBottomOffset = ViewPortSize.Height - MarginBottom;
@@ -372,7 +371,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             InitializeScalingAndWorldWindow();
         }
 
-
         public void InitializeWorldWindow(
             Point focus,
             Size size,
@@ -387,6 +385,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             InitializeScalingAndWorldWindow();
         }
 
+        // Kaldes:
+        // - Når ViewPorten initialiseres, dvs første gang den sættes og altså ikke når den ændres
+        // - Hvis hosten kalder en af de 4 InitializeWorldWindow metoder til placering af World Window
         private void InitializeScalingAndWorldWindow()
         {
             if (ViewPortSize.Width < double.Epsilon)
@@ -527,6 +528,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 {
                     throw new ArgumentException("Invalid specification of World Window");
                 }
+            }
+
+            foreach (var polylineViewModel in PolylineViewModels)
+            {
+                polylineViewModel.Update(Scaling, WorldWindowUpperLeft);
             }
         }
 

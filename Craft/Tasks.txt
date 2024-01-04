@@ -78,6 +78,8 @@ In progress:
     skal der opdateres en translations-matrix.
   - Prøv først at få det til at virke, hvor man har sat skalering til (1, 1)
   - PolyLineViewModel skal have en ekstra property, der udtrykker koordinaterne i Viewport koordinater
+  - I første omgang så lav en ekstra sektion i xaml-filen, hvor polylines tegnes oven i de eksisterende,
+    men hvor der bruges viewport-koordinater
 
 * Grid lines og kurver skal have samme tykkelse uanset magnification
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines

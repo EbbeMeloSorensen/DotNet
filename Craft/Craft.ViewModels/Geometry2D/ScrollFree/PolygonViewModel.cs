@@ -11,7 +11,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     {
         private Brush _brush;
 
-        public string Points { get; set; }
+        public string Points { get; }
+
         public double Thickness { get; }
 
         public Brush Brush
