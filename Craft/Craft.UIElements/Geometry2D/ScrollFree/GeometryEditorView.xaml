@@ -50,7 +50,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <ItemsControl ItemsSource="{Binding PolylineViewModels}">
+        <!--<ItemsControl ItemsSource="{Binding PolylineViewModels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -70,9 +70,9 @@
                     </Polyline>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        </ItemsControl>-->
 
-        <!--<ItemsControl ItemsSource="{Binding LineViewModels}">
+        <ItemsControl ItemsSource="{Binding PolylineViewModels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -80,7 +80,31 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Line Stroke="{Binding Brush}"
+                    <Polyline
+                        Stroke="White"
+                        StrokeThickness="1"
+                        Points="{Binding Points2}">
+                        <!--<Polyline.RenderTransform>
+                            <MatrixTransform Matrix="{Binding 
+                                Path=DataContext.TransformationMatrix, 
+                                RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </Polyline.RenderTransform>-->
+                    </Polyline>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Dette er en måde at tegne linier på, hvor de skaleres med TransformationMatrix
+             og linierne bliver tykkere, når der zoomes ind -->
+        <ItemsControl ItemsSource="{Binding LineViewModels}" Visibility="Hidden">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Line Stroke="Black"
                           StrokeThickness="{Binding Thickness}" 
                           X1="{Binding Point1.X}" 
                           Y1="{Binding Point1.Y}" 
@@ -94,7 +118,7 @@
                     </Line>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
+        </ItemsControl>
 
         <!--Alternativ måde at tegne linier på, hvor de IKKE SKALERER, dvs hvor thickness gælder for VIEW og ikke WORLD-->
         <ItemsControl ItemsSource="{Binding LineViewModels}">

@@ -137,6 +137,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     MousePositionWorld.Object.Value.X - _mousePositionViewport.X * _worldWindowSize.Width / _viewPortSize.Width,
                     MousePositionWorld.Object.Value.Y - _mousePositionViewport.Y * _worldWindowSize.Height / _viewPortSize.Height);
 
+                UpdatePoints2();
+
                 RaisePropertyChanged();
             }
         }
@@ -530,6 +532,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 }
             }
 
+            UpdatePoints2();
+        }
+
+        private void UpdatePoints2()
+        {
             foreach (var polylineViewModel in PolylineViewModels)
             {
                 polylineViewModel.Update(Scaling, WorldWindowUpperLeft);
