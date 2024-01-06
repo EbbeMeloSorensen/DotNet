@@ -50,7 +50,8 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!--<ItemsControl ItemsSource="{Binding PolylineViewModels}">
+        <!-- Dette er den gamle måde at tegne polylines på, hvor de bliver tykkere, når man zoomer ind (bemærk at det er hidden for nu) -->
+        <ItemsControl ItemsSource="{Binding PolylineViewModels}" Visibility="Hidden">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -70,8 +71,9 @@
                     </Polyline>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
+        </ItemsControl>
 
+        <!-- Dette er den nye måde at tegne polylines på, hvor de bibeholder zoom leel uanset skalering -->
         <ItemsControl ItemsSource="{Binding PolylineViewModels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -81,14 +83,19 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Polyline
-                        Stroke="White"
+                        Stroke="Black"
                         StrokeThickness="1"
                         Points="{Binding Points2}">
-                        <!--<Polyline.RenderTransform>
-                            <MatrixTransform Matrix="{Binding 
-                                Path=DataContext.TransformationMatrix, 
-                                RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-                        </Polyline.RenderTransform>-->
+                        <Polyline.RenderTransform>
+                            <TranslateTransform 
+                                X="{Binding
+                                    Path=DataContext.TranslationX,
+                                    RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                Y="{Binding
+                                    Path=DataContext.TranslationY,
+                                    RelativeSource={RelativeSource AncestorType=UserControl}}">
+                            </TranslateTransform>
+                        </Polyline.RenderTransform>
                     </Polyline>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

@@ -26,6 +26,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected Point _worldWindowUpperLeft;
         private Size _scaling;
         private Matrix _transformationMatrix;
+        private double _translationX;
+        private double _translationY;
         private Brush _defaultBrush;
         private Brush _backgroundBrush;
         private Brush _marginBrush;
@@ -62,7 +64,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 _viewPortSize = value;
                 UpdateWorldWindowSize();
-                //UpdateTransformationMatrix(); // Udkommenteret 3. januar 2023 - lader ikke til at gøre nogen forskel
                 RaisePropertyChanged();
 
                 OnWorldWindowMajorUpdateOccured();
@@ -137,6 +138,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     MousePositionWorld.Object.Value.X - _mousePositionViewport.X * _worldWindowSize.Width / _viewPortSize.Width,
                     MousePositionWorld.Object.Value.Y - _mousePositionViewport.Y * _worldWindowSize.Height / _viewPortSize.Height);
 
+                TranslationX = 0;
+                TranslationY = 0;
                 UpdatePoints2();
 
                 RaisePropertyChanged();
@@ -149,6 +152,28 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             private set
             {
                 _transformationMatrix = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        // Used exclusively for positioning polylines
+        public double TranslationX
+        {
+            get { return _translationX; }
+            set
+            {
+                _translationX = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        // Used exclusively for positioning polylines
+        public double TranslationY
+        {
+            get { return _translationY; }
+            set
+            {
+                _translationY = value;
                 RaisePropertyChanged();
             }
         }
@@ -535,7 +560,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             UpdatePoints2();
         }
 
-        private void UpdatePoints2()
+        public void UpdatePoints2()
         {
             foreach (var polylineViewModel in PolylineViewModels)
             {
@@ -607,8 +632,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double thickness,
             Brush brush)
         {
-            PolylineViewModels.Add(new PolylineViewModel(
-                points.Select(p => new PointD(p.X, _yAxisFactor * p.Y)), thickness, brush));
+            var polyLineViewModel = new PolylineViewModel(
+                points.Select(p => new PointD(p.X, _yAxisFactor * p.Y)), thickness, brush);
+
+            polyLineViewModel.Update(Scaling, WorldWindowUpperLeft);
+
+            PolylineViewModels.Add(polyLineViewModel);
         }
 
         // Argumenter
@@ -790,6 +819,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // This method is called from the View class
         public void OnWorldWindowMajorUpdateOccured()
         {
+            TranslationX = 0;
+            TranslationY = 0;
+            UpdatePoints2();
+
             var handler = WorldWindowMajorUpdateOccured;
 
             if (handler != null)

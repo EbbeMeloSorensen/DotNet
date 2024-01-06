@@ -15,6 +15,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
         private Size _initialViewPortSize;
         private Point _mouseDownViewport;
         private Point _worldWindowUpperLeftInitial;
+        private double _translationXInitial;
+        private double _translationYInitial;
         private bool _dragging;
 
         private GeometryEditorViewModel ViewModel => DataContext as GeometryEditorViewModel;
@@ -71,6 +73,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             if (Keyboard.IsKeyDown(Key.LeftShift))
             {
                 _worldWindowUpperLeftInitial = ViewModel.WorldWindowUpperLeft;
+                _translationXInitial = ViewModel.TranslationX;
+                _translationYInitial = ViewModel.TranslationY;
                 _dragging = true;
                 Canvas.CaptureMouse();
             }
@@ -177,6 +181,9 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                     : _worldWindowUpperLeftInitial.Y - mouseOffsetViewPort.Y / ViewModel.Scaling.Height;
 
                 ViewModel.WorldWindowUpperLeft = new Point(x, y);
+
+                ViewModel.TranslationX = _translationXInitial + mouseOffsetViewPort.X;
+                ViewModel.TranslationY = _translationYInitial + mouseOffsetViewPort.Y;
 
                 ViewModel.OnWorldWindowUpdateOccured();
             }
