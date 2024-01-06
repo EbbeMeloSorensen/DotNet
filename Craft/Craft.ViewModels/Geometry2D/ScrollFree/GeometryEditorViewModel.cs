@@ -105,10 +105,23 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             get { return _worldWindowUpperLeft; }
             set
             {
+                var worldWindowUpperLeftBeforeX = _worldWindowUpperLeft.X;
+                var worldWindowUpperLeftBeforeY = _worldWindowUpperLeft.Y;
+
                 _worldWindowUpperLeft.X = Math.Max(value.X, WorldWindowUpperLeftLimit.X);
                 _worldWindowUpperLeft.Y = Math.Max(value.Y, WorldWindowUpperLeftLimit.Y);
                 _worldWindowUpperLeft.X = Math.Min(_worldWindowUpperLeft.X, WorldWindowBottomRightLimit.X - WorldWindowSize.Width);
                 _worldWindowUpperLeft.Y = Math.Min(_worldWindowUpperLeft.Y, WorldWindowBottomRightLimit.Y - WorldWindowSize.Height);
+
+                var offsetX = worldWindowUpperLeftBeforeX - _worldWindowUpperLeft.X;
+                var offsetY = worldWindowUpperLeftBeforeY - _worldWindowUpperLeft.Y;
+
+                if (Math.Abs(offsetX) > 0 ||
+                    Math.Abs(offsetY) > 0)
+                {
+                    TranslationX += offsetX * Scaling.Width;
+                    TranslationY += offsetY * Scaling.Height;
+                }
 
                 UpdateTransformationMatrix();
                 RaisePropertyChanged();
@@ -138,8 +151,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     MousePositionWorld.Object.Value.X - _mousePositionViewport.X * _worldWindowSize.Width / _viewPortSize.Width,
                     MousePositionWorld.Object.Value.Y - _mousePositionViewport.Y * _worldWindowSize.Height / _viewPortSize.Height);
 
-                //TranslationX = 0;
-                //TranslationY = 0;
                 UpdatePoints2();
 
                 RaisePropertyChanged();
@@ -822,8 +833,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // This method is called from the View class
         public void OnWorldWindowMajorUpdateOccured()
         {
-            //TranslationX = 0;
-            //TranslationY = 0;
             UpdatePoints2();
 
             var handler = WorldWindowMajorUpdateOccured;
