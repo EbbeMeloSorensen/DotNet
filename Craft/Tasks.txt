@@ -76,10 +76,8 @@ In progress:
 * Tidskurven skal tegnes pænere, så man transformerer punkter og BAGEFTER tegner, fremfor at skalere selve kurven i vildskab
   - Når skalering ændres, skal "Points" propertyen for de PolylineViewModels, man har, genberegnes. Når man panorerer,
     skal der opdateres en translations-matrix.
-  - Prøv først at få det til at virke, hvor man har sat skalering til (1, 1)
   - PolyLineViewModel skal have en ekstra property, der udtrykker koordinaterne i Viewport koordinater
-  - I første omgang så lav en ekstra sektion i xaml-filen, hvor polylines tegnes oven i de eksisterende,
-    men hvor der bruges viewport-koordinater
+    -> Måske skal du have 2 forskellige specialiseringer af en abstrakt basisklasse
 
 * Grid lines og kurver skal have samme tykkelse uanset magnification
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines

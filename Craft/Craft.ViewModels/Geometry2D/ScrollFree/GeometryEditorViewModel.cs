@@ -138,8 +138,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     MousePositionWorld.Object.Value.X - _mousePositionViewport.X * _worldWindowSize.Width / _viewPortSize.Width,
                     MousePositionWorld.Object.Value.Y - _mousePositionViewport.Y * _worldWindowSize.Height / _viewPortSize.Height);
 
-                TranslationX = 0;
-                TranslationY = 0;
+                //TranslationX = 0;
+                //TranslationY = 0;
                 UpdatePoints2();
 
                 RaisePropertyChanged();
@@ -562,6 +562,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public void UpdatePoints2()
         {
+            TranslationX = 0;
+            TranslationY = 0;
+
             foreach (var polylineViewModel in PolylineViewModels)
             {
                 polylineViewModel.Update(Scaling, WorldWindowUpperLeft);
@@ -819,8 +822,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // This method is called from the View class
         public void OnWorldWindowMajorUpdateOccured()
         {
-            TranslationX = 0;
-            TranslationY = 0;
+            //TranslationX = 0;
+            //TranslationY = 0;
             UpdatePoints2();
 
             var handler = WorldWindowMajorUpdateOccured;

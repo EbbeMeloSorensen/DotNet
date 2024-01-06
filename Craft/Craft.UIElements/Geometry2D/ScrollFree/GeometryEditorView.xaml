@@ -83,7 +83,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Polyline
-                        Stroke="Black"
+                        Stroke="{Binding Brush}"
                         StrokeThickness="1"
                         Points="{Binding Points2}">
                         <Polyline.RenderTransform>
