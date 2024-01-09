@@ -38,6 +38,7 @@ Done
 * Man må godt lave ændringer, når man ser på historik for en database, men IKKE når man ser på en tidligere version af databasen
 * Når man vælger en Database Write Time og den så automatisk sætter en historical time, så skal man kunne se stregen i "historical time" viewet
 * Man skal ikke kunne sætte historical time of interest senere end database time of interest
+* Den skal vise gældende tidspunkt i en tekstbox i brugergrænsefladen
 
 In progress:
 * IMPORT AF SMS-STATIONER

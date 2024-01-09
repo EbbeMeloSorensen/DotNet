@@ -14,6 +14,7 @@ using Craft.ViewModels.Geometry2D.ScrollFree;
 using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
 using System.Globalization;
+using System.Timers;
 
 namespace C2IEDM.ViewModel;
 
@@ -54,11 +55,15 @@ public class MainWindowViewModel : ViewModelBase
     private Brush _controlBackgroundBrush;
     private string _messageInMap;
     private string _statusBarText;
+    private string _timeText;
+    private string _databaseTimeText;
+    private string _timeTextColor;
     private bool _displayMessageInMap;
     private bool _displayLog;
     private int _selectedTabIndexForRetrospectionTimeLines;
     private Window _owner;
     private MapOperation _mapOperation;
+    private Timer _timer;
 
     private RelayCommand<object> _createObservingFacilityCommand;
     private RelayCommand<object> _deleteSelectedObservingFacilitiesCommand;
@@ -131,6 +136,36 @@ public class MainWindowViewModel : ViewModelBase
         set
         {
             _statusBarText = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public string TimeText
+    {
+        get => _timeText;
+        set
+        {
+            _timeText = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public string DatabaseTimeText
+    {
+        get => _databaseTimeText;
+        set
+        {
+            _databaseTimeText = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public string TimeTextColor
+    {
+        get => _timeTextColor;
+        set
+        {
+            _timeTextColor = value;
             RaisePropertyChanged();
         }
     }
@@ -247,12 +282,19 @@ public class MainWindowViewModel : ViewModelBase
         {
             if (_historicalTimeOfInterest.Object.HasValue)
             {
-                // Highlight the position of the time of interest
+                // Vis den historiske tid i uret
+                var time = _historicalTimeOfInterest.Object.Value;
+                TimeText = $"{time.ToString("D")} {time.ToString("T")}";
+
+                // Highlight the position of the time of interest in the historical time view
                 HistoricalTimeViewModel.StaticXValue =
                     (_historicalTimeOfInterest.Object.Value - HistoricalTimeViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
             }
             else
             {
+                var now = DateTime.UtcNow;
+                TimeText = $"{now.ToString("D")} {now.ToString("T")}";
+
                 HistoricalTimeViewModel.StaticXValue = null;
 
                 // Vi vil gerne se situationen, som den gør sig gældende nu. Derfor opererer vi også essentielt med seneste version af databasen
@@ -267,6 +309,10 @@ public class MainWindowViewModel : ViewModelBase
 
         _databaseTimeOfInterest.PropertyChanged += (s, e) =>
         {
+            DatabaseTimeText = _databaseTimeOfInterest.Object.HasValue
+                ? $"(database as of {_databaseTimeOfInterest.Object.Value.AsDateTimeString(false)})"
+                : "";
+
             UpdateMapColoring();
             RefreshDatabaseTimeSeriesView();
             UpdateControlBackground();
@@ -286,7 +332,8 @@ public class MainWindowViewModel : ViewModelBase
 
         _displayStatusFilter = new ObservableObject<bool>
         {
-            Object = true
+            //Object = true
+            Object = false
         };
 
         _showActiveStations = new ObservableObject<bool>
@@ -306,14 +353,14 @@ public class MainWindowViewModel : ViewModelBase
 
         _displayHistoricalTimeControls = new ObservableObject<bool>
         {
-            //Object = false
-            Object = true
+            Object = false
+            //Object = true
         };
 
         _displayDatabaseTimeControls = new ObservableObject<bool>
         {
-            //Object = false
-            Object = true
+            Object = false
+            //Object = true
         };
 
         _displayHistoricalTimeControls.PropertyChanged += (s, e) =>
@@ -416,6 +463,21 @@ public class MainWindowViewModel : ViewModelBase
         };
 
         SelectedTabIndexForRetrospectionTimeLines = 1;
+
+        _timeTextColor = "White";
+        _timer = new Timer(1000);
+
+        _timer.Elapsed += (s, e) =>
+        {
+            if (!_historicalTimeOfInterest.Object.HasValue)
+            {
+                var now = DateTime.UtcNow;
+
+                TimeText = $"{now.ToString("D")} {now.ToString("T")}";
+            }
+        };
+
+        _timer.Start();
     }
 
     private void CreateObservingFacility(
@@ -725,10 +787,6 @@ public class MainWindowViewModel : ViewModelBase
             }
 
             _historicalTimeOfInterest.Object = HistoricalTimeViewModel.TimeAtMousePosition.Object;
-
-            // Highlight the position of the time of interest
-            //HistoricalTimeViewModel.StaticXValue =
-            //    (_historicalTimeOfInterest.Object.Value - HistoricalTimeViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
         };
     }
 
@@ -993,43 +1051,13 @@ public class MainWindowViewModel : ViewModelBase
                     -latestGeospatialLocationAmongRelevantOnes.Coordinate2), 
                 10, 
                 brush));
-
-
-            // Old
-            //observingFacilityDataExtract.GeospatialLocations.ForEach(_ =>
-            //{
-            //    if (_ is not Domain.Entities.WIGOS.GeospatialLocations.Point point)
-            //    {
-            //        // Forekommer ikke i praksis
-            //        return;
-            //    }
-
-            //    var brush = _activeObservingFacilityBrush;
-
-            //    if (_historicalTimeOfInterest.Object.HasValue)
-            //    {
-            //        if (_historicalTimeOfInterest.Object.Value < _.From ||
-            //            _historicalTimeOfInterest.Object.Value >= _.To)
-            //        {
-            //            return;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (_.To < DateTime.MaxValue)
-            //        {
-            //            brush = _closedObservingFacilityBrush;
-            //        }
-            //    }
-
-            //    MapViewModel.PointViewModels.Add(new PointViewModel(
-            //        new PointD(point.Coordinate1, -point.Coordinate2), 10, brush));
-            //});
         }
     }
 
     private void UpdateMapColoring()
     {
+        TimeTextColor = _historicalTimeOfInterest.Object.HasValue ? "Black" : "White";
+
         if (_historicalTimeOfInterest.Object.HasValue ||
             _databaseTimeOfInterest.Object.HasValue)
         {

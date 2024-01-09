@@ -1,20 +1,20 @@
-1) Start med en tom database (sørg for at have mulighed for at wipe)
+1) Start med en tom database og med at have skjult retrospection controls og filtre.
 2) Lav en ny, hvor den sættes til at være blevet oprettet på dags dato
    -> Den nye stations navn skal figurere i listen 
    -> Der skal placeres en sort prik på kortet
-   -> Der skal laves en lodret streg i "Database Write Time" viewet
-   -> Der skal laves en lodret streg i "Historical Time" viewet
+   -> Der skal laves en lodret streg i "Database Write Time" viewet (kun relevant hvis database write times viewet vises)
+   -> Der skal laves en lodret streg i "Historical Time" viewet (kun relevant hvis historical time viewet vises)
 3) Lav en ny, hvor den sættes til at være blevet oprettet på en dato før i tiden
    -> Den nye stations navn skal figurere i listen 
    -> Der skal placeres en sort prik på kortet
-   -> Der skal laves en lodret streg i "Database Write Time" viewet
-   -> Der skal laves en lodret streg i "Historical Time" viewet
+   -> Der skal laves en lodret streg i "Database Write Time" viewet (kun relevant hvis database write times viewet vises)
+   -> Der skal laves en lodret streg i "Historical Time" viewet (kun relevant hvis historical time viewet vises)
 4) Lav en ny, hvor den sættes til at være blevet oprettet på en dato før i tiden, og hvor den også sættes til at være nedlagt.
    Gør her opmærksom på at den i modsætning til de andre hverken vises i listen eller på kortet (fordi den jo er nedlagt og vi kigger på current situation)
    -> Den nye stations navn skal IKKE figurere i listen 
    -> Der skal IKKE placeres en sort prik på kortet
-   -> Der skal laves en lodret streg i "Database Write Time" viewet
-   -> Der skal laves to lodrette streger i "Historical Time" viewet (dvs hvis de ikke svarer til nogle, der allerede er der)
+   -> Der skal laves en lodret streg i "Database Write Time" viewet (kun relevant hvis database write times viewet vises)
+   -> Der skal laves to lodrette streger i "Historical Time" viewet (dvs hvis de ikke svarer til nogle, der allerede er der. I øvrigt kun relevant hvis historical time viewet vises)
 5) Konfigurer filteret til også at vise nedlagte stationer
    -> Den nedlagte stations navn skal nu figurere i listen 
    -> Den nedlagte station skal nu repræsenteres af en rød prik på kortet

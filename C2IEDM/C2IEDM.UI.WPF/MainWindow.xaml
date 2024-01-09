@@ -8,7 +8,7 @@
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
         mc:Ignorable="d"
-        Title="C2IEDM" Height="450" Width="800"
+        Title="Wigos based SMS prototype" Height="450" Width="800"
         WindowState="Maximized"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
 
@@ -77,6 +77,21 @@
 
             <!-- Map view -->
             <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="4" DataContext="{Binding MapViewModel}" />
+
+            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0, 5, 0, 0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="24" 
+                               Foreground="{Binding TimeTextColor}" 
+                               Text="{Binding TimeText}"/>
+                    <TextBlock FontSize="14"
+                               Margin="10"
+                               Foreground="{Binding TimeTextColor}" 
+                               Text="(utc)"/>
+                </StackPanel>
+                <TextBlock FontSize="12" 
+                           Foreground="{Binding TimeTextColor}" 
+                           Text="{Binding DatabaseTimeText}"/>
+            </StackPanel>
 
             <!-- Master view (Observing Facility List with toolbar and filter) -->
             <Border Grid.Row="0" Grid.Column="0" Margin="10"
