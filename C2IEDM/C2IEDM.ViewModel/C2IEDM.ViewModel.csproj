@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj" />
     <ProjectReference Include="..\C2IEDM.Application\C2IEDM.Application.csproj" />
+    <ProjectReference Include="..\C2IEDM.IO\C2IEDM.IO.csproj" />
   </ItemGroup>
 
 </Project>

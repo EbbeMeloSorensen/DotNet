@@ -7,7 +7,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Utils;
-using Craft.DataStructures.IO;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
@@ -15,7 +14,9 @@ using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
 using System.Globalization;
 using System.Timers;
+using C2IEDM.IO;
 using Microsoft.Win32;
+using DataIOHandler = Craft.DataStructures.IO.DataIOHandler;
 
 namespace C2IEDM.ViewModel;
 
@@ -32,8 +33,8 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Application.Application _application;
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private readonly IDialogService _applicationDialogService;
-    private readonly List<DateTime> _databaseWriteTimes;
-    private readonly List<DateTime> _historicalChangeTimes;
+    private List<DateTime> _databaseWriteTimes;
+    private List<DateTime> _historicalChangeTimes;
     private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
     private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
     private readonly ObservableObject<bool> _autoRefresh;
@@ -405,53 +406,7 @@ public class MainWindowViewModel : ViewModelBase
 
         DrawMapOfDenmark();
 
-        if (true)
-        {
-            try
-            {
-                using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    _databaseWriteTimes = new List<DateTime>();
-
-                    var observingFacilities = unitOfWork.ObservingFacilities.GetAll().ToList();
-                    var timeStampsForObservingFacilities = observingFacilities.Select(_ => _.Created).ToList();
-                    timeStampsForObservingFacilities.AddRange(observingFacilities.Select(_ => _.Superseded));
-                    timeStampsForObservingFacilities = timeStampsForObservingFacilities.Where(_ => _ < DateTime.MaxValue).ToList();
-                    _databaseWriteTimes.AddRange(timeStampsForObservingFacilities.Distinct());
-
-                    var geospatialLocations = unitOfWork.GeospatialLocations.GetAll().ToList();
-                    var timeStampsForGeospatialLocations = geospatialLocations.Select(_ => _.Created).ToList();
-                    timeStampsForGeospatialLocations.AddRange(geospatialLocations.Select(_ => _.Superseded));
-                    timeStampsForGeospatialLocations = timeStampsForGeospatialLocations.Where(_ => _ < DateTime.MaxValue).ToList();
-                    _databaseWriteTimes.AddRange(timeStampsForGeospatialLocations.Distinct());
-
-                    _databaseWriteTimes = _databaseWriteTimes.Distinct().ToList();
-
-                    geospatialLocations = unitOfWork.GeospatialLocations
-                        .Find(_ => _.Superseded == DateTime.MaxValue)
-                        .ToList();
-
-                    var historicalChangeTimeStamps = geospatialLocations.Select(_ => _.From).ToList();
-                    historicalChangeTimeStamps.AddRange(geospatialLocations.Select(_ => _.To));
-
-                    _historicalChangeTimes = historicalChangeTimeStamps
-                        .Where(_ => _ < DateTime.MaxValue)
-                        .Distinct()
-                        .ToList();
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                // Just swallow it for now - write it to the log later
-                _databaseWriteTimes = new List<DateTime>();
-                _historicalChangeTimes = new List<DateTime>();
-            }
-        }
-        else
-        {
-            _databaseWriteTimes = new List<DateTime>();
-            _historicalChangeTimes = new List<DateTime>();
-        }
+        InitializeTimestampsOfInterest();
 
         UpdateRetrospectionControls();
         UpdateControlBackground();
@@ -459,7 +414,7 @@ public class MainWindowViewModel : ViewModelBase
 
         if (_autoRefresh.Object)
         {
-            _logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (1)");
+            //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (1)");
             ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
         }
 
@@ -589,7 +544,7 @@ public class MainWindowViewModel : ViewModelBase
         _databaseWriteTimes.Clear();
         RefreshDatabaseTimeSeriesView();
 
-        _logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (2)");
+        //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (2)");
         ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
 
         var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was cleared", false);
@@ -616,7 +571,119 @@ public class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        throw new NotImplementedException();
+        var dataIOHandler = new IO.DataIOHandler();
+        dataIOHandler.ImportDataFromJson(dialog.FileName, out var stationInformations);
+
+        //var sorted = stationInformations.OrderBy(_ => _.GdbFromDate);
+
+        var objects = stationInformations.GroupBy(_ => _.ObjectId);
+
+        var simpleObjects = new List<StationInformation>();
+
+        foreach (var obj in objects)
+        {
+            var nRows = obj.Count();
+
+            if (nRows > 1)
+            {
+                continue;
+            }
+
+            var stationInformation = obj.Single();
+
+            if (string.IsNullOrEmpty(stationInformation.StationName))
+            {
+                continue;
+            }
+
+            if (stationInformation.GdbFromDate != stationInformation.DateFrom)
+            {
+                continue;
+            }
+
+            if (stationInformation.GdbToDate != stationInformation.DateTo)
+            {
+                continue;
+            }
+
+            if (stationInformation.Country == Country.Greenland)
+            {
+                continue;
+            }
+
+            if (!stationInformation.Wgs_lat.HasValue ||
+                !stationInformation.Wgs_long.HasValue)
+            {
+                continue;
+            }
+
+            if (stationInformation.DateFrom.HasValue && stationInformation.DateFrom.Value.Year > 2000)
+            {
+                continue;
+            }
+
+            simpleObjects.Add(stationInformation);
+        }
+
+        simpleObjects = simpleObjects.OrderBy(_ => _.DateFrom).ToList();
+
+        var now = DateTime.UtcNow;
+
+        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+        {
+            var count = 0;
+
+            foreach (var obj in simpleObjects)
+            {
+                var observingFacility = new ObservingFacility(
+                    Guid.NewGuid(),
+                    now)
+                {
+                    Name = obj.StationName,
+                    DateEstablished = obj.DateFrom.Value,
+                    DateClosed = obj.DateTo.Value,
+                };
+
+                var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
+                {
+                    AbstractEnvironmentalMonitoringFacility = observingFacility,
+                    AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
+                    From = obj.DateFrom.Value,
+                    To = obj.DateTo.Value,
+                    Coordinate1 = obj.Wgs_long.Value,
+                    Coordinate2 = obj.Wgs_lat.Value,
+                    CoordinateSystem = "WGS_84"
+                };
+
+                unitOfWork.ObservingFacilities.Add(observingFacility);
+                unitOfWork.Points_Wigos.Add(point);
+                unitOfWork.Complete();
+
+                var message = $"{obj.StationName}";
+
+                if (obj.DateFrom.HasValue &&
+                    obj.DateTo.HasValue)
+                {
+                    message += $" ({obj.DateFrom.Value.Year} - {obj.DateTo.Value.Year})";
+                }
+
+                _logger.WriteLine(LogMessageCategory.Information, message);
+
+                count++;
+
+                if (count > 100)
+                {
+                    break;
+                }
+            }
+        }
+
+        InitializeTimestampsOfInterest();
+
+        if (_autoRefresh.Object)
+        {
+            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+        }
     }
 
     private bool CanImportSMSDataSet(
@@ -662,7 +729,7 @@ public class MainWindowViewModel : ViewModelBase
 
         ObservingFacilityListViewModel.ObservingFacilityDataExtracts.PropertyChanged += (s, e) =>
         {
-            _logger?.WriteLine(LogMessageCategory.Information, "Updating Map points");
+            //_logger?.WriteLine(LogMessageCategory.Information, "Updating Map points");
             UpdateMapPoints();
         };
     }
@@ -1113,7 +1180,7 @@ public class MainWindowViewModel : ViewModelBase
 
         if (_autoRefresh.Object)
         {
-            _logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (3)");
+            //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (3)");
             ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
         }
     }
@@ -1352,5 +1419,48 @@ public class MainWindowViewModel : ViewModelBase
 
         UpdateMapPoints();
         RefreshDatabaseTimeSeriesView();
+    }
+
+    private void InitializeTimestampsOfInterest()
+    {
+        try
+        {
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                _databaseWriteTimes = new List<DateTime>();
+
+                var observingFacilities = unitOfWork.ObservingFacilities.GetAll().ToList();
+                var timeStampsForObservingFacilities = observingFacilities.Select(_ => _.Created).ToList();
+                timeStampsForObservingFacilities.AddRange(observingFacilities.Select(_ => _.Superseded));
+                timeStampsForObservingFacilities = timeStampsForObservingFacilities.Where(_ => _ < DateTime.MaxValue).ToList();
+                _databaseWriteTimes.AddRange(timeStampsForObservingFacilities.Distinct());
+
+                var geospatialLocations = unitOfWork.GeospatialLocations.GetAll().ToList();
+                var timeStampsForGeospatialLocations = geospatialLocations.Select(_ => _.Created).ToList();
+                timeStampsForGeospatialLocations.AddRange(geospatialLocations.Select(_ => _.Superseded));
+                timeStampsForGeospatialLocations = timeStampsForGeospatialLocations.Where(_ => _ < DateTime.MaxValue).ToList();
+                _databaseWriteTimes.AddRange(timeStampsForGeospatialLocations.Distinct());
+
+                _databaseWriteTimes = _databaseWriteTimes.Distinct().ToList();
+
+                geospatialLocations = unitOfWork.GeospatialLocations
+                    .Find(_ => _.Superseded == DateTime.MaxValue)
+                    .ToList();
+
+                var historicalChangeTimeStamps = geospatialLocations.Select(_ => _.From).ToList();
+                historicalChangeTimeStamps.AddRange(geospatialLocations.Select(_ => _.To));
+
+                _historicalChangeTimes = historicalChangeTimeStamps
+                    .Where(_ => _ < DateTime.MaxValue)
+                    .Distinct()
+                    .ToList();
+            }
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Just swallow it for now - write it to the log later
+            _databaseWriteTimes = new List<DateTime>();
+            _historicalChangeTimes = new List<DateTime>();
+        }
     }
 }

@@ -62,6 +62,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UI.Utils", "..\Craft\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO", "..\Craft\Craft.DataStructures.IO\Craft.DataStructures.IO.csproj", "{4DF65CAF-4BDF-4E8E-9D7D-3FE3F7429385}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2IEDM.IO", "C2IEDM.IO\C2IEDM.IO.csproj", "{12957006-C25A-4A60-A2EB-1DB5D78A6722}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -168,6 +170,10 @@ Global
 		{4DF65CAF-4BDF-4E8E-9D7D-3FE3F7429385}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DF65CAF-4BDF-4E8E-9D7D-3FE3F7429385}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DF65CAF-4BDF-4E8E-9D7D-3FE3F7429385}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12957006-C25A-4A60-A2EB-1DB5D78A6722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12957006-C25A-4A60-A2EB-1DB5D78A6722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12957006-C25A-4A60-A2EB-1DB5D78A6722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12957006-C25A-4A60-A2EB-1DB5D78A6722}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

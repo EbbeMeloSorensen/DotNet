@@ -232,8 +232,8 @@ public class ObservingFacilityListViewModel : ViewModelBase
                 });
         }
 
-        _logger?.WriteLine(LogMessageCategory.Information,
-            $"Retrieved {ObservingFacilityDataExtracts.Objects.Count()} Observing Facilities");
+        //_logger?.WriteLine(LogMessageCategory.Information,
+        //    $"Retrieved {ObservingFacilityDataExtracts.Objects.Count()} Observing Facilities");
     }
 
     private int CountObservingFacilitiesMatchingFilterFromRepository()
