@@ -55,6 +55,11 @@
                 <MenuItem IsCheckable="True" Header="Log" 
                           IsChecked="{Binding DisplayLog}" />
             </MenuItem>
+            <MenuItem Header="_Tools">
+                <MenuItem Header="Import SMS Dataset" 
+                          Command="{Binding ImportSMSDataSetCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </MenuItem>
         </Menu>
 
         <StatusBar DockPanel.Dock="Bottom" Height="25">

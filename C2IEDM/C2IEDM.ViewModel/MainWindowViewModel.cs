@@ -15,6 +15,7 @@ using C2IEDM.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using C2IEDM.Persistence;
 using System.Globalization;
 using System.Timers;
+using Microsoft.Win32;
 
 namespace C2IEDM.ViewModel;
 
@@ -68,6 +69,7 @@ public class MainWindowViewModel : ViewModelBase
     private RelayCommand<object> _createObservingFacilityCommand;
     private RelayCommand<object> _deleteSelectedObservingFacilitiesCommand;
     private RelayCommand<object> _clearRepositoryCommand;
+    private RelayCommand<object> _importSMSDataSetCommand;
     private RelayCommand _escapeCommand;
 
     public bool AutoRefresh
@@ -244,6 +246,15 @@ public class MainWindowViewModel : ViewModelBase
         {
             return _clearRepositoryCommand ?? (_clearRepositoryCommand =
                 new RelayCommand<object>(ClearRepository, CanClearRepository));
+        }
+    }
+
+    public RelayCommand<object> ImportSMSDataSetCommand
+    {
+        get
+        {
+            return _importSMSDataSetCommand ?? (_importSMSDataSetCommand =
+                new RelayCommand<object>(ImportSMSDataSet, CanImportSMSDataSet));
         }
     }
 
@@ -587,6 +598,28 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     private bool CanClearRepository(
+        object owner)
+    {
+        return true;
+    }
+
+    private void ImportSMSDataSet(
+        object owner)
+    {
+        var dialog = new OpenFileDialog
+        {
+            Filter = "Json Files(*.json)|*.json"
+        };
+
+        if (dialog.ShowDialog() == false)
+        {
+            return;
+        }
+
+        throw new NotImplementedException();
+    }
+
+    private bool CanImportSMSDataSet(
         object owner)
     {
         return true;
