@@ -1,0 +1,9 @@
+﻿using WIGOS.Domain.Entities.Geometry.Locations.Line;
+using Craft.Persistence;
+
+namespace WIGOS.Persistence.Repositories.Geometry
+{
+    public interface ILinePointRepository : IRepository<LinePoint>
+    {
+    }
+}

@@ -5,6 +5,16 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Domain", "WIGOS.Domain\WIGOS.Domain.csproj", "{9E629653-5E32-4C19-B469-4EAF1C093BB9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence", "WIGOS.Persistence\WIGOS.Persistence.csproj", "{88128690-AC17-4BD7-91DA-064177A64F5C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{B7EE02AB-3342-4FB5-BB11-7AA39D4D9590}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.IO", "WIGOS.IO\WIGOS.IO.csproj", "{B9443FA9-77B4-450F-9EEF-3F42B455806E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{F12535C9-8D37-4CF8-8745-7D67BBA3ABB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence.EntityFrameworkCore", "WIGOS.Persistence.EntityFrameworkCore\WIGOS.Persistence.EntityFrameworkCore.csproj", "{A2BAD585-3C79-42E3-93DE-4AFEDC378B0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +25,26 @@ Global
 		{9E629653-5E32-4C19-B469-4EAF1C093BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E629653-5E32-4C19-B469-4EAF1C093BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E629653-5E32-4C19-B469-4EAF1C093BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88128690-AC17-4BD7-91DA-064177A64F5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88128690-AC17-4BD7-91DA-064177A64F5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88128690-AC17-4BD7-91DA-064177A64F5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88128690-AC17-4BD7-91DA-064177A64F5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7EE02AB-3342-4FB5-BB11-7AA39D4D9590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7EE02AB-3342-4FB5-BB11-7AA39D4D9590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7EE02AB-3342-4FB5-BB11-7AA39D4D9590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7EE02AB-3342-4FB5-BB11-7AA39D4D9590}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9443FA9-77B4-450F-9EEF-3F42B455806E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9443FA9-77B4-450F-9EEF-3F42B455806E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9443FA9-77B4-450F-9EEF-3F42B455806E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9443FA9-77B4-450F-9EEF-3F42B455806E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F12535C9-8D37-4CF8-8745-7D67BBA3ABB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F12535C9-8D37-4CF8-8745-7D67BBA3ABB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F12535C9-8D37-4CF8-8745-7D67BBA3ABB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F12535C9-8D37-4CF8-8745-7D67BBA3ABB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2BAD585-3C79-42E3-93DE-4AFEDC378B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2BAD585-3C79-42E3-93DE-4AFEDC378B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2BAD585-3C79-42E3-93DE-4AFEDC378B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2BAD585-3C79-42E3-93DE-4AFEDC378B0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
