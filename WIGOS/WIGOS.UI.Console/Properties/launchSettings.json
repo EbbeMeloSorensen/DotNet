@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WIGOS.UI.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "list -e ObservingFacility"
+    }
+  }
+}

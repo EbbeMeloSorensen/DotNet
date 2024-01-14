@@ -35,6 +35,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils", "..\Craft\Cra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj", "{03BF082D-EB62-40A2-BB0F-D3ADCD67672D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{FAACFBC6-32B7-4782-ADEA-E06E5D3205E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.UI.Console", "WIGOS.UI.Console\WIGOS.UI.Console.csproj", "{F2CCE9AA-2258-4921-A215-9A482AA3EC56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence.EntityFrameworkCore.PostgreSQL", "WIGOS.Persistence.EntityFrameworkCore.PostgreSQL\WIGOS.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{83851564-8127-448B-9F54-98C5AE771D65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +111,18 @@ Global
 		{03BF082D-EB62-40A2-BB0F-D3ADCD67672D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03BF082D-EB62-40A2-BB0F-D3ADCD67672D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03BF082D-EB62-40A2-BB0F-D3ADCD67672D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAACFBC6-32B7-4782-ADEA-E06E5D3205E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAACFBC6-32B7-4782-ADEA-E06E5D3205E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAACFBC6-32B7-4782-ADEA-E06E5D3205E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAACFBC6-32B7-4782-ADEA-E06E5D3205E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2CCE9AA-2258-4921-A215-9A482AA3EC56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2CCE9AA-2258-4921-A215-9A482AA3EC56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2CCE9AA-2258-4921-A215-9A482AA3EC56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2CCE9AA-2258-4921-A215-9A482AA3EC56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83851564-8127-448B-9F54-98C5AE771D65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83851564-8127-448B-9F54-98C5AE771D65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83851564-8127-448B-9F54-98C5AE771D65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83851564-8127-448B-9F54-98C5AE771D65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
