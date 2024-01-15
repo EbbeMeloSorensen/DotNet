@@ -1,20 +1,23 @@
-﻿using System.Linq.Expressions;
-using DMI.SMS.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+//using DMI.ObsDB.Domain.Entities;
 
-namespace DMI.SMS.Persistence.Npgsql
+namespace DMI.ObsDB.Persistence.PostgreSQL
 {
     public static class ExpressionExtensions
     {
         private static Dictionary<string, string> _columnNameMap = new Dictionary<string, string>
         {
-            { "ObjectId", "objectid" }, // Table: General
-            { "GdbToDate", "gdb_to_date" }, // Table: General
-            { "StationName", "stationname" }, // Table: stationinformation
-            { "Stationtype", "stationtype" }, // Table: stationinformation
-            { "StationOwner", "stationowner" }, // Table: stationinformation
-            { "StationIDDMI", "stationid_dmi" }, // Table: stationinformation
-            { "Status", "status" }, // Table: General
-            { "Name", "name" } // contactperson
+            //{ "ObjectId", "objectid" }, // Table: General
+            //{ "GdbToDate", "gdb_to_date" }, // Table: General
+            //{ "StationName", "stationname" }, // Table: stationinformation
+            //{ "Stationtype", "stationtype" }, // Table: stationinformation
+            //{ "StationOwner", "stationowner" }, // Table: stationinformation
+            //{ "StationIDDMI", "stationid_dmi" }, // Table: stationinformation
+            //{ "Status", "status" }, // Table: General
+            //{ "Name", "name" } // contactperson
+            { "StatId", "statid" }
         };
 
         public static string ToMSSqlString(
@@ -57,33 +60,33 @@ namespace DMI.SMS.Persistence.Npgsql
 
                         return $"'{constant.Value.ToString()}'";
                     }
-                    else if (constant.Type == typeof(StationType?))
-                    {
-                        if (constant.Value == null)
-                        {
-                            return "null";
-                        }
+                    //else if (constant.Type == typeof(StationType?))
+                    //{
+                    //    if (constant.Value == null)
+                    //    {
+                    //        return "null";
+                    //    }
 
-                        return $"'{constant.Value.ToString()}'";
-                    }
-                    else if (constant.Type == typeof(StationOwner?))
-                    {
-                        if (constant.Value == null)
-                        {
-                            return "null";
-                        }
+                    //    return $"'{constant.Value.ToString()}'";
+                    //}
+                    //else if (constant.Type == typeof(StationOwner?))
+                    //{
+                    //    if (constant.Value == null)
+                    //    {
+                    //        return "null";
+                    //    }
 
-                        return $"'{constant.Value.ToString()}'";
-                    }
-                    else if (constant.Type == typeof(Status?))
-                    {
-                        if (constant.Value == null)
-                        {
-                            return "null";
-                        }
+                    //    return $"'{constant.Value.ToString()}'";
+                    //}
+                    //else if (constant.Type == typeof(Status?))
+                    //{
+                    //    if (constant.Value == null)
+                    //    {
+                    //        return "null";
+                    //    }
 
-                        return $"'{constant.Value.ToString()}'";
-                    }
+                    //    return $"'{constant.Value.ToString()}'";
+                    //}
                     else
                     {
                         var b = (int)constant.Value;
@@ -119,28 +122,32 @@ namespace DMI.SMS.Persistence.Npgsql
                     var memberName = member.Name;
                     switch (memberName)
                     {
-                        case "StationIDDMI":
-                        case "StationName":
-                        case "Stationtype":
-                        case "StationOwner":
-                        case "Status":
-                        case "GdbToDate":
-                        case "ObjectId":
+                        //case "StationIDDMI":
+                        //case "StationName":
+                        //case "Stationtype":
+                        //case "StationOwner":
+                        //case "Status":
+                        //case "GdbToDate":
+                        //case "ObjectId":
+                        case "StatId":
                             return _columnNameMap[memberName];
-                        case "maxDate":
-                            return "'9999-12-31 23:59:59'";
-                        case "_nameFilterInUppercase":
-                            return GetValue(memberaccess) as string;
-                        case "objectIdFilter":
-                            return GetValue(memberaccess).ToString();
-                        case "_onlyCurrent":
+                        //case "maxDate":
+                        //    return "'9999-12-31 23:59:59'";
+                        //case "_nameFilterInUppercase":
+                        //    return GetValue(memberaccess) as string;
+                        //case "objectIdFilter":
+                        //    return GetValue(memberaccess).ToString();
+                        //case "_onlyCurrent":
+                        //    return GetValue(memberaccess).ToString();
+                        case "statId":
                             return GetValue(memberaccess).ToString();
                         default:
                             throw new NotSupportedException();
                     }
                 case ExpressionType.Call:
-                    var call = expression as MethodCallExpression;
-                    return call.ConvertToMSSqlString();
+                    throw new NotImplementedException();
+                    //var call = expression as MethodCallExpression;
+                    //return call.ConvertToMSSqlString();
                 case ExpressionType.Convert:
                     var a = expression as UnaryExpression;
                     return a.Operand.ToMSSqlString();
@@ -159,63 +166,6 @@ namespace DMI.SMS.Persistence.Npgsql
                 expression.NodeType.ToString());
         }
 
-        private static string ConvertToMSSqlString(
-            this MethodCallExpression callExpression)
-        {
-            var str = callExpression.ToString();
-
-            if (str.Contains(".filter.Contains("))
-            {
-                var memberaccess = callExpression.Object as MemberExpression;
-                var parameter = callExpression.Arguments[0].ToString();
-                var property = parameter.Split('.')[1];
-
-                if (str.Contains("Status"))
-                {
-                    var list = GetValue(memberaccess) as List<Status>;
-                    return $"{_columnNameMap[property]} in ({list.Select(n => $"{(int)n}").Aggregate((c, n) => $"{c},{n}")})";
-                }
-                else if (str.Contains("Stationtype"))
-                {
-                    var list = GetValue(memberaccess) as List<StationType>;
-                    return $"{_columnNameMap[property]} in ({list.Select(n => $"{(int)n}").Aggregate((c, n) => $"{c},{n}")})";
-                }
-                else if (str.Contains("StationOwner"))
-                {
-                    var list = GetValue(memberaccess) as List<StationOwner>;
-                    return $"{_columnNameMap[property]} in ({list.Select(n => $"{(int)n}").Aggregate((c, n) => $"{c},{n}")})";
-                }
-            }
-
-            if (str.Contains(".ToUpper().Contains("))
-            {
-                var parameter = str.Split('.')[1];
-                var columnName = _columnNameMap[parameter];
-
-                var expression = callExpression.Arguments[0];
-                var memberaccess = expression as MemberExpression;
-                var member = memberaccess.Member;
-                var memberName = member.Name;
-                var value = GetValue(memberaccess);
-                return $"{columnName} ILIKE '%{value}%'";
-            }
-
-            if (str.Contains(".ToString().Contains("))
-            {
-                var parameter = str.Split('.')[1];
-                var columnName = _columnNameMap[parameter];
-
-                var expression = callExpression.Arguments[0];
-                var memberaccess = expression as MemberExpression;
-                var member = memberaccess.Member;
-                var memberName = member.Name;
-                var value = GetValue(memberaccess);
-                return $"{columnName}::TEXT LIKE '%{value}%'";
-            }
-
-            throw new InvalidOperationException();
-        }
-
         private static object GetValue(
             MemberExpression member)
         {
@@ -227,4 +177,3 @@ namespace DMI.SMS.Persistence.Npgsql
         }
     }
 }
-

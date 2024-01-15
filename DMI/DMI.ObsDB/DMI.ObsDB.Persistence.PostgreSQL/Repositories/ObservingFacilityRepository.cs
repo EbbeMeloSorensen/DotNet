@@ -42,7 +42,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
 
         public IEnumerable<ObservingFacility> Find(Expression<Func<ObservingFacility, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return GetObservingFacilities($" WHERE {predicate.ToMSSqlString()}");
         }
 
         public IEnumerable<ObservingFacility> Find(IList<Expression<Func<ObservingFacility, bool>>> predicates)
