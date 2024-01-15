@@ -3,23 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Domain", "WIGOS.Domain\WIGOS.Domain.csproj", "{9E629653-5E32-4C19-B469-4EAF1C093BB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Domain", "WIGOS.Domain\WIGOS.Domain.csproj", "{9E629653-5E32-4C19-B469-4EAF1C093BB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence", "WIGOS.Persistence\WIGOS.Persistence.csproj", "{88128690-AC17-4BD7-91DA-064177A64F5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Persistence", "WIGOS.Persistence\WIGOS.Persistence.csproj", "{88128690-AC17-4BD7-91DA-064177A64F5C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence", "..\Craft\Craft.Persistence\Craft.Persistence.csproj", "{B7EE02AB-3342-4FB5-BB11-7AA39D4D9590}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.IO", "WIGOS.IO\WIGOS.IO.csproj", "{B9443FA9-77B4-450F-9EEF-3F42B455806E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.IO", "WIGOS.IO\WIGOS.IO.csproj", "{B9443FA9-77B4-450F-9EEF-3F42B455806E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFrameworkCore", "..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj", "{F12535C9-8D37-4CF8-8745-7D67BBA3ABB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence.EntityFrameworkCore", "WIGOS.Persistence.EntityFrameworkCore\WIGOS.Persistence.EntityFrameworkCore.csproj", "{A2BAD585-3C79-42E3-93DE-4AFEDC378B0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Persistence.EntityFrameworkCore", "WIGOS.Persistence.EntityFrameworkCore\WIGOS.Persistence.EntityFrameworkCore.csproj", "{A2BAD585-3C79-42E3-93DE-4AFEDC378B0F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\Craft.Logging\Craft.Logging.csproj", "{B82BA8FF-FBD9-46A2-8324-7BB718F73AA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Application", "WIGOS.Application\WIGOS.Application.csproj", "{ACF93978-36B4-4C56-9A4A-09DA60480554}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Application", "WIGOS.Application\WIGOS.Application.csproj", "{ACF93978-36B4-4C56-9A4A-09DA60480554}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.ViewModel", "WIGOS.ViewModel\WIGOS.ViewModel.csproj", "{3F695111-1958-4053-84FC-F2529781AC99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.ViewModel", "WIGOS.ViewModel\WIGOS.ViewModel.csproj", "{3F695111-1958-4053-84FC-F2529781AC99}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO", "..\Craft\Craft.DataStructures.IO\Craft.DataStructures.IO.csproj", "{53C9F34E-867C-4881-A4AB-D340A8E606C1}"
 EndProject
@@ -37,9 +37,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Log4Net", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{FAACFBC6-32B7-4782-ADEA-E06E5D3205E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.UI.Console", "WIGOS.UI.Console\WIGOS.UI.Console.csproj", "{F2CCE9AA-2258-4921-A215-9A482AA3EC56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.UI.Console", "WIGOS.UI.Console\WIGOS.UI.Console.csproj", "{F2CCE9AA-2258-4921-A215-9A482AA3EC56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence.EntityFrameworkCore.PostgreSQL", "WIGOS.Persistence.EntityFrameworkCore.PostgreSQL\WIGOS.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{83851564-8127-448B-9F54-98C5AE771D65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Persistence.EntityFrameworkCore.PostgreSQL", "WIGOS.Persistence.EntityFrameworkCore.PostgreSQL\WIGOS.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{83851564-8127-448B-9F54-98C5AE771D65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence.EntityFrameworkCore.Sqlite", "WIGOS.Persistence.EntityFrameworkCore.Sqlite\WIGOS.Persistence.EntityFrameworkCore.Sqlite.csproj", "{58C70262-6B0E-46B1-B92E-6B4653CC5410}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence.EntityFrameworkCore.SqlServer", "WIGOS.Persistence.EntityFrameworkCore.SqlServer\WIGOS.Persistence.EntityFrameworkCore.SqlServer.csproj", "{E6ABF6A0-B462-4E43-9C47-BC003A0E5A13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +127,14 @@ Global
 		{83851564-8127-448B-9F54-98C5AE771D65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83851564-8127-448B-9F54-98C5AE771D65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83851564-8127-448B-9F54-98C5AE771D65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C70262-6B0E-46B1-B92E-6B4653CC5410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58C70262-6B0E-46B1-B92E-6B4653CC5410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58C70262-6B0E-46B1-B92E-6B4653CC5410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58C70262-6B0E-46B1-B92E-6B4653CC5410}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6ABF6A0-B462-4E43-9C47-BC003A0E5A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6ABF6A0-B462-4E43-9C47-BC003A0E5A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6ABF6A0-B462-4E43-9C47-BC003A0E5A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6ABF6A0-B462-4E43-9C47-BC003A0E5A13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
