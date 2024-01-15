@@ -208,16 +208,17 @@ namespace DMI.Data.Studio.Application
                     var observingFacility = unitOfWork.ObservingFacilities
                         .GetIncludingTimeSeries(int.Parse(nanoqStationId));
 
-                    if (observingFacility.TimeSeries != null)
+                    if (observingFacility != null && observingFacility.TimeSeries != null)
                     {
                         var timeSeries = observingFacility.TimeSeries
-                            .Where(_ => _.ParamId == "temp_dry")
+                            .Where(_ => _.ParamId == parameter)
                             .SingleOrDefault();
 
                         if (timeSeries != null)
                         {
                             var startYear = 1953;
-                            var lastYear = 2005;
+                            //var lastYear = 1953;
+                            var lastYear = 2000; // Det går ret langsomt, hvis vi skal op i de nyeste tabeller, som der er meget data i
 
                             var nYears = lastYear - startYear + 1;
                             var yearCount = 0;

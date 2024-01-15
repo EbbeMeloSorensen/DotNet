@@ -78,7 +78,8 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                     }
                     else
                     {
-                        throw new InvalidOperationException();
+                        var a = 0; // (Det er ikke sikkert, at den er der, f.eks i situationen hvor man antager, at den er der, fordi man har fundet en i sms,,)
+                        //throw new InvalidOperationException();
                     }
 
                     reader.Close();
@@ -96,13 +97,17 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
         public ObservingFacility GetIncludingTimeSeries(int id)
         {
             var observingFacility = Get(id);
+
+            if (observingFacility == null)
+            {
+                return null;
+            }
+
             observingFacility.TimeSeries = new List<TimeSeries>();
 
             var firstYear = 1953;
             var lastYear = DateTime.Now.Year;
             var years = Enumerable.Range(firstYear, lastYear - firstYear + 1);
-
-            var parameters = new HashSet<string>();
 
             foreach (var year in years)
             {
@@ -124,7 +129,7 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                                 TimeSeriesRepository.GenerateTimeSeries(id, "temp_dry")
                             );
 
-                            break; // SIkr lige at du ikke forårsager et leak på denne måde
+                            break; // Sikr lige at du ikke forårsager et leak på denne måde
                         }
                             
                         reader.Close();

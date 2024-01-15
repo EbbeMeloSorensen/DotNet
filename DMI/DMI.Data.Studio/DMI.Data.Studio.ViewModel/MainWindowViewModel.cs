@@ -389,7 +389,7 @@ namespace DMI.Data.Studio.ViewModel
             }
         }
 
-        private void UpdateChronologyView()
+        private async void UpdateChronologyView()
         {
             ChronologyViewModel.VerticalLineViewModels.Clear();
             ChronologyViewModel.TimeIntervalBarViewModels.Clear();
@@ -441,14 +441,14 @@ namespace DMI.Data.Studio.ViewModel
 
             if (IncludeObservationIntervalBars)
             {
-                if (stationInformationsIncluded)
+                if (stationInformationsIncluded && false)
                 {
-                    _selectedStationInformations.ForEach(s =>
+                    _selectedStationInformations.ForEach(async s =>
                     {
                         if (s.StationIDDMI.HasValue)
                         {
                             var stationId = $"{s.StationIDDMI.Value}".PadLeft(5, '0');
-                            var intervals = GetObservationIntervalsForStation(stationId);
+                            var intervals = await GetObservationIntervalsForStation(stationId); // 1
 
                             if (intervals != null)
                             {
@@ -458,15 +458,15 @@ namespace DMI.Data.Studio.ViewModel
                     });
                 }
 
-                if (stationsIncluded)
+                if (stationsIncluded && false)
                 {
-                    _selectedStations.ForEach(s =>
+                    _selectedStations.ForEach(async s =>
                     {
                         var stationId = s.StatID.ToString();
                         stationId = stationId.Substring(0, stationId.Length - 2);
                         stationId = $"{stationId}".PadLeft(5, '0');
 
-                        var intervals = GetObservationIntervalsForStation(stationId);
+                        var intervals = await GetObservationIntervalsForStation(stationId); // 2
 
                         if (intervals != null)
                         {
@@ -476,7 +476,7 @@ namespace DMI.Data.Studio.ViewModel
                 }
             }
 
-            var earliestTime = new DateTime(1889, 1, 1);
+            var earliestTime = new DateTime(1945, 1, 1);
 
             if (startTimes.Any())
             {
@@ -620,7 +620,7 @@ namespace DMI.Data.Studio.ViewModel
                             ? $"{stationInformation.StationIDDMI.Value}".PadLeft(5, '0')
                             : "";
 
-                        var intervals = GetObservationIntervalsForStation(stationId);
+                        var intervals = await GetObservationIntervalsForStation(stationId); // 3
 
                         var barHeightRatio = 0.3;
 
@@ -689,7 +689,7 @@ namespace DMI.Data.Studio.ViewModel
                             var stationId = station.StatID.ToString();
                             stationId = stationId.Substring(0, stationId.Length - 2);
                             stationId = $"{stationId}".PadLeft(5, '0');
-                            var intervals = GetObservationIntervalsForStation(stationId);
+                            var intervals = await GetObservationIntervalsForStation(stationId); // 4
 
                             var barHeightRatio = 0.3;
 
@@ -1016,7 +1016,7 @@ namespace DMI.Data.Studio.ViewModel
             //ExtractOceanographicalStationsCommand.RaiseCanExecuteChanged();
         }
 
-        private List<Tuple<DateTime, DateTime>> GetObservationIntervalsForStation(
+        private async Task<List<Tuple<DateTime, DateTime>>> GetObservationIntervalsForStation(
             string stationId)
         {
             if (string.IsNullOrEmpty(stationId))
@@ -1033,16 +1033,12 @@ namespace DMI.Data.Studio.ViewModel
                 parameter = "precip_past6h";
             }
 
-            // Den skal ikke læse fra sms data provider, men fra obsDB
-            //using (var unitOfWork = _obsDBUnitOfWorkFactory.GenerateUnitOfWork())
-            //{
-
-            //}
-
-            return _smsDataProvider.ReadObservationIntervalsForStation(
+            var intervals = await _application.ExtractObservationIntervals(
                 nanoqStationId,
                 parameter,
                 maxTolerableDifferenceBetweenTwoObservationsInDays);
+
+            return intervals;
         }
 
         private void DrawRoughOutlineOfDenmarkOnMap()
