@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
+    <ProjectReference Include="..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
+    <ProjectReference Include="..\WIGOS.Persistence.EntityFrameworkCore.Sqlite\WIGOS.Persistence.EntityFrameworkCore.Sqlite.csproj" />
+    <ProjectReference Include="..\WIGOS.ViewModel\WIGOS.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\Denmark.gml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\DenmarkAndGreenland.gml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

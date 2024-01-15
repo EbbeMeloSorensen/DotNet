@@ -1,0 +1,31 @@
+﻿<Application x:Class="WIGOS.UI.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WIGOS.UI.WPF"
+             xmlns:dialogs="clr-namespace:Craft.UIElements.Dialogs;assembly=Craft.UIElements"
+             xmlns:viewModelBase="clr-namespace:Craft.ViewModels.Dialogs;assembly=Craft.ViewModels"
+             xmlns:viewModelLocal="clr-namespace:WIGOS.ViewModel;assembly=WIGOS.ViewModel"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
+
+            <DataTemplate DataType="{x:Type viewModelBase:MessageBoxDialogViewModel}">
+                <dialogs:MessageBoxDialogView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModelLocal:CreateObservingFacilityDialogViewModel}">
+                <local:CreateObservingFacilityDialogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModelLocal:DefineGeospatialLocationDialogViewModel}">
+                <local:DefineGeospatialLocationDialogView/>
+            </DataTemplate>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />
+                <ResourceDictionary Source="/Craft.UIElements;component/Geometry2D/ScrollFree/Resources.xaml"/>
+                <ResourceDictionary Source="Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
