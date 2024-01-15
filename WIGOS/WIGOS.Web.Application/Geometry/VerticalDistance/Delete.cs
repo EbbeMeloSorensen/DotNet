@@ -1,0 +1,42 @@
+﻿using WIGOS.Web.Persistence;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using WIGOS.Web.Application.Core;
+
+namespace WIGOS.Web.Application.Geometry.VerticalDistance
+{
+    public class Delete
+    {
+        public class Command : IRequest<Result<Unit>>
+        {
+            public Guid Id { get; set; }
+        }
+
+        public class Handler : IRequestHandler<Command, Result<Unit>>
+        {
+            private readonly DataContext _context;
+
+            public Handler(DataContext context)
+            {
+                _context = context;
+            }
+
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            {
+                var query = _context.VerticalDistances
+                    .Where(_ => _.ObjectId == request.Id && _.Superseded == DateTime.MaxValue)
+                    .AsQueryable();
+
+                var verticalDistance = await query.FirstOrDefaultAsync();
+
+                verticalDistance.Superseded = DateTime.UtcNow;
+
+                var result = await _context.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to delete vertical distance");
+
+                return Result<Unit>.Success(Unit.Value);
+            }
+        }
+    }
+}
