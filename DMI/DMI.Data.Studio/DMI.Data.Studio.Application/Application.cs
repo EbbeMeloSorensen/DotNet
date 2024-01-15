@@ -64,6 +64,7 @@ namespace DMI.Data.Studio.Application
         };
 
         private SMS.Application.IUIDataProvider _smsUiDataProvider;
+        private ObsDB.Persistence.IUnitOfWorkFactory _unitOfWorkFactoryObsDB;
         private ILogger _logger;
 
         public SMS.Application.IUIDataProvider SMSUIDataProvider => _smsUiDataProvider;
@@ -77,9 +78,11 @@ namespace DMI.Data.Studio.Application
 
         public Application(
             SMS.Application.IUIDataProvider smsUIDataProvider,
+            ObsDB.Persistence.IUnitOfWorkFactory unitOfWorkFactoryObsDB,
             ILogger logger)
         {
             _smsUiDataProvider = smsUIDataProvider;
+            _unitOfWorkFactoryObsDB = unitOfWorkFactoryObsDB;
             _logger = logger;
         }
 
@@ -162,9 +165,131 @@ namespace DMI.Data.Studio.Application
         {
             return await Task.Run(() =>
             {
-                var fileName = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}", "intervals.txt");
-
                 var result = new List<Tuple<DateTime, DateTime>>();
+
+                var fileName = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_intervals.txt");
+                var file = new FileInfo(fileName);
+
+                if (file.Exists)
+                {
+                    // Filen er allerede genereret, så læs den og returner
+                    using (var streamReader = new StreamReader(fileName))
+                    {
+                        string line;
+
+                        while ((line = streamReader.ReadLine()) != null)
+                        {
+                            var year1 = int.Parse(line.Substring(0, 4));
+                            var month1 = int.Parse(line.Substring(5, 2));
+                            var day1 = int.Parse(line.Substring(8, 2));
+                            var hour1 = int.Parse(line.Substring(11, 2));
+                            var minute1 = int.Parse(line.Substring(14, 2));
+                            var second1 = int.Parse(line.Substring(17, 2));
+
+                            var year2 = int.Parse(line.Substring(22, 4));
+                            var month2 = int.Parse(line.Substring(27, 2));
+                            var day2 = int.Parse(line.Substring(30, 2));
+                            var hour2 = int.Parse(line.Substring(33, 2));
+                            var minute2 = int.Parse(line.Substring(36, 2));
+                            var second2 = int.Parse(line.Substring(39, 2));
+
+                            result.Add(new Tuple<DateTime, DateTime>(
+                                new DateTime(year1, month1, day1, hour1, minute1, second1),
+                                new DateTime(year2, month2, day2, hour2, minute2, second2)));
+                        }
+
+                        return result;
+                    }
+                }
+
+                // Filen er IKKE genereret, så generer den (så det går hurtigt næste gang) og returner listen
+                using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
+                {
+                    var observingFacility = unitOfWork.ObservingFacilities
+                        .GetIncludingTimeSeries(int.Parse(nanoqStationId));
+
+                    if (observingFacility.TimeSeries != null)
+                    {
+                        var timeSeries = observingFacility.TimeSeries
+                            .Where(_ => _.ParamId == "temp_dry")
+                            .SingleOrDefault();
+
+                        if (timeSeries != null)
+                        {
+                            var startYear = 1953;
+                            var lastYear = 2005;
+
+                            var nYears = lastYear - startYear + 1;
+                            var yearCount = 0;
+
+                            var timeStamps = new List<DateTime>();
+
+                            for (var year = startYear; year <= lastYear; year++)
+                            {
+                                var startTime = new DateTime(year, 1, 1);
+                                var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
+
+                                timeSeries = unitOfWork.TimeSeries.GetIncludingObservations(
+                                    timeSeries.Id, startTime, endTime);
+
+                                timeStamps.AddRange(timeSeries.Observations.Select(_ => _.Time));
+
+                                yearCount++;
+
+                                if (progressCallback != null)
+                                {
+                                    progressCallback.Invoke(0.0 + 100.0 * yearCount / nYears, "");
+                                }
+                            }
+
+                            var intervals = ConvertToIntervals(timeStamps, maxTolerableDifferenceBetweenTwoObservationsInDays);
+
+                            if (!Directory.Exists(@"C:\Data\Stations"))
+                            {
+                                Directory.CreateDirectory(@"C:\Data\Stations");
+                            }
+
+                            using (var streamWriter = new StreamWriter(fileName))
+                            {
+                                foreach (var interval in intervals)
+                                {
+                                    var t1 = interval.Item1;
+                                    var t2 = interval.Item2;
+
+                                    var year1 = $"{t1.Year}";
+                                    var month1 = $"{t1.Month}".PadLeft(2, '0');
+                                    var day1 = $"{t1.Day}".PadLeft(2, '0');
+                                    var hour1 = $"{t1.Hour}".PadLeft(2, '0');
+                                    var minute1 = $"{t1.Minute}".PadLeft(2, '0');
+                                    var second1 = $"{t1.Second}".PadLeft(2, '0');
+
+                                    var year2 = $"{t2.Year}";
+                                    var month2 = $"{t2.Month}".PadLeft(2, '0');
+                                    var day2 = $"{t2.Day}".PadLeft(2, '0');
+                                    var hour2 = $"{t2.Hour}".PadLeft(2, '0');
+                                    var minute2 = $"{t2.Minute}".PadLeft(2, '0');
+                                    var second2 = $"{t2.Second}".PadLeft(2, '0');
+
+                                    streamWriter.Write($"{year1}-");
+                                    streamWriter.Write($"{month1}-");
+                                    streamWriter.Write($"{day1} ");
+                                    streamWriter.Write($"{hour1}:");
+                                    streamWriter.Write($"{minute1}:");
+                                    streamWriter.Write($"{second1}");
+                                    streamWriter.Write(" - ");
+                                    streamWriter.Write($"{year2}-");
+                                    streamWriter.Write($"{month2}-");
+                                    streamWriter.Write($"{day2} ");
+                                    streamWriter.Write($"{hour2}:");
+                                    streamWriter.Write($"{minute2}:");
+                                    streamWriter.Write($"{second2}");
+                                    streamWriter.WriteLine();
+                                }
+                            }
+                        }
+                    }
+                }
+
                 return result;
             });
         }
@@ -701,6 +826,42 @@ namespace DMI.Data.Studio.Application
                 .ToList();
 
             return stationDataRaw;
+        }
+
+        private List<Tuple<DateTime, DateTime>> ConvertToIntervals(
+            List<DateTime> observationTimes,
+            double maxTolerableDifferenceBetweenTwoObservationsInDays)
+        {
+            var result = new List<Tuple<DateTime, DateTime>>();
+
+            if (observationTimes.Count == 0)
+            {
+                return result;
+            }
+
+            var startOfCurrentInterval = observationTimes.First();
+
+            var nObservations = observationTimes.Count;
+
+            for (var i = 1; i < nObservations; i++)
+            {
+                var t1 = observationTimes[i - 1];
+                var t2 = observationTimes[i];
+                var diff = t2 - t1;
+
+                if (diff.TotalDays > maxTolerableDifferenceBetweenTwoObservationsInDays)
+                {
+                    result.Add(new Tuple<DateTime, DateTime>(
+                        startOfCurrentInterval, t1));
+
+                    startOfCurrentInterval = t2;
+                }
+            }
+
+            result.Add(new Tuple<DateTime, DateTime>(
+                startOfCurrentInterval, observationTimes.Last()));
+
+            return result;
         }
     }
 }

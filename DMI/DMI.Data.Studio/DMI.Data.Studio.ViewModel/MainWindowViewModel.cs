@@ -230,6 +230,7 @@ namespace DMI.Data.Studio.ViewModel
 
             _application = new Application.Application(
                 _smsDataProvider,
+                _obsDBUnitOfWorkFactory,
                 _logger);
 
             _smsApplication = new SMS.Application.Application(
