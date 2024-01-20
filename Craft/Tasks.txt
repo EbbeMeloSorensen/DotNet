@@ -73,6 +73,11 @@ Done:
 * Bedre granularitet, når man zoomer ind på en tidsakse
 
 In progress:
+* Bemærk lige, at du i Tab3 (Line of sight) benytter en Polygon, som du binder til en "PointCollection", 
+  når du tegner 3-kanter. Det står i kontrast til hvordan du tegner polygoner i GeometryEditorView, hvor du binder
+  til en PolygonViewModel, som har en string property - det er nok en kende tungere end den første metode
+* Du burde kunne lave dit hex map på samme måde som når du tegner pixels, dvs hvor du bruger et uniformgrid.
+  Yes - der er noget proof of concept i Tab6View
 * Tidskurven skal tegnes pænere, så man transformerer punkter og BAGEFTER tegner, fremfor at skalere selve kurven i vildskab
   - Når skalering ændres, skal "Points" propertyen for de PolylineViewModels, man har, genberegnes. Når man panorerer,
     skal der opdateres en translations-matrix.

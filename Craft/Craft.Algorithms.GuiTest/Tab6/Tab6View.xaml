@@ -25,13 +25,23 @@
                     <Border BorderBrush="Gray"
                             BorderThickness="0.1"
                             Background="{Binding Path=Pixel, Converter={StaticResource PixelToBrushConverter}}">
-                        <TextBlock HorizontalAlignment="Center" 
+                        <Grid>
+                            <TextBlock HorizontalAlignment="Center" 
                                    VerticalAlignment="Center" 
                                    FontSize="10" 
                                    TextAlignment="Right" 
                                    Foreground="DarkOliveGreen"
                                    Text="{Binding Path=Pixel.TextOverlay}">
-                        </TextBlock>
+                            </TextBlock>
+                            <Polygon Points="0,0 30,0 0,30" Fill="Yellow" Opacity="0.1">
+                                
+                            </Polygon>
+                            <Ellipse Width="10" Height="10" Fill="DarkRed" Opacity="0.1">
+                            </Ellipse>
+                            <Grid.RenderTransform>
+                                <TranslateTransform X="18"/>
+                            </Grid.RenderTransform>
+                        </Grid>
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="MouseLeftButtonDown">
                                 <b:InvokeCommandAction Command="{Binding LeftClickedCommand}"/>
