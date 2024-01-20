@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
 using Craft.ViewModels.Common;
 
-namespace Craft.Algorithms.GuiTest.Tab6
+namespace Craft.Algorithms.GuiTest.Tab8
 {
-    // Euclidean Distance Transform
-    public class Tab6ViewModel : ViewModelBase
+    // Hexagons
+    public class Tab8ViewModel : ViewModelBase
     {
         private HashSet<int> _pixelIndexes;
         private List<PixelViewModel> _pixelViewModels;
 
         public int Rows
         {
-            get { return 10; }
+            get { return 5; }
         }
 
         public int Cols
@@ -32,7 +32,7 @@ namespace Craft.Algorithms.GuiTest.Tab6
             }
         }
 
-        public Tab6ViewModel()
+        public Tab8ViewModel()
         {
             _pixelIndexes = new HashSet<int>();
 
@@ -92,12 +92,12 @@ namespace Craft.Algorithms.GuiTest.Tab6
 
             // Bemærk lige cast metoden til at konvertere 2d arrayet til Enumerable af double
             PixelViewModels = distances.Cast<double>()
-                .Select((d, i) => new PixelViewModel(i, _pixelIndexes.Contains(i) 
-                    ? new Pixel(127, 0, 0, 255) 
+                .Select((d, i) => new PixelViewModel(i, _pixelIndexes.Contains(i)
+                    ? new Pixel(127, 0, 0, 255)
                     : new Pixel(
-                        (byte)System.Math.Round(255 * d / max), 
-                        (byte)System.Math.Round(255 * d / max), 
-                        (byte)System.Math.Round(255 * d / max), 
+                        (byte)System.Math.Round(255 * d / max),
+                        (byte)System.Math.Round(255 * d / max),
+                        (byte)System.Math.Round(255 * d / max),
                         255,
                         $"{d:F2}")))
                 .ToList();

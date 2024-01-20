@@ -11,6 +11,7 @@
         xmlns:tab5="clr-namespace:Craft.Algorithms.GuiTest.Tab5"
         xmlns:tab6="clr-namespace:Craft.Algorithms.GuiTest.Tab6"
         xmlns:tab7="clr-namespace:Craft.Algorithms.GuiTest.Tab7"
+        xmlns:tab8="clr-namespace:Craft.Algorithms.GuiTest.Tab8"
         mc:Ignorable="d"
         Title="Craft.Algorithms.GuiTest" Height="450" Width="800"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
@@ -35,6 +36,9 @@
         </TabItem>
         <TabItem Header="Triangle Rasterization">
             <tab4:Tab4View DataContext="{Binding Tab4ViewModel}"/>
+        </TabItem>
+        <TabItem Header="Hexagons">
+            <tab8:Tab8View DataContext="{Binding Tab8ViewModel}"/>
         </TabItem>
     </TabControl>
 </Window>
