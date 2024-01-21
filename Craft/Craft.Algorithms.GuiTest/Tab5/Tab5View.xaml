@@ -12,7 +12,7 @@
         <valueConverters:PixelToBrushConverter x:Key="PixelToBrushConverter"/>
     </UserControl.Resources>
 
-    <Canvas Grid.Column="0">
+    <Canvas>
         <ItemsControl Width="576" Height="360" ItemsSource="{Binding PixelViewModels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

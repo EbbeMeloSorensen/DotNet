@@ -3,7 +3,6 @@ using System.Linq;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
 using Craft.ViewModels.Common;
-using Craft.Algorithms.GuiTest.Common;
 
 namespace Craft.Algorithms.GuiTest.Tab5
 {
@@ -37,7 +36,7 @@ namespace Craft.Algorithms.GuiTest.Tab5
         {
             _pixelIndexes = new HashSet<int>();
 
-            InitializePixes();
+            InitializePixels();
         }
 
         private void PixelLeftClicked(
@@ -46,7 +45,7 @@ namespace Craft.Algorithms.GuiTest.Tab5
         {
             _pixelIndexes.Add(e.ElementId);
 
-            InitializePixes();
+            InitializePixels();
         }
 
         private void PixelRightClicked(
@@ -58,13 +57,13 @@ namespace Craft.Algorithms.GuiTest.Tab5
                 _pixelIndexes.Remove(e.ElementId);
             }
 
-            InitializePixes();
+            InitializePixels();
         }
 
-        private void InitializePixes()
+        private void InitializePixels()
         {
             PixelViewModels = Enumerable.Range(0, Rows * Cols)
-                .Select(i => new PixelViewModel(i, _pixelIndexes.Contains(i) ? new Pixel(255, 255, 255, 255) : new Pixel(0, 0, 0, 255)))
+                .Select(i => new PixelViewModel(i, _pixelIndexes.Contains(i) ? new Pixel(255, 255, 255, 255) : new Pixel(50, 50, 50, 255)))
                 .ToList();
 
             PixelViewModels.ForEach(p =>

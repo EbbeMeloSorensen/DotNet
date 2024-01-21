@@ -10,7 +10,8 @@ namespace Craft.Algorithms.GuiTest.Tab8
     public class Tab8ViewModel : ViewModelBase
     {
         private HashSet<int> _pixelIndexes;
-        private List<PixelViewModel> _pixelViewModels;
+        private List<PixelViewModel> _pixelViewModels1;
+        private List<PixelViewModel> _pixelViewModels2;
 
         public int Rows
         {
@@ -22,12 +23,22 @@ namespace Craft.Algorithms.GuiTest.Tab8
             get { return 16; }
         }
 
-        public List<PixelViewModel> PixelViewModels
+        public List<PixelViewModel> PixelViewModels1
         {
-            get { return _pixelViewModels; }
+            get { return _pixelViewModels1; }
             set
             {
-                _pixelViewModels = value;
+                _pixelViewModels1 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public List<PixelViewModel> PixelViewModels2
+        {
+            get { return _pixelViewModels2; }
+            set
+            {
+                _pixelViewModels2 = value;
                 RaisePropertyChanged();
             }
         }
@@ -36,7 +47,7 @@ namespace Craft.Algorithms.GuiTest.Tab8
         {
             _pixelIndexes = new HashSet<int>();
 
-            InitializePixes();
+            InitializePixels();
         }
 
         private void PixelLeftClicked(
@@ -45,67 +56,39 @@ namespace Craft.Algorithms.GuiTest.Tab8
         {
             _pixelIndexes.Add(e.ElementId);
 
-            InitializePixes();
+            InitializePixels();
         }
 
-        private void PixelRightClicked(
-            object sender,
-            ElementClickedEventArgs e)
+        private void InitializePixels()
         {
-            if (_pixelIndexes.Contains(e.ElementId))
-            {
-                _pixelIndexes.Remove(e.ElementId);
-            }
+            var range1 = Enumerable.Range(0, Rows)
+                .Select(i => Enumerable.Range(i * 2 * Cols, Cols))
+                .SelectMany(_ => _);
 
-            InitializePixes();
-        }
+            var range2 = Enumerable.Range(0, Rows)
+                .Select(i => Enumerable.Range(i * 2 * Cols + Cols, Cols))
+                .SelectMany(_ => _);
 
-        private void InitializePixes()
-        {
-            if (!_pixelIndexes.Any())
-            {
-                PixelViewModels = Enumerable.Range(0, Rows * Cols)
-                    .Select(i => new PixelViewModel(i, new Pixel(50, 50, 50, 255)))
-                    .ToList();
-
-                PixelViewModels.ForEach(p =>
-                {
-                    p.PixelLeftClicked += PixelLeftClicked;
-                    p.PixelRightClicked += PixelRightClicked;
-                });
-
-                return;
-            }
-
-            var image = new int[Rows, Cols];
-
-            _pixelIndexes.ToList().ForEach(i =>
-            {
-                var x = i % Cols;
-                var y = i / Cols;
-                image[y, x] = 1;
-            });
-
-            DistanceTransform.EuclideanDistanceTransform(image, out var distances, out var xValues, out var yValues);
-
-            var max = distances.Cast<double>().Max();
-
-            // Bemærk lige cast metoden til at konvertere 2d arrayet til Enumerable af double
-            PixelViewModels = distances.Cast<double>()
-                .Select((d, i) => new PixelViewModel(i, _pixelIndexes.Contains(i)
-                    ? new Pixel(127, 0, 0, 255)
-                    : new Pixel(
-                        (byte)System.Math.Round(255 * d / max),
-                        (byte)System.Math.Round(255 * d / max),
-                        (byte)System.Math.Round(255 * d / max),
-                        255,
-                        $"{d:F2}")))
+            PixelViewModels1 = range1
+                .Select(i => new PixelViewModel(i, _pixelIndexes.Contains(i) 
+                    ? new Pixel(255, 255, 255, 255, $"{i}") 
+                    : new Pixel(50, 50, 50, 255, $"{i}")))
                 .ToList();
 
-            PixelViewModels.ForEach(p =>
+            PixelViewModels2 = range2
+                .Select(i => new PixelViewModel(i, _pixelIndexes.Contains(i)
+                    ? new Pixel(255, 255, 255, 255, $"{i}")
+                    : new Pixel(50, 50, 50, 255, $"{i}")))
+                .ToList();
+
+            PixelViewModels1.ForEach(p =>
             {
                 p.PixelLeftClicked += PixelLeftClicked;
-                p.PixelRightClicked += PixelRightClicked;
+            });
+
+            PixelViewModels2.ForEach(p =>
+            {
+                p.PixelLeftClicked += PixelLeftClicked;
             });
         }
     }
