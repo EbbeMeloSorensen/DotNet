@@ -163,6 +163,54 @@ namespace Craft.DataStructures.IO.UnitTest
         }
 
         [Fact]
+        public void WriteGraphAdjacencyListToGraphMLFile_LabelledVertexAndEmptyEdge_Directed()
+        {
+            // Arrange
+            var vertices = new List<LabelledVertex>
+            {
+                new LabelledVertex("ARNE"),                            //  0
+                new LabelledVertex("Autovand"),                        //  1
+                new LabelledVertex("Frie Data"),                       //  2
+                new LabelledVertex("FTKImpact"),                       //  3
+                new LabelledVertex("FTKmil"),                          //  4
+                new LabelledVertex("Glatføre"),                        //  5
+                new LabelledVertex("Handover"),                        //  6
+                new LabelledVertex("InCaseIT"),                        //  7
+                new LabelledVertex("Klimadatabaser"),                  //  8
+                new LabelledVertex("Lyndatabaser"),                    //  9
+                new LabelledVertex("METAFbrowser"),                    // 10 
+                new LabelledVertex("METAF database"),                  // 11 
+                new LabelledVertex("Nexus"),                           // 12 
+                new LabelledVertex("Ninjo WebRequestHandler ekstern"), // 13 
+                new LabelledVertex("NorthAviMet"),                     // 14 
+                new LabelledVertex("OBSdb Observationsdata"),          // 15 
+                new LabelledVertex("OSM"),                             // 16 
+                new LabelledVertex("Pakkesystem"),                     // 17 
+                new LabelledVertex("Seadb Observationsdata"),          // 18 
+                new LabelledVertex("Skrivesystemet inkl split/flet"),  // 19 
+                new LabelledVertex("SPOT"),                            // 20 
+                new LabelledVertex("Station Management System"),       // 21
+                new LabelledVertex("TAF Planner"),                     // 22 
+                new LabelledVertex("Telegram"),                        // 23 
+                new LabelledVertex("VAO Varsling af oversvømmelser"),  // 24 
+                new LabelledVertex("VolcanoAsh"),                      // 25 
+                new LabelledVertex("VolcanoAsh model"),                // 26 
+            };
+
+            var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, true);
+            graph.AddEdge(0, 15);
+            graph.AddEdge(2, 8);
+            graph.AddEdge(2, 9);
+            graph.AddEdge(2, 15);
+            graph.AddEdge(2, 18);
+            graph.AddEdge(2, 21);
+            var outputFile = @"C:\Temp\SystemDependencies.graphml";
+
+            // Act
+            graph.WriteToFile(outputFile, Format.GraphML);
+        }
+
+        [Fact]
         public void WriteGraphAdjacencyListToGraphMLFile_LabelledVertexAndLabelledEdge()
         {
             // Arrange
