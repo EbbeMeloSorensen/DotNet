@@ -198,12 +198,25 @@ namespace Craft.DataStructures.IO.UnitTest
             };
 
             var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, true);
-            graph.AddEdge(0, 15);
-            graph.AddEdge(2, 8);
-            graph.AddEdge(2, 9);
-            graph.AddEdge(2, 15);
-            graph.AddEdge(2, 18);
-            graph.AddEdge(2, 21);
+            graph.AddEdge(15, 0);
+            graph.AddEdge(8, 2);
+            graph.AddEdge(9, 2);
+            graph.AddEdge(15, 2);
+            graph.AddEdge(18, 2);
+            graph.AddEdge(21, 2);
+            graph.AddEdge(13, 3);
+            graph.AddEdge(3, 4);
+            graph.AddEdge(16, 5);
+            graph.AddEdge(16, 6);
+            graph.AddEdge(22, 7);
+            graph.AddEdge(11, 10);
+            graph.AddEdge(17, 12);
+            graph.AddEdge(1, 19);
+            graph.AddEdge(14, 20);
+            graph.AddEdge(22, 20);
+            graph.AddEdge(20, 23);
+            graph.AddEdge(0, 24);
+            graph.AddEdge(26, 25);
             var outputFile = @"C:\Temp\SystemDependencies.graphml";
 
             // Act
