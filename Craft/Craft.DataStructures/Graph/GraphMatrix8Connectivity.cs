@@ -35,49 +35,49 @@ namespace Craft.DataStructures.Graph
 
             if (colIndex > 0)
             {
-                //yield return vertexId - 1;
+                // You can go left
                 yield return new EdgeWithCost(vertexId, vertexId - 1, 1);
 
                 if (rowIndex > 0)
                 {
-                    //yield return vertexId - _cols - 1;
+                    // You can go left and up
                     yield return new EdgeWithCost(vertexId, vertexId - _cols - 1, Math.Sqrt(2.0));
                 }
 
                 if (rowIndex < _rows - 1)
                 {
-                    //yield return vertexId + _cols - 1;
+                    // You can go left and down
                     yield return new EdgeWithCost(vertexId, vertexId + _cols - 1, Math.Sqrt(2.0));
                 }
             }
 
             if (rowIndex > 0)
             {
-                //yield return vertexId - _cols;
+                // You can go up
                 yield return new EdgeWithCost(vertexId, vertexId - _cols, 1);
 
+                // You can go right and up
                 if (colIndex < _cols - 1)
                 {
-                    //yield return vertexId - _cols + 1;
                     yield return new EdgeWithCost(vertexId, vertexId - _cols + 1, Math.Sqrt(2.0));
                 }
             }
 
             if (colIndex < _cols - 1)
             {
-                //yield return vertexId + 1;
+                // You can go right
                 yield return new EdgeWithCost(vertexId, vertexId + 1, 1);
 
+                // You can go right and down
                 if (rowIndex < _rows - 1)
                 {
-                    //yield return vertexId + _cols + 1;
                     yield return new EdgeWithCost(vertexId, vertexId + _cols + 1, Math.Sqrt(2));
                 }
             }
 
             if (rowIndex < _rows - 1)
             {
-                //yield return vertexId + _cols;
+                // You can go down
                 yield return new EdgeWithCost(vertexId, vertexId + _cols, 1);
             }
         }
