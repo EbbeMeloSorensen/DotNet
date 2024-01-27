@@ -7,6 +7,7 @@ using Craft.Algorithms.GuiTest.Tab5;
 using Craft.Algorithms.GuiTest.Tab6;
 using Craft.Algorithms.GuiTest.Tab7;
 using Craft.Algorithms.GuiTest.Tab8;
+using Craft.Algorithms.GuiTest.Tab9;
 
 namespace Craft.Algorithms.GuiTest
 {
@@ -20,6 +21,7 @@ namespace Craft.Algorithms.GuiTest
         public Tab6ViewModel Tab6ViewModel { get; }
         public Tab7ViewModel Tab7ViewModel { get; }
         public Tab8ViewModel Tab8ViewModel { get; }
+        public Tab9ViewModel Tab9ViewModel { get; }
 
         public MainWindowViewModel()
         {
@@ -31,6 +33,7 @@ namespace Craft.Algorithms.GuiTest
             Tab6ViewModel = new Tab6ViewModel();
             Tab7ViewModel = new Tab7ViewModel();
             Tab8ViewModel = new Tab8ViewModel();
+            Tab9ViewModel = new Tab9ViewModel();
         }
     }
 }

@@ -12,6 +12,7 @@
         xmlns:tab6="clr-namespace:Craft.Algorithms.GuiTest.Tab6"
         xmlns:tab7="clr-namespace:Craft.Algorithms.GuiTest.Tab7"
         xmlns:tab8="clr-namespace:Craft.Algorithms.GuiTest.Tab8"
+        xmlns:tab9="clr-namespace:Craft.Algorithms.GuiTest.Tab9"
         mc:Ignorable="d"
         Title="Craft.Algorithms.GuiTest" Height="450" Width="800"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
@@ -39,6 +40,9 @@
         </TabItem>
         <TabItem Header="General Hexagon Image Manipulation">
             <tab8:Tab8View DataContext="{Binding Tab8ViewModel}"/>
+        </TabItem>
+        <TabItem Header="Dijkstra Shortest Path (hex mesh)">
+            <tab9:Tab9View DataContext="{Binding Tab9ViewModel}"/>
         </TabItem>
     </TabControl>
 </Window>
