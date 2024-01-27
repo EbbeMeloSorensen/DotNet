@@ -59,6 +59,19 @@ namespace Craft.Algorithms.GuiTest.Tab8
             InitializePixels();
         }
 
+        private void PixelRightClicked(
+            object sender,
+            ElementClickedEventArgs e)
+        {
+            if (_pixelIndexes.Contains(e.ElementId))
+            {
+                _pixelIndexes.Remove(e.ElementId);
+            }
+
+            InitializePixels();
+        }
+
+
         private void InitializePixels()
         {
             var range1 = Enumerable.Range(0, Rows)
@@ -84,11 +97,13 @@ namespace Craft.Algorithms.GuiTest.Tab8
             PixelViewModels1.ForEach(p =>
             {
                 p.PixelLeftClicked += PixelLeftClicked;
+                p.PixelRightClicked += PixelRightClicked;
             });
 
             PixelViewModels2.ForEach(p =>
             {
                 p.PixelLeftClicked += PixelLeftClicked;
+                p.PixelRightClicked += PixelRightClicked;
             });
         }
     }

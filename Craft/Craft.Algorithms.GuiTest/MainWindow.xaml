@@ -37,7 +37,7 @@
         <TabItem Header="Triangle Rasterization">
             <tab4:Tab4View DataContext="{Binding Tab4ViewModel}"/>
         </TabItem>
-        <TabItem Header="Hexagons">
+        <TabItem Header="General Hexagon Image Manipulation">
             <tab8:Tab8View DataContext="{Binding Tab8ViewModel}"/>
         </TabItem>
     </TabControl>

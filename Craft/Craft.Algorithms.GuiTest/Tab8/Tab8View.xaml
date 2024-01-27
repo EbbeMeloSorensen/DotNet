@@ -30,6 +30,9 @@
                                 <b:EventTrigger EventName="MouseLeftButtonDown">
                                     <b:InvokeCommandAction Command="{Binding LeftClickedCommand}"/>
                                 </b:EventTrigger>
+                                <b:EventTrigger EventName="MouseRightButtonDown">
+                                    <b:InvokeCommandAction Command="{Binding RightClickedCommand}"/>
+                                </b:EventTrigger>
                             </b:Interaction.Triggers>
                         </Polygon>
                     </DataTemplate>
@@ -54,6 +57,9 @@
                             <b:Interaction.Triggers>
                                 <b:EventTrigger EventName="MouseLeftButtonDown">
                                     <b:InvokeCommandAction Command="{Binding LeftClickedCommand}"/>
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="MouseRightButtonDown">
+                                    <b:InvokeCommandAction Command="{Binding RightClickedCommand}"/>
                                 </b:EventTrigger>
                             </b:Interaction.Triggers>
                         </Polygon>
