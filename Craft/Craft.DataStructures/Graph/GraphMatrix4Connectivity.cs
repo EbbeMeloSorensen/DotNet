@@ -35,13 +35,13 @@ namespace Craft.DataStructures.Graph
 
             if (colIndex > 0)
             {
-                // You can go to the left
+                // You can go left
                 yield return new EdgeWithCost(vertexId, vertexId - 1, 1);
             }
 
             if (colIndex < _cols - 1)
             {
-                // You can go to the right
+                // You can go right
                 yield return new EdgeWithCost(vertexId, vertexId + 1, 1);
             }
 

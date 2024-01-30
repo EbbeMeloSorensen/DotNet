@@ -58,7 +58,7 @@ namespace Craft.Algorithms.GuiTest.Tab1
             _sourceIndexes = new HashSet<int>();
             _forbiddenIndexes = new HashSet<int>();
 
-            InitializePixes();
+            InitializePixels();
         }
 
         private void PixelLeftClicked(
@@ -96,7 +96,7 @@ namespace Craft.Algorithms.GuiTest.Tab1
             UpdatePixels();
         }
 
-        private void InitializePixes()
+        private void InitializePixels()
         {
             PixelViewModels = Enumerable.Range(0, Rows * Cols)
                 .Select(i => new PixelViewModel(i, _forbiddenIndexes.Contains(i) ? new Pixel(127, 0, 0, 127) : new Pixel(50, 50, 50, 255)))
@@ -113,7 +113,7 @@ namespace Craft.Algorithms.GuiTest.Tab1
         {
             if (!_sourceIndexes.Any())
             {
-                InitializePixes();
+                InitializePixels();
                 return;
             }
 

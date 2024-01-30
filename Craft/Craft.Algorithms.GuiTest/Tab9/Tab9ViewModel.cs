@@ -1,15 +1,17 @@
-﻿using Craft.ViewModels.Common;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using Craft.Utils;
 using GalaSoft.MvvmLight;
+using Craft.ViewModels.Common;
+using Craft.Utils;
+using Craft.DataStructures.Graph;
 
 namespace Craft.Algorithms.GuiTest.Tab9
 {
     // Dijkstra Shortest Path in a hex mesh
     public class Tab9ViewModel : ViewModelBase
     {
-        private HashSet<int> _pixelIndexes;
+        private HashSet<int> _sourceIndexes;
+        private HashSet<int> _forbiddenIndexes;
         private List<PixelViewModel> _pixelViewModels1;
         private List<PixelViewModel> _pixelViewModels2;
 
@@ -45,7 +47,8 @@ namespace Craft.Algorithms.GuiTest.Tab9
 
         public Tab9ViewModel()
         {
-            _pixelIndexes = new HashSet<int>();
+            _sourceIndexes = new HashSet<int>();
+            _forbiddenIndexes = new HashSet<int>();
 
             InitializePixels();
         }
@@ -54,21 +57,21 @@ namespace Craft.Algorithms.GuiTest.Tab9
             object sender,
             ElementClickedEventArgs e)
         {
-            _pixelIndexes.Add(e.ElementId);
+            _sourceIndexes.Add(e.ElementId);
 
-            InitializePixels();
+            UpdatePixels();
         }
 
         private void PixelRightClicked(
             object sender,
             ElementClickedEventArgs e)
         {
-            if (_pixelIndexes.Contains(e.ElementId))
+            if (_sourceIndexes.Contains(e.ElementId))
             {
-                _pixelIndexes.Remove(e.ElementId);
+                _sourceIndexes.Remove(e.ElementId);
             }
 
-            InitializePixels();
+            UpdatePixels();
         }
 
         private void InitializePixels()
@@ -82,15 +85,74 @@ namespace Craft.Algorithms.GuiTest.Tab9
                 .SelectMany(_ => _);
 
             PixelViewModels1 = range1
-                .Select(i => new PixelViewModel(i, _pixelIndexes.Contains(i)
+                .Select(i => new PixelViewModel(i, _sourceIndexes.Contains(i)
                     ? new Pixel(255, 255, 255, 255, $"{i}")
                     : new Pixel(50, 50, 50, 255, $"{i}")))
                 .ToList();
 
             PixelViewModels2 = range2
-                .Select(i => new PixelViewModel(i, _pixelIndexes.Contains(i)
+                .Select(i => new PixelViewModel(i, _sourceIndexes.Contains(i)
                     ? new Pixel(255, 255, 255, 255, $"{i}")
                     : new Pixel(50, 50, 50, 255, $"{i}")))
+                .ToList();
+
+            PixelViewModels1.ForEach(p =>
+            {
+                p.PixelLeftClicked += PixelLeftClicked;
+                p.PixelRightClicked += PixelRightClicked;
+            });
+
+            PixelViewModels2.ForEach(p =>
+            {
+                p.PixelLeftClicked += PixelLeftClicked;
+                p.PixelRightClicked += PixelRightClicked;
+            });
+        }
+
+        private void UpdatePixels()
+        {
+            if (!_sourceIndexes.Any())
+            {
+                InitializePixels();
+                return;
+            }
+
+            var graph = new GraphHexMesh(Rows * 2, Cols);
+
+            graph.ComputeDistances(
+                _sourceIndexes,
+                _forbiddenIndexes,
+                double.MaxValue,
+                out var distances,
+                out var previous);
+
+            var max = distances.Where(d => d < 999999).Max();
+
+            // Walls are drawn in red
+            // Unreachable areas are drawn in yellow
+            // Other pixels are drawn in gray
+
+            var temp = distances.Select((d, i) => new { Index = i, Distance = d });
+
+            var a = temp.Where(_ => _.Index / Cols % 2 == 0).ToList();
+            var b = temp.Where(_ => _.Index / Cols % 2 != 0).ToList();
+
+            PixelViewModels1 = a
+                .Select(_ => new PixelViewModel(_.Index, new Pixel(
+                    _.Distance < 999999 ? (byte)System.Math.Round(255 * _.Distance / max) : (byte)127,
+                    _.Distance < 999999 ? (byte)System.Math.Round(255 * _.Distance / max) : _forbiddenIndexes.Contains(_.Index) ? (byte)0 : (byte)127,
+                    _.Distance < 999999 ? (byte)System.Math.Round(255 * _.Distance / max) : (byte)0,
+                    255,
+                    _.Distance < 999999 ? $"{_.Distance:F2}" : null)))
+                .ToList();
+
+            PixelViewModels2 = b
+                .Select(_ => new PixelViewModel(_.Index, new Pixel(
+                    _.Distance < 999999 ? (byte)System.Math.Round(255 * _.Distance / max) : (byte)127,
+                    _.Distance < 999999 ? (byte)System.Math.Round(255 * _.Distance / max) : _forbiddenIndexes.Contains(_.Index) ? (byte)0 : (byte)127,
+                    _.Distance < 999999 ? (byte)System.Math.Round(255 * _.Distance / max) : (byte)0,
+                    255,
+                    _.Distance < 999999 ? $"{_.Distance:F2}" : null)))
                 .ToList();
 
             PixelViewModels1.ForEach(p =>

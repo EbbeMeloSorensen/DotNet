@@ -72,6 +72,42 @@ namespace Craft.Algorithms.UnitTest
         }
 
         [Fact]
+        public void TestDijkstraAlgorithmOnGraphHexMesh_1SourceVertex_1()
+        {
+            // Arrange
+            var graph = new GraphHexMesh(3, 3);
+
+            // Act
+            graph.ComputeDistances(
+                new[] { 0 },
+                null,
+                double.MaxValue,
+                out var distances,
+                out var previous);
+
+            // Assert
+            distances.SequenceEqual(new[] { 0.0, 1, 2, 1, 2, 3, 2, 2, 3 }).Should().BeTrue();
+        }
+
+        [Fact]
+        public void TestDijkstraAlgorithmOnGraphHexMesh_1SourceVertex_2()
+        {
+            // Arrange
+            var graph = new GraphHexMesh(3, 3);
+
+            // Act
+            graph.ComputeDistances(
+                new[] { 4 },
+                null,
+                double.MaxValue,
+                out var distances,
+                out var previous);
+
+            // Assert
+            distances.SequenceEqual(new[] { 2.0, 1, 1, 1, 0, 1, 2, 1, 1 }).Should().BeTrue();
+        }
+
+        [Fact]
         public void TestDijkstraAlgorithmOnGraphMatrix4Connectivity_1SourceVertex_2()
         {
             // Arrange

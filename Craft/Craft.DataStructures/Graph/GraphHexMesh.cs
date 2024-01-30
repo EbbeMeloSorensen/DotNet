@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Craft.DataStructures.Graph
 {
@@ -33,7 +32,47 @@ namespace Craft.DataStructures.Graph
             var rowIndex = vertexId / _cols;
             var colIndex = vertexId % _cols;
 
-            throw new NotImplementedException();
+            if (colIndex > 0)
+            {
+                // You can go left
+                yield return new EdgeWithCost(vertexId, vertexId - 1, 1);
+            }
+
+            if (colIndex < _cols - 1)
+            {
+                // You can go right
+                yield return new EdgeWithCost(vertexId, vertexId + 1, 1);
+            }
+
+            if (colIndex > 0 || rowIndex % 2 == 1)
+            {
+                if (rowIndex > 0)
+                {
+                    // You can go to the upper left
+                    yield return new EdgeWithCost(vertexId, vertexId - _cols - (rowIndex + 1) % 2, 1);
+                }
+
+                if (rowIndex < _rows - 1)
+                {
+                    // You can go to the lower left
+                    yield return new EdgeWithCost(vertexId, vertexId + _cols - (rowIndex + 1) % 2, 1);
+                }
+            }
+
+            if (colIndex < _cols - 1 || rowIndex % 2 == 0)
+            {
+                if (rowIndex > 0)
+                {
+                    // You can go to the upper right
+                    yield return new EdgeWithCost(vertexId, vertexId - _cols + 1 - (rowIndex + 1) % 2, 1);
+                }
+
+                if (rowIndex < _rows - 1)
+                {
+                    // You can go to the lower right
+                    yield return new EdgeWithCost(vertexId, vertexId + _cols + 1 - (rowIndex + 1) % 2, 1);
+                }
+            }
         }
     }
 }
