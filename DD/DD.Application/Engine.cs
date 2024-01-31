@@ -17,10 +17,8 @@ namespace DD.Application
         Move,
         Evade, // Occurs when a creature moves in a way that triggers a number of opportunity attacks
         InitiativeSwitchDuringEvasion,
-        FailedMeleeAttack,
-        SuccessfulMeleeAttack,
-        FailedRangedAttack,
-        SuccessfulRangedAttack,
+        MeleeAttack,
+        RangedAttack,
         Pass
     }
 
@@ -222,9 +220,7 @@ namespace DD.Application
 
                             TargetCreature = _evadingCreature;
 
-                            return evadingCreatureWasHit
-                                ? CreatureAction.SuccessfulMeleeAttack
-                                : CreatureAction.FailedMeleeAttack;
+                            return CreatureAction.MeleeAttack;
                         }
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -262,9 +258,7 @@ namespace DD.Application
                             TargetCreature = targetCreature;
                             _currentCreatureJustMoved = false;
 
-                            return opponentWasHit
-                                ? CreatureAction.SuccessfulMeleeAttack
-                                : CreatureAction.FailedMeleeAttack;
+                            return CreatureAction.MeleeAttack;
                         }
                     }
                     else
@@ -309,6 +303,341 @@ namespace DD.Application
 
                 return CreatureAction.Pass;
             });
+        }
+
+        public CreatureAction PlayerSelectSquare(
+            int squareIndex)
+        {
+            if (!BattleHasStarted.Object ||
+                BattleHasEnded.Object ||
+                AutoRunning.Object)
+            {
+                return CreatureAction.NoAction;
+            }
+
+            if (SquareIndexesCurrentCreatureCanMoveTo.Object != null &&
+                SquareIndexesCurrentCreatureCanMoveTo.Object.Keys.Contains(squareIndex))
+            {
+                // Player decides to move current creature
+                _moveDistanceRemaningForCurrentCreature -= SquareIndexesCurrentCreatureCanMoveTo.Object[squareIndex];
+                SquareIndexesCurrentCreatureCanMoveTo.Object = null;
+
+                // 1) Find ud af, hvilke væsener der er ved siden af væsenet, for hvert af de felter, der indgår i væsenets path
+                // 2) Find ud af, hvilke step, der involverer, at current creature bevæger sig væk fra en modstander
+                // 3) Hvis det allerede er ved første step, så bevæger væsenet sig ikke, og så er udfaldet, at
+                //    de væsener, der forlades, får et opportunity attack.
+                //    Hvis det først er ved et senere step at man forlader en modstander, så bevæger væsenet sig,
+                //    Måske kan man gøre det, at enginen, gemmer en sekvens af moves og opportunity attacks,
+                //    f.eks. move/oa/oa/move/oa/move
+                //    dvs udfaldet af dette trin sådan set ingenting, men når så man skal til næste trin, så
+                //    skal enginen se, om der ligger noget på "kø"...
+
+                var path = _previous.DeterminePath(squareIndex);
+                var evadedCreatures = IdentifyEvadedOpponents(path);
+
+                if (evadedCreatures.Any())
+                {
+                    // Player controlled creature moves in a way that provokes a number of opportunity attacks
+                    PopulateEvasionEventQueue(path, evadedCreatures);
+                    _evadingCreature = CurrentCreature;
+                    Logger?.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
+
+                    return CreatureAction.Evade;
+                }
+
+                // Player controlled creature moves ordinarily, without provoking an opportunity attack
+                MoveCurrentCreature(squareIndex);
+                CurrentCreaturePath = path;
+                IdentifyOptionsForCurrentPlayerControlledCreature(true);
+
+                return CreatureAction.Move;
+            }
+
+            if (SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object != null &&
+                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object.Contains(squareIndex))
+            {
+                // Player decides to perform a melee attack with current creature
+                var attack = CurrentCreature.Attacks.Dequeue();
+                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object = null;
+
+                var opponent = Creatures.Single(c => c.IndexOfOccupiedSquare(Scene.Columns) == squareIndex);
+
+                AttackOpponent(
+                    CurrentCreature,
+                    opponent, 
+                    attack,
+                    false,
+                    out var opponentWasHit,
+                    out var opponentWasKilled);
+
+                if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
+                {
+                    SquareIndexesCurrentCreatureCanMoveTo.Object = null;
+                    BattleDecided = true;
+                }
+                else
+                {
+                    IdentifyOptionsForCurrentPlayerControlledCreature(false);
+                }
+
+                TargetCreature = opponent;
+
+                return CreatureAction.MeleeAttack;
+            }
+
+            if (SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object != null &&
+                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object.Contains(squareIndex))
+            {
+                // Player decides to perform a ranged attack with current creature
+                var attack = CurrentCreature.Attacks.Dequeue();
+                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = null;
+
+                var opponent = Creatures.Single(c => c.IndexOfOccupiedSquare(Scene.Columns) == squareIndex);
+
+                // We need to communicate this to the stake holders for animation of a ranged attack
+                TargetCreature = opponent;
+
+                // If the current creature stands next to an opponent, it gets disadvantage
+                var opponents = Creatures
+                    .Where(c => c.IsHostile != CurrentCreature.IsHostile)
+                    .ToList();
+
+                var currentSquareIndex = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
+
+                ClosestOpponent(
+                    currentSquareIndex,
+                    opponents,
+                    out var distanceToClosestOpponent);
+
+                var disadvantage = distanceToClosestOpponent < 1.5;
+
+                AttackOpponent(
+                    CurrentCreature,
+                    opponent,
+                    attack,
+                    disadvantage,
+                    out var opponentWasHit,
+                    out var opponentWasKilled);
+
+                if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
+                {
+                    SquareIndexesCurrentCreatureCanMoveTo.Object = null;
+                    BattleDecided = true;
+                }
+                else
+                {
+                    IdentifyOptionsForCurrentPlayerControlledCreature(false);
+                }
+
+                return CreatureAction.RangedAttack;
+            }
+
+            return CreatureAction.NoAction;
+        }
+
+        public void StartBattle()
+        {
+            if (_scene == null)
+            {
+                throw new InvalidOperationException("Assign a scene to the engine before starting a battle");
+            }
+
+            Logger?.WriteLine(LogMessageCategory.Information, "  Starting Battle..");
+
+            BattleDecided = false;
+            BattleHasStarted.Object = true;
+            _battleRoundCount = 0;
+
+            var message = "    Determining initial acting order of creatures..";
+            Logger?.WriteLine(LogMessageCategory.Information, message);
+
+            var creatureTypeToDieRollMap = new Dictionary<CreatureType, int>();
+            var dieRollToCreatureMap = new Dictionary<int, Dictionary<CreatureType, List<Creature>>>();
+
+            // Determine the distance from each friendly creature to the closest enemy
+            var indexesOfHostileCreatures = Creatures
+                .Where(c => c.IsHostile)
+                .Select(c => c.IndexOfOccupiedSquare(_scene.Columns))
+                .ToArray();
+
+            // Determine the distance from each hostile creature to the closest enemy
+            var indexesOfFriendlyCreatures = Creatures
+                .Where(c => !c.IsHostile)
+                .Select(c => c.IndexOfOccupiedSquare(_scene.Columns))
+                .ToArray();
+
+            var graph = new GraphMatrix8Connectivity(_scene.Rows, _scene.Columns);
+
+            graph.ComputeDistances(
+                indexesOfHostileCreatures, 
+                _obstacleIndexes, 
+                double.MaxValue, 
+                out var distancesToHostiles, 
+                out _previous);
+
+            graph.ComputeDistances(
+                indexesOfFriendlyCreatures, 
+                _obstacleIndexes, 
+                double.MaxValue, 
+                out var distancesToFriendlies, 
+                out _previous);
+
+            Creatures.ForEach(c =>
+            {
+                int dieRoll;
+                if (creatureTypeToDieRollMap.ContainsKey(c.CreatureType))
+                {
+                    dieRoll = creatureTypeToDieRollMap[c.CreatureType];
+                }
+                else
+                {
+                    dieRoll = 1 + _random.Next(20) + c.CreatureType.InitiativeModifier;
+                    creatureTypeToDieRollMap[c.CreatureType] = dieRoll;
+                }
+
+                if (!dieRollToCreatureMap.ContainsKey(dieRoll))
+                {
+                    dieRollToCreatureMap[dieRoll] = new Dictionary<CreatureType, List<Creature>>();
+                }
+
+                if (!dieRollToCreatureMap[dieRoll].ContainsKey(c.CreatureType))
+                {
+                    dieRollToCreatureMap[dieRoll][c.CreatureType] = new List<Creature>();
+                }
+
+                dieRollToCreatureMap[dieRoll][c.CreatureType].Add(c);
+            });
+
+            Logger?.WriteLine(LogMessageCategory.Information, "    Initial acting order:");
+
+            var queueNumberInBattleRound = 0;
+            foreach (var kvp1 in dieRollToCreatureMap.OrderByDescending(kvp => kvp.Key))
+            {
+                foreach (var kvp2 in kvp1.Value)
+                {
+                    var creaturesOfCurrentType = kvp2.Value;
+
+                    if (creaturesOfCurrentType.Count == 1)
+                    {
+                        var creature = creaturesOfCurrentType.Single();
+
+                        creature.BattleRoundQueueNumber = queueNumberInBattleRound++;
+
+                        Logger?.WriteLine(
+                            LogMessageCategory.Information,
+                            $"      {queueNumberInBattleRound}: {Tag(creature)}");
+                    }
+                    else
+                    {
+                        var distances = creaturesOfCurrentType.First().IsHostile
+                            ? distancesToFriendlies
+                            : distancesToHostiles;
+
+                        creaturesOfCurrentType
+                            .Select(c => new { Creature = c, Distance = distances[c.IndexOfOccupiedSquare(_scene.Columns)] })
+                            .OrderBy(cd => cd.Distance)
+                            .Select(cd => cd.Creature)
+                            .ToList()
+                            .ForEach(c =>
+                            {
+                                c.BattleRoundQueueNumber = queueNumberInBattleRound++;
+
+                                Logger?.WriteLine(
+                                    LogMessageCategory.Information,
+                                    $"      {queueNumberInBattleRound}: {Tag(c)}");
+                            });
+                    }
+                }
+            }
+        }
+
+        public bool CurrentPlayerControlledCreatureHasAnyOptionsLeft()
+        {
+            return 
+                SquareIndexesCurrentCreatureCanMoveTo.Object != null &&
+                SquareIndexesCurrentCreatureCanMoveTo.Object.Count > 0 ||
+                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object != null &&
+                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object.Count > 0 ||
+                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object != null &&
+                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object.Count > 0;
+        }
+
+        public bool CanStartBattle()
+        {
+            return 
+                Scene != null && 
+                !BattleHasStarted.Object && 
+                !BattleHasEnded.Object;
+        }
+
+        public void InitializeCreatures()
+        {
+            BattleHasStarted.Object = false;
+            BattleHasEnded.Object = false;
+
+            _actingOrder.Clear();
+            Creatures = _scene?.Creatures.Select(c => c.Clone()).ToList();
+
+            InitializeCreatureIdMap();
+
+            CurrentCreature = null;
+
+            SquareIndexForCurrentCreature.Object = null;
+            SquareIndexesCurrentCreatureCanMoveTo.Object = null;
+            SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object = null;
+            SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = null;
+        }
+
+        public void StartBattleRound()
+        {
+            Logger?.WriteLine(LogMessageCategory.Information, $"    Starting battle round {++_battleRoundCount}");
+
+            // Todo: Perform updates for each the round (such as trolls regenerating, poison draining life, etc)
+
+            BattleroundCompleted = false;
+
+            Creatures
+                .OrderBy(c => c.BattleRoundQueueNumber)
+                .ToList()
+                .ForEach(c => _actingOrder.Enqueue(c));
+        }
+
+        public void SwitchToNextCreature()
+        {
+            // Discard creatures that have been killed
+            while (_actingOrder.Count > 0 && _actingOrder.Peek().HitPoints <= 0)
+            {
+                _actingOrder.Dequeue();
+            }
+
+            if (_actingOrder.Count == 0)
+            {
+                CurrentCreature = null;
+                BattleroundCompleted = true;
+                return;
+            }
+
+            CurrentCreature = _actingOrder.Dequeue();
+            SquareIndexForCurrentCreature.Object = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
+
+            var message = $"      Turn goes to {Tag(CurrentCreature)}";
+            Logger?.WriteLine(LogMessageCategory.Information, message);
+
+            _moveDistanceRemaningForCurrentCreature = CurrentCreature.CreatureType.Movement;
+
+            CurrentCreature.Attacks = new Queue<Attack>(CurrentCreature.CreatureType.Attacks);
+
+            if (!CurrentCreature.IsAutomatic)
+            {
+                IdentifyOptionsForCurrentPlayerControlledCreature(false);
+            }
+
+            _currentCreatureJustMoved = false;
+        }
+
+        public string Tag(Creature creature)
+        {
+            return $"{creature.CreatureType.Name}{_creatureIdMap[creature]}";
         }
 
         private async Task<MoveCreatureResult> DetermineDestinationOfCurrentCreatureWithMeleeAttack()
@@ -606,345 +935,6 @@ namespace DD.Application
                     return result;
                 }
             });
-        }
-
-        public CreatureAction PlayerSelectSquare(
-            int squareIndex)
-        {
-            if (!BattleHasStarted.Object ||
-                BattleHasEnded.Object ||
-                AutoRunning.Object)
-            {
-                return CreatureAction.NoAction;
-            }
-
-            if (SquareIndexesCurrentCreatureCanMoveTo.Object != null &&
-                SquareIndexesCurrentCreatureCanMoveTo.Object.Keys.Contains(squareIndex))
-            {
-                // Player decides to move current creature
-                _moveDistanceRemaningForCurrentCreature -= SquareIndexesCurrentCreatureCanMoveTo.Object[squareIndex];
-                SquareIndexesCurrentCreatureCanMoveTo.Object = null;
-
-                // 1) Find ud af, hvilke væsener der er ved siden af væsenet, for hvert af de felter, der indgår i væsenets path
-                // 2) Find ud af, hvilke step, der involverer, at current creature bevæger sig væk fra en modstander
-                // 3) Hvis det allerede er ved første step, så bevæger væsenet sig ikke, og så er udfaldet, at
-                //    de væsener, der forlades, får et opportunity attack.
-                //    Hvis det først er ved et senere step at man forlader en modstander, så bevæger væsenet sig,
-                //    Måske kan man gøre det, at enginen, gemmer en sekvens af moves og opportunity attacks,
-                //    f.eks. move/oa/oa/move/oa/move
-                //    dvs udfaldet af dette trin sådan set ingenting, men når så man skal til næste trin, så
-                //    skal enginen se, om der ligger noget på "kø"...
-
-                var path = _previous.DeterminePath(squareIndex);
-                var evadedCreatures = IdentifyEvadedOpponents(path);
-
-                if (evadedCreatures.Any())
-                {
-                    // Player controlled creature moves in a way that provokes a number of opportunity attacks
-                    PopulateEvasionEventQueue(path, evadedCreatures);
-                    _evadingCreature = CurrentCreature;
-                    Logger?.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
-
-                    return CreatureAction.Evade;
-                }
-
-                // Player controlled creature moves ordinarily, without provoking an opportunity attack
-                MoveCurrentCreature(squareIndex);
-                CurrentCreaturePath = path;
-                IdentifyOptionsForCurrentPlayerControlledCreature(true);
-
-                return CreatureAction.Move;
-            }
-
-            if (SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object != null &&
-                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object.Contains(squareIndex))
-            {
-                // Player decides to perform a melee attack with current creature
-                var attack = CurrentCreature.Attacks.Dequeue();
-                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object = null;
-
-                var opponent = Creatures.Single(c => c.IndexOfOccupiedSquare(Scene.Columns) == squareIndex);
-
-                AttackOpponent(
-                    CurrentCreature,
-                    opponent, 
-                    attack,
-                    false,
-                    out var opponentWasHit,
-                    out var opponentWasKilled);
-
-                if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
-                {
-                    SquareIndexesCurrentCreatureCanMoveTo.Object = null;
-                    BattleDecided = true;
-                }
-                else
-                {
-                    IdentifyOptionsForCurrentPlayerControlledCreature(false);
-                }
-
-                TargetCreature = opponent;
-
-                return opponentWasHit
-                    ? CreatureAction.SuccessfulMeleeAttack
-                    : CreatureAction.FailedMeleeAttack;
-            }
-
-            if (SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object != null &&
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object.Contains(squareIndex))
-            {
-                // Player decides to perform a ranged attack with current creature
-                var attack = CurrentCreature.Attacks.Dequeue();
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = null;
-
-                var opponent = Creatures.Single(c => c.IndexOfOccupiedSquare(Scene.Columns) == squareIndex);
-
-                // We need to communicate this to the stake holders for animation of a ranged attack
-                TargetCreature = opponent;
-
-                // If the current creature stands next to an opponent, it gets disadvantage
-                var opponents = Creatures
-                    .Where(c => c.IsHostile != CurrentCreature.IsHostile)
-                    .ToList();
-
-                var currentSquareIndex = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
-
-                ClosestOpponent(
-                    currentSquareIndex,
-                    opponents,
-                    out var distanceToClosestOpponent);
-
-                var disadvantage = distanceToClosestOpponent < 1.5;
-
-                AttackOpponent(
-                    CurrentCreature,
-                    opponent,
-                    attack,
-                    disadvantage,
-                    out var opponentWasHit,
-                    out var opponentWasKilled);
-
-                if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
-                {
-                    SquareIndexesCurrentCreatureCanMoveTo.Object = null;
-                    BattleDecided = true;
-                }
-                else
-                {
-                    IdentifyOptionsForCurrentPlayerControlledCreature(false);
-                }
-
-                return opponentWasHit
-                    ? CreatureAction.SuccessfulRangedAttack
-                    : CreatureAction.FailedRangedAttack;
-            }
-
-            return CreatureAction.NoAction;
-        }
-
-        public void StartBattle()
-        {
-            if (_scene == null)
-            {
-                throw new InvalidOperationException("Assign a scene to the engine before starting a battle");
-            }
-
-            Logger?.WriteLine(LogMessageCategory.Information, "  Starting Battle..");
-
-            BattleDecided = false;
-            BattleHasStarted.Object = true;
-            _battleRoundCount = 0;
-
-            var message = "    Determining initial acting order of creatures..";
-            Logger?.WriteLine(LogMessageCategory.Information, message);
-
-            var creatureTypeToDieRollMap = new Dictionary<CreatureType, int>();
-            var dieRollToCreatureMap = new Dictionary<int, Dictionary<CreatureType, List<Creature>>>();
-
-            // Determine the distance from each friendly creature to the closest enemy
-            var indexesOfHostileCreatures = Creatures
-                .Where(c => c.IsHostile)
-                .Select(c => c.IndexOfOccupiedSquare(_scene.Columns))
-                .ToArray();
-
-            // Determine the distance from each hostile creature to the closest enemy
-            var indexesOfFriendlyCreatures = Creatures
-                .Where(c => !c.IsHostile)
-                .Select(c => c.IndexOfOccupiedSquare(_scene.Columns))
-                .ToArray();
-
-            var graph = new GraphMatrix8Connectivity(_scene.Rows, _scene.Columns);
-
-            graph.ComputeDistances(
-                indexesOfHostileCreatures, 
-                _obstacleIndexes, 
-                double.MaxValue, 
-                out var distancesToHostiles, 
-                out _previous);
-
-            graph.ComputeDistances(
-                indexesOfFriendlyCreatures, 
-                _obstacleIndexes, 
-                double.MaxValue, 
-                out var distancesToFriendlies, 
-                out _previous);
-
-            Creatures.ForEach(c =>
-            {
-                int dieRoll;
-                if (creatureTypeToDieRollMap.ContainsKey(c.CreatureType))
-                {
-                    dieRoll = creatureTypeToDieRollMap[c.CreatureType];
-                }
-                else
-                {
-                    dieRoll = 1 + _random.Next(20) + c.CreatureType.InitiativeModifier;
-                    creatureTypeToDieRollMap[c.CreatureType] = dieRoll;
-                }
-
-                if (!dieRollToCreatureMap.ContainsKey(dieRoll))
-                {
-                    dieRollToCreatureMap[dieRoll] = new Dictionary<CreatureType, List<Creature>>();
-                }
-
-                if (!dieRollToCreatureMap[dieRoll].ContainsKey(c.CreatureType))
-                {
-                    dieRollToCreatureMap[dieRoll][c.CreatureType] = new List<Creature>();
-                }
-
-                dieRollToCreatureMap[dieRoll][c.CreatureType].Add(c);
-            });
-
-            Logger?.WriteLine(LogMessageCategory.Information, "    Initial acting order:");
-
-            var queueNumberInBattleRound = 0;
-            foreach (var kvp1 in dieRollToCreatureMap.OrderByDescending(kvp => kvp.Key))
-            {
-                foreach (var kvp2 in kvp1.Value)
-                {
-                    var creaturesOfCurrentType = kvp2.Value;
-
-                    if (creaturesOfCurrentType.Count == 1)
-                    {
-                        var creature = creaturesOfCurrentType.Single();
-
-                        creature.BattleRoundQueueNumber = queueNumberInBattleRound++;
-
-                        Logger?.WriteLine(
-                            LogMessageCategory.Information,
-                            $"      {queueNumberInBattleRound}: {Tag(creature)}");
-                    }
-                    else
-                    {
-                        var distances = creaturesOfCurrentType.First().IsHostile
-                            ? distancesToFriendlies
-                            : distancesToHostiles;
-
-                        creaturesOfCurrentType
-                            .Select(c => new { Creature = c, Distance = distances[c.IndexOfOccupiedSquare(_scene.Columns)] })
-                            .OrderBy(cd => cd.Distance)
-                            .Select(cd => cd.Creature)
-                            .ToList()
-                            .ForEach(c =>
-                            {
-                                c.BattleRoundQueueNumber = queueNumberInBattleRound++;
-
-                                Logger?.WriteLine(
-                                    LogMessageCategory.Information,
-                                    $"      {queueNumberInBattleRound}: {Tag(c)}");
-                            });
-                    }
-                }
-            }
-        }
-
-        public bool CurrentPlayerControlledCreatureHasAnyOptionsLeft()
-        {
-            return 
-                SquareIndexesCurrentCreatureCanMoveTo.Object != null &&
-                SquareIndexesCurrentCreatureCanMoveTo.Object.Count > 0 ||
-                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object != null &&
-                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object.Count > 0 ||
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object != null &&
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object.Count > 0;
-        }
-
-        public bool CanStartBattle()
-        {
-            return 
-                Scene != null && 
-                !BattleHasStarted.Object && 
-                !BattleHasEnded.Object;
-        }
-
-        public void InitializeCreatures()
-        {
-            BattleHasStarted.Object = false;
-            BattleHasEnded.Object = false;
-
-            _actingOrder.Clear();
-            Creatures = _scene?.Creatures.Select(c => c.Clone()).ToList();
-
-            InitializeCreatureIdMap();
-
-            CurrentCreature = null;
-
-            SquareIndexForCurrentCreature.Object = null;
-            SquareIndexesCurrentCreatureCanMoveTo.Object = null;
-            SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object = null;
-            SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = null;
-        }
-
-        public void StartBattleRound()
-        {
-            Logger?.WriteLine(LogMessageCategory.Information, $"    Starting battle round {++_battleRoundCount}");
-
-            // Todo: Perform updates for each the round (such as trolls regenerating, poison draining life, etc)
-
-            BattleroundCompleted = false;
-
-            Creatures
-                .OrderBy(c => c.BattleRoundQueueNumber)
-                .ToList()
-                .ForEach(c => _actingOrder.Enqueue(c));
-        }
-
-        public void SwitchToNextCreature()
-        {
-            // Discard creatures that have been killed
-            while (_actingOrder.Count > 0 && _actingOrder.Peek().HitPoints <= 0)
-            {
-                _actingOrder.Dequeue();
-            }
-
-            if (_actingOrder.Count == 0)
-            {
-                CurrentCreature = null;
-                BattleroundCompleted = true;
-                return;
-            }
-
-            CurrentCreature = _actingOrder.Dequeue();
-            SquareIndexForCurrentCreature.Object = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
-
-            var message = $"      Turn goes to {Tag(CurrentCreature)}";
-            Logger?.WriteLine(LogMessageCategory.Information, message);
-
-            _moveDistanceRemaningForCurrentCreature = CurrentCreature.CreatureType.Movement;
-
-            CurrentCreature.Attacks = new Queue<Attack>(CurrentCreature.CreatureType.Attacks);
-
-            if (!CurrentCreature.IsAutomatic)
-            {
-                IdentifyOptionsForCurrentPlayerControlledCreature(false);
-            }
-
-            _currentCreatureJustMoved = false;
-        }
-
-        public string Tag(Creature creature)
-        {
-            return $"{creature.CreatureType.Name}{_creatureIdMap[creature]}";
         }
 
         private void InitializeCreatureIdMap()
@@ -1298,9 +1288,7 @@ namespace DD.Application
             TargetCreature = targetCreature;
             _currentCreatureJustMoved = false;
 
-            return opponentWasHit
-                ? CreatureAction.SuccessfulRangedAttack
-                : CreatureAction.FailedRangedAttack;
+            return CreatureAction.RangedAttack;
         }
 
         private void PopulateEvasionEventQueue(

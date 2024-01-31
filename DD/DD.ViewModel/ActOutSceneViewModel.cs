@@ -19,7 +19,6 @@ namespace DD.ViewModel
         private AsyncCommand _startBattleCommand;
         private AsyncCommand _passCurrentCreatureCommand;
         private AsyncCommand _automateCurrentCreatureCommand;
-        private bool _attackSucceeded;
 
         public RelayCommand ResetCreaturesCommand
         {
@@ -77,29 +76,13 @@ namespace DD.ViewModel
                     case CreatureAction.Evade:
                         await Proceed();
                         break;
-                    case CreatureAction.FailedMeleeAttack:
-                        _attackSucceeded = false;
+                    case CreatureAction.MeleeAttack:
                         _boardViewModel.AnimateAttack(
                             _engine.CurrentCreature,
                             _engine.TargetCreature,
                             false);
                         break;
-                    case CreatureAction.FailedRangedAttack:
-                        _attackSucceeded = false;
-                        _boardViewModel.AnimateAttack(
-                            _engine.CurrentCreature,
-                            _engine.TargetCreature,
-                            true);
-                        break;
-                    case CreatureAction.SuccessfulMeleeAttack:
-                        _attackSucceeded = true;
-                        _boardViewModel.AnimateAttack(
-                            _engine.CurrentCreature,
-                            _engine.TargetCreature,
-                            false);
-                        break;
-                    case CreatureAction.SuccessfulRangedAttack:
-                        _attackSucceeded = true;
+                    case CreatureAction.RangedAttack:
                         _boardViewModel.AnimateAttack(
                             _engine.CurrentCreature,
                             _engine.TargetCreature,
@@ -117,12 +100,9 @@ namespace DD.ViewModel
 
             boardViewModel.AttackAnimationCompleted += async (s, e) =>
             {
-                if (_attackSucceeded)
-                {
-                    _boardViewModel.UpdateCreatureViewModels(
-                        _engine.Creatures,
-                        _engine.CurrentCreature);
-                }
+                _boardViewModel.UpdateCreatureViewModels(
+                    _engine.Creatures,
+                    _engine.CurrentCreature);
 
                 await Proceed();
             };
@@ -199,29 +179,13 @@ namespace DD.ViewModel
                                 _engine.CurrentCreature,
                                 _engine.CurrentCreaturePath);
                             break;
-                        case CreatureAction.FailedMeleeAttack:
-                            _attackSucceeded = false;
+                        case CreatureAction.MeleeAttack:
                             _boardViewModel.AnimateAttack(
                                 _engine.CurrentCreature,
                                 _engine.TargetCreature,
                                 false);
                             break;
-                        case CreatureAction.FailedRangedAttack:
-                            _attackSucceeded = false;
-                            _boardViewModel.AnimateAttack(
-                                _engine.CurrentCreature,
-                                _engine.TargetCreature,
-                                true);
-                            break;
-                        case CreatureAction.SuccessfulMeleeAttack:
-                            _attackSucceeded = true;
-                            _boardViewModel.AnimateAttack(
-                                _engine.CurrentCreature,
-                                _engine.TargetCreature,
-                                false);
-                            break;
-                        case CreatureAction.SuccessfulRangedAttack:
-                            _attackSucceeded = true;
+                        case CreatureAction.RangedAttack:
                             _boardViewModel.AnimateAttack(
                                 _engine.CurrentCreature,
                                 _engine.TargetCreature,
