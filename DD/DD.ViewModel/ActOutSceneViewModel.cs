@@ -152,8 +152,7 @@ namespace DD.ViewModel
                         _engine.CurrentCreature);
                 }
 
-                if (_engine.CreatureIsEvading ||
-                    _engine.CurrentCreature.IsAutomatic)
+                if (_engine.NextEventOccursAutomatically)
                 {
                     _engine.AutoRunning.Object = true;
                     var creatureAction = await _engine.ExecuteNextAction();

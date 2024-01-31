@@ -142,9 +142,9 @@ namespace DD.Application
         public ObservableObject<bool> BattleHasEnded { get; }
         public ObservableObject<bool> AutoRunning { get; }
 
-        public bool CreatureIsEvading
+        public bool NextEventOccursAutomatically
         {
-            get { return _evasionEvents.Count > 0; }
+            get { return CurrentCreature.IsAutomatic || _evasionEvents.Count > 0; }
         }
 
         public Engine(
