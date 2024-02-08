@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
+using DD.Application;
 using DD.Domain;
+using DD.Engine.Complex;
 
 namespace DD.ViewModel
 {
@@ -56,8 +57,13 @@ namespace DD.ViewModel
             var creatureDiameter = 75;
             var projectileDiameter = 75;
 
+            //var engine = new ComplexEngine(_application.Logger);
+            var engine = new SimpleEngine(_application.Logger);
+
+            _application.Engine = engine;
+
             BoardViewModel = new BoardViewModel(
-                _application.Engine,
+                engine: engine,
                 squareLength,
                 obstacleDiameter,
                 creatureDiameter,

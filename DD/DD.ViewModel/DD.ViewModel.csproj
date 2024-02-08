@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj" />
     <ProjectReference Include="..\DD.Application\DD.Application.csproj" />
+    <ProjectReference Include="..\DD.Engine.Complex\DD.Engine.Complex.csproj" />
   </ItemGroup>
 
 </Project>

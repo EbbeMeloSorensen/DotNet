@@ -2,21 +2,21 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Craft.DataStructures.Graph;
 using Craft.Algorithms;
-using Craft.Math;
+using Craft.DataStructures.Graph;
 using Craft.Logging;
+using Craft.Math;
 using Craft.Utils;
 using DD.Domain;
+using DD.Application;
 
-namespace DD.Application
+namespace DD.Engine.Complex
 {
     public class ComplexEngine : IEngine
     {
         private Dictionary<Creature, int> _creatureIdMap;
         private GraphAdjacencyList<Point2DVertex, EmptyEdge> _wallGraph;
         private Random _random = new Random(0);
-        //private Random _random = new Random(DateTime.Now.Millisecond);
         private Scene _scene;
         private HashSet<int> _obstacleIndexes;
         private Queue<Creature> _actingOrder;
@@ -120,16 +120,13 @@ namespace DD.Application
         }
 
         public ComplexEngine(
-            ObservableObject<int?> squareIndexForCurrentCreature,
-            ObservableObject<Dictionary<int, double>> squareIndexesCurrentCreatureCanMoveTo,
-            ObservableObject<HashSet<int>> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-            ObservableObject<HashSet<int>> squareIndexesCurrentCreatureCanAttackWithRangedWeapon,
             ILogger logger)
         {
-            SquareIndexForCurrentCreature = squareIndexForCurrentCreature;
-            SquareIndexesCurrentCreatureCanMoveTo = squareIndexesCurrentCreatureCanMoveTo;
-            SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon = squareIndexesCurrentCreatureCanAttackWithMeleeWeapon;
-            SquareIndexesCurrentCreatureCanAttackWithRangedWeapon = squareIndexesCurrentCreatureCanAttackWithRangedWeapon;
+            SquareIndexForCurrentCreature = new ObservableObject<int?>();
+            SquareIndexesCurrentCreatureCanMoveTo = new ObservableObject<Dictionary<int, double>>();
+            SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
+            SquareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
+
             BattleHasStarted = new ObservableObject<bool>();
             BattleHasEnded = new ObservableObject<bool>();
             AutoRunning = new ObservableObject<bool>();
@@ -154,46 +151,46 @@ namespace DD.Application
                             SquareIndexForCurrentCreature.Object = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
                             return CreatureAction.InitiativeSwitchDuringEvasion;
                         case Move move:
-                        {
-                            CurrentCreaturePath = move.Path;
-
-                            MoveCurrentCreature(CurrentCreaturePath.Last());
-
-                            if (!_evasionEvents.Any() && !CurrentCreature.IsAutomatic)
                             {
-                                IdentifyOptionsForCurrentPlayerControlledCreature(true);
-                            }
+                                CurrentCreaturePath = move.Path;
 
-                            return CreatureAction.Move;
-                        }
-                        case OpportunityAttack opportunityAttack:
-                        {
-                            var attacker = opportunityAttack.Creature;
+                                MoveCurrentCreature(CurrentCreaturePath.Last());
 
-                            AttackOpponent(
-                                attacker,
-                                _evadingCreature,
-                                new MeleeAttack("Opportunity attack", 5),
-                                false,
-                                out var evadingCreatureWasHit,
-                                out var evadingCreatureWasKilled);
-
-                            if (evadingCreatureWasKilled)
-                            {
-                                _evasionEvents.Clear();
-
-                                if (!OpponentsStillRemaining(attacker))
+                                if (!_evasionEvents.Any() && !CurrentCreature.IsAutomatic)
                                 {
-                                    SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object = null;
-                                    SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = null;
-                                    BattleDecided = true;
+                                    IdentifyOptionsForCurrentPlayerControlledCreature(true);
                                 }
+
+                                return CreatureAction.Move;
                             }
+                        case OpportunityAttack opportunityAttack:
+                            {
+                                var attacker = opportunityAttack.Creature;
 
-                            TargetCreature = _evadingCreature;
+                                AttackOpponent(
+                                    attacker,
+                                    _evadingCreature,
+                                    new MeleeAttack("Opportunity attack", 5),
+                                    false,
+                                    out var evadingCreatureWasHit,
+                                    out var evadingCreatureWasKilled);
 
-                            return CreatureAction.MeleeAttack;
-                        }
+                                if (evadingCreatureWasKilled)
+                                {
+                                    _evasionEvents.Clear();
+
+                                    if (!OpponentsStillRemaining(attacker))
+                                    {
+                                        SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object = null;
+                                        SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = null;
+                                        BattleDecided = true;
+                                    }
+                                }
+
+                                TargetCreature = _evadingCreature;
+
+                                return CreatureAction.MeleeAttack;
+                            }
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -236,7 +233,7 @@ namespace DD.Application
                     else
                     {
                         // Next attack is a ranged attack
-                        var range = ((RangedAttack) attack).Range;
+                        var range = ((RangedAttack)attack).Range;
 
                         if (_currentCreatureJustMoved)
                         {
@@ -336,7 +333,7 @@ namespace DD.Application
 
                 AttackOpponent(
                     CurrentCreature,
-                    opponent, 
+                    opponent,
                     attack,
                     false,
                     out var opponentWasHit,
@@ -441,17 +438,17 @@ namespace DD.Application
             var graph = new GraphMatrix8Connectivity(_scene.Rows, _scene.Columns);
 
             graph.ComputeDistances(
-                indexesOfHostileCreatures, 
-                _obstacleIndexes, 
-                double.MaxValue, 
-                out var distancesToHostiles, 
+                indexesOfHostileCreatures,
+                _obstacleIndexes,
+                double.MaxValue,
+                out var distancesToHostiles,
                 out _previous);
 
             graph.ComputeDistances(
-                indexesOfFriendlyCreatures, 
-                _obstacleIndexes, 
-                double.MaxValue, 
-                out var distancesToFriendlies, 
+                indexesOfFriendlyCreatures,
+                _obstacleIndexes,
+                double.MaxValue,
+                out var distancesToFriendlies,
                 out _previous);
 
             Creatures.ForEach(c =>
@@ -525,7 +522,7 @@ namespace DD.Application
 
         public bool CurrentPlayerControlledCreatureHasAnyOptionsLeft()
         {
-            return 
+            return
                 SquareIndexesCurrentCreatureCanMoveTo.Object != null &&
                 SquareIndexesCurrentCreatureCanMoveTo.Object.Count > 0 ||
                 SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object != null &&
@@ -536,9 +533,9 @@ namespace DD.Application
 
         public bool CanStartBattle()
         {
-            return 
-                Scene != null && 
-                !BattleHasStarted.Object && 
+            return
+                Scene != null &&
+                !BattleHasStarted.Object &&
                 !BattleHasEnded.Object;
         }
 
@@ -1042,7 +1039,7 @@ namespace DD.Application
             triangles.ForEach(t => t.Rasterize(raster, 1, 2));
 
             return Creatures
-                .Where(c => c.IsHostile != CurrentCreature.IsHostile && 
+                .Where(c => c.IsHostile != CurrentCreature.IsHostile &&
                             raster[c.PositionY, c.PositionX] == 2);
         }
 

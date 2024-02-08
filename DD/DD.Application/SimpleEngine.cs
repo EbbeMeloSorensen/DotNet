@@ -118,16 +118,12 @@ namespace DD.Application
         }
 
         public SimpleEngine(
-            ObservableObject<int?> squareIndexForCurrentCreature,
-            ObservableObject<Dictionary<int, double>> squareIndexesCurrentCreatureCanMoveTo,
-            ObservableObject<HashSet<int>> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-            ObservableObject<HashSet<int>> squareIndexesCurrentCreatureCanAttackWithRangedWeapon,
             ILogger logger)
         {
-            SquareIndexForCurrentCreature = squareIndexForCurrentCreature;
-            SquareIndexesCurrentCreatureCanMoveTo = squareIndexesCurrentCreatureCanMoveTo;
-            SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon = squareIndexesCurrentCreatureCanAttackWithMeleeWeapon;
-            SquareIndexesCurrentCreatureCanAttackWithRangedWeapon = squareIndexesCurrentCreatureCanAttackWithRangedWeapon;
+            SquareIndexForCurrentCreature = new ObservableObject<int?>();
+            SquareIndexesCurrentCreatureCanMoveTo = new ObservableObject<Dictionary<int, double>>();
+            SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
+            SquareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
             BattleHasStarted = new ObservableObject<bool>();
             BattleHasEnded = new ObservableObject<bool>();
             AutoRunning = new ObservableObject<bool>();

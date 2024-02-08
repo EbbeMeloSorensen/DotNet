@@ -25,25 +25,6 @@ namespace DD.Application
         public double FinalDistanceToClosestOpponent { get; set; }
     }
 
-    public abstract class EvasionEvent
-    {
-    }
-
-    public class Move : EvasionEvent
-    {
-        public int[] Path;
-    }
-
-    public class OpportunityAttack : EvasionEvent
-    {
-        public Creature Creature;
-    }
-
-    public class InitiativeSwitch : EvasionEvent
-    {
-        public Creature Creature;
-    }
-
     public interface IEngine
     {
         ILogger Logger { get; set; }

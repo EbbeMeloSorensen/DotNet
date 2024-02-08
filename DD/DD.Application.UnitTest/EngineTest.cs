@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Craft.Utils;
 using Xunit;
 using FluentAssertions;
+using DD.Engine.Complex;
 
 namespace DD.Application.UnitTest
 {
@@ -13,16 +13,7 @@ namespace DD.Application.UnitTest
         public async Task TestMethod1()
         {
             // Arrange
-            var squareIndexForCurrentCreature = new ObservableObject<int?>();
-            var squareIndexesCurrentCreatureCanMoveTo = new ObservableObject<Dictionary<int, double>>();
-            var squareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
-            var squareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
-
             var engine = new ComplexEngine(
-                squareIndexForCurrentCreature,
-                squareIndexesCurrentCreatureCanMoveTo,
-                squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-                squareIndexesCurrentCreatureCanAttackWithRangedWeapon,
                 null)
             {
                 Scene = SceneGenerator.GenerateScene(2)
@@ -63,16 +54,7 @@ namespace DD.Application.UnitTest
         public async Task TestMethod2()
         {
             // Arrange
-            var squareIndexForCurrentCreature = new ObservableObject<int?>();
-            var squareIndexesCurrentCreatureCanMoveTo = new ObservableObject<Dictionary<int, double>>();
-            var squareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
-            var squareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
-
             var engine = new ComplexEngine(
-                squareIndexForCurrentCreature,
-                squareIndexesCurrentCreatureCanMoveTo,
-                squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-                squareIndexesCurrentCreatureCanAttackWithRangedWeapon,
                 null)
             {
                 Scene = SceneGenerator.GenerateScene(16)
@@ -115,16 +97,7 @@ namespace DD.Application.UnitTest
         public async Task TestMethod3()
         {
             // Arrange
-            var squareIndexForCurrentCreature = new ObservableObject<int?>();
-            var squareIndexesCurrentCreatureCanMoveTo = new ObservableObject<Dictionary<int, double>>();
-            var squareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
-            var squareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
-
             var engine = new ComplexEngine(
-                squareIndexForCurrentCreature,
-                squareIndexesCurrentCreatureCanMoveTo,
-                squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-                squareIndexesCurrentCreatureCanAttackWithRangedWeapon,
                 null)
             {
                 Scene = SceneGenerator.GenerateScene(13)

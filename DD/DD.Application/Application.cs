@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils;
@@ -18,16 +19,15 @@ namespace DD.Application
             set
             {
                 _logger = value;
-                Engine.Logger = value;
+
+                if (Engine != null)
+                {
+                    Engine.Logger = value;
+                }
             }
         }
 
-        public IEngine Engine { get; }
-
-        public ObservableObject<int?> SquareIndexForCurrentCreature { get; }
-        public ObservableObject<Dictionary<int, double>> SquareIndexesCurrentCreatureCanMoveTo { get; }
-        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon { get; }
-        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithRangedWeapon { get; }
+        public IEngine Engine { get; set; }
 
         public Application(
             IUIDataProvider uiDataProvider,
@@ -35,22 +35,15 @@ namespace DD.Application
         {
             UIDataProvider = uiDataProvider;
             _logger = logger;
-
-            SquareIndexForCurrentCreature = new ObservableObject<int?>();
-            SquareIndexesCurrentCreatureCanMoveTo = new ObservableObject<Dictionary<int, double>>();
-            SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
-            SquareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
-
-            Engine = new SimpleEngine(
-                SquareIndexForCurrentCreature,
-                SquareIndexesCurrentCreatureCanMoveTo,
-                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon, 
-                _logger);
         }
 
         public async Task ActOutBattle()
         {
+            if (Engine == null)
+            {
+                throw new InvalidOperationException("Engine not set");
+            }
+
             await Task.Run(async () =>
             {
                 Engine.StartBattle();
