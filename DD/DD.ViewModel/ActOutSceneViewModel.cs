@@ -13,7 +13,7 @@ namespace DD.ViewModel
     public class ActOutSceneViewModel : ViewModelBase
     {
         private readonly ILogger _logger;
-        private readonly Engine _engine;
+        private readonly IEngine _engine;
         private readonly BoardViewModel _boardViewModel;
         private RelayCommand _resetCreaturesCommand;
         private AsyncCommand _startBattleCommand;
@@ -49,7 +49,7 @@ namespace DD.ViewModel
         }
 
         public ActOutSceneViewModel(
-            Engine engine,
+            IEngine engine,
             BoardViewModel boardViewModel,
             ObservableObject<Scene> selectedScene,
             ILogger logger)

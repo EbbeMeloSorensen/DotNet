@@ -385,7 +385,7 @@ namespace DD.ViewModel
         }
 
         public BoardViewModel(
-            Engine engine,
+            IEngine engine,
             double squareLength,
             double obstacleDiameter,
             double creatureDiameter,

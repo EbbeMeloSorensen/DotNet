@@ -22,7 +22,7 @@ namespace DD.Application
             }
         }
 
-        public Engine Engine { get; }
+        public IEngine Engine { get; }
 
         public ObservableObject<int?> SquareIndexForCurrentCreature { get; }
         public ObservableObject<Dictionary<int, double>> SquareIndexesCurrentCreatureCanMoveTo { get; }
@@ -41,7 +41,7 @@ namespace DD.Application
             SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
             SquareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
 
-            Engine = new Engine(
+            Engine = new SimpleEngine(
                 SquareIndexForCurrentCreature,
                 SquareIndexesCurrentCreatureCanMoveTo,
                 SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon,

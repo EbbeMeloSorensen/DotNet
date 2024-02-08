@@ -18,7 +18,7 @@ namespace DD.Application.UnitTest
             var squareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
             var squareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
 
-            var engine = new Engine(
+            var engine = new ComplexEngine(
                 squareIndexForCurrentCreature,
                 squareIndexesCurrentCreatureCanMoveTo,
                 squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
@@ -68,7 +68,7 @@ namespace DD.Application.UnitTest
             var squareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
             var squareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
 
-            var engine = new Engine(
+            var engine = new ComplexEngine(
                 squareIndexForCurrentCreature,
                 squareIndexesCurrentCreatureCanMoveTo,
                 squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
@@ -120,7 +120,7 @@ namespace DD.Application.UnitTest
             var squareIndexesCurrentCreatureCanAttackWithMeleeWeapon = new ObservableObject<HashSet<int>>();
             var squareIndexesCurrentCreatureCanAttackWithRangedWeapon = new ObservableObject<HashSet<int>>();
 
-            var engine = new Engine(
+            var engine = new ComplexEngine(
                 squareIndexForCurrentCreature,
                 squareIndexesCurrentCreatureCanMoveTo,
                 squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,

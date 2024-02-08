@@ -11,47 +11,8 @@ using DD.Domain;
 
 namespace DD.Application
 {
-    public enum CreatureAction
+    public class ComplexEngine : IEngine
     {
-        NoAction,
-        Move,
-        Evade, // Occurs when a creature moves in a way that triggers a number of opportunity attacks
-        InitiativeSwitchDuringEvasion,
-        MeleeAttack,
-        RangedAttack,
-        Pass
-    }
-
-    public class Engine
-    {
-        private class MoveCreatureResult
-        {
-            public int? IndexOfDestinationSquare { get; set; }
-            public double? WalkingDistanceToDestinationSquare { get; set; }
-            public Creature FinalClosestOpponent { get; set; }
-            public double FinalDistanceToClosestOpponent { get; set; }
-        }
-
-        private abstract class EvasionEvent
-        {
-        }
-
-        private class Move : EvasionEvent
-        {
-            public int[] Path;
-        }
-
-        private class OpportunityAttack : EvasionEvent
-        {
-            public Creature Creature;
-        }
-
-        private class InitiativeSwitch : EvasionEvent
-        {
-            public Creature Creature;
-        }
-
-
         private Dictionary<Creature, int> _creatureIdMap;
         private GraphAdjacencyList<Point2DVertex, EmptyEdge> _wallGraph;
         private Random _random = new Random(0);
@@ -66,8 +27,12 @@ namespace DD.Application
         private bool _currentCreatureJustMoved;
         private double _moveDistanceRemaningForCurrentCreature;
 
+        public ILogger Logger { get; set; }
+
         public int[] CurrentCreaturePath { get; set; }
+
         public bool BattleroundCompleted { get; set; }
+
         public bool BattleDecided { get; set; }
 
         public Scene Scene
@@ -129,17 +94,24 @@ namespace DD.Application
             }
         }
 
-        public ILogger Logger { get; set; }
-
         public List<Creature> Creatures { get; set; }
+
         public Creature CurrentCreature { get; set; }
+
         public Creature TargetCreature { get; set; }
+
         public ObservableObject<int?> SquareIndexForCurrentCreature { get; }
+
         public ObservableObject<Dictionary<int, double>> SquareIndexesCurrentCreatureCanMoveTo { get; }
+
         public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon { get; }
+
         public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithRangedWeapon { get; }
+
         public ObservableObject<bool> BattleHasStarted { get; }
+
         public ObservableObject<bool> BattleHasEnded { get; }
+
         public ObservableObject<bool> AutoRunning { get; }
 
         public bool NextEventOccursAutomatically
@@ -147,7 +119,7 @@ namespace DD.Application
             get { return CurrentCreature.IsAutomatic || _evasionEvents.Count > 0; }
         }
 
-        public Engine(
+        public ComplexEngine(
             ObservableObject<int?> squareIndexForCurrentCreature,
             ObservableObject<Dictionary<int, double>> squareIndexesCurrentCreatureCanMoveTo,
             ObservableObject<HashSet<int>> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
