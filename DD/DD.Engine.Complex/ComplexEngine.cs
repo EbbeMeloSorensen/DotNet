@@ -198,54 +198,78 @@ namespace DD.Engine.Complex
 
                 MoveCreatureResult moveCreatureResult = null;
 
-                if (CurrentCreature.Attacks.Any())
+                // We peek the next attack rather than deque, because we might not use it in this round
+                // such as when no enemies are within range and the creature can only move
+
+                Attack attack;
+
+                // Discard unknown attacks
+                while (true)
                 {
-                    var attack = CurrentCreature.Attacks.Peek();
+                    CurrentCreature.Attacks.TryPeek(out attack);
 
-                    if (attack is MeleeAttack)
+                    if (attack == null ||
+                        attack is MeleeAttack ||
+                        attack is RangedAttack)
                     {
-                        var potentialTargetsOfMeleeAttack = IdentifyPotentialTargetsOfMeleeAttack().ToList();
+                        break;
+                    }
 
-                        if (potentialTargetsOfMeleeAttack.Any())
+                    CurrentCreature.Attacks.Dequeue();
+                }
+
+                if (attack != null)
+                {
+                    switch (attack)
+                    {
+                        case MeleeAttack meleeAttack:
                         {
-                            attack = CurrentCreature.Attacks.Dequeue();
-                            var targetCreature = potentialTargetsOfMeleeAttack.First();
+                            var potentialTargetsOfMeleeAttack = IdentifyPotentialTargetsOfMeleeAttack().ToList();
 
-                            AttackOpponent(
-                                CurrentCreature,
-                                targetCreature,
-                                attack,
-                                false,
-                                out var opponentWasHit,
-                                out var opponentWasKilled);
-
-                            if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
+                            if (potentialTargetsOfMeleeAttack.Any())
                             {
-                                BattleDecided = true;
+                                attack = CurrentCreature.Attacks.Dequeue();
+                                var targetCreature = potentialTargetsOfMeleeAttack.First();
+
+                                AttackOpponent(
+                                    CurrentCreature,
+                                    targetCreature,
+                                    attack,
+                                    false,
+                                    out var opponentWasHit,
+                                    out var opponentWasKilled);
+
+                                if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
+                                {
+                                    BattleDecided = true;
+                                }
+
+                                TargetCreature = targetCreature;
+                                _currentCreatureJustMoved = false;
+
+                                return CreatureAction.MeleeAttack;
                             }
 
-                            TargetCreature = targetCreature;
-                            _currentCreatureJustMoved = false;
-
-                            return CreatureAction.MeleeAttack;
+                            break;
                         }
-                    }
-                    else
-                    {
-                        // Next attack is a ranged attack
-                        var range = ((RangedAttack)attack).Range;
-
-                        if (_currentCreatureJustMoved)
+                        case RangedAttack rangedAttack:
                         {
-                            return ExecuteRangedAttackOrPass(range);
-                        }
+                            var range = rangedAttack.Range;
 
-                        // Determine if the creature can move to a more suitable position before attacking
-                        moveCreatureResult = await DetermineDestinationOfCurrentCreatureWithRangedAttack(range);
+                            if (_currentCreatureJustMoved)
+                            {
+                                return ExecuteRangedAttackOrPass(range);
+                            }
 
-                        if (!moveCreatureResult.IndexOfDestinationSquare.HasValue)
-                        {
-                            return ExecuteRangedAttackOrPass(range);
+                            // Determine if the creature can move to a more suitable position before attacking
+                            moveCreatureResult = await DetermineDestinationOfCurrentCreatureWithRangedAttack(range);
+
+                            if (!moveCreatureResult.IndexOfDestinationSquare.HasValue)
+                            {
+                                return ExecuteRangedAttackOrPass(range);
+                            }
+
+                            break;
                         }
                     }
                 }
