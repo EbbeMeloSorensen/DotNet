@@ -150,11 +150,6 @@ namespace DD.ViewModel
 
                     switch (creatureAction)
                     {
-                        case CreatureAction.InitiativeSwitchDuringEvasion:
-                            _boardViewModel.UpdateCreatureViewModels(
-                                _engine.Creatures,
-                                _engine.CurrentCreature);
-                            continue;
                         case CreatureAction.Pass:
                             _engine.SwitchToNextCreature();
                             _boardViewModel.UpdateCreatureViewModels(
@@ -181,6 +176,9 @@ namespace DD.ViewModel
                                 true);
                             break;
                         default:
+                            _boardViewModel.UpdateCreatureViewModels(
+                                _engine.Creatures,
+                                _engine.CurrentCreature);
                             continue;
                     }
                 }

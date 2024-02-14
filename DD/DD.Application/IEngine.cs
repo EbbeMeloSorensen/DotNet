@@ -11,7 +11,6 @@ namespace DD.Application
         NoAction,
         Move,
         Evade, // Occurs when a creature moves in a way that triggers a number of opportunity attacks
-        InitiativeSwitchDuringEvasion,
         MeleeAttack,
         RangedAttack,
         Pass

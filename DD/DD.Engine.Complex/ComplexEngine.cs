@@ -149,7 +149,7 @@ namespace DD.Engine.Complex
                             Logger?.WriteLine(LogMessageCategory.Information, $"        Initiative goes to {Tag(initiativeSwitch.Creature)}");
                             CurrentCreature = initiativeSwitch.Creature;
                             SquareIndexForCurrentCreature.Object = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
-                            return CreatureAction.InitiativeSwitchDuringEvasion;
+                            return CreatureAction.NoAction;
                         case Move move:
                             {
                                 CurrentCreaturePath = move.Path;
