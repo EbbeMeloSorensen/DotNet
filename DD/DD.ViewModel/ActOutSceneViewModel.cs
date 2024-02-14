@@ -198,6 +198,9 @@ namespace DD.ViewModel
 
                         continue;
                     }
+                    
+                    // Diagnostics
+                    //_logger.WriteLine(LogMessageCategory.Information, "(Proceed method about to exit - Initiative will go to the player)");
                 }
 
                 break;
@@ -207,8 +210,11 @@ namespace DD.ViewModel
             {
                 _logger.WriteLine(LogMessageCategory.Information, "Battle was decided");
             }
-
-            _logger.WriteLine(LogMessageCategory.Information, "(Proced method exiting - initiative is now at the player)");
+            else
+            {
+                // Diagnostics
+                //_logger.WriteLine(LogMessageCategory.Information, "(Proceed method exiting)");
+            }
         }
 
         private async Task PassCurrentCreature()
