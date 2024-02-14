@@ -150,8 +150,6 @@ namespace DD.ViewModel
 
                     switch (creatureAction)
                     {
-                        case CreatureAction.Evade:
-                            continue;
                         case CreatureAction.InitiativeSwitchDuringEvasion:
                             _boardViewModel.UpdateCreatureViewModels(
                                 _engine.Creatures,
@@ -183,7 +181,7 @@ namespace DD.ViewModel
                                 true);
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException();
+                            continue;
                     }
                 }
                 else

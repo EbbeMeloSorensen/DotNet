@@ -213,6 +213,7 @@ namespace DD.ViewModel
             CreaturePath = stringBuilder.ToString();
 
             var ticksPrStep = 1000000;
+            //var ticksPrStep = 10000;
             var timeSpan = new TimeSpan(ticksPrStep * path.Length);
 
             DurationForMoveCreatureAnimation = $"0:0:{timeSpan.Seconds}.{timeSpan.Milliseconds.ToString().PadLeft(3, '0')}";
@@ -403,6 +404,7 @@ namespace DD.ViewModel
             WeaponViewModel = new WeaponViewModel(new Weapon(0, 0), _weaponDiameter) { IsVisible = false };
 
             var timeSpanForAttackAnimation = new TimeSpan(2000000);
+            //var timeSpanForAttackAnimation = new TimeSpan(20000);
             DurationForAttackAnimation = $"0:0:{timeSpanForAttackAnimation.Seconds}.{timeSpanForAttackAnimation.Milliseconds.ToString().PadLeft(3, '0')}";
 
             selectedScene.PropertyChanged += (s, e) =>
