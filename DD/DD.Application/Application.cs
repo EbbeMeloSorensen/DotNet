@@ -9,8 +9,6 @@ namespace DD.Application
     {
         private ILogger _logger;
 
-        public IUIDataProvider UIDataProvider { get; }
-
         // It must be possible for an external component to set the Logger, e.g. in order to override with a decorator
         public ILogger Logger
         {
@@ -29,10 +27,8 @@ namespace DD.Application
         public IEngine Engine { get; set; }
 
         public Application(
-            IUIDataProvider uiDataProvider,
             ILogger logger)
         {
-            UIDataProvider = uiDataProvider;
             _logger = logger;
         }
 

@@ -18,7 +18,6 @@ namespace DD.ViewModel
         private RelayCommand _windowLoadedCommand;
         private RelayCommand<object> _createCreatureTypeCommand;
 
-        public CreatureTypeCollectionViewModel CreatureTypeCollectionViewModel { get; }
         public SceneCollectionViewModel SceneCollectionViewModel { get; }
         public BoardViewModel BoardViewModel { get; }
         public ActOutSceneViewModel ActOutSceneViewModel { get; }
@@ -28,11 +27,6 @@ namespace DD.ViewModel
         public RelayCommand WindowLoadedCommand
         {
             get { return _windowLoadedCommand ?? (_windowLoadedCommand = new RelayCommand(WindowLoaded)); }
-        }
-
-        public RelayCommand<object> CreateCreatureTypeCommand
-        {
-            get { return _createCreatureTypeCommand ?? (_createCreatureTypeCommand = new RelayCommand<object>(CreateCreatureType, CanCreateCreatureType)); }
         }
 
         public MainWindowViewModel(
@@ -50,7 +44,6 @@ namespace DD.ViewModel
 
             var selectedScene = new ObservableObject<Scene>();
             SceneCollectionViewModel = new SceneCollectionViewModel(selectedScene);
-            CreatureTypeCollectionViewModel = new CreatureTypeCollectionViewModel(_application.UIDataProvider);
 
             var squareLength = 80;
             var obstacleDiameter = 80;
@@ -82,21 +75,7 @@ namespace DD.ViewModel
 
         private void WindowLoaded()
         {
-            CreatureTypeCollectionViewModel.PopulateListCommand.Execute(null);
-        }
-
-        private void CreateCreatureType(
-            object owner)
-        {
-            var dialogViewModel = new CreateCreatureTypeDialogViewModel();
-
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-            {
-                return;
-            }
-
-            _application.UIDataProvider.CreateCreatureType(
-                new CreatureType(dialogViewModel.Name, 8, 5, 15, 0, 8, null));
+            //CreatureTypeCollectionViewModel.PopulateListCommand.Execute(null);
         }
 
         private bool CanCreateCreatureType(object owner)

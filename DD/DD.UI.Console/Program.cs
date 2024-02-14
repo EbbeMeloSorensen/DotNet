@@ -12,9 +12,6 @@ namespace DD.UI.Console
             System.Console.WriteLine("Creature Types in repository:");
             var container = Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();
-            application.UIDataProvider.GetAllCreatureTypes()
-                .ToList()
-                .ForEach(c => System.Console.WriteLine($"  {c.Name}"));
 
             application.Engine.Scene = SceneGenerator.GenerateScene(2);
             System.Console.WriteLine($"Setting up scene: \"{application.Engine.Scene.Name}\"");

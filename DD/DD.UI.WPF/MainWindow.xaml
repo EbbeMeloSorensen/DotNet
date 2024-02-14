@@ -55,11 +55,6 @@
 
             <local:BoardView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding BoardViewModel}"/>
 
-            <!--<local:SceneEditorView Grid.Row="0" Grid.Column="2" DataContext="{Binding SceneEditorViewModel}"/>-->
-            <local:CreatureTypeCollectionView Grid.Row="0" Grid.Column="2" DataContext="{Binding CreatureTypeCollectionViewModel}">
-
-            </local:CreatureTypeCollectionView>
-
             <local:ActOutSceneView Grid.Row="1" Grid.Column="2" DataContext="{Binding ActOutSceneViewModel}"/>
 
             <Expander Grid.Row="2" Grid.ColumnSpan="999" Header="Log" ExpandDirection="Up" IsExpanded="True">

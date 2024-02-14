@@ -6,8 +6,5 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
-        <DataTemplate DataType="{x:Type viewModel:CreateCreatureTypeDialogViewModel}">
-            <local:CreateCreatureTypeDialogView/>
-        </DataTemplate>
     </Application.Resources>
 </Application>
