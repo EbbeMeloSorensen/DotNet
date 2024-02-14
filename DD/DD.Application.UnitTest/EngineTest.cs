@@ -28,9 +28,9 @@ namespace DD.Application.UnitTest
                     engine.StartBattleRound();
                 }
 
-                var creatureAction = await engine.ExecuteNextAction();
+                var nextEvent = await engine.ExecuteNextEvent();
 
-                if (creatureAction == CreatureAction.Pass)
+                if (nextEvent == CreatureAction.Pass)
                 {
                     engine.SwitchToNextCreature();
                 }
@@ -61,9 +61,9 @@ namespace DD.Application.UnitTest
                     engine.StartBattleRound();
                 }
 
-                var creatureAction = await engine.ExecuteNextAction();
+                var nextEvent = await engine.ExecuteNextEvent();
 
-                if (creatureAction == CreatureAction.Pass)
+                if (nextEvent == CreatureAction.Pass)
                 {
                     engine.SwitchToNextCreature();
                 }
@@ -96,9 +96,9 @@ namespace DD.Application.UnitTest
                     continue;
                 }
 
-                var creatureAction = await engine.ExecuteNextAction();
+                var nextEvent = await engine.ExecuteNextEvent();
 
-                if (creatureAction == CreatureAction.Pass)
+                if (nextEvent == CreatureAction.Pass)
                 {
                     engine.SwitchToNextCreature();
                 }

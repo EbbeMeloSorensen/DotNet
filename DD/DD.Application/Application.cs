@@ -61,9 +61,9 @@ namespace DD.Application
                         Engine.StartBattleRound();
                     }
 
-                    var creatureAction = await Engine.ExecuteNextAction();
+                    var nextEvent = await Engine.ExecuteNextEvent();
 
-                    if (creatureAction == CreatureAction.Pass)
+                    if (nextEvent == CreatureAction.Pass)
                     {
                         Engine.SwitchToNextCreature();
                     }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
@@ -147,9 +146,9 @@ namespace DD.ViewModel
                 if (_engine.NextEventOccursAutomatically)
                 {
                     _engine.AutoRunning.Object = true;
-                    var creatureAction = await _engine.ExecuteNextAction();
+                    var nextEvent = await _engine.ExecuteNextEvent();
 
-                    switch (creatureAction)
+                    switch (nextEvent)
                     {
                         case CreatureAction.Pass:
                             _engine.SwitchToNextCreature();

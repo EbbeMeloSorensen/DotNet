@@ -135,7 +135,7 @@ namespace DD.Engine.Complex
             _evasionEvents = new Queue<EvasionEvent>();
         }
 
-        public async Task<CreatureAction> ExecuteNextAction()
+        public async Task<CreatureAction> ExecuteNextEvent()
         {
             return await Task.Run(async () =>
             {

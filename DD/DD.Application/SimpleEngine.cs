@@ -26,7 +26,7 @@ namespace DD.Application
         public ObservableObject<bool> AutoRunning { get; }
         public bool NextEventOccursAutomatically { get; }
 
-        public Task<CreatureAction> ExecuteNextAction()
+        public Task<CreatureAction> ExecuteNextEvent()
         {
             throw new NotImplementedException();
         }
