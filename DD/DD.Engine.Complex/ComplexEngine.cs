@@ -542,6 +542,8 @@ namespace DD.Engine.Complex
                     }
                 }
             }
+
+            StartBattleRound();
         }
 
         public bool CurrentPlayerControlledCreatureHasAnyOptionsLeft()
@@ -589,10 +591,8 @@ namespace DD.Engine.Complex
 
             BattleroundCompleted = false;
 
-            Creatures
-                .OrderBy(c => c.BattleRoundQueueNumber)
-                .ToList()
-                .ForEach(c => _actingOrder.Enqueue(c));
+            EstablishCreatureActingOrder();
+            SwitchToNextCreature();
         }
 
         public void SwitchToNextCreature()
@@ -631,6 +631,14 @@ namespace DD.Engine.Complex
         public string Tag(Creature creature)
         {
             return $"{creature.CreatureType.Name}{_creatureIdMap[creature]}";
+        }
+
+        private void EstablishCreatureActingOrder()
+        {
+            Creatures
+                .OrderBy(c => c.BattleRoundQueueNumber)
+                .ToList()
+                .ForEach(c => _actingOrder.Enqueue(c));
         }
 
         private async Task<MoveCreatureResult> DetermineDestinationOfCurrentCreatureWithMeleeAttack()

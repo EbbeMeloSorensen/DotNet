@@ -48,7 +48,6 @@ namespace DD.Application
             {
                 Engine.StartBattle();
                 Engine.StartBattleRound();
-                Engine.SwitchToNextCreature();
 
                 while (true)
                 {
@@ -60,7 +59,6 @@ namespace DD.Application
                     if (Engine.BattleroundCompleted)
                     {
                         Engine.StartBattleRound();
-                        Engine.SwitchToNextCreature();
                     }
 
                     var creatureAction = await Engine.ExecuteNextAction();

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -21,20 +20,12 @@ namespace DD.Application.UnitTest
 
             // Act
             engine.StartBattle();
-            engine.StartBattleRound();
-            engine.SwitchToNextCreature();
 
-            while (true)
+            while (!engine.BattleDecided)
             {
-                if (engine.BattleDecided)
-                {
-                    break;
-                }
-
                 if (engine.BattleroundCompleted)
                 {
                     engine.StartBattleRound();
-                    engine.SwitchToNextCreature();
                 }
 
                 var creatureAction = await engine.ExecuteNextAction();
@@ -62,21 +53,12 @@ namespace DD.Application.UnitTest
 
             // Act
             engine.StartBattle();
-            engine.StartBattleRound();
-            engine.SwitchToNextCreature();
 
-            while (true)
+            while (!engine.BattleDecided)
             {
-                if (engine.BattleDecided)
-                {
-                    break;
-                }
-
                 if (engine.BattleroundCompleted)
                 {
                     engine.StartBattleRound();
-                    engine.SwitchToNextCreature();
-                    continue;
                 }
 
                 var creatureAction = await engine.ExecuteNextAction();
@@ -105,20 +87,12 @@ namespace DD.Application.UnitTest
 
             // Act
             engine.StartBattle();
-            engine.StartBattleRound();
-            engine.SwitchToNextCreature();
 
-            while (true)
+            while (!engine.BattleDecided)
             {
-                if (engine.BattleDecided)
-                {
-                    break;
-                }
-
                 if (engine.BattleroundCompleted)
                 {
                     engine.StartBattleRound();
-                    engine.SwitchToNextCreature();
                     continue;
                 }
 
