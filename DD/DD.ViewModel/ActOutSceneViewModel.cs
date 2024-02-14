@@ -160,8 +160,7 @@ namespace DD.ViewModel
                     switch (creatureAction)
                     {
                         case CreatureAction.Evade:
-                            await Proceed();
-                            break;
+                            continue;
                         case CreatureAction.InitiativeSwitchDuringEvasion:
                             _boardViewModel.UpdateCreatureViewModels(
                                 _engine.Creatures,
@@ -173,6 +172,8 @@ namespace DD.ViewModel
                                 _engine.Creatures,
                                 _engine.CurrentCreature);
                             continue;
+                        // Bemærk, at vi for de næste 3 ikke kalder continue men derimod break, dvs vi træder ud af løkken og dermed hele Proceed
+                        // metoden. Den kaldes igen, når vi håndterer disse evenst: MoveCreatureAnimationCompleted, AttackAnimationCompleted
                         case CreatureAction.Move:
                             _boardViewModel.MoveCurrentCreature(
                                 _engine.CurrentCreature,
