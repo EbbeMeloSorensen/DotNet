@@ -31,7 +31,7 @@ namespace DD.Application
             throw new NotImplementedException();
         }
 
-        public CreatureAction PlayerSelectSquare(int squareIndex)
+        public CreatureAction? PlayerSelectSquare(int squareIndex)
         {
             throw new NotImplementedException();
         }

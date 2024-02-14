@@ -66,6 +66,12 @@ namespace DD.ViewModel
             {
                 var creatureAction = _engine.PlayerSelectSquare(e.SquareIndex);
 
+                if (!creatureAction.HasValue)
+                {
+                    // Occurs e.g. when the user clicks a non-highlighted square that doesn't trigger anything
+                    return;
+                }
+
                 switch (creatureAction)
                 {
                     case CreatureAction.Move:
@@ -73,7 +79,7 @@ namespace DD.ViewModel
                             _engine.CurrentCreature,
                             _engine.CurrentCreaturePath);
                         break;
-                    case CreatureAction.Evade:
+                    case CreatureAction.NoAction:
                         await Proceed();
                         break;
                     case CreatureAction.MeleeAttack:

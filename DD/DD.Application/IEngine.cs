@@ -10,7 +10,6 @@ namespace DD.Application
     {
         NoAction,
         Move,
-        Evade, // Occurs when a creature moves in a way that triggers a number of opportunity attacks
         MeleeAttack,
         RangedAttack,
         Pass
@@ -60,7 +59,7 @@ namespace DD.Application
 
         Task<CreatureAction> ExecuteNextAction();
 
-        CreatureAction PlayerSelectSquare(
+        CreatureAction? PlayerSelectSquare(
             int squareIndex);
 
         void StartBattle();

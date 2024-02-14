@@ -298,14 +298,14 @@ namespace DD.Engine.Complex
             });
         }
 
-        public CreatureAction PlayerSelectSquare(
+        public CreatureAction? PlayerSelectSquare(
             int squareIndex)
         {
             if (!BattleHasStarted.Object ||
                 BattleHasEnded.Object ||
                 AutoRunning.Object)
             {
-                return CreatureAction.NoAction;
+                return null;
             }
 
             if (SquareIndexesCurrentCreatureCanMoveTo.Object != null &&
@@ -335,7 +335,7 @@ namespace DD.Engine.Complex
                     _evadingCreature = CurrentCreature;
                     Logger?.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
 
-                    return CreatureAction.Evade;
+                    return CreatureAction.NoAction;
                 }
 
                 // Player controlled creature moves ordinarily, without provoking an opportunity attack
@@ -425,7 +425,7 @@ namespace DD.Engine.Complex
                 return CreatureAction.RangedAttack;
             }
 
-            return CreatureAction.NoAction;
+            return null;
         }
 
         public void StartBattle()
