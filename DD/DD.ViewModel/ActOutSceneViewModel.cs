@@ -122,9 +122,6 @@ namespace DD.ViewModel
         private async Task StartBattle()
         {
             _engine.StartBattle();
-            _engine.StartBattleRound();
-
-            _engine.SwitchToNextCreature();
 
             _boardViewModel.UpdateCreatureViewModels(
                 _engine.Creatures,
@@ -135,18 +132,12 @@ namespace DD.ViewModel
 
         private async Task Proceed()
         {
-            while (true)
+            while (!_engine.BattleDecided)
             {
-                if (_engine.BattleDecided)
-                {
-                    _logger.WriteLine(LogMessageCategory.Information, "Battle was decided");
-                    break;
-                }
-
                 if (_engine.BattleroundCompleted)
                 {
                     _engine.StartBattleRound();
-                    _engine.SwitchToNextCreature();
+
                     _boardViewModel.UpdateCreatureViewModels(
                         _engine.Creatures,
                         _engine.CurrentCreature);
@@ -211,6 +202,8 @@ namespace DD.ViewModel
 
                 break;
             }
+
+            _logger.WriteLine(LogMessageCategory.Information, "Battle was decided");
         }
 
         private async Task PassCurrentCreature()
