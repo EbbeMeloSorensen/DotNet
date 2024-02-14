@@ -49,6 +49,8 @@ namespace DD.Application
 
         bool NextEventOccursAutomatically { get; }
 
+        void Randomize();
+
         Task<IBattleEvent> ExecuteNextEvent();
 
         IBattleEvent? PlayerSelectSquare(

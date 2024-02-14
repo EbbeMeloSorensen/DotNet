@@ -112,10 +112,7 @@ namespace DD.Application
 
         public ObservableObject<bool> AutoRunning { get; }
 
-        public bool NextEventOccursAutomatically
-        {
-            get { return CurrentCreature.IsAutomatic; }
-        }
+        public bool NextEventOccursAutomatically => CurrentCreature.IsAutomatic;
 
         public SimpleEngine(
             ILogger logger)
@@ -130,6 +127,11 @@ namespace DD.Application
             AutoRunning = new ObservableObject<bool>();
             Logger = logger;
             _actingOrder = new Queue<Creature>();
+        }
+
+        public void Randomize()
+        {
+            _random = new Random((int)DateTime.UtcNow.Ticks);
         }
 
         public async Task<IBattleEvent> ExecuteNextEvent()

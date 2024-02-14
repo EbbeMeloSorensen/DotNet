@@ -137,6 +137,11 @@ namespace DD.Engine.Complex
             _evasionEvents = new Queue<EvasionEvent>();
         }
 
+        public void Randomize()
+        {
+            _random = new Random((int)DateTime.UtcNow.Ticks);
+        }
+
         public async Task<IBattleEvent> ExecuteNextEvent()
         {
             if (_evasionEvents.Any())
