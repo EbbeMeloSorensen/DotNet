@@ -88,11 +88,6 @@ namespace DD.ViewModel
                             _engine.TargetCreature,
                             true);
                         break;
-                    case CreatureAction.Pass:
-                    case CreatureAction.NoAction:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
             };
 
