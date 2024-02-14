@@ -83,17 +83,17 @@ namespace DD.ViewModel
                     case NoEvent:
                         await Proceed();
                         break;
-                    case CreatureAttackMelee:
-                        _boardViewModel.AnimateAttack(
-                            _engine.CurrentCreature,
-                            _engine.TargetCreature,
-                            false);
-                        break;
                     case CreatureAttackRanged:
                         _boardViewModel.AnimateAttack(
                             _engine.CurrentCreature,
                             _engine.TargetCreature,
                             true);
+                        break;
+                    case CreatureAttack:
+                        _boardViewModel.AnimateAttack(
+                            _engine.CurrentCreature,
+                            _engine.TargetCreature,
+                            false);
                         break;
                 }
             };
@@ -165,17 +165,17 @@ namespace DD.ViewModel
                                 _engine.CurrentCreature,
                                 _engine.CurrentCreaturePath);
                             break;
-                        case CreatureAttackMelee:
-                            _boardViewModel.AnimateAttack(
-                                _engine.CurrentCreature,
-                                _engine.TargetCreature,
-                                false);
-                            break;
                         case CreatureAttackRanged:
                             _boardViewModel.AnimateAttack(
                                 _engine.CurrentCreature,
                                 _engine.TargetCreature,
                                 true);
+                            break;
+                        case CreatureAttack:
+                            _boardViewModel.AnimateAttack(
+                                _engine.CurrentCreature,
+                                _engine.TargetCreature,
+                                false);
                             break;
                         default:
                             _boardViewModel.UpdateCreatureViewModels(

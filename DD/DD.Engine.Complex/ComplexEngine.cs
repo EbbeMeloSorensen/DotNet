@@ -189,7 +189,7 @@ namespace DD.Engine.Complex
 
                             TargetCreature = _evadingCreature;
 
-                            return new CreatureAttackMelee();
+                            return new CreatureAttack();
                         }
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -247,7 +247,7 @@ namespace DD.Engine.Complex
                                 TargetCreature = targetCreature;
                                 _currentCreatureJustMoved = false;
 
-                                return new CreatureAttackMelee();
+                                return new CreatureAttack();
                             }
 
                             break;
@@ -374,7 +374,7 @@ namespace DD.Engine.Complex
 
                 TargetCreature = opponent;
 
-                return new CreatureAttackMelee();
+                return new CreatureAttack();
             }
 
             if (SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object != null &&

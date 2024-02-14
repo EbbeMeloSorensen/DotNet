@@ -1,6 +1,6 @@
 ﻿namespace DD.Application.BattleEvents
 {
-    public class CreatureAttackMelee : IBattleEvent
+    public class CreatureAttack : IBattleEvent
     {
     }
 }

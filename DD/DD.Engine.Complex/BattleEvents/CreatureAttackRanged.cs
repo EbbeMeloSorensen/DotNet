@@ -2,7 +2,7 @@
 
 namespace DD.Engine.Complex.BattleEvents
 {
-    public class CreatureAttackRanged : IBattleEvent
+    public class CreatureAttackRanged : CreatureAttack
     {
     }
 }

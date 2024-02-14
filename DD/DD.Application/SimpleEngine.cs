@@ -180,7 +180,7 @@ namespace DD.Application
                     TargetCreature = targetCreature;
                     _currentCreatureJustMoved = false;
 
-                    return new CreatureAttackMelee();
+                    return new CreatureAttack();
                 }
             }
             else
@@ -273,7 +273,7 @@ namespace DD.Application
 
                 TargetCreature = opponent;
 
-                return new CreatureAttackMelee();
+                return new CreatureAttack();
             }
 
             return null;
