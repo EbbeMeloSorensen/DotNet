@@ -36,15 +36,6 @@ namespace DD.Application
     {
     }
 
-    public enum CreatureAction
-    {
-        NoAction,
-        Move,
-        MeleeAttack,
-        RangedAttack,
-        Pass
-    }
-
     public class MoveCreatureResult
     {
         public int? IndexOfDestinationSquare { get; set; }
@@ -89,7 +80,7 @@ namespace DD.Application
 
         Task<IBattleEvent> ExecuteNextEvent();
 
-        CreatureAction? PlayerSelectSquare(
+        IBattleEvent? PlayerSelectSquare(
             int squareIndex);
 
         void StartBattle();

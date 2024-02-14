@@ -295,7 +295,7 @@ namespace DD.Engine.Complex
             return new CreaturePass();
         }
 
-        public CreatureAction? PlayerSelectSquare(
+        public IBattleEvent PlayerSelectSquare(
             int squareIndex)
         {
             if (!BattleHasStarted.Object ||
@@ -332,7 +332,7 @@ namespace DD.Engine.Complex
                     _evadingCreature = CurrentCreature;
                     Logger?.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
 
-                    return CreatureAction.NoAction;
+                    return new NoEvent();
                 }
 
                 // Player controlled creature moves ordinarily, without provoking an opportunity attack
@@ -340,7 +340,7 @@ namespace DD.Engine.Complex
                 CurrentCreaturePath = path;
                 IdentifyOptionsForCurrentPlayerControlledCreature(true);
 
-                return CreatureAction.Move;
+                return new CreatureMove();
             }
 
             if (SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object != null &&
@@ -372,7 +372,7 @@ namespace DD.Engine.Complex
 
                 TargetCreature = opponent;
 
-                return CreatureAction.MeleeAttack;
+                return new CreatureAttackMelee();
             }
 
             if (SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object != null &&
@@ -419,7 +419,7 @@ namespace DD.Engine.Complex
                     IdentifyOptionsForCurrentPlayerControlledCreature(false);
                 }
 
-                return CreatureAction.RangedAttack;
+                return new CreatureAttackRanged();
             }
 
             return null;
