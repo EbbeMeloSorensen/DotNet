@@ -1252,7 +1252,7 @@ namespace DD.Engine.Complex
 
                 Logger?.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
 
-                return CreatureAction.Evade;
+                return CreatureAction.NoAction;
             }
 
             MoveCurrentCreature(moveCreatureResult.IndexOfDestinationSquare.Value);
