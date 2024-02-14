@@ -184,9 +184,11 @@ namespace DD.ViewModel
                     if (!_engine.CurrentPlayerControlledCreatureHasAnyOptionsLeft())
                     {
                         _engine.SwitchToNextCreature();
+
                         _boardViewModel.UpdateCreatureViewModels(
                             _engine.Creatures,
                             _engine.CurrentCreature);
+
                         continue;
                     }
                 }
@@ -194,7 +196,12 @@ namespace DD.ViewModel
                 break;
             }
 
-            _logger.WriteLine(LogMessageCategory.Information, "Battle was decided");
+            if (_engine.BattleDecided)
+            {
+                _logger.WriteLine(LogMessageCategory.Information, "Battle was decided");
+            }
+
+            _logger.WriteLine(LogMessageCategory.Information, "(Proced method exiting - initiative is now at the player)");
         }
 
         private async Task PassCurrentCreature()
