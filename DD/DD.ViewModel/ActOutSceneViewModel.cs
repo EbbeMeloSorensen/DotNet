@@ -7,6 +7,7 @@ using Craft.ViewModel.Utils;
 using DD.Domain;
 using DD.Application;
 using DD.Application.BattleEvents;
+using DD.Engine.Complex.BattleEvents;
 
 namespace DD.ViewModel
 {

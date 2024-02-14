@@ -1,20 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Craft.Algorithms;
+﻿using Craft.Algorithms;
 using Craft.DataStructures.Graph;
 using Craft.Logging;
 using Craft.Math;
 using Craft.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using DD.Domain;
-using DD.Application;
 using DD.Application.BattleEvents;
-using DD.Engine.Complex.BattleEvents;
 
-namespace DD.Engine.Complex
+namespace DD.Application
 {
-    public class ComplexEngine : IEngine
+    public class SimpleEngine : IEngine
     {
         private Dictionary<Creature, int> _creatureIdMap;
         private GraphAdjacencyList<Point2DVertex, EmptyEdge> _wallGraph;
@@ -22,8 +20,6 @@ namespace DD.Engine.Complex
         private Scene _scene;
         private HashSet<int> _obstacleIndexes;
         private Queue<Creature> _actingOrder;
-        private Queue<EvasionEvent> _evasionEvents;
-        private Creature _evadingCreature;
         private int[] _previous;
         private int _battleRoundCount;
         private bool _currentCreatureJustMoved;
@@ -118,10 +114,10 @@ namespace DD.Engine.Complex
 
         public bool NextEventOccursAutomatically
         {
-            get { return CurrentCreature.IsAutomatic || _evasionEvents.Count > 0; }
+            get { return CurrentCreature.IsAutomatic; }
         }
 
-        public ComplexEngine(
+        public SimpleEngine(
             ILogger logger)
         {
             SquareIndexForCurrentCreature = new ObservableObject<int?>();
@@ -134,68 +130,10 @@ namespace DD.Engine.Complex
             AutoRunning = new ObservableObject<bool>();
             Logger = logger;
             _actingOrder = new Queue<Creature>();
-            _evasionEvents = new Queue<EvasionEvent>();
         }
 
         public async Task<IBattleEvent> ExecuteNextEvent()
         {
-            if (_evasionEvents.Any())
-            {
-                var evasionEvent = _evasionEvents.Dequeue();
-
-                switch (evasionEvent)
-                {
-                    case InitiativeSwitch initiativeSwitch:
-                        Logger?.WriteLine(LogMessageCategory.Information, $"        Initiative goes to {Tag(initiativeSwitch.Creature)}");
-                        CurrentCreature = initiativeSwitch.Creature;
-                        SquareIndexForCurrentCreature.Object = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
-                        return new NoEvent();
-                    case Move move:
-                        {
-                            CurrentCreaturePath = move.Path;
-
-                            MoveCurrentCreature(CurrentCreaturePath.Last());
-
-                            if (!_evasionEvents.Any() && !CurrentCreature.IsAutomatic)
-                            {
-                                IdentifyOptionsForCurrentPlayerControlledCreature(true);
-                            }
-
-                            return new CreatureMove();
-                        }
-                    case OpportunityAttack opportunityAttack:
-                        {
-                            var attacker = opportunityAttack.Creature;
-
-                            AttackOpponent(
-                                attacker,
-                                _evadingCreature,
-                                new MeleeAttack("Opportunity attack", 5),
-                                false,
-                                out var evadingCreatureWasHit,
-                                out var evadingCreatureWasKilled);
-
-                            if (evadingCreatureWasKilled)
-                            {
-                                _evasionEvents.Clear();
-
-                                if (!OpponentsStillRemaining(attacker))
-                                {
-                                    SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object = null;
-                                    SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = null;
-                                    BattleDecided = true;
-                                }
-                            }
-
-                            TargetCreature = _evadingCreature;
-
-                            return new CreatureAttackMelee();
-                        }
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-
             MoveCreatureResult moveCreatureResult = null;
 
             // We peek the next attack rather than deque, because we might not use it in this round
@@ -209,8 +147,7 @@ namespace DD.Engine.Complex
                 CurrentCreature.Attacks.TryPeek(out attack);
 
                 if (attack == null ||
-                    attack is MeleeAttack ||
-                    attack is RangedAttack)
+                    attack is MeleeAttack)
                 {
                     break;
                 }
@@ -220,57 +157,30 @@ namespace DD.Engine.Complex
 
             if (attack != null)
             {
-                switch (attack)
+                var potentialTargetsOfMeleeAttack = IdentifyPotentialTargetsOfMeleeAttack().ToList();
+
+                if (potentialTargetsOfMeleeAttack.Any())
                 {
-                    case MeleeAttack meleeAttack:
-                        {
-                            var potentialTargetsOfMeleeAttack = IdentifyPotentialTargetsOfMeleeAttack().ToList();
+                    attack = CurrentCreature.Attacks.Dequeue();
+                    var targetCreature = potentialTargetsOfMeleeAttack.First();
 
-                            if (potentialTargetsOfMeleeAttack.Any())
-                            {
-                                attack = CurrentCreature.Attacks.Dequeue();
-                                var targetCreature = potentialTargetsOfMeleeAttack.First();
+                    AttackOpponent(
+                        CurrentCreature,
+                        targetCreature,
+                        attack,
+                        false,
+                        out var opponentWasHit,
+                        out var opponentWasKilled);
 
-                                AttackOpponent(
-                                    CurrentCreature,
-                                    targetCreature,
-                                    attack,
-                                    false,
-                                    out var opponentWasHit,
-                                    out var opponentWasKilled);
+                    if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
+                    {
+                        BattleDecided = true;
+                    }
 
-                                if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
-                                {
-                                    BattleDecided = true;
-                                }
+                    TargetCreature = targetCreature;
+                    _currentCreatureJustMoved = false;
 
-                                TargetCreature = targetCreature;
-                                _currentCreatureJustMoved = false;
-
-                                return new CreatureAttackMelee();
-                            }
-
-                            break;
-                        }
-                    case RangedAttack rangedAttack:
-                        {
-                            var range = rangedAttack.Range;
-
-                            if (_currentCreatureJustMoved)
-                            {
-                                return ExecuteRangedAttackOrPass(range);
-                            }
-
-                            // Determine if the creature can move to a more suitable position before attacking
-                            moveCreatureResult = await DetermineDestinationOfCurrentCreatureWithRangedAttack(range);
-
-                            if (!moveCreatureResult.IndexOfDestinationSquare.HasValue)
-                            {
-                                return ExecuteRangedAttackOrPass(range);
-                            }
-
-                            break;
-                        }
+                    return new CreatureAttackMelee();
                 }
             }
             else
@@ -325,17 +235,6 @@ namespace DD.Engine.Complex
                 //    skal enginen se, om der ligger noget på "kø"...
 
                 var path = _previous.DeterminePath(squareIndex);
-                var evadedCreatures = IdentifyEvadedOpponents(path);
-
-                if (evadedCreatures.Any())
-                {
-                    // Player controlled creature moves in a way that provokes a number of opportunity attacks
-                    PopulateEvasionEventQueue(path, evadedCreatures);
-                    _evadingCreature = CurrentCreature;
-                    Logger?.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
-
-                    return new NoEvent();
-                }
 
                 // Player controlled creature moves ordinarily, without provoking an opportunity attack
                 MoveCurrentCreature(squareIndex);
@@ -375,53 +274,6 @@ namespace DD.Engine.Complex
                 TargetCreature = opponent;
 
                 return new CreatureAttackMelee();
-            }
-
-            if (SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object != null &&
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object.Contains(squareIndex))
-            {
-                // Player decides to perform a ranged attack with current creature
-                var attack = CurrentCreature.Attacks.Dequeue();
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = null;
-
-                var opponent = Creatures.Single(c => c.IndexOfOccupiedSquare(Scene.Columns) == squareIndex);
-
-                // We need to communicate this to the stake holders for animation of a ranged attack
-                TargetCreature = opponent;
-
-                // If the current creature stands next to an opponent, it gets disadvantage
-                var opponents = Creatures
-                    .Where(c => c.IsHostile != CurrentCreature.IsHostile)
-                    .ToList();
-
-                var currentSquareIndex = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
-
-                ClosestOpponent(
-                    currentSquareIndex,
-                    opponents,
-                    out var distanceToClosestOpponent);
-
-                var disadvantage = distanceToClosestOpponent < 1.5;
-
-                AttackOpponent(
-                    CurrentCreature,
-                    opponent,
-                    attack,
-                    disadvantage,
-                    out var opponentWasHit,
-                    out var opponentWasKilled);
-
-                if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
-                {
-                    SquareIndexesCurrentCreatureCanMoveTo.Object = null;
-                    BattleDecided = true;
-                }
-                else
-                {
-                    IdentifyOptionsForCurrentPlayerControlledCreature(false);
-                }
-
-                return new CreatureAttackRanged();
             }
 
             return null;
@@ -551,9 +403,7 @@ namespace DD.Engine.Complex
                 SquareIndexesCurrentCreatureCanMoveTo.Object != null &&
                 SquareIndexesCurrentCreatureCanMoveTo.Object.Count > 0 ||
                 SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object != null &&
-                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object.Count > 0 ||
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object != null &&
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object.Count > 0;
+                SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object.Count > 0;
         }
 
         public bool CanStartBattle()
@@ -1241,79 +1091,12 @@ namespace DD.Engine.Complex
             }
 
             var path = _previous.DeterminePath(moveCreatureResult.IndexOfDestinationSquare.Value);
-            var evadedCreatures = IdentifyEvadedOpponents(path);
-
-            if (evadedCreatures.Any())
-            {
-                // The automatic creature moves in a way that provokes a number of opportunity attacks
-                PopulateEvasionEventQueue(path, evadedCreatures);
-                _evadingCreature = CurrentCreature;
-
-                Logger?.WriteLine(LogMessageCategory.Information, $"        {Tag(CurrentCreature)} evades");
-
-                return new NoEvent();
-            }
 
             MoveCurrentCreature(moveCreatureResult.IndexOfDestinationSquare.Value);
 
             CurrentCreaturePath = path;
 
             return new CreatureMove();
-        }
-
-        private IBattleEvent ExecuteRangedAttackOrPass(double range)
-        {
-            // Identify creatures that can be attacked from the square occupied by the current creature
-            var potentialTargetsOfRangedAttack =
-                IdentifyPotentialTargetsOfRangedAttack(range).ToList();
-
-            if (!potentialTargetsOfRangedAttack.Any()) return new CreaturePass();
-
-            var attack = CurrentCreature.Attacks.Dequeue();
-            var targetCreature = potentialTargetsOfRangedAttack.First();
-
-            AttackOpponent(
-                CurrentCreature,
-                targetCreature,
-                attack,
-                false,
-                out var opponentWasHit,
-                out var opponentWasKilled);
-
-            if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
-            {
-                BattleDecided = true;
-            }
-
-            TargetCreature = targetCreature;
-            _currentCreatureJustMoved = false;
-
-            return new CreatureAttackRanged();
-        }
-
-        private void PopulateEvasionEventQueue(
-            IReadOnlyCollection<int> path,
-            IReadOnlyList<Tuple<int, List<Creature>>> evadedCreatures)
-        {
-            for (var i = 0; i < evadedCreatures.Count; i++)
-            {
-                var index1 = evadedCreatures[i].Item1;
-                var index2 = i < evadedCreatures.Count - 1 ? evadedCreatures[i + 1].Item1 : path.Count - 1;
-
-                if (i == 0 && index1 > 0)
-                {
-                    _evasionEvents.Enqueue(new Move { Path = path.Take(index1 + 1).ToArray() });
-                }
-
-                evadedCreatures[i].Item2.ForEach(c =>
-                {
-                    _evasionEvents.Enqueue(new InitiativeSwitch { Creature = c });
-                    _evasionEvents.Enqueue(new OpportunityAttack { Creature = c });
-                });
-
-                _evasionEvents.Enqueue(new InitiativeSwitch { Creature = CurrentCreature });
-                _evasionEvents.Enqueue(new Move { Path = path.Skip(index1).Take(index2 - index1 + 1).ToArray() });
-            }
         }
     }
 }
