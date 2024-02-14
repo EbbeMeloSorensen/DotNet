@@ -6,6 +6,7 @@ using Craft.Utils;
 using Craft.ViewModel.Utils;
 using DD.Domain;
 using DD.Application;
+using DD.Application.BattleEvents;
 
 namespace DD.ViewModel
 {

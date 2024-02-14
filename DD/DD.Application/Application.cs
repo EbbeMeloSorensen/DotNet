@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
-using Craft.Utils;
+using DD.Application.BattleEvents;
 
 namespace DD.Application
 {

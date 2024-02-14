@@ -3,39 +3,10 @@ using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils;
 using DD.Domain;
+using DD.Application.BattleEvents;
 
 namespace DD.Application
 {
-    public interface IBattleEvent
-    {
-    }
-
-    // The NoEvent class is used by the engine to inform its host that even though the engine passes control to the host,
-    // the host should pass back control to the engine immediately by calling the main loop that e.g. includes ExecuteNextAction
-    public class NoEvent : IBattleEvent
-    {
-    }
-
-    public class CreaturePass : IBattleEvent
-    {
-    }
-
-    public class CreatureMove : IBattleEvent
-    {
-    }
-
-    public class CreatureAttack : IBattleEvent
-    {
-    }
-
-    public class CreatureAttackMelee : IBattleEvent
-    {
-    }
-
-    public class CreatureAttackRanged : IBattleEvent
-    {
-    }
-
     public class MoveCreatureResult
     {
         public int? IndexOfDestinationSquare { get; set; }

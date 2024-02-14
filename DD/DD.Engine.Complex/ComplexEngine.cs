@@ -9,6 +9,7 @@ using Craft.Math;
 using Craft.Utils;
 using DD.Domain;
 using DD.Application;
+using DD.Application.BattleEvents;
 
 namespace DD.Engine.Complex
 {

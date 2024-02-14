@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using DD.Application.BattleEvents;
 using Xunit;
 using FluentAssertions;
 using DD.Engine.Complex;
