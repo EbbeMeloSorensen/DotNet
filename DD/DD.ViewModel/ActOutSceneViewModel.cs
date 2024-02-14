@@ -150,7 +150,7 @@ namespace DD.ViewModel
 
                     switch (nextEvent)
                     {
-                        case CreatureAction.Pass:
+                        case CreaturePass:
                             _engine.SwitchToNextCreature();
                             _boardViewModel.UpdateCreatureViewModels(
                                 _engine.Creatures,
@@ -158,18 +158,18 @@ namespace DD.ViewModel
                             continue;
                         // Bemærk, at vi for de næste 3 ikke kalder continue men derimod break, dvs vi træder ud af løkken og dermed hele Proceed
                         // metoden. Den kaldes igen, når vi håndterer disse evenst: MoveCreatureAnimationCompleted, AttackAnimationCompleted
-                        case CreatureAction.Move:
+                        case CreatureMove:
                             _boardViewModel.MoveCurrentCreature(
                                 _engine.CurrentCreature,
                                 _engine.CurrentCreaturePath);
                             break;
-                        case CreatureAction.MeleeAttack:
+                        case CreatureAttackMelee:
                             _boardViewModel.AnimateAttack(
                                 _engine.CurrentCreature,
                                 _engine.TargetCreature,
                                 false);
                             break;
-                        case CreatureAction.RangedAttack:
+                        case CreatureAttackRanged:
                             _boardViewModel.AnimateAttack(
                                 _engine.CurrentCreature,
                                 _engine.TargetCreature,

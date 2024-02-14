@@ -30,7 +30,7 @@ namespace DD.Application.UnitTest
 
                 var nextEvent = await engine.ExecuteNextEvent();
 
-                if (nextEvent == CreatureAction.Pass)
+                if (nextEvent is CreaturePass)
                 {
                     engine.SwitchToNextCreature();
                 }
@@ -63,7 +63,7 @@ namespace DD.Application.UnitTest
 
                 var nextEvent = await engine.ExecuteNextEvent();
 
-                if (nextEvent == CreatureAction.Pass)
+                if (nextEvent is CreaturePass)
                 {
                     engine.SwitchToNextCreature();
                 }
@@ -98,7 +98,7 @@ namespace DD.Application.UnitTest
 
                 var nextEvent = await engine.ExecuteNextEvent();
 
-                if (nextEvent == CreatureAction.Pass)
+                if (nextEvent is CreaturePass)
                 {
                     engine.SwitchToNextCreature();
                 }

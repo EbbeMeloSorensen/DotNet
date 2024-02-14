@@ -87,7 +87,7 @@ namespace DD.Application
 
         bool NextEventOccursAutomatically { get; }
 
-        Task<CreatureAction> ExecuteNextEvent();
+        Task<IBattleEvent> ExecuteNextEvent();
 
         CreatureAction? PlayerSelectSquare(
             int squareIndex);

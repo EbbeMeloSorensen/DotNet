@@ -63,7 +63,7 @@ namespace DD.Application
 
                     var nextEvent = await Engine.ExecuteNextEvent();
 
-                    if (nextEvent == CreatureAction.Pass)
+                    if (nextEvent is CreaturePass)
                     {
                         Engine.SwitchToNextCreature();
                     }
