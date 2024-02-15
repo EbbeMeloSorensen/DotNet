@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
@@ -177,18 +178,22 @@ namespace DD.ViewModel
                                 _engine.TargetCreature,
                                 false);
                             break;
-                        default:
+                        case NoEvent:
                             _boardViewModel.UpdateCreatureViewModels(
                                 _engine.Creatures,
                                 _engine.CurrentCreature);
                             continue;
+                        default:
+                            throw new ArgumentException("unexpected battle event");
                     }
                 }
                 else
                 {
-                    _engine.AutoRunning.Object = false;
-
-                    if (!_engine.CurrentPlayerControlledCreatureHasAnyOptionsLeft())
+                    if (_engine.CurrentPlayerControlledCreatureHasAnyOptionsLeft())
+                    {
+                        _engine.AutoRunning.Object = false;
+                    }
+                    else
                     {
                         _engine.SwitchToNextCreature();
 
@@ -198,7 +203,7 @@ namespace DD.ViewModel
 
                         continue;
                     }
-                    
+
                     // Diagnostics
                     //_logger.WriteLine(LogMessageCategory.Information, "(Proceed method about to exit - Initiative will go to the player)");
                 }
