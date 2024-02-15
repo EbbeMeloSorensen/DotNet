@@ -189,20 +189,7 @@ namespace DD.ViewModel
                 }
                 else
                 {
-                    //if (_engine.CurrentPlayerControlledCreatureHasAnyOptionsLeft())
-                    //{
-                        _engine.AutoRunning.Object = false;
-                    //}
-                    //else
-                    //{
-                    //    _engine.SwitchToNextCreature();
-
-                    //    _boardViewModel.UpdateCreatureViewModels(
-                    //        _engine.Creatures,
-                    //        _engine.CurrentCreature);
-
-                    //    continue;
-                    //}
+                    _engine.AutoRunning.Object = false;
 
                     // Diagnostics
                     //_logger.WriteLine(LogMessageCategory.Information, "(Proceed method about to exit - Initiative will go to the player)");
