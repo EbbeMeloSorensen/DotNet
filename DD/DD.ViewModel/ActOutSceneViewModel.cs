@@ -77,6 +77,7 @@ namespace DD.ViewModel
                 switch (creatureAction)
                 {
                     case CreatureMove:
+                        _boardViewModel.CurrentCreatureIsHighlighted = false;
                         _boardViewModel.MoveCurrentCreature(
                             _engine.CurrentCreature,
                             _engine.CurrentCreaturePath);
@@ -112,6 +113,8 @@ namespace DD.ViewModel
 
             selectedScene.PropertyChanged += (s, e) =>
             {
+                _boardViewModel.CurrentCreatureIsHighlighted = false;
+
                 _engine.Scene = (s as ObservableObject<Scene>)?.Object;
 
                 _engine.InitializeCreatures();
@@ -149,6 +152,7 @@ namespace DD.ViewModel
                 if (_engine.NextEventOccursAutomatically)
                 {
                     _engine.AutoRunning.Object = true;
+                    _boardViewModel.CurrentCreatureIsHighlighted = false;
                     var nextEvent = await _engine.ExecuteNextEvent();
 
                     switch (nextEvent)
@@ -190,6 +194,7 @@ namespace DD.ViewModel
                 else
                 {
                     _engine.AutoRunning.Object = false;
+                    _boardViewModel.CurrentCreatureIsHighlighted = true;
 
                     // Diagnostics
                     //_logger.WriteLine(LogMessageCategory.Information, "(Proceed method about to exit - Initiative will go to the player)");

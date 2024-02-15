@@ -1,2 +1,3 @@
 Todo:
-* Lav et boardview
+* Prøv at highlighte de felter, man kan ramme eller gå hen på med pixel colors i stedet for de der collections, du roder med
+* Lav et boardview med hex felter

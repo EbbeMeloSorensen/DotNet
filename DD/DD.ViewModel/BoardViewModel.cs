@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.Math;
+using Craft.ViewModels.Common;
 using Craft.ViewModels.Geometry2D.Scrolling;
 using DD.Domain;
 using DD.Application;
@@ -34,6 +35,7 @@ namespace DD.ViewModel
         private double _squareForCurrentCreatureWidth;
         private ObservableCollection<ObstacleViewModel> _obstacleViewModels;
         private ObservableCollection<CreatureViewModel> _creatureViewModels;
+        private List<PixelViewModel> _pixelViewModels;
         private ObservableCollection<HighlightedSquareViewModel> _highlightedSquareViewModelsForMove;
         private ObservableCollection<HighlightedSquareViewModel> _highlightedSquareViewModelsForMeleeAttack;
         private ObservableCollection<HighlightedSquareViewModel> _highlightedSquareViewModelsForRangedAttack;
@@ -57,6 +59,26 @@ namespace DD.ViewModel
         public WeaponViewModel WeaponViewModel { get; }
 
         public static double SquareLength { get; set; }
+
+        public int Rows
+        {
+            get => _rows;
+            set
+            {
+                _rows = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int Columns
+        {
+            get => _columns;
+            set
+            {
+                _columns = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public bool CurrentCreatureIsHighlighted
         {
@@ -120,6 +142,16 @@ namespace DD.ViewModel
             set
             {
                 _creatureViewModels = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public List<PixelViewModel> PixelViewModels
+        {
+            get { return _pixelViewModels; }
+            set
+            {
+                _pixelViewModels = value;
                 RaisePropertyChanged();
             }
         }
@@ -206,7 +238,7 @@ namespace DD.ViewModel
 
             stringBuilder.Append(path
                 .Skip(1)
-                .Select(i => new { X = i.ConvertToXCoordinate(_columns), Y = i.ConvertToYCoordinate(_columns) })
+                .Select(i => new { X = i.ConvertToXCoordinate(Columns), Y = i.ConvertToYCoordinate(Columns) })
                 .Select(p => $"L{(p.X - _currentCreaturePositionX) * SquareLength},{(p.Y - _currentCreaturePositionY) * SquareLength}")
                 .Aggregate((c, n) => $"{c}{n}"));
 
@@ -335,7 +367,7 @@ namespace DD.ViewModel
             // Todo: Determine the index of the square that the user clicked
             var indexX = (int) System.Math.Floor(MouseWorldPosition.X / SquareLength);
             var indexY = (int) System.Math.Floor(MouseWorldPosition.Y / SquareLength);
-            var squareIndex = indexY * _columns + indexX;
+            var squareIndex = indexY * Columns + indexX;
 
             OnPlayerClickedSquare(squareIndex);
         }
@@ -413,8 +445,8 @@ namespace DD.ViewModel
 
                 if (scene == null)
                 {
-                    _rows = 0;
-                    _columns = 0;
+                    Rows = 0;
+                    Columns = 0;
                     ImageWidth = 0;
                     ImageHeight = 0;
                     ScrollableOffset = new PointD(0, 0);
@@ -422,10 +454,14 @@ namespace DD.ViewModel
                 }
                 else
                 {
-                    _rows = scene.Rows;
-                    _columns = scene.Columns;
-                    ImageWidth = _columns * SquareLength;
-                    ImageHeight = _rows * SquareLength;
+                    Rows = scene.Rows;
+                    Columns = scene.Columns;
+                    ImageWidth = Columns * SquareLength;
+                    ImageHeight = Rows * SquareLength;
+
+                    PixelViewModels = Enumerable.Range(0, Rows * Columns)
+                        .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))
+                        .ToList();
                 }
 
                 if (scene == null || scene.Obstacles.Count == 0)
@@ -445,8 +481,8 @@ namespace DD.ViewModel
 
                 if (squareIndex.HasValue)
                 {
-                    var positionX = squareIndex.Value.ConvertToXCoordinate(_columns);
-                    var positionY = squareIndex.Value.ConvertToYCoordinate(_columns);
+                    var positionX = squareIndex.Value.ConvertToXCoordinate(Columns);
+                    var positionY = squareIndex.Value.ConvertToYCoordinate(Columns);
                     SquareForCurrentCreatureLeft = positionX * SquareLength;
                     SquareForCurrentCreatureTop = positionY * SquareLength;
                     SquareForCurrentCreatureWidth = SquareLength - 3;
@@ -460,7 +496,7 @@ namespace DD.ViewModel
                 if (squareIndexes != null)
                 {
                     HighligtedSquareViewModelsForMove = new ObservableCollection<HighlightedSquareViewModel>(
-                        squareIndexes.Select(i => new HighlightedSquareViewModel(i.Key % _columns, i.Key / _columns)));
+                        squareIndexes.Select(i => new HighlightedSquareViewModel(i.Key % Columns, i.Key / Columns)));
                 }
                 else
                 {
@@ -475,7 +511,7 @@ namespace DD.ViewModel
                 if (squareIndexes != null)
                 {
                     HighligtedSquareViewModelsForMeleeAttack = new ObservableCollection<HighlightedSquareViewModel>(
-                        squareIndexes.Select(i => new HighlightedSquareViewModel(i % _columns, i / _columns)));
+                        squareIndexes.Select(i => new HighlightedSquareViewModel(i % Columns, i / Columns)));
                 }
                 else
                 {
@@ -490,7 +526,7 @@ namespace DD.ViewModel
                 if (squareIndexes != null)
                 {
                     HighligtedSquareViewModelsForRangedAttack = new ObservableCollection<HighlightedSquareViewModel>(
-                        squareIndexes.Select(i => new HighlightedSquareViewModel(i % _columns, i / _columns)));
+                        squareIndexes.Select(i => new HighlightedSquareViewModel(i % Columns, i / Columns)));
                 }
                 else
                 {
