@@ -450,11 +450,6 @@ namespace DD.ViewModel
                     SquareForCurrentCreatureLeft = positionX * SquareLength;
                     SquareForCurrentCreatureTop = positionY * SquareLength;
                     SquareForCurrentCreatureWidth = SquareLength - 3;
-                    CurrentCreatureIsHighlighted = true;
-                }
-                else
-                {
-                    CurrentCreatureIsHighlighted = false;
                 }
             };
 
