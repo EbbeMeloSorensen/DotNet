@@ -57,7 +57,7 @@
 
             <local:ActOutSceneView Grid.Row="1" Grid.Column="2" DataContext="{Binding ActOutSceneViewModel}"/>
 
-            <Expander Grid.Row="2" Grid.ColumnSpan="999" Header="Log" ExpandDirection="Up" IsExpanded="True">
+            <Expander Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="999" Header="Log" ExpandDirection="Up" IsExpanded="True">
                 <logging:LogView Height="200" DataContext="{Binding LogViewModel}"/>
             </Expander>
         </Grid>

@@ -1,10 +1,8 @@
-﻿using System.Windows;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
-using DD.Application;
 using DD.Domain;
 using DD.Engine.Complex;
 
@@ -21,7 +19,6 @@ namespace DD.ViewModel
         public SceneCollectionViewModel SceneCollectionViewModel { get; }
         public BoardViewModel BoardViewModel { get; }
         public ActOutSceneViewModel ActOutSceneViewModel { get; }
-        public SceneEditorViewModel SceneEditorViewModel { get; }
         public LogViewModel LogViewModel { get; }
 
         public RelayCommand WindowLoadedCommand
@@ -63,9 +60,6 @@ namespace DD.ViewModel
                 projectileDiameter,
                 selectedScene);
 
-            SceneEditorViewModel = new SceneEditorViewModel(
-                BoardViewModel);
-
             ActOutSceneViewModel = new ActOutSceneViewModel(
                 _application.Engine,
                 BoardViewModel, 
@@ -76,11 +70,6 @@ namespace DD.ViewModel
         private void WindowLoaded()
         {
             //CreatureTypeCollectionViewModel.PopulateListCommand.Execute(null);
-        }
-
-        private bool CanCreateCreatureType(object owner)
-        {
-            return true;
         }
     }
 }
