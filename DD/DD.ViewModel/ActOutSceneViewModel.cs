@@ -189,20 +189,20 @@ namespace DD.ViewModel
                 }
                 else
                 {
-                    if (_engine.CurrentPlayerControlledCreatureHasAnyOptionsLeft())
-                    {
+                    //if (_engine.CurrentPlayerControlledCreatureHasAnyOptionsLeft())
+                    //{
                         _engine.AutoRunning.Object = false;
-                    }
-                    else
-                    {
-                        _engine.SwitchToNextCreature();
+                    //}
+                    //else
+                    //{
+                    //    _engine.SwitchToNextCreature();
 
-                        _boardViewModel.UpdateCreatureViewModels(
-                            _engine.Creatures,
-                            _engine.CurrentCreature);
+                    //    _boardViewModel.UpdateCreatureViewModels(
+                    //        _engine.Creatures,
+                    //        _engine.CurrentCreature);
 
-                        continue;
-                    }
+                    //    continue;
+                    //}
 
                     // Diagnostics
                     //_logger.WriteLine(LogMessageCategory.Information, "(Proceed method about to exit - Initiative will go to the player)");

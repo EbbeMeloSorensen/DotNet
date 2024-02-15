@@ -118,7 +118,9 @@ namespace DD.Engine.Complex
 
         public bool NextEventOccursAutomatically
         {
-            get { return CurrentCreature.IsAutomatic || _evasionEvents.Count > 0; }
+            get { return CurrentCreature.IsAutomatic || 
+                         !CurrentPlayerControlledCreatureHasAnyOptionsLeft() ||
+                         _evasionEvents.Count > 0; }
         }
 
         public ComplexEngine(
@@ -199,6 +201,11 @@ namespace DD.Engine.Complex
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+            }
+
+            if (!CurrentCreature.IsAutomatic && !CurrentPlayerControlledCreatureHasAnyOptionsLeft())
+            {
+                return new CreaturePass();
             }
 
             MoveCreatureResult moveCreatureResult = null;
