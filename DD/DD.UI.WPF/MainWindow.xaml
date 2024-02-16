@@ -53,8 +53,8 @@
             <local:SceneCollectionView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
                                        DataContext="{Binding SceneCollectionViewModel}"/>
 
-            <local:BoardView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                             DataContext="{Binding BoardViewModel}"/>
+            <local:BoardViewSquares Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                                    DataContext="{Binding BoardViewModel}"/>
 
             <!--<local:BoardViewHexagons Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
                              DataContext="{Binding BoardViewModel}"/>-->

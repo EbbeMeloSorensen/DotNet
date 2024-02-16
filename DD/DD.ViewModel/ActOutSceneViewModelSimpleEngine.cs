@@ -106,6 +106,7 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
 
         if (_engine.BattleDecided)
         {
+            _boardViewModel.ClearPlayerOptions();
             _logger.WriteLine(LogMessageCategory.Information, "Battle was decided");
         }
         else

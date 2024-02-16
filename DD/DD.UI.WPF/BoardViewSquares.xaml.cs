@@ -12,7 +12,7 @@ namespace DD.UI.WPF
     /// <summary>
     /// Interaction logic for BoardView.xaml
     /// </summary>
-    public partial class BoardView : UserControl
+    public partial class BoardViewSquares : UserControl
     {
         private PointD _mouseDownViewport;
         private PointD _initialScrollOffset;
@@ -23,7 +23,7 @@ namespace DD.UI.WPF
             get { return DataContext as BoardViewModel; }
         }
 
-        public BoardView()
+        public BoardViewSquares()
         {
             InitializeComponent();
         }
