@@ -3,8 +3,11 @@ using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
+using DD.Application;
 using DD.Domain;
 using DD.Engine.Complex;
+
+//using DD.Engine.Complex;
 
 namespace DD.ViewModel
 {
@@ -18,7 +21,7 @@ namespace DD.ViewModel
 
         public SceneCollectionViewModel SceneCollectionViewModel { get; }
         public BoardViewModel BoardViewModel { get; }
-        public ActOutSceneViewModel ActOutSceneViewModel { get; }
+        public ActOutSceneViewModelBase ActOutSceneViewModel { get; }
         public LogViewModel LogViewModel { get; }
 
         public RelayCommand WindowLoadedCommand
@@ -60,11 +63,23 @@ namespace DD.ViewModel
                 projectileDiameter,
                 selectedScene);
 
-            ActOutSceneViewModel = new ActOutSceneViewModel(
-                _application.Engine,
-                BoardViewModel, 
-                selectedScene,
-                _application.Logger);
+            if (engine is ComplexEngine)
+            {
+                ActOutSceneViewModel = new ActOutSceneViewModelComplexEngine(
+                    _application.Engine,
+                    BoardViewModel,
+                    selectedScene,
+                    _application.Logger);
+            }
+            else
+            {
+                ActOutSceneViewModel = new ActOutSceneViewModelSimpleEngine(
+                    _application.Engine,
+                    BoardViewModel,
+                    selectedScene,
+                    _application.Logger);
+            }
+
         }
 
         private void WindowLoaded()

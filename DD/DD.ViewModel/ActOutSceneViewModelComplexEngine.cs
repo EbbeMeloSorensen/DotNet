@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Utils;
@@ -12,7 +11,7 @@ using DD.Engine.Complex.BattleEvents;
 
 namespace DD.ViewModel
 {
-    public class ActOutSceneViewModel : ViewModelBase
+    public class ActOutSceneViewModelComplexEngine : ActOutSceneViewModelBase
     {
         private readonly ILogger _logger;
         private readonly IEngine _engine;
@@ -50,7 +49,7 @@ namespace DD.ViewModel
                 CanAutomateCurrentCreature)); }
         }
 
-        public ActOutSceneViewModel(
+        public ActOutSceneViewModelComplexEngine(
             IEngine engine,
             BoardViewModel boardViewModel,
             ObservableObject<Scene> selectedScene,
