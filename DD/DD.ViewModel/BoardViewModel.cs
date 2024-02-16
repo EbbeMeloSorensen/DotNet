@@ -227,6 +227,59 @@ namespace DD.ViewModel
                 new RelayCommand(AttackAnimationCompletedHandler)); }
         }
 
+        public void HighlightPlayerOptions(
+            int squareIndexOfCurrentCreature,
+            HashSet<int> squareIndexesCurrentCreatureCanMoveTo,
+            HashSet<int> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
+            HashSet<int> squareIndexesCurrentCreatureCanAttackWithRangedWeapon)
+        {
+            PixelViewModels = Enumerable.Range(0, Rows * Columns)
+                .Select(index => GeneratePixel(
+                    index,
+                    squareIndexOfCurrentCreature,
+                    squareIndexesCurrentCreatureCanMoveTo,
+                    squareIndexesCurrentCreatureCanAttackWithMeleeWeapon, 
+                    squareIndexesCurrentCreatureCanAttackWithRangedWeapon))
+                .ToList();
+        }
+
+        public void ClearPlayerOptions()
+        {
+            PixelViewModels = Enumerable.Range(0, Rows * Columns)
+                .Select(index => new PixelViewModel(index, new Pixel(200, 200, 200, 0)))
+                .ToList();
+        }
+
+        private PixelViewModel GeneratePixel(
+            int index,
+            int squareIndexOfCurrentCreature,
+            IReadOnlySet<int> squareIndexesCurrentCreatureCanMoveTo,
+            IReadOnlySet<int> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
+            IReadOnlySet<int> squareIndexesCurrentCreatureCanAttackWithRangedWeapon)
+        {
+            if (index == squareIndexOfCurrentCreature)
+            {
+                return new PixelViewModel(index, new Pixel(200, 200, 100, 0));
+            }
+
+            if (squareIndexesCurrentCreatureCanMoveTo.Contains(index))
+            {
+                return new PixelViewModel(index, new Pixel(220, 220, 220, 0));
+            }
+
+            if (squareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Contains(index))
+            {
+                return new PixelViewModel(index, new Pixel(200, 100, 100, 0));
+            }
+
+            if (squareIndexesCurrentCreatureCanAttackWithRangedWeapon.Contains(index))
+            {
+                return new PixelViewModel(index, new Pixel(200, 100, 150, 0));
+            }
+
+            return new PixelViewModel(index, new Pixel(200, 200, 200, 0));
+        }
+
         public void MoveCurrentCreature(
             Creature currentCreature,
             int[] path)

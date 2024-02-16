@@ -1,3 +1,4 @@
 Todo:
 * Prøv at highlighte de felter, man kan ramme eller gå hen på med pixel colors i stedet for de der collections, du roder med
+* Prøv at lave et alternativt BoardView, der viser banen som et hex map
 * Lav et boardview med hex felter

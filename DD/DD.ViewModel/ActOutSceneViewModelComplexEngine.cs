@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils;
@@ -30,6 +31,8 @@ public class ActOutSceneViewModelComplexEngine : ActOutSceneViewModelBase
                 // Occurs e.g. when the user clicks a non-highlighted square that doesn't trigger anything
                 return;
             }
+
+            _boardViewModel.ClearPlayerOptions();
 
             switch (creatureAction)
             {
@@ -117,6 +120,12 @@ public class ActOutSceneViewModelComplexEngine : ActOutSceneViewModelBase
             {
                 _engine.AutoRunning.Object = false;
                 _boardViewModel.CurrentCreatureIsHighlighted = true;
+
+                _boardViewModel.HighlightPlayerOptions(
+                    _engine.SquareIndexForCurrentCreature.Object.Value,
+                    _engine.SquareIndexesCurrentCreatureCanMoveTo.Object.Keys.ToHashSet(),
+                    _engine.SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object,
+                    _engine.SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object);
 
                 // Diagnostics
                 //_logger.WriteLine(LogMessageCategory.Information, "(Proceed method about to exit - Initiative will go to the player)");

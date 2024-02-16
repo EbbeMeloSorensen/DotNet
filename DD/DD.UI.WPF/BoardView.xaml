@@ -34,7 +34,7 @@
                 MouseLeftButtonUp="Canvas_OnMouseLeftButtonUp"
                 MouseMove="Canvas_OnMouseMove">
 
-            <!--<ItemsControl Width="{Binding ImageWidth}"
+            <ItemsControl Width="{Binding ImageWidth}"
                           Height="{Binding ImageHeight}"
                           ItemsSource="{Binding PixelViewModels}">
                 <ItemsControl.ItemsPanel>
@@ -51,7 +51,7 @@
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-            </ItemsControl>-->
+            </ItemsControl>
 
             <ItemsControl ItemsSource="{Binding ObstacleViewModels}">
                 <ItemsControl.ItemsPanel>
@@ -67,7 +67,6 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="viewModel:ObstacleViewModel">
-                        <!--<Rectangle Fill="DarkSlateGray" Stroke="Black" Width="{Binding Diameter}" Height="{Binding Diameter}"/>-->
                         <Image Height="{Binding Diameter}" Width="{Binding Diameter}" 
                             Source="{Binding Path=ImagePath,
                             UpdateSourceTrigger=PropertyChanged, 
@@ -75,80 +74,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-
-            <ItemsControl ItemsSource="{Binding HighligtedSquareViewModelsForMove}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
-                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="viewModel:HighlightedSquareViewModel">
-                        <Rectangle Stroke="LightGray" 
-                                   StrokeThickness="1"
-                                   Width="{Binding Diameter}" 
-                                   Height="{Binding Diameter}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <ItemsControl ItemsSource="{Binding HighligtedSquareViewModelsForMeleeAttack}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
-                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="viewModel:HighlightedSquareViewModel">
-                        <Rectangle Fill="LightSalmon"
-                                   Stroke="Red"
-                                   StrokeThickness="1"
-                                   Width="{Binding Diameter}" 
-                                   Height="{Binding Diameter}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <ItemsControl ItemsSource="{Binding HighligtedSquareViewModelsForRangedAttack}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
-                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="viewModel:HighlightedSquareViewModel">
-                        <Rectangle Fill="MediumPurple"
-                                   Stroke="Purple"
-                                   StrokeThickness="1"
-                                   Width="{Binding Diameter}" 
-                                   Height="{Binding Diameter}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <Rectangle Canvas.Left="{Binding SquareForCurrentCreatureLeft}" Canvas.Top="{Binding SquareForCurrentCreatureTop}" 
-                       Width="{Binding SquareForCurrentCreatureWidth}" Height="{Binding SquareForCurrentCreatureWidth}" 
-                       Fill="PaleGoldenrod" 
-                       Stroke="DarkOrange" StrokeThickness="1"
-                       Visibility="{Binding CurrentCreatureIsHighlighted, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             
             <ItemsControl ItemsSource="{Binding CreatureViewModels}">
                 <ItemsControl.ItemsPanel>
@@ -215,16 +140,6 @@
                        Source="{Binding Path=WeaponImagePath,
                             UpdateSourceTrigger=PropertyChanged, 
                             Converter={StaticResource ImagePathConverter}}">
-                    <!--<Image.Triggers>
-                        <EventTrigger RoutedEvent="Image.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="RotateTransform" Storyboard.TargetProperty="Angle"
-                                                     From="0.0" To="360.0" Duration="0:0:5" AutoReverse="True" RepeatBehavior="Forever"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Image.Triggers>-->
                     <Image.RenderTransform>
                         <RotateTransform x:Name="RotateTransform" CenterX="37.5" CenterY="37.5" Angle="{Binding WeaponViewModel.RotationAngle}"/>
                     </Image.RenderTransform>
