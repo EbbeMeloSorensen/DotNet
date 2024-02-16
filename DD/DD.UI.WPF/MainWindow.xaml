@@ -56,6 +56,9 @@
             <local:BoardView Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
                              DataContext="{Binding BoardViewModel}"/>
 
+            <!--<local:BoardViewHexagons Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                             DataContext="{Binding BoardViewModel}"/>-->
+
             <local:ActOutSceneView Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
                                    DataContext="{Binding ActOutSceneViewModel}"/>
 
