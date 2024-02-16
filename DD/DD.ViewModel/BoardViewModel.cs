@@ -53,6 +53,7 @@ namespace DD.ViewModel
 
         public static double SquareLength { get; set; }
 
+        // Used by the view to draw the grid
         public int Rows
         {
             get => _rows;
@@ -63,6 +64,7 @@ namespace DD.ViewModel
             }
         }
 
+        // Used by the view to draw the grid
         public int Columns
         {
             get => _columns;
@@ -277,6 +279,7 @@ namespace DD.ViewModel
             AttackAnimationRunning = true;
         }
 
+        // Used by the host (ActOutSceneViewModel) for triggering an animation
         public bool MoveCreatureAnimationRunning
         {
             get { return _moveCreatureAnimationRunning; }
@@ -287,6 +290,7 @@ namespace DD.ViewModel
             }
         }
 
+        // Used by the host (ActOutSceneViewModel) for triggering an animation
         public bool AttackAnimationRunning
         {
             get { return _attackAnimationRunning; }
@@ -297,6 +301,7 @@ namespace DD.ViewModel
             }
         }
 
+        // Used by a storyboard animation of the view
         public double TranslationX
         {
             get { return _translationX; }
@@ -307,6 +312,7 @@ namespace DD.ViewModel
             }
         }
 
+        // Used by a storyboard animation of the view
         public double TranslationY
         {
             get { return _translationY; }
@@ -317,6 +323,7 @@ namespace DD.ViewModel
             }
         }
 
+        // Used by a storyboard animation of the view
         public string CreaturePath
         {
             get { return _creaturePath; }
@@ -327,6 +334,7 @@ namespace DD.ViewModel
             }
         }
 
+        // Used by a storyboard animation of the view
         public string DurationForMoveCreatureAnimation
         {
             get { return _durationForMoveCreatureAnimation; }
@@ -337,6 +345,7 @@ namespace DD.ViewModel
             }
         }
 
+        // Used by a storyboard animation of the view
         public string DurationForAttackAnimation
         {
             get { return _durationForAttackAnimation; }
@@ -359,15 +368,13 @@ namespace DD.ViewModel
 
         public event EventHandler<PlayerClickedSquareEventArgs> PlayerClickedSquare;
 
+        // Used to inform the host (ActOutSceneViewModel) that an animation is completed
         public event EventHandler MoveCreatureAnimationCompleted;
 
+        // Used to inform the host (ActOutSceneViewModel) that an animation is completed
         public event EventHandler AttackAnimationCompleted;
 
-        /// <summary>
-        /// Update the board with the remaining creatures and their current condition
-        /// </summary>
-        /// <param name="creatures"></param>
-        /// <param name="currentCreature"></param>
+        // Called by the  Update the board with the remaining creatures and their current condition
         public void UpdateCreatureViewModels(
             IEnumerable<Creature> creatures,
             Creature currentCreature)
@@ -387,21 +394,7 @@ namespace DD.ViewModel
             UpdateCreatureViewModels();
         }
 
-        private void UpdateCreatureViewModels()
-        {
-            if (_creatures == null)
-            {
-                CreatureViewModels?.Clear();
-            }
-            else
-            {
-                CreatureViewModels = new ObservableCollection<CreatureViewModel>(
-                    _creatures.Select(c => new CreatureViewModel(c, _creatureDiameter)));
-            }
-
-            CurrentCreatureViewModel.Creature = _currentCreature;
-        }
-
+        // Constructor
         public BoardViewModel(
             IEngine engine,
             double squareLength,
@@ -475,6 +468,7 @@ namespace DD.ViewModel
             };
         }
 
+        // Called by the view, when a storyboard animation is complete
         public void CompleteMoveCreatureAnimation()
         {
             MoveCreatureAnimationRunning = false;
@@ -483,6 +477,7 @@ namespace DD.ViewModel
             OnMoveAnimationCompleted();
         }
 
+        // Called by the view, when a storyboard animation is complete
         public void CompleteAttackAnimation()
         {
             AttackAnimationRunning = false;
@@ -491,6 +486,22 @@ namespace DD.ViewModel
             OnAttackAnimationCompleted();
         }
 
+        private void UpdateCreatureViewModels()
+        {
+            if (_creatures == null)
+            {
+                CreatureViewModels?.Clear();
+            }
+            else
+            {
+                CreatureViewModels = new ObservableCollection<CreatureViewModel>(
+                    _creatures.Select(c => new CreatureViewModel(c, _creatureDiameter)));
+            }
+
+            CurrentCreatureViewModel.Creature = _currentCreature;
+        }
+
+        // Used to inform the host (ActOutSceneViewModel) that the user clicked the board
         private void OnPlayerClickedSquare(int squareIndex)
         {
             // Make a temporary copy of the event to avoid possibility of
@@ -505,6 +516,7 @@ namespace DD.ViewModel
             }
         }
 
+        // Used to inform the host (ActOutSceneViewModel) that an animation is completed
         private void OnMoveAnimationCompleted()
         {
             // Make a temporary copy of the event to avoid possibility of
@@ -519,6 +531,7 @@ namespace DD.ViewModel
             }
         }
 
+        // Used to inform the host (ActOutSceneViewModel) that an animation is completed
         private void OnAttackAnimationCompleted()
         {
             // Make a temporary copy of the event to avoid possibility of
