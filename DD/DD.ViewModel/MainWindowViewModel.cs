@@ -7,8 +7,6 @@ using DD.Application;
 using DD.Domain;
 using DD.Engine.Complex;
 
-//using DD.Engine.Complex;
-
 namespace DD.ViewModel
 {
     public class MainWindowViewModel
