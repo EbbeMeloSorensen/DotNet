@@ -28,16 +28,12 @@ namespace DD.ViewModel
 
         private int _rows;
         private int _columns;
-        private bool _currentCreatureIsHighlighted;
         private double _squareForCurrentCreatureLeft;
         private double _squareForCurrentCreatureTop;
         private double _squareForCurrentCreatureWidth;
         private List<PixelViewModel> _pixelViewModels;
         private ObservableCollection<ObstacleViewModel> _obstacleViewModels;
         private ObservableCollection<CreatureViewModel> _creatureViewModels;
-        private ObservableCollection<HighlightedSquareViewModel> _highlightedSquareViewModelsForMove;
-        private ObservableCollection<HighlightedSquareViewModel> _highlightedSquareViewModelsForMeleeAttack;
-        private ObservableCollection<HighlightedSquareViewModel> _highlightedSquareViewModelsForRangedAttack;
         private double _currentCreaturePositionX;
         private double _currentCreaturePositionY;
         private double _translationX;
@@ -143,45 +139,6 @@ namespace DD.ViewModel
             }
         }
 
-        public ObservableCollection<HighlightedSquareViewModel> HighligtedSquareViewModelsForMove
-        {
-            get
-            {
-                return _highlightedSquareViewModelsForMove;
-            }
-            set
-            {
-                _highlightedSquareViewModelsForMove = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public ObservableCollection<HighlightedSquareViewModel> HighligtedSquareViewModelsForMeleeAttack
-        {
-            get
-            {
-                return _highlightedSquareViewModelsForMeleeAttack;
-            }
-            set
-            {
-                _highlightedSquareViewModelsForMeleeAttack = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public ObservableCollection<HighlightedSquareViewModel> HighligtedSquareViewModelsForRangedAttack
-        {
-            get
-            {
-                return _highlightedSquareViewModelsForRangedAttack;
-            }
-            set
-            {
-                _highlightedSquareViewModelsForRangedAttack = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public string WeaponImagePath
         {
             get { return _weaponImagePath; }
@@ -201,18 +158,6 @@ namespace DD.ViewModel
                 RaisePropertyChanged();
             }
         }
-
-        //public RelayCommand MoveCreatureAnimationCompletedCommand
-        //{
-        //    get { return _moveCreatureAnimationCompletedCommand ?? (_moveCreatureAnimationCompletedCommand = 
-        //        new RelayCommand(MoveCreatureAnimationCompletedHandler)); }
-        //}
-
-        //public RelayCommand AttackAnimationCompletedCommand
-        //{
-        //    get { return _attackAnimationCompletedCommand ?? (_attackAnimationCompletedCommand = 
-        //        new RelayCommand(AttackAnimationCompletedHandler)); }
-        //}
 
         public void HighlightPlayerOptions(
             int squareIndexOfCurrentCreature,
@@ -528,51 +473,22 @@ namespace DD.ViewModel
                     SquareForCurrentCreatureWidth = SquareLength - 3;
                 }
             };
+        }
 
-            engine.SquareIndexesCurrentCreatureCanMoveTo.PropertyChanged += (s, e) =>
-            {
-                var squareIndexes = (s as ObservableObject<Dictionary<int, double>>)?.Object;
+        public void CompleteMoveCreatureAnimation()
+        {
+            MoveCreatureAnimationRunning = false;
 
-                if (squareIndexes != null)
-                {
-                    HighligtedSquareViewModelsForMove = new ObservableCollection<HighlightedSquareViewModel>(
-                        squareIndexes.Select(i => new HighlightedSquareViewModel(i.Key % Columns, i.Key / Columns)));
-                }
-                else
-                {
-                    HighligtedSquareViewModelsForMove = new ObservableCollection<HighlightedSquareViewModel>();
-                }
-            };
+            UpdateCreatureViewModels();
+            OnMoveAnimationCompleted();
+        }
 
-            engine.SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.PropertyChanged += (s, e) =>
-            {
-                var squareIndexes = (s as ObservableObject<HashSet<int>>)?.Object;
+        public void CompleteAttackAnimation()
+        {
+            AttackAnimationRunning = false;
+            WeaponViewModel.IsVisible = false;
 
-                if (squareIndexes != null)
-                {
-                    HighligtedSquareViewModelsForMeleeAttack = new ObservableCollection<HighlightedSquareViewModel>(
-                        squareIndexes.Select(i => new HighlightedSquareViewModel(i % Columns, i / Columns)));
-                }
-                else
-                {
-                    HighligtedSquareViewModelsForMeleeAttack = new ObservableCollection<HighlightedSquareViewModel>();
-                }
-            };
-
-            engine.SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.PropertyChanged += (s, e) =>
-            {
-                var squareIndexes = (s as ObservableObject<HashSet<int>>)?.Object;
-
-                if (squareIndexes != null)
-                {
-                    HighligtedSquareViewModelsForRangedAttack = new ObservableCollection<HighlightedSquareViewModel>(
-                        squareIndexes.Select(i => new HighlightedSquareViewModel(i % Columns, i / Columns)));
-                }
-                else
-                {
-                    HighligtedSquareViewModelsForRangedAttack = new ObservableCollection<HighlightedSquareViewModel>();
-                }
-            };
+            OnAttackAnimationCompleted();
         }
 
         private void OnPlayerClickedSquare(int squareIndex)
@@ -589,23 +505,7 @@ namespace DD.ViewModel
             }
         }
 
-        public void MoveCreatureAnimationCompletedHandler()
-        {
-            MoveCreatureAnimationRunning = false;
-
-            UpdateCreatureViewModels();
-            OnAnimationCompleted();
-        }
-
-        public void AttackAnimationCompletedHandler()
-        {
-            AttackAnimationRunning = false;
-            WeaponViewModel.IsVisible = false;
-
-            OnAttackAnimationCompleted();
-        }
-
-        private void OnAnimationCompleted()
+        private void OnMoveAnimationCompleted()
         {
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
