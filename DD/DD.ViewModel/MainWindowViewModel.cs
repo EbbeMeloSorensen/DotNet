@@ -1,8 +1,6 @@
-﻿using GalaSoft.MvvmLight.Command;
-using Craft.Logging;
+﻿using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
-using Craft.ViewModels.Dialogs;
 using DD.Application;
 using DD.Domain;
 using DD.Engine.Complex;
@@ -12,27 +10,16 @@ namespace DD.ViewModel
     public class MainWindowViewModel
     {
         private readonly Application.Application _application;
-        private readonly IDialogService _applicationDialogService;
-
-        private RelayCommand _windowLoadedCommand;
-        private RelayCommand<object> _createCreatureTypeCommand;
 
         public SceneCollectionViewModel SceneCollectionViewModel { get; }
         public BoardViewModel BoardViewModel { get; }
         public ActOutSceneViewModelBase ActOutSceneViewModel { get; }
         public LogViewModel LogViewModel { get; }
 
-        public RelayCommand WindowLoadedCommand
-        {
-            get { return _windowLoadedCommand ?? (_windowLoadedCommand = new RelayCommand(WindowLoaded)); }
-        }
-
         public MainWindowViewModel(
-            Application.Application application,
-            IDialogService applicationDialogService)
+            Application.Application application)
         {
             _application = application;
-            _applicationDialogService = applicationDialogService;
 
             LogViewModel = new LogViewModel();
 
@@ -78,11 +65,6 @@ namespace DD.ViewModel
                     _application.Logger);
             }
 
-        }
-
-        private void WindowLoaded()
-        {
-            //CreatureTypeCollectionViewModel.PopulateListCommand.Execute(null);
         }
     }
 }
