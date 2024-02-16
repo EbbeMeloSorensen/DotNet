@@ -112,7 +112,8 @@ namespace DD.Application
 
         public ObservableObject<bool> AutoRunning { get; }
 
-        public bool NextEventOccursAutomatically => CurrentCreature.IsAutomatic;
+        public bool NextEventOccursAutomatically => CurrentCreature.IsAutomatic ||
+                                                    !CurrentPlayerControlledCreatureHasAnyOptionsLeft();
 
         public SimpleEngine(
             ILogger logger)
@@ -202,7 +203,7 @@ namespace DD.Application
 
                 if (moveCreatureResult.IndexOfDestinationSquare.HasValue)
                 {
-                    return MoveOrEvade(moveCreatureResult);
+                    return Move(moveCreatureResult);
                 }
             }
 
@@ -599,196 +600,6 @@ namespace DD.Application
             });
         }
 
-        private async Task<MoveCreatureResult> DetermineDestinationOfCurrentCreatureWithRangedAttack(
-            double range)
-        {
-            return await Task.Run(() =>
-            {
-                var currentSquareIndex = CurrentCreature.IndexOfOccupiedSquare(_scene.Columns);
-
-                var opponents = Creatures
-                    .Where(c => c.IsHostile != CurrentCreature.IsHostile)
-                    .ToList();
-
-                var opponentIndexes = opponents
-                    .Select(c => c.IndexOfOccupiedSquare(_scene.Columns))
-                    .ToList();
-
-                var allyIndexes = Creatures
-                    .Where(c => c.IsHostile == CurrentCreature.IsHostile && !c.Equals(CurrentCreature))
-                    .Select(c => c.IndexOfOccupiedSquare(_scene.Columns))
-                    .ToList();
-
-                var forbiddenIndexes = new HashSet<int>(_obstacleIndexes.Concat(allyIndexes).Concat(opponentIndexes));
-
-                var raster1 = IdentifySquaresFromWhichAnOpponentCanBeAttackedWithARangedWeapon(range);
-                //raster1.WriteToFile(@"C:\Temp\SquaresFromWhichAnOpponentCanBeAttacked.txt");
-
-                var raster2 = opponentIndexes.ConvertToRaster(_scene.Columns, _scene.Rows);
-                raster2.Dilate(1.5);
-                raster2.Invert();
-                //raster2.WriteToFile(@"C:\Temp\raster2.txt");
-
-                var graph = new GraphMatrix8Connectivity(_scene.Rows, _scene.Columns);
-
-                // Determine where the current creature can go
-                graph.ComputeDistances(
-                    new[] { currentSquareIndex },
-                    forbiddenIndexes,
-                    _moveDistanceRemaningForCurrentCreature,
-                    out var walkingDistancesForCurrentCreature,
-                    out _previous);
-
-                var raster3 = walkingDistancesForCurrentCreature
-                    .ConvertTo2DArray(_scene.Columns, _scene.Rows)
-                    .Threshold(_moveDistanceRemaningForCurrentCreature);
-                //raster3.WriteToFile(@"C:\Temp\Reachable.txt");
-
-                var reachableSquares = raster3.ConvertToIndexes().ToList();
-                var squaresFacilitatingAttack = raster1.ConvertToIndexes().Except(_obstacleIndexes).ToList();
-
-                raster1.PixelWiseAnd(raster3);
-                var reachableSquaresFacilitatingEnablingAttack = raster1.ConvertToIndexes().ToList();
-                //raster1.WriteToFile(@"C:\Temp\FacilitatingAttack.txt");
-
-                raster1.PixelWiseAnd(raster2);
-                var reachableSquaresFacilitatingAttackWithoutDisadvantage = raster1.ConvertToIndexes().ToList();
-                //raster1.WriteToFile(@"C:\Temp\FacilitatingAttackWithoutDisadvantage.txt");
-
-                // These indexes are the ones that fulfill these criteria:
-                // * The current creature can reach them
-                // * The current creature can attack an opponent from them
-                // * The current does not have disadvantage for them
-
-                // If the current creature can reach such a square, it will do so (at first regardless if it provokes an opportunity attack)
-                // Otherwise, it will try to reach a square from which it can attack an opponent with disadvantage
-
-                // 1) Kan den nå et optimalt felt? Hvis ja, så gør den det og vælger i øvrigt det med den største afstand til fjenden, ellers:
-                // 2) Kan den nå et felt, hvorfra den kan angribe (med disadvantage)? Hvis ja, så gør den det og vælger i øvrigt det, der er tættest på den
-                // 3) Bevæg sig så tæt som muligt på et felt, hvorfra den kan angribe
-
-                // Algoritmen, der undersøger mulighederne, afgør, om den flytter sig, eller om den står stille.
-                // Hvis den står stille, så angriber den i næste tur
-
-                if (reachableSquaresFacilitatingAttackWithoutDisadvantage.Any())
-                {
-                    var image = new int[_scene.Rows, _scene.Columns];
-                    opponentIndexes.ForEach(i => image[i.ConvertToYCoordinate(_scene.Columns), i.ConvertToXCoordinate(_scene.Columns)] = 1);
-
-                    DistanceTransform.EuclideanDistanceTransform(
-                        image,
-                        out var distances,
-                        out var xValues,
-                        out var yValues);
-
-                    // Identify the (reachable) squares that are farthest away from an opponent,
-                    // and among these select one that has the minimum walking distance from the
-                    // currently occupied square of the current creature
-                    var indexOfDestinationSquare = reachableSquaresFacilitatingAttackWithoutDisadvantage
-                        .IdentifyIndexesOfMaximumValue(distances.Cast<double>().ToArray())
-                        .IdentifyIndexesOfMinimumValue(walkingDistancesForCurrentCreature)
-                        .First();
-
-                    // Also determine the walking distance, since we need to subtract it from the
-                    // remaining walking distance of the current creature for the current turn
-                    var walkingDistance = walkingDistancesForCurrentCreature[indexOfDestinationSquare];
-
-                    var closestOpponent = ClosestOpponent(
-                        indexOfDestinationSquare,
-                        opponents,
-                        out var finalDistanceToClosestOpponent);
-
-                    var result = new MoveCreatureResult
-                    {
-                        IndexOfDestinationSquare = indexOfDestinationSquare,
-                        WalkingDistanceToDestinationSquare = walkingDistance,
-                        FinalClosestOpponent = closestOpponent,
-                        FinalDistanceToClosestOpponent = finalDistanceToClosestOpponent
-                    };
-
-                    if (indexOfDestinationSquare == currentSquareIndex)
-                    {
-                        result.IndexOfDestinationSquare = null;
-                    }
-
-                    return result;
-                }
-
-                if (reachableSquaresFacilitatingEnablingAttack.Any())
-                {
-                    // Select the (reachable) square that is closest to the current position
-                    var indexOfDestinationSquare = reachableSquaresFacilitatingEnablingAttack
-                        .IdentifyIndexesOfMinimumValue(walkingDistancesForCurrentCreature)
-                        .First();
-
-                    // Also determine the walking distance, since we need to subtract it from the
-                    // remaining walking distance of the current creature for the current turn
-                    var walkingDistance = walkingDistancesForCurrentCreature[indexOfDestinationSquare];
-
-                    var closestOpponent = ClosestOpponent(
-                        indexOfDestinationSquare,
-                        opponents,
-                        out var finalDistanceToClosestOpponent);
-
-                    var result = new MoveCreatureResult
-                    {
-                        IndexOfDestinationSquare = indexOfDestinationSquare,
-                        WalkingDistanceToDestinationSquare = walkingDistance,
-                        FinalClosestOpponent = closestOpponent,
-                        FinalDistanceToClosestOpponent = finalDistanceToClosestOpponent
-                    };
-
-                    if (indexOfDestinationSquare == currentSquareIndex)
-                    {
-                        result.IndexOfDestinationSquare = null;
-                    }
-
-                    return result;
-                }
-                else
-                {
-                    // Determine the walking distances to a square from which the current creature can attack an opponent
-                    var graph2 = new GraphMatrix8Connectivity(_scene.Rows, _scene.Columns);
-
-                    graph2.ComputeDistances(
-                        squaresFacilitatingAttack,
-                        _obstacleIndexes,
-                        double.MaxValue,
-                        out var walkingDistancesToSquaresFromWhichAnOpponentCanBeAttacked);
-
-                    //walkingDistancesToSquaresFromWhichAnOpponentCanBeAttacked.ConvertTo2DArray(_scene.Columns, _scene.Rows).WriteToFile(@"C:\Temp\WalkingDistancesToSquaresFromWhichAnOpponentCanBeAttacked.txt");
-
-                    var indexOfDestinationSquare = reachableSquares
-                        .IdentifyIndexesOfMinimumValue(walkingDistancesToSquaresFromWhichAnOpponentCanBeAttacked)
-                        .First();
-
-                    // Also determine the walking distance, since we need to subtract it from the
-                    // remaining walking distance of the current creature for the current turn
-                    var walkingDistance = walkingDistancesForCurrentCreature[indexOfDestinationSquare];
-
-                    var closestOpponent = ClosestOpponent(
-                        indexOfDestinationSquare,
-                        opponents,
-                        out var finalDistanceToClosestOpponent);
-
-                    var result = new MoveCreatureResult
-                    {
-                        IndexOfDestinationSquare = indexOfDestinationSquare,
-                        WalkingDistanceToDestinationSquare = walkingDistance,
-                        FinalClosestOpponent = closestOpponent,
-                        FinalDistanceToClosestOpponent = finalDistanceToClosestOpponent
-                    };
-
-                    if (indexOfDestinationSquare == currentSquareIndex)
-                    {
-                        result.IndexOfDestinationSquare = null;
-                    }
-
-                    return result;
-                }
-            });
-        }
-
         private void InitializeCreatureIdMap()
         {
             _creatureIdMap = new Dictionary<Creature, int>();
@@ -829,18 +640,6 @@ namespace DD.Application
             else
             {
                 SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Object = new HashSet<int>();
-            }
-
-            if (CurrentCreature.Attacks.Count(a => a is RangedAttack) > 0)
-            {
-                var range = ((RangedAttack)CurrentCreature.Attacks.First(a => a is RangedAttack)).Range;
-
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = new HashSet<int>(
-                    IdentifyPotentialTargetsOfRangedAttack(range).Select(c => c.IndexOfOccupiedSquare(_scene.Columns)));
-            }
-            else
-            {
-                SquareIndexesCurrentCreatureCanAttackWithRangedWeapon.Object = new HashSet<int>();
             }
         }
 
@@ -895,64 +694,6 @@ namespace DD.Application
                 .Select(c => new { Creature = c, Distance = System.Math.Pow(c.PositionX - x, 2) + System.Math.Pow(c.PositionY - y, 2) })
                 .Where(cd => cd.Distance < 2.1)
                 .Select(cd => cd.Creature);
-        }
-
-        private IEnumerable<Creature> IdentifyPotentialTargetsOfRangedAttack(
-            double range)
-        {
-            if (CurrentCreature.Attacks.Count(a => a is RangedAttack) == 0)
-            {
-                return new List<Creature>();
-            }
-
-            // Identify indexes of squares that are visible to the creature
-            var viewPoint = new Point2D(
-                CurrentCreature.PositionX,
-                CurrentCreature.PositionY);
-
-            var triangles = VisibleRegion.IdentifyVisibleRegion(_wallGraph, viewPoint);
-            var raster = new int[_scene.Rows, _scene.Columns];
-
-            var circle = new Circle2D(
-                new Point2D(CurrentCreature.PositionX, CurrentCreature.PositionY),
-                range);
-
-            circle.Rasterize(raster, 0, 1);
-
-            triangles.ForEach(t => t.Rasterize(raster, 1, 2));
-
-            return Creatures
-                .Where(c => c.IsHostile != CurrentCreature.IsHostile &&
-                            raster[c.PositionY, c.PositionX] == 2);
-        }
-
-        private int[,] IdentifySquaresFromWhichAnOpponentCanBeAttackedWithARangedWeapon(
-            double range)
-        {
-            var opponents = Creatures
-                .Where(c => c.IsHostile != CurrentCreature.IsHostile)
-                .ToList();
-
-            var rasterForAllOpponents = new int[_scene.Rows, _scene.Columns];
-
-            opponents.ForEach(o =>
-            {
-                var triangles = VisibleRegion.IdentifyVisibleRegion(_wallGraph, new Point2D(o.PositionX, o.PositionY));
-                var rasterForIndividualOpponent = new int[_scene.Rows, _scene.Columns];
-
-                var circle = new Circle2D(
-                    new Point2D(o.PositionX, o.PositionY), range);
-
-                circle.Rasterize(rasterForIndividualOpponent, 0, 1);
-
-                triangles.ForEach(t => t.Rasterize(rasterForIndividualOpponent, 1, 2));
-
-                rasterForAllOpponents.PixelwiseMax(rasterForIndividualOpponent);
-            });
-
-            rasterForAllOpponents.Threshold(2);
-
-            return rasterForAllOpponents;
         }
 
         private void MoveCurrentCreature(
@@ -1059,29 +800,7 @@ namespace DD.Application
             return Creatures.Any(c => c.IsHostile != creature.IsHostile);
         }
 
-        private List<Tuple<int, List<Creature>>> IdentifyEvadedOpponents(
-            IEnumerable<int> path)
-        {
-            var temp = path
-                .Select(i => IdentifyAdjacentOpponents(i))
-                .ToArray();
-
-            var result = new List<Tuple<int, List<Creature>>>();
-
-            for (var i = 0; i < temp.Length - 1; i++)
-            {
-                var a = temp[i].Except(temp[i + 1]).ToList();
-
-                if (a.Any())
-                {
-                    result.Add(new Tuple<int, List<Creature>>(i, a));
-                }
-            }
-
-            return result;
-        }
-
-        private IBattleEvent MoveOrEvade(
+        private IBattleEvent Move(
             MoveCreatureResult moveCreatureResult)
         {
             _currentCreatureJustMoved = true;
