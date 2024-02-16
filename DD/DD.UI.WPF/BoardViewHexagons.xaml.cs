@@ -125,7 +125,7 @@ namespace DD.UI.WPF
 
             CurrentCreatureGrid.RenderTransform = new TranslateTransform(0, 0);
 
-            ViewModel.MoveCreatureAnimationCompletedCommand.Execute(null);
+            ViewModel.MoveCreatureAnimationCompletedHandler();
         }
 
         private void AttackStoryboard_Completed(object sender, EventArgs e)
@@ -134,7 +134,7 @@ namespace DD.UI.WPF
 
             WeaponGrid.RenderTransform = new TranslateTransform(0, 0);
 
-            ViewModel.AttackAnimationCompletedCommand.Execute(null);
+            ViewModel.AttackAnimationCompletedHandler();
         }
     }
 }

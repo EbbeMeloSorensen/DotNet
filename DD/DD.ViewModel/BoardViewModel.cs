@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.Math;
 using Craft.ViewModels.Common;
@@ -33,9 +32,9 @@ namespace DD.ViewModel
         private double _squareForCurrentCreatureLeft;
         private double _squareForCurrentCreatureTop;
         private double _squareForCurrentCreatureWidth;
+        private List<PixelViewModel> _pixelViewModels;
         private ObservableCollection<ObstacleViewModel> _obstacleViewModels;
         private ObservableCollection<CreatureViewModel> _creatureViewModels;
-        private List<PixelViewModel> _pixelViewModels;
         private ObservableCollection<HighlightedSquareViewModel> _highlightedSquareViewModelsForMove;
         private ObservableCollection<HighlightedSquareViewModel> _highlightedSquareViewModelsForMeleeAttack;
         private ObservableCollection<HighlightedSquareViewModel> _highlightedSquareViewModelsForRangedAttack;
@@ -48,8 +47,6 @@ namespace DD.ViewModel
         private string _durationForAttackAnimation;
         private bool _moveCreatureAnimationRunning;
         private bool _attackAnimationRunning;
-        private RelayCommand _moveCreatureAnimationCompletedCommand;
-        private RelayCommand _attackAnimationCompletedCommand;
         private List<Creature> _creatures;
         private Creature _currentCreature;
         private string _weaponImagePath;
@@ -76,16 +73,6 @@ namespace DD.ViewModel
             set
             {
                 _columns = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool CurrentCreatureIsHighlighted
-        {
-            get { return _currentCreatureIsHighlighted; }
-            set
-            {
-                _currentCreatureIsHighlighted = value;
                 RaisePropertyChanged();
             }
         }
@@ -215,17 +202,17 @@ namespace DD.ViewModel
             }
         }
 
-        public RelayCommand MoveCreatureAnimationCompletedCommand
-        {
-            get { return _moveCreatureAnimationCompletedCommand ?? (_moveCreatureAnimationCompletedCommand = 
-                new RelayCommand(MoveCreatureAnimationCompletedHandler)); }
-        }
+        //public RelayCommand MoveCreatureAnimationCompletedCommand
+        //{
+        //    get { return _moveCreatureAnimationCompletedCommand ?? (_moveCreatureAnimationCompletedCommand = 
+        //        new RelayCommand(MoveCreatureAnimationCompletedHandler)); }
+        //}
 
-        public RelayCommand AttackAnimationCompletedCommand
-        {
-            get { return _attackAnimationCompletedCommand ?? (_attackAnimationCompletedCommand = 
-                new RelayCommand(AttackAnimationCompletedHandler)); }
-        }
+        //public RelayCommand AttackAnimationCompletedCommand
+        //{
+        //    get { return _attackAnimationCompletedCommand ?? (_attackAnimationCompletedCommand = 
+        //        new RelayCommand(AttackAnimationCompletedHandler)); }
+        //}
 
         public void HighlightPlayerOptions(
             int squareIndexOfCurrentCreature,
@@ -602,16 +589,15 @@ namespace DD.ViewModel
             }
         }
 
-        private void MoveCreatureAnimationCompletedHandler()
+        public void MoveCreatureAnimationCompletedHandler()
         {
             MoveCreatureAnimationRunning = false;
 
             UpdateCreatureViewModels();
-
             OnAnimationCompleted();
         }
 
-        private void AttackAnimationCompletedHandler()
+        public void AttackAnimationCompletedHandler()
         {
             AttackAnimationRunning = false;
             WeaponViewModel.IsVisible = false;

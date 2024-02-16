@@ -33,7 +33,6 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
             switch (creatureAction)
             {
                 case CreatureMove:
-                    _boardViewModel.CurrentCreatureIsHighlighted = false;
                     _boardViewModel.MoveCurrentCreature(
                         _engine.CurrentCreature,
                         _engine.CurrentCreaturePath);
@@ -64,7 +63,6 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
             if (_engine.NextEventOccursAutomatically)
             {
                 _engine.AutoRunning.Object = true;
-                _boardViewModel.CurrentCreatureIsHighlighted = false;
                 var nextEvent = await _engine.ExecuteNextEvent();
 
                 switch (nextEvent)
@@ -95,7 +93,6 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
             else
             {
                 _engine.AutoRunning.Object = false;
-                _boardViewModel.CurrentCreatureIsHighlighted = true;
 
                 // Diagnostics
                 //_logger.WriteLine(LogMessageCategory.Information, "(Proceed method about to exit - Initiative will go to the player)");

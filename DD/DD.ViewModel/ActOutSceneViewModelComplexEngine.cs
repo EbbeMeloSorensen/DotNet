@@ -37,7 +37,6 @@ public class ActOutSceneViewModelComplexEngine : ActOutSceneViewModelBase
             switch (creatureAction)
             {
                 case CreatureMove:
-                    _boardViewModel.CurrentCreatureIsHighlighted = false;
                     _boardViewModel.MoveCurrentCreature(
                         _engine.CurrentCreature,
                         _engine.CurrentCreaturePath);
@@ -77,7 +76,6 @@ public class ActOutSceneViewModelComplexEngine : ActOutSceneViewModelBase
             if (_engine.NextEventOccursAutomatically)
             {
                 _engine.AutoRunning.Object = true;
-                _boardViewModel.CurrentCreatureIsHighlighted = false;
                 var nextEvent = await _engine.ExecuteNextEvent();
 
                 switch (nextEvent)
@@ -119,7 +117,6 @@ public class ActOutSceneViewModelComplexEngine : ActOutSceneViewModelBase
             else
             {
                 _engine.AutoRunning.Object = false;
-                _boardViewModel.CurrentCreatureIsHighlighted = true;
 
                 _boardViewModel.HighlightPlayerOptions(
                     _engine.SquareIndexForCurrentCreature.Object.Value,

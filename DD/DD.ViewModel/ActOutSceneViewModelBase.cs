@@ -85,8 +85,6 @@ public abstract class ActOutSceneViewModelBase
 
         selectedScene.PropertyChanged += (s, e) =>
         {
-            _boardViewModel.CurrentCreatureIsHighlighted = false;
-
             _engine.Scene = (s as ObservableObject<Scene>)?.Object;
 
             _engine.InitializeCreatures();
