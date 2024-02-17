@@ -23,13 +23,9 @@ namespace DD.UI.WPF
     /// </summary>
     public partial class BoardViewHexagons : UserControl
     {
-        private PointD _mouseDownViewport;
-        private PointD _initialScrollOffset;
-        private bool _dragging;
-
-        private BoardViewModel ViewModel
+        private BoardViewModelHex ViewModel
         {
-            get { return DataContext as BoardViewModel; }
+            get { return DataContext as BoardViewModelHex; }
         }
 
         public BoardViewHexagons()
@@ -76,65 +72,6 @@ namespace DD.UI.WPF
             ViewModel.ScrollOffset = new PointD(
                 e.HorizontalOffset,
                 e.VerticalOffset);
-        }
-
-        private void Canvas_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (ViewModel == null) return;
-
-            _mouseDownViewport = e.GetPosition(ScrollViewer).AsPointD();
-            _initialScrollOffset = ViewModel.ScrollOffset;
-            Canvas.CaptureMouse();
-            _dragging = true;
-        }
-
-        private void Canvas_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (ViewModel == null) return;
-
-            _dragging = false;
-            Canvas.ReleaseMouseCapture();
-
-            // The user might have moved a creature, so inform the ViewModel
-            ViewModel.PlayerClickedOnBoard();
-        }
-
-        private void Canvas_OnMouseMove(object sender, MouseEventArgs e)
-        {
-            if (ViewModel == null) return;
-
-            if (_dragging)
-            {
-                var scrollViewerPositionForMouseMove = e.GetPosition(ScrollViewer).AsPointD();
-                var offset = scrollViewerPositionForMouseMove - _mouseDownViewport;
-
-                ViewModel.ScrollOffset = new PointD(
-                    Math.Min(Math.Max(0, _initialScrollOffset.X - offset.X), ViewModel.ScrollableOffset.X),
-                    Math.Min(Math.Max(0, _initialScrollOffset.Y - offset.Y), ViewModel.ScrollableOffset.Y));
-            }
-            else
-            {
-                var canvasPositionForMouseMove = e.GetPosition(Canvas).AsPointD();
-                ViewModel.MouseWorldPosition = canvasPositionForMouseMove / ViewModel.Magnification;
-            }
-        }
-
-        private void MoveCreatureStoryboard_Completed(object sender, EventArgs e)
-        {
-            if (ViewModel == null) return;
-
-            CurrentCreatureGrid.RenderTransform = new TranslateTransform(0, 0);
-
-            ViewModel.CompleteMoveCreatureAnimation();
-        }
-
-        private void AttackStoryboard_Completed(object sender, EventArgs e)
-        {
-            if (ViewModel == null) return;
-
-            WeaponGrid.RenderTransform = new TranslateTransform(0, 0);
-
-            ViewModel.CompleteAttackAnimation();
         }
     }
 }

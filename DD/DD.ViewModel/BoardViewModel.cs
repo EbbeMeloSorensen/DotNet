@@ -40,11 +40,31 @@ namespace DD.ViewModel
         {
         }
 
-        public override void InitializePixelViewModels()
+        public override void LayoutBoard(
+            Scene scene)
         {
-            PixelViewModels = Enumerable.Range(0, Rows * Columns)
-                .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))
-                .ToList();
+            if (scene == null)
+            {
+                Rows = 0;
+                Columns = 0;
+                ImageWidth = 0;
+                ImageHeight = 0;
+                ScrollableOffset = new PointD(0, 0);
+                ScrollOffset = new PointD(0, 0);
+
+                PixelViewModels = new List<PixelViewModel>();
+            }
+            else
+            {
+                Rows = scene.Rows;
+                Columns = scene.Columns;
+                ImageWidth = Columns * SquareLength;
+                ImageHeight = Rows * SquareLength;
+
+                PixelViewModels = Enumerable.Range(0, Rows * Columns)
+                    .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))
+                    .ToList();
+            }
         }
 
         public override void HighlightPlayerOptions(

@@ -324,24 +324,7 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         {
             var scene = (s as ObservableObject<Scene>)?.Object;
 
-            if (scene == null)
-            {
-                Rows = 0;
-                Columns = 0;
-                ImageWidth = 0;
-                ImageHeight = 0;
-                ScrollableOffset = new PointD(0, 0);
-                ScrollOffset = new PointD(0, 0);
-            }
-            else
-            {
-                Rows = scene.Rows;
-                Columns = scene.Columns;
-                ImageWidth = Columns * SquareLength;
-                ImageHeight = Rows * SquareLength;
-
-                InitializePixelViewModels();
-            }
+            LayoutBoard(scene);
 
             if (scene == null || scene.Obstacles.Count == 0)
             {
@@ -425,7 +408,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         OnAttackAnimationCompleted();
     }
 
-    public abstract void InitializePixelViewModels();
+    public abstract void LayoutBoard(
+        Scene scene);
 
     protected PixelViewModel GeneratePixel(
         int index,

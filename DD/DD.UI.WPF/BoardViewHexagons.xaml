@@ -24,150 +24,50 @@
                   Loaded="ScrollViewer_OnLoaded"
                   SizeChanged="ScrollViewer_OnSizeChanged"
                   ScrollChanged="ScrollViewer_OnScrollChanged">
-        <Canvas x:Name="Canvas" 
-                Background="AntiqueWhite"
-                Width="{Binding ImageWidth}"
-                Height="{Binding ImageHeight}"
-                MouseLeftButtonDown="Canvas_OnMouseLeftButtonDown"
-                MouseLeftButtonUp="Canvas_OnMouseLeftButtonUp"
-                MouseMove="Canvas_OnMouseMove">
-
-            <ItemsControl Width="{Binding ImageWidth}"
-                          Height="{Binding ImageHeight}"
-                          ItemsSource="{Binding PixelViewModels}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="{Binding Rows}" 
-                                     Columns="{Binding Columns}" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Black"
-                                BorderThickness="0.5"
-                                Background="{Binding Path=Pixel, Converter={StaticResource PixelToBrushConverter}}">
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <ItemsControl ItemsSource="{Binding ObstacleViewModels}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
-                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="viewModel:ObstacleViewModel">
-                        <Image Height="{Binding Diameter}" Width="{Binding Diameter}" 
-                            Source="{Binding Path=ImagePath,
-                            UpdateSourceTrigger=PropertyChanged, 
-                            Converter={StaticResource ImagePathConverter}}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <ItemsControl ItemsSource="{Binding CreatureViewModels}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Left" Value="{Binding Left}"/>
-                        <Setter Property="Canvas.Top" Value="{Binding Top}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="viewModel:CreatureViewModel">
-                        <!--Bemærk, at vi bare har et Creature View her-->
-                        <local:CreatureView/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <Grid x:Name="CurrentCreatureGrid"
-                  Canvas.Left="{Binding CurrentCreatureViewModel.Left}"
-                  Canvas.Top="{Binding CurrentCreatureViewModel.Top}">
-                <local:CreatureView DataContext="{Binding CurrentCreatureViewModel}"/>
-                <Grid.RenderTransform>
-                    <TranslateTransform X="0" Y="0"/>
-                </Grid.RenderTransform>
-                <b:Interaction.Triggers>
-                    <b:DataTrigger Binding="{Binding MoveCreatureAnimationRunning, Mode=OneWay}" 
-                                    Value="true">
-                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                            <b:ControlStoryboardAction.Storyboard>
-                                <Storyboard Completed="MoveCreatureStoryboard_Completed">
-                                    <DoubleAnimationUsingPath Storyboard.TargetName="CurrentCreatureGrid"
-                                                              Storyboard.TargetProperty="(RenderTransform).X"
-                                                              Duration="{Binding DurationForMoveCreatureAnimation}"
-                                                              Source="X">
-                                        <DoubleAnimationUsingPath.PathGeometry>
-                                            <PathGeometry Figures="{Binding CreaturePath}"/>
-                                        </DoubleAnimationUsingPath.PathGeometry>
-                                    </DoubleAnimationUsingPath>
-                                    <DoubleAnimationUsingPath Storyboard.TargetName="CurrentCreatureGrid"
-                                                              Storyboard.TargetProperty="(RenderTransform).Y"
-                                                              Duration="{Binding DurationForMoveCreatureAnimation}"
-                                                              Source="Y">
-                                        <DoubleAnimationUsingPath.PathGeometry>
-                                            <PathGeometry Figures="{Binding CreaturePath}"/>
-                                        </DoubleAnimationUsingPath.PathGeometry>
-                                    </DoubleAnimationUsingPath>
-                                </Storyboard>
-                            </b:ControlStoryboardAction.Storyboard>
-                        </b:ControlStoryboardAction>
-                    </b:DataTrigger>
-                </b:Interaction.Triggers>
-            </Grid>
-
-            <Grid x:Name="WeaponGrid"
-                  Canvas.Left="{Binding WeaponViewModel.Left}"
-                  Canvas.Top="{Binding WeaponViewModel.Top}"
-                  Visibility="{Binding WeaponViewModel.IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Image Height="{Binding WeaponViewModel.Diameter}" 
-                       Width="{Binding WeaponViewModel.Diameter}"
-                       Source="{Binding Path=WeaponImagePath,
-                            UpdateSourceTrigger=PropertyChanged, 
-                            Converter={StaticResource ImagePathConverter}}">
-                    <Image.RenderTransform>
-                        <RotateTransform x:Name="RotateTransform" CenterX="37.5" CenterY="37.5" Angle="{Binding WeaponViewModel.RotationAngle}"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Grid.RenderTransform>
-                    <TranslateTransform X="0" Y="0"/>
-                </Grid.RenderTransform>
-                <b:Interaction.Triggers>
-                    <b:DataTrigger Binding="{Binding AttackAnimationRunning, Mode=OneWay}" 
-                                   Value="true">
-                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                            <b:ControlStoryboardAction.Storyboard>
-                                <Storyboard Completed="AttackStoryboard_Completed">
-                                    <DoubleAnimation Storyboard.TargetName="WeaponGrid"
-                                                     Storyboard.TargetProperty="(RenderTransform).X"
-                                                     To="{Binding TranslationX}"
-                                                     AutoReverse="{Binding WeaponAutoReverse}"
-                                                     Duration="{Binding DurationForAttackAnimation}"/>
-                                    <DoubleAnimation Storyboard.TargetName="WeaponGrid"
-                                                     Storyboard.TargetProperty="(RenderTransform).Y"
-                                                     To="{Binding TranslationY}" 
-                                                     AutoReverse="{Binding WeaponAutoReverse}"
-                                                     Duration="{Binding DurationForAttackAnimation}"/>
-                                </Storyboard>
-                            </b:ControlStoryboardAction.Storyboard>
-                        </b:ControlStoryboardAction>
-                    </b:DataTrigger>
-                </b:Interaction.Triggers>
-            </Grid>
-
-        </Canvas>
+        <Grid>
+            <Canvas Background="White">
+                <ItemsControl Width="{Binding ImageWidth}" 
+                              Height="{Binding ImageHeight}"
+                              ItemsSource="{Binding PixelViewModels1}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="{Binding Rows}"
+                                         Columns="{Binding Columns}" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Polygon Points="0,10.39230485 18,0 36,10.39230485 36,31.17691454 18,41.56921938 0,31.17691454" 
+                                     Stroke="Gray" StrokeThickness="1" 
+                                     Fill="{Binding Path=Pixel, Converter={StaticResource PixelToBrushConverter}}">
+                            </Polygon>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Canvas>
+            <Canvas>
+                <ItemsControl Width="{Binding ImageWidth}" 
+                              Height="{Binding ImageHeight}"
+                              ItemsSource="{Binding PixelViewModels2}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="{Binding Rows}"
+                                         Columns="{Binding Columns}" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Polygon Points="0,10.39230485 18,0 36,10.39230485 36,31.17691454 18,41.56921938 0,31.17691454" 
+                                     Stroke="Gray" StrokeThickness="1" 
+                                     Fill="{Binding Path=Pixel, Converter={StaticResource PixelToBrushConverter}}">
+                                <Polygon.RenderTransform>
+                                    <TranslateTransform X="18" Y="31.17691454"/>
+                                </Polygon.RenderTransform>
+                            </Polygon>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Canvas>
+        </Grid>
     </ScrollViewer>
 </UserControl>
