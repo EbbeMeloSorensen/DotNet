@@ -12,7 +12,7 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
 {
     public ActOutSceneViewModelSimpleEngine(
         IEngine engine,
-        BoardViewModel boardViewModel,
+        BoardViewModelBase boardViewModel,
         ObservableObject<Scene> selectedScene,
         ILogger logger) : base(
             engine,

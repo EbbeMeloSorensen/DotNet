@@ -14,7 +14,7 @@ public class ActOutSceneViewModelComplexEngine : ActOutSceneViewModelBase
 {
     public ActOutSceneViewModelComplexEngine(
         IEngine engine,
-        BoardViewModel boardViewModel,
+        BoardViewModelBase boardViewModel,
         ObservableObject<Scene> selectedScene,
         ILogger logger) : base(
             engine, 

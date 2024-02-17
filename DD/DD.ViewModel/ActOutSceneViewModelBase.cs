@@ -12,7 +12,7 @@ public abstract class ActOutSceneViewModelBase
 {
     protected ILogger _logger;
     protected IEngine _engine;
-    protected BoardViewModel _boardViewModel;
+    protected BoardViewModelBase _boardViewModel;
     protected RelayCommand _resetCreaturesCommand;
     protected AsyncCommand _startBattleCommand;
     protected AsyncCommand _passCurrentCreatureCommand;
@@ -60,7 +60,7 @@ public abstract class ActOutSceneViewModelBase
 
     public ActOutSceneViewModelBase(
         IEngine engine,
-        BoardViewModel boardViewModel,
+        BoardViewModelBase boardViewModel,
         ObservableObject<Scene> selectedScene,
         ILogger logger)
     {

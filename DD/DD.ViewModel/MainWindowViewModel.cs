@@ -12,7 +12,7 @@ namespace DD.ViewModel
         private readonly Application.Application _application;
 
         public SceneCollectionViewModel SceneCollectionViewModel { get; }
-        public BoardViewModel BoardViewModel { get; }
+        public BoardViewModelBase BoardViewModel { get; }
         public ActOutSceneViewModelBase ActOutSceneViewModel { get; }
         public LogViewModel LogViewModel { get; }
 
