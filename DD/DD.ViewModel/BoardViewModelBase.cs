@@ -12,7 +12,7 @@ using DD.Domain;
 
 namespace DD.ViewModel;
 
-public class BoardViewModelBase : ImageEditorViewModel
+public abstract class BoardViewModelBase : ImageEditorViewModel
 {
     private static Dictionary<string, double> _weaponImageBaseRotationAngleMap = new Dictionary<string, double>
     {
@@ -28,7 +28,6 @@ public class BoardViewModelBase : ImageEditorViewModel
     private double _squareForCurrentCreatureLeft;
     private double _squareForCurrentCreatureTop;
     private double _squareForCurrentCreatureWidth;
-    private List<PixelViewModel> _pixelViewModels;
     private ObservableCollection<ObstacleViewModel> _obstacleViewModels;
     private ObservableCollection<CreatureViewModel> _creatureViewModels;
     private double _currentCreaturePositionX;
@@ -128,16 +127,6 @@ public class BoardViewModelBase : ImageEditorViewModel
         }
     }
 
-    public List<PixelViewModel> PixelViewModels
-    {
-        get { return _pixelViewModels; }
-        set
-        {
-            _pixelViewModels = value;
-            RaisePropertyChanged();
-        }
-    }
-
     public string WeaponImagePath
     {
         get { return _weaponImagePath; }
@@ -158,58 +147,13 @@ public class BoardViewModelBase : ImageEditorViewModel
         }
     }
 
-    public void HighlightPlayerOptions(
+    public abstract void HighlightPlayerOptions(
         int squareIndexOfCurrentCreature,
         HashSet<int> squareIndexesCurrentCreatureCanMoveTo,
         HashSet<int> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-        HashSet<int> squareIndexesCurrentCreatureCanAttackWithRangedWeapon)
-    {
-        PixelViewModels = Enumerable.Range(0, Rows * Columns)
-            .Select(index => GeneratePixel(
-                index,
-                squareIndexOfCurrentCreature,
-                squareIndexesCurrentCreatureCanMoveTo,
-                squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-                squareIndexesCurrentCreatureCanAttackWithRangedWeapon))
-            .ToList();
-    }
+        HashSet<int> squareIndexesCurrentCreatureCanAttackWithRangedWeapon);
 
-    public void ClearPlayerOptions()
-    {
-        PixelViewModels = Enumerable.Range(0, Rows * Columns)
-            .Select(index => new PixelViewModel(index, new Pixel(200, 200, 200, 0)))
-            .ToList();
-    }
-
-    private PixelViewModel GeneratePixel(
-        int index,
-        int squareIndexOfCurrentCreature,
-        IReadOnlySet<int> squareIndexesCurrentCreatureCanMoveTo,
-        IReadOnlySet<int> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-        IReadOnlySet<int> squareIndexesCurrentCreatureCanAttackWithRangedWeapon)
-    {
-        if (index == squareIndexOfCurrentCreature)
-        {
-            return new PixelViewModel(index, new Pixel(200, 200, 100, 0));
-        }
-
-        if (squareIndexesCurrentCreatureCanMoveTo.Contains(index))
-        {
-            return new PixelViewModel(index, new Pixel(220, 220, 220, 0));
-        }
-
-        if (squareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Contains(index))
-        {
-            return new PixelViewModel(index, new Pixel(200, 100, 100, 0));
-        }
-
-        if (squareIndexesCurrentCreatureCanAttackWithRangedWeapon.Contains(index))
-        {
-            return new PixelViewModel(index, new Pixel(200, 100, 150, 0));
-        }
-
-        return new PixelViewModel(index, new Pixel(200, 200, 200, 0));
-    }
+    public abstract void ClearPlayerOptions();
 
     public void MoveCurrentCreature(
         Creature currentCreature,
@@ -396,9 +340,7 @@ public class BoardViewModelBase : ImageEditorViewModel
                 ImageWidth = Columns * SquareLength;
                 ImageHeight = Rows * SquareLength;
 
-                PixelViewModels = Enumerable.Range(0, Rows * Columns)
-                    .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))
-                    .ToList();
+                InitializePixelViewModels();
             }
 
             if (scene == null || scene.Obstacles.Count == 0)
@@ -481,6 +423,38 @@ public class BoardViewModelBase : ImageEditorViewModel
         WeaponViewModel.IsVisible = false;
 
         OnAttackAnimationCompleted();
+    }
+
+    public abstract void InitializePixelViewModels();
+
+    protected PixelViewModel GeneratePixel(
+        int index,
+        int squareIndexOfCurrentCreature,
+        IReadOnlySet<int> squareIndexesCurrentCreatureCanMoveTo,
+        IReadOnlySet<int> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
+        IReadOnlySet<int> squareIndexesCurrentCreatureCanAttackWithRangedWeapon)
+    {
+        if (index == squareIndexOfCurrentCreature)
+        {
+            return new PixelViewModel(index, new Pixel(200, 200, 100, 0));
+        }
+
+        if (squareIndexesCurrentCreatureCanMoveTo.Contains(index))
+        {
+            return new PixelViewModel(index, new Pixel(220, 220, 220, 0));
+        }
+
+        if (squareIndexesCurrentCreatureCanAttackWithMeleeWeapon.Contains(index))
+        {
+            return new PixelViewModel(index, new Pixel(200, 100, 100, 0));
+        }
+
+        if (squareIndexesCurrentCreatureCanAttackWithRangedWeapon.Contains(index))
+        {
+            return new PixelViewModel(index, new Pixel(200, 100, 150, 0));
+        }
+
+        return new PixelViewModel(index, new Pixel(200, 200, 200, 0));
     }
 
     private void UpdateCreatureViewModels()
