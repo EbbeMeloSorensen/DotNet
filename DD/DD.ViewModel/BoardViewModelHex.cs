@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using Craft.Utils;
 using Craft.ViewModels.Common;
 using DD.Application;
@@ -10,10 +10,10 @@ namespace DD.ViewModel;
 
 public class BoardViewModelHex : BoardViewModelBase
 {
-    private List<PixelViewModel> _pixelViewModels1;
-    private List<PixelViewModel> _pixelViewModels2;
+    private List<PixelViewModelHex> _pixelViewModels1;
+    private List<PixelViewModelHex> _pixelViewModels2;
 
-    public List<PixelViewModel> PixelViewModels1
+    public List<PixelViewModelHex> PixelViewModels1
     {
         get { return _pixelViewModels1; }
         set
@@ -23,7 +23,7 @@ public class BoardViewModelHex : BoardViewModelBase
         }
     }
 
-    public List<PixelViewModel> PixelViewModels2
+    public List<PixelViewModelHex> PixelViewModels2
     {
         get { return _pixelViewModels2; }
         set
@@ -63,7 +63,7 @@ public class BoardViewModelHex : BoardViewModelBase
             ScrollableOffset = new PointD(0, 0);
             ScrollOffset = new PointD(0, 0);
 
-            PixelViewModels1 = new List<PixelViewModel>();
+            PixelViewModels1 = new List<PixelViewModelHex>();
         }
         else
         {
@@ -85,11 +85,11 @@ public class BoardViewModelHex : BoardViewModelBase
                 .SelectMany(_ => _);
 
             PixelViewModels1 = range1
-                .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))
+                .Select(i => new PixelViewModelHex(i, new Pixel(200, 200, 200, 0)))
                 .ToList();
 
             PixelViewModels2 = range2
-                .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))
+                .Select(i => new PixelViewModelHex(i, new Pixel(200, 200, 200, 0)))
                 .ToList();
         }
     }

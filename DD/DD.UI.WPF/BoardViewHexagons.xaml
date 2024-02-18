@@ -39,7 +39,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Polygon Points="0,10.39230485 18,0 36,10.39230485 36,31.17691454 18,41.56921938 0,31.17691454" 
+                            <Polygon Points="{Binding Points}" 
                                      Stroke="Gray" StrokeThickness="1" 
                                      Fill="{Binding Path=Pixel, Converter={StaticResource PixelToBrushConverter}}">
                             </Polygon>
@@ -59,7 +59,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Polygon Points="0,10.39230485 18,0 36,10.39230485 36,31.17691454 18,41.56921938 0,31.17691454" 
+                            <Polygon Points="{Binding Points}" 
                                      Stroke="Gray" StrokeThickness="1" 
                                      Fill="{Binding Path=Pixel, Converter={StaticResource PixelToBrushConverter}}">
                                 <Polygon.RenderTransform>
