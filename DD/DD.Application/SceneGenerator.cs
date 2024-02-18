@@ -141,6 +141,20 @@ namespace DD.Application
                     return GenerateScene15();
                 case 16:
                     return GenerateScene16();
+                case 17:
+                    return GenerateScene17();
+                case 18:
+                    return GenerateScene18();
+                case 19:
+                    return GenerateScene19();
+                case 20:
+                    return GenerateScene20();
+                case 21:
+                    return GenerateScene21();
+                case 22:
+                    return GenerateScene22();
+                case 23:
+                    return GenerateScene23();
                 default:
                     throw new ArgumentException("Invalid scene id");
             }
@@ -734,5 +748,67 @@ namespace DD.Application
             return scene;
         }
 
+        private static Scene GenerateScene17()
+        {
+            var scene = new Scene("1 knight - 1 x 1", 1, 1);
+            scene.AddCreature(new Creature(_knight, false), 0, 0);
+
+            return scene;
+        }
+
+        private static Scene GenerateScene18()
+        {
+            var scene = new Scene("1 skeleton vs 1 knight - 2 x 2", 2, 2);
+            //scene.AddObstacle(new Obstacle(ObstacleType.Wall, 1, 0));
+            scene.AddCreature(new Creature(_knight, false), 0, 0);
+            scene.AddCreature(new Creature(_skeleton, true), 1, 1);
+
+            return scene;
+        }
+
+        private static Scene GenerateScene19()
+        {
+            var scene = new Scene("1 skeleton vs 1 knight - 3 x 3", 3, 3);
+            scene.AddCreature(new Creature(_knight, false), 0, 0);
+            scene.AddCreature(new Creature(_skeleton, true), 2, 2);
+
+            return scene;
+        }
+
+        private static Scene GenerateScene20()
+        {
+            var scene = new Scene("1 skeleton vs 1 knight - 4 x 4", 4, 4);
+            scene.AddCreature(new Creature(_knight, false), 0, 0);
+            scene.AddCreature(new Creature(_skeleton, true), 3, 3);
+
+            return scene;
+        }
+
+        private static Scene GenerateScene21()
+        {
+            var scene = new Scene("1 skeleton vs 1 knight - 5 x 5", 5, 5);
+            scene.AddCreature(new Creature(_knight, false), 0, 0);
+            scene.AddCreature(new Creature(_skeleton, true), 4, 4);
+
+            return scene;
+        }
+
+        private static Scene GenerateScene22()
+        {
+            var scene = new Scene("1 skeleton vs 1 knight - 3 x 5", 3, 5);
+            scene.AddCreature(new Creature(_knight, false), 0, 0);
+            scene.AddCreature(new Creature(_skeleton, true), 2, 4);
+
+            return scene;
+        }
+
+        private static Scene GenerateScene23()
+        {
+            var scene = new Scene("1 skeleton vs 1 knight - 5 x 3", 5, 3);
+            scene.AddCreature(new Creature(_knight, false), 0, 0);
+            scene.AddCreature(new Creature(_skeleton, true), 4, 2);
+
+            return scene;
+        }
     }
 }

@@ -7,6 +7,7 @@
              xmlns:utils="clr-namespace:Craft.UI.Utils;assembly=Craft.UI.Utils"
              xmlns:viewModel="clr-namespace:DD.ViewModel;assembly=DD.ViewModel"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -24,8 +25,9 @@
                   Loaded="ScrollViewer_OnLoaded"
                   SizeChanged="ScrollViewer_OnSizeChanged"
                   ScrollChanged="ScrollViewer_OnScrollChanged">
-        <Grid>
-            <Canvas Background="White">
+        <Grid Width="{Binding ImageWidth}"
+              Height="{Binding ImageHeight}">
+            <Canvas Background="#FF0000">
                 <ItemsControl Width="{Binding ImageWidth}" 
                               Height="{Binding ImageHeight}"
                               ItemsSource="{Binding PixelViewModels1}">

@@ -65,7 +65,7 @@ public class BoardViewModelHex : BoardViewModelBase
         }
         else
         {
-            Rows = scene.Rows / 2;
+            Rows = (scene.Rows + 1) / 2;
             Columns = scene.Columns;
             ImageWidth = Columns * 36;
             ImageHeight = Rows * 2 * 36 * 0.866025404;
@@ -74,7 +74,9 @@ public class BoardViewModelHex : BoardViewModelBase
                 .Select(i => Enumerable.Range(i * 2 * Columns, Columns))
                 .SelectMany(_ => _);
 
-            var range2 = Enumerable.Range(0, Rows)
+            var oddRows = scene.Rows / 2;
+
+            var range2 = Enumerable.Range(0, oddRows)
                 .Select(i => Enumerable.Range(i * 2 * Columns + Columns, Columns))
                 .SelectMany(_ => _);
 

@@ -5,6 +5,8 @@
     <valueConverters:BooleanToBrushConverter x:Key="BooleanToBrushConverter"/>
     <valueConverters:ImagePathConverter x:Key="ImagePathConverter"/>
     <valueConverters:PixelToBrushConverter x:Key="PixelToBrushConverter"/>
+    <valueConverters:DoubleAdder x:Key="DoubleScaler"/>
+    <valueConverters:DoubleAdder x:Key="DoubleAdder"/>
     <ControlTemplate x:Key="errorTemplate">
         <Border BorderBrush="Red" BorderThickness="2">
             <Grid>
