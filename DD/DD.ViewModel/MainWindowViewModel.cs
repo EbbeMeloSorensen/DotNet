@@ -29,7 +29,7 @@ namespace DD.ViewModel
             var selectedScene = new ObservableObject<Scene>();
             SceneCollectionViewModel = new SceneCollectionViewModel(selectedScene);
 
-            var squareLength = 80;
+            var tileCenterSpacing = 80;
             var obstacleDiameter = 80;
             var creatureDiameter = 75;
             var projectileDiameter = 75;
@@ -42,7 +42,7 @@ namespace DD.ViewModel
             //BoardViewModel = new BoardViewModel(
             BoardViewModel = new BoardViewModelHex(
                 engine: engine,
-                squareLength,
+                tileCenterSpacing,
                 obstacleDiameter,
                 creatureDiameter,
                 projectileDiameter,

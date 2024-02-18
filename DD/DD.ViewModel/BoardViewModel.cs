@@ -26,13 +26,13 @@ namespace DD.ViewModel
 
         public BoardViewModel(
             IEngine engine, 
-            double squareLength, 
+            double tileCenterSpacing, 
             double obstacleDiameter, 
             double creatureDiameter, 
             double weaponDiameter, 
             ObservableObject<Scene> selectedScene) : base(
-                engine, 
-                squareLength, 
+                engine,
+                tileCenterSpacing, 
                 obstacleDiameter, 
                 creatureDiameter, 
                 weaponDiameter, 
@@ -60,8 +60,8 @@ namespace DD.ViewModel
             {
                 Rows = scene.Rows;
                 Columns = scene.Columns;
-                BoardWidth = Columns * SquareLength;
-                BoardHeight = Rows * SquareLength;
+                BoardWidth = Columns * TileCenterSpacing;
+                BoardHeight = Rows * TileCenterSpacing;
                 ImageWidth = BoardWidth;
                 ImageHeight = BoardHeight;
 

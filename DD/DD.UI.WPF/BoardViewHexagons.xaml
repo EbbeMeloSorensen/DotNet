@@ -63,7 +63,8 @@
                                      Stroke="Gray" StrokeThickness="1" 
                                      Fill="{Binding Path=Pixel, Converter={StaticResource PixelToBrushConverter}}">
                                 <Polygon.RenderTransform>
-                                    <TranslateTransform X="18" Y="31.17691454"/>
+                                    <TranslateTransform X="{Binding ShiftX}" 
+                                                        Y="{Binding ShiftY}"/>
                                 </Polygon.RenderTransform>
                             </Polygon>
                         </DataTemplate>

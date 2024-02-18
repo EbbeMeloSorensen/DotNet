@@ -92,8 +92,8 @@ namespace DD.ViewModel
             double diameter)
         {
             Diameter = diameter;
-            Left = (positionX + 0.5) * BoardViewModel.SquareLength - Diameter / 2;
-            Top = (positionY + 0.5) * BoardViewModel.SquareLength - Diameter / 2;
+            Left = (positionX + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
+            Top = (positionY + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
         }
 
         public string GetImagePath(string creatureTypeName)

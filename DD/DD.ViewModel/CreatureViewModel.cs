@@ -48,8 +48,8 @@ namespace DD.ViewModel
                 }
                 else
                 {
-                    Left = (value.PositionX + 0.5) * BoardViewModel.SquareLength - Diameter / 2;
-                    Top = (value.PositionY + 0.5) * BoardViewModel.SquareLength - Diameter / 2;
+                    Left = (value.PositionX + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
+                    Top = (value.PositionY + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
 
                     IsHostile = value.IsHostile;
                     IsInjured = value.HitPoints < value.CreatureType.MaxHitPoints;

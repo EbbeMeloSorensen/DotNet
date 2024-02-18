@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Collections.Generic;
 using Craft.Utils;
-using Craft.ViewModels.Common;
 using DD.Application;
 using DD.Domain;
 
@@ -35,18 +34,19 @@ public class BoardViewModelHex : BoardViewModelBase
 
     public BoardViewModelHex(
         IEngine engine,
-        double squareLength,
+        double tileCenterSpacing,
         double obstacleDiameter,
         double creatureDiameter,
         double weaponDiameter,
         ObservableObject<Scene> selectedScene) : base(
             engine,
-            squareLength,
+            tileCenterSpacing,
             obstacleDiameter,
             creatureDiameter,
             weaponDiameter,
             selectedScene)
     {
+        PixelViewModelHex.InitializePoints(TileCenterSpacing);
     }
 
     public override void LayoutBoard(
@@ -69,10 +69,10 @@ public class BoardViewModelHex : BoardViewModelBase
         {
             Rows = (scene.Rows + 1) / 2;
             Columns = scene.Columns;
-            BoardWidth = Columns * 36;
-            BoardHeight = Rows * 2 * 36 * 0.866025404;
-            ImageWidth = BoardWidth + (scene.Rows > 1 ? 36 / 2 : 0);
-            ImageHeight = BoardHeight + (scene.Rows % 2 == 0 ? 10.39230485 : -20.78460969);
+            BoardWidth = Columns * TileCenterSpacing;
+            BoardHeight = Rows * TileCenterSpacing * Math.Sqrt(3);
+            ImageWidth = BoardWidth + (scene.Rows > 1 ? TileCenterSpacing / 2 : 0);
+            ImageHeight = BoardHeight + (scene.Rows % 2 == 0 ? TileCenterSpacing * Math.Sqrt(3) / 6 : -TileCenterSpacing * Math.Sqrt(3) / 3);
 
             var range1 = Enumerable.Range(0, Rows)
                 .Select(i => Enumerable.Range(i * 2 * Columns, Columns))

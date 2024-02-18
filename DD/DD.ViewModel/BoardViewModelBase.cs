@@ -70,7 +70,7 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         }
     }
 
-    public static double SquareLength { get; set; }
+    public static double TileCenterSpacing { get; set; }
 
     // Used by the view to draw the grid
     public int Rows
@@ -250,7 +250,7 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
     // Constructor
     public BoardViewModelBase(
         IEngine engine,
-        double squareLength,
+        double tileCenterSpacing,
         double obstacleDiameter,
         double creatureDiameter,
         double weaponDiameter,
@@ -259,7 +259,7 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         ScrollableOffset = new PointD(0, 0);
         ScrollOffset = new PointD(0, 0);
 
-        SquareLength = squareLength;
+        TileCenterSpacing = tileCenterSpacing;
         _creatureDiameter = creatureDiameter;
         _weaponDiameter = weaponDiameter;
 
@@ -295,9 +295,9 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             {
                 var positionX = squareIndex.Value.ConvertToXCoordinate(Columns);
                 var positionY = squareIndex.Value.ConvertToYCoordinate(Columns);
-                SquareForCurrentCreatureLeft = positionX * SquareLength;
-                SquareForCurrentCreatureTop = positionY * SquareLength;
-                SquareForCurrentCreatureWidth = SquareLength - 3;
+                SquareForCurrentCreatureLeft = positionX * TileCenterSpacing;
+                SquareForCurrentCreatureTop = positionY * TileCenterSpacing;
+                SquareForCurrentCreatureWidth = TileCenterSpacing - 3;
             }
         };
     }
@@ -314,15 +314,15 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         Creature currentCreature,
         int[] path)
     {
-        TranslationX = (currentCreature.PositionX - _currentCreaturePositionX) * SquareLength;
-        TranslationY = (currentCreature.PositionY - _currentCreaturePositionY) * SquareLength;
+        TranslationX = (currentCreature.PositionX - _currentCreaturePositionX) * TileCenterSpacing;
+        TranslationY = (currentCreature.PositionY - _currentCreaturePositionY) * TileCenterSpacing;
 
         var stringBuilder = new StringBuilder("M0,0");
 
         stringBuilder.Append(path
             .Skip(1)
             .Select(i => new { X = i.ConvertToXCoordinate(Columns), Y = i.ConvertToYCoordinate(Columns) })
-            .Select(p => $"L{(p.X - _currentCreaturePositionX) * SquareLength},{(p.Y - _currentCreaturePositionY) * SquareLength}")
+            .Select(p => $"L{(p.X - _currentCreaturePositionX) * TileCenterSpacing},{(p.Y - _currentCreaturePositionY) * TileCenterSpacing}")
             .Aggregate((c, n) => $"{c}{n}"));
 
         CreaturePath = stringBuilder.ToString();
@@ -364,8 +364,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             targetCreature.PositionX - currentCreature.PositionX,
             targetCreature.PositionY - currentCreature.PositionY);
 
-        TranslationX = (translationVector.X) * SquareLength;
-        TranslationY = (translationVector.Y) * SquareLength;
+        TranslationX = (translationVector.X) * TileCenterSpacing;
+        TranslationY = (translationVector.Y) * TileCenterSpacing;
 
         var polarVector = translationVector.AsPolarVector();
 
@@ -378,8 +378,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
     public void PlayerClickedOnBoard()
     {
         // Todo: Determine the index of the square that the user clicked
-        var indexX = (int)System.Math.Floor(MouseWorldPosition.X / SquareLength);
-        var indexY = (int)System.Math.Floor(MouseWorldPosition.Y / SquareLength);
+        var indexX = (int)System.Math.Floor(MouseWorldPosition.X / TileCenterSpacing);
+        var indexY = (int)System.Math.Floor(MouseWorldPosition.Y / TileCenterSpacing);
         var squareIndex = indexY * Columns + indexX;
 
         OnPlayerClickedSquare(squareIndex);
