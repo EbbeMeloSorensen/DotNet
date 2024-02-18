@@ -1,9 +1,10 @@
 Done:
+* Highlight de felter, man kan ramme eller gå hen på med pixel colors i stedet for de der collections, du roder med
 * Ryd lidt op i BoardViewModel - f.eks. det med at den har RelayCommands
+* Udskil en basisklasse fra BoardViewModel, som har en square og en hex specialisering
+* Lav et boardview med hex felter
+* Vis creatures på hex boardet
 
 Todo:
-* Udskil en basisklasse fra BoardViewModel, som har alt pånær pixelviewmodels
+* En automatisk kamp mellem en ridder og et skelet på et lille board
 * Mulighed for at skippe animationer
-* Prøv at highlighte de felter, man kan ramme eller gå hen på med pixel colors i stedet for de der collections, du roder med
-* Prøv at lave et alternativt BoardView, der viser banen som et hex map
-* Lav et boardview med hex felter
