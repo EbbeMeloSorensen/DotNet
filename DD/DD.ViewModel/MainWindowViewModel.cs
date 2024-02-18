@@ -3,6 +3,7 @@ using Craft.Utils;
 using Craft.ViewModel.Utils;
 using DD.Domain;
 using DD.Engine.Complex;
+using DD.Application;
 
 namespace DD.ViewModel
 {
@@ -34,8 +35,8 @@ namespace DD.ViewModel
             var creatureDiameter = 75;
             var projectileDiameter = 75;
 
-            var engine = new ComplexEngine(_application.Logger);
-            //var engine = new SimpleEngine(_application.Logger);
+            //var engine = new ComplexEngine(_application.Logger);
+            var engine = new SimpleEngine(_application.Logger);
 
             _application.Engine = engine;
 
