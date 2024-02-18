@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              xmlns:local="clr-namespace:DD.UI.WPF"
              xmlns:viewModel="clr-namespace:DD.ViewModel;assembly=DD.ViewModel"
              xmlns:utils="clr-namespace:Craft.UI.Utils;assembly=Craft.UI.Utils"
@@ -28,15 +26,15 @@
                   SizeChanged="ScrollViewer_OnSizeChanged"
                   ScrollChanged="ScrollViewer_OnScrollChanged">
         <Canvas x:Name="Canvas" 
-                Background="AntiqueWhite"
+                Background="White"
                 Width="{Binding ImageWidth}"
                 Height="{Binding ImageHeight}"
                 MouseLeftButtonDown="Canvas_OnMouseLeftButtonDown"
                 MouseLeftButtonUp="Canvas_OnMouseLeftButtonUp"
                 MouseMove="Canvas_OnMouseMove">
 
-            <ItemsControl Width="{Binding ImageWidth}"
-                          Height="{Binding ImageHeight}"
+            <ItemsControl Width="{Binding BoardWidth}"
+                          Height="{Binding BoardHeight}"
                           ItemsSource="{Binding PixelViewModels}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

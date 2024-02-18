@@ -47,6 +47,8 @@ namespace DD.ViewModel
             {
                 Rows = 0;
                 Columns = 0;
+                BoardWidth = 0;
+                BoardHeight = 0;
                 ImageWidth = 0;
                 ImageHeight = 0;
                 ScrollableOffset = new PointD(0, 0);
@@ -58,8 +60,10 @@ namespace DD.ViewModel
             {
                 Rows = scene.Rows;
                 Columns = scene.Columns;
-                ImageWidth = Columns * SquareLength;
-                ImageHeight = Rows * SquareLength;
+                BoardWidth = Columns * SquareLength;
+                BoardHeight = Rows * SquareLength;
+                ImageWidth = BoardWidth;
+                ImageHeight = BoardHeight;
 
                 PixelViewModels = Enumerable.Range(0, Rows * Columns)
                     .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))

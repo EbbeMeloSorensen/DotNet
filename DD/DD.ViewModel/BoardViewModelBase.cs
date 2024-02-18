@@ -43,9 +43,32 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
     private Creature _currentCreature;
     private string _weaponImagePath;
     private bool _weaponAutoReverse;
-
+    private double _boardWidth;
+    private double _boardHeight;
     public CreatureViewModel CurrentCreatureViewModel { get; }
     public WeaponViewModel WeaponViewModel { get; }
+
+    // Used for dimensioning the collection of pixels. It may differ from ImageWidth
+    public double BoardWidth
+    {
+        get { return _boardWidth; }
+        set
+        {
+            _boardWidth = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    // Used for dimensioning the collection of pixels. It may differ from ImageHeight
+    public double BoardHeight
+    {
+        get { return _boardHeight; }
+        set
+        {
+            _boardHeight = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public static double SquareLength { get; set; }
 
@@ -145,79 +168,6 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             _weaponAutoReverse = value;
             RaisePropertyChanged();
         }
-    }
-
-    public abstract void HighlightPlayerOptions(
-        int squareIndexOfCurrentCreature,
-        HashSet<int> squareIndexesCurrentCreatureCanMoveTo,
-        HashSet<int> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
-        HashSet<int> squareIndexesCurrentCreatureCanAttackWithRangedWeapon);
-
-    public abstract void ClearPlayerOptions();
-
-    public void MoveCurrentCreature(
-        Creature currentCreature,
-        int[] path)
-    {
-        TranslationX = (currentCreature.PositionX - _currentCreaturePositionX) * SquareLength;
-        TranslationY = (currentCreature.PositionY - _currentCreaturePositionY) * SquareLength;
-
-        var stringBuilder = new StringBuilder("M0,0");
-
-        stringBuilder.Append(path
-            .Skip(1)
-            .Select(i => new { X = i.ConvertToXCoordinate(Columns), Y = i.ConvertToYCoordinate(Columns) })
-            .Select(p => $"L{(p.X - _currentCreaturePositionX) * SquareLength},{(p.Y - _currentCreaturePositionY) * SquareLength}")
-            .Aggregate((c, n) => $"{c}{n}"));
-
-        CreaturePath = stringBuilder.ToString();
-
-        var ticksPrStep = 1000000;
-        //var ticksPrStep = 10000;
-        var timeSpan = new TimeSpan(ticksPrStep * path.Length);
-
-        DurationForMoveCreatureAnimation = $"0:0:{timeSpan.Seconds}.{timeSpan.Milliseconds.ToString().PadLeft(3, '0')}";
-        _currentCreaturePositionX = currentCreature.PositionX;
-        _currentCreaturePositionY = currentCreature.PositionY;
-
-        MoveCreatureAnimationRunning = true;
-    }
-
-    public void AnimateAttack(
-        Creature currentCreature,
-        Creature targetCreature,
-        bool ranged)
-    {
-        if (ranged)
-        {
-            WeaponImagePath = "Images/Arrow.png";
-            WeaponAutoReverse = false;
-        }
-        else
-        {
-            WeaponImagePath = "Images/Sword.png";
-            WeaponAutoReverse = true;
-        }
-
-        WeaponViewModel.Weapon = new Weapon(
-            currentCreature.PositionX,
-            currentCreature.PositionY);
-
-        WeaponViewModel.BaseRotationAngle = _weaponImageBaseRotationAngleMap[WeaponImagePath];
-
-        var translationVector = new Vector2D(
-            targetCreature.PositionX - currentCreature.PositionX,
-            targetCreature.PositionY - currentCreature.PositionY);
-
-        TranslationX = (translationVector.X) * SquareLength;
-        TranslationY = (translationVector.Y) * SquareLength;
-
-        var polarVector = translationVector.AsPolarVector();
-
-        WeaponViewModel.RotationAngle = polarVector.Angle * 180 / System.Math.PI;
-
-        WeaponViewModel.IsVisible = true;
-        AttackAnimationRunning = true;
     }
 
     // Used by the host (ActOutSceneViewModel) for triggering an animation
@@ -350,6 +300,79 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
                 SquareForCurrentCreatureWidth = SquareLength - 3;
             }
         };
+    }
+
+    public abstract void HighlightPlayerOptions(
+        int squareIndexOfCurrentCreature,
+        HashSet<int> squareIndexesCurrentCreatureCanMoveTo,
+        HashSet<int> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
+        HashSet<int> squareIndexesCurrentCreatureCanAttackWithRangedWeapon);
+
+    public abstract void ClearPlayerOptions();
+
+    public void MoveCurrentCreature(
+        Creature currentCreature,
+        int[] path)
+    {
+        TranslationX = (currentCreature.PositionX - _currentCreaturePositionX) * SquareLength;
+        TranslationY = (currentCreature.PositionY - _currentCreaturePositionY) * SquareLength;
+
+        var stringBuilder = new StringBuilder("M0,0");
+
+        stringBuilder.Append(path
+            .Skip(1)
+            .Select(i => new { X = i.ConvertToXCoordinate(Columns), Y = i.ConvertToYCoordinate(Columns) })
+            .Select(p => $"L{(p.X - _currentCreaturePositionX) * SquareLength},{(p.Y - _currentCreaturePositionY) * SquareLength}")
+            .Aggregate((c, n) => $"{c}{n}"));
+
+        CreaturePath = stringBuilder.ToString();
+
+        var ticksPrStep = 1000000;
+        //var ticksPrStep = 10000;
+        var timeSpan = new TimeSpan(ticksPrStep * path.Length);
+
+        DurationForMoveCreatureAnimation = $"0:0:{timeSpan.Seconds}.{timeSpan.Milliseconds.ToString().PadLeft(3, '0')}";
+        _currentCreaturePositionX = currentCreature.PositionX;
+        _currentCreaturePositionY = currentCreature.PositionY;
+
+        MoveCreatureAnimationRunning = true;
+    }
+
+    public void AnimateAttack(
+        Creature currentCreature,
+        Creature targetCreature,
+        bool ranged)
+    {
+        if (ranged)
+        {
+            WeaponImagePath = "Images/Arrow.png";
+            WeaponAutoReverse = false;
+        }
+        else
+        {
+            WeaponImagePath = "Images/Sword.png";
+            WeaponAutoReverse = true;
+        }
+
+        WeaponViewModel.Weapon = new Weapon(
+            currentCreature.PositionX,
+            currentCreature.PositionY);
+
+        WeaponViewModel.BaseRotationAngle = _weaponImageBaseRotationAngleMap[WeaponImagePath];
+
+        var translationVector = new Vector2D(
+            targetCreature.PositionX - currentCreature.PositionX,
+            targetCreature.PositionY - currentCreature.PositionY);
+
+        TranslationX = (translationVector.X) * SquareLength;
+        TranslationY = (translationVector.Y) * SquareLength;
+
+        var polarVector = translationVector.AsPolarVector();
+
+        WeaponViewModel.RotationAngle = polarVector.Angle * 180 / System.Math.PI;
+
+        WeaponViewModel.IsVisible = true;
+        AttackAnimationRunning = true;
     }
 
     public void PlayerClickedOnBoard()

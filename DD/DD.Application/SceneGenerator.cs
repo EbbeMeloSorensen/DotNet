@@ -797,7 +797,7 @@ namespace DD.Application
         {
             var scene = new Scene("1 skeleton vs 1 knight - 3 x 5", 3, 5);
             scene.AddCreature(new Creature(_knight, false), 0, 0);
-            scene.AddCreature(new Creature(_skeleton, true), 2, 4);
+            scene.AddCreature(new Creature(_skeleton, true), 4, 2);
 
             return scene;
         }
@@ -806,7 +806,7 @@ namespace DD.Application
         {
             var scene = new Scene("1 skeleton vs 1 knight - 5 x 3", 5, 3);
             scene.AddCreature(new Creature(_knight, false), 0, 0);
-            scene.AddCreature(new Creature(_skeleton, true), 4, 2);
+            scene.AddCreature(new Creature(_skeleton, true), 2, 4);
 
             return scene;
         }

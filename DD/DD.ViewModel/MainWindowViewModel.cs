@@ -39,6 +39,7 @@ namespace DD.ViewModel
 
             _application.Engine = engine;
 
+            //BoardViewModel = new BoardViewModel(
             BoardViewModel = new BoardViewModelHex(
                 engine: engine,
                 squareLength,

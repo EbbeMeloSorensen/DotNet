@@ -58,6 +58,8 @@ public class BoardViewModelHex : BoardViewModelBase
             Columns = 0;
             ImageWidth = 0;
             ImageHeight = 0;
+            BoardWidth = 0;
+            BoardHeight = 0;
             ScrollableOffset = new PointD(0, 0);
             ScrollOffset = new PointD(0, 0);
 
@@ -67,8 +69,10 @@ public class BoardViewModelHex : BoardViewModelBase
         {
             Rows = (scene.Rows + 1) / 2;
             Columns = scene.Columns;
-            ImageWidth = Columns * 36;
-            ImageHeight = Rows * 2 * 36 * 0.866025404;
+            BoardWidth = Columns * 36;
+            BoardHeight = Rows * 2 * 36 * 0.866025404;
+            ImageWidth = BoardWidth + (scene.Rows > 1 ? 36 / 2 : 0);
+            ImageHeight = BoardHeight + (scene.Rows % 2 == 0 ? 10.39230485 : -20.78460969);
 
             var range1 = Enumerable.Range(0, Rows)
                 .Select(i => Enumerable.Range(i * 2 * Columns, Columns))
@@ -81,11 +85,11 @@ public class BoardViewModelHex : BoardViewModelBase
                 .SelectMany(_ => _);
 
             PixelViewModels1 = range1
-                .Select(i => new PixelViewModel(i, new Pixel(50, 50, 50, 255)))
+                .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))
                 .ToList();
 
             PixelViewModels2 = range2
-                .Select(i => new PixelViewModel(i, new Pixel(50, 50, 50, 255)))
+                .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))
                 .ToList();
         }
     }

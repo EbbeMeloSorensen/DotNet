@@ -27,9 +27,9 @@
                   ScrollChanged="ScrollViewer_OnScrollChanged">
         <Grid Width="{Binding ImageWidth}"
               Height="{Binding ImageHeight}">
-            <Canvas Background="#FF0000">
-                <ItemsControl Width="{Binding ImageWidth}" 
-                              Height="{Binding ImageHeight}"
+            <Canvas Background="White">
+                <ItemsControl Width="{Binding BoardWidth}" 
+                              Height="{Binding BoardHeight}"
                               ItemsSource="{Binding PixelViewModels1}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -48,8 +48,8 @@
                 </ItemsControl>
             </Canvas>
             <Canvas>
-                <ItemsControl Width="{Binding ImageWidth}" 
-                              Height="{Binding ImageHeight}"
+                <ItemsControl Width="{Binding BoardWidth}" 
+                              Height="{Binding BoardHeight}"
                               ItemsSource="{Binding PixelViewModels2}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
