@@ -71,6 +71,17 @@ namespace DD.ViewModel
             }
         }
 
+        public override void DetermineCanvasPosition(
+            int positionX,
+            int positionY,
+            double diameter,
+            out double left,
+            out double top)
+        {
+            left = (positionX + 0.5) * TileCenterSpacing - diameter / 2;
+            top = (positionY + 0.5) * TileCenterSpacing - diameter / 2;
+        }
+
         public override void HighlightPlayerOptions(
             int squareIndexOfCurrentCreature,
             HashSet<int> squareIndexesCurrentCreatureCanMoveTo,

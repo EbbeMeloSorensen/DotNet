@@ -68,7 +68,9 @@ namespace DD.ViewModel
 
         public CreatureViewModel(
             Creature creature,
-            double diameter) : base(creature.PositionX, creature.PositionY, diameter)
+            double left,
+            double top,
+            double diameter) : base(left, top, diameter)
         {
             IsVisible = true;
             IsHostile = creature.IsHostile;

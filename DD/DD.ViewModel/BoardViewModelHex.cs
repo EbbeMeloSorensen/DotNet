@@ -94,6 +94,19 @@ public class BoardViewModelHex : BoardViewModelBase
         }
     }
 
+    public override void DetermineCanvasPosition(
+        int positionX,
+        int positionY,
+        double diameter,
+        out double left,
+        out double top)
+    {
+        left = (positionX + 0.5) * TileCenterSpacing - diameter / 2 + positionY % 2 * TileCenterSpacing / 2;
+        top = (positionY + 0.5) * TileCenterSpacing * Math.Sqrt(3) / 2 - diameter / 2;
+
+        top += TileCenterSpacing * 0.1;
+    }
+
     public override void HighlightPlayerOptions(
         int squareIndexOfCurrentCreature,
         HashSet<int> squareIndexesCurrentCreatureCanMoveTo,

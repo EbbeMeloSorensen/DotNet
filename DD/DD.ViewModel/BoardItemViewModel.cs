@@ -87,13 +87,13 @@ namespace DD.ViewModel
         }
 
         public BoardItemViewModel(
-            int positionX, 
-            int positionY,
+            double left, 
+            double top,
             double diameter)
         {
+            Left = left;
+            Top = top;
             Diameter = diameter;
-            Left = (positionX + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
-            Top = (positionY + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
         }
 
         public string GetImagePath(string creatureTypeName)

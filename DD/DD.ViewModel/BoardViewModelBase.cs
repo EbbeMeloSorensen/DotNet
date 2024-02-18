@@ -20,8 +20,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         { "Images/Sword.png", -56 },
     };
 
-    private static double _creatureDiameter;
-    private static double _weaponDiameter;
+    protected static double _creatureDiameter;
+    protected static double _weaponDiameter;
 
     private int _rows;
     private int _columns;
@@ -264,7 +264,10 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         _weaponDiameter = weaponDiameter;
 
         CurrentCreatureViewModel = new CreatureViewModel(_creatureDiameter);
-        WeaponViewModel = new WeaponViewModel(new Weapon(0, 0), _weaponDiameter) { IsVisible = false };
+        WeaponViewModel = new WeaponViewModel(new Weapon(0, 0), 0, 0, _weaponDiameter)
+        {
+            IsVisible = false
+        };
 
         var timeSpanForAttackAnimation = new TimeSpan(2000000);
         //var timeSpanForAttackAnimation = new TimeSpan(20000);
@@ -283,7 +286,12 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             else
             {
                 ObstacleViewModels = new ObservableCollection<ObstacleViewModel>(
-                    scene.Obstacles.Select(o => new ObstacleViewModel(o, obstacleDiameter)));
+                    scene.Obstacles.Select(o =>
+                    {
+                        var left = (o.PositionX + 0.5) * TileCenterSpacing - obstacleDiameter / 2;
+                        var top = (o.PositionY + 0.5) * TileCenterSpacing - obstacleDiameter / 2;
+                        return new ObstacleViewModel(o, left, top, obstacleDiameter);
+                    }));
             }
         };
 
@@ -473,11 +481,28 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         else
         {
             CreatureViewModels = new ObservableCollection<CreatureViewModel>(
-                _creatures.Select(c => new CreatureViewModel(c, _creatureDiameter)));
+                _creatures.Select(c =>
+                {
+                    DetermineCanvasPosition(
+                        c.PositionX, 
+                        c.PositionY,
+                        _creatureDiameter,
+                        out var left, 
+                        out var top);
+
+                    return new CreatureViewModel(c, left, top, _creatureDiameter);
+                }));
         }
 
         CurrentCreatureViewModel.Creature = _currentCreature;
     }
+
+    public abstract void DetermineCanvasPosition(
+        int positionX,
+        int positionY,
+        double diameter,
+        out double left,
+        out double top);
 
     // Used to inform the host (ActOutSceneViewModel) that the user clicked the board
     private void OnPlayerClickedSquare(int squareIndex)

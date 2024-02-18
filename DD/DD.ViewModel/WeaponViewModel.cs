@@ -45,7 +45,9 @@ namespace DD.ViewModel
 
         public WeaponViewModel(
             Weapon weapon,
-            double diameter) : base(weapon.PositionX, weapon.PositionY, diameter)
+            double left,
+            double top,
+            double diameter) : base(left, top, diameter)
         {
             ImagePath = "Images/Arrow.png";
         }

@@ -7,7 +7,9 @@ namespace DD.ViewModel
     {
         public ObstacleViewModel(
             Obstacle obstacle,
-            double diameter) : base(obstacle.PositionX, obstacle.PositionY, diameter)
+            double left,
+            double top,
+            double diameter) : base(left, top, diameter)
         {
             switch (obstacle.ObstacleType)
             {
