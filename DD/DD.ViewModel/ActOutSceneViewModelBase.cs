@@ -80,6 +80,11 @@ public abstract class ActOutSceneViewModelBase
                 _engine.Creatures,
                 _engine.CurrentCreature);
 
+            if (_engine.BattleDecided)
+            {
+                return;
+            }
+
             await Proceed();
         };
 

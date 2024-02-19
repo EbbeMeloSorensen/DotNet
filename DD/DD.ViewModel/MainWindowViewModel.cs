@@ -38,18 +38,26 @@ namespace DD.ViewModel
             //var engine = new ComplexEngine(_application.Logger);
             var engine = new SimpleEngine(_application.Logger);
 
-            engine.BoardTileMode = BoardTileMode.Hexagonal;
+            //engine.BoardTileMode = BoardTileMode.Hexagonal;
+            engine.BoardTileMode = BoardTileMode.Square;
 
             _application.Engine = engine;
 
-            //BoardViewModel = new BoardViewModel(
-            BoardViewModel = new BoardViewModelHex(
-                engine: engine,
-                tileCenterSpacing,
-                obstacleDiameter,
-                creatureDiameter,
-                projectileDiameter,
-                selectedScene);
+            BoardViewModel = engine.BoardTileMode == BoardTileMode.Square
+                ? new BoardViewModel(
+                    engine: engine,
+                    tileCenterSpacing,
+                    obstacleDiameter,
+                    creatureDiameter,
+                    projectileDiameter,
+                    selectedScene)
+                : new BoardViewModelHex(
+                    engine: engine,
+                    tileCenterSpacing,
+                    obstacleDiameter,
+                    creatureDiameter,
+                    projectileDiameter,
+                    selectedScene);
 
             if (engine is ComplexEngine)
             {

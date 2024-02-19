@@ -689,15 +689,20 @@ namespace DD.Application
         private IEnumerable<Creature> IdentifyAdjacentOpponents(
             int tileIndex)
         {
-            var x = tileIndex.ConvertToXCoordinate(_scene.Columns);
-            var y = tileIndex.ConvertToYCoordinate(_scene.Columns);
+            var positionX = tileIndex.ConvertToXCoordinate(_scene.Columns);
+            var positionY = tileIndex.ConvertToYCoordinate(_scene.Columns);
 
-            var currentCreaturePosition = tileIndex.GetTileCenterCoordinates(_scene.Columns, BoardTileMode);
+            var currentCreaturePosition = Helpers.GetTileCenterCoordinates(
+                positionX, positionY, BoardTileMode);
 
-            // Todo: Lav denne om, så den både virker for square og hexgonal tiles
             return Creatures
                 .Where(c => c.IsHostile != CurrentCreature.IsHostile)
-                .Select(c => new { Creature = c, Distance = Math.Pow(c.PositionX - x, 2) + Math.Pow(c.PositionY - y, 2) })
+                .Select(c => new 
+                    { 
+                        Creature = c, 
+                        Distance = currentCreaturePosition.SquaredDistanceTo(
+                            Helpers.GetTileCenterCoordinates(c.PositionX, c.PositionY, BoardTileMode))
+                    })
                 .Where(cd => cd.Distance < 2.1)
                 .Select(cd => cd.Creature);
         }

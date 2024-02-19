@@ -8,18 +8,15 @@ namespace DD.Application
     public static class Helpers
     {
         public static Point2D GetTileCenterCoordinates(
-            this int tileIndex,
-            int columns,
+            int positionX,
+            int positionY,
             BoardTileMode mode)
         {
-            var rowIndex = tileIndex / columns;
-            var columnIndex = tileIndex % columns;
-
             switch (mode)
             {
                 case BoardTileMode.Square:
                 {
-                    return new Point2D(columnIndex, rowIndex);
+                    return new Point2D(positionX, positionY);
                 }
                 case BoardTileMode.Hexagonal:
                 {
