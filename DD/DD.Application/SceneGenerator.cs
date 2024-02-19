@@ -760,8 +760,8 @@ namespace DD.Application
         {
             var scene = new Scene("1 skeleton vs 1 knight - 2 x 2", 2, 2);
             //scene.AddObstacle(new Obstacle(ObstacleType.Wall, 1, 0));
-            scene.AddCreature(new Creature(_knight, false) { IsAutomatic = true }, 0, 0);
-            scene.AddCreature(new Creature(_skeleton, true), 1, 1);
+            scene.AddCreature(new Creature(_knight, false) { IsAutomatic = true }, 1, 0);
+            scene.AddCreature(new Creature(_skeleton, true), 0, 1);
 
             return scene;
         }
