@@ -38,6 +38,8 @@ namespace DD.ViewModel
             //var engine = new ComplexEngine(_application.Logger);
             var engine = new SimpleEngine(_application.Logger);
 
+            engine.BoardTileMode = BoardTileMode.Hexagonal;
+
             _application.Engine = engine;
 
             //BoardViewModel = new BoardViewModel(
