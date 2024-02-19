@@ -29,13 +29,40 @@ namespace DD.Engine.Complex
         private bool _currentCreatureJustMoved;
         private double _moveDistanceRemaningForCurrentCreature;
 
+        public int[] CurrentCreaturePath { get; private set; }
+
+        public bool BattleroundCompleted { get; private set; }
+
+        public bool BattleDecided { get; private set; }
+
+        public List<Creature> Creatures { get; private set; }
+
+        public Creature CurrentCreature { get; private set; }
+
+        public Creature TargetCreature { get; private set; }
+
+        public ObservableObject<int?> SquareIndexForCurrentCreature { get; }
+
+        public ObservableObject<Dictionary<int, double>> SquareIndexesCurrentCreatureCanMoveTo { get; }
+
+        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon { get; }
+
+        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithRangedWeapon { get; }
+
+        public ObservableObject<bool> BattleHasStarted { get; }
+
+        public ObservableObject<bool> BattleHasEnded { get; }
+
+        public ObservableObject<bool> AutoRunning { get; }
+
+        public bool NextEventOccursAutomatically
+        {
+            get { return CurrentCreature.IsAutomatic || 
+                         !CurrentPlayerControlledCreatureHasAnyOptionsLeft() ||
+                         _evasionEvents.Count > 0; }
+        }
+
         public ILogger Logger { get; set; }
-
-        public int[] CurrentCreaturePath { get; set; }
-
-        public bool BattleroundCompleted { get; set; }
-
-        public bool BattleDecided { get; set; }
 
         public Scene Scene
         {
@@ -96,32 +123,7 @@ namespace DD.Engine.Complex
             }
         }
 
-        public List<Creature> Creatures { get; set; }
-
-        public Creature CurrentCreature { get; set; }
-
-        public Creature TargetCreature { get; set; }
-
-        public ObservableObject<int?> SquareIndexForCurrentCreature { get; }
-
-        public ObservableObject<Dictionary<int, double>> SquareIndexesCurrentCreatureCanMoveTo { get; }
-
-        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon { get; }
-
-        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithRangedWeapon { get; }
-
-        public ObservableObject<bool> BattleHasStarted { get; }
-
-        public ObservableObject<bool> BattleHasEnded { get; }
-
-        public ObservableObject<bool> AutoRunning { get; }
-
-        public bool NextEventOccursAutomatically
-        {
-            get { return CurrentCreature.IsAutomatic || 
-                         !CurrentPlayerControlledCreatureHasAnyOptionsLeft() ||
-                         _evasionEvents.Count > 0; }
-        }
+        public BoardTileMode BoardTileMode { get; set; }
 
         public ComplexEngine(
             ILogger logger)

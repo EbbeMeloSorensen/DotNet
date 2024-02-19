@@ -119,6 +119,7 @@ public abstract class ActOutSceneViewModelBase
     {
         _engine.StartBattle();
 
+        // I dont think this is necessary..
         _boardViewModel.UpdateCreatureViewModels(
             _engine.Creatures,
             _engine.CurrentCreature);

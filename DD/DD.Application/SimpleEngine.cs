@@ -5,6 +5,7 @@ using Craft.Math;
 using Craft.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using DD.Domain;
@@ -25,13 +26,36 @@ namespace DD.Application
         private bool _currentCreatureJustMoved;
         private double _moveDistanceRemaningForCurrentCreature;
 
+        public int[] CurrentCreaturePath { get; private set; }
+
+        public bool BattleroundCompleted { get; private set; }
+
+        public bool BattleDecided { get; private set; }
+
+        public List<Creature> Creatures { get; private set; }
+
+        public Creature CurrentCreature { get; private set; }
+
+        public Creature TargetCreature { get; private set; }
+
+        public ObservableObject<int?> SquareIndexForCurrentCreature { get; }
+
+        public ObservableObject<Dictionary<int, double>> SquareIndexesCurrentCreatureCanMoveTo { get; }
+
+        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon { get; }
+
+        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithRangedWeapon { get; }
+
+        public ObservableObject<bool> BattleHasStarted { get; }
+
+        public ObservableObject<bool> BattleHasEnded { get; }
+
+        public ObservableObject<bool> AutoRunning { get; }
+
+        public bool NextEventOccursAutomatically => CurrentCreature.IsAutomatic ||
+                                                    !CurrentPlayerControlledCreatureHasAnyOptionsLeft();
+
         public ILogger Logger { get; set; }
-
-        public int[] CurrentCreaturePath { get; set; }
-
-        public bool BattleroundCompleted { get; set; }
-
-        public bool BattleDecided { get; set; }
 
         public Scene Scene
         {
@@ -92,28 +116,7 @@ namespace DD.Application
             }
         }
 
-        public List<Creature> Creatures { get; set; }
-
-        public Creature CurrentCreature { get; set; }
-
-        public Creature TargetCreature { get; set; }
-
-        public ObservableObject<int?> SquareIndexForCurrentCreature { get; }
-
-        public ObservableObject<Dictionary<int, double>> SquareIndexesCurrentCreatureCanMoveTo { get; }
-
-        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithMeleeWeapon { get; }
-
-        public ObservableObject<HashSet<int>> SquareIndexesCurrentCreatureCanAttackWithRangedWeapon { get; }
-
-        public ObservableObject<bool> BattleHasStarted { get; }
-
-        public ObservableObject<bool> BattleHasEnded { get; }
-
-        public ObservableObject<bool> AutoRunning { get; }
-
-        public bool NextEventOccursAutomatically => CurrentCreature.IsAutomatic ||
-                                                    !CurrentPlayerControlledCreatureHasAnyOptionsLeft();
+        public BoardTileMode BoardTileMode { get; set; }
 
         public SimpleEngine(
             ILogger logger)
@@ -313,7 +316,7 @@ namespace DD.Application
                 .Select(c => c.IndexOfOccupiedSquare(_scene.Columns))
                 .ToArray();
 
-            var graph = new GraphMatrix8Connectivity(_scene.Rows, _scene.Columns);
+            var graph = GenerateGraph(_scene.Rows, _scene.Columns);
 
             graph.ComputeDistances(
                 indexesOfHostileCreatures,
@@ -689,9 +692,10 @@ namespace DD.Application
             var x = squareIndex.ConvertToXCoordinate(_scene.Columns);
             var y = squareIndex.ConvertToYCoordinate(_scene.Columns);
 
+            // Todo: Lav denne om, så den både virker for square og hexgonal tiles
             return Creatures
                 .Where(c => c.IsHostile != CurrentCreature.IsHostile)
-                .Select(c => new { Creature = c, Distance = System.Math.Pow(c.PositionX - x, 2) + System.Math.Pow(c.PositionY - y, 2) })
+                .Select(c => new { Creature = c, Distance = Math.Pow(c.PositionX - x, 2) + Math.Pow(c.PositionY - y, 2) })
                 .Where(cd => cd.Distance < 2.1)
                 .Select(cd => cd.Creature);
         }
@@ -818,6 +822,27 @@ namespace DD.Application
             CurrentCreaturePath = path;
 
             return new CreatureMove();
+        }
+
+        private IGraph GenerateGraph(
+            int rows,
+            int columns)
+        {
+            switch (BoardTileMode)
+            {
+                case BoardTileMode.Square:
+                {
+                    return new GraphMatrix8Connectivity(rows, columns);
+                }
+                case BoardTileMode.Hexagonal:
+                {
+                    return new GraphHexMesh(rows, columns);
+                }
+                default:
+                {
+                    throw new InvalidEnumArgumentException("Unknown board tile mode");
+                }
+            }
         }
     }
 }

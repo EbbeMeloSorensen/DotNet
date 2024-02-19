@@ -7,23 +7,25 @@ using DD.Application.BattleEvents;
 
 namespace DD.Application
 {
+    public enum BoardTileMode
+    {
+        Square,
+        Hexagonal
+    }
+
     public interface IEngine
     {
-        ILogger Logger { get; set; }
+        int[] CurrentCreaturePath { get; }
 
-        int[] CurrentCreaturePath { get; set; }
+        bool BattleroundCompleted { get; }
 
-        bool BattleroundCompleted { get; set; }
+        bool BattleDecided { get; }
 
-        bool BattleDecided { get; set; }
+        List<Creature> Creatures { get; }
 
-        Scene Scene { get; set; }
+        Creature CurrentCreature { get; }
 
-        List<Creature> Creatures { get; set; }
-
-        Creature CurrentCreature { get; set; }
-
-        Creature TargetCreature { get; set; }
+        Creature TargetCreature { get; }
 
         ObservableObject<int?> SquareIndexForCurrentCreature { get; }
 
@@ -40,6 +42,12 @@ namespace DD.Application
         ObservableObject<bool> AutoRunning { get; }
 
         bool NextEventOccursAutomatically { get; }
+
+        ILogger Logger { get; set; }
+
+        Scene Scene { get; set; }
+
+        BoardTileMode BoardTileMode { get; set; }
 
         void Randomize();
 
@@ -60,7 +68,7 @@ namespace DD.Application
 
         void SwitchToNextCreature();
 
-        public string Tag(
+        string Tag(
             Creature creature);
     }
 }
