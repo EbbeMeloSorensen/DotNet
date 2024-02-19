@@ -687,10 +687,12 @@ namespace DD.Application
         }
 
         private IEnumerable<Creature> IdentifyAdjacentOpponents(
-            int squareIndex)
+            int tileIndex)
         {
-            var x = squareIndex.ConvertToXCoordinate(_scene.Columns);
-            var y = squareIndex.ConvertToYCoordinate(_scene.Columns);
+            var x = tileIndex.ConvertToXCoordinate(_scene.Columns);
+            var y = tileIndex.ConvertToYCoordinate(_scene.Columns);
+
+            var currentCreaturePosition = tileIndex.GetTileCenterCoordinates(_scene.Columns, BoardTileMode);
 
             // Todo: Lav denne om, så den både virker for square og hexgonal tiles
             return Creatures
