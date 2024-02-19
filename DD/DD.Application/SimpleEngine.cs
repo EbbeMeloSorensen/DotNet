@@ -695,6 +695,12 @@ namespace DD.Application
             var currentCreaturePosition = Helpers.GetTileCenterCoordinates(
                 positionX, positionY, BoardTileMode);
 
+            var temp = Creatures
+                .Where(c => c.IsHostile != CurrentCreature.IsHostile)
+                .Select(c => currentCreaturePosition.SquaredDistanceTo(
+                    Helpers.GetTileCenterCoordinates(c.PositionX, c.PositionY, BoardTileMode)))
+                .ToList();
+
             return Creatures
                 .Where(c => c.IsHostile != CurrentCreature.IsHostile)
                 .Select(c => new 

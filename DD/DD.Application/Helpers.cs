@@ -20,7 +20,7 @@ namespace DD.Application
                 }
                 case BoardTileMode.Hexagonal:
                 {
-                    return new Point2D(positionX % 2 == 0 ? positionX : positionX + 0.5, positionY * Math.Sqrt(3) / 2);
+                    return new Point2D(positionY % 2 == 0 ? positionX : positionX + 0.5, positionY * Math.Sqrt(3) / 2);
                 }
                 default:
                 {
