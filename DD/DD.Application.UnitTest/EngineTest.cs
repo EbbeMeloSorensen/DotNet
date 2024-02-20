@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Threading.Tasks;
-using DD.Application.BattleEvents;
 using Xunit;
 using FluentAssertions;
 using DD.Engine.Complex;
+using DD.Application.BattleEvents;
 
 namespace DD.Application.UnitTest
 {
@@ -13,7 +13,7 @@ namespace DD.Application.UnitTest
         public async Task SevenKnights_vs_FiftyGoblins_16x16_SquareTiles()
         {
             // Arrange
-            var engine = new ComplexEngine(
+            var engine = new SimpleEngine(
                 null)
             {
                 Scene = SceneGenerator.GenerateScene(2)
@@ -39,6 +39,41 @@ namespace DD.Application.UnitTest
 
             // Assert
             engine.Creatures.Count.Should().Be(5);
+            engine.Creatures.First().CreatureType.Name.Should().Be("Knight");
+        }
+
+        [Fact]
+        public async Task SevenKnights_vs_FiftyGoblins_16x16_HexagonalTiles()
+        {
+            // Arrange
+            var engine = new SimpleEngine(
+                null)
+            {
+                Scene = SceneGenerator.GenerateScene(2)
+            };
+
+            engine.BoardTileMode = BoardTileMode.Hexagonal;
+
+            // Act
+            engine.StartBattle();
+
+            while (!engine.BattleDecided)
+            {
+                if (engine.BattleroundCompleted)
+                {
+                    engine.StartBattleRound();
+                }
+
+                var nextEvent = await engine.ExecuteNextEvent();
+
+                if (nextEvent is CreaturePass)
+                {
+                    engine.SwitchToNextCreature();
+                }
+            }
+
+            // Assert
+            engine.Creatures.Count.Should().Be(7);
             engine.Creatures.First().CreatureType.Name.Should().Be("Knight");
         }
 

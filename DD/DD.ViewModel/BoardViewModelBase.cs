@@ -31,8 +31,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
     private double _squareForCurrentCreatureWidth;
     private ObservableCollection<ObstacleViewModel> _obstacleViewModels;
     private ObservableCollection<CreatureViewModel> _creatureViewModels;
-    private double _currentCreaturePositionX;
-    private double _currentCreaturePositionY;
+    private int _currentCreaturePositionX;
+    private int _currentCreaturePositionY;
     private double _translationX;
     private double _translationY;
     private string _creaturePath;
@@ -270,8 +270,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             IsVisible = false
         };
 
-        var timeSpanForAttackAnimation = new TimeSpan(5000000);
-        //var timeSpanForAttackAnimation = new TimeSpan(2000000);
+        //var timeSpanForAttackAnimation = new TimeSpan(5000000);
+        var timeSpanForAttackAnimation = new TimeSpan(2000000);
         //var timeSpanForAttackAnimation = new TimeSpan(20000);
         DurationForAttackAnimation = $"0:0:{timeSpanForAttackAnimation.Seconds}.{timeSpanForAttackAnimation.Milliseconds.ToString().PadLeft(3, '0')}";
 
@@ -324,19 +324,45 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         Creature currentCreature,
         int[] path)
     {
-        TranslationX = (currentCreature.PositionX - _currentCreaturePositionX) * TileCenterSpacing;
-        TranslationY = (currentCreature.PositionY - _currentCreaturePositionY) * TileCenterSpacing;
+        DetermineCanvasPosition(
+            currentCreature.PositionX,
+            currentCreature.PositionY,
+            out var x2,
+            out var y2);
+
+        DetermineCanvasPosition(
+            _currentCreaturePositionX,
+            _currentCreaturePositionY,
+            out var x1,
+            out var y1);
+
+        TranslationX = x2 - x1;
+        TranslationY = y2 - y1;
 
         var stringBuilder = new StringBuilder("M0,0");
 
         stringBuilder.Append(path
             .Skip(1)
-            .Select(i => new { X = i.ConvertToXCoordinate(Columns), Y = i.ConvertToYCoordinate(Columns) })
-            .Select(p => $"L{(p.X - _currentCreaturePositionX) * TileCenterSpacing},{(p.Y - _currentCreaturePositionY) * TileCenterSpacing}")
+            .Select(i =>
+            {
+                DetermineCanvasPosition(
+                    i.ConvertToXCoordinate(Columns),
+                    i.ConvertToYCoordinate(Columns),
+                    out var x,
+                    out var y);
+
+                return new
+                {
+                    X = x,
+                    Y = y
+                };
+            })
+            .Select(p => $"L{p.X - x1},{p.Y - y1}")
             .Aggregate((c, n) => $"{c}{n}"));
 
         CreaturePath = stringBuilder.ToString();
 
+        //var ticksPrStep = 5000000;
         var ticksPrStep = 1000000;
         //var ticksPrStep = 10000;
         var timeSpan = new TimeSpan(ticksPrStep * path.Length);
