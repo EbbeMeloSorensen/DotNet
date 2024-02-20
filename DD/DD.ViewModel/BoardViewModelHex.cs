@@ -97,14 +97,11 @@ public class BoardViewModelHex : BoardViewModelBase
     public override void DetermineCanvasPosition(
         int positionX,
         int positionY,
-        double diameter,
-        out double left,
-        out double top)
+        out double x,
+        out double y)
     {
-        left = (positionX + 0.5) * TileCenterSpacing - diameter / 2 + positionY % 2 * TileCenterSpacing / 2;
-        top = (positionY + 0.5) * TileCenterSpacing * Math.Sqrt(3) / 2 - diameter / 2;
-
-        top += TileCenterSpacing * 0.1;
+        x = (positionX + 0.5) * TileCenterSpacing + positionY % 2 * TileCenterSpacing / 2;
+        y = (positionY + 0.5) * TileCenterSpacing * Math.Sqrt(3) / 2;
     }
 
     public override void HighlightPlayerOptions(

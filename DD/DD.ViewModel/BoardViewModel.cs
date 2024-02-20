@@ -74,12 +74,11 @@ namespace DD.ViewModel
         public override void DetermineCanvasPosition(
             int positionX,
             int positionY,
-            double diameter,
-            out double left,
-            out double top)
+            out double x,
+            out double y)
         {
-            left = (positionX + 0.5) * TileCenterSpacing - diameter / 2;
-            top = (positionY + 0.5) * TileCenterSpacing - diameter / 2;
+            x = (positionX + 0.5) * TileCenterSpacing;
+            y = (positionY + 0.5) * TileCenterSpacing;
         }
 
         public override void HighlightPlayerOptions(

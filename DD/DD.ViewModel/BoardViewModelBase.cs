@@ -367,13 +367,12 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         DetermineCanvasPosition(
             currentCreature.PositionX,
             currentCreature.PositionY,
-            _weaponDiameter,
-            out var left,
-            out var top);
+            out var x,
+            out var y);
 
         WeaponViewModel.Initialize(
-            left,
-            top);
+            x - _weaponDiameter / 2,
+            y - _weaponDiameter / 2);
 
         var translationVector = new Vector2D(
             targetCreature.PositionX - currentCreature.PositionX,
@@ -493,11 +492,10 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
                     DetermineCanvasPosition(
                         c.PositionX, 
                         c.PositionY,
-                        _creatureDiameter,
-                        out var left, 
-                        out var top);
+                        out var x, 
+                        out var y);
 
-                    return new CreatureViewModel(c, left, top, _creatureDiameter);
+                    return new CreatureViewModel(c, x - _creatureDiameter / 2, y - _creatureDiameter / 2, _creatureDiameter);
                 }));
         }
 
@@ -510,14 +508,13 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             DetermineCanvasPosition(
                 _currentCreature.PositionX,
                 _currentCreature.PositionY,
-                _creatureDiameter,
-                out var left,
-            out var top);
+                out var x,
+                out var y);
 
             CurrentCreatureViewModel.Initialize(
                 _currentCreature,
-                left,
-                top,
+                x - _creatureDiameter / 2,
+                y - _creatureDiameter / 2,
                 _creatureDiameter);
 
             CurrentCreatureViewModel.IsVisible = true;
@@ -527,9 +524,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
     public abstract void DetermineCanvasPosition(
         int positionX,
         int positionY,
-        double diameter,
-        out double left,
-        out double top);
+        out double x,
+        out double y);
 
     // Used to inform the host (ActOutSceneViewModel) that the user clicked the board
     private void OnPlayerClickedSquare(int squareIndex)
