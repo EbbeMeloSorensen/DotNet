@@ -9,6 +9,7 @@ using Craft.ViewModels.Common;
 using Craft.ViewModels.Geometry2D.Scrolling;
 using DD.Application;
 using DD.Domain;
+using Newtonsoft.Json.Linq;
 
 namespace DD.ViewModel;
 
@@ -495,7 +496,27 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
                 }));
         }
 
-        CurrentCreatureViewModel.Creature = _currentCreature;
+        if (_currentCreature == null)
+        {
+            CurrentCreatureViewModel.IsVisible = false;
+        }
+        else
+        {
+            DetermineCanvasPosition(
+                _currentCreature.PositionX,
+                _currentCreature.PositionY,
+                _creatureDiameter,
+                out var left,
+            out var top);
+
+            CurrentCreatureViewModel.Initialize(
+                _currentCreature,
+                left,
+                top,
+                _creatureDiameter);
+
+            CurrentCreatureViewModel.IsVisible = true;
+        }
     }
 
     public abstract void DetermineCanvasPosition(
