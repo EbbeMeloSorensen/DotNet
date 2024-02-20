@@ -364,11 +364,16 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             WeaponAutoReverse = true;
         }
 
-        WeaponViewModel.Weapon = new Weapon(
+        DetermineCanvasPosition(
             currentCreature.PositionX,
-            currentCreature.PositionY);
+            currentCreature.PositionY,
+            _weaponDiameter,
+            out var left,
+            out var top);
 
-        WeaponViewModel.BaseRotationAngle = _weaponImageBaseRotationAngleMap[WeaponImagePath];
+        WeaponViewModel.Initialize(
+            left,
+            top);
 
         var translationVector = new Vector2D(
             targetCreature.PositionX - currentCreature.PositionX,
@@ -379,8 +384,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
 
         var polarVector = translationVector.AsPolarVector();
 
+        WeaponViewModel.BaseRotationAngle = _weaponImageBaseRotationAngleMap[WeaponImagePath];
         WeaponViewModel.RotationAngle = polarVector.Angle * 180 / System.Math.PI;
-
         WeaponViewModel.IsVisible = true;
         AttackAnimationRunning = true;
     }

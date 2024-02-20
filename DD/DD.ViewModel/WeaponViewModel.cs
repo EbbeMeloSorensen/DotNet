@@ -27,20 +27,28 @@ namespace DD.ViewModel
             }
         }
 
-        public Weapon Weapon
+        //public Weapon Weapon
+        //{
+        //    set
+        //    {
+        //        if (value == null)
+        //        {
+        //            IsVisible = false;
+        //        }
+        //        else
+        //        {
+        //            Left = (value.PositionX + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
+        //            Top = (value.PositionY + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
+        //        }
+        //    }
+        //}
+
+        public void Initialize(
+            double left,
+            double top)
         {
-            set
-            {
-                if (value == null)
-                {
-                    IsVisible = false;
-                }
-                else
-                {
-                    Left = (value.PositionX + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
-                    Top = (value.PositionY + 0.5) * BoardViewModel.TileCenterSpacing - Diameter / 2;
-                }
-            }
+            Left = left;
+            Top = top;
         }
 
         public WeaponViewModel(
