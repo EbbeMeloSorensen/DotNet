@@ -270,7 +270,7 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             IsVisible = false
         };
 
-        var timeSpanForAttackAnimation = new TimeSpan(10000000);
+        var timeSpanForAttackAnimation = new TimeSpan(5000000);
         //var timeSpanForAttackAnimation = new TimeSpan(2000000);
         //var timeSpanForAttackAnimation = new TimeSpan(20000);
         DurationForAttackAnimation = $"0:0:{timeSpanForAttackAnimation.Seconds}.{timeSpanForAttackAnimation.Milliseconds.ToString().PadLeft(3, '0')}";
@@ -367,16 +367,22 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         DetermineCanvasPosition(
             currentCreature.PositionX,
             currentCreature.PositionY,
-            out var x,
-            out var y);
+            out var x1,
+            out var y1);
 
         WeaponViewModel.Initialize(
-            x - _weaponDiameter / 2,
-            y - _weaponDiameter / 2);
+            x1 - _weaponDiameter / 2,
+            y1 - _weaponDiameter / 2);
+
+        DetermineCanvasPosition(
+            targetCreature.PositionX,
+            targetCreature.PositionY,
+            out var x2,
+            out var y2);
 
         var translationVector = new Vector2D(
-            targetCreature.PositionX - currentCreature.PositionX,
-            targetCreature.PositionY - currentCreature.PositionY);
+            x2 - x1,
+            y2 - y1).Normalize();
 
         TranslationX = (translationVector.X) * TileCenterSpacing;
         TranslationY = (translationVector.Y) * TileCenterSpacing;
@@ -384,7 +390,7 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         var polarVector = translationVector.AsPolarVector();
 
         WeaponViewModel.BaseRotationAngle = _weaponImageBaseRotationAngleMap[WeaponImagePath];
-        WeaponViewModel.RotationAngle = polarVector.Angle * 180 / System.Math.PI;
+        WeaponViewModel.RotationAngle = polarVector.Angle * 180 / Math.PI;
         WeaponViewModel.IsVisible = true;
         AttackAnimationRunning = true;
     }

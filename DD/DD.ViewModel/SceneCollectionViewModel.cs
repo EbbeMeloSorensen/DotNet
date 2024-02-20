@@ -51,6 +51,7 @@ namespace DD.ViewModel
                 SceneGenerator.GenerateScene(21),
                 SceneGenerator.GenerateScene(22),
                 SceneGenerator.GenerateScene(23),
+                SceneGenerator.GenerateScene(24)
             };
 
             SceneViewModels = new ObservableCollection<SceneViewModel>(scenes.Select(s => new SceneViewModel(s)));

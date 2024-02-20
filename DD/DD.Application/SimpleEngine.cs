@@ -541,7 +541,7 @@ namespace DD.Application
 
                 var forbiddenIndexes = new HashSet<int>(_obstacleIndexes.Concat(allyIndexes).Concat(opponentIndexes));
 
-                var graph = new GraphMatrix8Connectivity(_scene.Rows, _scene.Columns);
+                var graph = GenerateGraph(_scene.Rows, _scene.Columns);
 
                 // Determine where the current creature can go
                 graph.ComputeDistances(
@@ -695,12 +695,6 @@ namespace DD.Application
             var currentCreaturePosition = Helpers.GetTileCenterCoordinates(
                 positionX, positionY, BoardTileMode);
 
-            var temp = Creatures
-                .Where(c => c.IsHostile != CurrentCreature.IsHostile)
-                .Select(c => currentCreaturePosition.SquaredDistanceTo(
-                    Helpers.GetTileCenterCoordinates(c.PositionX, c.PositionY, BoardTileMode)))
-                .ToList();
-
             return Creatures
                 .Where(c => c.IsHostile != CurrentCreature.IsHostile)
                 .Select(c => new 
@@ -739,11 +733,15 @@ namespace DD.Application
             var x = squareIndex.ConvertToXCoordinate(_scene.Columns);
             var y = squareIndex.ConvertToYCoordinate(_scene.Columns);
 
+            var currentCreaturePosition = Helpers.GetTileCenterCoordinates(
+                x, y, BoardTileMode);
+
             allOpponents.ForEach(opponent =>
             {
-                var dx = x - opponent.PositionX;
-                var dy = y - opponent.PositionY;
-                var sqrDist = dx * dx + dy * dy;
+                var opponentPosition = Helpers.GetTileCenterCoordinates(
+                    opponent.PositionX, opponent.PositionY, BoardTileMode);
+
+                var sqrDist = opponentPosition.SquaredDistanceTo(currentCreaturePosition);
 
                 if (sqrDist >= shortestSqrDistToAnOpponent)
                 {
