@@ -5,6 +5,14 @@ Done:
 * Lav et boardview med hex felter
 * Vis creatures på hex boardet
 
+In progress:
+* Automatiske kamp mellem en ridder og et skelet på et lille board - også dækket af unit test
+
 Todo:
-* En automatisk kamp mellem en ridder og et skelet på et lille board
+* Unit testen Knight_vs_Skeleton_ExcludingMove_2x2_HexagonalTiles virker tilsyneladende. Gør animationen også? og i modsat fald hvorfor ikke?
+* Logging i forbindelse med afvikling af unit test
+* Mulighed for at slå animationer til/fra under runtime
+* Mulighed for at justere hastighed af animationer under runtime
+* SimpleEngine.ClosestOpponent skal laves om, så den virker både for square og hexagonal tiles
+* DetermineDestinationOfCurrentCreatureWithMeleeAttack skal virke både for square og hexagonal tiles
 * Mulighed for at skippe animationer

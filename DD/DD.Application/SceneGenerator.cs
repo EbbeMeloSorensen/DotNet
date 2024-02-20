@@ -155,6 +155,8 @@ namespace DD.Application
                     return GenerateScene22();
                 case 23:
                     return GenerateScene23();
+                case 24:
+                    return GenerateScene24();
                 default:
                     throw new ArgumentException("Invalid scene id");
             }
@@ -609,16 +611,12 @@ namespace DD.Application
             scene.AddCreature(new Creature(_goblin, true), 3, 0);
             scene.AddCreature(new Creature(_goblin, true), 4, 0);
             scene.AddCreature(new Creature(_goblin, true), 5, 0);
-            //scene.AddCreature(new Creature(_goblin, true), 6, 0);
-            //scene.AddCreature(new Creature(_goblin, true), 7, 0);
             scene.AddCreature(new Creature(_goblin, true), 0, 2);
             scene.AddCreature(new Creature(_goblin, true), 1, 2);
             scene.AddCreature(new Creature(_goblin, true), 2, 2);
             scene.AddCreature(new Creature(_goblin, true), 3, 2);
             scene.AddCreature(new Creature(_goblin, true), 4, 2);
             scene.AddCreature(new Creature(_goblin, true), 5, 2);
-            //scene.AddCreature(new Creature(_goblin, true), 6, 2);
-            //scene.AddCreature(new Creature(_goblin, true), 7, 2);
 
             return scene;
         }
@@ -807,6 +805,16 @@ namespace DD.Application
             var scene = new Scene("1 skeleton vs 1 knight - 5 x 3", 5, 3);
             scene.AddCreature(new Creature(_knight, false), 0, 0);
             scene.AddCreature(new Creature(_skeleton, true), 2, 4);
+
+            return scene;
+        }
+
+        private static Scene GenerateScene24()
+        {
+            var scene = new Scene("1 skeleton vs 1 knight II - 2 x 2", 2, 2);
+            //scene.AddObstacle(new Obstacle(ObstacleType.Wall, 1, 0));
+            scene.AddCreature(new Creature(_knight, false) { IsAutomatic = true }, 0, 0);
+            scene.AddCreature(new Creature(_skeleton, true), 1, 1);
 
             return scene;
         }

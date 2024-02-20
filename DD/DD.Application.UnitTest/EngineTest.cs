@@ -10,7 +10,7 @@ namespace DD.Application.UnitTest
     public class EngineTest
     {
         [Fact]
-        public async Task TestMethod1()
+        public async Task SevenKnights_vs_FiftyGoblins_16x16_SquareTiles()
         {
             // Arrange
             var engine = new ComplexEngine(
@@ -43,7 +43,7 @@ namespace DD.Application.UnitTest
         }
 
         [Fact]
-        public async Task TestMethod2()
+        public async Task Humans_vs_Goblins_12x12_SquareTiles()
         {
             // Arrange
             var engine = new ComplexEngine(
@@ -77,7 +77,7 @@ namespace DD.Application.UnitTest
         }
 
         [Fact]
-        public async Task TestMethod3()
+        public async Task Archer_vs_TwelveGoblins_5x10_SquareTiles()
         {
             // Arrange
             var engine = new ComplexEngine(
@@ -107,6 +107,114 @@ namespace DD.Application.UnitTest
 
             // Assert
             engine.Creatures.Count.Should().Be(12);
+        }
+
+        [Fact]
+        public async Task Knight_vs_Skeleton_2x2_SquareTiles()
+        {
+            // Arrange
+            var engine = new SimpleEngine(
+                null)
+            {
+                Scene = SceneGenerator.GenerateScene(18)
+            };
+
+            engine.BoardTileMode = BoardTileMode.Square;
+
+            // Act
+            engine.StartBattle();
+
+            while (!engine.BattleDecided)
+            {
+                if (engine.BattleroundCompleted)
+                {
+                    engine.StartBattleRound();
+                    continue;
+                }
+
+                var nextEvent = await engine.ExecuteNextEvent();
+
+                if (nextEvent is CreaturePass)
+                {
+                    engine.SwitchToNextCreature();
+                }
+            }
+
+            // Assert
+            engine.Creatures.Count.Should().Be(1);
+            engine.Creatures.Single().CreatureType.Name.Should().Be("Knight");
+        }
+
+        [Fact]
+        public async Task Knight_vs_Skeleton_ExcludingMove_2x2_HexagonalTiles()
+        {
+            // Arrange
+            var engine = new SimpleEngine(
+                null)
+            {
+                Scene = SceneGenerator.GenerateScene(18)
+            };
+
+            engine.BoardTileMode = BoardTileMode.Hexagonal;
+
+            // Act
+            engine.StartBattle();
+
+            while (!engine.BattleDecided)
+            {
+                if (engine.BattleroundCompleted)
+                {
+                    engine.StartBattleRound();
+                    continue;
+                }
+
+                var nextEvent = await engine.ExecuteNextEvent();
+
+                if (nextEvent is CreaturePass)
+                {
+                    engine.SwitchToNextCreature();
+                }
+            }
+
+            // Assert
+            engine.Creatures.Count.Should().Be(1);
+            engine.Creatures.Single().CreatureType.Name.Should().Be("Knight");
+        }
+
+        [Fact]
+        public async Task Knight_vs_Skeleton_IncludingMove_2x2_HexagonalTiles()
+        {
+            // Arrange
+            var engine = new SimpleEngine(
+                null)
+            {
+                Scene = SceneGenerator.GenerateScene(24)
+            };
+
+            engine.BoardTileMode = BoardTileMode.Hexagonal;
+
+            // Act
+            engine.StartBattle();
+
+            while (!engine.BattleDecided)
+            {
+                if (engine.BattleroundCompleted)
+                {
+                    engine.StartBattleRound();
+                    continue;
+                }
+
+                var nextEvent = await engine.ExecuteNextEvent();
+
+                if (nextEvent is CreaturePass)
+                {
+                    engine.SwitchToNextCreature();
+                }
+            }
+
+            // Assert
+            engine.Creatures.Count.Should().Be(1);
+            engine.Creatures.Single().CreatureType.Name.Should().Be("Knight");
         }
     }
 }
