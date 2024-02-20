@@ -408,10 +408,10 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
 
         var translationVector = new Vector2D(
             x2 - x1,
-            y2 - y1).Normalize();
+            y2 - y1);
 
-        TranslationX = (translationVector.X) * TileCenterSpacing;
-        TranslationY = (translationVector.Y) * TileCenterSpacing;
+        TranslationX = translationVector.X;
+        TranslationY = translationVector.Y;
 
         var polarVector = translationVector.AsPolarVector();
 
