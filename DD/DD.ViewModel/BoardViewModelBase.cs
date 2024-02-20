@@ -269,7 +269,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             IsVisible = false
         };
 
-        var timeSpanForAttackAnimation = new TimeSpan(2000000);
+        var timeSpanForAttackAnimation = new TimeSpan(10000000);
+        //var timeSpanForAttackAnimation = new TimeSpan(2000000);
         //var timeSpanForAttackAnimation = new TimeSpan(20000);
         DurationForAttackAnimation = $"0:0:{timeSpanForAttackAnimation.Seconds}.{timeSpanForAttackAnimation.Milliseconds.ToString().PadLeft(3, '0')}";
 

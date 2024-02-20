@@ -93,6 +93,82 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <Grid x:Name="CurrentCreatureGrid"
+                  Canvas.Left="{Binding CurrentCreatureViewModel.Left}"
+                  Canvas.Top="{Binding CurrentCreatureViewModel.Top}">
+                    <local:CreatureView DataContext="{Binding CurrentCreatureViewModel}"/>
+                    <Grid.RenderTransform>
+                        <TranslateTransform X="0" Y="0"/>
+                    </Grid.RenderTransform>
+                    <b:Interaction.Triggers>
+                        <b:DataTrigger Binding="{Binding MoveCreatureAnimationRunning, Mode=OneWay}" 
+                                    Value="true">
+                            <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                <b:ControlStoryboardAction.Storyboard>
+                                    <Storyboard Completed="MoveCreatureStoryboard_Completed">
+                                        <DoubleAnimationUsingPath Storyboard.TargetName="CurrentCreatureGrid"
+                                                              Storyboard.TargetProperty="(RenderTransform).X"
+                                                              Duration="{Binding DurationForMoveCreatureAnimation}"
+                                                              Source="X">
+                                            <DoubleAnimationUsingPath.PathGeometry>
+                                                <PathGeometry Figures="{Binding CreaturePath}"/>
+                                            </DoubleAnimationUsingPath.PathGeometry>
+                                        </DoubleAnimationUsingPath>
+                                        <DoubleAnimationUsingPath Storyboard.TargetName="CurrentCreatureGrid"
+                                                              Storyboard.TargetProperty="(RenderTransform).Y"
+                                                              Duration="{Binding DurationForMoveCreatureAnimation}"
+                                                              Source="Y">
+                                            <DoubleAnimationUsingPath.PathGeometry>
+                                                <PathGeometry Figures="{Binding CreaturePath}"/>
+                                            </DoubleAnimationUsingPath.PathGeometry>
+                                        </DoubleAnimationUsingPath>
+                                    </Storyboard>
+                                </b:ControlStoryboardAction.Storyboard>
+                            </b:ControlStoryboardAction>
+                        </b:DataTrigger>
+                    </b:Interaction.Triggers>
+                </Grid>
+
+                <Grid x:Name="WeaponGrid"
+                      Canvas.Left="{Binding WeaponViewModel.Left}"
+                      Canvas.Top="{Binding WeaponViewModel.Top}"
+                      Visibility="{Binding WeaponViewModel.IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Image Height="{Binding WeaponViewModel.Diameter}" 
+                       Width="{Binding WeaponViewModel.Diameter}"
+                       Source="{Binding Path=WeaponImagePath,
+                            UpdateSourceTrigger=PropertyChanged, 
+                            Converter={StaticResource ImagePathConverter}}">
+                        <Image.RenderTransform>
+                            <RotateTransform x:Name="RotateTransform" CenterX="37.5" CenterY="37.5" Angle="{Binding WeaponViewModel.RotationAngle}"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Grid.RenderTransform>
+                        <TranslateTransform X="0" Y="0"/>
+                    </Grid.RenderTransform>
+                    <b:Interaction.Triggers>
+                        <b:DataTrigger Binding="{Binding AttackAnimationRunning, Mode=OneWay}" 
+                                   Value="true">
+                            <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                <b:ControlStoryboardAction.Storyboard>
+                                    <Storyboard Completed="AttackStoryboard_Completed">
+                                        <DoubleAnimation Storyboard.TargetName="WeaponGrid"
+                                                     Storyboard.TargetProperty="(RenderTransform).X"
+                                                     To="{Binding TranslationX}"
+                                                     AutoReverse="{Binding WeaponAutoReverse}"
+                                                     Duration="{Binding DurationForAttackAnimation}"/>
+                                        <DoubleAnimation Storyboard.TargetName="WeaponGrid"
+                                                     Storyboard.TargetProperty="(RenderTransform).Y"
+                                                     To="{Binding TranslationY}" 
+                                                     AutoReverse="{Binding WeaponAutoReverse}"
+                                                     Duration="{Binding DurationForAttackAnimation}"/>
+                                    </Storyboard>
+                                </b:ControlStoryboardAction.Storyboard>
+                            </b:ControlStoryboardAction>
+                        </b:DataTrigger>
+                    </b:Interaction.Triggers>
+                </Grid>
+
             </Canvas>
 
         </Grid>

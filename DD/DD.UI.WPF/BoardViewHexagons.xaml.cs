@@ -73,5 +73,23 @@ namespace DD.UI.WPF
                 e.HorizontalOffset,
                 e.VerticalOffset);
         }
+
+        private void MoveCreatureStoryboard_Completed(object sender, EventArgs e)
+        {
+            if (ViewModel == null) return;
+
+            CurrentCreatureGrid.RenderTransform = new TranslateTransform(0, 0);
+
+            ViewModel.CompleteMoveCreatureAnimation();
+        }
+
+        private void AttackStoryboard_Completed(object sender, EventArgs e)
+        {
+            if (ViewModel == null) return;
+
+            WeaponGrid.RenderTransform = new TranslateTransform(0, 0);
+
+            ViewModel.CompleteAttackAnimation();
+        }
     }
 }
