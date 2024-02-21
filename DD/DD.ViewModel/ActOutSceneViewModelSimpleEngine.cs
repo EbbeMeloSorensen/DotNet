@@ -76,16 +76,36 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
                     // Bemærk, at vi for de næste 3 ikke kalder continue men derimod break, dvs vi træder ud af løkken og dermed hele Proceed
                     // metoden. Den kaldes igen, når vi håndterer disse evenst: MoveCreatureAnimationCompleted, AttackAnimationCompleted
                     case CreatureMove:
-                        _boardViewModel.MoveCurrentCreature(
-                            _engine.CurrentCreature,
-                            _engine.CurrentCreaturePath);
-                        break;
+                        if (AnimateMoves)
+                        {
+                            _boardViewModel.MoveCurrentCreature(
+                                _engine.CurrentCreature,
+                                _engine.CurrentCreaturePath);
+                            break;
+                        }
+                        else
+                        {
+                            _boardViewModel.UpdateCreatureViewModels(
+                                _engine.Creatures,
+                                _engine.CurrentCreature);
+                            continue;
+                        }
                     case CreatureAttack:
-                        _boardViewModel.AnimateAttack(
-                            _engine.CurrentCreature,
-                            _engine.TargetCreature,
-                            false);
-                        break;
+                        if (AnimateAttacks)
+                        {
+                            _boardViewModel.AnimateAttack(
+                                _engine.CurrentCreature,
+                                _engine.TargetCreature,
+                                false);
+                            break;
+                        }
+                        else
+                        {
+                            _boardViewModel.UpdateCreatureViewModels(
+                                _engine.Creatures,
+                                _engine.CurrentCreature);
+                            continue;
+                        }
                     default:
                         throw new ArgumentException("unexpected battle event");
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Craft.Math;
@@ -270,8 +271,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
             IsVisible = false
         };
 
-        //var timeSpanForAttackAnimation = new TimeSpan(5000000);
-        var timeSpanForAttackAnimation = new TimeSpan(2000000);
+        var timeSpanForAttackAnimation = new TimeSpan(5000000);
+        //var timeSpanForAttackAnimation = new TimeSpan(2000000);
         //var timeSpanForAttackAnimation = new TimeSpan(20000);
         DurationForAttackAnimation = $"0:0:{timeSpanForAttackAnimation.Seconds}.{timeSpanForAttackAnimation.Milliseconds.ToString().PadLeft(3, '0')}";
 
@@ -357,13 +358,13 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
                     Y = y
                 };
             })
-            .Select(p => $"L{p.X - x1},{p.Y - y1}")
+            .Select(p => $"L{(p.X - x1).ToString(CultureInfo.InvariantCulture)},{(p.Y - y1).ToString(CultureInfo.InvariantCulture)}")
             .Aggregate((c, n) => $"{c}{n}"));
 
         CreaturePath = stringBuilder.ToString();
 
-        //var ticksPrStep = 5000000;
-        var ticksPrStep = 1000000;
+        var ticksPrStep = 5000000;
+        //var ticksPrStep = 1000000;
         //var ticksPrStep = 10000;
         var timeSpan = new TimeSpan(ticksPrStep * path.Length);
 

@@ -3,20 +3,43 @@ using Craft.Utils;
 using Craft.ViewModel.Utils;
 using DD.Application;
 using DD.Domain;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System.Threading.Tasks;
 
 namespace DD.ViewModel;
 
-public abstract class ActOutSceneViewModelBase
+public abstract class ActOutSceneViewModelBase : ViewModelBase
 {
     protected ILogger _logger;
     protected IEngine _engine;
     protected BoardViewModelBase _boardViewModel;
+    private bool _animateMoves;
+    private bool _animateAttacks;
     protected RelayCommand _resetCreaturesCommand;
     protected AsyncCommand _startBattleCommand;
     protected AsyncCommand _passCurrentCreatureCommand;
     protected AsyncCommand _automateCurrentCreatureCommand;
+
+    public bool AnimateMoves
+    {
+        get => _animateMoves;
+        set
+        {
+            _animateMoves = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool AnimateAttacks
+    {
+        get => _animateAttacks;
+        set
+        {
+            _animateAttacks = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public RelayCommand ResetCreaturesCommand
     {
