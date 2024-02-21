@@ -87,6 +87,9 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
         ObservableObject<Scene> selectedScene,
         ILogger logger)
     {
+        _animateMoves = true;
+        _animateAttacks = true;
+
         _engine = engine;
         _boardViewModel = boardViewModel;
         _logger = logger;
