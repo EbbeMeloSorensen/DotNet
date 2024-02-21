@@ -11,11 +11,11 @@
     <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
         <CheckBox IsChecked="{Binding AnimateMoves}" Content="Animate moves"/>
         <GroupBox Margin="0,0,0,10" Header="Move Animation Speed">
-            <Slider Orientation="Horizontal" IsSnapToTickEnabled="True" Ticks="1, 2, 3, 4, 5"/>
+            <Slider Orientation="Horizontal" Minimum="0" Maximum="1" Value="{Binding MoveAnimationSpeed}"/>
         </GroupBox>
         <CheckBox IsChecked="{Binding AnimateAttacks}" Content="Animate attacks"/>
         <GroupBox Margin="0,0,0,10" Header="Attack Animation Speed">
-            <Slider Orientation="Horizontal" IsSnapToTickEnabled="True" Ticks="1, 2, 3, 4, 5"/>
+            <Slider Orientation="Horizontal" Minimum="0" Maximum="1" Value="{Binding AttackAnimationSpeed}"/>
         </GroupBox>
         <Button Margin ="3" Content="Start Battle" FontSize="20"
                 Command="{Binding StartBattleCommand}"/>

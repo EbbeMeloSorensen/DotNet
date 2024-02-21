@@ -1,4 +1,6 @@
-﻿using Craft.Logging;
+﻿using System;
+using System.Globalization;
+using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using DD.Application;
@@ -16,6 +18,8 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
     protected BoardViewModelBase _boardViewModel;
     private bool _animateMoves;
     private bool _animateAttacks;
+    private double _moveAnimationSpeed;
+    private double _attackAnimationSpeed;
     protected RelayCommand _resetCreaturesCommand;
     protected AsyncCommand _startBattleCommand;
     protected AsyncCommand _passCurrentCreatureCommand;
@@ -37,6 +41,34 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
         set
         {
             _animateAttacks = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public double MoveAnimationSpeed
+    {
+        get => _moveAnimationSpeed;
+        set
+        {
+            _moveAnimationSpeed = value;
+
+            _boardViewModel.TicksPrStepForCreatureMoveAnimation =
+                (int) Math.Round(500000 * Math.Pow(10, 1 - _moveAnimationSpeed));
+
+            RaisePropertyChanged();
+        }
+    }
+
+    public double AttackAnimationSpeed
+    {
+        get => _attackAnimationSpeed;
+        set
+        {
+            _attackAnimationSpeed = value;
+
+            var timeSpanForAttackAnimation = new TimeSpan((long)Math.Round(500000 * Math.Pow(10, 1 - _attackAnimationSpeed)));
+            _boardViewModel.DurationForAttackAnimation = $"0:0:{timeSpanForAttackAnimation.Seconds}.{timeSpanForAttackAnimation.Milliseconds.ToString().PadLeft(3, '0')}";
+
             RaisePropertyChanged();
         }
     }
@@ -93,6 +125,9 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
         _engine = engine;
         _boardViewModel = boardViewModel;
         _logger = logger;
+
+        MoveAnimationSpeed = 0.5;
+        AttackAnimationSpeed = 0.5;
 
         _engine.BattleHasStarted.PropertyChanged += (s, e) => UpdateCommandStates();
         _engine.BattleHasEnded.PropertyChanged += (s, e) => UpdateCommandStates();

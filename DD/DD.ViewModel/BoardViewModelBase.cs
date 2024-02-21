@@ -227,6 +227,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         }
     }
 
+    public int TicksPrStepForCreatureMoveAnimation { get; set; }
+
     // Used by a storyboard animation of the view
     public string DurationForMoveCreatureAnimation
     {
@@ -270,11 +272,6 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
         {
             IsVisible = false
         };
-
-        var timeSpanForAttackAnimation = new TimeSpan(5000000);
-        //var timeSpanForAttackAnimation = new TimeSpan(2000000);
-        //var timeSpanForAttackAnimation = new TimeSpan(20000);
-        DurationForAttackAnimation = $"0:0:{timeSpanForAttackAnimation.Seconds}.{timeSpanForAttackAnimation.Milliseconds.ToString().PadLeft(3, '0')}";
 
         selectedScene.PropertyChanged += (s, e) =>
         {
@@ -363,12 +360,9 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
 
         CreaturePath = stringBuilder.ToString();
 
-        var ticksPrStep = 5000000;
-        //var ticksPrStep = 1000000;
-        //var ticksPrStep = 10000;
-        var timeSpan = new TimeSpan(ticksPrStep * path.Length);
-
+        var timeSpan = new TimeSpan(TicksPrStepForCreatureMoveAnimation * path.Length);
         DurationForMoveCreatureAnimation = $"0:0:{timeSpan.Seconds}.{timeSpan.Milliseconds.ToString().PadLeft(3, '0')}";
+
         _currentCreaturePositionX = currentCreature.PositionX;
         _currentCreaturePositionY = currentCreature.PositionY;
 
