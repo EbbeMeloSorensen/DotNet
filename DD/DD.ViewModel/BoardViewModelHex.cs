@@ -147,8 +147,5 @@ public class BoardViewModelHex : BoardViewModelBase
                 };
             }
         });
-
-        //PixelViewModels1[2].Pixel.ImagePath = "Images/Water.PNG";
-        //PixelViewModels2[2].Pixel.ImagePath = "Images/Wall.jpg";
     }
 }
