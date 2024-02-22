@@ -126,29 +126,29 @@ public class BoardViewModelHex : BoardViewModelBase
     {
         scene.Obstacles.ForEach(_ =>
         {
-            var tileIndex = _.PositionX + _.PositionY * scene.Columns;
+            var tileIndex = (_.PositionY - _.PositionY % 2) / 2 * scene.Columns + _.PositionX;
 
-            //PixelViewModels[tileIndex].Pixel.ImagePath = _.ObstacleType switch
-            //{
-            //    ObstacleType.Wall => "Images/Wall.jpg",
-            //    ObstacleType.Water => "Images/Water.PNG",
-            //    _ => ""
-            //};
-
-            var fatRowIndex = _.PositionY / 2;
-
-            //if (_.PositionY % 2 == 0)
-            //{
-            //    PixelViewModels1[tileIndex].Pixel.ImagePath = _.ObstacleType switch
-            //    {
-            //        ObstacleType.Wall => "Images/Wall.jpg",
-            //        ObstacleType.Water => "Images/Water.PNG",
-            //        _ => ""
-            //    };
-            //}
+            if (_.PositionY % 2 == 0)
+            {
+                PixelViewModels1[tileIndex].Pixel.ImagePath = _.ObstacleType switch
+                {
+                    ObstacleType.Wall => "Images/Wall.jpg",
+                    ObstacleType.Water => "Images/Water.PNG",
+                    _ => ""
+                };
+            }
+            else
+            {
+                PixelViewModels2[tileIndex].Pixel.ImagePath = _.ObstacleType switch
+                {
+                    ObstacleType.Wall => "Images/Wall.jpg",
+                    ObstacleType.Water => "Images/Water.PNG",
+                    _ => ""
+                };
+            }
         });
 
-        PixelViewModels1[2].Pixel.ImagePath = "Images/Water.PNG";
-        PixelViewModels2[2].Pixel.ImagePath = "Images/Wall.jpg";
+        //PixelViewModels1[2].Pixel.ImagePath = "Images/Water.PNG";
+        //PixelViewModels2[2].Pixel.ImagePath = "Images/Wall.jpg";
     }
 }
