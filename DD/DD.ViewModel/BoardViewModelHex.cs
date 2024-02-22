@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using Accessibility;
 using Craft.Utils;
 using DD.Application;
 using DD.Domain;
@@ -132,7 +133,19 @@ public class BoardViewModelHex : BoardViewModelBase
             //    ObstacleType.Wall => "Images/Wall.jpg",
             //    ObstacleType.Water => "Images/Water.PNG",
             //    _ => ""
-            //}; ;
+            //};
+
+            var fatRowIndex = _.PositionY / 2;
+
+            //if (_.PositionY % 2 == 0)
+            //{
+            //    PixelViewModels1[tileIndex].Pixel.ImagePath = _.ObstacleType switch
+            //    {
+            //        ObstacleType.Wall => "Images/Wall.jpg",
+            //        ObstacleType.Water => "Images/Water.PNG",
+            //        _ => ""
+            //    };
+            //}
         });
 
         PixelViewModels1[2].Pixel.ImagePath = "Images/Water.PNG";
