@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Craft.Utils;
 
 namespace Craft.UI.Utils.ValueConverters
@@ -18,7 +19,16 @@ namespace Craft.UI.Utils.ValueConverters
                 return Brushes.Transparent;
 
             var pixel = (Pixel) value;
-            return new SolidColorBrush(Color.FromArgb(255, pixel.Red, pixel.Green, pixel.Blue));
+
+            //var brush1 = new ImageBrush 
+            //{
+            //    ImageSource = new BitmapImage(new Uri(@"C:\Git\GitHub\DotNet\DD\DD.UI.WPF\Images\Water.PNG")),
+            //    TileMode = TileMode.Tile
+            //};
+
+            var brush2 = new SolidColorBrush(Color.FromArgb(255, pixel.Red, pixel.Green, pixel.Blue));
+
+            return brush2;
         }
 
         public object ConvertBack(
