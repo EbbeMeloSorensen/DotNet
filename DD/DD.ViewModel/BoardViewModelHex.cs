@@ -91,6 +91,8 @@ public class BoardViewModelHex : BoardViewModelBase
             PixelViewModels2 = range2
                 .Select(i => new PixelViewModelHex(i, new Pixel(200, 200, 200, 0)))
                 .ToList();
+
+            ApplyTileTextures(scene);
         }
     }
 
@@ -116,5 +118,24 @@ public class BoardViewModelHex : BoardViewModelBase
     public override void ClearPlayerOptions()
     {
         throw new NotImplementedException();
+    }
+
+    private void ApplyTileTextures(
+        Scene scene)
+    {
+        scene.Obstacles.ForEach(_ =>
+        {
+            var tileIndex = _.PositionX + _.PositionY * scene.Columns;
+
+            //PixelViewModels[tileIndex].Pixel.ImagePath = _.ObstacleType switch
+            //{
+            //    ObstacleType.Wall => "Images/Wall.jpg",
+            //    ObstacleType.Water => "Images/Water.PNG",
+            //    _ => ""
+            //}; ;
+        });
+
+        PixelViewModels1[2].Pixel.ImagePath = "Images/Water.PNG";
+        PixelViewModels2[2].Pixel.ImagePath = "Images/Wall.jpg";
     }
 }
