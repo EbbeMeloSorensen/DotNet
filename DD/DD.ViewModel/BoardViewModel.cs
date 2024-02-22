@@ -4,6 +4,7 @@ using DD.Domain;
 using DD.Application;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace DD.ViewModel
 {
@@ -68,9 +69,11 @@ namespace DD.ViewModel
                 PixelViewModels = Enumerable.Range(0, Rows * Columns)
                     .Select(i => new PixelViewModel(i, new Pixel(200, 200, 200, 0)))
                     .ToList();
+
+                ApplyTileTextures(scene);
             }
         }
-
+        
         public override void DetermineCanvasPosition(
             int positionX,
             int positionY,
@@ -87,6 +90,7 @@ namespace DD.ViewModel
             HashSet<int> squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
             HashSet<int> squareIndexesCurrentCreatureCanAttackWithRangedWeapon)
         {
+            // Måske en kende overkill at lave nye Pixels her
             PixelViewModels = Enumerable.Range(0, Rows * Columns)
                 .Select(index => GeneratePixel(
                     index,
@@ -95,13 +99,35 @@ namespace DD.ViewModel
                     squareIndexesCurrentCreatureCanAttackWithMeleeWeapon,
                     squareIndexesCurrentCreatureCanAttackWithRangedWeapon))
                 .ToList();
+
+            ApplyTileTextures(_scene);
         }
 
         public override void ClearPlayerOptions()
         {
+            // Måske en kende overkill at lave nye Pixels her
             PixelViewModels = Enumerable.Range(0, Rows * Columns)
                 .Select(index => new PixelViewModel(index, new Pixel(200, 200, 200, 0)))
                 .ToList();
+
+            ApplyTileTextures(_scene);
+        }
+
+        private void ApplyTileTextures(
+            Scene scene)
+        {
+            scene.Obstacles.ForEach(_ =>
+            {
+                var tileIndex = _.PositionX + _.PositionY * scene.Columns;
+
+                PixelViewModels[tileIndex].Pixel.ImagePath = _.ObstacleType switch
+                {
+                    ObstacleType.Wall => "Images/Wall.jpg",
+                    ObstacleType.Water => "Images/Water.PNG",
+                    _ => ""
+                }; ;
+            });
+
         }
     }
 }

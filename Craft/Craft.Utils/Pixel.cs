@@ -7,6 +7,7 @@
         public byte Blue { get; }
         public byte Alpha { get; }
         public string TextOverlay { get; }
+        public string ImagePath { get; set; }
 
         public Pixel(
             byte red,

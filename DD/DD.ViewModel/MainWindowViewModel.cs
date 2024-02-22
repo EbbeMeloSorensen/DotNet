@@ -35,8 +35,8 @@ namespace DD.ViewModel
             var creatureDiameter = 75;
             var projectileDiameter = 75;
 
-            //var engine = new ComplexEngine(_application.Logger);
-            var engine = new SimpleEngine(_application.Logger);
+            var engine = new ComplexEngine(_application.Logger);
+            //var engine = new SimpleEngine(_application.Logger);
 
             //engine.BoardTileMode = BoardTileMode.Hexagonal;
             engine.BoardTileMode = BoardTileMode.Square;

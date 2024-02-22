@@ -10,7 +10,6 @@ using Craft.ViewModels.Common;
 using Craft.ViewModels.Geometry2D.Scrolling;
 using DD.Application;
 using DD.Domain;
-using Newtonsoft.Json.Linq;
 
 namespace DD.ViewModel;
 
@@ -25,6 +24,7 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
     protected static double _creatureDiameter;
     protected static double _weaponDiameter;
 
+    protected Scene _scene;
     private int _rows;
     private int _columns;
     private double _squareForCurrentCreatureLeft;
@@ -275,18 +275,18 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
 
         selectedScene.PropertyChanged += (s, e) =>
         {
-            var scene = (s as ObservableObject<Scene>)?.Object;
+            _scene = (s as ObservableObject<Scene>)?.Object;
 
-            LayoutBoard(scene);
+            LayoutBoard(_scene);
 
-            if (scene == null || scene.Obstacles.Count == 0)
+            if (_scene == null || _scene.Obstacles.Count == 0)
             {
                 ObstacleViewModels = new ObservableCollection<ObstacleViewModel>();
             }
             else
             {
                 ObstacleViewModels = new ObservableCollection<ObstacleViewModel>(
-                    scene.Obstacles.Select(o =>
+                    _scene.Obstacles.Select(o =>
                     {
                         var left = (o.PositionX + 0.5) * TileCenterSpacing - obstacleDiameter / 2;
                         var top = (o.PositionY + 0.5) * TileCenterSpacing - obstacleDiameter / 2;

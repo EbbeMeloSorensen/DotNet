@@ -20,15 +20,22 @@ namespace Craft.UI.Utils.ValueConverters
 
             var pixel = (Pixel) value;
 
-            //var brush1 = new ImageBrush 
-            //{
-            //    ImageSource = new BitmapImage(new Uri(@"C:\Git\GitHub\DotNet\DD\DD.UI.WPF\Images\Water.PNG")),
-            //    TileMode = TileMode.Tile
-            //};
+            if (string.IsNullOrEmpty(pixel.ImagePath))
+            {
+                return new SolidColorBrush(Color.FromArgb(255, pixel.Red, pixel.Green, pixel.Blue));
+            }
 
-            var brush2 = new SolidColorBrush(Color.FromArgb(255, pixel.Red, pixel.Green, pixel.Blue));
+            // Bemærk lige her, hvordan vi her returnerer en ImageBrush, som benytter et billede,
+            // der indgår som en ressource i WPF-applikationen
 
-            return brush2;
+            // Eksempel:
+            //var imagePath = "Images/Wall.jpg";
+
+            return new ImageBrush
+            {
+                ImageSource = new BitmapImage(new Uri($"pack://application:,,,/DD.UI.WPF;component/{pixel.ImagePath}")),
+                TileMode = TileMode.Tile
+            };
         }
 
         public object ConvertBack(
