@@ -1,24 +1,28 @@
 ﻿using System;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
-using DD.Application;
 using DD.Domain;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using System.Threading.Tasks;
+using DD.Application;
 
 namespace DD.ViewModel;
 
 public abstract class ActOutSceneViewModelBase : ViewModelBase
 {
-    protected ILogger _logger;
-    protected IEngine _engine;
-    protected BoardViewModelBase _boardViewModel;
     private bool _animateMoves;
     private bool _animateAttacks;
     private double _moveAnimationSpeed;
     private double _attackAnimationSpeed;
+
+    protected bool _paused;
+    protected ILogger _logger;
+    protected IEngine _engine;
+    protected BoardViewModelBase _boardViewModel;
+    protected RelayCommand _pauseCommand;
+    protected RelayCommand _resumeCommand;
     protected RelayCommand _resetCreaturesCommand;
     protected AsyncCommand _startBattleCommand;
     protected AsyncCommand _passCurrentCreatureCommand;
@@ -82,6 +86,26 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
         }
     }
 
+    public RelayCommand PauseCommand
+    {
+        get
+        {
+            return _pauseCommand ?? (_pauseCommand = new RelayCommand(
+                Pause,
+                CanPause));
+        }
+    }
+
+    public RelayCommand ResumeCommand
+    {
+        get
+        {
+            return _resumeCommand ?? (_resumeCommand = new RelayCommand(
+                Resume,
+                CanResume));
+        }
+    }
+
     public AsyncCommand StartBattleCommand
     {
         get
@@ -142,6 +166,7 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
 
             if (_engine.BattleDecided)
             {
+                UpdateCommandStates();
                 return;
             }
 
@@ -162,6 +187,48 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
 
     protected abstract Task Proceed();
 
+    private void Pause()
+    {
+        _paused = true;
+        UpdateCommandStates();
+    }
+
+    private bool CanPause()
+    {
+        var result =
+            _engine.Scene != null &&
+            _engine.BattleHasStarted.Object &&
+            !_engine.BattleHasEnded.Object &&
+            !_paused;
+
+        return
+            _engine.Scene != null &&
+            _engine.BattleHasStarted.Object &&
+            !_engine.BattleHasEnded.Object &&
+            !_paused;
+    }
+
+    private void Resume()
+    {
+        if (!_paused)
+        {
+            return;
+        }
+
+        _paused = false;
+        UpdateCommandStates();
+        Proceed();
+    }
+
+    private bool CanResume()
+    {
+        return
+            _engine.Scene != null &&
+            _engine.BattleHasStarted.Object &&
+            !_engine.BattleHasEnded.Object &&
+            _paused;
+    }
+
     private void ResetCreatures()
     {
         var message = $"Resetting scene \"{_engine.Scene.Name}\"";
@@ -172,12 +239,23 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
         _boardViewModel.UpdateCreatureViewModels(
             _engine.Creatures,
             _engine.CurrentCreature);
+
+        _paused = false;
     }
 
     private bool CanResetCreatures()
     {
+        var result =
+            _engine.Scene != null &&
+            _engine.BattleHasEnded.Object ||
+            _engine.BattleHasStarted.Object &&
+            _paused;
+
         return
-            _engine.BattleHasStarted.Object;
+            _engine.Scene != null &&
+            _engine.BattleHasEnded.Object ||
+            _engine.BattleHasStarted.Object &&
+            _paused;
     }
 
     private async Task StartBattle()
@@ -185,6 +263,7 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
         _engine.StartBattle();
 
         // I dont think this is necessary..
+        // well apparently it is - if omitted the first creature move just happens instantly
         _boardViewModel.UpdateCreatureViewModels(
             _engine.Creatures,
             _engine.CurrentCreature);
@@ -246,6 +325,8 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
     private void UpdateCommandStates()
     {
         StartBattleCommand.RaiseCanExecuteChanged();
+        PauseCommand.RaiseCanExecuteChanged();
+        ResumeCommand.RaiseCanExecuteChanged();
         PassCurrentCreatureCommand.RaiseCanExecuteChanged();
         AutomateCurrentCreatureCommand.RaiseCanExecuteChanged();
         ResetCreaturesCommand.RaiseCanExecuteChanged();

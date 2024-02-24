@@ -8,9 +8,10 @@ Done:
 * SimpleEngine.ClosestOpponent skal laves om, så den virker både for square og hexagonal tiles
 * DetermineDestinationOfCurrentCreatureWithMeleeAttack skal virke både for square og hexagonal tiles
 * Automatiske kamp mellem en ridder og et skelet på et lille board - også dækket af unit test
+* Mulighed for at slå animationer til/fra under runtime
+* Mulighed for at justere hastighed af animationer under runtime
+* Mulughed for at pause og genoptage en kamp
+* Mulighed for at resette en scene under pause eller efter kampen er afgjort
 
 Todo:
 * Logging i forbindelse med afvikling af unit test
-* Mulighed for at slå animationer til/fra under runtime
-* Mulighed for at justere hastighed af animationer under runtime
-* Mulighed for at skippe animationer

@@ -19,11 +19,15 @@
         </GroupBox>
         <Button Margin ="3" Content="Start Battle" FontSize="20"
                 Command="{Binding StartBattleCommand}"/>
-        <Button Margin ="3" Content="Pass" FontSize="20"
+        <Button Margin ="3" Content="Pause" FontSize="20"
+                Command="{Binding PauseCommand}"/>
+        <Button Margin ="3" Content="Resume" FontSize="20"
+                Command="{Binding ResumeCommand}"/>
+        <Button Margin ="3" Content="Reset" FontSize="20"
+                Command="{Binding ResetCreaturesCommand}"/>
+        <Button Margin ="3, 13, 3, 3" Content="Pass" FontSize="20"
                 Command="{Binding PassCurrentCreatureCommand}"/>
         <Button Margin ="3" Content="Automate" FontSize="20"
                 Command="{Binding AutomateCurrentCreatureCommand}"/>
-        <Button Margin ="3" Content="Reset" FontSize="20"
-                Command="{Binding ResetCreaturesCommand}"/>
     </StackPanel>
 </UserControl>

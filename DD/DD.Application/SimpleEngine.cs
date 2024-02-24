@@ -180,6 +180,7 @@ namespace DD.Application
 
                     if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
                     {
+                        BattleHasEnded.Object = true;
                         BattleDecided = true;
                     }
 
@@ -270,6 +271,7 @@ namespace DD.Application
                 if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
                 {
                     SquareIndexesCurrentCreatureCanMoveTo.Object = null;
+                    BattleHasEnded.Object = true;
                     BattleDecided = true;
                 }
                 else
@@ -296,6 +298,7 @@ namespace DD.Application
 
             BattleDecided = false;
             BattleHasStarted.Object = true;
+            BattleHasEnded.Object = false;
             _battleRoundCount = 0;
 
             var message = "    Determining initial acting order of creatures..";

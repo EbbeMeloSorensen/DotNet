@@ -49,6 +49,11 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
 
     protected override async Task Proceed()
     {
+        if (_paused)
+        {
+            return;
+        }
+
         while (!_engine.BattleDecided)
         {
             if (_engine.BattleroundCompleted)
