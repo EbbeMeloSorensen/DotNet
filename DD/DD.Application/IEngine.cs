@@ -4,6 +4,7 @@ using Craft.Logging;
 using Craft.Utils;
 using DD.Domain;
 using DD.Application.BattleEvents;
+using System;
 
 namespace DD.Application
 {
@@ -48,6 +49,8 @@ namespace DD.Application
         Scene Scene { get; set; }
 
         BoardTileMode BoardTileMode { get; set; }
+
+        event EventHandler CreatureKilled;
 
         void Randomize();
 

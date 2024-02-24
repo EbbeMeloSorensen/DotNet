@@ -125,6 +125,8 @@ namespace DD.Engine.Complex
 
         public BoardTileMode BoardTileMode { get; set; }
 
+        public event EventHandler CreatureKilled;
+
         public ComplexEngine(
             ILogger logger)
         {
@@ -187,6 +189,8 @@ namespace DD.Engine.Complex
                             if (evadingCreatureWasKilled)
                             {
                                 _evasionEvents.Clear();
+
+                                OnCreatureKilled();
 
                                 if (!OpponentsStillRemaining(attacker))
                                 {
@@ -253,9 +257,14 @@ namespace DD.Engine.Complex
                                     out var opponentWasHit,
                                     out var opponentWasKilled);
 
-                                if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
+                                if (opponentWasKilled)
                                 {
-                                    BattleDecided = true;
+                                    OnCreatureKilled();
+
+                                    if (!OpponentsStillRemaining(CurrentCreature))
+                                    {
+                                        BattleDecided = true;
+                                    }
                                 }
 
                                 TargetCreature = targetCreature;
@@ -1327,6 +1336,16 @@ namespace DD.Engine.Complex
 
                 _evasionEvents.Enqueue(new InitiativeSwitch { Creature = CurrentCreature });
                 _evasionEvents.Enqueue(new Move { Path = path.Skip(index1).Take(index2 - index1 + 1).ToArray() });
+            }
+        }
+
+        private void OnCreatureKilled()
+        {
+            var handler = CreatureKilled;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
             }
         }
     }

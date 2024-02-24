@@ -1,13 +1,13 @@
-﻿using Craft.Algorithms;
-using Craft.DataStructures.Graph;
-using Craft.Logging;
-using Craft.Math;
-using Craft.Utils;
-using System;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
+using Craft.Logging;
+using Craft.Utils;
+using Craft.Math;
+using Craft.Algorithms;
+using Craft.DataStructures.Graph;
 using DD.Domain;
 using DD.Application.BattleEvents;
 
@@ -118,6 +118,8 @@ namespace DD.Application
 
         public BoardTileMode BoardTileMode { get; set; }
 
+        public event EventHandler CreatureKilled;
+
         public SimpleEngine(
             ILogger logger)
         {
@@ -178,10 +180,15 @@ namespace DD.Application
                         out var opponentWasHit,
                         out var opponentWasKilled);
 
-                    if (opponentWasKilled && !OpponentsStillRemaining(CurrentCreature))
+                    if (opponentWasKilled)
                     {
-                        BattleHasEnded.Object = true;
-                        BattleDecided = true;
+                        OnCreatureKilled();
+
+                        if (!OpponentsStillRemaining(CurrentCreature))
+                        {
+                            BattleHasEnded.Object = true;
+                            BattleDecided = true;
+                        }
                     }
 
                     TargetCreature = targetCreature;
@@ -856,6 +863,16 @@ namespace DD.Application
                 {
                     throw new InvalidEnumArgumentException("Unknown board tile mode");
                 }
+            }
+        }
+
+        private void OnCreatureKilled()
+        {
+            var handler = CreatureKilled;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
             }
         }
     }

@@ -28,6 +28,8 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
     protected AsyncCommand _passCurrentCreatureCommand;
     protected AsyncCommand _automateCurrentCreatureCommand;
 
+    public TeamStatsViewModel TeamStatsViewModel { get; }
+
     public bool AnimateMoves
     {
         get => _animateMoves;
@@ -152,9 +154,13 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
         MoveAnimationSpeed = 0.5;
         AttackAnimationSpeed = 0.5;
 
+        TeamStatsViewModel = new TeamStatsViewModel();
+
         _engine.BattleHasStarted.PropertyChanged += (s, e) => UpdateCommandStates();
         _engine.BattleHasEnded.PropertyChanged += (s, e) => UpdateCommandStates();
         _engine.AutoRunning.PropertyChanged += (s, e) => UpdateCommandStates();
+
+        _engine.CreatureKilled += (s, e) => TeamStatsViewModel.Update(_engine.Creatures);
 
         boardViewModel.MoveCreatureAnimationCompleted += async (s, e) => await Proceed();
 
@@ -178,6 +184,8 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
             _engine.Scene = (s as ObservableObject<Scene>)?.Object;
 
             _engine.InitializeCreatures();
+
+            TeamStatsViewModel.Initialize(_engine.Creatures);
 
             _boardViewModel.UpdateCreatureViewModels(
                 _engine.Creatures,
