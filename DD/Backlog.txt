@@ -14,4 +14,6 @@ Done:
 * Mulighed for at resette en scene under pause eller efter kampen er afgjort
 
 Todo:
+* "Defender of the Crown"" mode sucks quite a bit - nok fordi der bruges rigtig mange kræfter på at opdatere creature view models
+* Hvis man opererer med move animations slået fra, burde der være mulighed for at opdatere boardet på en billigere måde
 * Logging i forbindelse med afvikling af unit test

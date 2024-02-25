@@ -244,6 +244,8 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
 
         _engine.InitializeCreatures();
 
+        TeamStatsViewModel.Initialize(_engine.Creatures);
+
         _boardViewModel.UpdateCreatureViewModels(
             _engine.Creatures,
             _engine.CurrentCreature);
