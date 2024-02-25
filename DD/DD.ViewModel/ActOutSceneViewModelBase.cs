@@ -12,6 +12,7 @@ namespace DD.ViewModel;
 
 public abstract class ActOutSceneViewModelBase : ViewModelBase
 {
+    private bool _updateBoard;
     private bool _animateMoves;
     private bool _animateAttacks;
     private double _moveAnimationSpeed;
@@ -29,6 +30,16 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
     protected AsyncCommand _automateCurrentCreatureCommand;
 
     public TeamStatsViewModel TeamStatsViewModel { get; }
+
+    public bool UpdateBoard
+    {
+        get => _updateBoard;
+        set
+        {
+            _updateBoard = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public bool AnimateMoves
     {
@@ -144,6 +155,7 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
         ObservableObject<Scene> selectedScene,
         ILogger logger)
     {
+        _updateBoard = true;
         _animateMoves = true;
         _animateAttacks = true;
 
@@ -166,9 +178,12 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
 
         boardViewModel.AttackAnimationCompleted += async (s, e) =>
         {
-            _boardViewModel.UpdateCreatureViewModels(
-                _engine.Creatures,
-                _engine.CurrentCreature);
+            if (UpdateBoard)
+            {
+                _boardViewModel.UpdateCreatureViewModels(
+                    _engine.Creatures,
+                    _engine.CurrentCreature);
+            }
 
             if (_engine.BattleDecided)
             {
@@ -272,11 +287,12 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
     {
         _engine.StartBattle();
 
-        // I dont think this is necessary..
-        // well apparently it is - if omitted the first creature move just happens instantly
-        _boardViewModel.UpdateCreatureViewModels(
-            _engine.Creatures,
-            _engine.CurrentCreature);
+        if (UpdateBoard)
+        {
+            _boardViewModel.UpdateCreatureViewModels(
+                _engine.Creatures,
+                _engine.CurrentCreature);
+        }
 
         await Proceed();
     }
@@ -299,9 +315,12 @@ public abstract class ActOutSceneViewModelBase : ViewModelBase
 
         _engine.SwitchToNextCreature();
 
-        _boardViewModel.UpdateCreatureViewModels(
-            _engine.Creatures,
-            _engine.CurrentCreature);
+        if (UpdateBoard)
+        {
+            _boardViewModel.UpdateCreatureViewModels(
+                _engine.Creatures,
+                _engine.CurrentCreature);
+        }
 
         await Proceed();
     }

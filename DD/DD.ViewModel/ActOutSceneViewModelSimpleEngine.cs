@@ -60,9 +60,12 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
             {
                 _engine.StartBattleRound();
 
-                _boardViewModel.UpdateCreatureViewModels(
-                    _engine.Creatures,
-                    _engine.CurrentCreature);
+                if (UpdateBoard)
+                {
+                    _boardViewModel.UpdateCreatureViewModels(
+                        _engine.Creatures,
+                        _engine.CurrentCreature);
+                }
             }
 
             if (_engine.NextEventOccursAutomatically)
@@ -74,9 +77,12 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
                 {
                     case CreaturePass:
                         _engine.SwitchToNextCreature();
-                        _boardViewModel.UpdateCreatureViewModels(
-                            _engine.Creatures,
-                            _engine.CurrentCreature);
+                        if (UpdateBoard)
+                        {
+                            _boardViewModel.UpdateCreatureViewModels(
+                                _engine.Creatures,
+                                _engine.CurrentCreature);
+                        }
                         continue;
                     // Bemærk, at vi for de næste 3 ikke kalder continue men derimod break, dvs vi træder ud af løkken og dermed hele Proceed
                     // metoden. Den kaldes igen, når vi håndterer disse evenst: MoveCreatureAnimationCompleted, AttackAnimationCompleted
@@ -90,9 +96,12 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
                         }
                         else
                         {
-                            _boardViewModel.UpdateCreatureViewModels(
-                                _engine.Creatures,
-                                _engine.CurrentCreature);
+                            if (UpdateBoard)
+                            {
+                                _boardViewModel.UpdateCreatureViewModels(
+                                    _engine.Creatures,
+                                    _engine.CurrentCreature);
+                            }
                             continue;
                         }
                     case CreatureAttack:
@@ -106,9 +115,12 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
                         }
                         else
                         {
-                            _boardViewModel.UpdateCreatureViewModels(
-                                _engine.Creatures,
-                                _engine.CurrentCreature);
+                            if (UpdateBoard)
+                            {
+                                _boardViewModel.UpdateCreatureViewModels(
+                                    _engine.Creatures,
+                                    _engine.CurrentCreature);
+                            }
                             continue;
                         }
                     default:
@@ -128,6 +140,13 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
 
         if (_engine.BattleDecided)
         {
+            if (!UpdateBoard)
+            {
+                _boardViewModel.UpdateCreatureViewModels(
+                    _engine.Creatures,
+                    _engine.CurrentCreature);
+            }
+
             if (!_engine.CurrentCreature.IsAutomatic)
             {
                 _boardViewModel.ClearPlayerOptions();
