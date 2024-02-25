@@ -23,6 +23,8 @@ namespace Game.Zelda.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private static double _zeldaRadius = 0.25;
+
         private static int _nextWallId = 100000;
         private static bool _boundariesVisible = false; // Set to true to inspect boundaries
 
@@ -398,7 +400,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(5, 3.75)));
+            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, _zeldaRadius, 1, true), new Vector2D(5, 3.75)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -458,7 +460,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
+            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, _zeldaRadius, 1, true), new Vector2D(1, 15)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;
@@ -549,7 +551,7 @@ namespace Game.Zelda.ViewModel
             PostPropagationCallBack postPropagationCallBack)
         {
             var initialState = new State();
-            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, 0.5, 1, true), new Vector2D(1, 15)));
+            initialState.AddBodyState(new BodyStateZelda(new Bodies.Zelda(1, _zeldaRadius, 1, true), new Vector2D(1, 15)));
 
             var wallWidth = 0.3;
             var doorWidth = 1.2;

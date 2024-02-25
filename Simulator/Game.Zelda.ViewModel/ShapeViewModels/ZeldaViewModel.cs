@@ -12,7 +12,8 @@ namespace Game.Zelda.ViewModel.ShapeViewModels
 
         static ZeldaViewModel()
         {
-            _correctionMatrix = new System.Windows.Media.Matrix(1.8, 0, 0, 1.8, 0.0, -0.03);
+            //_correctionMatrix = new System.Windows.Media.Matrix(1.8, 0, 0, 1.8, 0.0, -0.03);
+            _correctionMatrix = new System.Windows.Media.Matrix(3.6, 0, 0, 3.6, 0.0, -0.03);
         }
 
         public ZeldaViewModel(
