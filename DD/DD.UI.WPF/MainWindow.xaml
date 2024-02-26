@@ -23,9 +23,9 @@
         </b:Interaction.Triggers>
 
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_Repository">
-                <MenuItem Header="_New Creature Type" 
-                          Command="{Binding CreateCreatureTypeCommand}"/>
+            <MenuItem Header="File">
+                <MenuItem Header="Logging enabled" IsCheckable="True"
+                          IsChecked="{Binding LoggingActive}"/>
             </MenuItem>
         </Menu>
 

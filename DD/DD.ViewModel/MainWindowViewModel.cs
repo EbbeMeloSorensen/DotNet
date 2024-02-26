@@ -1,4 +1,5 @@
-﻿using Craft.Logging;
+﻿using GalaSoft.MvvmLight;
+using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using DD.Domain;
@@ -7,14 +8,31 @@ using DD.Application;
 
 namespace DD.ViewModel
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : ViewModelBase
     {
+        private ViewModelLogger _viewModelLogger;
+        private bool _loggingActive;
         private readonly Application.Application _application;
 
         public SceneCollectionViewModel SceneCollectionViewModel { get; }
         public BoardViewModelBase BoardViewModel { get; }
         public ActOutSceneViewModelBase ActOutSceneViewModel { get; }
         public LogViewModel LogViewModel { get; }
+
+        public bool LoggingActive
+        {
+            get => _loggingActive;
+            set
+            {
+                _loggingActive = value;
+
+                RaisePropertyChanged();
+
+                _application.Logger = _loggingActive
+                    ? _viewModelLogger
+                    : null;
+            }
+        }
 
         public MainWindowViewModel(
             Application.Application application)
@@ -23,8 +41,11 @@ namespace DD.ViewModel
 
             LogViewModel = new LogViewModel();
 
-            //_application.Logger = new ViewModelLogger(_application.Logger, LogViewModel);
-            _application.Logger = null;
+            _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
+
+            _loggingActive = false;
+
+            _application.Logger = _loggingActive ? _viewModelLogger : null;
             _application.Logger?.WriteLine(LogMessageCategory.Debug, "Dungeons and Dragons - starting up");
 
             var selectedScene = new ObservableObject<Scene>();
