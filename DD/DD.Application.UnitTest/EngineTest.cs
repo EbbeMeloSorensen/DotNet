@@ -38,8 +38,8 @@ namespace DD.Application.UnitTest
             }
 
             // Assert
-            engine.Creatures.Count.Should().Be(5);
-            engine.Creatures.First().CreatureType.Name.Should().Be("Knight");
+            engine.Creatures.Count.Should().Be(8);
+            engine.Creatures.First().CreatureType.Name.Should().Be("Goblin");
         }
 
         [Fact]
@@ -73,8 +73,8 @@ namespace DD.Application.UnitTest
             }
 
             // Assert
-            engine.Creatures.Count.Should().Be(7);
-            engine.Creatures.First().CreatureType.Name.Should().Be("Knight");
+            engine.Creatures.Count.Should().Be(8);
+            engine.Creatures.First().CreatureType.Name.Should().Be("Goblin");
         }
 
         [Fact]

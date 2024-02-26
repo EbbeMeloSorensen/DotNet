@@ -14,11 +14,11 @@ namespace DD.Application
             });
 
         private static CreatureType _archer = new CreatureType(
-            "Archer", 10, 6, 13, 10, 6, new List<Attack>
+            "Archer", 12, 6, 14, 10, 6, new List<Attack>
             {
-                new RangedAttack("Bow & Arrow", 4, 6),
-                new RangedAttack("Bow & Arrow", 4, 6),
-                new RangedAttack("Bow & Arrow", 4, 6)
+                new RangedAttack("Bow & Arrow", 4, 5),
+                new RangedAttack("Bow & Arrow", 4, 5),
+                new RangedAttack("Bow & Arrow", 4, 5)
             });
 
         private static CreatureType _wizard = new CreatureType(
@@ -33,12 +33,11 @@ namespace DD.Application
             "Goblin Archer", 20, 7, 13, 0, 6, new List<Attack>
             {
                 new RangedAttack("Bow & Arrow", 4, 4),
-                new RangedAttack("Bow & Arrow", 4, 4),
                 new RangedAttack("Bow & Arrow", 4, 4)
             });
 
         private static CreatureType _goblin = new CreatureType(
-            "Goblin", 8, 5, 20, 0, 6, new List<Attack>
+            "Goblin", 12, 5, 20, 0, 6, new List<Attack>
             {
                 new MeleeAttack("Short sword", 6)
             });

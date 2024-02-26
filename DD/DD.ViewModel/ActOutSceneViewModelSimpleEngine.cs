@@ -152,7 +152,7 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
                 _boardViewModel.ClearPlayerOptions();
             }
 
-            _logger.WriteLine(LogMessageCategory.Information, "Battle was decided");
+            _logger?.WriteLine(LogMessageCategory.Information, "Battle was decided");
         }
         else
         {
