@@ -83,6 +83,9 @@ public class ActOutSceneViewModelSimpleEngine : ActOutSceneViewModelBase
                                 _engine.Creatures,
                                 _engine.CurrentCreature);
                         }
+
+                        // Comment in for Defender of the Crown mode
+                        //await Task.Delay(50);
                         continue;
                     // Bemærk, at vi for de næste 3 ikke kalder continue men derimod break, dvs vi træder ud af løkken og dermed hele Proceed
                     // metoden. Den kaldes igen, når vi håndterer disse evenst: MoveCreatureAnimationCompleted, AttackAnimationCompleted
