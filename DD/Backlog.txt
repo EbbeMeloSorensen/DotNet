@@ -14,6 +14,24 @@ Done:
 * Mulighed for at resette en scene under pause eller efter kampen er afgjort
 
 Todo:
-* "Defender of the Crown"" mode sucks quite a bit - nok fordi der bruges rigtig mange kræfter på at opdatere creature view models
-* Hvis man opererer med move animations slået fra, burde der være mulighed for at opdatere boardet på en billigere måde
+* Lav det sådan at et creature kan fylde flere tiles
+* Area of effect
+  - burning hands
+  - dragon breath
+  - fireball
+  - cloud kill
+  - healing
+  - stinking cloud
+  - sleep
+  - confuse
+* Charm person
+* Stances - defensive/offensive
+* Conditions - poisoned
+* Under Simulator - lav et Dark alliance-agtigt spil i stil med de der pacman ting
+* Under Craft - lav en algoritme, der laver 
+* Sikr, at man i graf vieweren kan placere dots som man vil
+* Ban vejen for at lave et RISK/Defender of the Crown spil, hvor man ikke afhænger af det sædvanlige board
+* Ban vejen for at man kan lave et spil, hvor man bevæger sig rundt på en bane alla Dark Alliance
+* Hvis man opererer med move animations slået fra, burde der være mulighed for at opdatere boardet på en billigere måde,
+  dvs undlade at operere med, at der er et dedikeret view til CurrentCreature
 * Logging i forbindelse med afvikling af unit test

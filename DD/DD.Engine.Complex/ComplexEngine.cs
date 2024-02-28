@@ -829,7 +829,7 @@ namespace DD.Engine.Complex
                 // These indexes are the ones that fulfill these criteria:
                 // * The current creature can reach them
                 // * The current creature can attack an opponent from them
-                // * The current does not have disadvantage for them
+                // * The current creature does not have disadvantage for them
 
                 // If the current creature can reach such a square, it will do so (at first regardless if it provokes an opportunity attack)
                 // Otherwise, it will try to reach a square from which it can attack an opponent with disadvantage
