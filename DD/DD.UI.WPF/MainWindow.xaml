@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:DD.UI.WPF"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
+        xmlns:graph="clr-namespace:Craft.UIElements.Graph;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
@@ -53,11 +54,21 @@
             <local:SceneCollectionView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
                                        DataContext="{Binding SceneCollectionViewModel}"/>
 
-            <!--<local:BoardViewSquares Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+            <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <graph:GraphView Grid.Column="0" 
+                                 DataContext="{Binding MapViewModel}"/>
+
+                <!--<local:BoardViewSquares Grid.Column="1" Grid.RowSpan="2"
                                     DataContext="{Binding BoardViewModel}"/>-->
 
-            <local:BoardViewHexagons Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                <local:BoardViewHexagons Grid.Column="1" Grid.RowSpan="2"
                                      DataContext="{Binding BoardViewModel}"/>
+            </Grid>
 
             <local:ActOutSceneView Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
                                    DataContext="{Binding ActOutSceneViewModel}"/>

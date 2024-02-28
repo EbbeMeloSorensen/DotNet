@@ -64,7 +64,7 @@ namespace Craft.ViewModels.Graph
             ScrollableOffset = new PointD(0, 0);
             ScrollOffset = new PointD(0, 0);
 
-            _graph = GenerateAGraph();
+            _graph = GenerateAGraph2();
 
             _points = new List<PointD>();
             _pointViewModels = new ObservableCollection<PointViewModel>();
@@ -100,6 +100,15 @@ namespace Craft.ViewModels.Graph
             UpdateLines();
         }
 
+        public void PlacePoint(
+            int pointIndex,
+            PointD position)
+        {
+            _points[pointIndex] = position;
+            PointViewModels[pointIndex].Point = position;
+            UpdateLines();
+        }
+
         private void ElementViewModelElementClicked(
             object sender,
             ElementClickedEventArgs e)
@@ -116,7 +125,7 @@ namespace Craft.ViewModels.Graph
                 _graph.Edges.Select(_ => new LineSegmentD(_points[_.VertexId1], _points[_.VertexId2])));
         }
 
-        private IGraph<LabelledVertex, EmptyEdge> GenerateAGraph()
+        private IGraph<LabelledVertex, EmptyEdge> GenerateAGraph1()
         {
             var vertices = new List<LabelledVertex>
             {
@@ -169,6 +178,56 @@ namespace Craft.ViewModels.Graph
             graph.AddEdge(14, 15);
             graph.AddEdge(15, 16);
             graph.AddEdge(16, 17);
+
+            return graph;
+        }
+
+        private IGraph<LabelledVertex, EmptyEdge> GenerateAGraph2()
+        {
+            var vertices = new List<LabelledVertex>
+            {
+                // North America
+                new LabelledVertex("Alaska"),                //  0
+                new LabelledVertex("Northwest Territory"),   //  1
+                new LabelledVertex("Greenland"),             //  2
+                new LabelledVertex("Alberta"),               //  3
+                new LabelledVertex("Ontario"),               //  4
+                new LabelledVertex("Eastern Canada"),        //  5
+                new LabelledVertex("Western United States"), //  6
+                new LabelledVertex("Eastern United States"), //  7
+                new LabelledVertex("Central America"),       //  8
+
+                // South America
+                new LabelledVertex("Venezuela"),   //  9
+                new LabelledVertex("Peru"),        // 10
+                new LabelledVertex("Argentina"),   // 11
+                new LabelledVertex("Brazil"),      // 12
+            };
+
+            var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, false);
+
+            graph.AddEdge(0, 1);
+            graph.AddEdge(0, 3);
+            graph.AddEdge(1, 2);
+            graph.AddEdge(1, 3);
+            graph.AddEdge(1, 4);
+            graph.AddEdge(2, 4);
+            graph.AddEdge(2, 5);
+            graph.AddEdge(3, 4);
+            graph.AddEdge(3, 6);
+            graph.AddEdge(4, 5);
+            graph.AddEdge(4, 6);
+            graph.AddEdge(4, 7);
+            graph.AddEdge(5, 7);
+            graph.AddEdge(6, 7);
+            graph.AddEdge(6, 8);
+            graph.AddEdge(7, 8);
+            graph.AddEdge(8, 9);
+            graph.AddEdge(9, 10);
+            graph.AddEdge(9, 12);
+            graph.AddEdge(10, 11);
+            graph.AddEdge(10, 12);
+            graph.AddEdge(11, 12);
 
             return graph;
         }

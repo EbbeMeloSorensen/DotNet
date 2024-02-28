@@ -5,6 +5,7 @@ using Craft.ViewModel.Utils;
 using DD.Domain;
 using DD.Engine.Complex;
 using DD.Application;
+using Craft.ViewModels.Graph;
 
 namespace DD.ViewModel
 {
@@ -15,6 +16,7 @@ namespace DD.ViewModel
         private readonly Application.Application _application;
 
         public SceneCollectionViewModel SceneCollectionViewModel { get; }
+        public GraphViewModel MapViewModel { get; }
         public BoardViewModelBase BoardViewModel { get; }
         public ActOutSceneViewModelBase ActOutSceneViewModel { get; }
         public LogViewModel LogViewModel { get; }
@@ -63,6 +65,8 @@ namespace DD.ViewModel
             //engine.BoardTileMode = BoardTileMode.Square;
 
             _application.Engine = engine;
+
+            MapViewModel = new GraphViewModel(1200, 900);
 
             BoardViewModel = engine.BoardTileMode == BoardTileMode.Square
                 ? new BoardViewModel(

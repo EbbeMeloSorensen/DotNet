@@ -102,7 +102,7 @@ namespace Craft.DataStructures.IO.UnitTest
         }
 
         [Fact]
-        public void WriteGraphAdjacencyListToGraphMLFile_LabelledVertexAndEmptyEdge()
+        public void WriteGraphAdjacencyListToGraphMLFile_LabelledVertexAndEmptyEdge_1()
         {
             // Arrange
             var vertices = new List<LabelledVertex>
@@ -157,6 +157,61 @@ namespace Craft.DataStructures.IO.UnitTest
             graph.AddEdge(16, 17);
 
             var outputFile = @"C:\Temp\GraphAdjacencyList_labelledVertices.graphml";
+
+            // Act
+            graph.WriteToFile(outputFile, Format.GraphML);
+        }
+
+        [Fact]
+        public void WriteGraphAdjacencyListToGraphMLFile_LabelledVertexAndEmptyEdge_2()
+        {
+            // Arrange
+            var vertices = new List<LabelledVertex>
+            {
+                // North America
+                new LabelledVertex("Alaska"),                //  0
+                new LabelledVertex("Northwest Territory"),   //  1
+                new LabelledVertex("Greenland"),             //  2
+                new LabelledVertex("Alberta"),               //  3
+                new LabelledVertex("Ontario"),               //  4
+                new LabelledVertex("Eastern Canada"),        //  5
+                new LabelledVertex("Western United States"), //  6
+                new LabelledVertex("Eastern United States"), //  7
+                new LabelledVertex("Central America"),       //  8
+
+                // South America
+                new LabelledVertex("Venezuela"),   //  9
+                new LabelledVertex("Peru"),        // 10
+                new LabelledVertex("Argentina"),   // 11
+                new LabelledVertex("Brazil"),      // 12
+            };
+
+            var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, false);
+
+            graph.AddEdge(0, 1);
+            graph.AddEdge(0, 3);
+            graph.AddEdge(1, 2);
+            graph.AddEdge(1, 3);
+            graph.AddEdge(1, 4);
+            graph.AddEdge(2, 4);
+            graph.AddEdge(2, 5);
+            graph.AddEdge(3, 4);
+            graph.AddEdge(3, 6);
+            graph.AddEdge(4, 5);
+            graph.AddEdge(4, 6);
+            graph.AddEdge(4, 7);
+            graph.AddEdge(5, 7);
+            graph.AddEdge(6, 7);
+            graph.AddEdge(6, 8);
+            graph.AddEdge(7, 8);
+            graph.AddEdge(8, 9);
+            graph.AddEdge(9, 10);
+            graph.AddEdge(9, 12);
+            graph.AddEdge(10, 11);
+            graph.AddEdge(10, 12);
+            graph.AddEdge(11, 12);
+
+            var outputFile = @"C:\Temp\RISK_BoardGame.graphml";
 
             // Act
             graph.WriteToFile(outputFile, Format.GraphML);

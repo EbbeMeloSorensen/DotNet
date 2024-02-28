@@ -73,6 +73,7 @@ Done:
 * Bedre granularitet, når man zoomer ind på en tidsakse
 
 In progress:
+* Man skal kunne sige til GraphViewModel hvor de forskellige punkter skal placeres
 * Bemærk lige, at du i Tab3 (Line of sight) benytter en Polygon, som du binder til en "PointCollection", 
   når du tegner 3-kanter. Det står i kontrast til hvordan du tegner polygoner i GeometryEditorView, hvor du binder
   til en PolygonViewModel, som har en string property - det er nok en kende tungere end den første metode
