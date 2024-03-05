@@ -75,7 +75,7 @@
 
      `npm run build`
 
-    This creates a production build of the client application. Due to a postbuild construct in the package.json file, the application is also copied to the wwwroot folder
+    This creates a production build of the client application. Due to a postbuild construct in the package.json file, the application is also copied to the wwwroot folder. Notice that for some reason, the production build may be placed in a a subfolder of wwwroot named 'build' - this will result in a FAILED deployment. The wwwroot folder needs to contain the 2 subfolders 'assets' and 'static' as well as a number of other files such as index.html. If a build folder is generated the copy its contents to the wwwroot folder and delete the now empty build folder.
 
 17. Commit the changes to the local Git repo.
 
@@ -244,3 +244,7 @@ PS C:\Temp3\HerokuSjovIgen\Glossary\Glossary.Web.API>
 ## Appendix B: Troubleshooting tips
 
 When I started writing this guide the 3rd of March 2024 I had just succeeded in deploying the Glossary web application to Heroku, using the MELO_HOME computer. I then deleted the application and set out to do a clean deployment from the MELO_BASEMENT computer, while documenting each step along the way. At the final step I got an error about something being rejected, and I couldn't figure out what was wrong. I suspected that it had something to do with being in the wrong folder when executing git init, heroku git:remote, or git push heroku master. I tried again the 4th of March from the MELO_HOME computer and succeeded. The command git init should be called from the 'Glossary' folder, and I am quite sure I called the latter to commands from the Glossary.Web.API folder, but I am not sure if it can be called from the 'Glossary' folder as well.
+
+Update 5th of March 2024. I tried and failed to install the PR application. I just got an internal server error with error code 500 and no details. When investigating, I realized that it was because the production build of the client application was placed in a folder named 'build' instead of the wwwroot folder, so this may be a cause of an internal server error.
+
+If you get a [remote rejected] error when trying to push to heroku, it may be because you forgot to specify a build pack for the application or because you entered the path for the build pack incorrectly.
