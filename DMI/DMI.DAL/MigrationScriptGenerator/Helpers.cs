@@ -2,6 +2,14 @@
 
 public static class Helpers
 {
+    public static void PrintLine(
+        this StreamWriter streamWriter,
+        string line)
+    {
+        Console.WriteLine(line);
+        streamWriter.WriteLine(line);
+    }
+
     public static DateTime AsDateTimeUTC(this string s)
     {
         if (s.Contains("infinity"))
@@ -20,12 +28,23 @@ public static class Helpers
         return new DateTime(year, month, day, hour, minute, second, milliSecond, DateTimeKind.Utc);
     }
 
-    public static string AsShortDateString(this DateTime dateTime)
+    public static string AsShortDateString(
+        this DateTime dateTime)
     {
         var day = dateTime.Day;
         var month = dateTime.Month;
         var year = dateTime.Year;
 
+        if (year == 9999)
+        {
+            return $"infinity";
+        }
+
         return $"{day}-{month}-{year}";
+    }
+
+    public static bool Overlap()
+    {
+        return false;
     }
 }
