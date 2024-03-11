@@ -1,4 +1,6 @@
-﻿namespace MigrationScriptGenerator;
+﻿using System.Text;
+
+namespace MigrationScriptGenerator;
 
 public static class Helpers
 {
@@ -10,7 +12,8 @@ public static class Helpers
         streamWriter.WriteLine(line);
     }
 
-    public static DateTime AsDateTimeUTC(this string s)
+    public static DateTime AsDateTimeUTC(
+        this string s)
     {
         if (s.Contains("infinity"))
         {
@@ -43,8 +46,18 @@ public static class Helpers
         return $"{day}-{month}-{year}";
     }
 
-    public static bool Overlap()
+    public static bool Overlaps(
+        this TimeInterval a,
+        TimeInterval b)
     {
-        return false;
+        var maxStartTime = a.Start > b.Start
+            ? a.Start
+            : b.Start;
+
+        var minEndTime = a.End < b.End
+            ? a.End
+            : b.End;
+
+        return maxStartTime < minEndTime;
     }
 }

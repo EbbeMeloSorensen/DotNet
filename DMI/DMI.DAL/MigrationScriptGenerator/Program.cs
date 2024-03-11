@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Text;
 using MigrationScriptGenerator;
 using Npgsql;
 
@@ -117,39 +116,38 @@ catch (PostgresException excp)
 
 var count = 0;
 
-using (var streamWriter = new StreamWriter("output.txt"))
+using var streamWriter = new StreamWriter("output.txt");
+
+foreach (var positionRow in positionRowsFromPayload)
 {
-    foreach (var positionRow in positionRowsFromPayload)
+    streamWriter.PrintLine($"Migrating position for station {positionRow.StationIdDMI}..");
+
+    var timeIntervalPayload = new TimeInterval
     {
-        streamWriter.PrintLine($"Migrating position for station {positionRow.StationIdDMI}..");
+        Start = positionRow.StartTime,
+        End = positionRow.EndTime
+    };
 
-        //var timeIntervalPayload = new TimeInterval()
+    streamWriter.PrintLine($"  Time interval in payload: {timeIntervalPayload.ToString()}");
 
-        var sb = new StringBuilder($"  Time interval in payload: ");
-        sb.Append(positionRow.StartTime.AsShortDateString());
-        sb.Append(" -> ");
-        sb.Append(positionRow.EndTime.AsShortDateString());
-
-        streamWriter.PrintLine(sb.ToString());
-
-        positionRowsFromTargetDatabase
-            .Where(_ => _.StationIdDMI == positionRow.StationIdDMI)
-            .ToList()
-            .ForEach(_ =>
-            {
-                var sb = new StringBuilder($"  Time interval in database: ");
-                sb.Append(_.StartTime.AsShortDateString());
-                sb.Append(" -> ");
-                sb.Append(_.EndTime.AsShortDateString());
-
-                streamWriter.PrintLine(sb.ToString());
-            });
-
-        count++;
-
-        if (count >= 100)
+    positionRowsFromTargetDatabase
+        .Where(_ => _.StationIdDMI == positionRow.StationIdDMI)
+        .ToList()
+        .ForEach(_ =>
         {
-            break;
-        }
+            var timeIntervalDatabase = new TimeInterval
+            {
+                Start = _.StartTime,
+                End = _.EndTime
+            };
+
+            streamWriter.PrintLine($"  Time interval in payload: {timeIntervalDatabase}");
+        });
+
+    count++;
+
+    if (count >= 100)
+    {
+        break;
     }
 }
