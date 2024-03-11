@@ -1,6 +1,65 @@
 ﻿using MigrationScriptGenerator;
 using Npgsql;
 
+static void PrintLine(
+    StreamWriter streamWriter,
+    string line)
+{
+    Console.WriteLine(line);
+    streamWriter.WriteLine(line);
+}
+
+var lines = File.ReadAllLines(@"..\..\..\data\position_tmp.SQL");
+
+var positionRowsFromNettoListe = new List<PositionRow>();
+
+using (var streamWriter1 = new StreamWriter("output1.txt"))
+
+    foreach (var line in lines.Skip(2))
+    {
+        if (string.IsNullOrEmpty(line))
+        {
+            continue;
+        }
+
+        var values = line.Split(',');
+
+        var positionRow = new PositionRow
+        {
+            StationIdDMI = int.Parse(values[0].Trim('(')),
+            DummyStationString = values[1],
+            StartString = values[2],
+            EndString = values[3],
+            LatitudeString = values[4],
+            LongitudeString = values[5],
+            HeightString = values[6].Trim(')')
+        };
+
+        if (positionRow.DummyStationString != "'station'")
+        {
+            throw new InvalidDataException("Unexpected value");
+        }
+
+        positionRowsFromNettoListe.Add(positionRow);
+
+        //var sb = new StringBuilder();
+        //sb.Append($"{positionRow.StationIdDMI}");
+        //sb.Append($" - {positionRow.DummyStationString}");
+        //sb.Append($" - {positionRow.StartString}");
+        //sb.Append($" ({positionRow.StartTime})");
+        //sb.Append($" - {positionRow.EndString}");
+        //sb.Append($" ({positionRow.EndTime})");
+        //sb.Append($" - {positionRow.LatitudeString}");
+        //sb.Append($" - {positionRow.LongitudeString}");
+        //sb.Append($" - {positionRow.HeightString}");
+
+        //var logMessage = sb.ToString();
+
+        //PrintLine(streamWriter1, logMessage);
+    }
+
+// Her har vi læst alle positions fra nettolisten ind i en liste
+
 var statdb_host = "nanoq.dmi.dk";
 var statdb_user = "ebs";
 var statdb_password = "Vm6PAkPh";
@@ -38,12 +97,4 @@ try
 catch (PostgresException excp)
 {
     throw excp;
-}
-
-static void PrintLine(
-    StreamWriter streamWriter, 
-    string line)
-{
-    Console.WriteLine(line);
-    streamWriter.WriteLine(line);
 }
