@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.HttpClient.GovCloud.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.DAL.ObsDB.UI.Console", "DMI.DAL.ObsDB.UI.Console\DMI.DAL.ObsDB.UI.Console.csproj", "{400A101E-6B03-4A85-8AE6-41D937C19F5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevationAngleInspector", "ElevationAngleInspector\ElevationAngleInspector.csproj", "{945D158F-4750-4FE8-83D8-DE90BBA96206}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElevationAngleInspector", "ElevationAngleInspector\ElevationAngleInspector.csproj", "{945D158F-4750-4FE8-83D8-DE90BBA96206}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrationScriptGenerator", "MigrationScriptGenerator\MigrationScriptGenerator.csproj", "{FD2093D2-D532-426F-8915-02F7DF204199}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,10 @@ Global
 		{945D158F-4750-4FE8-83D8-DE90BBA96206}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{945D158F-4750-4FE8-83D8-DE90BBA96206}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{945D158F-4750-4FE8-83D8-DE90BBA96206}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD2093D2-D532-426F-8915-02F7DF204199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD2093D2-D532-426F-8915-02F7DF204199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD2093D2-D532-426F-8915-02F7DF204199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD2093D2-D532-426F-8915-02F7DF204199}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
