@@ -75,6 +75,11 @@ statdb_conn.Open();
 
 var positionRowsFromTargetDatabase = new List<PositionRow>();
 
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(statdb_connectionString);
+dataSourceBuilder.UseNodaTime();
+var dataSource = dataSourceBuilder.Build();
+var conn = await dataSource.OpenConnectionAsync();
+
 try
 {
     var query =
