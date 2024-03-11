@@ -4,7 +4,7 @@ public class PositionRow
 {
     public int StationIdDMI { get; set; }
 
-    public string DummyStationString { get; set; }
+    public string Entity { get; set; }
     
     public string StartString { get; set; }
     
