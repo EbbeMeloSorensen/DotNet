@@ -40,10 +40,10 @@ public static class Helpers
 
         if (year == 9999)
         {
-            return $"infinity";
+            return $"          ";
         }
 
-        return $"{day}-{month}-{year}";
+        return $"{day.ToString().PadLeft(2, '0')}-{month.ToString().PadLeft(2, '0')}-{year}";
     }
 
     public static bool Overlaps(
@@ -59,5 +59,37 @@ public static class Helpers
             : b.End;
 
         return maxStartTime < minEndTime;
+    }
+
+    public static TimeInterval Trim(
+        this TimeInterval a,
+        TimeInterval b)
+    {
+        if (a.Start >= b.Start && a.End < b.End)
+        {
+            throw new InvalidOperationException();
+        }
+
+        if (a.End <= b.Start || b.End <= a.Start)
+        {
+            return a;
+        }
+
+        if (a.Start < b.Start)
+        {
+            return new TimeInterval
+            {
+                Start = a.Start,
+                End = b.Start
+            };
+        }
+        else
+        {
+            return new TimeInterval
+            {
+                Start = b.End,
+                End = a.End
+            };
+        }
     }
 }

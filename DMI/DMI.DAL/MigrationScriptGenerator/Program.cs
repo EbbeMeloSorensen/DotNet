@@ -87,11 +87,6 @@ try
             var longitude = statdb_reader.IsDBNull(5) ? new double() : statdb_reader.GetDouble(5);
             var height = statdb_reader.IsDBNull(6) ? new double() : statdb_reader.GetDouble(6);
 
-            if (statid == 500520)
-            {
-                int a = 0;
-            }
-
             var positionRow = new PositionRow
             {
                 StationIdDMI = statid,
@@ -128,10 +123,9 @@ foreach (var positionRow in positionRowsFromPayload)
         End = positionRow.EndTime
     };
 
-    streamWriter.PrintLine($"  Time interval in payload: {timeIntervalPayload.ToString()}");
-
     positionRowsFromTargetDatabase
         .Where(_ => _.StationIdDMI == positionRow.StationIdDMI)
+        .OrderBy(_ => _.StartTime)
         .ToList()
         .ForEach(_ =>
         {
@@ -141,8 +135,23 @@ foreach (var positionRow in positionRowsFromPayload)
                 End = _.EndTime
             };
 
-            streamWriter.PrintLine($"  Time interval in payload: {timeIntervalDatabase}");
+            var logMessage = $"  Time interval in database: {timeIntervalDatabase}";
+
+            if (timeIntervalDatabase.Overlaps(timeIntervalPayload))
+            {
+                var trimmedTimeInterval = timeIntervalDatabase.Trim(timeIntervalPayload);
+
+                logMessage += $" (overlap) -> {trimmedTimeInterval}";
+            }
+            else
+            {
+                logMessage += $"           -> {timeIntervalDatabase}";
+            }
+
+            streamWriter.PrintLine(logMessage);
         });
+
+    streamWriter.PrintLine($"  Time interval in payload:  {timeIntervalPayload}           -> {timeIntervalPayload}");
 
     count++;
 

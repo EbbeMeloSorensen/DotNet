@@ -9,10 +9,11 @@ public class TimeInterval
 
     public override string ToString()
     {
-        var sb = new StringBuilder($"  Time interval in payload: ");
+        var sb = new StringBuilder("[");
         sb.Append(Start.AsShortDateString());
         sb.Append(" -> ");
         sb.Append(End.AsShortDateString());
+        sb.Append("]");
         return sb.ToString();
     }
 }
