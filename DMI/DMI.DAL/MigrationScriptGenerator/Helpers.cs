@@ -6,10 +6,15 @@ public static class Helpers
 {
     public static void PrintLine(
         this StreamWriter streamWriter,
-        string line)
+        string line,
+        bool alsoWriteToConsole)
     {
-        Console.WriteLine(line);
         streamWriter.WriteLine(line);
+
+        if (alsoWriteToConsole)
+        {
+            Console.WriteLine(line);
+        }
     }
 
     public static DateTime AsDateTimeUTC(
@@ -31,19 +36,34 @@ public static class Helpers
         return new DateTime(year, month, day, hour, minute, second, milliSecond, DateTimeKind.Utc);
     }
 
-    public static string AsShortDateString(
+    public static string AsDateTimeString(
         this DateTime dateTime)
     {
         var day = dateTime.Day;
         var month = dateTime.Month;
         var year = dateTime.Year;
+        var hour = dateTime.Hour;
+        var minute = dateTime.Minute;
+        var second = dateTime.Second;
+        var milliSecond = dateTime.Millisecond;
 
         if (year == 9999)
         {
-            return $"          ";
+            return $"                       ";
         }
 
-        return $"{day.ToString().PadLeft(2, '0')}-{month.ToString().PadLeft(2, '0')}-{year}";
+        var sb = new StringBuilder();
+        sb.Append($"{year}");
+        sb.Append($"-{month.ToString().PadLeft(2, '0')}");
+        sb.Append($"-{day.ToString().PadLeft(2, '0')}");
+        sb.Append($" {hour.ToString().PadLeft(2, '0')}");
+        sb.Append($":{minute.ToString().PadLeft(2, '0')}");
+        sb.Append($":{second.ToString().PadLeft(2, '0')}");
+        sb.Append($".{milliSecond.ToString().PadLeft(3, '0')}");
+
+        var result = sb.ToString();
+
+        return result;
     }
 
     public static bool Overlaps(
@@ -59,6 +79,16 @@ public static class Helpers
             : b.End;
 
         return maxStartTime < minEndTime;
+    }
+
+    public static bool CoveredBy(
+        this TimeInterval a,
+        TimeInterval b)
+    {
+        var temp1 = a.Start >= b.Start;
+        var temp2 = a.End <= b.End;
+
+        return temp1 && temp2;
     }
 
     public static TimeInterval Trim(

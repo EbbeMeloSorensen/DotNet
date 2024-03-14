@@ -10,9 +10,9 @@ public class TimeInterval
     public override string ToString()
     {
         var sb = new StringBuilder("[");
-        sb.Append(Start.AsShortDateString());
+        sb.Append(Start.AsDateTimeString());
         sb.Append(" -> ");
-        sb.Append(End.AsShortDateString());
+        sb.Append(End.AsDateTimeString());
         sb.Append("]");
         return sb.ToString();
     }
