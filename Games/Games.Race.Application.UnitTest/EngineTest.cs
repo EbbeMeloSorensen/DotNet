@@ -40,6 +40,8 @@ namespace Games.Race.Application.UnitTest
 
             // Assert
             log.Last().Should().Be("Player 1 wins");
+
+            await File.WriteAllLinesAsync("RaceLog.txt", log);
         }
     }
 }

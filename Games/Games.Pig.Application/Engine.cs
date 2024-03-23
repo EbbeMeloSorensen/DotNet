@@ -14,7 +14,7 @@ namespace Games.Pig.Application
 
         public int CurrentPlayerIndex { get; private set; }
 
-        public int[] PlayerScores { get; private set; }
+        public int[] PlayerScores { get; }
 
         public int Pot { get; private set; }
 
@@ -56,11 +56,20 @@ namespace Games.Pig.Application
         {
             await Task.Delay(1);
 
-            var currentPlayerIndex = CurrentPlayerIndex;
-
-            if (Pot == 0 || _random.Next(2) == 1)
+            if (PlayerScores[0] == 90 && CurrentPlayerIndex == 0)
             {
-                var dieRoll = _random.Next(6);
+                var a = 0;
+            }
+
+            if (Pot + PlayerScores[CurrentPlayerIndex] < 100 && (Pot < 10 || _random.Next(2) == 1))
+            {
+                var dieRoll = _random.Next(1, 6);
+
+                var gameEvent = new PlayerRollsDie
+                {
+                    Player = CurrentPlayerIndex + 1,
+                    DieRoll = dieRoll
+                };
 
                 if (dieRoll > 1)
                 {
@@ -72,15 +81,18 @@ namespace Games.Pig.Application
                     CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
                 }
 
-                return new PlayerRollsDie
-                {
-                    Player = currentPlayerIndex + 1,
-                    DieRoll = dieRoll
-                };
+                return gameEvent;
             }
             else
             {
                 PlayerScores[CurrentPlayerIndex] += Pot;
+                Pot = 0;
+
+                var gameEvent = new PlayerTakesPot
+                {
+                    Player = CurrentPlayerIndex + 1,
+                    NewScore = PlayerScores[CurrentPlayerIndex]
+                };
 
                 if (PlayerScores[CurrentPlayerIndex] >= 100)
                 {
@@ -91,7 +103,7 @@ namespace Games.Pig.Application
                     CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length; 
                 }
 
-                return new PlayerTakesPot { Player = currentPlayerIndex + 1 };
+                return gameEvent;
             }
         }
     }

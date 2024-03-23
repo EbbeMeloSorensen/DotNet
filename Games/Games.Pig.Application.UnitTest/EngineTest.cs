@@ -30,11 +30,11 @@ namespace Games.Pig.Application.UnitTest
 
                                 if (playerRollsDie.DieRoll == 1)
                                 {
-                                    logMessage += " => Bad luck: Player looses the turn and pot is reset";
+                                    logMessage += " => Player looses turn and pot is reset";
                                 }
                                 else
                                 {
-                                    logMessage += $" => Raising the stakes: Pot is now at {engine.Pot}";
+                                    logMessage += $" => Pot is now at {engine.Pot}";
                                 }
 
                                 log.Add(logMessage);
@@ -43,7 +43,7 @@ namespace Games.Pig.Application.UnitTest
                         case PlayerTakesPot playerTakesPot:
                             {
                                 var logMessage =
-                                    $"Player {playerTakesPot.Player} takes pot";
+                                    $"Player {playerTakesPot.Player} takes pot and now has a score of {playerTakesPot.NewScore}";
 
                                 log.Add(logMessage);
                                 break;
@@ -55,6 +55,10 @@ namespace Games.Pig.Application.UnitTest
                     }
                 }
             }
+
+            log.Add($"Player {engine.CurrentPlayerIndex + 1} wins");
+
+            await File.WriteAllLinesAsync("PigGameLog.txt", log);
         }
     }
 }
