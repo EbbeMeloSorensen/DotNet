@@ -2,7 +2,6 @@
 using Games.Pig.Application;
 using Games.Pig.Application.GameEvents;
 using Games.Pig.Application.PlayerOptions;
-using Microsoft.VisualBasic;
 
 namespace Games.Pig.UI.Console;
 
