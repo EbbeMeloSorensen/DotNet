@@ -8,6 +8,32 @@
         Title="Pig Game" Height="450" Width="800"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
+        <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Padding="0, 0, 10, 0" Text="Score:"/>
+            <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True"/>
+        </Grid>
+
+        <StackPanel Grid.Column="1">
+            <Button Width="75" Margin="10" Command="{Binding StartGameCommand}">Start Game</Button>
+            <Button Width="75" Margin="10" Command="{Binding RollDieCommand}">Roll Die</Button>
+            <Button Width="75" Margin="10" Command="{Binding TakePotCommand}">Take Pot</Button>
+            <TextBox Width="75" Margin="10" IsReadOnly="True" />
+        </StackPanel>
     </Grid>
 </Window>
