@@ -1,0 +1,8 @@
+Done:
+* Ingen Task.Delays - vent på user keypress i stedet
+
+Todo
+* Spillet skal slutte, når en spiller når en score på 100 eller 20
+* Når pot er på 0, skal man kun have mulighed for at rulle terningen
+* En velkomst og introduktion til spillet
+* Mulighed for at spille igen, når spillet er afgjort

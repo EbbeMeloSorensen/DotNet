@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.Application", "Ga
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.Application.UnitTest", "Games.Pig.Application.UnitTest\Games.Pig.Application.UnitTest.csproj", "{F7662D4D-5DC6-4D63-8865-A6282C3161CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Pig.UI.Console", "Games.Pig.UI.Console\Games.Pig.UI.Console.csproj", "{D509709D-583A-4FB5-A76B-71C5B3CA8C26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.UI.Console", "Games.Pig.UI.Console\Games.Pig.UI.Console.csproj", "{D509709D-583A-4FB5-A76B-71C5B3CA8C26}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6A729A33-78C0-44EC-8EFC-A7E9E179EAD0}"
+	ProjectSection(SolutionItems) = preProject
+		Backlog.txt = Backlog.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

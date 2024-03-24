@@ -2,11 +2,15 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Games.Pig.Application.GameEvents;
+using Games.Pig.Application.PlayerOptions;
 
 namespace Games.Pig.Application
 {
     public class Engine
     {
+        private const int _targetScore = 20;
+        private const int _dieFaces = 4;
+
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
 
@@ -56,55 +60,80 @@ namespace Games.Pig.Application
         {
             await Task.Delay(1);
 
-            if (PlayerScores[0] == 90 && CurrentPlayerIndex == 0)
+            if (Pot + PlayerScores[CurrentPlayerIndex] < _targetScore && (Pot < 10 || _random.Next(2) == 1))
             {
-                var a = 0;
+                return RollDie();
             }
+                
+            return TakePot();
+        }
 
-            if (Pot + PlayerScores[CurrentPlayerIndex] < 100 && (Pot < 10 || _random.Next(2) == 1))
+        public async Task<IGameEvent> PlayerSelectsOption(
+            IPlayerOption option)
+        {
+            await Task.Delay(1);
+
+            switch (option)
             {
-                var dieRoll = _random.Next(1, 6);
-
-                var gameEvent = new PlayerRollsDie
+                case RollDie _:
                 {
-                    Player = CurrentPlayerIndex + 1,
-                    DieRoll = dieRoll
-                };
-
-                if (dieRoll > 1)
-                {
-                    Pot += dieRoll;
+                    return RollDie();
                 }
-                else
+                case TakePot _:
                 {
-                    Pot = 0;
-                    CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
+                    return TakePot();
                 }
+                default:
+                {
+                    throw new InvalidOperationException("Invalid player option");
+                }
+            }
+        }
 
-                return gameEvent;
+        private IGameEvent RollDie()
+        {
+            var dieRoll = _random.Next(1, _dieFaces + 1);
+
+            var gameEvent = new PlayerRollsDie
+            {
+                Player = CurrentPlayerIndex + 1,
+                DieRoll = dieRoll
+            };
+
+            if (dieRoll > 1)
+            {
+                Pot += dieRoll;
             }
             else
             {
-                PlayerScores[CurrentPlayerIndex] += Pot;
                 Pot = 0;
-
-                var gameEvent = new PlayerTakesPot
-                {
-                    Player = CurrentPlayerIndex + 1,
-                    NewScore = PlayerScores[CurrentPlayerIndex]
-                };
-
-                if (PlayerScores[CurrentPlayerIndex] >= 100)
-                {
-                    GameDecided = true;
-                }
-                else
-                {
-                    CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length; 
-                }
-
-                return gameEvent;
+                CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
             }
+
+            return gameEvent;
+        }
+
+        private IGameEvent TakePot()
+        {
+            PlayerScores[CurrentPlayerIndex] += Pot;
+            Pot = 0;
+
+            var gameEvent = new PlayerTakesPot
+            {
+                Player = CurrentPlayerIndex + 1,
+                NewScore = PlayerScores[CurrentPlayerIndex]
+            };
+
+            if (PlayerScores[CurrentPlayerIndex] >= _targetScore)
+            {
+                GameDecided = true;
+            }
+            else
+            {
+                CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
+            }
+
+            return gameEvent;
         }
     }
 }
