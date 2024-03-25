@@ -63,11 +63,11 @@
                 <graph:GraphView Grid.Column="0" 
                                  DataContext="{Binding MapViewModel}"/>
 
-                <!--<local:BoardViewSquares Grid.Column="1" Grid.RowSpan="2"
-                                    DataContext="{Binding BoardViewModel}"/>-->
+                <local:BoardViewSquares Grid.Column="1" Grid.RowSpan="2"
+                                    DataContext="{Binding BoardViewModel}"/>
 
-                <local:BoardViewHexagons Grid.Column="1" Grid.RowSpan="2"
-                                     DataContext="{Binding BoardViewModel}"/>
+                <!--<local:BoardViewHexagons Grid.Column="1" Grid.RowSpan="2"
+                                     DataContext="{Binding BoardViewModel}"/>-->
             </Grid>
 
             <local:ActOutSceneView Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"

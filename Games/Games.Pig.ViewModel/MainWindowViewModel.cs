@@ -17,11 +17,11 @@ namespace Games.Pig.ViewModel
         private int _playerScore;
         private bool _playerHasInitiative;
 
-        private RelayCommand _startGameCommand;
+        private AsyncCommand _startGameCommand;
         private AsyncCommand _rollDieCommand;
         private AsyncCommand _takePotCommand;
 
-        public RelayCommand StartGameCommand => _startGameCommand ??= new RelayCommand(StartGame, CanStartGame);
+        public AsyncCommand StartGameCommand => _startGameCommand ??= new AsyncCommand(StartGame, CanStartGame);
         public AsyncCommand RollDieCommand => _rollDieCommand ??= new AsyncCommand(RollDie, CanRollDie);
         public AsyncCommand TakePotCommand => _takePotCommand ??= new AsyncCommand(TakePot, CanTakePot);
 
@@ -72,9 +72,42 @@ namespace Games.Pig.ViewModel
             PlayerHasInitiative = !players[0];
         }
 
-        private void StartGame()
+        private async Task Proceed()
         {
-            throw new NotImplementedException();
+            while (!_engine.GameDecided)
+            {
+                if (_engine.NextEventOccursAutomatically)
+                {
+                    var nextEvent = await _engine.ExecuteNextEvent();
+
+                    switch (nextEvent)
+                    {
+                        case TakePot gameEvent:
+                        {
+                            ComputerScore = _engine.PlayerScores[0];
+                            break;
+                        }
+                    }
+
+                    Pot = _engine.Pot;
+                    PlayerHasInitiative = _engine.CurrentPlayerIndex == 1;
+
+                    if (!PlayerHasInitiative)
+                    {
+                        await Task.Delay(500);
+                        continue;
+                    }
+
+                    RollDieCommand.RaiseCanExecuteChanged();
+                    break;
+                }
+            }
+        }
+
+        private async Task StartGame()
+        {
+            _engine.StartGame();
+            await Proceed();
         }
 
         private bool CanStartGame()
@@ -87,23 +120,36 @@ namespace Games.Pig.ViewModel
             var gameEvent = await _engine.PlayerSelectsOption(new RollDie()) as PlayerRollsDie;
 
             Pot = _engine.Pot;
+
+            if (Pot == 0)
+            {
+                PlayerHasInitiative = false;
+                await Proceed();
+            }
+            else
+            {
+                TakePotCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private bool CanRollDie()
         {
-            return true;
+            return PlayerHasInitiative;
         }
 
         private async Task TakePot()
         {
             var gameEvent = await _engine.PlayerSelectsOption(new TakePot()) as PlayerTakesPot;
 
+            PlayerScore = _engine.PlayerScores[1];
             Pot = _engine.Pot;
+            PlayerHasInitiative = false;
+            await Proceed();
         }
 
         private bool CanTakePot()
         {
-            return true;
+            return _engine.Pot > 0 && PlayerHasInitiative;
         }
     }
 }

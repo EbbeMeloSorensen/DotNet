@@ -62,6 +62,11 @@ public class ActOutSceneViewModelComplexEngine : ActOutSceneViewModelBase
 
     protected override async Task Proceed()
     {
+        if (_paused)
+        {
+            return;
+        }
+
         while (!_engine.BattleDecided)
         {
             if (_engine.BattleroundCompleted)
@@ -133,7 +138,7 @@ public class ActOutSceneViewModelComplexEngine : ActOutSceneViewModelBase
 
         if (_engine.BattleDecided)
         {
-            _logger.WriteLine(LogMessageCategory.Information, "Battle was decided");
+            _logger?.WriteLine(LogMessageCategory.Information, "Battle was decided");
         }
         else
         {
