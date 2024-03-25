@@ -4,36 +4,69 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Games.Pig.UI.WPF"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Pig Game" Height="450" Width="800"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
-    <Grid>
+
+    <Window.Resources>
+        <local:BooleanMatchToBrushConverter x:Key="BooleanMatchToBrushConverter"/>
+        <system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
+    </Window.Resources>
+
+    <Grid Background="DarkGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Button Grid.Row="0" Grid.Column="1" Width="200" Height="50"
+                Margin="10, 10, 10, 40" FontSize="15" FontWeight="Bold"
+                Command="{Binding StartGameCommand}">New Game</Button>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Padding="0, 0, 10, 0" Text="Score:"/>
-            <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True"/>
-        </Grid>
+        <StackPanel Grid.Row="1" Grid.Column="0"
+                    Background="{Binding PlayerHasInitiative, 
+                        Converter={StaticResource BooleanMatchToBrushConverter}, 
+                        ConverterParameter={StaticResource False}}">
+            <TextBlock FontSize="15" FontWeight="Bold" 
+                       Text="Computer Score:" TextAlignment="Center"/>
+            <TextBox Margin="20" Height="50"
+                     FontSize="15" TextAlignment="Center" VerticalContentAlignment="Center"
+                     Text="{Binding ComputerScore, Mode=OneWay}"/>
+        </StackPanel>
 
-        <StackPanel Grid.Column="1">
-            <Button Width="75" Margin="10" Command="{Binding StartGameCommand}">Start Game</Button>
-            <Button Width="75" Margin="10" Command="{Binding RollDieCommand}">Roll Die</Button>
-            <Button Width="75" Margin="10" Command="{Binding TakePotCommand}">Take Pot</Button>
-            <TextBox Width="75" Margin="10" IsReadOnly="True" />
+        <StackPanel Grid.Row="1" Grid.Column="2"
+                    Background="{Binding PlayerHasInitiative, 
+                        Converter={StaticResource BooleanMatchToBrushConverter}, 
+                        ConverterParameter={StaticResource True}}">
+            <TextBlock FontSize="15" FontWeight="Bold" 
+                       Text="Your Score:" TextAlignment="Center"/>
+            <TextBox Margin="20" Height="50"
+                     FontSize="15" TextAlignment="Center" VerticalContentAlignment="Center"
+                     Text="{Binding PlayerScore, Mode=OneWay}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Background="Orange">
+            <TextBlock FontSize="15" FontWeight="Bold" 
+                       Text="Pot:" TextAlignment="Center"/>
+            <TextBox Margin="20" Height="50" IsReadOnly="True"
+                     FontSize="15" TextAlignment="Center" VerticalContentAlignment="Center"
+                     Text="{Binding Pot, Mode=OneWay}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
+                    Command="{Binding RollDieCommand}">Roll Die</Button>
+            <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
+                    Command="{Binding TakePotCommand}">Take Pot</Button>
         </StackPanel>
     </Grid>
 </Window>

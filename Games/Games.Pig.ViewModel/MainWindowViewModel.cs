@@ -1,20 +1,69 @@
 ﻿using System;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Craft.ViewModel.Utils;
 using Games.Pig.Application;
+using Games.Pig.Application.GameEvents;
+using Games.Pig.Application.PlayerOptions;
 
 namespace Games.Pig.ViewModel
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : ViewModelBase
     {
         private Engine _engine;
+        private int _pot;
+        private int _computerScore;
+        private int _playerScore;
+        private bool _playerHasInitiative;
 
         private RelayCommand _startGameCommand;
-        private RelayCommand _rollDieCommand;
-        private RelayCommand _takePotCommand;
+        private AsyncCommand _rollDieCommand;
+        private AsyncCommand _takePotCommand;
 
         public RelayCommand StartGameCommand => _startGameCommand ??= new RelayCommand(StartGame, CanStartGame);
-        public RelayCommand RollDieCommand => _rollDieCommand ??= new RelayCommand(RollDie, CanRollDie);
-        public RelayCommand TakePotCommand => _rollDieCommand ??= new RelayCommand(TakePot, CanTakePot);
+        public AsyncCommand RollDieCommand => _rollDieCommand ??= new AsyncCommand(RollDie, CanRollDie);
+        public AsyncCommand TakePotCommand => _takePotCommand ??= new AsyncCommand(TakePot, CanTakePot);
+
+        public int Pot
+        {
+            get => _pot;
+            private set
+            {
+                _pot = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int ComputerScore
+        {
+            get => _computerScore;
+            private set
+            {
+                _computerScore = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int PlayerScore
+        {
+            get => _playerScore;
+            private set
+            {
+                _playerScore = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool PlayerHasInitiative
+        {
+            get => _playerHasInitiative;
+            private set
+            {
+                _playerHasInitiative = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public MainWindowViewModel()
         {
@@ -32,9 +81,11 @@ namespace Games.Pig.ViewModel
             return true;
         }
 
-        private void RollDie()
+        private async Task RollDie()
         {
-            throw new NotImplementedException();
+            var gameEvent = await _engine.PlayerSelectsOption(new RollDie()) as PlayerRollsDie;
+
+            Pot = _engine.Pot;
         }
 
         private bool CanRollDie()
@@ -42,9 +93,11 @@ namespace Games.Pig.ViewModel
             return true;
         }
 
-        private void TakePot()
+        private async Task TakePot()
         {
-            throw new NotImplementedException();
+            var gameEvent = await _engine.PlayerSelectsOption(new TakePot()) as PlayerTakesPot;
+
+            Pot = _engine.Pot;
         }
 
         private bool CanTakePot()

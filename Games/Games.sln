@@ -18,9 +18,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Backlog.txt = Backlog.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Pig.ViewModel", "Games.Pig.ViewModel\Games.Pig.ViewModel.csproj", "{E6267A2A-70F2-4F95-9D1C-227F2FA20789}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.ViewModel", "Games.Pig.ViewModel\Games.Pig.ViewModel.csproj", "{E6267A2A-70F2-4F95-9D1C-227F2FA20789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Pig.UI.WPF", "Games.Pig.UI.WPF\Games.Pig.UI.WPF.csproj", "{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.UI.WPF", "Games.Pig.UI.WPF\Games.Pig.UI.WPF.csproj", "{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{FC23B78B-1A2D-49BF-AEF1-865D69930355}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "..\Craft\Craft.Logging\Craft.Logging.csproj", "{C0EA2F5B-083C-4383-B4DD-A121B3967BA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +60,14 @@ Global
 		{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC23B78B-1A2D-49BF-AEF1-865D69930355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC23B78B-1A2D-49BF-AEF1-865D69930355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC23B78B-1A2D-49BF-AEF1-865D69930355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC23B78B-1A2D-49BF-AEF1-865D69930355}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0EA2F5B-083C-4383-B4DD-A121B3967BA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0EA2F5B-083C-4383-B4DD-A121B3967BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0EA2F5B-083C-4383-B4DD-A121B3967BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0EA2F5B-083C-4383-B4DD-A121B3967BA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
