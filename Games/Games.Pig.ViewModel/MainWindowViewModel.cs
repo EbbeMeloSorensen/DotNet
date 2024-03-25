@@ -69,6 +69,7 @@ namespace Games.Pig.ViewModel
         {
             var players = new[] { true, false };
             _engine = new Engine(players);
+            PlayerHasInitiative = !players[0];
         }
 
         private void StartGame()
