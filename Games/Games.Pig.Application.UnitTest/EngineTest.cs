@@ -9,7 +9,7 @@ namespace Games.Pig.Application.UnitTest
         {
             // Arrange
             var players = new bool[] { true, true, true };
-            var engine = new Engine(players);
+            var engine = new Engine(players, true);
             var log = new List<string>();
 
             // Act

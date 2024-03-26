@@ -31,7 +31,7 @@ internal class Program
     private static async Task PlayGame()
     {
         var players = new[] { true, false };
-        var engine = new Engine(players);
+        var engine = new Engine(players, false);
 
         while (!engine.GameDecided)
         {

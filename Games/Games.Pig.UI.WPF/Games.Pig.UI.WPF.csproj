@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj" />
     <ProjectReference Include="..\Games.Pig.ViewModel\Games.Pig.ViewModel.csproj" />
   </ItemGroup>
 

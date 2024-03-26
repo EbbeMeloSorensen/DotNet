@@ -11,6 +11,7 @@
 
     <Window.Resources>
         <local:BooleanMatchToBrushConverter x:Key="BooleanMatchToBrushConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <system:Boolean x:Key="True">True</system:Boolean>
         <system:Boolean x:Key="False">False</system:Boolean>
     </Window.Resources>
@@ -38,8 +39,8 @@
                         ConverterParameter={StaticResource False}}">
             <TextBlock FontSize="15" FontWeight="Bold" 
                        Text="Computer Score:" TextAlignment="Center"/>
-            <TextBox Margin="20" Height="50"
-                     FontSize="15" TextAlignment="Center" VerticalContentAlignment="Center"
+            <TextBox Margin="20" FontWeight="Bold"
+                     FontSize="50" TextAlignment="Center" VerticalContentAlignment="Center"
                      Text="{Binding ComputerScore, Mode=OneWay}"/>
         </StackPanel>
 
@@ -49,24 +50,31 @@
                         ConverterParameter={StaticResource True}}">
             <TextBlock FontSize="15" FontWeight="Bold" 
                        Text="Your Score:" TextAlignment="Center"/>
-            <TextBox Margin="20" Height="50"
-                     FontSize="15" TextAlignment="Center" VerticalContentAlignment="Center"
+            <TextBox Margin="20" FontWeight="Bold"
+                     FontSize="50" TextAlignment="Center" VerticalContentAlignment="Center"
                      Text="{Binding PlayerScore, Mode=OneWay}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Background="Orange">
             <TextBlock FontSize="15" FontWeight="Bold" 
                        Text="Pot:" TextAlignment="Center"/>
-            <TextBox Margin="20" Height="50" IsReadOnly="True"
-                     FontSize="15" TextAlignment="Center" VerticalContentAlignment="Center"
+            <TextBox Margin="20" IsReadOnly="True"
+                     FontSize="50" FontWeight="Bold" TextAlignment="Center" VerticalContentAlignment="Center"
                      Text="{Binding Pot, Mode=OneWay}"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Grid.Column="1">
+        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
             <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                     Command="{Binding RollDieCommand}">Roll Die</Button>
             <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
                     Command="{Binding TakePotCommand}">Take Pot</Button>
         </StackPanel>
+
+        <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Width="500" Height="150"
+                   TextAlignment="Center" FontSize="30" FontWeight="Bold" VerticalContentAlignment="Center"
+                   Background="OrangeRed"
+                   Visibility="{Binding Path=GameDecided, 
+                                        Converter={StaticResource BooleanToVisibilityConverter}}"
+                   Text="{Binding GameResultMessage}"/>
     </Grid>
 </Window>

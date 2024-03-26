@@ -30,7 +30,8 @@ namespace Games.Pig.Application
         }
 
         public Engine(
-            bool[] players)
+            bool[] players,
+            bool pseudoRandomNumbers)
         {
             var playerCount = players.Count();
 
@@ -39,7 +40,9 @@ namespace Games.Pig.Application
                 throw new ArgumentOutOfRangeException("Invalid number of players");
             }
 
-            _random = new Random(0);
+            _random = pseudoRandomNumbers 
+                ? new Random(0)
+                : new Random((int)DateTime.UtcNow.Ticks);
 
             _players = players;
             PlayerScores = new int[playerCount];
@@ -54,6 +57,18 @@ namespace Games.Pig.Application
 
             GameDecided = false;
             CurrentPlayerIndex = 0;
+        }
+
+        public void Reset()
+        {
+            Pot = 0;
+            GameDecided = false;
+            CurrentPlayerIndex = 0;
+
+            for (var i = 0; i < PlayerScores.Length; i++)
+            {
+                PlayerScores[i] = 0;
+            }
         }
 
         public async Task<IGameEvent> ExecuteNextEvent()
