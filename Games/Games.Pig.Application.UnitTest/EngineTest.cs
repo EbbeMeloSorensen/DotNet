@@ -8,7 +8,7 @@ namespace Games.Pig.Application.UnitTest
         public async Task Test1()
         {
             // Arrange
-            var players = new bool[] { true, true, true };
+            var players = new [] { true, true, true };
             var engine = new Engine(players, true);
             var log = new List<string>();
 
@@ -23,29 +23,14 @@ namespace Games.Pig.Application.UnitTest
 
                     switch (nextEvent)
                     {
-                        case PlayerRollsDie playerRollsDie:
+                        case PlayerRollsDie gameEvent:
                             {
-                                var logMessage =
-                                    $"Player {playerRollsDie.Player} rolls die and gets {playerRollsDie.DieRoll}";
-
-                                if (playerRollsDie.DieRoll == 1)
-                                {
-                                    logMessage += " => Player looses turn and pot is reset";
-                                }
-                                else
-                                {
-                                    logMessage += $" => Pot is now at {engine.Pot}";
-                                }
-
-                                log.Add(logMessage);
+                                log.Add(gameEvent.Description);
                                 break;
                             }
-                        case PlayerTakesPot playerTakesPot:
+                        case PlayerTakesPot gameEvent:
                             {
-                                var logMessage =
-                                    $"Player {playerTakesPot.Player} takes pot and now has a score of {playerTakesPot.NewScore}";
-
-                                log.Add(logMessage);
+                                log.Add(gameEvent.Description);
                                 break;
                             }
                         default:

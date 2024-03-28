@@ -37,41 +37,8 @@ internal class Program
         {
             if (engine.NextEventOccursAutomatically)
             {
-                var nextEvent = await engine.ExecuteNextEvent();
-
-                switch (nextEvent)
-                {
-                    case PlayerRollsDie playerRollsDie:
-                        {
-                            var logMessage = $"Computer rolls die and gets {playerRollsDie.DieRoll}";
-                            
-                            if (playerRollsDie.DieRoll == 1)
-                            {
-                                logMessage += " => Computer looses turn and pot is reset";
-                            }
-                            else
-                            {
-                                logMessage += $" => Pot is now at {engine.Pot}";
-                            }
-
-                            System.Console.WriteLine(logMessage);
-
-                            break;
-                        }
-                    case PlayerTakesPot playerTakesPot:
-                        {
-                            var logMessage =
-                                $"Computer takes pot and now has a score of {playerTakesPot.NewScore}";
-
-                            System.Console.WriteLine(logMessage);
-
-                            break;
-                        }
-                    default:
-                        {
-                            throw new InvalidOperationException("Unknown game event");
-                        }
-                }
+                var gameEvent = await engine.ExecuteNextEvent();
+                System.Console.WriteLine(gameEvent.Description.Replace("Player 1", "Computer"));
             }
             else
             {

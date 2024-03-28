@@ -14,7 +14,6 @@ namespace Games.Pig.ViewModel
         private bool _loggingActive;
         private readonly Application.Application _application;
 
-        private Engine _engine;
         private int _pot;
         private int _computerScore;
         private int _playerScore;
@@ -111,45 +110,45 @@ namespace Games.Pig.ViewModel
             Application.Application application)
         {
             _application = application;
+            _application.Engine = new Engine(new[] { true, false }, true);
 
             LogViewModel = new LogViewModel();
-
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
-
             LoggingActive = true;
-
-            var players = new[] { true, false };
-            _engine = new Engine(players, true);
 
             _application.Logger?.WriteLine(LogMessageCategory.Debug, "Pig Game - starting up");
         }
 
         private async Task Proceed()
         {
-            while (!_engine.GameDecided)
+            while (!_application.Engine.GameDecided)
             {
-                if (_engine.NextEventOccursAutomatically)
+                if (_application.Engine.NextEventOccursAutomatically)
                 {
-                    var nextEvent = await _engine.ExecuteNextEvent();
+                    var gameEvent = await _application.Engine.ExecuteNextEvent();
 
-                    Pot = _engine.Pot;
+                    _application.Logger.WriteLine(
+                        LogMessageCategory.Information,
+                        gameEvent.Description.Replace("Player 1", "Computer"));
 
-                    switch (nextEvent)
+                    Pot = _application.Engine.Pot;
+
+                    switch (gameEvent)
                     {
-                        case PlayerRollsDie gameEvent:
+                        case PlayerRollsDie _:
                         {
-                            PlayerHasInitiative = _engine.CurrentPlayerIndex == 1;
+                            PlayerHasInitiative = _application.Engine.CurrentPlayerIndex == 1;
                             break;
                         }
-                        case PlayerTakesPot gameEvent:
+                        case PlayerTakesPot _:
                         {
-                            ComputerScore = _engine.PlayerScores[0];
-                            PlayerHasInitiative = !_engine.GameDecided;
+                            ComputerScore = _application.Engine.PlayerScores[0];
+                            PlayerHasInitiative = !_application.Engine.GameDecided;
                             break;
                         }
                     }
 
-                    if (!PlayerHasInitiative && !_engine.GameDecided)
+                    if (!PlayerHasInitiative && !_application.Engine.GameDecided)
                     {
                         await Task.Delay(500);
                         continue;
@@ -160,7 +159,7 @@ namespace Games.Pig.ViewModel
                 }
             }
 
-            if (_engine.GameDecided)
+            if (_application.Engine.GameDecided)
             {
                 GameResultMessage = "Game Over - You Lost";
                 GameDecided = true;
@@ -169,14 +168,14 @@ namespace Games.Pig.ViewModel
 
         private async Task StartGame()
         {
-            _engine.Reset();
+            _application.Engine.Reset();
 
             GameDecided = false;
-            PlayerHasInitiative = !_engine.NextEventOccursAutomatically;
+            PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
             ComputerScore = 0;
             PlayerScore = 0;
             Pot = 0;
-            _engine.StartGame();
+            _application.Engine.StartGame();
             await Proceed();
         }
 
@@ -187,9 +186,13 @@ namespace Games.Pig.ViewModel
 
         private async Task RollDie()
         {
-            var gameEvent = await _engine.PlayerSelectsOption(new RollDie()) as PlayerRollsDie;
+            var gameEvent = await _application.Engine.PlayerSelectsOption(new RollDie()) as PlayerRollsDie;
 
-            Pot = _engine.Pot;
+            _application.Logger.WriteLine(
+                LogMessageCategory.Information,
+                gameEvent.Description.Replace("Player 2", "Player"));
+
+            Pot = _application.Engine.Pot;
 
             if (Pot == 0)
             {
@@ -209,12 +212,12 @@ namespace Games.Pig.ViewModel
 
         private async Task TakePot()
         {
-            var gameEvent = await _engine.PlayerSelectsOption(new TakePot()) as PlayerTakesPot;
+            var gameEvent = await _application.Engine.PlayerSelectsOption(new TakePot()) as PlayerTakesPot;
 
-            Pot = _engine.Pot;
-            PlayerScore = _engine.PlayerScores[1];
+            Pot = _application.Engine.Pot;
+            PlayerScore = _application.Engine.PlayerScores[1];
 
-            if (_engine.GameDecided)
+            if (_application.Engine.GameDecided)
             {
                 GameResultMessage = "Congratulations - You Win";
                 GameDecided = true;
@@ -228,7 +231,7 @@ namespace Games.Pig.ViewModel
 
         private bool CanTakePot()
         {
-            return _engine.Pot > 0 && PlayerHasInitiative;
+            return _application.Engine.Pot > 0 && PlayerHasInitiative;
         }
     }
 }

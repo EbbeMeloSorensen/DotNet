@@ -2,5 +2,6 @@
 {
     public interface IGameEvent
     {
+        string Description { get; }
     }
 }

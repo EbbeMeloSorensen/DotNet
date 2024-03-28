@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Games.Pig.Application.GameEvents;
 using Games.Pig.Application.PlayerOptions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Games.Pig.Application
 {
@@ -113,20 +115,27 @@ namespace Games.Pig.Application
         private IGameEvent RollDie()
         {
             var dieRoll = _random.Next(1, _dieFaces + 1);
+            var sb = new StringBuilder($"Player {CurrentPlayerIndex + 1} rolls die and gets {dieRoll}");
 
-            var gameEvent = new PlayerRollsDie
+            if (dieRoll == 1)
+            {
+                Pot = 0;
+                sb.Append($" => Player {CurrentPlayerIndex + 1} looses turn and pot is reset");
+            }
+            else
+            {
+                Pot += dieRoll;
+                sb.Append($" => Pot is now at {Pot}");
+            }
+
+            var gameEvent = new PlayerRollsDie(sb.ToString())
             {
                 Player = CurrentPlayerIndex + 1,
                 DieRoll = dieRoll
             };
 
-            if (dieRoll > 1)
+            if (dieRoll == 1)
             {
-                Pot += dieRoll;
-            }
-            else
-            {
-                Pot = 0;
                 CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
             }
 
@@ -138,7 +147,8 @@ namespace Games.Pig.Application
             PlayerScores[CurrentPlayerIndex] += Pot;
             Pot = 0;
 
-            var gameEvent = new PlayerTakesPot
+            var gameEvent = new PlayerTakesPot(
+                $"Player {CurrentPlayerIndex + 1} takes pot and now has a score of {PlayerScores[CurrentPlayerIndex]}")
             {
                 Player = CurrentPlayerIndex + 1,
                 NewScore = PlayerScores[CurrentPlayerIndex]
