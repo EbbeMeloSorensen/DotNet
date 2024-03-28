@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Craft.Logging;
 using GalaSoft.MvvmLight;
 using Craft.ViewModel.Utils;
 using Games.Pig.Application;
@@ -9,6 +10,10 @@ namespace Games.Pig.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private ViewModelLogger _viewModelLogger;
+        private bool _loggingActive;
+        private readonly Application.Application _application;
+
         private Engine _engine;
         private int _pot;
         private int _computerScore;
@@ -24,6 +29,23 @@ namespace Games.Pig.ViewModel
         public AsyncCommand StartGameCommand => _startGameCommand ??= new AsyncCommand(StartGame, CanStartGame);
         public AsyncCommand RollDieCommand => _rollDieCommand ??= new AsyncCommand(RollDie, CanRollDie);
         public AsyncCommand TakePotCommand => _takePotCommand ??= new AsyncCommand(TakePot, CanTakePot);
+
+        public LogViewModel LogViewModel { get; }
+
+        public bool LoggingActive
+        {
+            get => _loggingActive;
+            set
+            {
+                _loggingActive = value;
+
+                RaisePropertyChanged();
+
+                _application.Logger = _loggingActive
+                    ? _viewModelLogger
+                    : null;
+            }
+        }
 
         public int Pot
         {
@@ -85,10 +107,21 @@ namespace Games.Pig.ViewModel
             }
         }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(
+            Application.Application application)
         {
+            _application = application;
+
+            LogViewModel = new LogViewModel();
+
+            _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
+
+            LoggingActive = true;
+
             var players = new[] { true, false };
             _engine = new Engine(players, true);
+
+            _application.Logger?.WriteLine(LogMessageCategory.Debug, "Pig Game - starting up");
         }
 
         private async Task Proceed()

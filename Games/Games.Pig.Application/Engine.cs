@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Craft.Logging;
 using Games.Pig.Application.GameEvents;
 using Games.Pig.Application.PlayerOptions;
 
@@ -28,6 +29,8 @@ namespace Games.Pig.Application
         {
             get => _players[CurrentPlayerIndex]; 
         }
+
+        public ILogger Logger { get; set; }
 
         public Engine(
             bool[] players,
@@ -57,6 +60,8 @@ namespace Games.Pig.Application
 
             GameDecided = false;
             CurrentPlayerIndex = 0;
+
+            Logger?.WriteLine(LogMessageCategory.Information, "New Game Started");
         }
 
         public void Reset()

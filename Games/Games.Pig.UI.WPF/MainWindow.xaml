@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Games.Pig.UI.WPF"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="Pig Game" Height="450" Width="800"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
@@ -27,6 +28,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Button Grid.Row="0" Grid.Column="1" Width="200" Height="50"
@@ -76,5 +78,9 @@
                    Visibility="{Binding Path=GameDecided, 
                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                    Text="{Binding GameResultMessage}"/>
+
+        <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Header="Log" ExpandDirection="Up" IsExpanded="True">
+            <logging:LogView Height="200" DataContext="{Binding LogViewModel}"/>
+        </Expander>
     </Grid>
 </Window>
