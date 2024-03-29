@@ -18,6 +18,7 @@ namespace Games.Pig.ViewModel
         private int _computerScore;
         private int _playerScore;
         private bool _playerHasInitiative;
+        private bool _gameOngoing;
         private bool _gameDecided;
         private string _gameResultMessage;
 
@@ -25,7 +26,13 @@ namespace Games.Pig.ViewModel
         private AsyncCommand _rollDieCommand;
         private AsyncCommand _takePotCommand;
 
-        public AsyncCommand StartGameCommand => _startGameCommand ??= new AsyncCommand(StartGame, CanStartGame);
+        public AsyncCommand StartGameCommand => _startGameCommand ??= new AsyncCommand(
+            () =>
+            {
+                StartGame();
+                return Proceed();
+            }, CanStartGame);
+
         public AsyncCommand RollDieCommand => _rollDieCommand ??= new AsyncCommand(RollDie, CanRollDie);
         public AsyncCommand TakePotCommand => _takePotCommand ??= new AsyncCommand(TakePot, CanTakePot);
 
@@ -82,6 +89,16 @@ namespace Games.Pig.ViewModel
             private set
             {
                 _playerHasInitiative = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool GameOngoing
+        {
+            get => _gameOngoing;
+            private set
+            {
+                _gameOngoing = value;
                 RaisePropertyChanged();
             }
         }
@@ -154,7 +171,7 @@ namespace Games.Pig.ViewModel
                         continue;
                     }
 
-                    RollDieCommand.RaiseCanExecuteChanged();
+                    UpdateCommandAvailability();
                     break;
                 }
             }
@@ -162,21 +179,26 @@ namespace Games.Pig.ViewModel
             if (_application.Engine.GameDecided)
             {
                 GameResultMessage = "Game Over - You Lost";
+                GameOngoing = false;
                 GameDecided = true;
+
+                UpdateCommandAvailability();
             }
         }
 
-        private async Task StartGame()
+        private void StartGame()
         {
-            _application.Engine.Reset();
-
+            GameOngoing = true;
             GameDecided = false;
             PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
             ComputerScore = 0;
             PlayerScore = 0;
             Pot = 0;
+
+            UpdateCommandAvailability();
+
+            _application.Engine.Reset();
             _application.Engine.StartGame();
-            await Proceed();
         }
 
         private bool CanStartGame()
@@ -207,12 +229,16 @@ namespace Games.Pig.ViewModel
 
         private bool CanRollDie()
         {
-            return PlayerHasInitiative;
+            return GameOngoing && PlayerHasInitiative;
         }
 
         private async Task TakePot()
         {
             var gameEvent = await _application.Engine.PlayerSelectsOption(new TakePot()) as PlayerTakesPot;
+
+            _application.Logger.WriteLine(
+                LogMessageCategory.Information,
+                gameEvent.Description.Replace("Player 2", "Player"));
 
             Pot = _application.Engine.Pot;
             PlayerScore = _application.Engine.PlayerScores[1];
@@ -220,7 +246,9 @@ namespace Games.Pig.ViewModel
             if (_application.Engine.GameDecided)
             {
                 GameResultMessage = "Congratulations - You Win";
+                GameOngoing = false;
                 GameDecided = true;
+                UpdateCommandAvailability();
             }
             else
             {
@@ -231,7 +259,15 @@ namespace Games.Pig.ViewModel
 
         private bool CanTakePot()
         {
-            return _application.Engine.Pot > 0 && PlayerHasInitiative;
+            return _application.Engine.Pot > 0 && 
+                   GameOngoing &&
+                   PlayerHasInitiative;
+        }
+
+        private void UpdateCommandAvailability()
+        {
+            RollDieCommand.RaiseCanExecuteChanged();
+            TakePotCommand.RaiseCanExecuteChanged();
         }
     }
 }

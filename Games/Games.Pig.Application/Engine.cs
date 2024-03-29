@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using Craft.Logging;
 using Games.Pig.Application.GameEvents;
 using Games.Pig.Application.PlayerOptions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Games.Pig.Application
 {
     public class Engine
     {
-        private const int _targetScore = 20;
-        private const int _dieFaces = 4;
+        private const int _targetScore = 100;
+        private const int _dieFaces = 6;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;

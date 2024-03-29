@@ -27,8 +27,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Button Grid.Row="0" Grid.Column="0" Width="200" Height="50" HorizontalAlignment="Left"
@@ -73,15 +73,15 @@
                     Command="{Binding TakePotCommand}">Take Pot</Button>
         </StackPanel>
 
-        <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Width="500" Height="150"
-                   TextAlignment="Center" FontSize="30" FontWeight="Bold" VerticalContentAlignment="Center"
-                   Background="OrangeRed"
-                   Visibility="{Binding Path=GameDecided, 
-                                        Converter={StaticResource BooleanToVisibilityConverter}}"
-                   Text="{Binding GameResultMessage}"/>
-
         <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Header="Log" ExpandDirection="Up" IsExpanded="True">
-            <logging:LogView Height="150" DataContext="{Binding LogViewModel}"/>
+            <logging:LogView DataContext="{Binding LogViewModel}"/>
         </Expander>
+
+        <TextBox Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="500" Height="150" Margin="10"
+                 TextAlignment="Center" FontSize="30" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Top"
+                 Background="OrangeRed"
+                 Visibility="{Binding Path=GameDecided,
+                    Converter={StaticResource BooleanToVisibilityConverter}}"
+                 Text="{Binding GameResultMessage}"/>
     </Grid>
 </Window>
