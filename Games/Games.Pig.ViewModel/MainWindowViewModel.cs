@@ -10,7 +10,7 @@ namespace Games.Pig.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private const int _delay = 10;
+        private const int _delay = 200;
 
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
@@ -146,7 +146,7 @@ namespace Games.Pig.ViewModel
                 {
                     var gameEvent = await _application.Engine.ExecuteNextEvent();
 
-                    _application.Logger.WriteLine(
+                    _application.Logger?.WriteLine(
                         LogMessageCategory.Information,
                         gameEvent.Description.Replace("Player 1", "Computer"));
 
@@ -212,7 +212,7 @@ namespace Games.Pig.ViewModel
         {
             var gameEvent = await _application.Engine.PlayerSelectsOption(new RollDie()) as PlayerRollsDie;
 
-            _application.Logger.WriteLine(
+            _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
                 gameEvent.Description.Replace("Player 2", "Player"));
 
@@ -239,7 +239,7 @@ namespace Games.Pig.ViewModel
         {
             var gameEvent = await _application.Engine.PlayerSelectsOption(new TakePot()) as PlayerTakesPot;
 
-            _application.Logger.WriteLine(
+            _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
                 gameEvent.Description.Replace("Player 2", "Player"));
 
@@ -251,12 +251,13 @@ namespace Games.Pig.ViewModel
                 GameResultMessage = "Congratulations - You Win";
                 GameOngoing = false;
                 GameDecided = true;
-                UpdateCommandAvailability();
+                await Task.Delay(_delay);
             }
             else
             {
                 PlayerHasInitiative = false;
                 UpdateCommandAvailability();
+                await Task.Delay(_delay);
                 await Proceed();
             }
         }

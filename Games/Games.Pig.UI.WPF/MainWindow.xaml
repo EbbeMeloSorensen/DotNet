@@ -17,71 +17,82 @@
         <system:Boolean x:Key="False">False</system:Boolean>
     </Window.Resources>
 
-    <Grid Background="DarkGray">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <DockPanel>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Logging enabled" IsCheckable="True"
+                          IsChecked="{Binding LoggingActive}"/>
+            </MenuItem>
+        </Menu>
 
-        <Button Grid.Row="0" Grid.Column="0" Width="200" Height="50" HorizontalAlignment="Left"
+        <Grid Background="DarkGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" Width="200" Height="50" HorizontalAlignment="Left"
                 Margin="10, 10, 10, 40" FontSize="15" FontWeight="Bold"
                 Command="{Binding StartGameCommand}">New Game</Button>
 
-        <StackPanel Grid.Row="1" Grid.Column="0"
+            <StackPanel Grid.Row="1" Grid.Column="0"
                     Background="{Binding PlayerHasInitiative, 
                         Converter={StaticResource BooleanMatchToBrushConverter}, 
                         ConverterParameter={StaticResource False}}">
-            <TextBlock FontSize="15" FontWeight="Bold" 
+                <TextBlock FontSize="15" FontWeight="Bold" 
                        Text="Computer Score:" TextAlignment="Center"/>
-            <TextBox Margin="20" FontWeight="Bold"
+                <TextBox Margin="20" FontWeight="Bold"
                      FontSize="50" TextAlignment="Center" VerticalContentAlignment="Center"
                      Text="{Binding ComputerScore, Mode=OneWay}"/>
-        </StackPanel>
+            </StackPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="2"
+            <StackPanel Grid.Row="1" Grid.Column="2"
                     Background="{Binding PlayerHasInitiative, 
                         Converter={StaticResource BooleanMatchToBrushConverter}, 
                         ConverterParameter={StaticResource True}}">
-            <TextBlock FontSize="15" FontWeight="Bold" 
+                <TextBlock FontSize="15" FontWeight="Bold" 
                        Text="Your Score:" TextAlignment="Center"/>
-            <TextBox Margin="20" FontWeight="Bold"
+                <TextBox Margin="20" FontWeight="Bold"
                      FontSize="50" TextAlignment="Center" VerticalContentAlignment="Center"
                      Text="{Binding PlayerScore, Mode=OneWay}"/>
-        </StackPanel>
+            </StackPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="1" Background="Orange">
-            <TextBlock FontSize="15" FontWeight="Bold" 
+            <StackPanel Grid.Row="1" Grid.Column="1" Background="Orange">
+                <TextBlock FontSize="15" FontWeight="Bold" 
                        Text="Pot:" TextAlignment="Center"/>
-            <TextBox Margin="20" IsReadOnly="True"
+                <TextBox Margin="20" IsReadOnly="True"
                      FontSize="50" FontWeight="Bold" TextAlignment="Center" VerticalContentAlignment="Center"
                      Text="{Binding Pot, Mode=OneWay}"/>
-        </StackPanel>
+            </StackPanel>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Top"
+            <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Top"
                     Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
+                <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                     Command="{Binding RollDieCommand}">Roll Die</Button>
-            <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
+                <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
                     Command="{Binding TakePotCommand}">Take Pot</Button>
-        </StackPanel>
+            </StackPanel>
 
-        <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Header="Log" ExpandDirection="Up" IsExpanded="True">
-            <logging:LogView DataContext="{Binding LogViewModel}"/>
-        </Expander>
+            <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Header="Log" ExpandDirection="Up" IsExpanded="False">
+                <logging:LogView DataContext="{Binding LogViewModel}"/>
+            </Expander>
 
-        <TextBox Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="500" Height="150" Margin="10"
+            <TextBox Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="500" Height="150" Margin="10"
                  TextAlignment="Center" FontSize="30" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Top"
                  Background="OrangeRed"
                  Visibility="{Binding Path=GameDecided,
                     Converter={StaticResource BooleanToVisibilityConverter}}"
                  Text="{Binding GameResultMessage}"/>
-    </Grid>
+        </Grid>
+
+    </DockPanel>
 </Window>
