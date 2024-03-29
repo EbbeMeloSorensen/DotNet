@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Craft.Logging;
 using GalaSoft.MvvmLight;
+using Craft.Logging;
 using Craft.ViewModel.Utils;
 using Games.Pig.Application;
 using Games.Pig.Application.GameEvents;
@@ -10,7 +10,7 @@ namespace Games.Pig.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private const int _delay = 1000;
+        private const int _delay = 10;
 
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
@@ -190,6 +190,9 @@ namespace Games.Pig.ViewModel
 
         private void StartGame()
         {
+            _application.Engine.Reset();
+            _application.Engine.StartGame();
+
             GameOngoing = true;
             GameDecided = false;
             PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
@@ -198,9 +201,6 @@ namespace Games.Pig.ViewModel
             Pot = 0;
 
             UpdateCommandAvailability();
-
-            _application.Engine.Reset();
-            _application.Engine.StartGame();
         }
 
         private bool CanStartGame()
