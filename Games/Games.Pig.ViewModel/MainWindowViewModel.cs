@@ -10,6 +10,8 @@ namespace Games.Pig.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private const int _delay = 1000;
+
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
         private readonly Application.Application _application;
@@ -167,7 +169,7 @@ namespace Games.Pig.ViewModel
 
                     if (!PlayerHasInitiative && !_application.Engine.GameDecided)
                     {
-                        await Task.Delay(500);
+                        await Task.Delay(_delay);
                         continue;
                     }
                 }
@@ -175,7 +177,6 @@ namespace Games.Pig.ViewModel
                 UpdateCommandAvailability();
                 break;
             }
-
 
             if (_application.Engine.GameDecided)
             {
@@ -204,7 +205,7 @@ namespace Games.Pig.ViewModel
 
         private bool CanStartGame()
         {
-            return true;
+            return !GameOngoing || PlayerHasInitiative;
         }
 
         private async Task RollDie()
@@ -220,11 +221,12 @@ namespace Games.Pig.ViewModel
             if (Pot == 0)
             {
                 PlayerHasInitiative = false;
+                UpdateCommandAvailability();
                 await Proceed();
             }
             else
             {
-                TakePotCommand.RaiseCanExecuteChanged();
+                UpdateCommandAvailability();
             }
         }
 
@@ -254,6 +256,7 @@ namespace Games.Pig.ViewModel
             else
             {
                 PlayerHasInitiative = false;
+                UpdateCommandAvailability();
                 await Proceed();
             }
         }
@@ -267,6 +270,7 @@ namespace Games.Pig.ViewModel
 
         private void UpdateCommandAvailability()
         {
+            StartGameCommand.RaiseCanExecuteChanged();
             RollDieCommand.RaiseCanExecuteChanged();
             TakePotCommand.RaiseCanExecuteChanged();
         }
