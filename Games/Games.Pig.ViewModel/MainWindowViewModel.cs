@@ -170,11 +170,12 @@ namespace Games.Pig.ViewModel
                         await Task.Delay(500);
                         continue;
                     }
-
-                    UpdateCommandAvailability();
-                    break;
                 }
+
+                UpdateCommandAvailability();
+                break;
             }
+
 
             if (_application.Engine.GameDecided)
             {
