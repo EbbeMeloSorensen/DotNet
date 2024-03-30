@@ -6,7 +6,10 @@
         public int NewScore { get; set; }
 
         public PlayerTakesPot(
-            string description) : base(description)
+            string description,
+            bool turnGoesToNextPlayer) : base(
+                description,
+                turnGoesToNextPlayer)
         {
         }
     }

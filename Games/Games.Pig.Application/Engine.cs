@@ -18,11 +18,15 @@ namespace Games.Pig.Application
 
         private Random _random;
 
+        public int PlayerCount => PlayerScores.Length; 
+
         public int CurrentPlayerIndex { get; private set; }
 
         public int[] PlayerScores { get; }
 
         public int Pot { get; private set; }
+
+        public bool GameInProgress { get; private set; }
 
         public bool GameDecided { get; private set; }
 
@@ -54,19 +58,15 @@ namespace Games.Pig.Application
 
         public void StartGame()
         {
-            for (var index = 0; index < PlayerScores.Length; index++)
-            {
-                PlayerScores[index] = 0;
-            }
+            GameInProgress = true;
+            CurrentPlayerIndex = _random.Next(1, _players.Length + 1);
 
-            GameDecided = false;
-            CurrentPlayerIndex = 0;
-
-            Logger?.WriteLine(LogMessageCategory.Information, "New Game Started");
+            Logger?.WriteLine(LogMessageCategory.Information, $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
         }
 
         public void Reset()
         {
+            GameInProgress = false;
             Pot = 0;
             GameDecided = false;
             CurrentPlayerIndex = 0;
@@ -81,7 +81,7 @@ namespace Games.Pig.Application
         {
             await Task.Delay(1);
 
-            if (Pot + PlayerScores[CurrentPlayerIndex] < _targetScore && (Pot < 10 || _random.Next(2) == 1))
+            if (Pot + PlayerScores[CurrentPlayerIndex] < _targetScore && (Pot < 20 || _random.Next(2) == 1))
             {
                 return RollDie();
             }
@@ -127,7 +127,7 @@ namespace Games.Pig.Application
                 sb.Append($" => Pot is now at {Pot}");
             }
 
-            var gameEvent = new PlayerRollsDie(sb.ToString())
+            var gameEvent = new PlayerRollsDie(sb.ToString(), dieRoll == 1)
             {
                 Player = CurrentPlayerIndex + 1,
                 DieRoll = dieRoll
@@ -147,7 +147,7 @@ namespace Games.Pig.Application
             Pot = 0;
 
             var gameEvent = new PlayerTakesPot(
-                $"Player {CurrentPlayerIndex + 1} takes pot and now has a score of {PlayerScores[CurrentPlayerIndex]}")
+                $"Player {CurrentPlayerIndex + 1} takes pot and now has a score of {PlayerScores[CurrentPlayerIndex]}", true)
             {
                 Player = CurrentPlayerIndex + 1,
                 NewScore = PlayerScores[CurrentPlayerIndex]
@@ -155,6 +155,7 @@ namespace Games.Pig.Application
 
             if (PlayerScores[CurrentPlayerIndex] >= _targetScore)
             {
+                GameInProgress = false;
                 GameDecided = true;
             }
             else

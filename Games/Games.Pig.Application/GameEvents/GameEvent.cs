@@ -3,11 +3,14 @@
     public abstract class GameEvent : IGameEvent
     {
         public string Description { get; }
+        public bool TurnGoesToNextPlayer { get; }
 
         protected GameEvent(
-            string description)
+            string description, 
+            bool turnGoesToNextPlayer)
         {
             Description = description;
+            TurnGoesToNextPlayer = turnGoesToNextPlayer;
         }
     }
 }

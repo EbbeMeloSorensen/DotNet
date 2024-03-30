@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using Craft.Logging;
 using Craft.ViewModel.Utils;
@@ -10,19 +11,18 @@ namespace Games.Pig.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private const int _delay = 200;
+        private const int _delay = 800;
 
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
         private readonly Application.Application _application;
 
-        private int _pot;
-        private int _computerScore;
-        private int _playerScore;
+        private int _currentPlayerIndex;
         private bool _playerHasInitiative;
-        private bool _gameOngoing;
+        private bool _gameInProgress;
         private bool _gameDecided;
         private string _gameResultMessage;
+        private int _pot;
 
         private AsyncCommand _startGameCommand;
         private AsyncCommand _rollDieCommand;
@@ -40,6 +40,8 @@ namespace Games.Pig.ViewModel
 
         public LogViewModel LogViewModel { get; }
 
+        public ObservableCollection<PlayerViewModel> PlayerViewModels { get; }
+
         public bool LoggingActive
         {
             get => _loggingActive;
@@ -55,32 +57,12 @@ namespace Games.Pig.ViewModel
             }
         }
 
-        public int Pot
+        public int CurrentPlayerIndex
         {
-            get => _pot;
-            private set
+            get { return _currentPlayerIndex; }
+            set
             {
-                _pot = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int ComputerScore
-        {
-            get => _computerScore;
-            private set
-            {
-                _computerScore = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int PlayerScore
-        {
-            get => _playerScore;
-            private set
-            {
-                _playerScore = value;
+                _currentPlayerIndex = value;
                 RaisePropertyChanged();
             }
         }
@@ -95,12 +77,12 @@ namespace Games.Pig.ViewModel
             }
         }
 
-        public bool GameOngoing
+        public bool GameInProgress
         {
-            get => _gameOngoing;
+            get => _gameInProgress;
             private set
             {
-                _gameOngoing = value;
+                _gameInProgress = value;
                 RaisePropertyChanged();
             }
         }
@@ -125,11 +107,29 @@ namespace Games.Pig.ViewModel
             }
         }
 
+        public int Pot
+        {
+            get => _pot;
+            private set
+            {
+                _pot = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public MainWindowViewModel(
             Application.Application application)
         {
             _application = application;
-            _application.Engine = new Engine(new[] { true, false }, true);
+            _application.Engine = new Engine(new[] { true, true, false, true }, true);
+
+            PlayerViewModels = new ObservableCollection<PlayerViewModel>
+            {
+                new PlayerViewModel{ Name = "Player 1 (computer)", Score = 0 },
+                new PlayerViewModel{ Name = "Player 2 (computer)", Score = 0 },
+                new PlayerViewModel{ Name = "Player 3 (you)", Score = 0 },
+                new PlayerViewModel{ Name = "Player 4 (computer)", Score = 0 }
+            };
 
             LogViewModel = new LogViewModel();
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
@@ -145,33 +145,45 @@ namespace Games.Pig.ViewModel
                 if (_application.Engine.NextEventOccursAutomatically)
                 {
                     var gameEvent = await _application.Engine.ExecuteNextEvent();
+                    await Task.Delay(_delay);
 
                     _application.Logger?.WriteLine(
                         LogMessageCategory.Information,
-                        gameEvent.Description.Replace("Player 1", "Computer"));
+                        gameEvent.Description);
 
                     Pot = _application.Engine.Pot;
 
                     switch (gameEvent)
                     {
                         case PlayerRollsDie _:
-                        {
-                            PlayerHasInitiative = _application.Engine.CurrentPlayerIndex == 1;
-                            break;
-                        }
+                            {
+                                break;
+                            }
                         case PlayerTakesPot _:
-                        {
-                            ComputerScore = _application.Engine.PlayerScores[0];
-                            PlayerHasInitiative = !_application.Engine.GameDecided;
-                            break;
-                        }
+                            {
+                                var indexOfPreviousPlayer= 
+                                    (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) % _application.Engine.PlayerCount;
+
+                                PlayerViewModels[indexOfPreviousPlayer].Score =
+                                    _application.Engine.PlayerScores[indexOfPreviousPlayer];
+
+                                PlayerViewModels[indexOfPreviousPlayer].HasInitiative = false;
+                                PlayerViewModels[_application.Engine.CurrentPlayerIndex].HasInitiative = true;
+
+                                break;
+                            }
                     }
 
-                    if (!PlayerHasInitiative && !_application.Engine.GameDecided)
+                    if (gameEvent.TurnGoesToNextPlayer)
                     {
-                        await Task.Delay(_delay);
-                        continue;
+                        var indexOfPreviousPlayer =
+                            (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) % _application.Engine.PlayerCount;
+
+                        PlayerViewModels[indexOfPreviousPlayer].HasInitiative = false;
+                        PlayerViewModels[_application.Engine.CurrentPlayerIndex].HasInitiative = true;
                     }
+
+                    continue;
                 }
 
                 UpdateCommandAvailability();
@@ -181,8 +193,8 @@ namespace Games.Pig.ViewModel
             if (_application.Engine.GameDecided)
             {
                 GameResultMessage = "Game Over - You Lost";
-                GameOngoing = false;
-                GameDecided = true;
+                GameInProgress = _application.Engine.GameInProgress;
+                GameDecided = _application.Engine.GameDecided;
 
                 UpdateCommandAvailability();
             }
@@ -193,19 +205,13 @@ namespace Games.Pig.ViewModel
             _application.Engine.Reset();
             _application.Engine.StartGame();
 
-            GameOngoing = true;
-            GameDecided = false;
-            PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
-            ComputerScore = 0;
-            PlayerScore = 0;
-            Pot = 0;
-
+            SyncControlsWithApplication();
             UpdateCommandAvailability();
         }
 
         private bool CanStartGame()
         {
-            return !GameOngoing || PlayerHasInitiative;
+            return !GameInProgress || PlayerHasInitiative;
         }
 
         private async Task RollDie()
@@ -232,7 +238,7 @@ namespace Games.Pig.ViewModel
 
         private bool CanRollDie()
         {
-            return GameOngoing && PlayerHasInitiative;
+            return GameInProgress && PlayerHasInitiative;
         }
 
         private async Task TakePot()
@@ -244,13 +250,12 @@ namespace Games.Pig.ViewModel
                 gameEvent.Description.Replace("Player 2", "Player"));
 
             Pot = _application.Engine.Pot;
-            PlayerScore = _application.Engine.PlayerScores[1];
 
             if (_application.Engine.GameDecided)
             {
                 GameResultMessage = "Congratulations - You Win";
-                GameOngoing = false;
-                GameDecided = true;
+                GameInProgress = _application.Engine.GameInProgress;
+                GameDecided = _application.Engine.GameDecided;
                 await Task.Delay(_delay);
             }
             else
@@ -265,8 +270,18 @@ namespace Games.Pig.ViewModel
         private bool CanTakePot()
         {
             return _application.Engine.Pot > 0 && 
-                   GameOngoing &&
+                   GameInProgress &&
                    PlayerHasInitiative;
+        }
+
+        private void SyncControlsWithApplication()
+        {
+            CurrentPlayerIndex = _application.Engine.CurrentPlayerIndex;
+            GameInProgress = _application.Engine.GameInProgress;
+            GameDecided = _application.Engine.GameDecided;
+            PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
+            Pot = _application.Engine.Pot;
+            PlayerViewModels[CurrentPlayerIndex].HasInitiative = true;
         }
 
         private void UpdateCommandAvailability()

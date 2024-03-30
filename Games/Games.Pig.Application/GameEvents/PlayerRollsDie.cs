@@ -7,7 +7,10 @@
         public int DieRoll { get; set; }
 
         public PlayerRollsDie(
-            string description) : base(description)
+            string description,
+            bool turnGoesToNextPlayer) : base(
+                description, 
+                turnGoesToNextPlayer)
         {
         }
     }

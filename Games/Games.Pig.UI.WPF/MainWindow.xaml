@@ -7,7 +7,7 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
         mc:Ignorable="d"
-        Title="Pig Game" Height="450" Width="800"
+        Title="Pig Game" Height="600" Width="800"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
 
     <Window.Resources>
@@ -44,7 +44,15 @@
                 Margin="10, 10, 10, 40" FontSize="15" FontWeight="Bold"
                 Command="{Binding StartGameCommand}">New Game</Button>
 
-            <StackPanel Grid.Row="1" Grid.Column="0"
+            <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Top"
+                        Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
+                        Command="{Binding RollDieCommand}">Roll Die</Button>
+                <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
+                        Command="{Binding TakePotCommand}">Take Pot</Button>
+            </StackPanel>
+
+            <!--<StackPanel Grid.Row="1" Grid.Column="0"
                     Background="{Binding PlayerHasInitiative, 
                         Converter={StaticResource BooleanMatchToBrushConverter}, 
                         ConverterParameter={StaticResource False}}">
@@ -53,9 +61,9 @@
                 <TextBox Margin="20" FontWeight="Bold"
                      FontSize="50" TextAlignment="Center" VerticalContentAlignment="Center"
                      Text="{Binding ComputerScore, Mode=OneWay}"/>
-            </StackPanel>
+            </StackPanel>-->
 
-            <StackPanel Grid.Row="1" Grid.Column="2"
+            <!--<StackPanel Grid.Row="1" Grid.Column="2"
                     Background="{Binding PlayerHasInitiative, 
                         Converter={StaticResource BooleanMatchToBrushConverter}, 
                         ConverterParameter={StaticResource True}}">
@@ -64,9 +72,33 @@
                 <TextBox Margin="20" FontWeight="Bold"
                      FontSize="50" TextAlignment="Center" VerticalContentAlignment="Center"
                      Text="{Binding PlayerScore, Mode=OneWay}"/>
-            </StackPanel>
+            </StackPanel>-->
 
-            <StackPanel Grid.Row="1" Grid.Column="1" Background="Orange">
+            <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding PlayerViewModels}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Black">
+                            <Grid Background="{Binding HasInitiative, 
+                                Converter={StaticResource BooleanMatchToBrushConverter},
+                                ConverterParameter={StaticResource True}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" FontSize="20" FontWeight="Bold"
+                                           Padding="10"
+                                           Text="{Binding Name}"/>
+                                <TextBlock Grid.Column="1" FontSize="20" FontWeight="Bold" 
+                                           Padding="10" HorizontalAlignment="Right"
+                                           Text="{Binding Score}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <StackPanel Grid.Row="1" Grid.Column="1">
                 <TextBlock FontSize="15" FontWeight="Bold" 
                        Text="Pot:" TextAlignment="Center"/>
                 <TextBox Margin="20" IsReadOnly="True"
@@ -74,15 +106,8 @@
                      Text="{Binding Pot, Mode=OneWay}"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Top"
-                    Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
-                    Command="{Binding RollDieCommand}">Roll Die</Button>
-                <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
-                    Command="{Binding TakePotCommand}">Take Pot</Button>
-            </StackPanel>
 
-            <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Header="Log" ExpandDirection="Up" IsExpanded="False">
+            <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Header="Log" ExpandDirection="Up" IsExpanded="True">
                 <logging:LogView DataContext="{Binding LogViewModel}"/>
             </Expander>
 

@@ -3,5 +3,6 @@
     public interface IGameEvent
     {
         string Description { get; }
+        bool TurnGoesToNextPlayer { get; }
     }
 }
