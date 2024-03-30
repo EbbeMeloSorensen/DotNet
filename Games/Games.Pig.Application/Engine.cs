@@ -59,7 +59,7 @@ namespace Games.Pig.Application
         public void StartGame()
         {
             GameInProgress = true;
-            CurrentPlayerIndex = _random.Next(1, _players.Length + 1);
+            CurrentPlayerIndex = _random.Next(0, _players.Length);
 
             Logger?.WriteLine(LogMessageCategory.Information, $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
         }
@@ -127,9 +127,11 @@ namespace Games.Pig.Application
                 sb.Append($" => Pot is now at {Pot}");
             }
 
-            var gameEvent = new PlayerRollsDie(sb.ToString(), dieRoll == 1)
+            var gameEvent = new PlayerRollsDie(
+                CurrentPlayerIndex,
+                sb.ToString(), 
+                dieRoll == 1)
             {
-                Player = CurrentPlayerIndex + 1,
                 DieRoll = dieRoll
             };
 
@@ -147,9 +149,10 @@ namespace Games.Pig.Application
             Pot = 0;
 
             var gameEvent = new PlayerTakesPot(
-                $"Player {CurrentPlayerIndex + 1} takes pot and now has a score of {PlayerScores[CurrentPlayerIndex]}", true)
+                CurrentPlayerIndex,
+                $"Player {CurrentPlayerIndex + 1} takes pot and now has a score of {PlayerScores[CurrentPlayerIndex]}",
+                true)
             {
-                Player = CurrentPlayerIndex + 1,
                 NewScore = PlayerScores[CurrentPlayerIndex]
             };
 

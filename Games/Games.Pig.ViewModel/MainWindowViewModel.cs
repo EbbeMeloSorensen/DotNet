@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using Craft.Logging;
@@ -11,13 +12,12 @@ namespace Games.Pig.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private const int _delay = 200;
+        private const int _delay = 100;
 
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
         private readonly Application.Application _application;
 
-        private int _currentPlayerIndex;
         private bool _playerHasInitiative;
         private bool _gameInProgress;
         private bool _gameDecided;
@@ -54,16 +54,6 @@ namespace Games.Pig.ViewModel
                 _application.Logger = _loggingActive
                     ? _viewModelLogger
                     : null;
-            }
-        }
-
-        public int CurrentPlayerIndex
-        {
-            get { return _currentPlayerIndex; }
-            set
-            {
-                _currentPlayerIndex = value;
-                RaisePropertyChanged();
             }
         }
 
@@ -152,30 +142,19 @@ namespace Games.Pig.ViewModel
                         gameEvent.Description);
 
                     Pot = _application.Engine.Pot;
-
-                    var indexOfPreviousPlayer = gameEvent.TurnGoesToNextPlayer
-                        ? (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) % _application.Engine.PlayerCount
-                        : _application.Engine.CurrentPlayerIndex;
-
+                    
                     switch (gameEvent)
                     {
-                        case PlayerRollsDie _:
-                            {
-                                break;
-                            }
                         case PlayerTakesPot _:
-                            {
-                                PlayerViewModels[indexOfPreviousPlayer].Score =
-                                    _application.Engine.PlayerScores[indexOfPreviousPlayer];
-
-                                break;
-                            }
+                        {
+                            UpdateScore(gameEvent.PlayerIndex);
+                            break;
+                        }
                     }
 
                     if (gameEvent.TurnGoesToNextPlayer)
                     {
-                        PlayerViewModels[indexOfPreviousPlayer].HasInitiative = false;
-                        PlayerViewModels[_application.Engine.CurrentPlayerIndex].HasInitiative = true;
+                        HighlightCurrentPlayer();
                     }
 
                     continue;
@@ -187,7 +166,8 @@ namespace Games.Pig.ViewModel
 
             if (_application.Engine.GameDecided)
             {
-                GameResultMessage = "Game Over - You Lost";
+                //UpdateScore(_application.Engine.CurrentPlayerIndex);
+                GameResultMessage = $"Game Over\nPlayer {_application.Engine.CurrentPlayerIndex + 1} Wins";
                 GameInProgress = _application.Engine.GameInProgress;
                 GameDecided = _application.Engine.GameDecided;
             }
@@ -202,9 +182,20 @@ namespace Games.Pig.ViewModel
         private void StartGame()
         {
             _application.Engine.Reset();
+
+            Enumerable
+                .Range(0, _application.Engine.PlayerCount)
+                .ToList()
+                .ForEach(playerIndex =>
+                {
+                    UpdateScore(playerIndex);
+                    PlayerViewModels[playerIndex].HasInitiative = false;
+                });
+
             _application.Engine.StartGame();
 
             SyncControlsWithApplication();
+            HighlightCurrentPlayer();
             UpdateCommandAvailability();
         }
 
@@ -215,17 +206,18 @@ namespace Games.Pig.ViewModel
 
         private async Task RollDie()
         {
-            var gameEvent = await _application.Engine.PlayerSelectsOption(new RollDie()) as PlayerRollsDie;
+            var gameEvent = await _application.Engine.PlayerSelectsOption(new RollDie());
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
-                gameEvent.Description.Replace("Player 2", "Player"));
+                gameEvent.Description);
 
             Pot = _application.Engine.Pot;
 
             if (Pot == 0)
             {
                 PlayerHasInitiative = false;
+                HighlightCurrentPlayer();
                 UpdateCommandAvailability();
                 await Proceed();
             }
@@ -242,13 +234,14 @@ namespace Games.Pig.ViewModel
 
         private async Task TakePot()
         {
-            var gameEvent = await _application.Engine.PlayerSelectsOption(new TakePot()) as PlayerTakesPot;
+            var gameEvent = await _application.Engine.PlayerSelectsOption(new TakePot());
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
-                gameEvent.Description.Replace("Player 2", "Player"));
+                gameEvent.Description);
 
             Pot = _application.Engine.Pot;
+            UpdateScore(gameEvent.PlayerIndex);
 
             if (_application.Engine.GameDecided)
             {
@@ -260,8 +253,9 @@ namespace Games.Pig.ViewModel
             else
             {
                 PlayerHasInitiative = false;
+                SyncControlsWithApplication();
+                HighlightCurrentPlayer();
                 UpdateCommandAvailability();
-                await Task.Delay(_delay);
                 await Proceed();
             }
         }
@@ -275,12 +269,20 @@ namespace Games.Pig.ViewModel
 
         private void SyncControlsWithApplication()
         {
-            CurrentPlayerIndex = _application.Engine.CurrentPlayerIndex;
             GameInProgress = _application.Engine.GameInProgress;
             GameDecided = _application.Engine.GameDecided;
             PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
             Pot = _application.Engine.Pot;
-            PlayerViewModels[CurrentPlayerIndex].HasInitiative = true;
+        }
+
+        private void HighlightCurrentPlayer()
+        {
+            var indexOfPreviousPlayer =
+                (_application.Engine.CurrentPlayerIndex - 1 + _application.Engine.PlayerCount) %
+                _application.Engine.PlayerCount;
+
+            PlayerViewModels[indexOfPreviousPlayer].HasInitiative = false;
+            PlayerViewModels[_application.Engine.CurrentPlayerIndex].HasInitiative = true;
         }
 
         private void UpdateCommandAvailability()
@@ -288,6 +290,13 @@ namespace Games.Pig.ViewModel
             StartGameCommand.RaiseCanExecuteChanged();
             RollDieCommand.RaiseCanExecuteChanged();
             TakePotCommand.RaiseCanExecuteChanged();
+        }
+
+        private void UpdateScore(
+            int playerIndex)
+        {
+            PlayerViewModels[playerIndex].Score =
+                _application.Engine.PlayerScores[playerIndex];
         }
     }
 }

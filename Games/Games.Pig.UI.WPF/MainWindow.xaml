@@ -107,7 +107,7 @@
             </StackPanel>
 
 
-            <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Header="Log" ExpandDirection="Up" IsExpanded="True">
+            <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Header="Log" ExpandDirection="Up" IsExpanded="False">
                 <logging:LogView DataContext="{Binding LogViewModel}"/>
             </Expander>
 
