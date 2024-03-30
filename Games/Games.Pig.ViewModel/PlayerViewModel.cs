@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight;
 
 namespace Games.Pig.ViewModel
 {
@@ -26,7 +26,7 @@ namespace Games.Pig.ViewModel
             {
                 _hasInitiative = value;
                 RaisePropertyChanged();
-            } 
+            }
         }
     }
 }

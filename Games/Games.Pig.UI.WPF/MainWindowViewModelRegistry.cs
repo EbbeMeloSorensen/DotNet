@@ -10,6 +10,7 @@ namespace Games.Pig.UI.WPF
             {
                 _.WithDefaultConventions();
                 _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("Craft.Logging"));
+                _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("Craft.UIElements"));
                 _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("Games.Pig"));
                 _.LookForRegistries();
             });

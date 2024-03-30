@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Backlog.txt = Backlog.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.ViewModel", "Games.Pig.ViewModel\Games.Pig.ViewModel.csproj", "{E6267A2A-70F2-4F95-9D1C-227F2FA20789}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.UI.WPF", "Games.Pig.UI.WPF\Games.Pig.UI.WPF.csproj", "{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModel.Utils", "..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj", "{FC23B78B-1A2D-49BF-AEF1-865D69930355}"
@@ -37,6 +35,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{E1068328-C34E-43E1-B8CA-6CFE74B3BF9F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craft\Craft.UIElements\Craft.UIElements.csproj", "{D2B75C64-6708-4D75-83B8-C67EDCBAFFF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Pig.ViewModel", "Games.Pig.ViewModel\Games.Pig.ViewModel.csproj", "{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,10 +64,6 @@ Global
 		{D509709D-583A-4FB5-A76B-71C5B3CA8C26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D509709D-583A-4FB5-A76B-71C5B3CA8C26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D509709D-583A-4FB5-A76B-71C5B3CA8C26}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6267A2A-70F2-4F95-9D1C-227F2FA20789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6267A2A-70F2-4F95-9D1C-227F2FA20789}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6267A2A-70F2-4F95-9D1C-227F2FA20789}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6267A2A-70F2-4F95-9D1C-227F2FA20789}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -104,6 +100,10 @@ Global
 		{D2B75C64-6708-4D75-83B8-C67EDCBAFFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2B75C64-6708-4D75-83B8-C67EDCBAFFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2B75C64-6708-4D75-83B8-C67EDCBAFFF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

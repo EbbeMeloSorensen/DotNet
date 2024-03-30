@@ -2,18 +2,23 @@
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.ViewModel.Utils;
+using Craft.ViewModels.Dialogs;
 using Games.Pig.Application;
 using Games.Pig.Application.GameEvents;
 using Games.Pig.Application.PlayerOptions;
+using System.Configuration;
+using System.IO;
 
 namespace Games.Pig.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private int _playerCount = 5;
+        private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
         private const int _delay = 200;
@@ -28,9 +33,13 @@ namespace Games.Pig.ViewModel
         private string _gameResultMessage;
         private int _pot;
 
+        private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
         private AsyncCommand _rollDieCommand;
         private AsyncCommand _takePotCommand;
+
+        public RelayCommand<object> OpenSettingsDialogCommand =>
+            _openSettingsDialogCommand ??= new RelayCommand<object>(OpenSettingsDialog);
 
         public AsyncCommand StartGameCommand => _startGameCommand ??= new AsyncCommand(
             () =>
@@ -112,13 +121,15 @@ namespace Games.Pig.ViewModel
         }
 
         public MainWindowViewModel(
-            Application.Application application)
+            Application.Application application,
+            IDialogService applicationDialogService)
         {
+            _application = application;
+            _applicationDialogService = applicationDialogService;
+
             _random = _pseudoRandomNumbers
                 ? new Random(0)
                 : new Random((int)DateTime.UtcNow.Ticks);
-
-            _application = application;
 
             LogViewModel = new LogViewModel();
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
@@ -179,13 +190,29 @@ namespace Games.Pig.ViewModel
             UpdateCommandAvailability();
         }
 
+        private void OpenSettingsDialog(
+            object owner)
+        {
+            var dialogViewModel = new SettingsDialogViewModel();
+
+            _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+        }
+
         private void StartGame()
         {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+
+            if (!int.TryParse(settings["PlayerCount"]?.Value, out var playerCount))
+            {
+                throw new InvalidDataException("Invalid Config file");
+            }
+
             // Create engine
-            var tempArray = Enumerable.Repeat(true, _playerCount).ToArray();
-            var indexOfPlayer = _random.Next(0, _playerCount);
+            var tempArray = Enumerable.Repeat(true, playerCount).ToArray();
+            var indexOfPlayer = _random.Next(0, playerCount);
             tempArray[indexOfPlayer] = false;
-            _application.Engine = new Engine(tempArray, true);
+            _application.Engine = new Engine(tempArray, false);
 
             PlayerViewModels.Clear();
 

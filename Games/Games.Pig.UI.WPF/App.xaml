@@ -2,8 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Games.Pig.UI.WPF"
+             xmlns:viewModel="clr-namespace:Games.Pig.ViewModel;assembly=Games.Pig.ViewModel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ObjectDataProvider x:Key="BootStrapper" ObjectType="local:BootStrapper"/>
+
+        <DataTemplate DataType="{x:Type viewModel:SettingsDialogViewModel}">
+            <local:SettingsDialogView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

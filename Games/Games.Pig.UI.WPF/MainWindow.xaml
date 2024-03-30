@@ -23,6 +23,11 @@
             <MenuItem Header="File">
                 <MenuItem Header="Logging enabled" IsCheckable="True"
                           IsChecked="{Binding LoggingActive}"/>
+                <Separator/>
+                <MenuItem Header="_Settings"
+                          Command="{Binding OpenSettingsDialogCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Separator />
             </MenuItem>
         </Menu>
 
@@ -51,28 +56,6 @@
                 <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
                         Command="{Binding TakePotCommand}">Take Pot</Button>
             </StackPanel>
-
-            <!--<StackPanel Grid.Row="1" Grid.Column="0"
-                    Background="{Binding PlayerHasInitiative, 
-                        Converter={StaticResource BooleanMatchToBrushConverter}, 
-                        ConverterParameter={StaticResource False}}">
-                <TextBlock FontSize="15" FontWeight="Bold" 
-                       Text="Computer Score:" TextAlignment="Center"/>
-                <TextBox Margin="20" FontWeight="Bold"
-                     FontSize="50" TextAlignment="Center" VerticalContentAlignment="Center"
-                     Text="{Binding ComputerScore, Mode=OneWay}"/>
-            </StackPanel>-->
-
-            <!--<StackPanel Grid.Row="1" Grid.Column="2"
-                    Background="{Binding PlayerHasInitiative, 
-                        Converter={StaticResource BooleanMatchToBrushConverter}, 
-                        ConverterParameter={StaticResource True}}">
-                <TextBlock FontSize="15" FontWeight="Bold" 
-                       Text="Your Score:" TextAlignment="Center"/>
-                <TextBox Margin="20" FontWeight="Bold"
-                     FontSize="50" TextAlignment="Center" VerticalContentAlignment="Center"
-                     Text="{Binding PlayerScore, Mode=OneWay}"/>
-            </StackPanel>-->
 
             <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding PlayerViewModels}">
                 <ItemsControl.ItemTemplate>
