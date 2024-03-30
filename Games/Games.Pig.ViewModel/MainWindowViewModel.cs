@@ -1,5 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
 using System.Linq;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using Craft.Logging;
@@ -12,7 +13,10 @@ namespace Games.Pig.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private const int _delay = 100;
+        private int _playerCount = 5;
+        private const bool _pseudoRandomNumbers = true;
+        private readonly Random _random;
+        private const int _delay = 200;
 
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
@@ -110,20 +114,17 @@ namespace Games.Pig.ViewModel
         public MainWindowViewModel(
             Application.Application application)
         {
-            _application = application;
-            _application.Engine = new Engine(new[] { true, true, false, true }, true);
+            _random = _pseudoRandomNumbers
+                ? new Random(0)
+                : new Random((int)DateTime.UtcNow.Ticks);
 
-            PlayerViewModels = new ObservableCollection<PlayerViewModel>
-            {
-                new PlayerViewModel{ Name = "Player 1 (computer)", Score = 0 },
-                new PlayerViewModel{ Name = "Player 2 (computer)", Score = 0 },
-                new PlayerViewModel{ Name = "Player 3 (you)", Score = 0 },
-                new PlayerViewModel{ Name = "Player 4 (computer)", Score = 0 }
-            };
+            _application = application;
 
             LogViewModel = new LogViewModel();
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
             LoggingActive = true;
+
+            PlayerViewModels = new ObservableCollection<PlayerViewModel>();
 
             _application.Logger?.WriteLine(LogMessageCategory.Debug, "Pig Game - starting up");
         }
@@ -166,7 +167,6 @@ namespace Games.Pig.ViewModel
 
             if (_application.Engine.GameDecided)
             {
-                //UpdateScore(_application.Engine.CurrentPlayerIndex);
                 GameResultMessage = $"Game Over\nPlayer {_application.Engine.CurrentPlayerIndex + 1} Wins";
                 GameInProgress = _application.Engine.GameInProgress;
                 GameDecided = _application.Engine.GameDecided;
@@ -181,15 +181,23 @@ namespace Games.Pig.ViewModel
 
         private void StartGame()
         {
-            _application.Engine.Reset();
+            // Create engine
+            var tempArray = Enumerable.Repeat(true, _playerCount).ToArray();
+            var indexOfPlayer = _random.Next(0, _playerCount);
+            tempArray[indexOfPlayer] = false;
+            _application.Engine = new Engine(tempArray, true);
+
+            PlayerViewModels.Clear();
 
             Enumerable
                 .Range(0, _application.Engine.PlayerCount)
                 .ToList()
                 .ForEach(playerIndex =>
                 {
-                    UpdateScore(playerIndex);
-                    PlayerViewModels[playerIndex].HasInitiative = false;
+                    var description = playerIndex == indexOfPlayer ? "you" : "computer";
+                    var name = $"Player {playerIndex + 1} ({description})";
+
+                    PlayerViewModels.Add(new PlayerViewModel { Name = name, Score = 0 });
                 });
 
             _application.Engine.StartGame();
@@ -262,7 +270,8 @@ namespace Games.Pig.ViewModel
 
         private bool CanTakePot()
         {
-            return _application.Engine.Pot > 0 && 
+            return _application.Engine != null &&
+                   _application.Engine.Pot > 0 && 
                    GameInProgress &&
                    PlayerHasInitiative;
         }

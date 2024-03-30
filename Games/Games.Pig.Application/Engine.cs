@@ -64,19 +64,6 @@ namespace Games.Pig.Application
             Logger?.WriteLine(LogMessageCategory.Information, $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
         }
 
-        public void Reset()
-        {
-            GameInProgress = false;
-            Pot = 0;
-            GameDecided = false;
-            CurrentPlayerIndex = 0;
-
-            for (var i = 0; i < PlayerScores.Length; i++)
-            {
-                PlayerScores[i] = 0;
-            }
-        }
-
         public async Task<IGameEvent> ExecuteNextEvent()
         {
             await Task.Delay(1);
