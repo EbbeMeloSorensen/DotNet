@@ -11,7 +11,7 @@ namespace Games.Pig.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private const int _delay = 800;
+        private const int _delay = 200;
 
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
@@ -153,6 +153,10 @@ namespace Games.Pig.ViewModel
 
                     Pot = _application.Engine.Pot;
 
+                    var indexOfPreviousPlayer = gameEvent.TurnGoesToNextPlayer
+                        ? (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) % _application.Engine.PlayerCount
+                        : _application.Engine.CurrentPlayerIndex;
+
                     switch (gameEvent)
                     {
                         case PlayerRollsDie _:
@@ -161,14 +165,8 @@ namespace Games.Pig.ViewModel
                             }
                         case PlayerTakesPot _:
                             {
-                                var indexOfPreviousPlayer= 
-                                    (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) % _application.Engine.PlayerCount;
-
                                 PlayerViewModels[indexOfPreviousPlayer].Score =
                                     _application.Engine.PlayerScores[indexOfPreviousPlayer];
-
-                                PlayerViewModels[indexOfPreviousPlayer].HasInitiative = false;
-                                PlayerViewModels[_application.Engine.CurrentPlayerIndex].HasInitiative = true;
 
                                 break;
                             }
@@ -176,9 +174,6 @@ namespace Games.Pig.ViewModel
 
                     if (gameEvent.TurnGoesToNextPlayer)
                     {
-                        var indexOfPreviousPlayer =
-                            (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) % _application.Engine.PlayerCount;
-
                         PlayerViewModels[indexOfPreviousPlayer].HasInitiative = false;
                         PlayerViewModels[_application.Engine.CurrentPlayerIndex].HasInitiative = true;
                     }
@@ -195,9 +190,13 @@ namespace Games.Pig.ViewModel
                 GameResultMessage = "Game Over - You Lost";
                 GameInProgress = _application.Engine.GameInProgress;
                 GameDecided = _application.Engine.GameDecided;
-
-                UpdateCommandAvailability();
             }
+            else
+            {
+                PlayerHasInitiative = true;
+            }
+
+            UpdateCommandAvailability();
         }
 
         private void StartGame()
