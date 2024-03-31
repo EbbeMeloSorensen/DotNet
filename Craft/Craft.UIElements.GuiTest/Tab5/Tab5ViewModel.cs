@@ -1,10 +1,19 @@
-﻿using Craft.ViewModels.Graph;
+﻿using System.Linq;
+using System.Windows.Media;
+using Craft.ViewModels.Graph;
 using GalaSoft.MvvmLight;
 
 namespace Craft.UIElements.GuiTest.Tab5
 {
     public class Tab5ViewModel : ViewModelBase
     {
+        private readonly Brush _northAmericaBrush = new SolidColorBrush(Colors.Yellow);
+        private readonly Brush _southAmericaBrush = new SolidColorBrush(Colors.DarkOrange);
+        private readonly Brush _europeBrush = new SolidColorBrush(Colors.CornflowerBlue);
+        private readonly Brush _africaBrush = new SolidColorBrush(Colors.Red);
+        private readonly Brush _asiaBrush = new SolidColorBrush(Colors.MediumSeaGreen);
+        private readonly Brush _oceaniaBrush = new SolidColorBrush(Colors.MediumPurple);
+
         public GraphViewModel GraphViewModel { get; set; }
 
         public Tab5ViewModel()
@@ -29,7 +38,7 @@ namespace Craft.UIElements.GuiTest.Tab5
             GraphViewModel.PlacePoint(10, new Utils.PointD(125, 350));
             GraphViewModel.PlacePoint(11, new Utils.PointD(175, 400));
             GraphViewModel.PlacePoint(12, new Utils.PointD(225, 350));
-
+            
             // Europe
             GraphViewModel.PlacePoint(13, new Utils.PointD(400, 50));
             GraphViewModel.PlacePoint(14, new Utils.PointD(500, 50));
@@ -67,7 +76,35 @@ namespace Craft.UIElements.GuiTest.Tab5
             GraphViewModel.PlacePoint(40, new Utils.PointD(850, 400));
             GraphViewModel.PlacePoint(41, new Utils.PointD(950, 400));
 
+            Enumerable
+                .Range(0, 9)
+                .ToList()
+                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _northAmericaBrush));
 
+            Enumerable
+                .Range(10, 4)
+                .ToList()
+                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _southAmericaBrush));
+
+            Enumerable
+                .Range(13, 7)
+                .ToList()
+                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _europeBrush));
+
+            Enumerable
+                .Range(20, 6)
+                .ToList()
+                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _africaBrush));
+
+            Enumerable
+                .Range(26, 12)
+                .ToList()
+                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _asiaBrush));
+
+            Enumerable
+                .Range(38, 4)
+                .ToList()
+                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _oceaniaBrush));
         }
     }
 }

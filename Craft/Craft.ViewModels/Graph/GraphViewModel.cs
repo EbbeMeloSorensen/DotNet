@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Media;
 using Craft.Utils;
 using Craft.DataStructures.Graph;
 using Craft.ViewModels.Common;
@@ -17,6 +18,7 @@ namespace Craft.ViewModels.Graph
         private PointViewModel _activeViewModel;
         private int _indexOfActivePoint;
         private PointD _initialPoint; // At start of drag
+        private Brush _defaultVertexBrush = new SolidColorBrush(Colors.Orange);
 
         private IGraph<LabelledVertex, EmptyEdge> _graph;
 
@@ -81,6 +83,7 @@ namespace Craft.ViewModels.Graph
 
                 pointViewModel.ElementClicked += ElementViewModelElementClicked;
                 pointViewModel.Label = _.Label;
+                pointViewModel.Brush = _defaultVertexBrush;
 
                 _pointViewModels.Add(pointViewModel);
             });
@@ -108,6 +111,13 @@ namespace Craft.ViewModels.Graph
             _points[pointIndex] = position;
             PointViewModels[pointIndex].Point = position;
             UpdateLines();
+        }
+
+        public void AssignBrushToPoint(
+            int pointIndex,
+            Brush brush)
+        {
+            PointViewModels[pointIndex].Brush = brush;
         }
 
         private void ElementViewModelElementClicked(

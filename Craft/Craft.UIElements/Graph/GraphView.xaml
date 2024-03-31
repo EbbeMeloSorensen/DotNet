@@ -58,7 +58,7 @@
                         <Grid Width="400"
                               Height="{Binding Diameter}">
                             <Ellipse
-                                Fill="Orange" 
+                                Fill="{Binding Brush}" 
                                 Stroke="OrangeRed"
                                 Width="{Binding Diameter}"
                                 HorizontalAlignment="Left">
