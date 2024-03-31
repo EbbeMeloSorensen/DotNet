@@ -18,7 +18,7 @@ namespace Games.Race.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly IDialogService _applicationDialogService;
-        private const bool _pseudoRandomNumbers = true;
+        private const bool _pseudoRandomNumbers = false;
         private readonly Random _random;
         private const int _delay = 200;
 
