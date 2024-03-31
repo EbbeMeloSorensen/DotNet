@@ -34,6 +34,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.ViewModel", "Games.Pig.ViewModel\Games.Pig.ViewModel.csproj", "{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Race.Application", "Games.Race.Application\Games.Race.Application.csproj", "{AC75AEA4-34C2-4204-B729-547356FD4B1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Race.ViewModel", "Games.Race.ViewModel\Games.Race.ViewModel.csproj", "{3A312B91-494F-4E6A-8ECF-550A91EB99D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Race.UI.WPF", "Games.Race.UI.WPF\Games.Race.UI.WPF.csproj", "{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +98,18 @@ Global
 		{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC75AEA4-34C2-4204-B729-547356FD4B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC75AEA4-34C2-4204-B729-547356FD4B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC75AEA4-34C2-4204-B729-547356FD4B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC75AEA4-34C2-4204-B729-547356FD4B1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A312B91-494F-4E6A-8ECF-550A91EB99D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A312B91-494F-4E6A-8ECF-550A91EB99D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A312B91-494F-4E6A-8ECF-550A91EB99D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A312B91-494F-4E6A-8ECF-550A91EB99D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
