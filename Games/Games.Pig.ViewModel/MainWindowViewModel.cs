@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Configuration;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,8 +13,6 @@ using Craft.ViewModels.Dialogs;
 using Games.Pig.Application;
 using Games.Pig.Application.GameEvents;
 using Games.Pig.Application.PlayerOptions;
-using System.Configuration;
-using System.IO;
 
 namespace Games.Pig.ViewModel
 {

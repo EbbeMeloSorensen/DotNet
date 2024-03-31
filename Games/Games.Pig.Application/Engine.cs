@@ -59,7 +59,6 @@ namespace Games.Pig.Application
         public void StartGame()
         {
             GameInProgress = true;
-            //CurrentPlayerIndex = _random.Next(0, _players.Length);
             CurrentPlayerIndex = 0;
 
             Logger?.WriteLine(LogMessageCategory.Information, $"New Game Started - Player {CurrentPlayerIndex + 1} begins");

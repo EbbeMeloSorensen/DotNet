@@ -53,8 +53,6 @@
                         Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                         Command="{Binding RollDieCommand}">Roll Die</Button>
-                <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
-                        Command="{Binding TakePotCommand}">Take Pot</Button>
             </StackPanel>
 
             <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding PlayerViewModels}">
@@ -80,15 +78,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-
-            <StackPanel Grid.Row="1" Grid.Column="1">
-                <TextBlock FontSize="15" FontWeight="Bold" 
-                       Text="Pot:" TextAlignment="Center"/>
-                <TextBox Margin="20" IsReadOnly="True"
-                     FontSize="50" FontWeight="Bold" TextAlignment="Center" VerticalContentAlignment="Center"
-                     Text="{Binding Pot, Mode=OneWay}"/>
-            </StackPanel>
-
 
             <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Header="Log" ExpandDirection="Up" IsExpanded="False">
                 <logging:LogView DataContext="{Binding LogViewModel}"/>

@@ -1,16 +1,16 @@
-﻿using Craft.Logging;
-using Games.Race.Application.GameEvents;
-using Games.Race.Application.PlayerOptions;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Craft.Logging;
+using Games.Race.Application.GameEvents;
+using Games.Race.Application.PlayerOptions;
 
 namespace Games.Race.Application
 {
     public class Engine
     {
-        private const int _targetScore = 100;
+        private const int _targetScore = 20;
         private const int _dieFaces = 6;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
@@ -23,8 +23,6 @@ namespace Games.Race.Application
         public int CurrentPlayerIndex { get; private set; }
 
         public int[] PlayerScores { get; }
-
-        public int Pot { get; private set; }
 
         public bool GameInProgress { get; private set; }
 
@@ -69,12 +67,7 @@ namespace Games.Race.Application
         {
             await Task.Delay(1);
 
-            if (Pot + PlayerScores[CurrentPlayerIndex] < _targetScore && (Pot < 20 || _random.Next(2) == 1))
-            {
-                return RollDie();
-            }
-
-            return TakePot();
+            return RollDie();
         }
 
         public async Task<IGameEvent> PlayerSelectsOption(
@@ -88,10 +81,6 @@ namespace Games.Race.Application
                     {
                         return RollDie();
                     }
-                case TakePot _:
-                    {
-                        return TakePot();
-                    }
                 default:
                     {
                         throw new InvalidOperationException("Invalid player option");
@@ -104,44 +93,14 @@ namespace Games.Race.Application
             var dieRoll = _random.Next(1, _dieFaces + 1);
             var sb = new StringBuilder($"Player {CurrentPlayerIndex + 1} rolls die and gets {dieRoll}");
 
-            if (dieRoll == 1)
-            {
-                Pot = 0;
-                sb.Append($" => Player {CurrentPlayerIndex + 1} looses turn and pot is reset");
-            }
-            else
-            {
-                Pot += dieRoll;
-                sb.Append($" => Pot is now at {Pot}");
-            }
+            PlayerScores[CurrentPlayerIndex] += dieRoll;
 
             var gameEvent = new PlayerRollsDie(
                 CurrentPlayerIndex,
                 sb.ToString(),
-                dieRoll == 1)
-            {
-                DieRoll = dieRoll
-            };
-
-            if (dieRoll == 1)
-            {
-                CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
-            }
-
-            return gameEvent;
-        }
-
-        private IGameEvent TakePot()
-        {
-            PlayerScores[CurrentPlayerIndex] += Pot;
-            Pot = 0;
-
-            var gameEvent = new PlayerTakesPot(
-                CurrentPlayerIndex,
-                $"Player {CurrentPlayerIndex + 1} takes pot and now has a score of {PlayerScores[CurrentPlayerIndex]}",
                 true)
             {
-                NewScore = PlayerScores[CurrentPlayerIndex]
+                DieRoll = dieRoll
             };
 
             if (PlayerScores[CurrentPlayerIndex] >= _targetScore)

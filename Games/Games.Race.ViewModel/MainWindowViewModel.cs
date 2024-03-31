@@ -1,18 +1,17 @@
-﻿using Craft.Logging;
-using Craft.ViewModel.Utils;
-using Craft.ViewModels.Dialogs;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Games.Race.Application;
-using Games.Race.Application.GameEvents;
-using Games.Race.Application.PlayerOptions;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Craft.Logging;
+using Craft.ViewModel.Utils;
+using Craft.ViewModels.Dialogs;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Games.Race.Application;
+using Games.Race.Application.PlayerOptions;
 
 namespace Games.Race.ViewModel
 {
@@ -31,12 +30,10 @@ namespace Games.Race.ViewModel
         private bool _gameInProgress;
         private bool _gameDecided;
         private string _gameResultMessage;
-        private int _pot;
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
         private AsyncCommand _rollDieCommand;
-        private AsyncCommand _takePotCommand;
 
         public RelayCommand<object> OpenSettingsDialogCommand =>
             _openSettingsDialogCommand ??= new RelayCommand<object>(OpenSettingsDialog);
@@ -49,7 +46,6 @@ namespace Games.Race.ViewModel
             }, CanStartGame);
 
         public AsyncCommand RollDieCommand => _rollDieCommand ??= new AsyncCommand(RollDie, CanRollDie);
-        public AsyncCommand TakePotCommand => _takePotCommand ??= new AsyncCommand(TakePot, CanTakePot);
 
         public LogViewModel LogViewModel { get; }
 
@@ -110,16 +106,6 @@ namespace Games.Race.ViewModel
             }
         }
 
-        public int Pot
-        {
-            get => _pot;
-            private set
-            {
-                _pot = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public MainWindowViewModel(
             Application.Application application,
             IDialogService applicationDialogService)
@@ -137,7 +123,7 @@ namespace Games.Race.ViewModel
 
             PlayerViewModels = new ObservableCollection<PlayerViewModel>();
 
-            _application.Logger?.WriteLine(LogMessageCategory.Debug, "Pig Game - starting up");
+            _application.Logger?.WriteLine(LogMessageCategory.Debug, "Race Game - starting up");
         }
 
         private async Task Proceed()
@@ -153,16 +139,7 @@ namespace Games.Race.ViewModel
                         LogMessageCategory.Information,
                         gameEvent.Description);
 
-                    Pot = _application.Engine.Pot;
-
-                    switch (gameEvent)
-                    {
-                        case PlayerTakesPot _:
-                            {
-                                UpdateScore(gameEvent.PlayerIndex);
-                                break;
-                            }
-                    }
+                    UpdateScore(gameEvent.PlayerIndex);
 
                     if (gameEvent.TurnGoesToNextPlayer)
                     {
@@ -212,7 +189,7 @@ namespace Games.Race.ViewModel
             var tempArray = Enumerable.Repeat(true, playerCount).ToArray();
             var indexOfPlayer = _random.Next(0, playerCount);
             tempArray[indexOfPlayer] = false;
-            _application.Engine = new Engine(tempArray, false);
+            _application.Engine = new Engine(tempArray, _pseudoRandomNumbers);
 
             PlayerViewModels.Clear();
 
@@ -247,35 +224,6 @@ namespace Games.Race.ViewModel
                 LogMessageCategory.Information,
                 gameEvent.Description);
 
-            Pot = _application.Engine.Pot;
-
-            if (Pot == 0)
-            {
-                PlayerHasInitiative = false;
-                HighlightCurrentPlayer();
-                UpdateCommandAvailability();
-                await Proceed();
-            }
-            else
-            {
-                UpdateCommandAvailability();
-            }
-        }
-
-        private bool CanRollDie()
-        {
-            return GameInProgress && PlayerHasInitiative;
-        }
-
-        private async Task TakePot()
-        {
-            var gameEvent = await _application.Engine.PlayerSelectsOption(new TakePot());
-
-            _application.Logger?.WriteLine(
-                LogMessageCategory.Information,
-                gameEvent.Description);
-
-            Pot = _application.Engine.Pot;
             UpdateScore(gameEvent.PlayerIndex);
 
             if (_application.Engine.GameDecided)
@@ -283,7 +231,6 @@ namespace Games.Race.ViewModel
                 GameResultMessage = "Congratulations - You Win";
                 GameInProgress = _application.Engine.GameInProgress;
                 GameDecided = _application.Engine.GameDecided;
-                await Task.Delay(_delay);
             }
             else
             {
@@ -295,12 +242,9 @@ namespace Games.Race.ViewModel
             }
         }
 
-        private bool CanTakePot()
+        private bool CanRollDie()
         {
-            return _application.Engine != null &&
-                   _application.Engine.Pot > 0 &&
-                   GameInProgress &&
-                   PlayerHasInitiative;
+            return GameInProgress && PlayerHasInitiative;
         }
 
         private void SyncControlsWithApplication()
@@ -308,7 +252,6 @@ namespace Games.Race.ViewModel
             GameInProgress = _application.Engine.GameInProgress;
             GameDecided = _application.Engine.GameDecided;
             PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
-            Pot = _application.Engine.Pot;
         }
 
         private void HighlightCurrentPlayer()
@@ -325,7 +268,6 @@ namespace Games.Race.ViewModel
         {
             StartGameCommand.RaiseCanExecuteChanged();
             RollDieCommand.RaiseCanExecuteChanged();
-            TakePotCommand.RaiseCanExecuteChanged();
         }
 
         private void UpdateScore(
