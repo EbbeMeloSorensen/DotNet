@@ -32,7 +32,7 @@ namespace Games.Risk.ViewModel
 
         public SettingsDialogViewModel()
         {
-            PlayerCountOptions = new ObservableCollection<int>(Enumerable.Range(2, 9));
+            PlayerCountOptions = new ObservableCollection<int>(Enumerable.Range(2, 5));
 
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;

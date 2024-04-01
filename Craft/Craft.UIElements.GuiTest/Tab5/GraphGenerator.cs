@@ -65,61 +65,61 @@ public static class GraphGenerator
     public static IGraph<LabelledVertex, EmptyEdge> GenerateGraphOfRiskTerritories()
     {
         var vertices = new List<LabelledVertex>
-            {
-                // North America
-                new LabelledVertex("Alaska"),                //  0
-                new LabelledVertex("Northwest Territory"),   //  1
-                new LabelledVertex("Greenland"),             //  2
-                new LabelledVertex("Alberta"),               //  3
-                new LabelledVertex("Ontario"),               //  4
-                new LabelledVertex("Quebec"),                //  5
-                new LabelledVertex("Western United States"), //  6
-                new LabelledVertex("Eastern United States"), //  7
-                new LabelledVertex("Central America"),       //  8
+        {
+            // North America
+            new LabelledVertex("Alaska"),                //  0
+            new LabelledVertex("Northwest Territory"),   //  1
+            new LabelledVertex("Greenland"),             //  2
+            new LabelledVertex("Alberta"),               //  3
+            new LabelledVertex("Ontario"),               //  4
+            new LabelledVertex("Quebec"),                //  5
+            new LabelledVertex("Western United States"), //  6
+            new LabelledVertex("Eastern United States"), //  7
+            new LabelledVertex("Central America"),       //  8
 
-                // South America
-                new LabelledVertex("Venezuela"),   //  9
-                new LabelledVertex("Peru"),        // 10
-                new LabelledVertex("Argentina"),   // 11
-                new LabelledVertex("Brazil"),      // 12
+            // South America
+            new LabelledVertex("Venezuela"),   //  9
+            new LabelledVertex("Peru"),        // 10
+            new LabelledVertex("Argentina"),   // 11
+            new LabelledVertex("Brazil"),      // 12
 
-                // Europe
-                new LabelledVertex("Iceland"),         // 13
-                new LabelledVertex("Scandinavia"),     // 14
-                new LabelledVertex("Great Britain"),   // 15
-                new LabelledVertex("Northern Europe"), // 16
-                new LabelledVertex("Ukraine"),         // 17
-                new LabelledVertex("Western Europe"),  // 18
-                new LabelledVertex("Southern Europe"), // 19
+            // Europe
+            new LabelledVertex("Iceland"),         // 13
+            new LabelledVertex("Scandinavia"),     // 14
+            new LabelledVertex("Great Britain"),   // 15
+            new LabelledVertex("Northern Europe"), // 16
+            new LabelledVertex("Ukraine"),         // 17
+            new LabelledVertex("Western Europe"),  // 18
+            new LabelledVertex("Southern Europe"), // 19
 
-                // Africa
-                new LabelledVertex("North Africa"), // 20
-                new LabelledVertex("Egypt"),        // 21
-                new LabelledVertex("East Africa"),  // 22
-                new LabelledVertex("Congo"),        // 23
-                new LabelledVertex("South Africa"), // 24
-                new LabelledVertex("Madagascar"),   // 25
+            // Africa
+            new LabelledVertex("North Africa"), // 20
+            new LabelledVertex("Egypt"),        // 21
+            new LabelledVertex("East Africa"),  // 22
+            new LabelledVertex("Congo"),        // 23
+            new LabelledVertex("South Africa"), // 24
+            new LabelledVertex("Madagascar"),   // 25
 
-                // Asia
-                new LabelledVertex("Siberia"),     // 26
-                new LabelledVertex("Ural"),        // 27
-                new LabelledVertex("Yakutsk"),     // 28
-                new LabelledVertex("Kamchatka"),   // 29
-                new LabelledVertex("Irkutsk"),     // 30
-                new LabelledVertex("Afghanistan"), // 31
-                new LabelledVertex("Mongolia"),    // 32
-                new LabelledVertex("Japan"),       // 33
-                new LabelledVertex("China"),       // 34
-                new LabelledVertex("Middle East"), // 35
-                new LabelledVertex("India"),       // 36
-                new LabelledVertex("Siam"),        // 37
+            // Asia
+            new LabelledVertex("Siberia"),     // 26
+            new LabelledVertex("Ural"),        // 27
+            new LabelledVertex("Yakutsk"),     // 28
+            new LabelledVertex("Kamchatka"),   // 29
+            new LabelledVertex("Irkutsk"),     // 30
+            new LabelledVertex("Afghanistan"), // 31
+            new LabelledVertex("Mongolia"),    // 32
+            new LabelledVertex("Japan"),       // 33
+            new LabelledVertex("China"),       // 34
+            new LabelledVertex("Middle East"), // 35
+            new LabelledVertex("India"),       // 36
+            new LabelledVertex("Siam"),        // 37
 
-                // ~Oceania
-                new LabelledVertex("Indonesia"),         // 38
-                new LabelledVertex("New Guinea"),        // 39
-                new LabelledVertex("Western Australia"), // 40
-                new LabelledVertex("Eastern Australia"), // 41
-            };
+            // Oceania
+            new LabelledVertex("Indonesia"),         // 38
+            new LabelledVertex("New Guinea"),        // 39
+            new LabelledVertex("Western Australia"), // 40
+            new LabelledVertex("Eastern Australia"), // 41
+        };
 
         var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, false);
 

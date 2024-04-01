@@ -18,7 +18,7 @@ namespace Craft.ViewModels.Graph
         private PointViewModel _activeViewModel;
         private int _indexOfActivePoint;
         private PointD _initialPoint; // At start of drag
-        private Brush _defaultVertexBrush = new SolidColorBrush(Colors.Orange);
+        private Brush _defaultVertexBrush = new SolidColorBrush(Colors.LightGray);
 
         private IGraph<LabelledVertex, EmptyEdge> _graph;
 

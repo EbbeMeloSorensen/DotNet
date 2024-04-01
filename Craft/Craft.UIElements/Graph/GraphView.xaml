@@ -31,7 +31,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Line Stroke="OrangeRed" 
+                        <Line Stroke="DarkGray" 
                               StrokeThickness="2" 
                               X1="{Binding Point1.X}" 
                               Y1="{Binding Point1.Y}" 
@@ -59,7 +59,7 @@
                               Height="{Binding Diameter}">
                             <Ellipse
                                 Fill="{Binding Brush}" 
-                                Stroke="OrangeRed"
+                                Stroke="DarkGray"
                                 Width="{Binding Diameter}"
                                 HorizontalAlignment="Left">
                                 <b:Interaction.Triggers>

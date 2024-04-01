@@ -1,10 +1,12 @@
-﻿using Craft.Logging;
-using Games.Risk.Application.GameEvents;
-using Games.Risk.Application.PlayerOptions;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Craft.Logging;
+using Craft.DataStructures.Graph;
+using Games.Risk.Application.GameEvents;
+using Games.Risk.Application.PlayerOptions;
 
 namespace Games.Risk.Application
 {
@@ -12,6 +14,8 @@ namespace Games.Risk.Application
     {
         private const int _targetScore = 100;
         private const int _dieFaces = 6;
+        private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
+        private Dictionary<int, int> _territoryToPlayerMap;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -39,8 +43,11 @@ namespace Games.Risk.Application
 
         public Engine(
             bool[] players,
-            bool pseudoRandomNumbers)
+            bool pseudoRandomNumbers,
+            IGraph<LabelledVertex, EmptyEdge> graphOfTerritories)
         {
+            _graphOfTerritories = graphOfTerritories;
+
             var playerCount = players.Count();
 
             if (playerCount < 2 || playerCount > 10)
@@ -58,8 +65,24 @@ namespace Games.Risk.Application
 
         public void StartGame()
         {
+            // Distribute territories among players
+            var vertexIds = _graphOfTerritories.Vertices
+                .Select(_ => _.Id)
+                .ToList();
+
+            // Shuffle the vertex ids;
+            vertexIds = vertexIds.OrderBy(_ => Guid.NewGuid()).ToList();
+
+            _territoryToPlayerMap = new Dictionary<int, int>();
+
+            var playerId = 0;
+            foreach (var vertexId in vertexIds)
+            {
+                _territoryToPlayerMap[vertexId] = playerId;
+                playerId = (playerId + 1) % PlayerCount;
+            }
+
             GameInProgress = true;
-            //CurrentPlayerIndex = _random.Next(0, _players.Length);
             CurrentPlayerIndex = 0;
 
             Logger?.WriteLine(LogMessageCategory.Information, $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
@@ -97,6 +120,12 @@ namespace Games.Risk.Application
                         throw new InvalidOperationException("Invalid player option");
                     }
             }
+        }
+
+        public int IdOfPlayerCurrentlyControllingTerritory(
+            int territoryId)
+        {
+            return _territoryToPlayerMap[territoryId];
         }
 
         private IGameEvent RollDie()

@@ -14,7 +14,7 @@ namespace Craft.UIElements.GuiTest.Tab5
         private readonly Brush _asiaBrush = new SolidColorBrush(Colors.MediumSeaGreen);
         private readonly Brush _oceaniaBrush = new SolidColorBrush(Colors.MediumPurple);
 
-        public GraphViewModel GraphViewModel { get; set; }
+        public GraphViewModel GraphViewModel { get; }
 
         public Tab5ViewModel()
         {
