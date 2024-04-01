@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Media;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
@@ -13,6 +14,7 @@ namespace Craft.ViewModels.Common
         private double _top;
         private double _diameter;
         private string _label;
+        private Brush _brush;
         private RelayCommand _clickedCommand;
 
         public PointD Point
@@ -61,6 +63,16 @@ namespace Craft.ViewModels.Common
             set
             {
                 _label = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public Brush Brush
+        {
+            get => _brush;
+            set
+            {
+                _brush = value;
                 RaisePropertyChanged();
             }
         }
