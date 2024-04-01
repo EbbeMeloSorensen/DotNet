@@ -34,11 +34,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.UIElements", "..\Craf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.ViewModel", "Games.Pig.ViewModel\Games.Pig.ViewModel.csproj", "{EBFFB5BE-E972-4D9E-A7C6-945CC1AFF06E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Race.Application", "Games.Race.Application\Games.Race.Application.csproj", "{AC75AEA4-34C2-4204-B729-547356FD4B1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Race.Application", "Games.Race.Application\Games.Race.Application.csproj", "{AC75AEA4-34C2-4204-B729-547356FD4B1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Race.ViewModel", "Games.Race.ViewModel\Games.Race.ViewModel.csproj", "{3A312B91-494F-4E6A-8ECF-550A91EB99D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Race.ViewModel", "Games.Race.ViewModel\Games.Race.ViewModel.csproj", "{3A312B91-494F-4E6A-8ECF-550A91EB99D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Race.UI.WPF", "Games.Race.UI.WPF\Games.Race.UI.WPF.csproj", "{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Race.UI.WPF", "Games.Race.UI.WPF\Games.Race.UI.WPF.csproj", "{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Risk.Application", "Games.Risk.Application\Games.Risk.Application.csproj", "{128EDB5F-DBBB-4298-B84A-38393A86C582}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Risk.ViewModel", "Games.Risk.ViewModel\Games.Risk.ViewModel.csproj", "{F04254D6-78D1-4C6A-964E-2971B7039CE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Risk.UI.WPF", "Games.Risk.UI.WPF\Games.Risk.UI.WPF.csproj", "{EF1B3DDC-2748-4663-97C6-4B1BF70F1736}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,6 +116,18 @@ Global
 		{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{128EDB5F-DBBB-4298-B84A-38393A86C582}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{128EDB5F-DBBB-4298-B84A-38393A86C582}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{128EDB5F-DBBB-4298-B84A-38393A86C582}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{128EDB5F-DBBB-4298-B84A-38393A86C582}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F04254D6-78D1-4C6A-964E-2971B7039CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F04254D6-78D1-4C6A-964E-2971B7039CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F04254D6-78D1-4C6A-964E-2971B7039CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F04254D6-78D1-4C6A-964E-2971B7039CE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF1B3DDC-2748-4663-97C6-4B1BF70F1736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF1B3DDC-2748-4663-97C6-4B1BF70F1736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF1B3DDC-2748-4663-97C6-4B1BF70F1736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF1B3DDC-2748-4663-97C6-4B1BF70F1736}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
