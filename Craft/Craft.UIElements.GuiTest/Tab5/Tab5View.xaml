@@ -8,6 +8,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <graph:GraphView DataContext="{Binding GraphViewModel}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <CheckBox Grid.Row="0" Content="Allow Moving Vertices" Margin="10"
+                  IsChecked="{Binding AllowMovingVertices}"/>
+        <graph:GraphView Grid.Row="1" DataContext="{Binding GraphViewModel}" />
+        <Canvas Grid.Row="1">
+            <Ellipse Fill="Transparent" Stroke="Black" StrokeThickness="3" 
+                     Width="32" Height="32" 
+                     Canvas.Left="{Binding SelectedVertexCanvasPositionLeft}" 
+                     Canvas.Top="{Binding SelectedVertexCanvasPositionTop}"/>
+        </Canvas>
     </Grid>
 </UserControl>

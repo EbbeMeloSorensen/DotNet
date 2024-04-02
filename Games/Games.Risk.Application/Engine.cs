@@ -92,12 +92,12 @@ namespace Games.Risk.Application
         {
             await Task.Delay(1);
 
-            if (Pot + PlayerScores[CurrentPlayerIndex] < _targetScore && (Pot < 20 || _random.Next(2) == 1))
+            if (_random.Next(3) == 0)
             {
-                return RollDie();
+                return Pass();
             }
 
-            return TakePot();
+            return Attack();
         }
 
         public async Task<IGameEvent> PlayerSelectsOption(
@@ -107,13 +107,13 @@ namespace Games.Risk.Application
 
             switch (option)
             {
-                case RollDie _:
+                case Attack _:
                     {
-                        return RollDie();
+                        return Attack();
                     }
-                case TakePot _:
+                case Pass _:
                     {
-                        return TakePot();
+                        return Pass();
                     }
                 default:
                     {
@@ -160,28 +160,24 @@ namespace Games.Risk.Application
             return gameEvent;
         }
 
-        private IGameEvent TakePot()
+        private IGameEvent Attack()
         {
-            PlayerScores[CurrentPlayerIndex] += Pot;
-            Pot = 0;
-
-            var gameEvent = new PlayerTakesPot(
+            var gameEvent = new PlayerAttacks(
                 CurrentPlayerIndex,
-                $"Player {CurrentPlayerIndex + 1} takes pot and now has a score of {PlayerScores[CurrentPlayerIndex]}",
-                true)
-            {
-                NewScore = PlayerScores[CurrentPlayerIndex]
-            };
+                $"Player {CurrentPlayerIndex + 1} attacks",
+                false);
 
-            if (PlayerScores[CurrentPlayerIndex] >= _targetScore)
-            {
-                GameInProgress = false;
-                GameDecided = true;
-            }
-            else
-            {
-                CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
-            }
+            return gameEvent;
+        }
+
+        private IGameEvent Pass()
+        {
+            var gameEvent = new PlayerPasses(
+                CurrentPlayerIndex,
+                $"Player {CurrentPlayerIndex + 1} passes",
+                true);
+
+            CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
 
             return gameEvent;
         }

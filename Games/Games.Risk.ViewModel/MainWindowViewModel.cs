@@ -26,7 +26,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 200;
+        private const int _delay = 500;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, Brush> _colorPalette;
 
@@ -42,8 +42,8 @@ namespace Games.Risk.ViewModel
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
-        private AsyncCommand _rollDieCommand;
-        private AsyncCommand _takePotCommand;
+        private AsyncCommand _attackCommand;
+        private AsyncCommand _passCommand;
 
         public RelayCommand<object> OpenSettingsDialogCommand =>
             _openSettingsDialogCommand ??= new RelayCommand<object>(OpenSettingsDialog);
@@ -55,8 +55,8 @@ namespace Games.Risk.ViewModel
                 return Proceed();
             }, CanStartGame);
 
-        public AsyncCommand RollDieCommand => _rollDieCommand ??= new AsyncCommand(RollDie, CanRollDie);
-        public AsyncCommand TakePotCommand => _takePotCommand ??= new AsyncCommand(TakePot, CanTakePot);
+        public AsyncCommand AttackCommand => _attackCommand ??= new AsyncCommand(Attack, CanAttack);
+        public AsyncCommand PassCommand => _passCommand ??= new AsyncCommand(Pass, CanPass);
 
         public GraphViewModel MapViewModel { get; }
         public LogViewModel LogViewModel { get; }
@@ -178,9 +178,12 @@ namespace Games.Risk.ViewModel
 
                     switch (gameEvent)
                     {
-                        case PlayerTakesPot _:
+                        case PlayerAttacks _:
+                        {
+                            break;
+                        }
+                        case PlayerPasses _:
                             {
-                                UpdateScore(gameEvent.PlayerIndex);
                                 break;
                             }
                     }
@@ -233,7 +236,7 @@ namespace Games.Risk.ViewModel
             var tempArray = Enumerable.Repeat(true, playerCount).ToArray();
             var indexOfPlayer = _random.Next(0, playerCount);
             tempArray[indexOfPlayer] = false;
-            _application.Engine = new Engine(tempArray, false, _graphOfTerritories);
+            _application.Engine = new Engine(tempArray, _pseudoRandomNumbers, _graphOfTerritories);
 
             PlayerViewModels.Clear();
 
@@ -265,9 +268,9 @@ namespace Games.Risk.ViewModel
             return !GameInProgress || PlayerHasInitiative;
         }
 
-        private async Task RollDie()
+        private async Task Attack()
         {
-            var gameEvent = await _application.Engine.PlayerSelectsOption(new RollDie());
+            var gameEvent = await _application.Engine.PlayerSelectsOption(new Attack());
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
@@ -288,14 +291,14 @@ namespace Games.Risk.ViewModel
             }
         }
 
-        private bool CanRollDie()
+        private bool CanAttack()
         {
             return GameInProgress && PlayerHasInitiative;
         }
 
-        private async Task TakePot()
+        private async Task Pass()
         {
-            var gameEvent = await _application.Engine.PlayerSelectsOption(new TakePot());
+            var gameEvent = await _application.Engine.PlayerSelectsOption(new Pass());
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
@@ -321,11 +324,9 @@ namespace Games.Risk.ViewModel
             }
         }
 
-        private bool CanTakePot()
+        private bool CanPass()
         {
-            return _application.Engine != null &&
-                   _application.Engine.Pot > 0 &&
-                   GameInProgress &&
+            return GameInProgress &&
                    PlayerHasInitiative;
         }
 
@@ -358,8 +359,8 @@ namespace Games.Risk.ViewModel
         private void UpdateCommandAvailability()
         {
             StartGameCommand.RaiseCanExecuteChanged();
-            RollDieCommand.RaiseCanExecuteChanged();
-            TakePotCommand.RaiseCanExecuteChanged();
+            AttackCommand.RaiseCanExecuteChanged();
+            PassCommand.RaiseCanExecuteChanged();
         }
 
         private void UpdateScore(

@@ -52,9 +52,9 @@
             <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Top"
                         Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
-                        Command="{Binding RollDieCommand}">Roll Die</Button>
+                        Command="{Binding AttackCommand}">Attack</Button>
                 <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
-                        Command="{Binding TakePotCommand}">Take Pot</Button>
+                        Command="{Binding PassCommand}">Pass</Button>
             </StackPanel>
 
             <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding PlayerViewModels}">
@@ -84,7 +84,7 @@
             <graph:GraphView Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
                              DataContext="{Binding MapViewModel}"/>
 
-            <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Header="Log" ExpandDirection="Up" IsExpanded="False">
+            <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Header="Log" ExpandDirection="Up" IsExpanded="True">
                 <logging:LogView DataContext="{Binding LogViewModel}"/>
             </Expander>
 

@@ -1,5 +1,5 @@
 ﻿namespace Games.Risk.Application.PlayerOptions
 {
-    public class RollDie : IPlayerOption
+    public class Pass : IPlayerOption
     { }
 }

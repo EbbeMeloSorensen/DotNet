@@ -6,6 +6,7 @@ using Craft.Utils;
 using Craft.DataStructures.Graph;
 using Craft.ViewModels.Common;
 using Craft.ViewModels.Geometry2D.Scrolling;
+using System;
 
 namespace Craft.ViewModels.Graph
 {
@@ -21,6 +22,10 @@ namespace Craft.ViewModels.Graph
         private Brush _defaultVertexBrush = new SolidColorBrush(Colors.LightGray);
 
         private IGraph<LabelledVertex, EmptyEdge> _graph;
+
+        public bool AllowMovingVertices { get; set; }
+
+        public event EventHandler<ElementClickedEventArgs> VertexClicked;
 
         public ObservableCollection<LineSegmentD> Lines
         {
@@ -64,6 +69,7 @@ namespace Craft.ViewModels.Graph
             int initialImageWidth,
             int initialImageHeight) : base(initialImageWidth, initialImageHeight)
         {
+            AllowMovingVertices = true;
             ScrollableOffset = new PointD(0, 0);
             ScrollOffset = new PointD(0, 0);
 
@@ -120,6 +126,7 @@ namespace Craft.ViewModels.Graph
             PointViewModels[pointIndex].Brush = brush;
         }
 
+        // Handler for when a PointViewModel is clicked
         private void ElementViewModelElementClicked(
             object sender,
             ElementClickedEventArgs e)
@@ -128,6 +135,20 @@ namespace Craft.ViewModels.Graph
             _indexOfActivePoint = e.ElementId;
             _activeViewModel = PointViewModels[_indexOfActivePoint];
             _initialPoint = _activeViewModel.Point;
+
+            OnVertexClicked(e.ElementId);
+        }
+
+        // For raising an event regarding a vertex being clicked
+        private void OnVertexClicked(
+            int vertexId)
+        {
+            var handler = VertexClicked;
+
+            if (handler != null)
+            {
+                handler(this, new ElementClickedEventArgs(vertexId));
+            }
         }
 
         private void UpdateLines()

@@ -7,6 +7,10 @@ namespace Craft.UIElements.GuiTest.Tab5
 {
     public class Tab5ViewModel : ViewModelBase
     {
+        private bool _allowMovingVertices;
+        private int _selectedVertexCanvasPositionLeft;
+        private int _selectedVertexCanvasPositionTop;
+
         private readonly Brush _northAmericaBrush = new SolidColorBrush(Colors.Yellow);
         private readonly Brush _southAmericaBrush = new SolidColorBrush(Colors.DarkOrange);
         private readonly Brush _europeBrush = new SolidColorBrush(Colors.CornflowerBlue);
@@ -14,14 +18,58 @@ namespace Craft.UIElements.GuiTest.Tab5
         private readonly Brush _asiaBrush = new SolidColorBrush(Colors.MediumSeaGreen);
         private readonly Brush _oceaniaBrush = new SolidColorBrush(Colors.MediumPurple);
 
+        public bool AllowMovingVertices
+        {
+            get => _allowMovingVertices;
+            set
+            {
+                _allowMovingVertices = value;
+                GraphViewModel.AllowMovingVertices = _allowMovingVertices;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int SelectedVertexCanvasPositionLeft
+        {
+            get => _selectedVertexCanvasPositionLeft;
+            set
+            {
+                _selectedVertexCanvasPositionLeft = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int SelectedVertexCanvasPositionTop
+        {
+            get => _selectedVertexCanvasPositionTop;
+            set
+            {
+                _selectedVertexCanvasPositionTop = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public GraphViewModel GraphViewModel { get; }
 
         public Tab5ViewModel()
         {
             var graph = GraphGenerator.GenerateGraphOfRiskTerritories();
 
-            GraphViewModel = new GraphViewModel(graph, 1200, 900);
+            GraphViewModel = new GraphViewModel(graph, 1200, 900){ AllowMovingVertices = false };
+            AllowMovingVertices = GraphViewModel.AllowMovingVertices;
 
+            StyleGraph();
+
+            GraphViewModel.VertexClicked += (s, e) =>
+            {
+                var point = GraphViewModel.PointViewModels[e.ElementId].Point;
+                SelectedVertexCanvasPositionLeft = (int) point.X - 16;
+                SelectedVertexCanvasPositionTop = (int) point.Y - 16;
+            };
+        }
+
+        private void StyleGraph()
+        {
             // North America
             GraphViewModel.PlacePoint(0, new Utils.PointD(50, 50));
             GraphViewModel.PlacePoint(1, new Utils.PointD(150, 50));
@@ -38,7 +86,7 @@ namespace Craft.UIElements.GuiTest.Tab5
             GraphViewModel.PlacePoint(10, new Utils.PointD(125, 350));
             GraphViewModel.PlacePoint(11, new Utils.PointD(175, 400));
             GraphViewModel.PlacePoint(12, new Utils.PointD(225, 350));
-            
+
             // Europe
             GraphViewModel.PlacePoint(13, new Utils.PointD(400, 50));
             GraphViewModel.PlacePoint(14, new Utils.PointD(500, 50));
@@ -59,16 +107,16 @@ namespace Craft.UIElements.GuiTest.Tab5
             // Asia
             GraphViewModel.PlacePoint(26, new Utils.PointD(900, 100));
             GraphViewModel.PlacePoint(27, new Utils.PointD(800, 100));
-            GraphViewModel.PlacePoint(28, new Utils.PointD(1000, 100)); 
-            GraphViewModel.PlacePoint(29, new Utils.PointD(1000, 150)); 
-            GraphViewModel.PlacePoint(30, new Utils.PointD(900, 150)); 
+            GraphViewModel.PlacePoint(28, new Utils.PointD(1000, 100));
+            GraphViewModel.PlacePoint(29, new Utils.PointD(1000, 150));
+            GraphViewModel.PlacePoint(30, new Utils.PointD(900, 150));
             GraphViewModel.PlacePoint(31, new Utils.PointD(725, 175));
-            GraphViewModel.PlacePoint(32, new Utils.PointD(900, 200)); 
-            GraphViewModel.PlacePoint(33, new Utils.PointD(1000, 200)); 
-            GraphViewModel.PlacePoint(34, new Utils.PointD(825, 175)); 
-            GraphViewModel.PlacePoint(35, new Utils.PointD(675, 250));  
-            GraphViewModel.PlacePoint(36, new Utils.PointD(775, 250));  
-            GraphViewModel.PlacePoint(37, new Utils.PointD(850, 250));  
+            GraphViewModel.PlacePoint(32, new Utils.PointD(900, 200));
+            GraphViewModel.PlacePoint(33, new Utils.PointD(1000, 200));
+            GraphViewModel.PlacePoint(34, new Utils.PointD(825, 175));
+            GraphViewModel.PlacePoint(35, new Utils.PointD(675, 250));
+            GraphViewModel.PlacePoint(36, new Utils.PointD(775, 250));
+            GraphViewModel.PlacePoint(37, new Utils.PointD(850, 250));
 
             // Oceania
             GraphViewModel.PlacePoint(38, new Utils.PointD(850, 350));
@@ -82,7 +130,7 @@ namespace Craft.UIElements.GuiTest.Tab5
                 .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _northAmericaBrush));
 
             Enumerable
-                .Range(10, 4)
+                .Range(9, 4)
                 .ToList()
                 .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _southAmericaBrush));
 

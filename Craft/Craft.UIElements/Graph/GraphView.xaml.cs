@@ -88,8 +88,10 @@ namespace Craft.UIElements.Graph
 
             if (ViewModel.PointWasClicked)
             {
-                _draggingPoint = true;
-                //ViewModel.StartMovingPoint();
+                if (ViewModel.AllowMovingVertices)
+                {
+                    _draggingPoint = true;
+                }
             }
             else
             {
