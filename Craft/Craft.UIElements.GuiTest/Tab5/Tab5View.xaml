@@ -18,8 +18,8 @@
         <Canvas Grid.Row="1">
             <Ellipse Fill="Transparent" Stroke="Black" StrokeThickness="3" 
                      Width="32" Height="32" 
-                     Canvas.Left="{Binding SelectedVertexCanvasPositionLeft}" 
-                     Canvas.Top="{Binding SelectedVertexCanvasPositionTop}"/>
+                     Canvas.Left="{Binding SelectedVertexCanvasPosition.X}" 
+                     Canvas.Top="{Binding SelectedVertexCanvasPosition.Y}"/>
         </Canvas>
     </Grid>
 </UserControl>

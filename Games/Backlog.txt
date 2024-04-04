@@ -1,9 +1,10 @@
 Done:
 * Ingen Task.Delays - vent på user keypress i stedet
+* En automatisk spiller passer med 25 % sandsynlighed og "angriber"" med 75% sandsynlighed.
 
 Todo
-* En automatisk spiller passer med 25 % sandsynlighed og "angriber"" med 75% sandsynlighed.
 * I første omgang indebærer et angreb blot at 2 tilfældige vertices fremhæves med en pil fra den ene til den anden
+
 * Fremhæv spillerens valg af 2 vertices med cirkler samt en pil, der går fra den ene til den anden
 * Spillet skal slutte, når en spiller når en score på 100 eller 20
 * Når pot er på 0, skal man kun have mulighed for at rulle terningen

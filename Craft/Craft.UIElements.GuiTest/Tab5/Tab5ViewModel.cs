@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows.Media;
+using Craft.Utils;
 using Craft.ViewModels.Graph;
 using GalaSoft.MvvmLight;
 
@@ -8,8 +9,9 @@ namespace Craft.UIElements.GuiTest.Tab5
     public class Tab5ViewModel : ViewModelBase
     {
         private bool _allowMovingVertices;
-        private int _selectedVertexCanvasPositionLeft;
-        private int _selectedVertexCanvasPositionTop;
+        //private int _selectedVertexCanvasPositionLeft;
+        //private int _selectedVertexCanvasPositionTop;
+        private PointD _selectedVertexCanvasPosition;
 
         private readonly Brush _northAmericaBrush = new SolidColorBrush(Colors.Yellow);
         private readonly Brush _southAmericaBrush = new SolidColorBrush(Colors.DarkOrange);
@@ -29,22 +31,12 @@ namespace Craft.UIElements.GuiTest.Tab5
             }
         }
 
-        public int SelectedVertexCanvasPositionLeft
+        public PointD SelectedVertexCanvasPosition
         {
-            get => _selectedVertexCanvasPositionLeft;
+            get => _selectedVertexCanvasPosition;
             set
             {
-                _selectedVertexCanvasPositionLeft = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int SelectedVertexCanvasPositionTop
-        {
-            get => _selectedVertexCanvasPositionTop;
-            set
-            {
-                _selectedVertexCanvasPositionTop = value;
+                _selectedVertexCanvasPosition = value;
                 RaisePropertyChanged();
             }
         }
@@ -63,8 +55,7 @@ namespace Craft.UIElements.GuiTest.Tab5
             GraphViewModel.VertexClicked += (s, e) =>
             {
                 var point = GraphViewModel.PointViewModels[e.ElementId].Point;
-                SelectedVertexCanvasPositionLeft = (int) point.X - 16;
-                SelectedVertexCanvasPositionTop = (int) point.Y - 16;
+                SelectedVertexCanvasPosition = new PointD(point.X - 16, point.Y - 16);
             };
         }
 

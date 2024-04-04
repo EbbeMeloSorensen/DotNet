@@ -26,9 +26,12 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 500;
+        private const int _delay = 1000;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, Brush> _colorPalette;
+        private PointD _selectedVertexCanvasPosition;
+        private PointD _selectedTargetVertexCanvasPosition;
+        private bool _attackVectorVisible;
 
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
@@ -127,6 +130,36 @@ namespace Games.Risk.ViewModel
             }
         }
 
+        public PointD SelectedVertexCanvasPosition
+        {
+            get => _selectedVertexCanvasPosition;
+            set
+            {
+                _selectedVertexCanvasPosition = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public PointD SelectedTargetVertexCanvasPosition
+        {
+            get => _selectedTargetVertexCanvasPosition;
+            set
+            {
+                _selectedTargetVertexCanvasPosition = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool AttackVectorVisible
+        {
+            get => _attackVectorVisible;
+            set
+            {
+                _attackVectorVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public MainWindowViewModel(
             Application.Application application,
             IDialogService applicationDialogService)
@@ -168,7 +201,6 @@ namespace Games.Risk.ViewModel
                 if (_application.Engine.NextEventOccursAutomatically)
                 {
                     var gameEvent = await _application.Engine.ExecuteNextEvent();
-                    await Task.Delay(_delay);
 
                     _application.Logger?.WriteLine(
                         LogMessageCategory.Information,
@@ -178,15 +210,22 @@ namespace Games.Risk.ViewModel
 
                     switch (gameEvent)
                     {
-                        case PlayerAttacks _:
-                        {
-                            break;
-                        }
+                        case PlayerAttacks playerAttacks:
+                            {
+                                var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
+                                var point2 = MapViewModel.PointViewModels[playerAttacks.Vertex2].Point;
+
+                                SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
+                                SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
+                                break;
+                            }
                         case PlayerPasses _:
                             {
                                 break;
                             }
                     }
+
+                    await Task.Delay(_delay);
 
                     if (gameEvent.TurnGoesToNextPlayer)
                     {

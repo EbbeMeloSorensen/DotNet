@@ -7,15 +7,18 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
         xmlns:graph="clr-namespace:Craft.UIElements.Graph;assembly=Craft.UIElements"
+        xmlns:valueConverters="clr-namespace:Craft.UI.Utils.ValueConverters;assembly=Craft.UI.Utils"
         mc:Ignorable="d"
         Title="Risk Game" Height="800" Width="1400"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
 
     <Window.Resources>
+        <valueConverters:DoubleAdder x:Key="DoubleAdder"/>
         <local:BooleanMatchToBrushConverter x:Key="BooleanMatchToBrushConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <system:Boolean x:Key="True">True</system:Boolean>
         <system:Boolean x:Key="False">False</system:Boolean>
+        <system:Double x:Key="Shift">20</system:Double>
     </Window.Resources>
 
     <DockPanel>
@@ -83,6 +86,24 @@
 
             <graph:GraphView Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
                              DataContext="{Binding MapViewModel}"/>
+
+            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="450" Visibility="Hidden">
+                <Ellipse Fill="Transparent" Stroke="Black" StrokeThickness="6" 
+                         Width="40" Height="40" 
+                         Canvas.Left="{Binding SelectedVertexCanvasPosition.X}" 
+                         Canvas.Top="{Binding SelectedVertexCanvasPosition.Y}"/>
+                <Ellipse Fill="Transparent" Stroke="Black" StrokeThickness="3" 
+                         Width="40" Height="40" 
+                         Canvas.Left="{Binding SelectedTargetVertexCanvasPosition.X}" 
+                         Canvas.Top="{Binding SelectedTargetVertexCanvasPosition.Y}"/>
+                <Line Stroke="Black" StrokeThickness="3" 
+                      X1="{Binding SelectedVertexCanvasPosition.X, Converter={StaticResource DoubleAdder}, ConverterParameter={StaticResource Shift}}"
+                      Y1="{Binding SelectedVertexCanvasPosition.Y, Converter={StaticResource DoubleAdder}, ConverterParameter={StaticResource Shift}}"
+                      X2="{Binding SelectedTargetVertexCanvasPosition.X, Converter={StaticResource DoubleAdder}, ConverterParameter={StaticResource Shift}}"
+                      Y2="{Binding SelectedTargetVertexCanvasPosition.Y, Converter={StaticResource DoubleAdder}, ConverterParameter={StaticResource Shift}}">
+                </Line>
+            </Canvas>
+
 
             <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Header="Log" ExpandDirection="Up" IsExpanded="True">
                 <logging:LogView DataContext="{Binding LogViewModel}"/>

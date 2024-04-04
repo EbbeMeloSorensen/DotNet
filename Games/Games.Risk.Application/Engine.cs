@@ -162,10 +162,23 @@ namespace Games.Risk.Application
 
         private IGameEvent Attack()
         {
+            var indexOfSourceVertex = _random.Next(0, _graphOfTerritories.VertexCount);
+            int indexOfTargetVertex;
+
+            do
+            {
+                indexOfTargetVertex = _random.Next(0, _graphOfTerritories.VertexCount);
+            } while (indexOfTargetVertex == indexOfSourceVertex);
+
+
             var gameEvent = new PlayerAttacks(
                 CurrentPlayerIndex,
                 $"Player {CurrentPlayerIndex + 1} attacks",
-                false);
+                false)
+            {
+                Vertex1 = indexOfSourceVertex,
+                Vertex2 = indexOfTargetVertex
+            };
 
             return gameEvent;
         }
