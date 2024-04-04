@@ -447,6 +447,8 @@ namespace WIGOS.ViewModel
             };
 
             _timer.Start();
+
+            _logger?.WriteLine(LogMessageCategory.Information, "Done constructing MainWindowViewModel");
         }
 
         private void CreateObservingFacility(
@@ -1242,90 +1244,123 @@ namespace WIGOS.ViewModel
 
         private void CreateNewObservingFacility()
         {
-            var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
-
-            if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
+            try
             {
-                return;
-            }
+                _logger?.WriteLine(LogMessageCategory.Debug, "Opening dialog for creating new observing facility");
 
-            var from = new DateTime(
-                dialogViewModel.From.Year,
-                dialogViewModel.From.Month,
-                dialogViewModel.From.Day,
-                dialogViewModel.From.Hour,
-                dialogViewModel.From.Minute,
-                dialogViewModel.From.Second,
-                DateTimeKind.Utc);
+                var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
 
-            var to = dialogViewModel.To.HasValue
-                ? dialogViewModel.To == DateTime.MaxValue
-                    ? DateTime.MaxValue
-                    : new DateTime(
-                        dialogViewModel.To.Value.Year,
-                        dialogViewModel.To.Value.Month,
-                        dialogViewModel.To.Value.Day,
-                        dialogViewModel.To.Value.Hour,
-                        dialogViewModel.To.Value.Minute,
-                        dialogViewModel.To.Value.Second,
-                        DateTimeKind.Utc)
-                : DateTime.MaxValue;
-
-            var latitude = dialogViewModel.Latitude;
-            var longitude = dialogViewModel.Longitude;
-
-            var now = DateTime.UtcNow;
-
-            // Bemærk, at vi sætter DateEstablished og DateClosed svarende til From og To for den ene lokation, som
-            // den pågældende observing facility laves med
-            var observingFacility = new ObservingFacility(
-                Guid.NewGuid(),
-                now)
-            {
-                Name = dialogViewModel.Name,
-                DateEstablished = from,
-                DateClosed = to
-            };
-
-            var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
-            {
-                AbstractEnvironmentalMonitoringFacility = observingFacility,
-                AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
-                From = from,
-                To = to,
-                Coordinate1 = latitude,
-                Coordinate2 = longitude,
-                CoordinateSystem = "WGS_84"
-            };
-
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-            {
-                unitOfWork.ObservingFacilities.Add(observingFacility);
-                unitOfWork.Points_Wigos.Add(point);
-                unitOfWork.Complete();
-            }
-
-            if (!_historicalChangeTimes.Contains(observingFacility.DateEstablished))
-            {
-                _historicalChangeTimes.Add(observingFacility.DateEstablished);
-            }
-
-            if (observingFacility.DateClosed < DateTime.MaxValue)
-            {
-                if (!_historicalChangeTimes.Contains(observingFacility.DateClosed))
+                if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
                 {
-                    _historicalChangeTimes.Add(observingFacility.DateClosed);
+                    return;
                 }
+
+                _logger?.WriteLine(LogMessageCategory.Debug, "Collecting input from dialog");
+
+                var from = new DateTime(
+                    dialogViewModel.From.Year,
+                    dialogViewModel.From.Month,
+                    dialogViewModel.From.Day,
+                    dialogViewModel.From.Hour,
+                    dialogViewModel.From.Minute,
+                    dialogViewModel.From.Second,
+                    DateTimeKind.Utc);
+
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    From: {from}");
+
+                var to = dialogViewModel.To.HasValue
+                    ? dialogViewModel.To == DateTime.MaxValue
+                        ? DateTime.MaxValue
+                        : new DateTime(
+                            dialogViewModel.To.Value.Year,
+                            dialogViewModel.To.Value.Month,
+                            dialogViewModel.To.Value.Day,
+                            dialogViewModel.To.Value.Hour,
+                            dialogViewModel.To.Value.Minute,
+                            dialogViewModel.To.Value.Second,
+                            DateTimeKind.Utc)
+                    : DateTime.MaxValue;
+
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    From: {to}");
+
+                var latitude = dialogViewModel.Latitude;
+                var longitude = dialogViewModel.Longitude;
+
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    Latitude: {latitude}");
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    Longitude: {longitude}");
+
+                var now = DateTime.UtcNow;
+
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    now: {now}");
+
+                _logger?.WriteLine(LogMessageCategory.Debug, "Instantiating new ObservingFacility");
+
+                // Bemærk, at vi sætter DateEstablished og DateClosed svarende til From og To for den ene lokation, som
+                // den pågældende observing facility laves med
+                var observingFacility = new ObservingFacility(
+                    Guid.NewGuid(),
+                    now)
+                {
+                    Name = dialogViewModel.Name,
+                    DateEstablished = from,
+                    DateClosed = to
+                };
+
+                _logger?.WriteLine(LogMessageCategory.Debug, "Instantiating new Point");
+
+                var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
+                {
+                    AbstractEnvironmentalMonitoringFacility = observingFacility,
+                    AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
+                    From = from,
+                    To = to,
+                    Coordinate1 = latitude,
+                    Coordinate2 = longitude,
+                    CoordinateSystem = "WGS_84"
+                };
+
+                _logger?.WriteLine(LogMessageCategory.Debug, "Trying to write to repository..");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    _logger?.WriteLine(LogMessageCategory.Debug, "Writing ObservingFacility..");
+                    unitOfWork.ObservingFacilities.Add(observingFacility);
+                    _logger?.WriteLine(LogMessageCategory.Debug, "Writing Point..");
+                    unitOfWork.Points_Wigos.Add(point);
+                    _logger?.WriteLine(LogMessageCategory.Debug, "Completing transaction..");
+                    unitOfWork.Complete();
+                }
+
+                _logger?.WriteLine(LogMessageCategory.Debug, "Done writing to repository..");
+
+                if (!_historicalChangeTimes.Contains(observingFacility.DateEstablished))
+                {
+                    _historicalChangeTimes.Add(observingFacility.DateEstablished);
+                }
+
+                if (observingFacility.DateClosed < DateTime.MaxValue)
+                {
+                    if (!_historicalChangeTimes.Contains(observingFacility.DateClosed))
+                    {
+                        _historicalChangeTimes.Add(observingFacility.DateClosed);
+                    }
+                }
+
+                RefreshHistoricalTimeSeriesView(false);
+
+                _databaseWriteTimes.Add(now);
+                RefreshDatabaseTimeSeriesView();
+
+                if (_autoRefresh.Object)
+                {
+                    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                }
+
+                _logger?.WriteLine(LogMessageCategory.Debug, "Done creating new observing facility");
             }
-
-            RefreshHistoricalTimeSeriesView(false);
-
-            _databaseWriteTimes.Add(now);
-            RefreshDatabaseTimeSeriesView();
-
-            if (_autoRefresh.Object)
+            catch (Exception e)
             {
-                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                _logger?.WriteLine(LogMessageCategory.Error, $"Exception caught, Message: \"{e.Message}\"");
             }
         }
 
