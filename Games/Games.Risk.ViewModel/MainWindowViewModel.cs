@@ -43,7 +43,7 @@ namespace Games.Risk.ViewModel
         private bool _gameDecided;
         private string _gameResultMessage;
         private int _pot;
-        //private int? _indexOfActiveTerritory; // So far not used
+        private int? _indexOfActiveTerritory;
         private int? _indexOfTargetTerritory;
         private int[] _indexesOfHostileNeighbours;
 
@@ -193,11 +193,11 @@ namespace Games.Risk.ViewModel
 
             _colorPalette = new Dictionary<int, Brush>
             {
-                {0, new SolidColorBrush(Colors.Red)},
-                {1, new SolidColorBrush(Colors.Blue)},
-                {2, new SolidColorBrush(Colors.Green)},
+                {0, new SolidColorBrush(Colors.IndianRed)},
+                {1, new SolidColorBrush(Colors.CornflowerBlue)},
+                {2, new SolidColorBrush(Colors.LightGreen)},
                 {3, new SolidColorBrush(Colors.Yellow)},
-                {4, new SolidColorBrush(Colors.DarkOrange)},
+                {4, new SolidColorBrush(Colors.Orange)},
                 {5, new SolidColorBrush(Colors.MediumPurple)}
             };
 
@@ -230,7 +230,7 @@ namespace Games.Risk.ViewModel
                     return;
                 }
 
-                //_indexOfActiveTerritory = territoryId;
+                _indexOfActiveTerritory = territoryId;
                 _indexOfTargetTerritory = null;
                 SelectedVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
                 ActiveTerritoryHighlighted = true;
@@ -280,6 +280,11 @@ namespace Games.Risk.ViewModel
                                 break;
                             }
                     }
+
+                    await Task.Delay(_delay);
+
+                    // Måske lidt overkill - prøv bare at opdatere de 2 vertices, der er i spil
+                    SyncControlsWithApplication();
 
                     await Task.Delay(_delay);
 
@@ -365,7 +370,19 @@ namespace Games.Risk.ViewModel
 
         private async Task Attack()
         {
-            var gameEvent = await _application.Engine.PlayerSelectsOption(new Attack());
+            if (!_indexOfActiveTerritory.HasValue || !_indexOfTargetTerritory.HasValue)
+            {
+                throw new InvalidOperationException("Something wrong");
+            }
+
+            var gameEvent = await _application.Engine.PlayerSelectsOption(
+                new Attack
+                {
+                    ActiveTerritoryIndex = _indexOfActiveTerritory.Value,
+                    TargetTerritoryIndex = _indexOfTargetTerritory.Value
+                });
+
+            SyncControlsWithApplication();
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,

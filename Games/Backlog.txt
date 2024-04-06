@@ -5,9 +5,10 @@ Done:
 * (Pig) Spillet skal slutte, når en spiller når en score på 100 eller 20
 * (Risk) En automatisk spiller passer med 25 % sandsynlighed og "angriber"" med 75% sandsynlighed.
 * (Risk) Fremhæv spillerens valg af 1 eller 2 vertices med cirkler samt en pil, der går fra den ene til den anden
-
-Todo 
 * (Risk) Der skal være et antal armeer på hver vertex, som vises i stedet for navnet
   - engine skal kende antallet ligesom den ved, hvilken spiller der kontrollerer et territorium
+
+Todo 
+* (Risk) Et angreb foranlediger, at der trækkes 1 fra target vertex
 * (Risk) Navne på territorier vises på lag over GraphViewet
 * (Pig) En velkomst og introduktion til spillet

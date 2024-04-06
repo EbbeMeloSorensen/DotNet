@@ -86,7 +86,7 @@ namespace Games.Risk.Application
                 _territoryStatusMap[vertexId] = new TerritoryStatus
                 {
                     ControllingPlayerIndex = playerId,
-                    Armies = 10
+                    Armies = 3
                 };
                 playerId = (playerId + 1) % PlayerCount;
             }
@@ -106,7 +106,14 @@ namespace Games.Risk.Application
                 return Pass();
             }
 
-            return Attack();
+            var options = IdentifyOptionsForCurrentPlayer();
+
+            var randomIndex = _random.Next(0, options.Count);
+            var selectedOption = options[randomIndex];
+
+            return Attack(
+                selectedOption.Item1,
+                selectedOption.Item2);
         }
 
         public async Task<IGameEvent> PlayerSelectsOption(
@@ -116,9 +123,11 @@ namespace Games.Risk.Application
 
             switch (option)
             {
-                case Attack _:
+                case Attack attack:
                     {
-                        return Attack();
+                        return Attack(
+                            attack.ActiveTerritoryIndex,
+                            attack.TargetTerritoryIndex);
                     }
                 case Pass _:
                     {
@@ -179,46 +188,19 @@ namespace Games.Risk.Application
             return gameEvent;
         }
 
-        private IGameEvent Attack()
+        private IGameEvent Attack(
+            int activeTerritoryIndex,
+            int targetTerritoryIndex)
         {
-            // Which vertices are controlled by the current player?
-            var vertexIndexes = _territoryStatusMap
-                .Where(_ => _.Value.ControllingPlayerIndex== CurrentPlayerIndex)
-                .Select(_ => _.Key)
-                .ToList();
-
-            // Traverse all those vertices and identify neighbours controlled by other players
-            var options = new List<Tuple<int, int>>();
-
-            vertexIndexes.ForEach(vertexIndex =>
-            //foreach (var vertexIndex in vertexIndexes)
-            {
-                var adjacentEdges = _graphOfTerritories.GetAdjacentEdges(vertexIndex);
-
-                var neighbourIds = adjacentEdges.Select(_ => _.VertexId1 == vertexIndex ? _.VertexId2 : _.VertexId1);
-
-                foreach (var neighbourId in neighbourIds)
-                {
-                    if (!vertexIndexes.Contains(neighbourId))
-                    {
-                        options.Add(new Tuple<int, int>(vertexIndex, neighbourId));
-                    }
-                }
-            });
-
-            var randomIndex = _random.Next(0, options.Count);
-            var selectedOption = options[randomIndex];
-
-            var indexOfSourceVertex = selectedOption.Item1;
-            var indexOfTargetVertex = selectedOption.Item2;
+            _territoryStatusMap[targetTerritoryIndex].Armies -= 1;
 
             var gameEvent = new PlayerAttacks(
                 CurrentPlayerIndex,
                 $"Player {CurrentPlayerIndex + 1} attacks",
                 false)
             {
-                Vertex1 = indexOfSourceVertex,
-                Vertex2 = indexOfTargetVertex
+                Vertex1 = activeTerritoryIndex,
+                Vertex2 = targetTerritoryIndex
             };
 
             return gameEvent;
@@ -234,6 +216,35 @@ namespace Games.Risk.Application
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
 
             return gameEvent;
+        }
+
+        private List<Tuple<int, int>> IdentifyOptionsForCurrentPlayer()
+        {
+            // Which vertices are controlled by the current player?
+            var vertexIndexes = _territoryStatusMap
+                .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
+                .Select(_ => _.Key)
+                .ToList();
+
+            // Traverse all those vertices and identify neighbours controlled by other players
+            var options = new List<Tuple<int, int>>();
+
+            vertexIndexes.ForEach(vertexIndex =>
+            {
+                var adjacentEdges = _graphOfTerritories.GetAdjacentEdges(vertexIndex);
+
+                var neighbourIds = adjacentEdges.Select(_ => _.VertexId1 == vertexIndex ? _.VertexId2 : _.VertexId1);
+
+                foreach (var neighbourId in neighbourIds)
+                {
+                    if (!vertexIndexes.Contains(neighbourId))
+                    {
+                        options.Add(new Tuple<int, int>(vertexIndex, neighbourId));
+                    }
+                }
+            });
+
+            return options;
         }
     }
 }
