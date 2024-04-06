@@ -133,6 +133,16 @@ namespace Games.Risk.Application
             return _territoryToPlayerMap[territoryId];
         }
 
+        public IEnumerable<int> IndexesOfHostileNeighbourTerritories(
+            int territoryId)
+        {
+            var adjacentEdges = _graphOfTerritories.GetAdjacentEdges(territoryId);
+            var neighbourIds = adjacentEdges.Select(_ => _.VertexId1 == territoryId ? _.VertexId2 : _.VertexId1);
+
+            return neighbourIds.Except(
+                _territoryToPlayerMap.Where(_ => _.Value == CurrentPlayerIndex).Select(_ => _.Key));
+        }
+
         private IGameEvent RollDie()
         {
             var dieRoll = _random.Next(1, _dieFaces + 1);

@@ -26,11 +26,12 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 800;
+        private const int _delay = 500;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, Brush> _colorPalette;
         private PointD _selectedVertexCanvasPosition;
         private PointD _selectedTargetVertexCanvasPosition;
+        private bool _activeTerritoryHighlighted;
         private bool _attackVectorVisible;
 
         private ViewModelLogger _viewModelLogger;
@@ -42,6 +43,9 @@ namespace Games.Risk.ViewModel
         private bool _gameDecided;
         private string _gameResultMessage;
         private int _pot;
+        private int? _indexOfActiveTerritory;
+        private int? _indexOfTargetTerritory;
+        private int[] _indexesOfHostileNeighbours;
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
@@ -150,6 +154,16 @@ namespace Games.Risk.ViewModel
             }
         }
 
+        public bool ActiveTerritoryHighlighted
+        {
+            get => _activeTerritoryHighlighted;
+            set
+            {
+                _activeTerritoryHighlighted = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool AttackVectorVisible
         {
             get => _attackVectorVisible;
@@ -188,8 +202,46 @@ namespace Games.Risk.ViewModel
             };
 
             _graphOfTerritories = GenerateGraphOfTerritories();
-            MapViewModel = new GraphViewModel(_graphOfTerritories, 1100, 450);
+            _indexesOfHostileNeighbours = new int[]{};
+            
+            MapViewModel = new GraphViewModel(_graphOfTerritories, 1100, 500)
+            {
+                AllowMovingVertices = false
+            };
+
             ArrangeMapVertices(MapViewModel);
+
+            MapViewModel.VertexClicked += (s, e) =>
+            {
+                var territoryId = e.ElementId;
+
+                if (_indexesOfHostileNeighbours.Contains(territoryId))
+                {
+                    SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
+                    _indexOfTargetTerritory = territoryId;
+                    AttackVectorVisible = true;
+                    UpdateCommandAvailability();
+                    return;
+                }
+                
+                if (_application.Engine.CurrentPlayerIndex !=
+                    _application.Engine.IdOfPlayerCurrentlyControllingTerritory(territoryId))
+                {
+                    return;
+                }
+
+                _indexOfActiveTerritory = territoryId;
+                _indexOfTargetTerritory = null;
+                SelectedVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
+                ActiveTerritoryHighlighted = true;
+                AttackVectorVisible = false;
+
+                _indexesOfHostileNeighbours = _application.Engine
+                    .IndexesOfHostileNeighbourTerritories(territoryId)
+                    .ToArray();
+
+                UpdateCommandAvailability();
+            };
 
             _application.Logger?.WriteLine(LogMessageCategory.Debug, "Risk Game - starting up");
         }
@@ -217,11 +269,13 @@ namespace Games.Risk.ViewModel
 
                                 SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
                                 SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
+                                ActiveTerritoryHighlighted = true;
                                 AttackVectorVisible = true;
                                 break;
                             }
                         case PlayerPasses _:
                             {
+                                ActiveTerritoryHighlighted = false;
                                 AttackVectorVisible = false;
                                 break;
                             }
@@ -334,7 +388,9 @@ namespace Games.Risk.ViewModel
 
         private bool CanAttack()
         {
-            return GameInProgress && PlayerHasInitiative;
+            return GameInProgress && 
+                   PlayerHasInitiative && 
+                   _indexOfTargetTerritory.HasValue;
         }
 
         private async Task Pass()
@@ -344,6 +400,9 @@ namespace Games.Risk.ViewModel
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
                 gameEvent.Description);
+
+            _indexOfTargetTerritory = null;
+            _indexesOfHostileNeighbours = new int[] { };
 
             Pot = _application.Engine.Pot;
             UpdateScore(gameEvent.PlayerIndex);
@@ -474,6 +533,7 @@ namespace Games.Risk.ViewModel
 
             graph.AddEdge(0, 1);
             graph.AddEdge(0, 3);
+            graph.AddEdge(0, 29);
             graph.AddEdge(1, 2);
             graph.AddEdge(1, 3);
             graph.AddEdge(1, 4);
@@ -563,57 +623,57 @@ namespace Games.Risk.ViewModel
         {
             // North America
             graphViewModel.PlacePoint(0, new PointD(50, 50));
-            graphViewModel.PlacePoint(1, new PointD(150, 50));
-            graphViewModel.PlacePoint(2, new PointD(300, 50));
-            graphViewModel.PlacePoint(3, new PointD(100, 100));
-            graphViewModel.PlacePoint(4, new PointD(200, 100));
-            graphViewModel.PlacePoint(5, new PointD(300, 100));
-            graphViewModel.PlacePoint(6, new PointD(100, 150));
-            graphViewModel.PlacePoint(7, new PointD(250, 150));
-            graphViewModel.PlacePoint(8, new PointD(175, 200));
+            graphViewModel.PlacePoint(1, new PointD(150, 100));
+            graphViewModel.PlacePoint(2, new PointD(300, 100));
+            graphViewModel.PlacePoint(3, new PointD(100, 150));
+            graphViewModel.PlacePoint(4, new PointD(200, 150));
+            graphViewModel.PlacePoint(5, new PointD(300, 150));
+            graphViewModel.PlacePoint(6, new PointD(100, 200));
+            graphViewModel.PlacePoint(7, new PointD(250, 200));
+            graphViewModel.PlacePoint(8, new PointD(175, 250));
 
             // South America
-            graphViewModel.PlacePoint(9, new PointD(175, 300));
-            graphViewModel.PlacePoint(10, new PointD(125, 350));
-            graphViewModel.PlacePoint(11, new PointD(175, 400));
-            graphViewModel.PlacePoint(12, new PointD(225, 350));
+            graphViewModel.PlacePoint(9, new PointD(175, 350));
+            graphViewModel.PlacePoint(10, new PointD(125, 400));
+            graphViewModel.PlacePoint(11, new PointD(175, 450));
+            graphViewModel.PlacePoint(12, new PointD(225, 400));
 
             // Europe
-            graphViewModel.PlacePoint(13, new PointD(400, 50));
-            graphViewModel.PlacePoint(14, new PointD(500, 50));
-            graphViewModel.PlacePoint(15, new PointD(450, 100));
-            graphViewModel.PlacePoint(16, new PointD(500, 150));
-            graphViewModel.PlacePoint(17, new PointD(550, 100));
-            graphViewModel.PlacePoint(18, new PointD(450, 200));
-            graphViewModel.PlacePoint(19, new PointD(550, 200));
+            graphViewModel.PlacePoint(13, new PointD(400, 100));
+            graphViewModel.PlacePoint(14, new PointD(500, 100));
+            graphViewModel.PlacePoint(15, new PointD(450, 150));
+            graphViewModel.PlacePoint(16, new PointD(500, 200));
+            graphViewModel.PlacePoint(17, new PointD(550, 150));
+            graphViewModel.PlacePoint(18, new PointD(450, 250));
+            graphViewModel.PlacePoint(19, new PointD(550, 250));
 
             // Africa
-            graphViewModel.PlacePoint(20, new PointD(450, 300));
-            graphViewModel.PlacePoint(21, new PointD(550, 300));
-            graphViewModel.PlacePoint(22, new PointD(600, 350));
-            graphViewModel.PlacePoint(23, new PointD(500, 350));
-            graphViewModel.PlacePoint(24, new PointD(500, 400));
-            graphViewModel.PlacePoint(25, new PointD(600, 400));
+            graphViewModel.PlacePoint(20, new PointD(450, 350));
+            graphViewModel.PlacePoint(21, new PointD(550, 350));
+            graphViewModel.PlacePoint(22, new PointD(600, 400));
+            graphViewModel.PlacePoint(23, new PointD(500, 400));
+            graphViewModel.PlacePoint(24, new PointD(500, 450));
+            graphViewModel.PlacePoint(25, new PointD(600, 450));
 
             // Asia
-            graphViewModel.PlacePoint(26, new PointD(900, 100));
-            graphViewModel.PlacePoint(27, new PointD(800, 100));
-            graphViewModel.PlacePoint(28, new PointD(1000, 100));
-            graphViewModel.PlacePoint(29, new PointD(1000, 150));
-            graphViewModel.PlacePoint(30, new PointD(900, 150));
-            graphViewModel.PlacePoint(31, new PointD(725, 175));
-            graphViewModel.PlacePoint(32, new PointD(900, 200));
-            graphViewModel.PlacePoint(33, new PointD(1000, 200));
-            graphViewModel.PlacePoint(34, new PointD(825, 175));
-            graphViewModel.PlacePoint(35, new PointD(675, 250));
-            graphViewModel.PlacePoint(36, new PointD(775, 250));
-            graphViewModel.PlacePoint(37, new PointD(850, 250));
+            graphViewModel.PlacePoint(26, new PointD(825, 150));
+            graphViewModel.PlacePoint(27, new PointD(725, 150));
+            graphViewModel.PlacePoint(28, new PointD(875, 100));
+            graphViewModel.PlacePoint(29, new PointD(1025, 50));
+            graphViewModel.PlacePoint(30, new PointD(925, 150));
+            graphViewModel.PlacePoint(31, new PointD(725, 225));
+            graphViewModel.PlacePoint(32, new PointD(925, 225));
+            graphViewModel.PlacePoint(33, new PointD(1025, 225));
+            graphViewModel.PlacePoint(34, new PointD(825, 225));
+            graphViewModel.PlacePoint(35, new PointD(675, 300));
+            graphViewModel.PlacePoint(36, new PointD(775, 300));
+            graphViewModel.PlacePoint(37, new PointD(875, 300));
 
             // Oceania
-            graphViewModel.PlacePoint(38, new PointD(850, 350));
-            graphViewModel.PlacePoint(39, new PointD(950, 350));
-            graphViewModel.PlacePoint(40, new PointD(850, 400));
-            graphViewModel.PlacePoint(41, new PointD(950, 400));
+            graphViewModel.PlacePoint(38, new PointD(875, 400));
+            graphViewModel.PlacePoint(39, new PointD(975, 400));
+            graphViewModel.PlacePoint(40, new PointD(875, 450));
+            graphViewModel.PlacePoint(41, new PointD(975, 450));
         }
     }
 }

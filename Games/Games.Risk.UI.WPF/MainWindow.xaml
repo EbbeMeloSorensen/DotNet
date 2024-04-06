@@ -87,12 +87,16 @@
             <graph:GraphView Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
                              DataContext="{Binding MapViewModel}"/>
 
-            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="450"
-                    Visibility="{Binding AttackVectorVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="500"
+                    Visibility="{Binding ActiveTerritoryHighlighted, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Ellipse Fill="Transparent" Stroke="Black" StrokeThickness="6" 
                          Width="40" Height="40" 
                          Canvas.Left="{Binding SelectedVertexCanvasPosition.X}" 
                          Canvas.Top="{Binding SelectedVertexCanvasPosition.Y}"/>
+            </Canvas>
+
+            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="500"
+                    Visibility="{Binding AttackVectorVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Ellipse Fill="Transparent" Stroke="Black" StrokeThickness="3" 
                          Width="40" Height="40" 
                          Canvas.Left="{Binding SelectedTargetVertexCanvasPosition.X}" 
@@ -104,7 +108,6 @@
                       Y2="{Binding SelectedTargetVertexCanvasPosition.Y, Converter={StaticResource DoubleAdder}, ConverterParameter={StaticResource Shift}}">
                 </Line>
             </Canvas>
-
 
             <Expander Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Header="Log" ExpandDirection="Up" IsExpanded="True">
                 <logging:LogView DataContext="{Binding LogViewModel}"/>

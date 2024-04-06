@@ -62,58 +62,58 @@ namespace Craft.UIElements.GuiTest.Tab5
         private void StyleGraph()
         {
             // North America
-            GraphViewModel.PlacePoint(0, new Utils.PointD(50, 50 + 50));
-            GraphViewModel.PlacePoint(1, new Utils.PointD(150, 50 + 50));
-            GraphViewModel.PlacePoint(2, new Utils.PointD(300, 50 + 50));
-            GraphViewModel.PlacePoint(3, new Utils.PointD(100, 100 + 50));
-            GraphViewModel.PlacePoint(4, new Utils.PointD(200, 100 + 50));
-            GraphViewModel.PlacePoint(5, new Utils.PointD(300, 100 + 50));
-            GraphViewModel.PlacePoint(6, new Utils.PointD(100, 150 + 50));
-            GraphViewModel.PlacePoint(7, new Utils.PointD(250, 150 + 50));
-            GraphViewModel.PlacePoint(8, new Utils.PointD(175, 200 + 50));
+            GraphViewModel.PlacePoint(0, new PointD(50, 50));
+            GraphViewModel.PlacePoint(1, new PointD(150, 100));
+            GraphViewModel.PlacePoint(2, new PointD(300, 100));
+            GraphViewModel.PlacePoint(3, new PointD(100, 150));
+            GraphViewModel.PlacePoint(4, new PointD(200, 150));
+            GraphViewModel.PlacePoint(5, new PointD(300, 150));
+            GraphViewModel.PlacePoint(6, new PointD(100, 200));
+            GraphViewModel.PlacePoint(7, new PointD(250, 200));
+            GraphViewModel.PlacePoint(8, new PointD(175, 250));
 
             // South America
-            GraphViewModel.PlacePoint(9, new Utils.PointD(175, 300 + 50));
-            GraphViewModel.PlacePoint(10, new Utils.PointD(125, 350 + 50));
-            GraphViewModel.PlacePoint(11, new Utils.PointD(175, 400 + 50));
-            GraphViewModel.PlacePoint(12, new Utils.PointD(225, 350 + 50));
+            GraphViewModel.PlacePoint(9, new PointD(175, 350));
+            GraphViewModel.PlacePoint(10, new PointD(125, 400));
+            GraphViewModel.PlacePoint(11, new PointD(175, 450));
+            GraphViewModel.PlacePoint(12, new PointD(225, 400));
 
             // Europe
-            GraphViewModel.PlacePoint(13, new Utils.PointD(400, 50 + 50));
-            GraphViewModel.PlacePoint(14, new Utils.PointD(500, 50 + 50));
-            GraphViewModel.PlacePoint(15, new Utils.PointD(450, 100 + 50));
-            GraphViewModel.PlacePoint(16, new Utils.PointD(500, 150 + 50));
-            GraphViewModel.PlacePoint(17, new Utils.PointD(550, 100 + 50));
-            GraphViewModel.PlacePoint(18, new Utils.PointD(450, 200 + 50));
-            GraphViewModel.PlacePoint(19, new Utils.PointD(550, 200 + 50));
+            GraphViewModel.PlacePoint(13, new PointD(400, 100));
+            GraphViewModel.PlacePoint(14, new PointD(500, 100));
+            GraphViewModel.PlacePoint(15, new PointD(450, 150));
+            GraphViewModel.PlacePoint(16, new PointD(500, 200));
+            GraphViewModel.PlacePoint(17, new PointD(550, 150));
+            GraphViewModel.PlacePoint(18, new PointD(450, 250));
+            GraphViewModel.PlacePoint(19, new PointD(550, 250));
 
             // Africa
-            GraphViewModel.PlacePoint(20, new Utils.PointD(450, 300 + 50));
-            GraphViewModel.PlacePoint(21, new Utils.PointD(550, 300 + 50));
-            GraphViewModel.PlacePoint(22, new Utils.PointD(600, 350 + 50));
-            GraphViewModel.PlacePoint(23, new Utils.PointD(500, 350 + 50));
-            GraphViewModel.PlacePoint(24, new Utils.PointD(500, 400 + 50));
-            GraphViewModel.PlacePoint(25, new Utils.PointD(600, 400 + 50));
+            GraphViewModel.PlacePoint(20, new PointD(450, 350));
+            GraphViewModel.PlacePoint(21, new PointD(550, 350));
+            GraphViewModel.PlacePoint(22, new PointD(600, 400));
+            GraphViewModel.PlacePoint(23, new PointD(500, 400));
+            GraphViewModel.PlacePoint(24, new PointD(500, 450));
+            GraphViewModel.PlacePoint(25, new PointD(600, 450));
 
             // Asia
-            GraphViewModel.PlacePoint(26, new Utils.PointD(900, 100 + 50));
-            GraphViewModel.PlacePoint(27, new Utils.PointD(800, 100 + 50));
-            GraphViewModel.PlacePoint(28, new Utils.PointD(1000, 100 + 50));
-            GraphViewModel.PlacePoint(29, new Utils.PointD(1000, 150 + 50));
-            GraphViewModel.PlacePoint(30, new Utils.PointD(900, 150 + 50));
-            GraphViewModel.PlacePoint(31, new Utils.PointD(725, 175 + 50));
-            GraphViewModel.PlacePoint(32, new Utils.PointD(900, 200 + 50));
-            GraphViewModel.PlacePoint(33, new Utils.PointD(1000, 200 + 50));
-            GraphViewModel.PlacePoint(34, new Utils.PointD(825, 175 + 50));
-            GraphViewModel.PlacePoint(35, new Utils.PointD(675, 250 + 50));
-            GraphViewModel.PlacePoint(36, new Utils.PointD(775, 250 + 50));
-            GraphViewModel.PlacePoint(37, new Utils.PointD(850, 250 + 50));
+            GraphViewModel.PlacePoint(26, new PointD(825, 150));
+            GraphViewModel.PlacePoint(27, new PointD(725, 150));
+            GraphViewModel.PlacePoint(28, new PointD(875, 100));
+            GraphViewModel.PlacePoint(29, new PointD(1025, 50));
+            GraphViewModel.PlacePoint(30, new PointD(925, 150));
+            GraphViewModel.PlacePoint(31, new PointD(725, 225));
+            GraphViewModel.PlacePoint(32, new PointD(925, 225));
+            GraphViewModel.PlacePoint(33, new PointD(1025, 225));
+            GraphViewModel.PlacePoint(34, new PointD(825, 225));
+            GraphViewModel.PlacePoint(35, new PointD(675, 300));
+            GraphViewModel.PlacePoint(36, new PointD(775, 300));
+            GraphViewModel.PlacePoint(37, new PointD(875, 300));
 
             // Oceania
-            GraphViewModel.PlacePoint(38, new Utils.PointD(850, 350 + 50));
-            GraphViewModel.PlacePoint(39, new Utils.PointD(950, 350 + 50));
-            GraphViewModel.PlacePoint(40, new Utils.PointD(850, 400 + 50));
-            GraphViewModel.PlacePoint(41, new Utils.PointD(950, 400 + 50));
+            GraphViewModel.PlacePoint(38, new PointD(875, 400));
+            GraphViewModel.PlacePoint(39, new PointD(975, 400));
+            GraphViewModel.PlacePoint(40, new PointD(875, 450));
+            GraphViewModel.PlacePoint(41, new PointD(975, 450));
 
             Enumerable
                 .Range(0, 9)

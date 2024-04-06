@@ -125,6 +125,7 @@ public static class GraphGenerator
 
         graph.AddEdge(0, 1);
         graph.AddEdge(0, 3);
+        graph.AddEdge(0, 29);
         graph.AddEdge(1, 2);
         graph.AddEdge(1, 3);
         graph.AddEdge(1, 4);
