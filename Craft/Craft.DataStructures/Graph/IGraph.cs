@@ -32,5 +32,8 @@ namespace Craft.DataStructures.Graph
 
         void AddEdge(
             TE edge);
+
+        public IEnumerable<TE> GetAdjacentEdges(
+            int vertexId);
     }
 }

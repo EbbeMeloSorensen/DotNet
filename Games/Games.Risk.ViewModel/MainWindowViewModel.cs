@@ -26,7 +26,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 1000;
+        private const int _delay = 800;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, Brush> _colorPalette;
         private PointD _selectedVertexCanvasPosition;
@@ -217,10 +217,12 @@ namespace Games.Risk.ViewModel
 
                                 SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
                                 SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
+                                AttackVectorVisible = true;
                                 break;
                             }
                         case PlayerPasses _:
                             {
+                                AttackVectorVisible = false;
                                 break;
                             }
                     }

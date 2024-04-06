@@ -87,7 +87,8 @@
             <graph:GraphView Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
                              DataContext="{Binding MapViewModel}"/>
 
-            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="450" Visibility="Hidden">
+            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="450"
+                    Visibility="{Binding AttackVectorVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Ellipse Fill="Transparent" Stroke="Black" StrokeThickness="6" 
                          Width="40" Height="40" 
                          Canvas.Left="{Binding SelectedVertexCanvasPosition.X}" 

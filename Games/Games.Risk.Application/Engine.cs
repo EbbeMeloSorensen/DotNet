@@ -16,6 +16,7 @@ namespace Games.Risk.Application
         private const int _dieFaces = 6;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, int> _territoryToPlayerMap;
+        private bool _pseudoRandomNumbers;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -46,11 +47,12 @@ namespace Games.Risk.Application
             bool pseudoRandomNumbers,
             IGraph<LabelledVertex, EmptyEdge> graphOfTerritories)
         {
+            _pseudoRandomNumbers = pseudoRandomNumbers;
             _graphOfTerritories = graphOfTerritories;
 
             var playerCount = players.Count();
 
-            if (playerCount < 2 || playerCount > 10)
+            if (playerCount < 2 || playerCount > 6)
             {
                 throw new ArgumentOutOfRangeException("Invalid number of players");
             }
@@ -71,7 +73,10 @@ namespace Games.Risk.Application
                 .ToList();
 
             // Shuffle the vertex ids;
-            vertexIds = vertexIds.OrderBy(_ => Guid.NewGuid()).ToList();
+            if (!_pseudoRandomNumbers)
+            {
+                vertexIds = vertexIds.OrderBy(_ => Guid.NewGuid()).ToList();
+            }
 
             _territoryToPlayerMap = new Dictionary<int, int>();
 
@@ -92,7 +97,7 @@ namespace Games.Risk.Application
         {
             await Task.Delay(1);
 
-            if (_random.Next(3) == 0)
+            if (_random.Next(4) == 0)
             {
                 return Pass();
             }
@@ -162,14 +167,36 @@ namespace Games.Risk.Application
 
         private IGameEvent Attack()
         {
-            var indexOfSourceVertex = _random.Next(0, _graphOfTerritories.VertexCount);
-            int indexOfTargetVertex;
+            // Which vertices are controlled by the current player?
+            var vertexIndexes = _territoryToPlayerMap
+                .Where(_ => _.Value == CurrentPlayerIndex)
+                .Select(_ => _.Key)
+                .ToList();
 
-            do
+            // Traverse all those vertices and identify neighbours controlled by other players
+            var options = new List<Tuple<int, int>>();
+
+            vertexIndexes.ForEach(vertexIndex =>
+            //foreach (var vertexIndex in vertexIndexes)
             {
-                indexOfTargetVertex = _random.Next(0, _graphOfTerritories.VertexCount);
-            } while (indexOfTargetVertex == indexOfSourceVertex);
+                var adjacentEdges = _graphOfTerritories.GetAdjacentEdges(vertexIndex);
 
+                var neighbourIds = adjacentEdges.Select(_ => _.VertexId1 == vertexIndex ? _.VertexId2 : _.VertexId1);
+
+                foreach (var neighbourId in neighbourIds)
+                {
+                    if (!vertexIndexes.Contains(neighbourId))
+                    {
+                        options.Add(new Tuple<int, int>(vertexIndex, neighbourId));
+                    }
+                }
+            });
+
+            var randomIndex = _random.Next(0, options.Count);
+            var selectedOption = options[randomIndex];
+
+            var indexOfSourceVertex = selectedOption.Item1;
+            var indexOfTargetVertex = selectedOption.Item2;
 
             var gameEvent = new PlayerAttacks(
                 CurrentPlayerIndex,
