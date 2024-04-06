@@ -43,7 +43,7 @@ namespace Games.Risk.ViewModel
         private bool _gameDecided;
         private string _gameResultMessage;
         private int _pot;
-        private int? _indexOfActiveTerritory;
+        //private int? _indexOfActiveTerritory; // So far not used
         private int? _indexOfTargetTerritory;
         private int[] _indexesOfHostileNeighbours;
 
@@ -225,12 +225,12 @@ namespace Games.Risk.ViewModel
                 }
                 
                 if (_application.Engine.CurrentPlayerIndex !=
-                    _application.Engine.IdOfPlayerCurrentlyControllingTerritory(territoryId))
+                    _application.Engine.GetTerritoryStatus(territoryId).ControllingPlayerIndex)
                 {
                     return;
                 }
 
-                _indexOfActiveTerritory = territoryId;
+                //_indexOfActiveTerritory = territoryId;
                 _indexOfTargetTerritory = null;
                 SelectedVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
                 ActiveTerritoryHighlighted = true;
@@ -437,12 +437,14 @@ namespace Games.Risk.ViewModel
             PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
             Pot = _application.Engine.Pot;
 
-            // Colors on map
+            // Colors and numbers on map
             _graphOfTerritories.Vertices.ForEach(_ =>
             {
-                var playerId = _application.Engine.IdOfPlayerCurrentlyControllingTerritory(_.Id);
-
-                MapViewModel.AssignBrushToPoint(_.Id, _colorPalette[playerId]);
+                var territoryStatus = _application.Engine.GetTerritoryStatus(_.Id);
+                MapViewModel.StylePoint(
+                    _.Id, 
+                    _colorPalette[territoryStatus.ControllingPlayerIndex],
+                    territoryStatus.Armies.ToString());
             });
         }
 

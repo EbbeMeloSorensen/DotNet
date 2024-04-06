@@ -119,11 +119,14 @@ namespace Craft.ViewModels.Graph
             UpdateLines();
         }
 
-        public void AssignBrushToPoint(
+        public void StylePoint(
             int pointIndex,
-            Brush brush)
+            Brush brush,
+            string label)
         {
-            PointViewModels[pointIndex].Brush = brush;
+            var pointViewModel = PointViewModels[pointIndex];
+            pointViewModel.Brush = brush;
+            pointViewModel.Label = label;
         }
 
         // Handler for when a PointViewModel is clicked

@@ -15,7 +15,7 @@ namespace Games.Risk.Application
         private const int _targetScore = 100;
         private const int _dieFaces = 6;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
-        private Dictionary<int, int> _territoryToPlayerMap;
+        private Dictionary<int, TerritoryStatus> _territoryStatusMap;
         private bool _pseudoRandomNumbers;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
@@ -78,12 +78,16 @@ namespace Games.Risk.Application
                 vertexIds = vertexIds.OrderBy(_ => Guid.NewGuid()).ToList();
             }
 
-            _territoryToPlayerMap = new Dictionary<int, int>();
+            _territoryStatusMap = new Dictionary<int, TerritoryStatus>();
 
             var playerId = 0;
             foreach (var vertexId in vertexIds)
             {
-                _territoryToPlayerMap[vertexId] = playerId;
+                _territoryStatusMap[vertexId] = new TerritoryStatus
+                {
+                    ControllingPlayerIndex = playerId,
+                    Armies = 10
+                };
                 playerId = (playerId + 1) % PlayerCount;
             }
 
@@ -127,10 +131,10 @@ namespace Games.Risk.Application
             }
         }
 
-        public int IdOfPlayerCurrentlyControllingTerritory(
+        public TerritoryStatus GetTerritoryStatus(
             int territoryId)
         {
-            return _territoryToPlayerMap[territoryId];
+            return _territoryStatusMap[territoryId];
         }
 
         public IEnumerable<int> IndexesOfHostileNeighbourTerritories(
@@ -140,7 +144,7 @@ namespace Games.Risk.Application
             var neighbourIds = adjacentEdges.Select(_ => _.VertexId1 == territoryId ? _.VertexId2 : _.VertexId1);
 
             return neighbourIds.Except(
-                _territoryToPlayerMap.Where(_ => _.Value == CurrentPlayerIndex).Select(_ => _.Key));
+                _territoryStatusMap.Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex).Select(_ => _.Key));
         }
 
         private IGameEvent RollDie()
@@ -178,8 +182,8 @@ namespace Games.Risk.Application
         private IGameEvent Attack()
         {
             // Which vertices are controlled by the current player?
-            var vertexIndexes = _territoryToPlayerMap
-                .Where(_ => _.Value == CurrentPlayerIndex)
+            var vertexIndexes = _territoryStatusMap
+                .Where(_ => _.Value.ControllingPlayerIndex== CurrentPlayerIndex)
                 .Select(_ => _.Key)
                 .ToList();
 

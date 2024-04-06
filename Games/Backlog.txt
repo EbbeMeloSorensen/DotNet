@@ -1,12 +1,13 @@
 Done:
-* Ingen Task.Delays - vent på user keypress i stedet
-* En automatisk spiller passer med 25 % sandsynlighed og "angriber"" med 75% sandsynlighed.
+* (Pig - console) Ingen Task.Delays - vent på user keypress i stedet
+* (Pig) Mulighed for at spille igen, når spillet er afgjort
+* (Pig) Når pot er på 0, skal man kun have mulighed for at rulle terningen
+* (Pig) Spillet skal slutte, når en spiller når en score på 100 eller 20
+* (Risk) En automatisk spiller passer med 25 % sandsynlighed og "angriber"" med 75% sandsynlighed.
+* (Risk) Fremhæv spillerens valg af 1 eller 2 vertices med cirkler samt en pil, der går fra den ene til den anden
 
-Todo
-* I første omgang indebærer et angreb blot at 2 tilfældige vertices fremhæves med en pil fra den ene til den anden
-
-* Fremhæv spillerens valg af 2 vertices med cirkler samt en pil, der går fra den ene til den anden
-* Spillet skal slutte, når en spiller når en score på 100 eller 20
-* Når pot er på 0, skal man kun have mulighed for at rulle terningen
-* En velkomst og introduktion til spillet
-* Mulighed for at spille igen, når spillet er afgjort
+Todo 
+* (Risk) Der skal være et antal armeer på hver vertex, som vises i stedet for navnet
+  - engine skal kende antallet ligesom den ved, hvilken spiller der kontrollerer et territorium
+* (Risk) Navne på territorier vises på lag over GraphViewet
+* (Pig) En velkomst og introduktion til spillet
