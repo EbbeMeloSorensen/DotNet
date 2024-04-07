@@ -86,7 +86,7 @@ namespace Games.Risk.Application
                 _territoryStatusMap[vertexId] = new TerritoryStatus
                 {
                     ControllingPlayerIndex = playerId,
-                    Armies = 5
+                    Armies = 16
                 };
                 playerId = (playerId + 1) % PlayerCount;
             }
@@ -198,8 +198,17 @@ namespace Games.Risk.Application
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
             {
                 _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex = CurrentPlayerIndex;
-                _territoryStatusMap[targetTerritoryIndex].Armies = _territoryStatusMap[activeTerritoryIndex].Armies - 1;
-                _territoryStatusMap[activeTerritoryIndex].Armies = 1;
+
+                // For nu flytter vi havldelen over (rundet ned)
+                var armiesLeft = _territoryStatusMap[activeTerritoryIndex].Armies;
+                _territoryStatusMap[targetTerritoryIndex].Armies = armiesLeft / 2;
+                _territoryStatusMap[activeTerritoryIndex].Armies = armiesLeft - armiesLeft / 2;
+
+                if (_territoryStatusMap.All(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex))
+                {
+                    GameDecided = true;
+                    GameInProgress = false;
+                }
             }
 
             var gameEvent = new PlayerAttacks(
