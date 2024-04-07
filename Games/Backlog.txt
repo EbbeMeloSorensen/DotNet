@@ -7,8 +7,10 @@ Done:
 * (Risk) Fremhæv spillerens valg af 1 eller 2 vertices med cirkler samt en pil, der går fra den ene til den anden
 * (Risk) Der skal være et antal armeer på hver vertex, som vises i stedet for navnet
   - engine skal kende antallet ligesom den ved, hvilken spiller der kontrollerer et territorium
+* (Risk) Et angreb foranlediger, at der trækkes 1 fra target vertex
 
 Todo 
-* (Risk) Et angreb foranlediger, at der trækkes 1 fra target vertex
+* (Risk) Et angreb er kun en option, hvis der er 2 eller flere spillere
+* (Risk) Når sidste arme for et territorium nedkæmpes, erobres territoriet, og alle pånær én arme rykkes over
 * (Risk) Navne på territorier vises på lag over GraphViewet
 * (Pig) En velkomst og introduktion til spillet

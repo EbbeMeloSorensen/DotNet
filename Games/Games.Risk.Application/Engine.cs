@@ -86,7 +86,7 @@ namespace Games.Risk.Application
                 _territoryStatusMap[vertexId] = new TerritoryStatus
                 {
                     ControllingPlayerIndex = playerId,
-                    Armies = 3
+                    Armies = 5
                 };
                 playerId = (playerId + 1) % PlayerCount;
             }
@@ -103,7 +103,8 @@ namespace Games.Risk.Application
 
             if (_random.Next(4) == 0)
             {
-                return Pass();
+                // Temporarily outcommented
+                //return Pass();
             }
 
             var options = IdentifyOptionsForCurrentPlayer();
@@ -194,6 +195,13 @@ namespace Games.Risk.Application
         {
             _territoryStatusMap[targetTerritoryIndex].Armies -= 1;
 
+            if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
+            {
+                _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex = CurrentPlayerIndex;
+                _territoryStatusMap[targetTerritoryIndex].Armies = _territoryStatusMap[activeTerritoryIndex].Armies - 1;
+                _territoryStatusMap[activeTerritoryIndex].Armies = 1;
+            }
+
             var gameEvent = new PlayerAttacks(
                 CurrentPlayerIndex,
                 $"Player {CurrentPlayerIndex + 1} attacks",
@@ -231,6 +239,11 @@ namespace Games.Risk.Application
 
             vertexIndexes.ForEach(vertexIndex =>
             {
+                if (_territoryStatusMap[vertexIndex].Armies == 1)
+                {
+                    return;
+                }
+
                 var adjacentEdges = _graphOfTerritories.GetAdjacentEdges(vertexIndex);
 
                 var neighbourIds = adjacentEdges.Select(_ => _.VertexId1 == vertexIndex ? _.VertexId2 : _.VertexId1);
