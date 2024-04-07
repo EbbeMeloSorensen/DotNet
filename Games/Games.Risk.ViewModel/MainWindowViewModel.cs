@@ -42,7 +42,6 @@ namespace Games.Risk.ViewModel
         private bool _gameInProgress;
         private bool _gameDecided;
         private string _gameResultMessage;
-        private int _pot;
         private int? _indexOfActiveTerritory;
         private int? _indexOfTargetTerritory;
         private int[] _indexesOfHostileNeighbours;
@@ -120,16 +119,6 @@ namespace Games.Risk.ViewModel
             set
             {
                 _gameResultMessage = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int Pot
-        {
-            get => _pot;
-            private set
-            {
-                _pot = value;
                 RaisePropertyChanged();
             }
         }
@@ -257,8 +246,6 @@ namespace Games.Risk.ViewModel
                     _application.Logger?.WriteLine(
                         LogMessageCategory.Information,
                         gameEvent.Description);
-
-                    Pot = _application.Engine.Pot;
 
                     switch (gameEvent)
                     {
@@ -390,19 +377,7 @@ namespace Games.Risk.ViewModel
                 LogMessageCategory.Information,
                 gameEvent.Description);
 
-            Pot = _application.Engine.Pot;
-
-            if (Pot == 0)
-            {
-                PlayerHasInitiative = false;
-                HighlightCurrentPlayer();
-                UpdateCommandAvailability();
-                await Proceed();
-            }
-            else
-            {
-                UpdateCommandAvailability();
-            }
+            UpdateCommandAvailability();
         }
 
         private bool CanAttack()
@@ -423,7 +398,6 @@ namespace Games.Risk.ViewModel
             _indexOfTargetTerritory = null;
             _indexesOfHostileNeighbours = new int[] { };
 
-            Pot = _application.Engine.Pot;
             UpdateScore(gameEvent.PlayerIndex);
 
             if (_application.Engine.GameDecided)
@@ -454,7 +428,6 @@ namespace Games.Risk.ViewModel
             GameInProgress = _application.Engine.GameInProgress;
             GameDecided = _application.Engine.GameDecided;
             PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
-            Pot = _application.Engine.Pot;
 
             // Colors and numbers on map
             _graphOfTerritories.Vertices.ForEach(_ =>

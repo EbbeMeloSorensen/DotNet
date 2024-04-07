@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.DataStructures.Graph;
@@ -28,8 +27,6 @@ namespace Games.Risk.Application
         public int CurrentPlayerIndex { get; private set; }
 
         public int[] PlayerScores { get; }
-
-        public int Pot { get; private set; }
 
         public bool GameInProgress { get; private set; }
 
@@ -113,8 +110,8 @@ namespace Games.Risk.Application
             var selectedOption = options[randomIndex];
 
             return Attack(
-                selectedOption.Item1,
-                selectedOption.Item2);
+                selectedOption.IndexOfTerritoryWhereAttackOriginates,
+                selectedOption.IndexOfTerritoryUnderAttack);
         }
 
         public async Task<IGameEvent> PlayerSelectsOption(
@@ -155,38 +152,6 @@ namespace Games.Risk.Application
 
             return neighbourIds.Except(
                 _territoryStatusMap.Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex).Select(_ => _.Key));
-        }
-
-        private IGameEvent RollDie()
-        {
-            var dieRoll = _random.Next(1, _dieFaces + 1);
-            var sb = new StringBuilder($"Player {CurrentPlayerIndex + 1} rolls die and gets {dieRoll}");
-
-            if (dieRoll == 1)
-            {
-                Pot = 0;
-                sb.Append($" => Player {CurrentPlayerIndex + 1} looses turn and pot is reset");
-            }
-            else
-            {
-                Pot += dieRoll;
-                sb.Append($" => Pot is now at {Pot}");
-            }
-
-            var gameEvent = new PlayerRollsDie(
-                CurrentPlayerIndex,
-                sb.ToString(),
-                dieRoll == 1)
-            {
-                DieRoll = dieRoll
-            };
-
-            if (dieRoll == 1)
-            {
-                CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
-            }
-
-            return gameEvent;
         }
 
         private IGameEvent Attack(
@@ -235,7 +200,7 @@ namespace Games.Risk.Application
             return gameEvent;
         }
 
-        private List<Tuple<int, int>> IdentifyOptionsForCurrentPlayer()
+        private List<AttackOption> IdentifyOptionsForCurrentPlayer()
         {
             // Which vertices are controlled by the current player?
             var vertexIndexes = _territoryStatusMap
@@ -244,7 +209,7 @@ namespace Games.Risk.Application
                 .ToList();
 
             // Traverse all those vertices and identify neighbours controlled by other players
-            var options = new List<Tuple<int, int>>();
+            var options = new List<AttackOption>();
 
             vertexIndexes.ForEach(vertexIndex =>
             {
@@ -261,7 +226,11 @@ namespace Games.Risk.Application
                 {
                     if (!vertexIndexes.Contains(neighbourId))
                     {
-                        options.Add(new Tuple<int, int>(vertexIndex, neighbourId));
+                        options.Add(new AttackOption
+                        {
+                            IndexOfTerritoryWhereAttackOriginates = vertexIndex,
+                            IndexOfTerritoryUnderAttack = neighbourId
+                        });
                     }
                 }
             });
