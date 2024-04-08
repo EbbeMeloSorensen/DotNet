@@ -262,10 +262,6 @@ namespace Games.Risk.ViewModel
                 {
                     var gameEvent = await _application.Engine.ExecuteNextEvent();
 
-                    //_application.Logger?.WriteLine(
-                    //    LogMessageCategory.Information,
-                    //    gameEvent.Description);
-
                     switch (gameEvent)
                     {
                         case PlayerAttacks playerAttacks:
@@ -296,6 +292,13 @@ namespace Games.Risk.ViewModel
                             }
                         case PlayerPasses _:
                             {
+                                if (LoggingActive)
+                                {
+                                    _application.Logger?.WriteLine(
+                                        LogMessageCategory.Information,
+                                        gameEvent.Description);
+                                }
+
                                 ActiveTerritoryHighlighted = false;
                                 AttackVectorVisible = false;
                                 break;
