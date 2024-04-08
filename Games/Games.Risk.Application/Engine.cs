@@ -178,7 +178,7 @@ namespace Games.Risk.Application
 
             var gameEvent = new PlayerAttacks(
                 CurrentPlayerIndex,
-                $"Player {CurrentPlayerIndex + 1} attacks",
+                $"Player {CurrentPlayerIndex + 1} attacks vertex {targetTerritoryIndex} from vertex {activeTerritoryIndex}",
                 false)
             {
                 Vertex1 = activeTerritoryIndex,

@@ -33,6 +33,10 @@
                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
                 <Separator />
             </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem Header="Attack vector" IsCheckable="True"
+                          IsChecked="{Binding DisplayAttackVector}"/>
+            </MenuItem>
         </Menu>
 
         <Grid Background="DarkGray">

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -23,10 +24,12 @@ namespace Games.Risk.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private Dictionary<int, string> _territoryNameMap;
+
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 1;
+        private const int _delay = 1000;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, Brush> _colorPalette;
         private PointD _selectedVertexCanvasPosition;
@@ -45,6 +48,7 @@ namespace Games.Risk.ViewModel
         private int? _indexOfActiveTerritory;
         private int? _indexOfTargetTerritory;
         private int[] _indexesOfHostileNeighbours;
+        private bool _displayAttackVector;
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
@@ -80,6 +84,16 @@ namespace Games.Risk.ViewModel
                 _application.Logger = _loggingActive
                     ? _viewModelLogger
                     : null;
+            }
+        }
+
+        public bool DisplayAttackVector
+        {
+            get => _displayAttackVector;
+            set
+            {
+                _displayAttackVector = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -177,7 +191,7 @@ namespace Games.Risk.ViewModel
             LogViewModel = new LogViewModel();
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
             LoggingActive = true;
-
+            DisplayAttackVector = true;
             PlayerViewModels = new ObservableCollection<PlayerViewModel>();
 
             _colorPalette = new Dictionary<int, Brush>
@@ -191,6 +205,11 @@ namespace Games.Risk.ViewModel
             };
 
             _graphOfTerritories = GenerateGraphOfTerritories();
+
+            _territoryNameMap = _graphOfTerritories.Vertices.ToDictionary(
+                _ => _.Id,
+                _ => _.Label);
+
             _indexesOfHostileNeighbours = new int[]{};
             
             MapViewModel = new GraphViewModel(_graphOfTerritories, 1100, 500)
@@ -243,21 +262,36 @@ namespace Games.Risk.ViewModel
                 {
                     var gameEvent = await _application.Engine.ExecuteNextEvent();
 
-                    _application.Logger?.WriteLine(
-                        LogMessageCategory.Information,
-                        gameEvent.Description);
+                    //_application.Logger?.WriteLine(
+                    //    LogMessageCategory.Information,
+                    //    gameEvent.Description);
 
                     switch (gameEvent)
                     {
                         case PlayerAttacks playerAttacks:
                             {
-                                var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
-                                var point2 = MapViewModel.PointViewModels[playerAttacks.Vertex2].Point;
+                                if (LoggingActive)
+                                {
+                                    var sb = new StringBuilder($"Player {playerAttacks.PlayerIndex + 1}");
+                                    sb.Append($" attacks {_territoryNameMap[playerAttacks.Vertex2]}");
+                                    sb.Append($" from {_territoryNameMap[playerAttacks.Vertex1]}");
 
-                                SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
-                                SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
-                                ActiveTerritoryHighlighted = true;
-                                AttackVectorVisible = true;
+                                    _application.Logger?.WriteLine(
+                                        LogMessageCategory.Information,
+                                        sb.ToString());
+                                }
+
+                                if (DisplayAttackVector)
+                                {
+                                    var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
+                                    var point2 = MapViewModel.PointViewModels[playerAttacks.Vertex2].Point;
+
+                                    SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
+                                    SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
+                                    ActiveTerritoryHighlighted = true;
+                                    AttackVectorVisible = true;
+                                }
+
                                 break;
                             }
                         case PlayerPasses _:
