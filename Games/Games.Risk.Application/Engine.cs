@@ -106,8 +106,6 @@ namespace Games.Risk.Application
 
             if (bestOption.OpportunityRating > 0)
             {
-                _currentPlayerMayReinforce = false;
-
                 return Attack(
                     bestOption.IndexOfTerritoryWhereAttackOriginates,
                     bestOption.IndexOfTerritoryUnderAttack);
@@ -165,6 +163,7 @@ namespace Games.Risk.Application
             int activeTerritoryIndex,
             int targetTerritoryIndex)
         {
+            // Todo: Replace with proper battle dynamics
             _territoryStatusMap[targetTerritoryIndex].Armies -= 1;
 
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
@@ -192,6 +191,8 @@ namespace Games.Risk.Application
                 Vertex2 = targetTerritoryIndex
             };
 
+            _currentPlayerMayReinforce = false;
+
             return gameEvent;
         }
 
@@ -203,16 +204,44 @@ namespace Games.Risk.Application
                 true);
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
+            _currentPlayerMayReinforce = true;
 
             return gameEvent;
         }
 
         private IGameEvent Reinforce()
         {
+            var territoryCount = _territoryStatusMap.Count(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex);
+            var extraArmies = Math.Max(3, territoryCount / 3);
+
+            // For now, just distribute the armies on the territories with the fewest armies
+            var territoryIndexes = new List<int>();
+
+            Enumerable.Repeat(0, extraArmies)
+                .ToList()
+                .ForEach(_ =>
+                {
+                    var territoryIndex = _territoryStatusMap
+                        .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
+                        .OrderBy(_ => _.Value.Armies)
+                        .First()
+                        .Key;
+
+                    _territoryStatusMap[territoryIndex].Armies += 1;
+
+                    territoryIndexes.Add(territoryIndex);
+                });
+
+            var reinforcedTerritoryIndexesAsCSV  = territoryIndexes
+                .Select(_ => _.ToString()).Aggregate((c, n) => $"{c}, {n}");
+
             var gameEvent = new PlayerReinforces(
                 CurrentPlayerIndex,
-                $"Player {CurrentPlayerIndex + 1} reinforces",
+                $"Player {CurrentPlayerIndex + 1} reinforces: {reinforcedTerritoryIndexesAsCSV}",
                 true);
+
+            CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
+            _currentPlayerMayReinforce = true;
 
             return gameEvent;
         }

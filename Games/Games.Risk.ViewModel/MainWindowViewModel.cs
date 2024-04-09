@@ -29,7 +29,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 1000;
+        private const int _delay = 1;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, Brush> _colorPalette;
         private PointD _selectedVertexCanvasPosition;
@@ -265,44 +265,59 @@ namespace Games.Risk.ViewModel
                     switch (gameEvent)
                     {
                         case PlayerAttacks playerAttacks:
+                        {
+                            if (LoggingActive)
                             {
-                                if (LoggingActive)
-                                {
-                                    var sb = new StringBuilder($"Player {playerAttacks.PlayerIndex + 1}");
-                                    sb.Append($" attacks {_territoryNameMap[playerAttacks.Vertex2]}");
-                                    sb.Append($" from {_territoryNameMap[playerAttacks.Vertex1]}");
+                                var sb = new StringBuilder($"Player {playerAttacks.PlayerIndex + 1}");
+                                sb.Append($" attacks {_territoryNameMap[playerAttacks.Vertex2]}");
+                                sb.Append($" from {_territoryNameMap[playerAttacks.Vertex1]}");
 
-                                    _application.Logger?.WriteLine(
-                                        LogMessageCategory.Information,
-                                        sb.ToString());
-                                }
-
-                                if (DisplayAttackVector)
-                                {
-                                    var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
-                                    var point2 = MapViewModel.PointViewModels[playerAttacks.Vertex2].Point;
-
-                                    SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
-                                    SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
-                                    ActiveTerritoryHighlighted = true;
-                                    AttackVectorVisible = true;
-                                }
-
-                                break;
+                                _application.Logger?.WriteLine(
+                                    LogMessageCategory.Information,
+                                    sb.ToString());
                             }
+
+                            if (DisplayAttackVector)
+                            {
+                                var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
+                                var point2 = MapViewModel.PointViewModels[playerAttacks.Vertex2].Point;
+
+                                SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
+                                SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
+                                ActiveTerritoryHighlighted = true;
+                                AttackVectorVisible = true;
+                            }
+
+                            break;
+                        }
+                        case PlayerReinforces _:
+                        {
+                            ActiveTerritoryHighlighted = false;
+                            AttackVectorVisible = false;
+
+                            if (LoggingActive)
+                            {
+                                _application.Logger?.WriteLine(
+                                    LogMessageCategory.Information,
+                                    gameEvent.Description);
+                            }
+
+                            break;
+                        }
                         case PlayerPasses _:
-                            {
-                                if (LoggingActive)
-                                {
-                                    _application.Logger?.WriteLine(
-                                        LogMessageCategory.Information,
-                                        gameEvent.Description);
-                                }
+                        {
+                            ActiveTerritoryHighlighted = false;
+                            AttackVectorVisible = false;
 
-                                ActiveTerritoryHighlighted = false;
-                                AttackVectorVisible = false;
-                                break;
+                            if (LoggingActive)
+                            {
+                                _application.Logger?.WriteLine(
+                                    LogMessageCategory.Information,
+                                    gameEvent.Description);
                             }
+
+                            break;
+                        }
                     }
 
                     await Task.Delay(_delay);
