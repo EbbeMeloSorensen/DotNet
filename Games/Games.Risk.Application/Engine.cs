@@ -16,6 +16,7 @@ namespace Games.Risk.Application
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, TerritoryStatus> _territoryStatusMap;
         private bool _pseudoRandomNumbers;
+        private bool _currentPlayerMayReinforce;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -90,6 +91,7 @@ namespace Games.Risk.Application
 
             GameInProgress = true;
             CurrentPlayerIndex = 0;
+            _currentPlayerMayReinforce = true;
 
             Logger?.WriteLine(LogMessageCategory.Information, $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
         }
@@ -98,20 +100,25 @@ namespace Games.Risk.Application
         {
             await Task.Delay(1);
 
-            if (_random.Next(4) == 0)
-            {
-                // Temporarily outcommented
-                //return Pass();
-            }
-
             var options = IdentifyOptionsForCurrentPlayer();
 
-            var randomIndex = _random.Next(0, options.Count);
-            var selectedOption = options[randomIndex];
+            var bestOption = options.OrderByDescending(_ => _.OpportunityRating).First();
 
-            return Attack(
-                selectedOption.IndexOfTerritoryWhereAttackOriginates,
-                selectedOption.IndexOfTerritoryUnderAttack);
+            if (bestOption.OpportunityRating > 0)
+            {
+                _currentPlayerMayReinforce = false;
+
+                return Attack(
+                    bestOption.IndexOfTerritoryWhereAttackOriginates,
+                    bestOption.IndexOfTerritoryUnderAttack);
+            }
+
+            if (_currentPlayerMayReinforce)
+            {
+                return Reinforce();
+            }
+
+            return Pass();
         }
 
         public async Task<IGameEvent> PlayerSelectsOption(
@@ -200,6 +207,16 @@ namespace Games.Risk.Application
             return gameEvent;
         }
 
+        private IGameEvent Reinforce()
+        {
+            var gameEvent = new PlayerReinforces(
+                CurrentPlayerIndex,
+                $"Player {CurrentPlayerIndex + 1} reinforces",
+                true);
+
+            return gameEvent;
+        }
+
         private List<AttackOption> IdentifyOptionsForCurrentPlayer()
         {
             // Which vertices are controlled by the current player?
@@ -217,19 +234,24 @@ namespace Games.Risk.Application
                 {
                     return;
                 }
-
+                
                 var adjacentEdges = _graphOfTerritories.GetAdjacentEdges(vertexIndex);
 
                 var neighbourIds = adjacentEdges.Select(_ => _.VertexId1 == vertexIndex ? _.VertexId2 : _.VertexId1);
+
+                var armiesInTerritory = _territoryStatusMap[vertexIndex].Armies;
 
                 foreach (var neighbourId in neighbourIds)
                 {
                     if (!vertexIndexes.Contains(neighbourId))
                     {
+                        var armiesInOpposingTerritory = _territoryStatusMap[neighbourId].Armies;
+
                         options.Add(new AttackOption
                         {
                             IndexOfTerritoryWhereAttackOriginates = vertexIndex,
-                            IndexOfTerritoryUnderAttack = neighbourId
+                            IndexOfTerritoryUnderAttack = neighbourId,
+                            OpportunityRating = armiesInTerritory - armiesInOpposingTerritory
                         });
                     }
                 }
