@@ -102,6 +102,11 @@ namespace Games.Risk.Application
 
             var options = IdentifyOptionsForCurrentPlayer();
 
+            if (options.Count == 0)
+            {
+                return Pass();
+            }
+
             var bestOption = options.OrderByDescending(_ => _.OpportunityRating).First();
 
             if (bestOption.OpportunityRating > 0)
