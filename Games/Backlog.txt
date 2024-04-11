@@ -8,9 +8,20 @@ Done:
 * (Risk) Der skal være et antal armeer på hver vertex, som vises i stedet for navnet
   - engine skal kende antallet ligesom den ved, hvilken spiller der kontrollerer et territorium
 * (Risk) Et angreb foranlediger, at der trækkes 1 fra target vertex
+* (Risk) Et angreb er kun en option, hvis der er 2 eller flere armies på et territorium
+* (Risk) Når sidste arme for et territorium nedkæmpes, erobres territoriet, og halvdelen af armeerne rundet ned rykkes over
+
+* In progress
 
 Todo 
-* (Risk) Et angreb er kun en option, hvis der er 2 eller flere spillere
-* (Risk) Når sidste arme for et territorium nedkæmpes, erobres territoriet, og alle pånær én arme rykkes over
 * (Risk) Navne på territorier vises på lag over GraphViewet
+* (Risk) Reinforcement - Der skal ikke være et bias mod at den starter i Nordamerika
+* (Risk) I starten af hver runde - hvis en spiller har et helt kontinent, skal vedkommende have ekstra armeer
+* (Risk) Rigtige game mechanics
+* (Risk) Valg blandt options for computer player - der skal være en bonus til en option, hvis der kun er et enkelt fjendtligt naboområde
+* (Risk) 
+* (Risk) 
+* (Risk) 
+* (Risk) 
+* (Risk) 
 * (Pig) En velkomst og introduktion til spillet

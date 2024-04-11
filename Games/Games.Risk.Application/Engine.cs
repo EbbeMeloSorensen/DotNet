@@ -84,7 +84,7 @@ namespace Games.Risk.Application
                 _territoryStatusMap[vertexId] = new TerritoryStatus
                 {
                     ControllingPlayerIndex = playerId,
-                    Armies = 16
+                    Armies = 3
                 };
                 playerId = (playerId + 1) % PlayerCount;
             }
@@ -243,7 +243,10 @@ namespace Games.Risk.Application
             var gameEvent = new PlayerReinforces(
                 CurrentPlayerIndex,
                 $"Player {CurrentPlayerIndex + 1} reinforces: {reinforcedTerritoryIndexesAsCSV}",
-                true);
+                true)
+            {
+                TerritoryIndexes = territoryIndexes
+            };
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
             _currentPlayerMayReinforce = true;

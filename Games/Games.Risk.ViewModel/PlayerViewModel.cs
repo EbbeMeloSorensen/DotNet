@@ -5,7 +5,6 @@ namespace Games.Risk.ViewModel
 {
     public class PlayerViewModel : ViewModelBase
     {
-        private int _score;
         private bool _hasInitiative;
         private Brush _brush;
 
@@ -17,16 +16,6 @@ namespace Games.Risk.ViewModel
             set
             {
                 _brush = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int Score
-        {
-            get => _score;
-            set
-            {
-                _score = value;
                 RaisePropertyChanged();
             }
         }

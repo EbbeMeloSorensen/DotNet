@@ -2,7 +2,7 @@
 {
     public class LabelledVertex : EmptyVertex
     {
-        public string Label { get; }
+        public string Label { get; set; }
 
         public LabelledVertex(
             string label)

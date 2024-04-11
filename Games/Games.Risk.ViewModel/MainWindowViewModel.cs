@@ -19,6 +19,7 @@ using Craft.ViewModels.Graph;
 using Games.Risk.Application;
 using Games.Risk.Application.GameEvents;
 using Games.Risk.Application.PlayerOptions;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 
 namespace Games.Risk.ViewModel
 {
@@ -29,7 +30,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 1;
+        private const int _delay = 1000;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, Brush> _colorPalette;
         private PointD _selectedVertexCanvasPosition;
@@ -69,9 +70,11 @@ namespace Games.Risk.ViewModel
         public AsyncCommand PassCommand => _passCommand ??= new AsyncCommand(Pass, CanPass);
 
         public GraphViewModel MapViewModel { get; }
+        public ObservableCollection<TerritoryLabelViewModel> TerritoryLabelViewModels { get; }
+
         public LogViewModel LogViewModel { get; }
         public ObservableCollection<PlayerViewModel> PlayerViewModels { get; }
-
+        
         public bool LoggingActive
         {
             get => _loggingActive;
@@ -219,8 +222,22 @@ namespace Games.Risk.ViewModel
 
             ArrangeMapVertices(MapViewModel);
 
+            TerritoryLabelViewModels = new ObservableCollection<TerritoryLabelViewModel>(
+                MapViewModel.PointViewModels.Select(_ => new TerritoryLabelViewModel
+                {
+                    Point = _.Point + new PointD(5, -30),
+                    Text = _.Label
+                }));
+
+            MapViewModel.PointViewModels.ToList().ForEach(_ => _.Label = "");
+
             MapViewModel.VertexClicked += (s, e) =>
             {
+                if (!PlayerHasInitiative)
+                {
+                    return;
+                }
+
                 var territoryId = e.ElementId;
 
                 if (_indexesOfHostileNeighbours.Contains(territoryId))
@@ -290,16 +307,22 @@ namespace Games.Risk.ViewModel
 
                             break;
                         }
-                        case PlayerReinforces _:
+                        case PlayerReinforces playerReinforces:
                         {
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
 
                             if (LoggingActive)
                             {
+                                var sb = new StringBuilder(gameEvent.Description.Substring(0, gameEvent.Description.IndexOf(':') + 2));
+
+                                sb.Append(playerReinforces.TerritoryIndexes
+                                    .Select(_ => _territoryNameMap[_])
+                                    .Aggregate((c, n) => $"{c}, {n}"));
+
                                 _application.Logger?.WriteLine(
                                     LogMessageCategory.Information,
-                                    gameEvent.Description);
+                                    sb.ToString());
                             }
 
                             break;
@@ -320,12 +343,12 @@ namespace Games.Risk.ViewModel
                         }
                     }
 
-                    await Task.Delay(_delay);
+                    await Delay(_delay);
 
                     // Måske lidt overkill - prøv bare at opdatere de 2 vertices, der er i spil
                     SyncControlsWithApplication();
 
-                    await Task.Delay(_delay);
+                    await Delay(_delay);
 
                     if (gameEvent.TurnGoesToNextPlayer)
                     {
@@ -398,8 +421,7 @@ namespace Games.Risk.ViewModel
                     PlayerViewModels.Add(new PlayerViewModel
                     {
                         Name = name,
-                        Brush = _colorPalette[playerIndex],
-                        Score = 0
+                        Brush = _colorPalette[playerIndex]
                     });
                 });
 
@@ -456,14 +478,12 @@ namespace Games.Risk.ViewModel
             _indexOfTargetTerritory = null;
             _indexesOfHostileNeighbours = new int[] { };
 
-            UpdateScore(gameEvent.PlayerIndex);
-
             if (_application.Engine.GameDecided)
             {
                 GameResultMessage = "Congratulations - You Win";
                 GameInProgress = _application.Engine.GameInProgress;
                 GameDecided = _application.Engine.GameDecided;
-                await Task.Delay(_delay);
+                await Delay(_delay);
             }
             else
             {
@@ -513,13 +533,6 @@ namespace Games.Risk.ViewModel
             StartGameCommand.RaiseCanExecuteChanged();
             AttackCommand.RaiseCanExecuteChanged();
             PassCommand.RaiseCanExecuteChanged();
-        }
-
-        private void UpdateScore(
-            int playerIndex)
-        {
-            PlayerViewModels[playerIndex].Score =
-                _application.Engine.PlayerScores[playerIndex];
         }
 
         private static IGraph<LabelledVertex, EmptyEdge> GenerateGraphOfTerritories()
@@ -726,6 +739,15 @@ namespace Games.Risk.ViewModel
             graphViewModel.PlacePoint(39, new PointD(975, 400));
             graphViewModel.PlacePoint(40, new PointD(875, 450));
             graphViewModel.PlacePoint(41, new PointD(975, 450));
+        }
+
+        private async Task Delay(
+            int milliSeconds)
+        {
+            if (milliSeconds > 0)
+            {
+                await Task.Delay(milliSeconds);
+            }
         }
     }
 }
