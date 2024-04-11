@@ -37,5 +37,21 @@ namespace Craft.Utils.Linq
         {
             return sequence.Zip(sequence.Skip(1), (first, second) => new Tuple<T, T>(first, second));
         }
+
+        public static IEnumerable<T> Shuffle<T>(
+            this IEnumerable<T> sequence)
+        {
+            var random = new Random();
+            var list = new List<T>(sequence);
+
+            var n = list.Count();
+
+            for (var i = 0; i < n; i++ )
+            {
+                var k = random.Next(i, n);
+                yield return list[k];
+                list[k] = list[i];
+            }
+        }
     }
 }
