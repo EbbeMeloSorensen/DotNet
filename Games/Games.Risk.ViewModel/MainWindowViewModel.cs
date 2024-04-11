@@ -19,7 +19,6 @@ using Craft.ViewModels.Graph;
 using Games.Risk.Application;
 using Games.Risk.Application.GameEvents;
 using Games.Risk.Application.PlayerOptions;
-using Craft.ViewModels.Geometry2D.ScrollFree;
 
 namespace Games.Risk.ViewModel
 {
@@ -30,7 +29,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 1000;
+        private const int _delay = 0;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, Brush> _colorPalette;
         private PointD _selectedVertexCanvasPosition;

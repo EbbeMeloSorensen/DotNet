@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Craft\Craft.DataStructures\Craft.DataStructures.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
+    <ProjectReference Include="..\..\Craft\Craft.Utils\Craft.Utils.csproj" />
   </ItemGroup>
 
 </Project>

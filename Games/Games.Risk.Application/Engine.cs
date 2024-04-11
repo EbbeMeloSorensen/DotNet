@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.DataStructures.Graph;
+using Craft.Utils.Linq;
 using Games.Risk.Application.GameEvents;
 using Games.Risk.Application.PlayerOptions;
 
@@ -70,11 +71,7 @@ namespace Games.Risk.Application
                 .Select(_ => _.Id)
                 .ToList();
 
-            // Shuffle the vertex ids;
-            if (!_pseudoRandomNumbers)
-            {
-                vertexIds = vertexIds.OrderBy(_ => Guid.NewGuid()).ToList();
-            }
+            vertexIds = vertexIds.Shuffle(_random).ToList();
 
             _territoryStatusMap = new Dictionary<int, TerritoryStatus>();
 
@@ -104,6 +101,12 @@ namespace Games.Risk.Application
 
             if (options.Count == 0)
             {
+                if (_currentPlayerMayReinforce &&
+                    _territoryStatusMap.Any(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex))
+                {
+                    return Reinforce();
+                }
+
                 return Pass();
             }
 
@@ -216,7 +219,22 @@ namespace Games.Risk.Application
 
         private IGameEvent Reinforce()
         {
-            var territoryCount = _territoryStatusMap.Count(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex);
+            var indexesOfTerritoriesControlledByCurrentPlayer = _territoryStatusMap
+                .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
+                .Select(_ => _.Key)
+                .ToList();
+
+            var indexesOfFrontlineTerritories = new List<int>();
+
+            indexesOfTerritoriesControlledByCurrentPlayer.ForEach(vertexId =>
+            {
+                var temp = _graphOfTerritories.GetAdjacentEdges(vertexId)
+                    .Select(_ => vertexId == _.VertexId1 ? _.VertexId2 : _.VertexId1)
+                    .Except(indexesOfTerritoriesControlledByCurrentPlayer)
+                    .ToList();
+            });
+
+            var territoryCount = indexesOfTerritoriesControlledByCurrentPlayer.Count();
             var extraArmies = Math.Max(3, territoryCount / 3);
 
             // For now, just distribute the armies on the territories with the fewest armies
@@ -226,6 +244,8 @@ namespace Games.Risk.Application
                 .ToList()
                 .ForEach(_ =>
                 {
+
+
                     var territoryIndex = _territoryStatusMap
                         .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
                         .OrderBy(_ => _.Value.Armies)

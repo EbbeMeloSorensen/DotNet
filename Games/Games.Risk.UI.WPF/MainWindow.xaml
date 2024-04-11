@@ -92,6 +92,7 @@
                              DataContext="{Binding MapViewModel}"/>
 
             <ItemsControl Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" IsHitTestVisible="False"
+                          Width="1100" Height="500"
                           ItemsSource="{Binding TerritoryLabelViewModels}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
