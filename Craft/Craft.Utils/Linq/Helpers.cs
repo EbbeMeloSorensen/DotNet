@@ -39,9 +39,11 @@ namespace Craft.Utils.Linq
         }
 
         public static IEnumerable<T> Shuffle<T>(
-            this IEnumerable<T> sequence)
+            this IEnumerable<T> sequence,
+            Random? random = null)
         {
-            var random = new Random();
+            random ??= new Random((int)DateTime.UtcNow.Ticks);
+
             var list = new List<T>(sequence);
 
             var n = list.Count();

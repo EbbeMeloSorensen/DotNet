@@ -118,32 +118,32 @@ namespace Craft.UIElements.GuiTest.Tab5
             Enumerable
                 .Range(0, 9)
                 .ToList()
-                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _northAmericaBrush));
+                .ForEach(index => GraphViewModel.StylePoint(index, _northAmericaBrush, ""));
 
             Enumerable
                 .Range(9, 4)
                 .ToList()
-                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _southAmericaBrush));
+                .ForEach(index => GraphViewModel.StylePoint(index, _southAmericaBrush, ""));
 
             Enumerable
                 .Range(13, 7)
                 .ToList()
-                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _europeBrush));
+                .ForEach(index => GraphViewModel.StylePoint(index, _europeBrush, ""));
 
             Enumerable
                 .Range(20, 6)
                 .ToList()
-                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _africaBrush));
+                .ForEach(index => GraphViewModel.StylePoint(index, _africaBrush, ""));
 
             Enumerable
                 .Range(26, 12)
                 .ToList()
-                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _asiaBrush));
+                .ForEach(index => GraphViewModel.StylePoint(index, _asiaBrush, ""));
 
             Enumerable
                 .Range(38, 4)
                 .ToList()
-                .ForEach(index => GraphViewModel.AssignBrushToPoint(index, _oceaniaBrush));
+                .ForEach(index => GraphViewModel.StylePoint(index, _oceaniaBrush, ""));
         }
     }
 }

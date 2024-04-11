@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO.UnitTest", "Craft.DataStructures.IO.UnitTest\Craft.DataStructures.IO.UnitTest.csproj", "{C61A3448-A28D-4A47-A332-358B0CF5E05C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Utils.UnitTest", "Craft.Utils.UnitTest\Craft.Utils.UnitTest.csproj", "{EE7DECD5-0C2B-46A6-91E2-A73809753AFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +149,10 @@ Global
 		{C61A3448-A28D-4A47-A332-358B0CF5E05C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C61A3448-A28D-4A47-A332-358B0CF5E05C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C61A3448-A28D-4A47-A332-358B0CF5E05C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE7DECD5-0C2B-46A6-91E2-A73809753AFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE7DECD5-0C2B-46A6-91E2-A73809753AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE7DECD5-0C2B-46A6-91E2-A73809753AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE7DECD5-0C2B-46A6-91E2-A73809753AFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
