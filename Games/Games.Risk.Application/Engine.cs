@@ -153,22 +153,59 @@ namespace Games.Risk.Application
         public IEnumerable<int> IndexesOfHostileNeighbourTerritories(
             int territoryId)
         {
-            var adjacentEdges = _graphOfTerritories.GetAdjacentEdges(territoryId);
-            var neighbourIds = adjacentEdges.Select(_ => _.VertexId1 == territoryId ? _.VertexId2 : _.VertexId1);
+            return _graphOfTerritories.NeighborIds(territoryId)
+                .Except(IndexesOfControlledTerritories(CurrentPlayerIndex));
+        }
 
-            return neighbourIds.Except(
-                _territoryStatusMap.Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex).Select(_ => _.Key));
+        private IEnumerable<int> IndexesOfControlledTerritories(
+            int playerId)
+        {
+            return _territoryStatusMap
+                .Where(_ => _.Value.ControllingPlayerIndex == playerId)
+                .Select(_ => _.Key);
         }
 
         private IGameEvent Attack(
             int activeTerritoryIndex,
             int targetTerritoryIndex)
         {
-            // Todo: Replace with proper battle dynamics
-            _territoryStatusMap[targetTerritoryIndex].Armies -= 1;
+            var armyCountAttacker = _territoryStatusMap[activeTerritoryIndex].Armies;
+            var armyCountDefender = _territoryStatusMap[targetTerritoryIndex].Armies;
+
+            var diceCountAttacker = Math.Min(armyCountAttacker - 1, 3);
+            var diceCountDefender = Math.Min(armyCountDefender, 2);
+
+            var diceRollsAttacker = Enumerable
+                .Repeat(0, diceCountAttacker)
+                .Select(_ => _random.Next(0, 7))
+                .OrderByDescending(_ => _)
+                .ToList();
+
+            var diceRollsDefender = Enumerable
+                .Repeat(0, diceCountDefender)
+                .Select(_ => _random.Next(0, 7))
+                .OrderByDescending(_ => _)
+                .ToList();
+
+            var comparisons = Math.Min(diceCountAttacker, diceCountDefender);
+
+            diceRollsAttacker = diceRollsAttacker.Take(comparisons).ToList();
+            diceRollsDefender = diceRollsDefender.Take(comparisons).ToList();
+
+            var casualtiesDefender = diceRollsAttacker
+                .Zip(diceRollsDefender, (a, d) => a > d)
+                .Count(_ => _);
+
+            var casualtiesAttacker = comparisons - casualtiesDefender;
+
+            _territoryStatusMap[activeTerritoryIndex].Armies -= casualtiesAttacker;
+            _territoryStatusMap[targetTerritoryIndex].Armies -= casualtiesDefender;
+
+            var territoryConquered = false;
 
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
             {
+                territoryConquered = true;
                 _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex = CurrentPlayerIndex;
 
                 // For nu flytter vi havldelen over (rundet ned)
@@ -189,7 +226,10 @@ namespace Games.Risk.Application
                 false)
             {
                 Vertex1 = activeTerritoryIndex,
-                Vertex2 = targetTerritoryIndex
+                Vertex2 = targetTerritoryIndex,
+                CasualtiesAttacker = casualtiesAttacker,
+                CasualtiesDefender = casualtiesDefender,
+                TerritoryConquered = territoryConquered
             };
 
             _currentPlayerMayReinforce = false;
@@ -223,11 +263,7 @@ namespace Games.Risk.Application
 
             indexesOfTerritoriesControlledByCurrentPlayer.ForEach(vertexId =>
             {
-                var neighbourIndexes = _graphOfTerritories
-                    .GetAdjacentEdges(vertexId)
-                    .Select(_ => vertexId == _.VertexId1 ? _.VertexId2 : _.VertexId1);
-
-                var hostileNeighbourIndexes = neighbourIndexes
+                var hostileNeighbourIndexes = _graphOfTerritories.NeighborIds(vertexId)
                     .Except(indexesOfTerritoriesControlledByCurrentPlayer)
                     .ToList();
 
@@ -297,11 +333,8 @@ namespace Games.Risk.Application
                 {
                     return;
                 }
-                
-                var adjacentEdges = _graphOfTerritories.GetAdjacentEdges(vertexIndex);
 
-                var neighbourIds = adjacentEdges.Select(_ => _.VertexId1 == vertexIndex ? _.VertexId2 : _.VertexId1);
-
+                var neighbourIds = _graphOfTerritories.NeighborIds(vertexIndex);
                 var armiesInTerritory = _territoryStatusMap[vertexIndex].Armies;
 
                 foreach (var neighbourId in neighbourIds)
