@@ -169,5 +169,12 @@ namespace Craft.DataStructures.Graph
 
             return _adjacencyList[vertexId].Select(_ => _.Item2);
         }
+
+        public IEnumerable<int> NeighborIds(
+            int vertexId)
+        {
+            return GetAdjacentEdges(vertexId)
+                .Select(_ => _.VertexId1 == vertexId ? _.VertexId2 : _.VertexId1);
+        }
     }
 }

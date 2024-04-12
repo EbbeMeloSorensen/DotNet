@@ -18,6 +18,11 @@ namespace Craft.DataStructures.Graph
             get { return _vertexCount; }
         }
 
+        public IEnumerable<int> NeighborIds(int vertexId)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsDirected => _directed;
 
         public GraphAdjacencyMatrix(

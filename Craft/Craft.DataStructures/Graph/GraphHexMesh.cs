@@ -9,6 +9,11 @@ namespace Craft.DataStructures.Graph
 
         public int VertexCount { get; }
 
+        public IEnumerable<int> NeighborIds(int vertexId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public bool IsDirected => false;
 
         public GraphHexMesh(

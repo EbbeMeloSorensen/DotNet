@@ -12,6 +12,9 @@ namespace Craft.DataStructures.Graph
         IEnumerable<IEdge> OutgoingEdges(
             int vertexId);
 
+        IEnumerable<int> NeighborIds(
+            int vertexId);
+
         bool IsDirected { get; }
     }
 

@@ -10,6 +10,11 @@ namespace Craft.DataStructures.Graph
 
         public int VertexCount { get; }
 
+        public IEnumerable<int> NeighborIds(int vertexId)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsDirected => false;
 
         public GraphMatrix4Connectivity(

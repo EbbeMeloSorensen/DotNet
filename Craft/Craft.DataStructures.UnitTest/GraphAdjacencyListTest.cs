@@ -89,5 +89,27 @@ namespace Craft.DataStructures.UnitTest
             graph.GetAdjacentEdges(2).Count().Should().Be(2);
             graph.GetAdjacentEdges(3).Count().Should().Be(2);
         }
+
+        [Fact]
+        public void GettingNeighbourIds()
+        {
+            // Arrange
+            var graph = new GraphAdjacencyList<LabelledVertex, LabelledEdge>(true);
+            graph.AddVertex(new LabelledVertex("Ebbe"));
+            graph.AddVertex(new LabelledVertex("Ana"));
+            graph.AddVertex(new LabelledVertex("Anton"));
+            graph.AddVertex(new LabelledVertex("Cecilie"));
+            graph.AddEdge(new LabelledEdge(0, 1, "wife"));
+            graph.AddEdge(new LabelledEdge(2, 0, "parent"));
+            graph.AddEdge(new LabelledEdge(2, 1, "parent"));
+            graph.AddEdge(new LabelledEdge(3, 0, "parent"));
+            graph.AddEdge(new LabelledEdge(3, 1, "parent"));
+
+            // Act
+            var neighborIds = graph.NeighborIds(2);
+
+            // Assert
+            neighborIds.SequenceEqual(new[] {0, 1}).Should().BeTrue();
+        }
     }
 }
