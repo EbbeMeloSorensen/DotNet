@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Craft.Logging;
-using Craft.DataStructures.Graph;
 using Craft.Utils.Linq;
+using Craft.DataStructures.Graph;
 using Games.Risk.Application.GameEvents;
 using Games.Risk.Application.PlayerOptions;
 
@@ -99,27 +99,20 @@ namespace Games.Risk.Application
 
             var options = IdentifyOptionsForCurrentPlayer();
 
-            if (options.Count == 0)
+            if (options.Count > 0)
             {
-                if (_currentPlayerMayReinforce &&
-                    _territoryStatusMap.Any(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex))
+                var bestOption = options.OrderByDescending(_ => _.OpportunityRating).First();
+
+                if (bestOption.OpportunityRating > 0)
                 {
-                    return Reinforce();
+                    return Attack(
+                        bestOption.IndexOfTerritoryWhereAttackOriginates,
+                        bestOption.IndexOfTerritoryUnderAttack);
                 }
-
-                return Pass();
             }
 
-            var bestOption = options.OrderByDescending(_ => _.OpportunityRating).First();
-
-            if (bestOption.OpportunityRating > 0)
-            {
-                return Attack(
-                    bestOption.IndexOfTerritoryWhereAttackOriginates,
-                    bestOption.IndexOfTerritoryUnderAttack);
-            }
-
-            if (_currentPlayerMayReinforce)
+            if (_currentPlayerMayReinforce &&
+                _territoryStatusMap.Any(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex))
             {
                 return Reinforce();
             }
@@ -219,6 +212,8 @@ namespace Games.Risk.Application
 
         private IGameEvent Reinforce()
         {
+            // Tactic: Distribute the armies randomly on the frontline territories with the fewest armies
+
             var indexesOfTerritoriesControlledByCurrentPlayer = _territoryStatusMap
                 .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
                 .Select(_ => _.Key)
@@ -228,29 +223,40 @@ namespace Games.Risk.Application
 
             indexesOfTerritoriesControlledByCurrentPlayer.ForEach(vertexId =>
             {
-                var temp = _graphOfTerritories.GetAdjacentEdges(vertexId)
-                    .Select(_ => vertexId == _.VertexId1 ? _.VertexId2 : _.VertexId1)
+                var neighbourIndexes = _graphOfTerritories
+                    .GetAdjacentEdges(vertexId)
+                    .Select(_ => vertexId == _.VertexId1 ? _.VertexId2 : _.VertexId1);
+
+                var hostileNeighbourIndexes = neighbourIndexes
                     .Except(indexesOfTerritoriesControlledByCurrentPlayer)
                     .ToList();
+
+                if (hostileNeighbourIndexes.Count > 0)
+                {
+                    indexesOfFrontlineTerritories.Add(vertexId);
+                }
             });
 
             var territoryCount = indexesOfTerritoriesControlledByCurrentPlayer.Count();
             var extraArmies = Math.Max(3, territoryCount / 3);
-
-            // For now, just distribute the armies on the territories with the fewest armies
             var territoryIndexes = new List<int>();
 
             Enumerable.Repeat(0, extraArmies)
                 .ToList()
                 .ForEach(_ =>
                 {
-
-
-                    var territoryIndex = _territoryStatusMap
+                    var temp = _territoryStatusMap
                         .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
                         .OrderBy(_ => _.Value.Armies)
-                        .First()
-                        .Key;
+                        .ToList();
+
+                    var minNumberOfArmies = temp.Min(_ => _.Value.Armies);
+
+                    var temp2 = temp
+                        .TakeWhile(_ => _.Value.Armies == minNumberOfArmies)
+                        .ToList();
+
+                    var territoryIndex = temp2.Shuffle(_random).First().Key;
 
                     _territoryStatusMap[territoryIndex].Armies += 1;
 
