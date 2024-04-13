@@ -1,6 +1,5 @@
 ﻿using Craft.Logging;
 using System;
-using System.Diagnostics;
 
 namespace Craft.ViewModel.Utils
 {
@@ -25,7 +24,7 @@ namespace Craft.ViewModel.Utils
             bool startStopWatch)
         {
             message = _logger.WriteLine(category, message, aspect, startStopWatch);
-            _logViewModel.Log += $"{GetCurrentTime()}: {message}\n";
+            _logViewModel.Append($"{GetCurrentTime()}: {message}");
             _logViewModel.LogUpdated = true;
             return message;
         }

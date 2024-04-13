@@ -117,7 +117,8 @@ namespace Games.Race.ViewModel
                 ? new Random(0)
                 : new Random((int)DateTime.UtcNow.Ticks);
 
-            LogViewModel = new LogViewModel();
+            var maxLineCount = 50;
+            LogViewModel = new LogViewModel(maxLineCount);
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
             LoggingActive = true;
 

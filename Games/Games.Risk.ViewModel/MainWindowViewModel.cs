@@ -190,10 +190,11 @@ namespace Games.Risk.ViewModel
             _random = _pseudoRandomNumbers
                 ? new Random(0)
                 : new Random((int)DateTime.UtcNow.Ticks);
-           
-            LogViewModel = new LogViewModel();
+
+            var maxLineCount = 50;
+            LogViewModel = new LogViewModel(maxLineCount);
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
-            LoggingActive = false;
+            LoggingActive = true;
             DisplayAttackVector = true;
             PlayerViewModels = new ObservableCollection<PlayerViewModel>();
 
@@ -342,6 +343,10 @@ namespace Games.Risk.ViewModel
                 GameResultMessage = $"Game Over\nPlayer {_application.Engine.CurrentPlayerIndex + 1} Wins";
                 GameInProgress = _application.Engine.GameInProgress;
                 GameDecided = _application.Engine.GameDecided;
+
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    $"Game decided. Player {_application.Engine.CurrentPlayerIndex + 1} wins");
             }
             else
             {
@@ -403,6 +408,10 @@ namespace Games.Risk.ViewModel
             SyncControlsWithApplication();
             HighlightCurrentPlayer();
             UpdateCommandAvailability();
+
+            _application.Logger?.WriteLine(
+                LogMessageCategory.Information,
+                "New game started");
         }
 
         private bool CanStartGame()

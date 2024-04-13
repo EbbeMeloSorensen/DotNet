@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils.Linq;
 using Craft.DataStructures.Graph;
+using Games.Risk.Application.ComputerPlayerOptions;
 using Games.Risk.Application.GameEvents;
 using Games.Risk.Application.PlayerOptions;
-using Games.Risk.Application.GameOptions;
 
 namespace Games.Risk.Application
 {
@@ -93,7 +93,8 @@ namespace Games.Risk.Application
             _currentPlayerMayReinforce = true;
             _currentPlayerMayTransferArmies = true;
 
-            Logger?.WriteLine(LogMessageCategory.Information, $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
+            Logger?.WriteLine(LogMessageCategory.Information,
+                $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
         }
 
         public async Task<IGameEvent> ExecuteNextEvent()
@@ -122,6 +123,8 @@ namespace Games.Risk.Application
 
             if (_currentPlayerMayTransferArmies)
             {
+                var armyTransferOptions = IdentifyArmyTransferOptionsForCurrentPlayer();
+
                 return TransferArmies();
             }
 
@@ -136,19 +139,19 @@ namespace Games.Risk.Application
             switch (option)
             {
                 case Attack attack:
-                    {
-                        return Attack(
-                            attack.ActiveTerritoryIndex,
-                            attack.TargetTerritoryIndex);
-                    }
+                {
+                    return Attack(
+                        attack.ActiveTerritoryIndex,
+                        attack.TargetTerritoryIndex);
+                }
                 case Pass _:
-                    {
-                        return Pass();
-                    }
+                {
+                    return Pass();
+                }
                 default:
-                    {
-                        throw new InvalidOperationException("Invalid player option");
-                    }
+                {
+                    throw new InvalidOperationException("Invalid player option");
+                }
             }
         }
 
@@ -269,9 +272,7 @@ namespace Games.Risk.Application
         {
             // Tactic: Distribute the armies randomly on the frontline territories with the fewest armies
 
-            var indexesOfTerritoriesControlledByCurrentPlayer = _territoryStatusMap
-                .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
-                .Select(_ => _.Key)
+            var indexesOfTerritoriesControlledByCurrentPlayer = IndexesOfControlledTerritories(CurrentPlayerIndex)
                 .ToList();
 
             var indexesOfFrontlineTerritories = new List<int>();
@@ -314,7 +315,7 @@ namespace Games.Risk.Application
                     territoryIndexes.Add(territoryIndex);
                 });
 
-            var reinforcedTerritoryIndexesAsCSV  = territoryIndexes
+            var reinforcedTerritoryIndexesAsCSV = territoryIndexes
                 .Select(_ => _.ToString()).Aggregate((c, n) => $"{c}, {n}");
 
             var gameEvent = new PlayerReinforces(
@@ -344,6 +345,8 @@ namespace Games.Risk.Application
 
         private List<AttackOption> IdentifyAttackOptionsForCurrentPlayer()
         {
+            var options = new List<AttackOption>();
+
             // Which vertices are controlled by the current player?
             var indexesOfTerritoriesControlledByCurrentPlayer = _territoryStatusMap
                 .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
@@ -351,8 +354,6 @@ namespace Games.Risk.Application
                 .ToList();
 
             // Traverse all those vertices and identify neighbours controlled by other players
-            var options = new List<AttackOption>();
-
             indexesOfTerritoriesControlledByCurrentPlayer.ForEach(vertexIndex =>
             {
                 if (_territoryStatusMap[vertexIndex].Armies == 1)
@@ -386,6 +387,13 @@ namespace Games.Risk.Application
                     });
                 }
             });
+
+            return options;
+        }
+
+        private List<ArmyTransferOption> IdentifyArmyTransferOptionsForCurrentPlayer()
+        {
+            var options = new List<ArmyTransferOption>();
 
             return options;
         }
