@@ -7,6 +7,7 @@ using Craft.Utils.Linq;
 using Craft.DataStructures.Graph;
 using Games.Risk.Application.GameEvents;
 using Games.Risk.Application.PlayerOptions;
+using Games.Risk.Application.GameOptions;
 
 namespace Games.Risk.Application
 {
@@ -99,17 +100,17 @@ namespace Games.Risk.Application
         {
             await Task.Delay(1);
 
-            var options = IdentifyOptionsForCurrentPlayer();
+            var attackOptions = IdentifyAttackOptionsForCurrentPlayer();
 
-            if (options.Count > 0)
+            if (attackOptions.Count > 0)
             {
-                var bestOption = options.OrderByDescending(_ => _.OpportunityRating).First();
+                var bestAttackOption = attackOptions.OrderByDescending(_ => _.OpportunityRating).First();
 
-                if (bestOption.OpportunityRating > 0)
+                if (bestAttackOption.OpportunityRating > 0)
                 {
                     return Attack(
-                        bestOption.IndexOfTerritoryWhereAttackOriginates,
-                        bestOption.IndexOfTerritoryUnderAttack);
+                        bestAttackOption.IndexOfTerritoryWhereAttackOriginates,
+                        bestAttackOption.IndexOfTerritoryUnderAttack);
                 }
             }
 
@@ -341,7 +342,7 @@ namespace Games.Risk.Application
             return gameEvent;
         }
 
-        private List<AttackOption> IdentifyOptionsForCurrentPlayer()
+        private List<AttackOption> IdentifyAttackOptionsForCurrentPlayer()
         {
             // Which vertices are controlled by the current player?
             var indexesOfTerritoriesControlledByCurrentPlayer = _territoryStatusMap

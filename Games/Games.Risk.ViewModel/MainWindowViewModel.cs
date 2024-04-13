@@ -193,7 +193,7 @@ namespace Games.Risk.ViewModel
            
             LogViewModel = new LogViewModel();
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
-            LoggingActive = true;
+            LoggingActive = false;
             DisplayAttackVector = true;
             PlayerViewModels = new ObservableCollection<PlayerViewModel>();
 

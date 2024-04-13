@@ -1,4 +1,4 @@
-﻿namespace Games.Risk.Application
+﻿namespace Games.Risk.Application.GameOptions
 {
     public class AttackOption
     {
