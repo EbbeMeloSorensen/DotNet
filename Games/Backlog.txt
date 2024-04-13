@@ -13,15 +13,17 @@ Done:
 * (Risk) Navne på territorier vises på lag over GraphViewet
 * (Risk) Reinforcement - Der skal ikke være et bias mod at den starter i Nordamerika
 * (Risk) Reinforcement - Den skal kun reinforce frontline territorier
+* (Risk) Rigtige game mechanics
+* (Risk) Valg blandt options for computer player - der skal være en bonus til en option, hvis der kun er et enkelt fjendtligt naboområde og man vel at mærke også er i overtal
+* (Risk) Hvis man erobrer et territorie ved at angribe fra et territorie, der efterfølgende ligger bag frontlinien, så flyttes alle armeer pånær 1 over
+* (Risk) Når man reinforcer skal det kun ske på frontlinieterritorier
 
 In progress:
-* (Risk) Rigtige game mechanics
 
 Todo 
-* (Risk) Valg blandt options for computer player - der skal være en bonus til en option, hvis der kun er et enkelt fjendtligt naboområde
 * (Risk) I starten af hver runde - hvis en spiller har et helt kontinent, skal vedkommende have ekstra armeer
 * (Risk) Der skal være mulighed for at en spiller kan reinforce
-* (Risk) 
+* (Risk) Mulighed for at pause spillet
 * (Risk) 
 * (Risk) 
 * (Risk) 

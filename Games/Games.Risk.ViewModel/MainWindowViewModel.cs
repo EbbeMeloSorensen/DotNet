@@ -192,7 +192,7 @@ namespace Games.Risk.ViewModel
            
             LogViewModel = new LogViewModel();
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
-            LoggingActive = true;
+            LoggingActive = false;
             DisplayAttackVector = true;
             PlayerViewModels = new ObservableCollection<PlayerViewModel>();
 
@@ -282,17 +282,6 @@ namespace Games.Risk.ViewModel
                     {
                         case PlayerAttacks playerAttacks:
                         {
-                            if (LoggingActive)
-                            {
-                                var sb = new StringBuilder($"Player {playerAttacks.PlayerIndex + 1}");
-                                sb.Append($" attacks {_territoryNameMap[playerAttacks.Vertex2]}");
-                                sb.Append($" from {_territoryNameMap[playerAttacks.Vertex1]}");
-
-                                _application.Logger?.WriteLine(
-                                    LogMessageCategory.Information,
-                                    sb.ToString());
-                            }
-
                             if (DisplayAttackVector)
                             {
                                 var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
@@ -310,37 +299,17 @@ namespace Games.Risk.ViewModel
                         {
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
-
-                            if (LoggingActive)
-                            {
-                                var sb = new StringBuilder($"Player {playerReinforces.PlayerIndex + 1} reinforces: ");
-
-                                sb.Append(playerReinforces.TerritoryIndexes
-                                    .Select(_ => _territoryNameMap[_])
-                                    .Aggregate((c, n) => $"{c}, {n}"));
-
-                                _application.Logger?.WriteLine(
-                                    LogMessageCategory.Information,
-                                    sb.ToString());
-                            }
-
                             break;
                         }
                         case PlayerPasses playerPasses:
                         {
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
-
-                            if (LoggingActive)
-                            {
-                                _application.Logger?.WriteLine(
-                                    LogMessageCategory.Information,
-                                    $"Player {playerPasses.PlayerIndex + 1} passes");
-                            }
-
                             break;
                         }
                     }
+
+                    LogGameEvent(gameEvent);
 
                     await Delay(_delay);
 
@@ -451,12 +420,8 @@ namespace Games.Risk.ViewModel
                 });
 
             SyncControlsWithApplication();
-
-            _application.Logger?.WriteLine(
-                LogMessageCategory.Information,
-                $"Player {gameEvent.PlayerIndex + 1} attacks");
-
             UpdateCommandAvailability();
+            LogGameEvent(gameEvent);
         }
 
         private bool CanAttack()
@@ -748,6 +713,70 @@ namespace Games.Risk.ViewModel
             {
                 await Task.Delay(milliSeconds);
             }
+        }
+
+        private void LogGameEvent(
+            IGameEvent gameEvent)
+        {
+            if (!LoggingActive)
+            {
+                return;
+            }
+
+            var playerId = gameEvent.PlayerIndex + 1;
+            var sb = new StringBuilder($"Player {playerId}");
+
+            switch (gameEvent)
+            {
+                case PlayerAttacks playerAttacks:
+                {
+                    sb.Append($" attacks {_territoryNameMap[playerAttacks.Vertex2]}");
+                    sb.Append($" from {_territoryNameMap[playerAttacks.Vertex1]}. Outcome: ");
+
+                    if (playerAttacks.CasualtiesAttacker > 0)
+                    {
+                        sb.Append($"Player {playerId} looses {playerAttacks.CasualtiesAttacker} ");
+                        sb.Append(playerAttacks.CasualtiesAttacker == 1 ? "army" : "armies");
+                    }
+
+                    if (playerAttacks.CasualtiesAttacker > 0 && playerAttacks.CasualtiesDefender > 0)
+                    {
+                        sb.Append(", and ");
+                    }
+
+                    if (playerAttacks.CasualtiesDefender > 0)
+                    {
+                        sb.Append($"Defending player (Player {playerAttacks.DefendingPlayerIndex + 1}) looses {playerAttacks.CasualtiesDefender} ");
+                        sb.Append(playerAttacks.CasualtiesDefender == 1 ? "army" : "armies");
+                    }
+
+                    if (playerAttacks.TerritoryConquered)
+                    {
+                        sb.Append(". Territory is conquered");
+                    }
+
+                    break;
+                }
+                case PlayerReinforces playerReinforces:
+                {
+                    sb.Append(" reinforces: ");
+
+                    sb.Append(playerReinforces.TerritoryIndexes
+                        .Select(_ => _territoryNameMap[_])
+                        .Aggregate((c, n) => $"{c}, {n}"));
+
+                    break;
+                }
+                case PlayerPasses:
+                {
+                    sb.Append(" passes");
+                    break;
+                }
+            }
+
+            _application.Logger?.WriteLine(
+                LogMessageCategory.Information,
+                sb.ToString());
         }
     }
 }

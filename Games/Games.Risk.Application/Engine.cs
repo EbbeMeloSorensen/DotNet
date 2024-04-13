@@ -202,16 +202,25 @@ namespace Games.Risk.Application
             _territoryStatusMap[targetTerritoryIndex].Armies -= casualtiesDefender;
 
             var territoryConquered = false;
+            var defendingPlayerIndex = _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex;
 
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
             {
                 territoryConquered = true;
                 _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex = CurrentPlayerIndex;
 
-                // For nu flytter vi havldelen over (rundet ned)
                 var armiesLeft = _territoryStatusMap[activeTerritoryIndex].Armies;
-                _territoryStatusMap[targetTerritoryIndex].Armies = armiesLeft / 2;
-                _territoryStatusMap[activeTerritoryIndex].Armies = armiesLeft - armiesLeft / 2;
+
+                // Did we manage to establish an isolated territory?
+                var isolatedTerritoryEstablished = _graphOfTerritories.NeighborIds(activeTerritoryIndex)
+                    .All(neighborId => _territoryStatusMap[neighborId].ControllingPlayerIndex == CurrentPlayerIndex);
+
+                var armyTransferCount = isolatedTerritoryEstablished
+                    ? armiesLeft - 1
+                    : (armiesLeft + 1) / 2;
+
+                _territoryStatusMap[targetTerritoryIndex].Armies = armyTransferCount;
+                _territoryStatusMap[activeTerritoryIndex].Armies = armiesLeft - armyTransferCount;
 
                 if (_territoryStatusMap.All(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex))
                 {
@@ -225,6 +234,7 @@ namespace Games.Risk.Application
             {
                 Vertex1 = activeTerritoryIndex,
                 Vertex2 = targetTerritoryIndex,
+                DefendingPlayerIndex = defendingPlayerIndex,
                 CasualtiesAttacker = casualtiesAttacker,
                 CasualtiesDefender = casualtiesDefender,
                 TerritoryConquered = territoryConquered
@@ -277,14 +287,14 @@ namespace Games.Risk.Application
                 .ToList()
                 .ForEach(_ =>
                 {
-                    var temp = _territoryStatusMap
-                        .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
+                    var temp1 = _territoryStatusMap
+                        .Where(_ => indexesOfFrontlineTerritories.Contains(_.Key))
                         .OrderBy(_ => _.Value.Armies)
                         .ToList();
 
-                    var minNumberOfArmies = temp.Min(_ => _.Value.Armies);
+                    var minNumberOfArmies = temp1.Min(_ => _.Value.Armies);
 
-                    var temp2 = temp
+                    var temp2 = temp1
                         .TakeWhile(_ => _.Value.Armies == minNumberOfArmies)
                         .ToList();
 
@@ -313,7 +323,7 @@ namespace Games.Risk.Application
         private List<AttackOption> IdentifyOptionsForCurrentPlayer()
         {
             // Which vertices are controlled by the current player?
-            var vertexIndexes = _territoryStatusMap
+            var indexesOfTerritoriesControlledByCurrentPlayer = _territoryStatusMap
                 .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
                 .Select(_ => _.Key)
                 .ToList();
@@ -321,29 +331,37 @@ namespace Games.Risk.Application
             // Traverse all those vertices and identify neighbours controlled by other players
             var options = new List<AttackOption>();
 
-            vertexIndexes.ForEach(vertexIndex =>
+            indexesOfTerritoriesControlledByCurrentPlayer.ForEach(vertexIndex =>
             {
                 if (_territoryStatusMap[vertexIndex].Armies == 1)
                 {
+                    // Cannot attack from territory unless it has more than one army
                     return;
                 }
 
-                var neighbourIds = _graphOfTerritories.NeighborIds(vertexIndex);
                 var armiesInTerritory = _territoryStatusMap[vertexIndex].Armies;
 
-                foreach (var neighbourId in neighbourIds)
-                {
-                    if (!vertexIndexes.Contains(neighbourId))
-                    {
-                        var armiesInOpposingTerritory = _territoryStatusMap[neighbourId].Armies;
+                var opposingNeighbourIds = _graphOfTerritories.NeighborIds(vertexIndex)
+                    .Except(indexesOfTerritoriesControlledByCurrentPlayer);
 
-                        options.Add(new AttackOption
-                        {
-                            IndexOfTerritoryWhereAttackOriginates = vertexIndex,
-                            IndexOfTerritoryUnderAttack = neighbourId,
-                            OpportunityRating = armiesInTerritory - armiesInOpposingTerritory
-                        });
+                var opposingNeighbourCount = opposingNeighbourIds.Count();
+
+                foreach (var neighbourId in opposingNeighbourIds)
+                {
+                    var armiesInOpposingTerritory = _territoryStatusMap[neighbourId].Armies;
+                    var opportunityRating = armiesInTerritory - armiesInOpposingTerritory;
+
+                    if (opportunityRating > 0 && opposingNeighbourCount == 1)
+                    {
+                        opportunityRating += 2;
                     }
+
+                    options.Add(new AttackOption
+                    {
+                        IndexOfTerritoryWhereAttackOriginates = vertexIndex,
+                        IndexOfTerritoryUnderAttack = neighbourId,
+                        OpportunityRating = opportunityRating
+                    });
                 }
             });
 
