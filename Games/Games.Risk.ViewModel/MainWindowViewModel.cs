@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -192,7 +193,7 @@ namespace Games.Risk.ViewModel
            
             LogViewModel = new LogViewModel();
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
-            LoggingActive = false;
+            LoggingActive = true;
             DisplayAttackVector = true;
             PlayerViewModels = new ObservableCollection<PlayerViewModel>();
 
@@ -267,7 +268,7 @@ namespace Games.Risk.ViewModel
                 UpdateCommandAvailability();
             };
 
-            _application.Logger?.WriteLine(LogMessageCategory.Debug, "Risk Game - starting up");
+            _application.Logger?.WriteLine(LogMessageCategory.Information, "Risk Game - starting up");
         }
 
         private async Task Proceed()
@@ -307,6 +308,10 @@ namespace Games.Risk.ViewModel
                             AttackVectorVisible = false;
                             break;
                         }
+                        case PlayerTransfersArmies:
+                        {
+                            break;
+                        }
                     }
 
                     LogGameEvent(gameEvent);
@@ -320,7 +325,7 @@ namespace Games.Risk.ViewModel
 
                     if (gameEvent.TurnGoesToNextPlayer)
                     {
-                        HighlightCurrentPlayer();
+                        SwitchToNextPlayer();
                     }
 
                     continue;
@@ -434,11 +439,7 @@ namespace Games.Risk.ViewModel
         private async Task Pass()
         {
             var gameEvent = await _application.Engine.PlayerSelectsOption(new Pass());
-
-            // Todo: Lav en hjælpefunktion, der omformer et gameEvent til en besked
-            _application.Logger?.WriteLine(
-                LogMessageCategory.Information,
-                $"Player {gameEvent.PlayerIndex + 1} passes");
+            LogGameEvent(gameEvent);
 
             _indexOfTargetTerritory = null;
             _indexesOfHostileNeighbours = new int[] { };
@@ -448,13 +449,12 @@ namespace Games.Risk.ViewModel
                 GameResultMessage = "Congratulations - You Win";
                 GameInProgress = _application.Engine.GameInProgress;
                 GameDecided = _application.Engine.GameDecided;
-                await Delay(_delay);
             }
             else
             {
                 PlayerHasInitiative = false;
                 SyncControlsWithApplication();
-                HighlightCurrentPlayer();
+                SwitchToNextPlayer();
                 UpdateCommandAvailability();
                 await Proceed();
             }
@@ -724,7 +724,7 @@ namespace Games.Risk.ViewModel
             }
 
             var playerId = gameEvent.PlayerIndex + 1;
-            var sb = new StringBuilder($"Player {playerId}");
+            var sb = new StringBuilder($"  Player {playerId}");
 
             switch (gameEvent)
             {
@@ -772,11 +772,25 @@ namespace Games.Risk.ViewModel
                     sb.Append(" passes");
                     break;
                 }
+                case PlayerTransfersArmies:
+                {
+                    sb.Append(" transfers armies");
+                    break;
+                }
             }
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
                 sb.ToString());
+        }
+
+        private void SwitchToNextPlayer()
+        {
+            HighlightCurrentPlayer();
+
+            _application.Logger?.WriteLine(
+                LogMessageCategory.Information,
+                $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
         }
     }
 }

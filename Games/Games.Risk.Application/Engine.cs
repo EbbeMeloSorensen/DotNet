@@ -18,6 +18,7 @@ namespace Games.Risk.Application
         private Dictionary<int, TerritoryStatus> _territoryStatusMap;
         private bool _pseudoRandomNumbers;
         private bool _currentPlayerMayReinforce;
+        private bool _currentPlayerMayTransferArmies;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -89,6 +90,7 @@ namespace Games.Risk.Application
             GameInProgress = true;
             CurrentPlayerIndex = 0;
             _currentPlayerMayReinforce = true;
+            _currentPlayerMayTransferArmies = true;
 
             Logger?.WriteLine(LogMessageCategory.Information, $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
         }
@@ -115,6 +117,11 @@ namespace Games.Risk.Application
                 _territoryStatusMap.Any(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex))
             {
                 return Reinforce();
+            }
+
+            if (_currentPlayerMayTransferArmies)
+            {
+                return TransferArmies();
             }
 
             return Pass();
@@ -252,6 +259,7 @@ namespace Games.Risk.Application
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
             _currentPlayerMayReinforce = true;
+            _currentPlayerMayTransferArmies = true;
 
             return gameEvent;
         }
@@ -315,8 +323,21 @@ namespace Games.Risk.Application
             };
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
-            _currentPlayerMayReinforce = true;
+            _currentPlayerMayReinforce = true; // This goes for the next player
+            _currentPlayerMayTransferArmies = true; // This goes for the next player
 
+            return gameEvent;
+        }
+
+        private IGameEvent TransferArmies()
+        {
+            var gameEvent = new PlayerTransfersArmies(
+                CurrentPlayerIndex);
+
+            CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
+            _currentPlayerMayReinforce = true; // This goes for the next player
+
+            _currentPlayerMayTransferArmies = true; // This goes for the next player
             return gameEvent;
         }
 

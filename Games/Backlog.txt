@@ -21,6 +21,8 @@ Done:
 In progress:
 
 Todo 
+* (Risk) Der skal være en option om at overføre en arme fra et område til et andet
+* (Risk) Som det sidste i sin runde kan en spiller flytte armeer. En automatisk spiller flytter blot armeer fra et evt isoleret områder til et frontlinieområde
 * (Risk) I starten af hver runde - hvis en spiller har et helt kontinent, skal vedkommende have ekstra armeer
 * (Risk) Der skal være mulighed for at en spiller kan reinforce
 * (Risk) Mulighed for at pause spillet
