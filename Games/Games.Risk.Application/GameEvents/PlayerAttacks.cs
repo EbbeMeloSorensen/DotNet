@@ -9,12 +9,8 @@
         public bool TerritoryConquered { get; set; }
 
         public PlayerAttacks(
-            int playerIndex,
-            string description,
-            bool turnGoesToNextPlayer) : base(
-            playerIndex,
-            description,
-            turnGoesToNextPlayer)
+            int playerIndex) : base(
+            playerIndex)
         {
         }
     }

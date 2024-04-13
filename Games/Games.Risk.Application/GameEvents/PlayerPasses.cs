@@ -3,12 +3,8 @@
     public class PlayerPasses : GameEvent
     {
         public PlayerPasses(
-            int playerIndex, 
-            string description, 
-            bool turnGoesToNextPlayer) : base(
-                playerIndex, 
-                description, 
-                turnGoesToNextPlayer)
+            int playerIndex) : base(
+                playerIndex)
         {
         }
     }

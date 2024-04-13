@@ -7,12 +7,8 @@ namespace Games.Risk.Application.GameEvents
         public List<int> TerritoryIndexes { get; set; }
 
         public PlayerReinforces(
-            int playerIndex, 
-            string description, 
-            bool turnGoesToNextPlayer) : base(
-                playerIndex, 
-                description, 
-                turnGoesToNextPlayer)
+            int playerIndex) : base(
+                playerIndex)
         {
         }
     }

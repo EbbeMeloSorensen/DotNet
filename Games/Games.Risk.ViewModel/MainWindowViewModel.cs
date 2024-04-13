@@ -29,7 +29,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 2000;
+        private const int _delay = 0;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, Brush> _colorPalette;
         private PointD _selectedVertexCanvasPosition;
@@ -313,7 +313,7 @@ namespace Games.Risk.ViewModel
 
                             if (LoggingActive)
                             {
-                                var sb = new StringBuilder(gameEvent.Description.Substring(0, gameEvent.Description.IndexOf(':') + 2));
+                                var sb = new StringBuilder($"Player {playerReinforces.PlayerIndex + 1} reinforces: ");
 
                                 sb.Append(playerReinforces.TerritoryIndexes
                                     .Select(_ => _territoryNameMap[_])
@@ -326,7 +326,7 @@ namespace Games.Risk.ViewModel
 
                             break;
                         }
-                        case PlayerPasses _:
+                        case PlayerPasses playerPasses:
                         {
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
@@ -335,7 +335,7 @@ namespace Games.Risk.ViewModel
                             {
                                 _application.Logger?.WriteLine(
                                     LogMessageCategory.Information,
-                                    gameEvent.Description);
+                                    $"Player {playerPasses.PlayerIndex + 1} passes");
                             }
 
                             break;
@@ -349,7 +349,7 @@ namespace Games.Risk.ViewModel
 
                     await Delay(_delay);
 
-                    if (gameEvent.TurnGoesToNextPlayer)
+                    if (gameEvent is PlayerPasses || gameEvent is PlayerReinforces)
                     {
                         HighlightCurrentPlayer();
                     }
@@ -454,7 +454,7 @@ namespace Games.Risk.ViewModel
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
-                gameEvent.Description);
+                $"Player {gameEvent.PlayerIndex + 1} attacks");
 
             UpdateCommandAvailability();
         }
@@ -470,9 +470,10 @@ namespace Games.Risk.ViewModel
         {
             var gameEvent = await _application.Engine.PlayerSelectsOption(new Pass());
 
+            // Todo: Lav en hjælpefunktion, der omformer et gameEvent til en besked
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
-                gameEvent.Description);
+                $"Player {gameEvent.PlayerIndex + 1} passes");
 
             _indexOfTargetTerritory = null;
             _indexesOfHostileNeighbours = new int[] { };

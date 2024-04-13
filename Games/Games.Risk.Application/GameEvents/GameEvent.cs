@@ -4,18 +4,10 @@
     {
         public int PlayerIndex { get; }
 
-        public string Description { get; }
-
-        public bool TurnGoesToNextPlayer { get; }
-
         protected GameEvent(
-            int playerIndex,
-            string description,
-            bool turnGoesToNextPlayer)
+            int playerIndex)
         {
             PlayerIndex = playerIndex;
-            Description = description;
-            TurnGoesToNextPlayer = turnGoesToNextPlayer;
         }
     }
 }

@@ -221,9 +221,7 @@ namespace Games.Risk.Application
             }
 
             var gameEvent = new PlayerAttacks(
-                CurrentPlayerIndex,
-                $"Player {CurrentPlayerIndex + 1} attacks vertex {targetTerritoryIndex} from vertex {activeTerritoryIndex}",
-                false)
+                CurrentPlayerIndex)
             {
                 Vertex1 = activeTerritoryIndex,
                 Vertex2 = targetTerritoryIndex,
@@ -240,9 +238,7 @@ namespace Games.Risk.Application
         private IGameEvent Pass()
         {
             var gameEvent = new PlayerPasses(
-                CurrentPlayerIndex,
-                $"Player {CurrentPlayerIndex + 1} passes",
-                true);
+                CurrentPlayerIndex);
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
             _currentPlayerMayReinforce = true;
@@ -303,9 +299,7 @@ namespace Games.Risk.Application
                 .Select(_ => _.ToString()).Aggregate((c, n) => $"{c}, {n}");
 
             var gameEvent = new PlayerReinforces(
-                CurrentPlayerIndex,
-                $"Player {CurrentPlayerIndex + 1} reinforces: {reinforcedTerritoryIndexesAsCSV}",
-                true)
+                CurrentPlayerIndex)
             {
                 TerritoryIndexes = territoryIndexes
             };
