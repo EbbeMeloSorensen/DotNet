@@ -349,7 +349,7 @@ namespace Games.Risk.ViewModel
 
                     await Delay(_delay);
 
-                    if (gameEvent is PlayerPasses || gameEvent is PlayerReinforces)
+                    if (gameEvent.TurnGoesToNextPlayer)
                     {
                         HighlightCurrentPlayer();
                     }

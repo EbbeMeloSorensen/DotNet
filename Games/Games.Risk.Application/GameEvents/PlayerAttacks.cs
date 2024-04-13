@@ -10,7 +10,7 @@
 
         public PlayerAttacks(
             int playerIndex) : base(
-            playerIndex)
+            playerIndex, false)
         {
         }
     }

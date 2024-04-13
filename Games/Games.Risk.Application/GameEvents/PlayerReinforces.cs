@@ -8,7 +8,7 @@ namespace Games.Risk.Application.GameEvents
 
         public PlayerReinforces(
             int playerIndex) : base(
-                playerIndex)
+                playerIndex, true)
         {
         }
     }

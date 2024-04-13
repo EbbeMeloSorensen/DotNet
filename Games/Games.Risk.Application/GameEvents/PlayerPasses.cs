@@ -4,7 +4,7 @@
     {
         public PlayerPasses(
             int playerIndex) : base(
-                playerIndex)
+                playerIndex, true)
         {
         }
     }
