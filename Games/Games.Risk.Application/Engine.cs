@@ -272,8 +272,8 @@ namespace Games.Risk.Application
         {
             // Tactic: Distribute the armies randomly on the frontline territories with the fewest armies
 
-            var indexesOfTerritoriesControlledByCurrentPlayer = IndexesOfControlledTerritories(CurrentPlayerIndex)
-                .ToList();
+            var indexesOfTerritoriesControlledByCurrentPlayer =
+                IndexesOfControlledTerritories(CurrentPlayerIndex).ToList();
 
             var indexesOfFrontlineTerritories = new List<int>();
 
@@ -347,11 +347,8 @@ namespace Games.Risk.Application
         {
             var options = new List<AttackOption>();
 
-            // Which vertices are controlled by the current player?
-            var indexesOfTerritoriesControlledByCurrentPlayer = _territoryStatusMap
-                .Where(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex)
-                .Select(_ => _.Key)
-                .ToList();
+            var indexesOfTerritoriesControlledByCurrentPlayer =
+                IndexesOfControlledTerritories(CurrentPlayerIndex).ToList();
 
             // Traverse all those vertices and identify neighbours controlled by other players
             indexesOfTerritoriesControlledByCurrentPlayer.ForEach(vertexIndex =>
@@ -394,6 +391,29 @@ namespace Games.Risk.Application
         private List<ArmyTransferOption> IdentifyArmyTransferOptionsForCurrentPlayer()
         {
             var options = new List<ArmyTransferOption>();
+
+            var anIndexOfTerritoryControlledByCurrentPlayer =
+                IndexesOfControlledTerritories(CurrentPlayerIndex).First();
+
+            var connectedComponent1 = new HashSet<int>();
+            var myQueue = new Queue<int>();
+
+            connectedComponent1.Add(anIndexOfTerritoryControlledByCurrentPlayer);
+            myQueue.Enqueue(anIndexOfTerritoryControlledByCurrentPlayer);
+
+            while (myQueue.Any())
+            {
+                var vertexId = myQueue.Dequeue();
+                var neighbours = _graphOfTerritories
+                    .NeighborIds(vertexId).ToList();
+
+                neighbours.ForEach(neighbourId =>
+                {
+
+                });
+
+            }
+
 
             return options;
         }
