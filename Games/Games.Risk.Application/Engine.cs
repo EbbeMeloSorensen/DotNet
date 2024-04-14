@@ -392,13 +392,21 @@ namespace Games.Risk.Application
         private List<ArmyTransferOption> IdentifyArmyTransferOptionsForCurrentPlayer()
         {
             var options = new List<ArmyTransferOption>();
+
+            var connectedComponents = IdentifyConnectedTerritories();
+
+            return options;
+        }
+
+        private Dictionary<int, List<List<int>>> IdentifyConnectedTerritories()
+        {
+            var result = new Dictionary<int, List<List<int>>>();
+
             var handled = new HashSet<int>();
 
             var vertexIds = _graphOfTerritories.Vertices
                 .Select(vertex => vertex.Id)
                 .ToList();
-
-            var connectedComponentMap = new Dictionary<int, List<List<int>>>();
 
             vertexIds.ForEach(vertexIdInGraph =>
             {
@@ -410,14 +418,14 @@ namespace Games.Risk.Application
                 var controllingPlayerIndex =
                     _territoryStatusMap[vertexIdInGraph].ControllingPlayerIndex;
 
-                var component = new HashSet<int>();
+                var connectedComponent = new HashSet<int>();
                 var queue = new Queue<int>();
                 queue.Enqueue(vertexIdInGraph);
 
                 while (queue.Any())
                 {
                     var vertexIdInComponent = queue.Dequeue();
-                    component.Add(vertexIdInComponent);
+                    connectedComponent.Add(vertexIdInComponent);
                     handled.Add(vertexIdInComponent);
 
                     var neighbours = _graphOfTerritories
@@ -425,7 +433,7 @@ namespace Games.Risk.Application
 
                     neighbours.ForEach(neighbourId =>
                     {
-                        if (component.Contains(neighbourId) ||
+                        if (connectedComponent.Contains(neighbourId) ||
                             queue.Contains(neighbourId) ||
                             _territoryStatusMap[neighbourId].ControllingPlayerIndex != controllingPlayerIndex)
                         {
@@ -436,16 +444,15 @@ namespace Games.Risk.Application
                     });
                 }
 
-                if (connectedComponentMap.ContainsKey(controllingPlayerIndex))
+                if (!result.ContainsKey(controllingPlayerIndex))
                 {
-                    connectedComponentMap[controllingPlayerIndex] = new List<List<int>>();
+                    result[controllingPlayerIndex] = new List<List<int>>();
                 }
 
-                // Under construction:
-                //connectedComponentMap[controllingPlayerIndex].Add(connected);
+                result[controllingPlayerIndex].Add(connectedComponent.ToList());
             });
 
-            return options;
+            return result;
         }
     }
 }
