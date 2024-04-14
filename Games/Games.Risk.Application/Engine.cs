@@ -8,6 +8,7 @@ using Craft.DataStructures.Graph;
 using Games.Risk.Application.ComputerPlayerOptions;
 using Games.Risk.Application.GameEvents;
 using Games.Risk.Application.PlayerOptions;
+using System.Collections;
 
 namespace Games.Risk.Application
 {
@@ -391,29 +392,58 @@ namespace Games.Risk.Application
         private List<ArmyTransferOption> IdentifyArmyTransferOptionsForCurrentPlayer()
         {
             var options = new List<ArmyTransferOption>();
+            var handled = new HashSet<int>();
 
-            var anIndexOfTerritoryControlledByCurrentPlayer =
-                IndexesOfControlledTerritories(CurrentPlayerIndex).First();
+            var vertexIds = _graphOfTerritories.Vertices
+                .Select(vertex => vertex.Id)
+                .ToList();
 
-            var connectedComponent1 = new HashSet<int>();
-            var myQueue = new Queue<int>();
+            var connectedComponentMap = new Dictionary<int, List<List<int>>>();
 
-            connectedComponent1.Add(anIndexOfTerritoryControlledByCurrentPlayer);
-            myQueue.Enqueue(anIndexOfTerritoryControlledByCurrentPlayer);
-
-            while (myQueue.Any())
+            vertexIds.ForEach(vertexIdInGraph =>
             {
-                var vertexId = myQueue.Dequeue();
-                var neighbours = _graphOfTerritories
-                    .NeighborIds(vertexId).ToList();
-
-                neighbours.ForEach(neighbourId =>
+                if (handled.Contains(vertexIdInGraph))
                 {
+                    return;
+                }
 
-                });
+                var controllingPlayerIndex =
+                    _territoryStatusMap[vertexIdInGraph].ControllingPlayerIndex;
 
-            }
+                var component = new HashSet<int>();
+                var queue = new Queue<int>();
+                queue.Enqueue(vertexIdInGraph);
 
+                while (queue.Any())
+                {
+                    var vertexIdInComponent = queue.Dequeue();
+                    component.Add(vertexIdInComponent);
+                    handled.Add(vertexIdInComponent);
+
+                    var neighbours = _graphOfTerritories
+                        .NeighborIds(vertexIdInComponent).ToList();
+
+                    neighbours.ForEach(neighbourId =>
+                    {
+                        if (component.Contains(neighbourId) ||
+                            queue.Contains(neighbourId) ||
+                            _territoryStatusMap[neighbourId].ControllingPlayerIndex != controllingPlayerIndex)
+                        {
+                            return;
+                        }
+
+                        queue.Enqueue(neighbourId);
+                    });
+                }
+
+                if (connectedComponentMap.ContainsKey(controllingPlayerIndex))
+                {
+                    connectedComponentMap[controllingPlayerIndex] = new List<List<int>>();
+                }
+
+                // Under construction:
+                //connectedComponentMap[controllingPlayerIndex].Add(connected);
+            });
 
             return options;
         }
