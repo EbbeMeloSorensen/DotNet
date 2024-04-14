@@ -395,6 +395,58 @@ namespace Games.Risk.Application
 
             var connectedComponents = IdentifyConnectedTerritories();
 
+            if (!connectedComponents.ContainsKey(CurrentPlayerIndex))
+            {
+                return options;
+            }
+
+            // Identify isolated territories (non-frontline) territories controlled by the current player
+            var territoryIndexes =  IndexesOfControlledTerritories(CurrentPlayerIndex).ToList();
+            var indexesOfFrontlineTerritories = new List<int>();
+
+            territoryIndexes.ForEach(index =>
+            {
+                if (_graphOfTerritories.NeighborIds(index)
+                    .Any(neighborId => _territoryStatusMap[neighborId].ControllingPlayerIndex != CurrentPlayerIndex))
+                {
+                    indexesOfFrontlineTerritories.Add(index);
+                }
+            });
+
+            var isolatedTerritories = territoryIndexes.Except(indexesOfFrontlineTerritories).ToList();
+
+            //Task.Delay(10); // Perhaps this ensures that the gui can keep up..
+
+            connectedComponents[CurrentPlayerIndex]
+                .Where(_ => _.Count > 2)
+                .ToList()
+                .ForEach(cc =>
+                {
+                    cc.ForEach(territoryIndex1 =>
+                    {
+                        var armiesInTerritory = _territoryStatusMap[territoryIndex1].Armies;
+                        
+                        if (armiesInTerritory == 1)
+                        {
+                            return;
+                        }
+
+                        cc.ForEach(territoryIndex2 =>
+                        {
+                            if (territoryIndex1 == territoryIndex2)
+                            {
+                                return;
+                            }
+
+                            options.Add(new ArmyTransferOption
+                            {
+                                InitialTerritoryIndex = territoryIndex1,
+                                DestinationTerritoryIndex = territoryIndex2
+                            });
+                        });
+                    });
+                });
+
             return options;
         }
 
