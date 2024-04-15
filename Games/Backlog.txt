@@ -21,6 +21,15 @@ Done:
 In progress:
 
 Todo 
+* (Risk) Tildeling af ratings for army transfer options
+  I) Det bedste er at flytte armeer fra et isoleret område til et frontlinieområde, især hvis:
+    1) Der er mange armeer at flytte
+    2) Der er få armeer på frontlinie territoriet
+    3) Det er en stor connected component (så mitigerer man risikoen for at en modstander bryder gennem frontlinien og ind i et sammenhængende område, 
+       hvor der kan laves ravage)
+  II) Fra et frontlinieområde til et andet frontlinieområde, især hvis
+      1) det ene frontlinieområde har mange armeer i forhold til det andet
+      2) det andet frontlinieområde er nabo til et isoleret område
 * (Risk) Der skal være en option om at overføre en arme fra et område til et andet
 * (Risk) Som det sidste i sin runde kan en spiller flytte armeer. En automatisk spiller flytter blot armeer fra et evt isoleret områder til et frontlinieområde
 * (Risk) I starten af hver runde - hvis en spiller har et helt kontinent, skal vedkommende have ekstra armeer
