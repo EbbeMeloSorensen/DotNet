@@ -31,6 +31,7 @@ namespace Games.Risk.ViewModel
         private readonly Random _random;
         private const int _delay = 0;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
+        private List<Continent> _continents;
         private Dictionary<int, Brush> _colorPalette;
         private PointD _selectedVertexCanvasPosition;
         private PointD _selectedTargetVertexCanvasPosition;
@@ -197,16 +198,8 @@ namespace Games.Risk.ViewModel
             DisplayAttackVector = true;
             PlayerViewModels = new ObservableCollection<PlayerViewModel>();
 
-            _colorPalette = new Dictionary<int, Brush>
-            {
-                {0, new SolidColorBrush(Colors.IndianRed)},
-                {1, new SolidColorBrush(Colors.CornflowerBlue)},
-                {2, new SolidColorBrush(Colors.LightGreen)},
-                {3, new SolidColorBrush(Colors.Yellow)},
-                {4, new SolidColorBrush(Colors.Orange)},
-                {5, new SolidColorBrush(Colors.MediumPurple)}
-            };
-
+            _continents = GenerateContinents();
+            _colorPalette = GenerateColorPalette();
             _graphOfTerritories = GenerateGraphOfTerritories();
 
             _territoryNameMap = _graphOfTerritories.Vertices.ToDictionary(
@@ -381,6 +374,7 @@ namespace Games.Risk.ViewModel
             var indexOfPlayer = _random.Next(0, playerCount);
             tempArray[indexOfPlayer] = false;
             _application.Engine = new Engine(tempArray, _pseudoRandomNumbers, _graphOfTerritories);
+            _application.Engine.Initialize(_continents);
 
             PlayerViewModels.Clear();
 
@@ -798,6 +792,71 @@ namespace Games.Risk.ViewModel
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
                 $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
+
+            var continents =  _application.Engine.AssignExtraArmiesForControlledContinents();
+
+            if (continents.Any())
+            {
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    $"Continents controlled by player: {continents.Aggregate((c, n) => $"{c}, {n}")}");
+            }
+        }
+
+        private List<Continent> GenerateContinents()
+        {
+            return new List<Continent>
+            {
+                new Continent
+                {
+                    Name = "North America",
+                    Territories = Enumerable.Range(0, 9).ToArray(),
+                    ExtraArmies = 5
+                },
+                new Continent
+                {
+                    Name = "South America",
+                    Territories = Enumerable.Range(9, 4).ToArray(),
+                    ExtraArmies = 2
+                },
+                new Continent
+                {
+                    Name = "Europe",
+                    Territories = Enumerable.Range(13, 7).ToArray(),
+                    ExtraArmies = 5
+                },
+                new Continent
+                {
+                    Name = "Africa",
+                    Territories = Enumerable.Range(20, 6).ToArray(),
+                    ExtraArmies = 3
+                },
+                new Continent
+                {
+                    Name = "Asia",
+                    Territories = Enumerable.Range(26, 12).ToArray(),
+                    ExtraArmies = 7
+                },
+                new Continent
+                {
+                    Name = "Oceania",
+                    Territories = Enumerable.Range(38, 4).ToArray(),
+                    ExtraArmies = 2
+                }
+            };
+        }
+
+        private Dictionary<int, Brush> GenerateColorPalette()
+        {
+            return new Dictionary<int, Brush>
+            {
+                {0, new SolidColorBrush(Colors.IndianRed)},
+                {1, new SolidColorBrush(Colors.CornflowerBlue)},
+                {2, new SolidColorBrush(Colors.LightGreen)},
+                {3, new SolidColorBrush(Colors.Yellow)},
+                {4, new SolidColorBrush(Colors.Orange)},
+                {5, new SolidColorBrush(Colors.MediumPurple)}
+            };
         }
     }
 }

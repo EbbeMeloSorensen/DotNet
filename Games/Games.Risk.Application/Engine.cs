@@ -20,17 +20,17 @@ namespace Games.Risk.Application
         private bool _pseudoRandomNumbers;
         private bool _currentPlayerMayReinforce;
         private bool _currentPlayerMayTransferArmies;
+        private List<Continent> _continents;
+        private int _extraArmiesForCurrentPlayer;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
 
         private Random _random;
 
-        public int PlayerCount => PlayerScores.Length;
+        public int PlayerCount => _players.Length;
 
         public int CurrentPlayerIndex { get; private set; }
-
-        public int[] PlayerScores { get; }
 
         public bool GameInProgress { get; private set; }
 
@@ -50,7 +50,6 @@ namespace Games.Risk.Application
         {
             _pseudoRandomNumbers = pseudoRandomNumbers;
             _graphOfTerritories = graphOfTerritories;
-
             var playerCount = players.Count();
 
             if (playerCount < 2 || playerCount > 6)
@@ -63,7 +62,13 @@ namespace Games.Risk.Application
                 : new Random((int)DateTime.UtcNow.Ticks);
 
             _players = players;
-            PlayerScores = new int[playerCount];
+            _continents = new List<Continent>();
+        }
+
+        public void Initialize(
+            IEnumerable<Continent> continents)
+        {
+            _continents.AddRange(continents);
         }
 
         public void StartGame()
@@ -186,6 +191,27 @@ namespace Games.Risk.Application
         {
             return _graphOfTerritories.NeighborIds(territoryId)
                 .Except(IndexesOfControlledTerritories(CurrentPlayerIndex));
+        }
+
+        public List<string> AssignExtraArmiesForControlledContinents()
+        {
+            var result = new List<string>();
+
+            var controlledTerritories = IndexesOfControlledTerritories(CurrentPlayerIndex).ToList();
+
+            _continents.ForEach(c =>
+            {
+                if (controlledTerritories.Intersect(c.Territories).Count() != c.Territories.Length)
+                {
+                    return;
+                }
+
+                result.Add(c.Name);
+
+                _extraArmiesForCurrentPlayer += c.ExtraArmies;
+            });
+
+            return result;
         }
 
         private IEnumerable<int> IndexesOfControlledTerritories(
