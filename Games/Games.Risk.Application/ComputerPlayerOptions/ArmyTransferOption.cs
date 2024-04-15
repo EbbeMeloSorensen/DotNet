@@ -8,7 +8,7 @@
 
         public override string ToString()
         {
-            return $"From {InitialTerritoryIndex} to {DestinationTerritoryIndex}";
+            return $"From {InitialTerritoryIndex} to {DestinationTerritoryIndex} (Rating: {OpportunityRating})";
         }
     }
 }

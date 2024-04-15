@@ -415,7 +415,7 @@ namespace Games.Risk.Application
 
             var isolatedTerritories = territoryIndexes.Except(indexesOfFrontlineTerritories).ToList();
 
-            //Task.Delay(10); // Perhaps this ensures that the gui can keep up..
+            Task.Delay(10); // Perhaps this ensures that the gui can keep up..
 
             connectedComponents[CurrentPlayerIndex]
                 .Where(_ => _.Count > 2)
@@ -431,6 +431,11 @@ namespace Games.Risk.Application
                             return;
                         }
 
+                        if (!isolatedTerritories.Contains(territoryIndex1))
+                        {
+                            return;
+                        }
+
                         cc.ForEach(territoryIndex2 =>
                         {
                             if (territoryIndex1 == territoryIndex2)
@@ -438,10 +443,16 @@ namespace Games.Risk.Application
                                 return;
                             }
 
+                            if (isolatedTerritories.Contains(territoryIndex2))
+                            {
+                                return;
+                            }
+
                             options.Add(new ArmyTransferOption
                             {
                                 InitialTerritoryIndex = territoryIndex1,
-                                DestinationTerritoryIndex = territoryIndex2
+                                DestinationTerritoryIndex = territoryIndex2,
+                                OpportunityRating = armiesInTerritory - 1
                             });
                         });
                     });
