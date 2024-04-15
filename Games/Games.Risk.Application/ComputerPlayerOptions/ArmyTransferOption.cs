@@ -4,7 +4,7 @@
     {
         public int InitialTerritoryIndex { get; set; }
         public int DestinationTerritoryIndex { get; set; }
-        public double OpportunityRating { get; set; }
+        public int OpportunityRating { get; set; }
 
         public override string ToString()
         {

@@ -8,7 +8,6 @@ using Craft.DataStructures.Graph;
 using Games.Risk.Application.ComputerPlayerOptions;
 using Games.Risk.Application.GameEvents;
 using Games.Risk.Application.PlayerOptions;
-using System.Collections;
 
 namespace Games.Risk.Application
 {
@@ -104,15 +103,21 @@ namespace Games.Risk.Application
 
             var attackOptions = IdentifyAttackOptionsForCurrentPlayer();
 
-            if (attackOptions.Count > 0)
+            if (attackOptions.Any())
             {
-                var bestAttackOption = attackOptions.OrderByDescending(_ => _.OpportunityRating).First();
+                attackOptions = attackOptions.OrderByDescending(_ => _.OpportunityRating).ToList();
+                var highestOpportunityRating = attackOptions.First().OpportunityRating;
 
-                if (bestAttackOption.OpportunityRating > 0)
+                var bestAttackOptions = attackOptions
+                    .TakeWhile(_ => _.OpportunityRating == highestOpportunityRating);
+
+                var chosenCandidate = bestAttackOptions.Shuffle(_random).First();
+
+                if (chosenCandidate.OpportunityRating > 0)
                 {
                     return Attack(
-                        bestAttackOption.IndexOfTerritoryWhereAttackOriginates,
-                        bestAttackOption.IndexOfTerritoryUnderAttack);
+                        chosenCandidate.IndexOfTerritoryWhereAttackOriginates,
+                        chosenCandidate.IndexOfTerritoryUnderAttack);
                 }
             }
 
@@ -126,7 +131,21 @@ namespace Games.Risk.Application
             {
                 var armyTransferOptions = IdentifyArmyTransferOptionsForCurrentPlayer();
 
-                return TransferArmies();
+                if (armyTransferOptions.Any())
+                {
+                    armyTransferOptions = armyTransferOptions.OrderByDescending(_ => _.OpportunityRating).ToList();
+                    var highestOpportunityRating = armyTransferOptions.First().OpportunityRating;
+
+                    var bestArmyTransferOptions = armyTransferOptions
+                        .TakeWhile(_ => _.OpportunityRating == highestOpportunityRating);
+
+                    var chosenOption = bestArmyTransferOptions.Shuffle(_random).First();
+
+                    return TransferArmies(
+                        chosenOption.InitialTerritoryIndex,
+                        chosenOption.DestinationTerritoryIndex,
+                        _territoryStatusMap[chosenOption.InitialTerritoryIndex].Armies - 1);
+                }
             }
 
             return Pass();
@@ -332,14 +351,24 @@ namespace Games.Risk.Application
             return gameEvent;
         }
 
-        private IGameEvent TransferArmies()
+        private IGameEvent TransferArmies(
+            int initialTerritoryIndex,
+            int destinationTerritoryIndex,
+            int armiesTransfered)
         {
             var gameEvent = new PlayerTransfersArmies(
-                CurrentPlayerIndex);
+                CurrentPlayerIndex)
+            {
+                Vertex1 = initialTerritoryIndex,
+                Vertex2 = destinationTerritoryIndex,
+                ArmiesTransfered = armiesTransfered
+            };
+
+            _territoryStatusMap[initialTerritoryIndex].Armies -= armiesTransfered;
+            _territoryStatusMap[destinationTerritoryIndex].Armies += armiesTransfered;
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
             _currentPlayerMayReinforce = true; // This goes for the next player
-
             _currentPlayerMayTransferArmies = true; // This goes for the next player
             return gameEvent;
         }
@@ -402,20 +431,30 @@ namespace Games.Risk.Application
 
             // Identify isolated territories (non-frontline) territories controlled by the current player
             var territoryIndexes =  IndexesOfControlledTerritories(CurrentPlayerIndex).ToList();
-            var indexesOfFrontlineTerritories = new List<int>();
+            var frontlineTerritories = new List<int>();
 
             territoryIndexes.ForEach(index =>
             {
                 if (_graphOfTerritories.NeighborIds(index)
                     .Any(neighborId => _territoryStatusMap[neighborId].ControllingPlayerIndex != CurrentPlayerIndex))
                 {
-                    indexesOfFrontlineTerritories.Add(index);
+                    frontlineTerritories.Add(index);
                 }
             });
 
-            var isolatedTerritories = territoryIndexes.Except(indexesOfFrontlineTerritories).ToList();
+            var isolatedTerritories = territoryIndexes.Except(frontlineTerritories).ToList();
 
-            Task.Delay(10); // Perhaps this ensures that the gui can keep up..
+            // Identify frontline territories guarding isolated territories
+            var guardianTerritories = new List<int>();
+
+            frontlineTerritories.ForEach(index =>
+            {
+                if (_graphOfTerritories.NeighborIds(index)
+                    .Any(neighborId => isolatedTerritories.Contains(neighborId)))
+                {
+                    guardianTerritories.Add(index);
+                }
+            });
 
             connectedComponents[CurrentPlayerIndex]
                 .Where(_ => _.Count > 2)
@@ -424,9 +463,9 @@ namespace Games.Risk.Application
                 {
                     cc.ForEach(territoryIndex1 =>
                     {
-                        var armiesInTerritory = _territoryStatusMap[territoryIndex1].Armies;
+                        var armiesInInitialTerritory = _territoryStatusMap[territoryIndex1].Armies;
                         
-                        if (armiesInTerritory == 1)
+                        if (armiesInInitialTerritory == 1)
                         {
                             return;
                         }
@@ -443,16 +482,19 @@ namespace Games.Risk.Application
                                 return;
                             }
 
-                            if (isolatedTerritories.Contains(territoryIndex2))
+                            if (!guardianTerritories.Contains(territoryIndex2))
                             {
                                 return;
                             }
+
+                            var armiesInDestinationTerritory = _territoryStatusMap[territoryIndex2].Armies;
+                            var opportunityRating = armiesInInitialTerritory - armiesInDestinationTerritory;
 
                             options.Add(new ArmyTransferOption
                             {
                                 InitialTerritoryIndex = territoryIndex1,
                                 DestinationTerritoryIndex = territoryIndex2,
-                                OpportunityRating = armiesInTerritory - 1
+                                OpportunityRating = opportunityRating
                             });
                         });
                     });

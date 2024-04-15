@@ -4,7 +4,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
-using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -297,7 +296,8 @@ namespace Games.Risk.ViewModel
 
                             break;
                         }
-                        case PlayerReinforces playerReinforces:
+                        case PlayerReinforces:
+                        case PlayerTransfersArmies:
                         {
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
@@ -307,10 +307,6 @@ namespace Games.Risk.ViewModel
                         {
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
-                            break;
-                        }
-                        case PlayerTransfersArmies:
-                        {
                             break;
                         }
                     }
@@ -781,9 +777,11 @@ namespace Games.Risk.ViewModel
                     sb.Append(" passes");
                     break;
                 }
-                case PlayerTransfersArmies:
+                case PlayerTransfersArmies playerTransfersArmies:
                 {
-                    sb.Append(" transfers armies");
+                    sb.Append($" transfers {playerTransfersArmies.ArmiesTransfered} armies");
+                    sb.Append($" from {_territoryNameMap[playerTransfersArmies.Vertex1]}");
+                    sb.Append($" to {_territoryNameMap[playerTransfersArmies.Vertex2]}");
                     break;
                 }
             }
