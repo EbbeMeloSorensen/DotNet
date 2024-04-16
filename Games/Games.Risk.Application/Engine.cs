@@ -19,6 +19,7 @@ namespace Games.Risk.Application
         private Dictionary<int, TerritoryStatus> _territoryStatusMap;
         private bool _pseudoRandomNumbers;
         private bool _currentPlayerMayReinforce;
+        private bool _currentPlayerHasReinforced;
         private bool _currentPlayerMayTransferArmies;
         private List<Continent> _continents;
 
@@ -108,9 +109,13 @@ namespace Games.Risk.Application
 
             if (ExtraArmiesForCurrentPlayer > 0)
             {
+                if (!_currentPlayerHasReinforced)
+                {
+                    return DeployArmies(false);
+                }
 
-
-                ExtraArmiesForCurrentPlayer = 0;
+                _currentPlayerHasReinforced = false;
+                return DeployArmies(true);
             }
 
             var attackOptions = IdentifyAttackOptionsForCurrentPlayer();
@@ -323,6 +328,18 @@ namespace Games.Risk.Application
 
         private IGameEvent Reinforce()
         {
+            var territoryCount =
+                IndexesOfControlledTerritories(CurrentPlayerIndex).Count();
+
+            ExtraArmiesForCurrentPlayer = Math.Max(3, territoryCount / 3);
+            _currentPlayerHasReinforced = true;
+
+            return new PlayerReinforces(CurrentPlayerIndex, false);
+        }
+
+        private IGameEvent DeployArmies(
+            bool turnGoesToNextPlayer)
+        {
             // Tactic: Distribute the armies randomly on the frontline territories with the fewest armies
 
             var indexesOfTerritoriesControlledByCurrentPlayer =
@@ -342,11 +359,9 @@ namespace Games.Risk.Application
                 }
             });
 
-            var territoryCount = indexesOfTerritoriesControlledByCurrentPlayer.Count();
-            var extraArmies = Math.Max(3, territoryCount / 3);
             var territoryIndexes = new List<int>();
 
-            Enumerable.Repeat(0, extraArmies)
+            Enumerable.Repeat(0, ExtraArmiesForCurrentPlayer)
                 .ToList()
                 .ForEach(_ =>
                 {
@@ -368,11 +383,14 @@ namespace Games.Risk.Application
                     territoryIndexes.Add(territoryIndex);
                 });
 
+            ExtraArmiesForCurrentPlayer = 0;
+
             var reinforcedTerritoryIndexesAsCSV = territoryIndexes
                 .Select(_ => _.ToString()).Aggregate((c, n) => $"{c}, {n}");
 
-            var gameEvent = new PlayerReinforces(
-                CurrentPlayerIndex)
+            var gameEvent = new PlayerDeploysArmies(
+                CurrentPlayerIndex,
+                turnGoesToNextPlayer)
             {
                 TerritoryIndexes = territoryIndexes
             };

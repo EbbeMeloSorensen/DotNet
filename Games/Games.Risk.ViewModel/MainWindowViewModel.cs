@@ -290,6 +290,7 @@ namespace Games.Risk.ViewModel
                             break;
                         }
                         case PlayerReinforces:
+                        case PlayerDeploysArmies:
                         case PlayerTransfersArmies:
                         {
                             ActiveTerritoryHighlighted = false;
@@ -758,9 +759,15 @@ namespace Games.Risk.ViewModel
                 }
                 case PlayerReinforces playerReinforces:
                 {
-                    sb.Append(" reinforces: ");
+                    sb.Append($" reinforces and gets {_application.Engine.ExtraArmiesForCurrentPlayer} extra armies");
 
-                    sb.Append(playerReinforces.TerritoryIndexes
+                    break;
+                }
+                case PlayerDeploysArmies playerDeploysArmies:
+                {
+                    sb.Append(" deploys armies in: ");
+
+                    sb.Append(playerDeploysArmies.TerritoryIndexes
                         .Select(_ => _territoryNameMap[_])
                         .Aggregate((c, n) => $"{c}, {n}"));
 
@@ -793,6 +800,9 @@ namespace Games.Risk.ViewModel
                 LogMessageCategory.Information,
                 $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
 
+            // Comment out to diagnose strange behavior
+            //return;
+
             var continents =  _application.Engine.AssignExtraArmiesForControlledContinents();
 
             if (!continents.Any())
@@ -800,7 +810,7 @@ namespace Games.Risk.ViewModel
                 return;
             }
 
-            var sb = new StringBuilder($"Player {_application.Engine.CurrentPlayerIndex + 1}");
+            var sb = new StringBuilder($"  Player {_application.Engine.CurrentPlayerIndex + 1}");
             sb.Append($" gets {_application.Engine.ExtraArmiesForCurrentPlayer} extra armies");
             sb.Append(" for entirely controlling the continent");
             
