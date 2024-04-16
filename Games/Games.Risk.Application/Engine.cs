@@ -21,7 +21,6 @@ namespace Games.Risk.Application
         private bool _currentPlayerMayReinforce;
         private bool _currentPlayerMayTransferArmies;
         private List<Continent> _continents;
-        private int _extraArmiesForCurrentPlayer;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -36,6 +35,7 @@ namespace Games.Risk.Application
 
         public bool GameDecided { get; private set; }
 
+        public int ExtraArmiesForCurrentPlayer { get; private set; }
         public bool NextEventOccursAutomatically
         {
             get => _players[CurrentPlayerIndex];
@@ -105,6 +105,13 @@ namespace Games.Risk.Application
         public async Task<IGameEvent> ExecuteNextEvent()
         {
             await Task.Delay(1);
+
+            if (ExtraArmiesForCurrentPlayer > 0)
+            {
+
+
+                ExtraArmiesForCurrentPlayer = 0;
+            }
 
             var attackOptions = IdentifyAttackOptionsForCurrentPlayer();
 
@@ -208,7 +215,7 @@ namespace Games.Risk.Application
 
                 result.Add(c.Name);
 
-                _extraArmiesForCurrentPlayer += c.ExtraArmies;
+                ExtraArmiesForCurrentPlayer += c.ExtraArmies;
             });
 
             return result;

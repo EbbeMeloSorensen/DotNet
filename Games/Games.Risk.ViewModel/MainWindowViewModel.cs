@@ -795,12 +795,25 @@ namespace Games.Risk.ViewModel
 
             var continents =  _application.Engine.AssignExtraArmiesForControlledContinents();
 
-            if (continents.Any())
+            if (!continents.Any())
             {
-                _application.Logger?.WriteLine(
-                    LogMessageCategory.Information,
-                    $"Continents controlled by player: {continents.Aggregate((c, n) => $"{c}, {n}")}");
+                return;
             }
+
+            var sb = new StringBuilder($"Player {_application.Engine.CurrentPlayerIndex + 1}");
+            sb.Append($" gets {_application.Engine.ExtraArmiesForCurrentPlayer} extra armies");
+            sb.Append(" for entirely controlling the continent");
+            
+            if (continents.Count() > 1)
+            {
+                sb.Append("s");
+            }
+
+            sb.Append($": {continents.Aggregate((c, n) => $"{c}, {n}")}");
+
+            _application.Logger?.WriteLine(
+                LogMessageCategory.Information,
+                sb.ToString());
         }
 
         private List<Continent> GenerateContinents()
