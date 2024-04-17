@@ -395,9 +395,12 @@ namespace Games.Risk.Application
                 TerritoryIndexes = territoryIndexes
             };
 
-            CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
-            _currentPlayerMayReinforce = true; // This goes for the next player
-            _currentPlayerMayTransferArmies = true; // This goes for the next player
+            if (turnGoesToNextPlayer)
+            {
+                CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
+                _currentPlayerMayReinforce = true; // This goes for the next player
+                _currentPlayerMayTransferArmies = true; // This goes for the next player
+            }
 
             return gameEvent;
         }

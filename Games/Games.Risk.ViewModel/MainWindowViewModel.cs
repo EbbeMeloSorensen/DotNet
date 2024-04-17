@@ -346,7 +346,7 @@ namespace Games.Risk.ViewModel
             UpdateCommandAvailability();
 
             // Diagnotics: Make the game fully automatic by making the player pass
-            if (PlayerHasInitiative)
+            if (PlayerHasInitiative && false)
             {
                 await Pass();
             }
@@ -433,7 +433,8 @@ namespace Games.Risk.ViewModel
         {
             return GameInProgress && 
                    PlayerHasInitiative && 
-                   _indexOfTargetTerritory.HasValue;
+                   _indexOfTargetTerritory.HasValue &&
+                   _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1;
         }
 
         private async Task Pass()
@@ -815,7 +816,7 @@ namespace Games.Risk.ViewModel
             sb.Append(" for entirely controlling the continent");
             
             if (continents.Count() > 1)
-            {
+            {   
                 sb.Append("s");
             }
 
