@@ -53,6 +53,7 @@ namespace Games.Risk.ViewModel
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
+        private AsyncCommand _reinforceCommand;
         private AsyncCommand _attackCommand;
         private AsyncCommand _passCommand;
 
@@ -66,6 +67,7 @@ namespace Games.Risk.ViewModel
                 return Proceed();
             }, CanStartGame);
 
+        public AsyncCommand ReinforceCommand => _reinforceCommand ??= new AsyncCommand(Reinforce, CanReinforce);
         public AsyncCommand AttackCommand => _attackCommand ??= new AsyncCommand(Attack, CanAttack);
         public AsyncCommand PassCommand => _passCommand ??= new AsyncCommand(Pass, CanPass);
 
@@ -410,6 +412,28 @@ namespace Games.Risk.ViewModel
             return !GameInProgress || PlayerHasInitiative;
         }
 
+        private async Task Reinforce()
+        {
+            var gameEvent = await _application.Engine.PlayerSelectsOption(
+                new Reinforce());
+
+            ActiveTerritoryHighlighted = false;
+            AttackVectorVisible = false;
+            _indexOfActiveTerritory = null;
+            _indexOfTargetTerritory = null;
+
+            SyncControlsWithApplication();
+            UpdateCommandAvailability();
+            LogGameEvent(gameEvent);
+        }
+
+        private bool CanReinforce()
+        {
+            return GameInProgress &&
+                   PlayerHasInitiative &&
+                   _application.Engine.CurrentPlayerMayReinforce;
+        }
+
         private async Task Attack()
         {
             if (!_indexOfActiveTerritory.HasValue || !_indexOfTargetTerritory.HasValue)
@@ -497,6 +521,7 @@ namespace Games.Risk.ViewModel
         private void UpdateCommandAvailability()
         {
             StartGameCommand.RaiseCanExecuteChanged();
+            ReinforceCommand.RaiseCanExecuteChanged();
             AttackCommand.RaiseCanExecuteChanged();
             PassCommand.RaiseCanExecuteChanged();
         }

@@ -18,7 +18,6 @@ namespace Games.Risk.Application
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, TerritoryStatus> _territoryStatusMap;
         private bool _pseudoRandomNumbers;
-        private bool _currentPlayerMayReinforce;
         private bool _currentPlayerHasReinforced;
         private bool _currentPlayerMayTransferArmies;
         private List<Continent> _continents;
@@ -37,6 +36,9 @@ namespace Games.Risk.Application
         public bool GameDecided { get; private set; }
 
         public int ExtraArmiesForCurrentPlayer { get; private set; }
+
+        public bool CurrentPlayerMayReinforce { get; private set; }
+
         public bool NextEventOccursAutomatically
         {
             get => _players[CurrentPlayerIndex];
@@ -96,7 +98,7 @@ namespace Games.Risk.Application
 
             GameInProgress = true;
             CurrentPlayerIndex = 0;
-            _currentPlayerMayReinforce = true;
+            CurrentPlayerMayReinforce = true;
             _currentPlayerMayTransferArmies = true;
 
             Logger?.WriteLine(LogMessageCategory.Information,
@@ -138,7 +140,7 @@ namespace Games.Risk.Application
                 }
             }
 
-            if (_currentPlayerMayReinforce &&
+            if (CurrentPlayerMayReinforce &&
                 _territoryStatusMap.Any(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex))
             {
                 return Reinforce();
@@ -175,6 +177,10 @@ namespace Games.Risk.Application
 
             switch (option)
             {
+                case Reinforce _:
+                {
+                    return Reinforce();
+                }
                 case Attack attack:
                 {
                     return Attack(
@@ -309,7 +315,7 @@ namespace Games.Risk.Application
                 TerritoryConquered = territoryConquered
             };
 
-            _currentPlayerMayReinforce = false;
+            CurrentPlayerMayReinforce = false;
 
             return gameEvent;
         }
@@ -320,7 +326,7 @@ namespace Games.Risk.Application
                 CurrentPlayerIndex);
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
-            _currentPlayerMayReinforce = true;
+            CurrentPlayerMayReinforce = true;
             _currentPlayerMayTransferArmies = true;
 
             return gameEvent;
@@ -333,6 +339,7 @@ namespace Games.Risk.Application
 
             ExtraArmiesForCurrentPlayer = Math.Max(3, territoryCount / 3);
             _currentPlayerHasReinforced = true;
+            CurrentPlayerMayReinforce = false;
 
             return new PlayerReinforces(CurrentPlayerIndex, false);
         }
@@ -398,7 +405,7 @@ namespace Games.Risk.Application
             if (turnGoesToNextPlayer)
             {
                 CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
-                _currentPlayerMayReinforce = true; // This goes for the next player
+                CurrentPlayerMayReinforce = true; // This goes for the next player
                 _currentPlayerMayTransferArmies = true; // This goes for the next player
             }
 
@@ -422,7 +429,7 @@ namespace Games.Risk.Application
             _territoryStatusMap[destinationTerritoryIndex].Armies += armiesTransfered;
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
-            _currentPlayerMayReinforce = true; // This goes for the next player
+            CurrentPlayerMayReinforce = true; // This goes for the next player
             _currentPlayerMayTransferArmies = true; // This goes for the next player
             return gameEvent;
         }
