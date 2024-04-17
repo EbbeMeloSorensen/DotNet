@@ -58,11 +58,16 @@
 
             <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Top"
                         Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
+                <TextBox Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold"
+                         IsReadOnly="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                         Text="{Binding ArmiesToDeploy, Mode=OneWay}"/>
+                <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                         Command="{Binding ReinforceCommand}">Reinforce</Button>
-                <Button Width="200" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
+                <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
+                        Command="{Binding DeployCommand}">Deploy</Button>
+                <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                         Command="{Binding AttackCommand}">Attack</Button>
-                <Button Width="200" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
+                <Button Width="100" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
                         Command="{Binding PassCommand}">Pass</Button>
             </StackPanel>
 

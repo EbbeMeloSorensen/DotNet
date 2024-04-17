@@ -50,10 +50,12 @@ namespace Games.Risk.ViewModel
         private int? _indexOfTargetTerritory;
         private int[] _indexesOfHostileNeighbours;
         private bool _displayAttackVector;
+        private int _armiesToDeploy;
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
         private AsyncCommand _reinforceCommand;
+        private AsyncCommand _deployCommand;
         private AsyncCommand _attackCommand;
         private AsyncCommand _passCommand;
 
@@ -68,6 +70,7 @@ namespace Games.Risk.ViewModel
             }, CanStartGame);
 
         public AsyncCommand ReinforceCommand => _reinforceCommand ??= new AsyncCommand(Reinforce, CanReinforce);
+        public AsyncCommand DeployCommand => _deployCommand ??= new AsyncCommand(Deploy, CanDeploy);
         public AsyncCommand AttackCommand => _attackCommand ??= new AsyncCommand(Attack, CanAttack);
         public AsyncCommand PassCommand => _passCommand ??= new AsyncCommand(Pass, CanPass);
 
@@ -98,6 +101,16 @@ namespace Games.Risk.ViewModel
             set
             {
                 _displayAttackVector = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int ArmiesToDeploy
+        {
+            get => _armiesToDeploy;
+            set
+            {
+                _armiesToDeploy = value;
                 RaisePropertyChanged();
             }
         }
@@ -235,7 +248,7 @@ namespace Games.Risk.ViewModel
 
                 var territoryId = e.ElementId;
 
-                if (_indexesOfHostileNeighbours.Contains(territoryId))
+                if (ArmiesToDeploy == 0 && _indexesOfHostileNeighbours.Contains(territoryId))
                 {
                     SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
                     _indexOfTargetTerritory = territoryId;
@@ -256,9 +269,12 @@ namespace Games.Risk.ViewModel
                 ActiveTerritoryHighlighted = true;
                 AttackVectorVisible = false;
 
-                _indexesOfHostileNeighbours = _application.Engine
-                    .IndexesOfHostileNeighbourTerritories(territoryId)
-                    .ToArray();
+                if (ArmiesToDeploy == 0)
+                {
+                    _indexesOfHostileNeighbours = _application.Engine
+                        .IndexesOfHostileNeighbourTerritories(territoryId)
+                        .ToArray();
+                }
 
                 UpdateCommandAvailability();
             };
@@ -417,6 +433,7 @@ namespace Games.Risk.ViewModel
             var gameEvent = await _application.Engine.PlayerSelectsOption(
                 new Reinforce());
 
+            ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
             ActiveTerritoryHighlighted = false;
             AttackVectorVisible = false;
             _indexOfActiveTerritory = null;
@@ -432,6 +449,19 @@ namespace Games.Risk.ViewModel
             return GameInProgress &&
                    PlayerHasInitiative &&
                    _application.Engine.CurrentPlayerMayReinforce;
+        }
+
+        private async Task Deploy()
+        {
+            ArmiesToDeploy -= 1;
+        }
+
+        private bool CanDeploy()
+        {
+            return GameInProgress &&
+                   PlayerHasInitiative &&
+                   _indexOfActiveTerritory.HasValue &&
+                   ArmiesToDeploy > 0;
         }
 
         private async Task Attack()
@@ -458,6 +488,7 @@ namespace Games.Risk.ViewModel
             return GameInProgress && 
                    PlayerHasInitiative && 
                    _indexOfTargetTerritory.HasValue &&
+                   ArmiesToDeploy == 0 &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1;
         }
 
@@ -488,7 +519,8 @@ namespace Games.Risk.ViewModel
         private bool CanPass()
         {
             return GameInProgress &&
-                   PlayerHasInitiative;
+                   PlayerHasInitiative &&
+                   ArmiesToDeploy == 0;
         }
 
         private void SyncControlsWithApplication()
@@ -522,6 +554,7 @@ namespace Games.Risk.ViewModel
         {
             StartGameCommand.RaiseCanExecuteChanged();
             ReinforceCommand.RaiseCanExecuteChanged();
+            DeployCommand.RaiseCanExecuteChanged();
             AttackCommand.RaiseCanExecuteChanged();
             PassCommand.RaiseCanExecuteChanged();
         }
