@@ -17,11 +17,13 @@ Done:
 * (Risk) Valg blandt options for computer player - der skal være en bonus til en option, hvis der kun er et enkelt fjendtligt naboområde og man vel at mærke også er i overtal
 * (Risk) Hvis man erobrer et territorie ved at angribe fra et territorie, der efterfølgende ligger bag frontlinien, så flyttes alle armeer pånær 1 over
 * (Risk) Når man reinforcer skal det kun ske på frontlinieterritorier
+* (Risk) Tildeling af ratings for army transfer options (basic)
 
 In progress:
 
 Todo 
-* (Risk) Tildeling af ratings for army transfer options
+* (Risk) I starten af hver runde - hvis en spiller har et helt kontinent, skal vedkommende have ekstra armeer
+* (Risk) Tildeling af mere sofistikerede ratings for army transfer options
   I) Det bedste er at flytte armeer fra et isoleret område til et frontlinieområde, især hvis:
     1) Der er mange armeer at flytte
     2) Der er få armeer på frontlinie territoriet
@@ -32,7 +34,6 @@ Todo
       2) det andet frontlinieområde er nabo til et isoleret område
 * (Risk) Der skal være en option om at overføre en arme fra et område til et andet
 * (Risk) Som det sidste i sin runde kan en spiller flytte armeer. En automatisk spiller flytter blot armeer fra et evt isoleret områder til et frontlinieområde
-* (Risk) I starten af hver runde - hvis en spiller har et helt kontinent, skal vedkommende have ekstra armeer
 * (Risk) Der skal være mulighed for at en spiller kan reinforce
 * (Risk) Mulighed for at pause spillet
 * (Risk) 

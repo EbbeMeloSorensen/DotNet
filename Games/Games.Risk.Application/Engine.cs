@@ -177,6 +177,10 @@ namespace Games.Risk.Application
 
             switch (option)
             {
+                case Deploy deploy:
+                {
+                    return DeployArmy(deploy.ActiveTerritoryIndex);
+                }
                 case Reinforce _:
                 {
                     return Reinforce();
@@ -342,6 +346,20 @@ namespace Games.Risk.Application
             CurrentPlayerMayReinforce = false;
 
             return new PlayerReinforces(CurrentPlayerIndex, false);
+        }
+
+        private IGameEvent DeployArmy(
+            int territoryIndex)
+        {
+            ExtraArmiesForCurrentPlayer--;
+            _territoryStatusMap[territoryIndex].Armies++;
+
+            return new PlayerDeploysArmies(
+                CurrentPlayerIndex,
+                false)
+            {
+                TerritoryIndexes = new List<int>{ territoryIndex }
+            };
         }
 
         private IGameEvent DeployArmies(

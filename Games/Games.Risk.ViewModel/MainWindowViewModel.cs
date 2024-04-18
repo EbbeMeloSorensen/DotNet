@@ -269,12 +269,9 @@ namespace Games.Risk.ViewModel
                 ActiveTerritoryHighlighted = true;
                 AttackVectorVisible = false;
 
-                if (ArmiesToDeploy == 0)
-                {
-                    _indexesOfHostileNeighbours = _application.Engine
-                        .IndexesOfHostileNeighbourTerritories(territoryId)
-                        .ToArray();
-                }
+                _indexesOfHostileNeighbours = _application.Engine
+                    .IndexesOfHostileNeighbourTerritories(territoryId)
+                    .ToArray();
 
                 UpdateCommandAvailability();
             };
@@ -448,12 +445,28 @@ namespace Games.Risk.ViewModel
         {
             return GameInProgress &&
                    PlayerHasInitiative &&
-                   _application.Engine.CurrentPlayerMayReinforce;
+                   _application.Engine.CurrentPlayerMayReinforce &&
+                   _application.Engine.ExtraArmiesForCurrentPlayer == 0;
         }
 
         private async Task Deploy()
         {
-            ArmiesToDeploy -= 1;
+            if (!_indexOfActiveTerritory.HasValue)
+            {
+                throw new InvalidOperationException("Deploy called without having selected a territory - should not be possible");
+            }
+
+            var gameEvent = await _application.Engine.PlayerSelectsOption(
+                new Deploy
+                {
+                    ActiveTerritoryIndex = _indexOfActiveTerritory.Value,
+                });
+
+            ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
+
+            SyncControlsWithApplication();
+            UpdateCommandAvailability();
+            LogGameEvent(gameEvent);
         }
 
         private bool CanDeploy()
@@ -468,7 +481,7 @@ namespace Games.Risk.ViewModel
         {
             if (!_indexOfActiveTerritory.HasValue || !_indexOfTargetTerritory.HasValue)
             {
-                throw new InvalidOperationException("Something wrong");
+                throw new InvalidOperationException("Deploy called without having selected two territories - should not be possible");
             }
 
             var gameEvent = await _application.Engine.PlayerSelectsOption(
@@ -497,6 +510,7 @@ namespace Games.Risk.ViewModel
             var gameEvent = await _application.Engine.PlayerSelectsOption(new Pass());
             LogGameEvent(gameEvent);
 
+            _indexOfActiveTerritory = null;
             _indexOfTargetTerritory = null;
             _indexesOfHostileNeighbours = new int[] { };
 
@@ -824,7 +838,18 @@ namespace Games.Risk.ViewModel
                 }
                 case PlayerDeploysArmies playerDeploysArmies:
                 {
-                    sb.Append(" deploys armies in: ");
+                    sb.Append(" deploys ");
+                    
+                    if (playerDeploysArmies.TerritoryIndexes.Count == 1)
+                    {
+                        sb.Append(" an army");
+                    }
+                    else
+                    {
+                        sb.Append($"{playerDeploysArmies.TerritoryIndexes.Count} armies");
+                    }
+
+                    sb.Append(" in: ");
 
                     sb.Append(playerDeploysArmies.TerritoryIndexes
                         .Select(_ => _territoryNameMap[_])
@@ -859,14 +884,16 @@ namespace Games.Risk.ViewModel
                 LogMessageCategory.Information,
                 $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
 
-            // Comment out to diagnose strange behavior
-            //return;
-
             var continents =  _application.Engine.AssignExtraArmiesForControlledContinents();
 
             if (!continents.Any())
             {
                 return;
+            }
+
+            if (PlayerHasInitiative)
+            {
+                ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
             }
 
             var sb = new StringBuilder($"  Player {_application.Engine.CurrentPlayerIndex + 1}");
