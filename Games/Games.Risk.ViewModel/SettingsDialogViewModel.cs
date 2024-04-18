@@ -1,9 +1,9 @@
-﻿using Craft.ViewModels.Dialogs;
-using GalaSoft.MvvmLight.Command;
-using System;
+﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Configuration;
-using System.Linq;
+using GalaSoft.MvvmLight.Command;
+using Craft.ViewModels.Dialogs;
 
 namespace Games.Risk.ViewModel
 {

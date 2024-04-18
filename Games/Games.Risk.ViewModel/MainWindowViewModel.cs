@@ -370,7 +370,8 @@ namespace Games.Risk.ViewModel
         private void OpenSettingsDialog(
             object owner)
         {
-            var dialogViewModel = new SettingsDialogViewModel();
+            //var dialogViewModel = new SettingsDialogViewModel();
+            var dialogViewModel = new TransferArmiesDialogViewModel(7); // (test)
 
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }

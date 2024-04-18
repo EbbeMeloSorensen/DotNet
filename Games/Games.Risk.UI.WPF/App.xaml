@@ -10,5 +10,10 @@
         <DataTemplate DataType="{x:Type viewModel:SettingsDialogViewModel}">
             <local:SettingsDialogView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:TransferArmiesDialogViewModel}">
+            <local:TransferArmiesDialogView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>
