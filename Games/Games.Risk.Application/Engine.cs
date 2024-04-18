@@ -177,13 +177,13 @@ namespace Games.Risk.Application
 
             switch (option)
             {
-                case Deploy deploy:
-                {
-                    return DeployArmy(deploy.ActiveTerritoryIndex);
-                }
                 case Reinforce _:
                 {
                     return Reinforce();
+                }
+                case Deploy deploy:
+                {
+                    return DeployArmy(deploy.ActiveTerritoryIndex);
                 }
                 case Attack attack:
                 {
@@ -316,7 +316,8 @@ namespace Games.Risk.Application
                 DefendingPlayerIndex = defendingPlayerIndex,
                 CasualtiesAttacker = casualtiesAttacker,
                 CasualtiesDefender = casualtiesDefender,
-                TerritoryConquered = territoryConquered
+                TerritoryConquered = territoryConquered,
+                DiceRolledByAttacker = diceCountAttacker
             };
 
             CurrentPlayerMayReinforce = false;

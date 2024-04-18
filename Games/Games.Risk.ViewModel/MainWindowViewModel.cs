@@ -26,6 +26,7 @@ namespace Games.Risk.ViewModel
     {
         private Dictionary<int, string> _territoryNameMap;
 
+        private Window _owner;
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
@@ -370,8 +371,7 @@ namespace Games.Risk.ViewModel
         private void OpenSettingsDialog(
             object owner)
         {
-            //var dialogViewModel = new SettingsDialogViewModel();
-            var dialogViewModel = new TransferArmiesDialogViewModel(7); // (test)
+            var dialogViewModel = new SettingsDialogViewModel();
 
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }
@@ -495,6 +495,21 @@ namespace Games.Risk.ViewModel
             SyncControlsWithApplication();
             UpdateCommandAvailability();
             LogGameEvent(gameEvent);
+
+            var playerAttacks = gameEvent as PlayerAttacks;
+
+            if (playerAttacks.TerritoryConquered)
+            {
+                var a = _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies;
+                var b = _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).Armies;
+
+                var dialog = new TransferArmiesDialogViewModel(playerAttacks.DiceRolledByAttacker, a + b - 1);
+
+                _applicationDialogService.ShowDialog(dialog, null);
+
+                var c = dialog.ArmiesToTransfer;
+                var d = 0;
+            }
         }
 
         private bool CanAttack()

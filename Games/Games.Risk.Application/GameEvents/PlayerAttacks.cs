@@ -8,6 +8,7 @@
         public int CasualtiesAttacker { get; set; }
         public int CasualtiesDefender { get; set; }
         public bool TerritoryConquered { get; set; }
+        public int DiceRolledByAttacker { get; set; }
 
         public PlayerAttacks(
             int playerIndex) : base(
