@@ -499,10 +499,12 @@ namespace Games.Risk.ViewModel
         private bool CanAttack()
         {
             return GameInProgress && 
-                   PlayerHasInitiative && 
-                   _indexOfTargetTerritory.HasValue &&
+                   PlayerHasInitiative &&
                    ArmiesToDeploy == 0 &&
-                   _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1;
+                   _indexOfActiveTerritory.HasValue &&
+                   _indexOfTargetTerritory.HasValue &&
+                   _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
+                   _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex != _application.Engine.CurrentPlayerIndex;
         }
 
         private async Task Pass()
