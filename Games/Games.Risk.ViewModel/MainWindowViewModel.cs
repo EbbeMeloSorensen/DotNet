@@ -362,7 +362,7 @@ namespace Games.Risk.ViewModel
             UpdateCommandAvailability();
 
             // Diagnotics: Make the game fully automatic by making the player pass
-            if (PlayerHasInitiative && false)
+            if (PlayerHasInitiative)
             {
                 await Pass();
             }

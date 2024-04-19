@@ -21,6 +21,9 @@ namespace Games.Risk.Application
         private bool _currentPlayerHasReinforced;
         private bool _currentPlayerMayTransferArmies;
         private List<Continent> _continents;
+        private bool _territoryWasJustConquered;
+        private int _conqueringTerritoryId;
+        private int _conqueredTerritoryId;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -108,6 +111,15 @@ namespace Games.Risk.Application
         public async Task<IGameEvent> ExecuteNextEvent()
         {
             await Task.Delay(1);
+
+            if (_territoryWasJustConquered)
+            {
+                _territoryWasJustConquered = false;
+
+                var armiesLeftInConqueringTerritory = _territoryStatusMap[_conqueringTerritoryId].Armies;
+
+                //throw new NotImplementedException("Todo: transfer troops");
+            }
 
             if (ExtraArmiesForCurrentPlayer > 0)
             {
@@ -244,6 +256,7 @@ namespace Games.Risk.Application
                 .Select(_ => _.Key);
         }
 
+        // Kaldes fra ExecuteNextEvent samt PlayerSelectsOption, dvs både når computeren agerer og når en spiller agerer
         private IGameEvent Attack(
             int activeTerritoryIndex,
             int targetTerritoryIndex)
@@ -280,23 +293,30 @@ namespace Games.Risk.Application
             _territoryStatusMap[activeTerritoryIndex].Armies -= casualtiesAttacker;
             _territoryStatusMap[targetTerritoryIndex].Armies -= casualtiesDefender;
 
-            var territoryConquered = false;
+            _territoryWasJustConquered = false;
             var defendingPlayerIndex = _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex;
 
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
             {
-                territoryConquered = true;
+                _territoryWasJustConquered = true;
+                _conqueringTerritoryId = activeTerritoryIndex;
+                _conqueredTerritoryId = targetTerritoryIndex;
+
                 _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex = CurrentPlayerIndex;
 
                 var armiesLeft = _territoryStatusMap[activeTerritoryIndex].Armies;
 
+                // Dette skal vi ikke gøre her, da det nu også bruges for den menneskelige spiller, som selv bestemmer,
+                // hvor mange armeer der skal flyttes
                 // Did we manage to establish an isolated territory?
-                var isolatedTerritoryEstablished = _graphOfTerritories.NeighborIds(activeTerritoryIndex)
-                    .All(neighborId => _territoryStatusMap[neighborId].ControllingPlayerIndex == CurrentPlayerIndex);
+                //var isolatedTerritoryEstablished = _graphOfTerritories.NeighborIds(activeTerritoryIndex)
+                //    .All(neighborId => _territoryStatusMap[neighborId].ControllingPlayerIndex == CurrentPlayerIndex);
 
-                var armyTransferCount = isolatedTerritoryEstablished
-                    ? armiesLeft - 1
-                    : (armiesLeft + 1) / 2;
+                //var armyTransferCount = isolatedTerritoryEstablished
+                //    ? armiesLeft - 1
+                //    : (armiesLeft + 1) / 2;
+
+                var armyTransferCount = diceCountAttacker;
 
                 _territoryStatusMap[targetTerritoryIndex].Armies = armyTransferCount;
                 _territoryStatusMap[activeTerritoryIndex].Armies = armiesLeft - armyTransferCount;
@@ -316,7 +336,7 @@ namespace Games.Risk.Application
                 DefendingPlayerIndex = defendingPlayerIndex,
                 CasualtiesAttacker = casualtiesAttacker,
                 CasualtiesDefender = casualtiesDefender,
-                TerritoryConquered = territoryConquered,
+                TerritoryConquered = _territoryWasJustConquered,
                 DiceRolledByAttacker = diceCountAttacker
             };
 
