@@ -26,11 +26,10 @@ namespace Games.Risk.ViewModel
     {
         private Dictionary<int, string> _territoryNameMap;
 
-        private Window _owner;
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 0;
+        private const int _delay = 300;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private List<Continent> _continents;
         private Dictionary<int, Brush> _colorPalette;
@@ -364,7 +363,7 @@ namespace Games.Risk.ViewModel
             // Diagnotics: Make the game fully automatic by making the player pass
             if (PlayerHasInitiative)
             {
-                await Pass();
+                //await Pass();
             }
         }
 
@@ -500,15 +499,34 @@ namespace Games.Risk.ViewModel
 
             if (playerAttacks.TerritoryConquered)
             {
-                var a = _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies;
-                var b = _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).Armies;
+                var armiesInTotal =
+                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies +
+                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).Armies;
 
-                var dialog = new TransferArmiesDialogViewModel(playerAttacks.DiceRolledByAttacker, a + b - 1);
+                var sb = new StringBuilder($"You succesfully conquered {_territoryNameMap[_indexOfTargetTerritory.Value]}");
+                sb.Append($" from {_territoryNameMap[_indexOfActiveTerritory.Value]}");
+
+                var dialog = new TransferArmiesDialogViewModel(
+                    sb.ToString(),
+                    playerAttacks.DiceRolledByAttacker, 
+                    armiesInTotal - 1);
 
                 _applicationDialogService.ShowDialog(dialog, null);
 
-                var c = dialog.ArmiesToTransfer;
-                var d = 0;
+                gameEvent = _application.Engine.TransferArmies(
+                    _indexOfActiveTerritory.Value,
+                    _indexOfTargetTerritory.Value,
+                    dialog.ArmiesToTransfer,
+                    false);
+
+                _indexesOfHostileNeighbours = _application.Engine
+                    .IndexesOfHostileNeighbourTerritories(_indexOfActiveTerritory.Value)
+                    .ToArray();
+
+                AttackVectorVisible = false;
+                SyncControlsWithApplication();
+                UpdateCommandAvailability();
+                LogGameEvent(gameEvent);
             }
         }
 
@@ -519,6 +537,7 @@ namespace Games.Risk.ViewModel
                    ArmiesToDeploy == 0 &&
                    _indexOfActiveTerritory.HasValue &&
                    _indexOfTargetTerritory.HasValue &&
+                   !_application.Engine.CurrentPlayerHasReinforced &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex != _application.Engine.CurrentPlayerIndex;
         }
@@ -568,7 +587,7 @@ namespace Games.Risk.ViewModel
                 MapViewModel.StylePoint(
                     _.Id, 
                     _colorPalette[territoryStatus.ControllingPlayerIndex],
-                    territoryStatus.Armies.ToString());
+                    territoryStatus.Armies == 0 ? "" : $"{territoryStatus.Armies}");
             });
         }
 
@@ -882,7 +901,8 @@ namespace Games.Risk.ViewModel
                 }
                 case PlayerTransfersArmies playerTransfersArmies:
                 {
-                    sb.Append($" transfers {playerTransfersArmies.ArmiesTransfered} armies");
+                    sb.Append($" transfers {playerTransfersArmies.ArmiesTransfered} ");
+                    sb.Append(playerTransfersArmies.ArmiesTransfered == 1 ? "army" : "armies");
                     sb.Append($" from {_territoryNameMap[playerTransfersArmies.Vertex1]}");
                     sb.Append($" to {_territoryNameMap[playerTransfersArmies.Vertex2]}");
                     break;

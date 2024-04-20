@@ -8,8 +8,19 @@ namespace Games.Risk.ViewModel;
 
 public class TransferArmiesDialogViewModel : DialogViewModelBase
 {
+    private string _message;
     private int _armiesToTransfer;
     private RelayCommand<object> _okCommand;
+
+    public string Message
+    {
+        get => _message;
+        set
+        {
+            _message = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public int ArmiesToTransfer
     {
@@ -29,9 +40,11 @@ public class TransferArmiesDialogViewModel : DialogViewModelBase
     }
 
     public TransferArmiesDialogViewModel(
+        string message,
         int minNumberOfArmies,
         int maxNumberOfArmies)
     {
+        Message = message;
         ArmyTransferOptions = new ObservableCollection<int>(Enumerable.Range(minNumberOfArmies, maxNumberOfArmies - minNumberOfArmies + 1));
         ArmiesToTransfer = minNumberOfArmies;
     }

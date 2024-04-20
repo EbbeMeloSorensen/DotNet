@@ -16,14 +16,18 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Margin="10" Text="Transfer Troops:"/>
-        <ComboBox Grid.Row="0" Grid.Column="1" Margin="10" 
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10"
+                   Text="{Binding Message}"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="10" Text="Transfer Troops:"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" Margin="10" 
                   ItemsSource="{Binding ArmyTransferOptions}"
                   SelectedValue="{Binding ArmiesToTransfer}"/>
 
-        <Button Margin="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="OK"
+        <Button Margin="10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="OK"
                 Command="{Binding OKCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
     </Grid>

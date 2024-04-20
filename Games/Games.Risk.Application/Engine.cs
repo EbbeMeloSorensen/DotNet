@@ -13,17 +13,14 @@ namespace Games.Risk.Application
 {
     public class Engine
     {
-        private const int _targetScore = 100;
-        private const int _dieFaces = 6;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private Dictionary<int, TerritoryStatus> _territoryStatusMap;
-        private bool _pseudoRandomNumbers;
-        private bool _currentPlayerHasReinforced;
         private bool _currentPlayerMayTransferArmies;
         private List<Continent> _continents;
         private bool _territoryWasJustConquered;
         private int _conqueringTerritoryId;
         private int _conqueredTerritoryId;
+        private int _armiesInFinalAttack;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -42,6 +39,8 @@ namespace Games.Risk.Application
 
         public bool CurrentPlayerMayReinforce { get; private set; }
 
+        public bool CurrentPlayerHasReinforced { get; private set; }
+
         public bool NextEventOccursAutomatically
         {
             get => _players[CurrentPlayerIndex];
@@ -54,7 +53,6 @@ namespace Games.Risk.Application
             bool pseudoRandomNumbers,
             IGraph<LabelledVertex, EmptyEdge> graphOfTerritories)
         {
-            _pseudoRandomNumbers = pseudoRandomNumbers;
             _graphOfTerritories = graphOfTerritories;
             var playerCount = players.Count();
 
@@ -118,18 +116,32 @@ namespace Games.Risk.Application
 
                 var armiesLeftInConqueringTerritory = _territoryStatusMap[_conqueringTerritoryId].Armies;
 
-                //throw new NotImplementedException("Todo: transfer troops");
+                if (armiesLeftInConqueringTerritory - 1 == _armiesInFinalAttack)
+                {
+                    return TransferArmies(
+                        _conqueringTerritoryId,
+                        _conqueredTerritoryId,
+                        _armiesInFinalAttack,
+                        true);
+                }
+
+                var isolatedTerritoryEstablished = _graphOfTerritories.NeighborIds(_conqueringTerritoryId)
+                    .All(neighborId => _territoryStatusMap[neighborId].ControllingPlayerIndex == CurrentPlayerIndex);
+
+                var armyTransferCount = isolatedTerritoryEstablished
+                    ? armiesLeftInConqueringTerritory - 1
+                    : (armiesLeftInConqueringTerritory + 1) / 2;
+
+                return TransferArmies(
+                    _conqueringTerritoryId,
+                    _conqueredTerritoryId,
+                    armyTransferCount,
+                    true);
             }
 
             if (ExtraArmiesForCurrentPlayer > 0)
             {
-                if (!_currentPlayerHasReinforced)
-                {
-                    return DeployArmies(false);
-                }
-
-                _currentPlayerHasReinforced = false;
-                return DeployArmies(true);
+                return DeployArmies(CurrentPlayerHasReinforced);
             }
 
             var attackOptions = IdentifyAttackOptionsForCurrentPlayer();
@@ -175,7 +187,8 @@ namespace Games.Risk.Application
                     return TransferArmies(
                         chosenOption.InitialTerritoryIndex,
                         chosenOption.DestinationTerritoryIndex,
-                        _territoryStatusMap[chosenOption.InitialTerritoryIndex].Armies - 1);
+                        _territoryStatusMap[chosenOption.InitialTerritoryIndex].Armies - 1,
+                        true);
                 }
             }
 
@@ -301,28 +314,16 @@ namespace Games.Risk.Application
                 _territoryWasJustConquered = true;
                 _conqueringTerritoryId = activeTerritoryIndex;
                 _conqueredTerritoryId = targetTerritoryIndex;
+                _armiesInFinalAttack = diceCountAttacker;
 
                 _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex = CurrentPlayerIndex;
 
-                var armiesLeft = _territoryStatusMap[activeTerritoryIndex].Armies;
-
-                // Dette skal vi ikke gøre her, da det nu også bruges for den menneskelige spiller, som selv bestemmer,
-                // hvor mange armeer der skal flyttes
-                // Did we manage to establish an isolated territory?
-                //var isolatedTerritoryEstablished = _graphOfTerritories.NeighborIds(activeTerritoryIndex)
-                //    .All(neighborId => _territoryStatusMap[neighborId].ControllingPlayerIndex == CurrentPlayerIndex);
-
-                //var armyTransferCount = isolatedTerritoryEstablished
-                //    ? armiesLeft - 1
-                //    : (armiesLeft + 1) / 2;
-
-                var armyTransferCount = diceCountAttacker;
-
-                _territoryStatusMap[targetTerritoryIndex].Armies = armyTransferCount;
-                _territoryStatusMap[activeTerritoryIndex].Armies = armiesLeft - armyTransferCount;
-
                 if (_territoryStatusMap.All(_ => _.Value.ControllingPlayerIndex == CurrentPlayerIndex))
                 {
+                    var armiesLeft = _territoryStatusMap[activeTerritoryIndex].Armies;
+                    var armyTransferCount = diceCountAttacker;
+                    _territoryStatusMap[targetTerritoryIndex].Armies = armyTransferCount;
+                    _territoryStatusMap[activeTerritoryIndex].Armies = armiesLeft - armyTransferCount;
                     GameDecided = true;
                     GameInProgress = false;
                 }
@@ -353,6 +354,7 @@ namespace Games.Risk.Application
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
             CurrentPlayerMayReinforce = true;
             _currentPlayerMayTransferArmies = true;
+            _territoryWasJustConquered = false;
 
             return gameEvent;
         }
@@ -363,7 +365,7 @@ namespace Games.Risk.Application
                 IndexesOfControlledTerritories(CurrentPlayerIndex).Count();
 
             ExtraArmiesForCurrentPlayer = Math.Max(3, territoryCount / 3);
-            _currentPlayerHasReinforced = true;
+            CurrentPlayerHasReinforced = true;
             CurrentPlayerMayReinforce = false;
 
             return new PlayerReinforces(CurrentPlayerIndex, false);
@@ -430,10 +432,7 @@ namespace Games.Risk.Application
                 });
 
             ExtraArmiesForCurrentPlayer = 0;
-
-            var reinforcedTerritoryIndexesAsCSV = territoryIndexes
-                .Select(_ => _.ToString()).Aggregate((c, n) => $"{c}, {n}");
-
+            
             var gameEvent = new PlayerDeploysArmies(
                 CurrentPlayerIndex,
                 turnGoesToNextPlayer)
@@ -445,31 +444,38 @@ namespace Games.Risk.Application
             {
                 CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
                 CurrentPlayerMayReinforce = true; // This goes for the next player
+                CurrentPlayerHasReinforced = false; // This goes for the next player
                 _currentPlayerMayTransferArmies = true; // This goes for the next player
             }
 
             return gameEvent;
         }
 
-        private IGameEvent TransferArmies(
+        public IGameEvent TransferArmies(
             int initialTerritoryIndex,
             int destinationTerritoryIndex,
-            int armiesTransfered)
+            int armiesToTransfer,
+            bool turnGoesToNextPlayer)
         {
             var gameEvent = new PlayerTransfersArmies(
                 CurrentPlayerIndex)
             {
                 Vertex1 = initialTerritoryIndex,
                 Vertex2 = destinationTerritoryIndex,
-                ArmiesTransfered = armiesTransfered
+                ArmiesTransfered = armiesToTransfer
             };
 
-            _territoryStatusMap[initialTerritoryIndex].Armies -= armiesTransfered;
-            _territoryStatusMap[destinationTerritoryIndex].Armies += armiesTransfered;
+            _territoryStatusMap[initialTerritoryIndex].Armies -= armiesToTransfer;
+            _territoryStatusMap[destinationTerritoryIndex].Armies += armiesToTransfer;
 
-            CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
-            CurrentPlayerMayReinforce = true; // This goes for the next player
-            _currentPlayerMayTransferArmies = true; // This goes for the next player
+            if (turnGoesToNextPlayer)
+            {
+                CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
+                CurrentPlayerMayReinforce = true; // This goes for the next player
+                CurrentPlayerHasReinforced = false; // This goes for the next player
+                _currentPlayerMayTransferArmies = true; // This goes for the next player
+            }
+
             return gameEvent;
         }
 
