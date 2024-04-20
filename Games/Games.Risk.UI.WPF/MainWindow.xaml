@@ -67,6 +67,8 @@
                         Command="{Binding DeployCommand}">Deploy</Button>
                 <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                         Command="{Binding AttackCommand}">Attack</Button>
+                <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
+                        Command="{Binding MoveCommand}">Move</Button>
                 <Button Width="100" Height="50"  Margin="10" FontSize="15" FontWeight="Bold"
                         Command="{Binding PassCommand}">Pass</Button>
             </StackPanel>
@@ -127,7 +129,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="500"
+            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="500" IsHitTestVisible="False"
                     Visibility="{Binding ActiveTerritoryHighlighted, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Ellipse Fill="Transparent" Stroke="Black" StrokeThickness="6" 
                          Width="40" Height="40" 

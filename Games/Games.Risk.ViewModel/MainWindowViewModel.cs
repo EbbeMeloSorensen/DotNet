@@ -49,6 +49,7 @@ namespace Games.Risk.ViewModel
         private int? _indexOfActiveTerritory;
         private int? _indexOfTargetTerritory;
         private int[] _indexesOfHostileNeighbours;
+        private int[] _indexesOfReachableTerritories;
         private bool _displayAttackVector;
         private int _armiesToDeploy;
 
@@ -57,6 +58,7 @@ namespace Games.Risk.ViewModel
         private AsyncCommand _reinforceCommand;
         private AsyncCommand _deployCommand;
         private AsyncCommand _attackCommand;
+        private AsyncCommand _moveCommand;
         private AsyncCommand _passCommand;
 
         public RelayCommand<object> OpenSettingsDialogCommand =>
@@ -72,6 +74,7 @@ namespace Games.Risk.ViewModel
         public AsyncCommand ReinforceCommand => _reinforceCommand ??= new AsyncCommand(Reinforce, CanReinforce);
         public AsyncCommand DeployCommand => _deployCommand ??= new AsyncCommand(Deploy, CanDeploy);
         public AsyncCommand AttackCommand => _attackCommand ??= new AsyncCommand(Attack, CanAttack);
+        public AsyncCommand MoveCommand => _moveCommand ??= new AsyncCommand(Move, CanMove);
         public AsyncCommand PassCommand => _passCommand ??= new AsyncCommand(Pass, CanPass);
 
         public GraphViewModel MapViewModel { get; }
@@ -221,7 +224,8 @@ namespace Games.Risk.ViewModel
                 _ => _.Id,
                 _ => _.Label);
 
-            _indexesOfHostileNeighbours = new int[]{};
+            _indexesOfHostileNeighbours = new int[] { };
+            _indexesOfReachableTerritories = new int[] {};
             
             MapViewModel = new GraphViewModel(_graphOfTerritories, 1100, 500)
             {
@@ -248,8 +252,21 @@ namespace Games.Risk.ViewModel
 
                 var territoryId = e.ElementId;
 
+                if (_indexOfActiveTerritory.HasValue && _indexOfActiveTerritory.Value == territoryId)
+                {
+                    // Deselect active territory
+                    _indexOfActiveTerritory = null;
+                    _indexesOfHostileNeighbours = new int[] { };
+                    _indexesOfReachableTerritories = new int[] { };
+                    ActiveTerritoryHighlighted = false;
+                    AttackVectorVisible = false;
+                    UpdateCommandAvailability();
+                    return;
+                }
+
                 if (ArmiesToDeploy == 0 && _indexesOfHostileNeighbours.Contains(territoryId))
                 {
+                    // Select hostile neighbor to active territory
                     SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
                     _indexOfTargetTerritory = territoryId;
                     AttackVectorVisible = true;
@@ -260,9 +277,11 @@ namespace Games.Risk.ViewModel
                 if (_application.Engine.CurrentPlayerIndex !=
                     _application.Engine.GetTerritoryStatus(territoryId).ControllingPlayerIndex)
                 {
+                    // User clicked on a hostile territory that is not a neighbour of the active territory - we ignore that
                     return;
                 }
 
+                // Select active territory
                 _indexOfActiveTerritory = territoryId;
                 _indexOfTargetTerritory = null;
                 SelectedVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
@@ -542,6 +561,17 @@ namespace Games.Risk.ViewModel
                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex != _application.Engine.CurrentPlayerIndex;
         }
 
+        private async Task Move()
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanMove()
+        {
+            return GameInProgress &&
+                   PlayerHasInitiative;
+        }
+
         private async Task Pass()
         {
             var gameEvent = await _application.Engine.PlayerSelectsOption(new Pass());
@@ -550,6 +580,7 @@ namespace Games.Risk.ViewModel
             _indexOfActiveTerritory = null;
             _indexOfTargetTerritory = null;
             _indexesOfHostileNeighbours = new int[] { };
+            _indexesOfReachableTerritories = new int[] { };
 
             if (_application.Engine.GameDecided)
             {
@@ -607,6 +638,7 @@ namespace Games.Risk.ViewModel
             ReinforceCommand.RaiseCanExecuteChanged();
             DeployCommand.RaiseCanExecuteChanged();
             AttackCommand.RaiseCanExecuteChanged();
+            MoveCommand.RaiseCanExecuteChanged();
             PassCommand.RaiseCanExecuteChanged();
         }
 
@@ -615,58 +647,58 @@ namespace Games.Risk.ViewModel
             var vertices = new List<LabelledVertex>
             {
                 // North America
-                new LabelledVertex("Alaska"),                //  0
-                new LabelledVertex("Northwest Territory"),   //  1
-                new LabelledVertex("Greenland"),             //  2
-                new LabelledVertex("Alberta"),               //  3
-                new LabelledVertex("Ontario"),               //  4
-                new LabelledVertex("Quebec"),                //  5
-                new LabelledVertex("Western United States"), //  6
-                new LabelledVertex("Eastern United States"), //  7
-                new LabelledVertex("Central America"),       //  8
+                new LabelledVertex("Alaska"),                //  0 (soldier)
+                new LabelledVertex("Northwest Territory"),   //  1 (canon)
+                new LabelledVertex("Greenland"),             //  2 (horse)
+                new LabelledVertex("Alberta"),               //  3 (horse)
+                new LabelledVertex("Ontario"),               //  4 (horse)
+                new LabelledVertex("Quebec"),                //  5 (horse)
+                new LabelledVertex("Western United States"), //  6 (canon)
+                new LabelledVertex("Eastern United States"), //  7 (canon)
+                new LabelledVertex("Central America"),       //  8 (canon)
 
                 // South America
-                new LabelledVertex("Venezuela"),   //  9
-                new LabelledVertex("Peru"),        // 10
-                new LabelledVertex("Argentina"),   // 11
-                new LabelledVertex("Brazil"),      // 12
+                new LabelledVertex("Venezuela"),   //  9 (soldier)
+                new LabelledVertex("Peru"),        // 10 (soldier)
+                new LabelledVertex("Argentina"),   // 11 (soldier)
+                new LabelledVertex("Brazil"),      // 12 (canon)
 
                 // Europe
-                new LabelledVertex("Iceland"),         // 13
-                new LabelledVertex("Scandinavia"),     // 14
-                new LabelledVertex("Great Britain"),   // 15
-                new LabelledVertex("Northern Europe"), // 16
-                new LabelledVertex("Ukraine"),         // 17
-                new LabelledVertex("Western Europe"),  // 18
-                new LabelledVertex("Southern Europe"), // 19
+                new LabelledVertex("Iceland"),         // 13 (soldier)
+                new LabelledVertex("Scandinavia"),     // 14 (horse)
+                new LabelledVertex("Great Britain"),   // 15 (canon)
+                new LabelledVertex("Northern Europe"), // 16 (canon)
+                new LabelledVertex("Ukraine"),         // 17 (horse)
+                new LabelledVertex("Western Europe"),  // 18 (canon)
+                new LabelledVertex("Southern Europe"), // 19 (canon)
 
                 // Africa
-                new LabelledVertex("North Africa"), // 20
-                new LabelledVertex("Egypt"),        // 21
-                new LabelledVertex("East Africa"),  // 22
-                new LabelledVertex("Congo"),        // 23
-                new LabelledVertex("South Africa"), // 24
-                new LabelledVertex("Madagascar"),   // 25
+                new LabelledVertex("North Africa"), // 20 (horse)
+                new LabelledVertex("Egypt"),        // 21 (soldier)
+                new LabelledVertex("East Africa"),  // 22 (soldier)
+                new LabelledVertex("Congo"),        // 23 (soldier)
+                new LabelledVertex("South Africa"), // 24 (canon)
+                new LabelledVertex("Madagascar"),   // 25 (horse)
 
                 // Asia
-                new LabelledVertex("Siberia"),     // 26
-                new LabelledVertex("Ural"),        // 27
-                new LabelledVertex("Yakutsk"),     // 28
-                new LabelledVertex("Kamchatka"),   // 29
-                new LabelledVertex("Irkutsk"),     // 30
-                new LabelledVertex("Afghanistan"), // 31
-                new LabelledVertex("Mongolia"),    // 32
-                new LabelledVertex("Japan"),       // 33
-                new LabelledVertex("China"),       // 34
-                new LabelledVertex("Middle East"), // 35
-                new LabelledVertex("India"),       // 36
-                new LabelledVertex("Siam"),        // 37
+                new LabelledVertex("Siberia"),     // 26 (horse)
+                new LabelledVertex("Ural"),        // 27 (horse)
+                new LabelledVertex("Yakutsk"),     // 28 (horse)
+                new LabelledVertex("Kamchatka"),   // 29 (soldier)
+                new LabelledVertex("Irkutsk"),     // 30 (horse)
+                new LabelledVertex("Afghanistan"), // 31 (horse)
+                new LabelledVertex("Mongolia"),    // 32 (soldier)
+                new LabelledVertex("Japan"),       // 33 (canon)
+                new LabelledVertex("China"),       // 34 (soldier)
+                new LabelledVertex("Middle East"), // 35 (soldier)
+                new LabelledVertex("India"),       // 36 (horse)
+                new LabelledVertex("Siam"),        // 37 (soldier)
 
                 // Oceania
-                new LabelledVertex("Indonesia"),         // 38
-                new LabelledVertex("New Guinea"),        // 39
-                new LabelledVertex("Western Australia"), // 40
-                new LabelledVertex("Eastern Australia"), // 41
+                new LabelledVertex("Indonesia"),         // 38 (canon)
+                new LabelledVertex("New Guinea"),        // 39 (soldier)
+                new LabelledVertex("Western Australia"), // 40 (canon)
+                new LabelledVertex("Eastern Australia"), // 41 (canon)
             };
 
             var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, false);
