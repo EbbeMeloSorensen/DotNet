@@ -29,7 +29,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 300;
+        private const int _delay = 200;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private List<Continent> _continents;
         private Dictionary<int, Brush> _colorPalette;
@@ -264,14 +264,27 @@ namespace Games.Risk.ViewModel
                     return;
                 }
 
-                if (ArmiesToDeploy == 0 && _indexesOfHostileNeighbours.Contains(territoryId))
+                if (ArmiesToDeploy == 0)
                 {
-                    // Select hostile neighbor to active territory
-                    SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
-                    _indexOfTargetTerritory = territoryId;
-                    AttackVectorVisible = true;
-                    UpdateCommandAvailability();
-                    return;
+                    if (_indexesOfHostileNeighbours.Contains(territoryId))
+                    {
+                        // Select hostile neighbor to active territory
+                        SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
+                        _indexOfTargetTerritory = territoryId;
+                        AttackVectorVisible = true;
+                        UpdateCommandAvailability();
+                        return;
+                    }
+                    
+                    if (_indexesOfReachableTerritories.Contains(territoryId))
+                    {
+                        // Select territory reachable from active territory
+                        SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
+                        _indexOfTargetTerritory = territoryId;
+                        AttackVectorVisible = true;
+                        UpdateCommandAvailability();
+                        return;
+                    }
                 }
                 
                 if (_application.Engine.CurrentPlayerIndex !=
@@ -575,7 +588,12 @@ namespace Games.Risk.ViewModel
         private bool CanMove()
         {
             return GameInProgress &&
-                   PlayerHasInitiative;
+                   PlayerHasInitiative &&
+                   ArmiesToDeploy == 0 &&
+                   _indexOfActiveTerritory.HasValue &&
+                   _indexOfTargetTerritory.HasValue &&
+                   _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
+                   _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex == _application.Engine.CurrentPlayerIndex;
         }
 
         private async Task Pass()

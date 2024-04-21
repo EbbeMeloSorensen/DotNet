@@ -243,9 +243,10 @@ namespace Games.Risk.Application
         public IEnumerable<int> IndexesOfReachableTerritories(
             int territoryId)
         {
-
-
-            throw new NotImplementedException();
+            var handled = new HashSet<int>();
+            var reachable = GetConnectedComponent(territoryId, CurrentPlayerIndex, handled);
+            reachable.Remove(territoryId);
+            return reachable;
         }
 
         public List<string> AssignExtraArmiesForControlledContinents()
@@ -627,41 +628,20 @@ namespace Games.Risk.Application
                 .Select(vertex => vertex.Id)
                 .ToList();
 
-            vertexIds.ForEach(vertexIdInGraph =>
+            vertexIds.ForEach(vertexId=>
             {
-                if (handled.Contains(vertexIdInGraph))
+                if (handled.Contains(vertexId))
                 {
                     return;
                 }
 
                 var controllingPlayerIndex =
-                    _territoryStatusMap[vertexIdInGraph].ControllingPlayerIndex;
+                    _territoryStatusMap[vertexId].ControllingPlayerIndex;
 
-                var connectedComponent = new HashSet<int>();
-                var queue = new Queue<int>();
-                queue.Enqueue(vertexIdInGraph);
-
-                while (queue.Any())
-                {
-                    var vertexIdInComponent = queue.Dequeue();
-                    connectedComponent.Add(vertexIdInComponent);
-                    handled.Add(vertexIdInComponent);
-
-                    var neighbours = _graphOfTerritories
-                        .NeighborIds(vertexIdInComponent).ToList();
-
-                    neighbours.ForEach(neighbourId =>
-                    {
-                        if (connectedComponent.Contains(neighbourId) ||
-                            queue.Contains(neighbourId) ||
-                            _territoryStatusMap[neighbourId].ControllingPlayerIndex != controllingPlayerIndex)
-                        {
-                            return;
-                        }
-
-                        queue.Enqueue(neighbourId);
-                    });
-                }
+                var connectedComponent = GetConnectedComponent(
+                    controllingPlayerIndex,
+                    vertexId, 
+                    handled);
 
                 if (!result.ContainsKey(controllingPlayerIndex))
                 {
@@ -672,6 +652,41 @@ namespace Games.Risk.Application
             });
 
             return result;
+        }
+
+        private List<int> GetConnectedComponent(
+            int vertexId,
+            int controllingPlayerIndex,
+            ISet<int> handled)
+        {
+            var connectedComponent = new HashSet<int>();
+            var queue = new Queue<int>();
+            queue.Enqueue(vertexId);
+
+            while (queue.Any())
+            {
+                var vertexIdInComponent = queue.Dequeue();
+                connectedComponent.Add(vertexIdInComponent);
+                handled.Add(vertexIdInComponent);
+
+                var neighbors = _graphOfTerritories
+                    .NeighborIds(vertexIdInComponent)
+                    .ToList();
+
+                neighbors.ForEach(neighbourId =>
+                {
+                    if (connectedComponent.Contains(neighbourId) ||
+                        queue.Contains(neighbourId) ||
+                        _territoryStatusMap[neighbourId].ControllingPlayerIndex != controllingPlayerIndex)
+                    {
+                        return;
+                    }
+
+                    queue.Enqueue(neighbourId);
+                });
+            }
+
+            return connectedComponent.ToList();
         }
     }
 }
