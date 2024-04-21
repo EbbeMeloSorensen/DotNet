@@ -29,7 +29,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 200;
+        private const int _delay = 500;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private List<Continent> _continents;
         private Dictionary<int, Brush> _colorPalette;
@@ -484,6 +484,7 @@ namespace Games.Risk.ViewModel
             return GameInProgress &&
                    PlayerHasInitiative &&
                    _application.Engine.CurrentPlayerMayReinforce &&
+                   !_application.Engine.CurrentPlayerHasMovedTroops &&
                    _application.Engine.ExtraArmiesForCurrentPlayer == 0;
         }
 
@@ -537,30 +538,38 @@ namespace Games.Risk.ViewModel
 
             if (playerAttacks.TerritoryConquered)
             {
-                var armiesInTotal =
-                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies +
-                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).Armies;
+                if (_application.Engine.GameDecided)
+                {
+                    GameResultMessage = "Congratulations\nYou won!";
+                    ActiveTerritoryHighlighted = false;
+                }
+                else
+                {
+                    var armiesInTotal =
+                        _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies +
+                        _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).Armies;
 
-                var sb = new StringBuilder($"You succesfully conquered {_territoryNameMap[_indexOfTargetTerritory.Value]}");
-                sb.Append($" from {_territoryNameMap[_indexOfActiveTerritory.Value]}");
+                    var sb = new StringBuilder($"You succesfully conquered {_territoryNameMap[_indexOfTargetTerritory.Value]}");
+                    sb.Append($" from {_territoryNameMap[_indexOfActiveTerritory.Value]}");
 
-                var dialog = new TransferArmiesDialogViewModel(
-                    sb.ToString(),
-                    playerAttacks.DiceRolledByAttacker, 
-                    armiesInTotal - 1);
+                    var dialog = new TransferArmiesDialogViewModel(
+                        sb.ToString(),
+                        playerAttacks.DiceRolledByAttacker,
+                        armiesInTotal - 1);
 
-                _applicationDialogService.ShowDialog(dialog, null);
+                    _applicationDialogService.ShowDialog(dialog, null);
 
-                gameEvent = _application.Engine.TransferArmies(
-                    _indexOfActiveTerritory.Value,
-                    _indexOfTargetTerritory.Value,
-                    dialog.ArmiesToTransfer,
-                    false,
-                    true);
+                    gameEvent = _application.Engine.TransferArmies(
+                        _indexOfActiveTerritory.Value,
+                        _indexOfTargetTerritory.Value,
+                        dialog.ArmiesToTransfer,
+                        false,
+                        true);
 
-                _indexesOfHostileNeighbours = _application.Engine
-                    .IndexesOfHostileNeighbourTerritories(_indexOfActiveTerritory.Value)
-                    .ToArray();
+                    _indexesOfHostileNeighbours = _application.Engine
+                        .IndexesOfHostileNeighbourTerritories(_indexOfActiveTerritory.Value)
+                        .ToArray();
+                }
 
                 AttackVectorVisible = false;
                 SyncControlsWithApplication();
@@ -577,6 +586,7 @@ namespace Games.Risk.ViewModel
                    _indexOfActiveTerritory.HasValue &&
                    _indexOfTargetTerritory.HasValue &&
                    !_application.Engine.CurrentPlayerHasReinforced &&
+                   !_application.Engine.CurrentPlayerHasMovedTroops &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex != _application.Engine.CurrentPlayerIndex;
         }
@@ -599,6 +609,9 @@ namespace Games.Risk.ViewModel
                     false,
                     false);
 
+                AttackVectorVisible = false;
+                ActiveTerritoryHighlighted = false;
+
                 SyncControlsWithApplication();
                 UpdateCommandAvailability();
                 LogGameEvent(gameEvent);
@@ -612,6 +625,7 @@ namespace Games.Risk.ViewModel
                    ArmiesToDeploy == 0 &&
                    _indexOfActiveTerritory.HasValue &&
                    _indexOfTargetTerritory.HasValue &&
+                   !_application.Engine.CurrentPlayerHasMovedTroops &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex == _application.Engine.CurrentPlayerIndex;
         }

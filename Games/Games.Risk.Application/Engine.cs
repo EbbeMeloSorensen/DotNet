@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils.Linq;
@@ -79,25 +79,8 @@ namespace Games.Risk.Application
 
         public void StartGame()
         {
-            // Distribute territories among players
-            var vertexIds = _graphOfTerritories.Vertices
-                .Select(_ => _.Id)
-                .ToList();
-
-            vertexIds = vertexIds.Shuffle(_random).ToList();
-
-            _territoryStatusMap = new Dictionary<int, TerritoryStatus>();
-
-            var playerId = 0;
-            foreach (var vertexId in vertexIds)
-            {
-                _territoryStatusMap[vertexId] = new TerritoryStatus
-                {
-                    ControllingPlayerIndex = playerId,
-                    Armies = 3
-                };
-                playerId = (playerId + 1) % PlayerCount;
-            }
+            DistributeTerritoriesAmongPlayers();
+            //DistributeTerritoriesAmongPlayers2();
 
             GameInProgress = true;
             CurrentPlayerIndex = 0;
@@ -420,8 +403,18 @@ namespace Games.Risk.Application
         private IGameEvent DeployArmy(
             int territoryIndex)
         {
-            ExtraArmiesForCurrentPlayer--;
-            _territoryStatusMap[territoryIndex].Armies++;
+            var temporarilyPlaceAllTroopsInSameTerritory = true;
+
+            if (temporarilyPlaceAllTroopsInSameTerritory)
+            {
+                _territoryStatusMap[territoryIndex].Armies += ExtraArmiesForCurrentPlayer;
+                ExtraArmiesForCurrentPlayer = 0;
+            }
+            else
+            {
+                ExtraArmiesForCurrentPlayer--;
+                _territoryStatusMap[territoryIndex].Armies++;
+            }
 
             return new PlayerDeploysArmies(
                 CurrentPlayerIndex,
@@ -697,6 +690,78 @@ namespace Games.Risk.Application
             }
 
             return connectedComponent.ToList();
+        }
+
+        private void DistributeTerritoriesAmongPlayers2()
+        {
+            _territoryStatusMap = new Dictionary<int, TerritoryStatus>
+            {
+                [0] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 3 },
+                [1] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [2] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [3] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [4] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [5] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [6] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [7] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [8] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [9] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [10] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [11] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [12] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [13] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [14] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [15] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [16] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [17] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [18] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [19] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [20] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [21] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [22] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [23] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [24] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [25] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [26] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [27] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [28] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [29] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [30] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [31] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [32] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [33] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [34] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [35] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [36] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [37] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [38] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [39] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [40] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
+                [41] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 }
+            };
+        }
+
+        private void DistributeTerritoriesAmongPlayers()
+        {
+            var vertexIds = _graphOfTerritories.Vertices
+                .Select(_ => _.Id)
+                .ToList();
+
+            vertexIds = vertexIds.Shuffle(_random).ToList();
+
+            _territoryStatusMap = new Dictionary<int, TerritoryStatus>();
+
+            var playerId = 0;
+            foreach (var vertexId in vertexIds)
+            {
+                _territoryStatusMap[vertexId] = new TerritoryStatus
+                {
+                    ControllingPlayerIndex = playerId,
+                    Armies = 3
+                };
+
+                playerId = (playerId + 1) % PlayerCount;
+            }
         }
     }
 }

@@ -18,13 +18,14 @@ Done:
 * (Risk) Hvis man erobrer et territorie ved at angribe fra et territorie, der efterfølgende ligger bag frontlinien, så flyttes alle armeer pånær 1 over
 * (Risk) Når man reinforcer skal det kun ske på frontlinieterritorier
 * (Risk) Tildeling af ratings for army transfer options (basic)
+* (Risk) Der skal være mulighed for at en spiller kan reinforce
 * (Risk) I starten af hver runde - hvis en spiller har et helt kontinent, skal vedkommende have ekstra armeer
-
-In progress:
+* (Risk) Som det sidste i sin runde kan en spiller flytte armeer. En automatisk spiller flytter blot armeer fra et evt isoleret områder til et frontlinieområde
 * (Risk) Der skal være en option om at overføre armeer fra et område til et andet som det sidste i hver tur
   - Man skal kunne deselecte active territory (ok)
-  - Man skal kunne selecte et andet af sine egne territorier for at få mulighed for at FLYTTE armeer
+  - Man skal kunne selecte et andet af sine egne territorier for at få mulighed for at FLYTTE armeer (ok)
 
+In progress:
 
 Todo 
 * (Risk) Tildeling af mere sofistikerede ratings for army transfer options
@@ -36,8 +37,6 @@ Todo
   II) Fra et frontlinieområde til et andet frontlinieområde, især hvis
       1) det ene frontlinieområde har mange armeer i forhold til det andet
       2) det andet frontlinieområde er nabo til et isoleret område
-* (Risk) Som det sidste i sin runde kan en spiller flytte armeer. En automatisk spiller flytter blot armeer fra et evt isoleret områder til et frontlinieområde
-* (Risk) Der skal være mulighed for at en spiller kan reinforce
 * (Risk) Mulighed for at pause spillet
 * (Risk) 
 * (Risk) 
