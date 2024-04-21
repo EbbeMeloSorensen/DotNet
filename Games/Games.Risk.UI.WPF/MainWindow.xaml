@@ -52,7 +52,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Width="200" Height="50" HorizontalAlignment="Left"
+            <Button Grid.Row="0" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Left"
                 Margin="10, 10, 10, 40" FontSize="15" FontWeight="Bold"
                 Command="{Binding StartGameCommand}">New Game</Button>
 
@@ -63,8 +63,25 @@
                          Text="{Binding ArmiesToDeploy, Mode=OneWay}"/>
                 <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                         Command="{Binding ReinforceCommand}">Reinforce</Button>
-                <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
-                        Command="{Binding DeployCommand}">Deploy</Button>
+
+                <Button Width="160" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
+                        Command="{Binding DeployCommand}" HorizontalContentAlignment="Left" Padding="8">
+                    <Button.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="75"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Deploy" Margin="5, 5, 10, 5"/>
+                            <ComboBox Grid.Column="1" Width="55"
+                                      ItemsSource="{Binding DeployOptions}"
+                                      SelectedValue="{Binding SelectedDeployOption, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding DeployOptions}"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+
                 <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                         Command="{Binding AttackCommand}">Attack</Button>
                 <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 

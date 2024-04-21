@@ -52,6 +52,7 @@ namespace Games.Risk.ViewModel
         private int[] _indexesOfReachableTerritories;
         private bool _displayAttackVector;
         private int _armiesToDeploy;
+        private string _selectedDeployOption;
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
@@ -60,6 +61,16 @@ namespace Games.Risk.ViewModel
         private AsyncCommand _attackCommand;
         private AsyncCommand _moveCommand;
         private AsyncCommand _passCommand;
+
+        public string SelectedDeployOption
+        {
+            get => _selectedDeployOption;
+            set
+            {
+                _selectedDeployOption = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public RelayCommand<object> OpenSettingsDialogCommand =>
             _openSettingsDialogCommand ??= new RelayCommand<object>(OpenSettingsDialog);
@@ -82,7 +93,9 @@ namespace Games.Risk.ViewModel
 
         public LogViewModel LogViewModel { get; }
         public ObservableCollection<PlayerViewModel> PlayerViewModels { get; }
-        
+
+        public ObservableCollection<string> DeployOptions { get; }
+
         public bool LoggingActive
         {
             get => _loggingActive;
@@ -242,6 +255,9 @@ namespace Games.Risk.ViewModel
                 }));
 
             MapViewModel.PointViewModels.ToList().ForEach(_ => _.Label = "");
+
+            DeployOptions = new ObservableCollection<string> { "1", "5", "10", "All" };
+            SelectedDeployOption = DeployOptions[2];
 
             MapViewModel.VertexClicked += (s, e) =>
             {
