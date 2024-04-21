@@ -555,7 +555,8 @@ namespace Games.Risk.ViewModel
                     _indexOfActiveTerritory.Value,
                     _indexOfTargetTerritory.Value,
                     dialog.ArmiesToTransfer,
-                    false);
+                    false,
+                    true);
 
                 _indexesOfHostileNeighbours = _application.Engine
                     .IndexesOfHostileNeighbourTerritories(_indexOfActiveTerritory.Value)
@@ -582,7 +583,26 @@ namespace Games.Risk.ViewModel
 
         private async Task Move()
         {
-            throw new NotImplementedException();
+            var armiesInTerritory = _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies;
+
+            var dialog = new TransferArmiesDialogViewModel(
+                "Transfer armies? (this will end your turn)", 
+                1,
+                armiesInTerritory - 1);
+
+            if (_applicationDialogService.ShowDialog(dialog, null) == DialogResult.OK)
+            {
+                var gameEvent = _application.Engine.TransferArmies(
+                    _indexOfActiveTerritory.Value,
+                    _indexOfTargetTerritory.Value,
+                    dialog.ArmiesToTransfer,
+                    false,
+                    false);
+
+                SyncControlsWithApplication();
+                UpdateCommandAvailability();
+                LogGameEvent(gameEvent);
+            }
         }
 
         private bool CanMove()

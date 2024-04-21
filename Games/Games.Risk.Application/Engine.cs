@@ -41,6 +41,8 @@ namespace Games.Risk.Application
 
         public bool CurrentPlayerHasReinforced { get; private set; }
 
+        public bool CurrentPlayerHasMovedTroops { get; private set; }
+
         public bool NextEventOccursAutomatically
         {
             get => _players[CurrentPlayerIndex];
@@ -122,6 +124,7 @@ namespace Games.Risk.Application
                         _conqueringTerritoryId,
                         _conqueredTerritoryId,
                         _armiesInFinalAttack,
+                        true,
                         true);
                 }
 
@@ -136,6 +139,7 @@ namespace Games.Risk.Application
                     _conqueringTerritoryId,
                     _conqueredTerritoryId,
                     armyTransferCount,
+                    true,
                     true);
             }
 
@@ -188,7 +192,8 @@ namespace Games.Risk.Application
                         chosenOption.InitialTerritoryIndex,
                         chosenOption.DestinationTerritoryIndex,
                         _territoryStatusMap[chosenOption.InitialTerritoryIndex].Armies - 1,
-                        true);
+                        true,
+                        false);
                 }
             }
 
@@ -274,7 +279,8 @@ namespace Games.Risk.Application
             int initialTerritoryIndex,
             int destinationTerritoryIndex,
             int armiesToTransfer,
-            bool turnGoesToNextPlayer)
+            bool turnGoesToNextPlayer,
+            bool postAttack)
         {
             var gameEvent = new PlayerTransfersArmies(
                 CurrentPlayerIndex)
@@ -292,8 +298,11 @@ namespace Games.Risk.Application
                 CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
                 CurrentPlayerMayReinforce = true; // This goes for the next player
                 CurrentPlayerHasReinforced = false; // This goes for the next player
+                CurrentPlayerHasMovedTroops = false; // This goes for the next player
                 _currentPlayerMayTransferArmies = true; // This goes for the next player
             }
+
+            CurrentPlayerHasMovedTroops = !postAttack;
 
             return gameEvent;
         }
@@ -482,6 +491,7 @@ namespace Games.Risk.Application
                 CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
                 CurrentPlayerMayReinforce = true; // This goes for the next player
                 CurrentPlayerHasReinforced = false; // This goes for the next player
+                CurrentPlayerHasMovedTroops = false; // This goes for the next player
                 _currentPlayerMayTransferArmies = true; // This goes for the next player
             }
 
