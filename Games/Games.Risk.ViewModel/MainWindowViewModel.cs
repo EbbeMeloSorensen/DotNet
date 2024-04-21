@@ -288,8 +288,14 @@ namespace Games.Risk.ViewModel
                 ActiveTerritoryHighlighted = true;
                 AttackVectorVisible = false;
 
+                // Identify hostile neighboring territories the player can attack
                 _indexesOfHostileNeighbours = _application.Engine
                     .IndexesOfHostileNeighbourTerritories(territoryId)
+                    .ToArray();
+
+                // Identify hostile neighbors the player can attack
+                _indexesOfReachableTerritories = _application.Engine
+                    .IndexesOfReachableTerritories(territoryId)
                     .ToArray();
 
                 UpdateCommandAvailability();

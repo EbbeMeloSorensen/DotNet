@@ -243,6 +243,8 @@ namespace Games.Risk.Application
         public IEnumerable<int> IndexesOfReachableTerritories(
             int territoryId)
         {
+
+
             throw new NotImplementedException();
         }
 
@@ -615,10 +617,10 @@ namespace Games.Risk.Application
             return options;
         }
 
+        // Returns a dictionary with player ids as keys and a list of connected collections of territories as values
         private Dictionary<int, List<List<int>>> IdentifyConnectedTerritories()
         {
             var result = new Dictionary<int, List<List<int>>>();
-
             var handled = new HashSet<int>();
 
             var vertexIds = _graphOfTerritories.Vertices
