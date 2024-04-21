@@ -28,6 +28,8 @@ Done:
 In progress:
 
 Todo 
+* Når man deployerer, skal man via en drop down i Deploy buttonen kunne vælge mellem: 1, halvdelen eller alle
+* Når man flytter armeer som det sidste i sin tur, skal man via en drop down i Move buttonen kunne vælge mellem: alle eller let me decide
 * (Risk) Tildeling af mere sofistikerede ratings for army transfer options
   I) Det bedste er at flytte armeer fra et isoleret område til et frontlinieområde, især hvis:
     1) Der er mange armeer at flytte

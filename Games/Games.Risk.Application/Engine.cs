@@ -403,7 +403,7 @@ namespace Games.Risk.Application
         private IGameEvent DeployArmy(
             int territoryIndex)
         {
-            var temporarilyPlaceAllTroopsInSameTerritory = true;
+            var temporarilyPlaceAllTroopsInSameTerritory = false;
 
             if (temporarilyPlaceAllTroopsInSameTerritory)
             {
