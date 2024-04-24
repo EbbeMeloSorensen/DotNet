@@ -1,6 +1,12 @@
-﻿// Statdb opererer både med datefrom og dateto for højdevinkelsæt - i modsætning til sms, der kun opererer med datefrom
-// Der er eksempler i sms på at der er 2 forskellige højdevinkelsæt med samme dato for en og samme station, f.eks. Østerlars
+﻿// Statdb opererer både med datefrom og dateto for højdevinkelsæt - i modsætning til sms, der kun opererer med datefrom.
+// Når man overfører højdevinkelsæt fra sms til statdb skal man sikre, at der ikke opstår overlap i virkningstidsintervaller.
+// Hvis det, man overfører, er nyere end de resterende højdevinkelsæt, skal men ændre end_time for den, der før var den nyeste,
+// fra infinity til start_time for den nyeste 
+// Essentielt skal man finde ud af, om et højdevinkelsæt skal APPENDES til sekvensen af højdevinkelsæt eller om det skal INDSÆTTES
+// .. og det afhænger af, om der i den eksisterende sekvens af højdevinkelsæt er et start_time, der er nyere
 
+
+// Der er eksempler i sms på at der er 2 forskellige højdevinkelsæt med samme dato for en og samme station, f.eks. Østerlars
 // Todo: Identificer forekomster af dupletter som den for Østerlars
 
 using System.Text;
@@ -176,7 +182,7 @@ foreach(var sms_station in sms_stations)
             smsReportLine.comment = "no elevation angle set for given station id and date in statdb";
             // (Therefore, we should insert it in statdb)
 
-            // Genereate line in insert script
+            // Genereate comment in insert script
             var sb = new StringBuilder($"--Missing elevation angle set (n/ne/e/se/s/sw/w/nw/index =");
             sb.Append($" {sms_station.angle_n.ToString().PadLeft(2)}"); 
             sb.Append($" {sms_station.angle_ne.ToString().PadLeft(2)}"); 
@@ -233,9 +239,52 @@ foreach(var sms_station in sms_stations)
                     sb.Append($" - id of corresponding station in statdb: {statId}");
 
                     insertQueryScript.Add(sb.ToString());
+                    
+                    // (Her har vi entydigt identificeret den station i statdb, som skal have tildelt højdevinkelsættet)
 
                     if (includeInsertStatements)
                     {
+                        // Hent den pulje af højdevinkelsæt, som pågældende station allerede har
+                        var existingStartTimes = new List<DateTime>();
+
+                        statdb_query = $"SELECT start_time FROM leeindex WHERE statid = {statId} ORDER BY start_time";
+
+                        using (var statdb_cmd = new NpgsqlCommand(statdb_query, statdb_conn))
+                        using (var statdb_reader = statdb_cmd.ExecuteReader())
+                        {
+                            while (statdb_reader.Read())
+                            {
+                                var startTime = statdb_reader.GetDateTime(0);
+                                existingStartTimes.Add(startTime);
+                            }
+                        }
+
+                        existingStartTimes.Sort();
+
+                        if (sms_station.datefrom > existingStartTimes.Last())
+                        {
+                            // Det højdevinkelsæt, der skal indsættes, er nyere end alle de eksisterende
+                            // Derfor skal den seneste trimmes
+
+                            // Kontrol 1 (Udtræk hele den eksisterende sekvens af højdevinkler for stationen)
+                            insertQueryScript.Add($"SELECT * FROM leeindex WHERE statid = {statId} ORDER BY start_time;");
+
+                            var whereClause = $"WHERE statid = {statId} AND start_time = '{existingStartTimes.Last().AsDateTimeString(false)}'";
+
+                            // Kontrol 2 (Udtræk det ene højdevinkelsæt, der skal trimmes)
+                            insertQueryScript.Add($"SELECT * FROM leeindex {whereClause};");
+
+                            sb.Clear();
+                            sb.Append($"UPDATE leeindex SET end_time = '{sms_station.datefrom.AsDateTimeString(false)}' ");
+                            sb.Append($"{whereClause};");
+                            insertQueryScript.Add(sb.ToString());
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
+
+
                         sb.Clear();
                         sb.Append("INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (");
                         sb.Append($"{statId}, ");
@@ -250,9 +299,6 @@ foreach(var sms_station in sms_stations)
                         sb.Append($"{sms_station.angle_e}, ");
                         sb.Append($"{sms_station.angle_se}, ");
                         sb.Append($"{sms_station.angleindex});");
-
-
-
 
                         //INSERT INTO position_tmp VALUES
                         //(500520,'station','2018-12-04 10:31:55.000','infinity',57.57048816,10.10736043,8.00000000),
