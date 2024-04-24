@@ -13,6 +13,7 @@ namespace ElevationAngleInspector
         public int? angle_w { get; set; }
         public int? angle_nw { get; set; }
         public int? angleindex { get; set; }
+        public string anglecomment { get; set; }
         public string comment { get; set; }
 
         public override string ToString()
@@ -27,6 +28,12 @@ namespace ElevationAngleInspector
             var angle_w_asString = angle_w.HasValue ? angle_w.Value.ToString() : "null";
             var angle_nw_asString = angle_nw.HasValue ? angle_nw.Value.ToString() : "null";
             var angleindex_asString = angleindex.HasValue ? angleindex.Value.ToString() : "null";
+            var anglecomment_asString = anglecomment != null ? anglecomment : "";
+
+            if (anglecomment_asString.Length > 50)
+            {
+                anglecomment_asString = $"{anglecomment_asString.Substring(0, 46)}..";
+            }
 
             return
                 $"{stationid_dmi_asString, -10}, " + 
@@ -40,6 +47,7 @@ namespace ElevationAngleInspector
                 $"{angle_w_asString, 5}, " +
                 $"{angle_nw_asString, 5}, " +
                 $"{angleindex_asString, 5}, " + 
+                $"{anglecomment_asString, -46}, " + 
                 comment;
         }
     }

@@ -13,6 +13,7 @@ namespace ElevationAngleInspector
         public int? angle_w { get; set; }
         public int? angle_nw { get; set; }
         public int? angleindex { get; set; }
+        public string? anglecomment { get; set; }
 
         public override string ToString()
         {
@@ -26,6 +27,7 @@ namespace ElevationAngleInspector
             var angle_w_asString = angle_w.HasValue ? angle_w.Value.ToString() : "null";
             var angle_nw_asString = angle_nw.HasValue ? angle_nw.Value.ToString() : "null";
             var angleindex_asString = angleindex.HasValue ? angleindex.Value.ToString() : "null";
+            var anglecomment_asString = anglecomment != null ? anglecomment : "null";
 
             return
                 $"{stationid_dmi_asString, -10}, " + 
@@ -38,15 +40,20 @@ namespace ElevationAngleInspector
                 $"{angle_sw_asString, 5}, " +
                 $"{angle_w_asString, 5}, " +
                 $"{angle_nw_asString, 5}, " +
-                $"{angleindex_asString, 5}";
+                $"{angleindex_asString, 5}" + 
+                $"{anglecomment_asString, 5}";
         }
 
-        public string datefromAsDBString()
+        public string datefromAsLongDBString()
         {
             var year = datefrom.Year.ToString().PadLeft(2, '0');
             var month = datefrom.Month.ToString().PadLeft(2, '0');
             var day = datefrom.Day.ToString().PadLeft(2, '0');
-            return $"{year}-{month}-{day}";
+            var hour = datefrom.Hour.ToString().PadLeft(2, '0');
+            var minute = datefrom.Minute.ToString().PadLeft(2, '0');
+            var second = datefrom.Second.ToString().PadLeft(2, '0');
+
+            return $"{year}-{month}-{day} {hour}:{minute}:{second}";
         }
     }
 
@@ -54,11 +61,11 @@ namespace ElevationAngleInspector
     {
         public static string AsShortDateString(this DateTime dateTime)
         {
-            var day = dateTime.Day;
-            var month = dateTime.Month;
             var year = dateTime.Year;
+            var month = dateTime.Month.ToString().PadLeft(2, '0');
+            var day = dateTime.Day.ToString().PadLeft(2, '0');
 
-            return $"{day}-{month}-{year}";
+            return $"{year}-{month}-{day}";
         }
     }
 }
