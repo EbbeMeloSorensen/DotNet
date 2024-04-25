@@ -18,6 +18,7 @@ namespace Games.Risk.Application
         private bool _currentPlayerMayTransferArmies;
         private List<Continent> _continents;
         private bool _territoryWasJustConquered;
+        private bool _currentPlayerHasConqueredATerritory;
         private int _conqueringTerritoryId;
         private int _conqueredTerritoryId;
         private int _armiesInFinalAttack;
@@ -196,7 +197,7 @@ namespace Games.Risk.Application
                 }
                 case Deploy deploy:
                 {
-                    return DeployArmy(deploy.ActiveTerritoryIndex);
+                    return DeployArmies(deploy.ActiveTerritoryIndex, deploy.Armies);
                 }
                 case Attack attack:
                 {
@@ -337,6 +338,7 @@ namespace Games.Risk.Application
 
             _territoryWasJustConquered = false;
             var defendingPlayerIndex = _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex;
+            var attackerGetsACard = false; // GØr man egentlig ikke det PR modstander, man erobrer land fra?
 
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
             {
@@ -356,6 +358,13 @@ namespace Games.Risk.Application
                     GameDecided = true;
                     GameInProgress = false;
                 }
+
+                if (!_currentPlayerHasConqueredATerritory)
+                {
+                    attackerGetsACard = true;
+                }
+
+                _currentPlayerHasConqueredATerritory = true;
             }
 
             var gameEvent = new PlayerAttacks(
@@ -367,7 +376,8 @@ namespace Games.Risk.Application
                 CasualtiesAttacker = casualtiesAttacker,
                 CasualtiesDefender = casualtiesDefender,
                 TerritoryConquered = _territoryWasJustConquered,
-                DiceRolledByAttacker = diceCountAttacker
+                DiceRolledByAttacker = diceCountAttacker,
+                PlayerGetsACard = attackerGetsACard
             };
 
             CurrentPlayerMayReinforce = false;
@@ -400,21 +410,12 @@ namespace Games.Risk.Application
             return new PlayerReinforces(CurrentPlayerIndex, false);
         }
 
-        private IGameEvent DeployArmy(
-            int territoryIndex)
+        private IGameEvent DeployArmies(
+            int territoryIndex,
+            int armies)
         {
-            var temporarilyPlaceAllTroopsInSameTerritory = false;
-
-            if (temporarilyPlaceAllTroopsInSameTerritory)
-            {
-                _territoryStatusMap[territoryIndex].Armies += ExtraArmiesForCurrentPlayer;
-                ExtraArmiesForCurrentPlayer = 0;
-            }
-            else
-            {
-                ExtraArmiesForCurrentPlayer--;
-                _territoryStatusMap[territoryIndex].Armies++;
-            }
+            ExtraArmiesForCurrentPlayer -= armies;
+            _territoryStatusMap[territoryIndex].Armies += armies;
 
             return new PlayerDeploysArmies(
                 CurrentPlayerIndex,

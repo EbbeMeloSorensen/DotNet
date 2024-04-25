@@ -29,7 +29,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 500;
+        private const int _delay = 0;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private List<Continent> _continents;
         private Dictionary<int, Brush> _colorPalette;
@@ -256,8 +256,8 @@ namespace Games.Risk.ViewModel
 
             MapViewModel.PointViewModels.ToList().ForEach(_ => _.Label = "");
 
-            DeployOptions = new ObservableCollection<string> { "1", "5", "10", "All" };
-            SelectedDeployOption = DeployOptions[2];
+            DeployOptions = new ObservableCollection<string> { "1", "2", "5", "10", "All" };
+            SelectedDeployOption = "1";
 
             MapViewModel.VertexClicked += (s, e) =>
             {
@@ -356,6 +356,11 @@ namespace Games.Risk.ViewModel
                                 AttackVectorVisible = true;
                             }
 
+                            if (playerAttacks.PlayerGetsACard)
+                            {
+
+                            }
+
                             break;
                         }
                         case PlayerReinforces:
@@ -445,6 +450,8 @@ namespace Games.Risk.ViewModel
             tempArray[indexOfPlayer] = false;
             _application.Engine = new Engine(tempArray, _pseudoRandomNumbers, _graphOfTerritories);
             _application.Engine.Initialize(_continents);
+            _indexOfActiveTerritory = null;
+            _indexOfTargetTerritory = null;
 
             PlayerViewModels.Clear();
 
@@ -511,10 +518,18 @@ namespace Games.Risk.ViewModel
                 throw new InvalidOperationException("Deploy called without having selected a territory - should not be possible");
             }
 
+            var armiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
+
+            if (SelectedDeployOption != "All")
+            {
+                armiesToDeploy = Math.Min(armiesToDeploy, int.Parse(SelectedDeployOption));
+            }
+
             var gameEvent = await _application.Engine.PlayerSelectsOption(
                 new Deploy
                 {
                     ActiveTerritoryIndex = _indexOfActiveTerritory.Value,
+                    Armies = armiesToDeploy
                 });
 
             ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;

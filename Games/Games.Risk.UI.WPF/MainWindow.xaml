@@ -64,20 +64,19 @@
                 <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                         Command="{Binding ReinforceCommand}">Reinforce</Button>
 
-                <Button Width="160" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
+                <Button Width="129" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                         Command="{Binding DeployCommand}" HorizontalContentAlignment="Left" Padding="8">
                     <Button.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="75"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Deploy" Margin="5, 5, 10, 5"/>
-                            <ComboBox Grid.Column="1" Width="55"
+                            <ComboBox Grid.Column="1" Width="45" FontSize="12" FontStyle="Normal" Foreground="Black" 
+                                      VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                                       ItemsSource="{Binding DeployOptions}"
                                       SelectedValue="{Binding SelectedDeployOption, UpdateSourceTrigger=PropertyChanged}"/>
-
-                            <ComboBox Grid.Column="1" ItemsSource="{Binding DeployOptions}"/>
                         </Grid>
                     </Button.Content>
                 </Button>
