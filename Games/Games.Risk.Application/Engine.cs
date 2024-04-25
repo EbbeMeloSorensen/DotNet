@@ -22,6 +22,7 @@ namespace Games.Risk.Application
         private int _conqueringTerritoryId;
         private int _conqueredTerritoryId;
         private int _armiesInFinalAttack;
+        private List<Card>[] _cards;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -70,6 +71,8 @@ namespace Games.Risk.Application
 
             _players = players;
             _continents = new List<Continent>();
+
+            _cards = Enumerable.Repeat(0, playerCount).Select(_ => new List<Card>()).ToArray();
         }
 
         public void Initialize(
@@ -87,6 +90,7 @@ namespace Games.Risk.Application
             CurrentPlayerIndex = 0;
             CurrentPlayerMayReinforce = true;
             _currentPlayerMayTransferArmies = true;
+            _currentPlayerHasConqueredATerritory = false;
 
             Logger?.WriteLine(LogMessageCategory.Information,
                 $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
@@ -284,6 +288,7 @@ namespace Games.Risk.Application
                 CurrentPlayerHasReinforced = false; // This goes for the next player
                 CurrentPlayerHasMovedTroops = false; // This goes for the next player
                 _currentPlayerMayTransferArmies = true; // This goes for the next player
+                _currentPlayerHasConqueredATerritory = false; // This goes for the next player
             }
 
             CurrentPlayerHasMovedTroops = !postAttack;
@@ -338,7 +343,7 @@ namespace Games.Risk.Application
 
             _territoryWasJustConquered = false;
             var defendingPlayerIndex = _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex;
-            var attackerGetsACard = false; // GØr man egentlig ikke det PR modstander, man erobrer land fra?
+            var attackerGetsACard = false;
 
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
             {
@@ -361,6 +366,7 @@ namespace Games.Risk.Application
 
                 if (!_currentPlayerHasConqueredATerritory)
                 {
+                    _cards[CurrentPlayerIndex].Add(new Card());
                     attackerGetsACard = true;
                 }
 
@@ -392,8 +398,9 @@ namespace Games.Risk.Application
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
             CurrentPlayerMayReinforce = true;
-            _currentPlayerMayTransferArmies = true;
+            _currentPlayerHasConqueredATerritory = false;
             _territoryWasJustConquered = false;
+            _currentPlayerMayTransferArmies = true;
 
             return gameEvent;
         }
@@ -487,6 +494,7 @@ namespace Games.Risk.Application
                 CurrentPlayerHasReinforced = false; // This goes for the next player
                 CurrentPlayerHasMovedTroops = false; // This goes for the next player
                 _currentPlayerMayTransferArmies = true; // This goes for the next player
+                _currentPlayerHasConqueredATerritory = false; // This goes for the next player
             }
 
             return gameEvent;

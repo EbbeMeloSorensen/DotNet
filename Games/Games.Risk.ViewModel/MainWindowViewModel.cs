@@ -356,11 +356,6 @@ namespace Games.Risk.ViewModel
                                 AttackVectorVisible = true;
                             }
 
-                            if (playerAttacks.PlayerGetsACard)
-                            {
-
-                            }
-
                             break;
                         }
                         case PlayerReinforces:
@@ -984,6 +979,11 @@ namespace Games.Risk.ViewModel
                     if (playerAttacks.TerritoryConquered)
                     {
                         sb.Append(". Territory is conquered");
+                    }
+
+                    if (playerAttacks.PlayerGetsACard)
+                    {
+                        sb.Append($", and player {playerAttacks.PlayerIndex + 1} gets a card");
                     }
 
                     break;
