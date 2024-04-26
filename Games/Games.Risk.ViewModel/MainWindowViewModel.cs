@@ -356,6 +356,12 @@ namespace Games.Risk.ViewModel
                                 AttackVectorVisible = true;
                             }
 
+                            if (playerAttacks.Card != null)
+                            {
+                                PlayerViewModels[_application.Engine.CurrentPlayerIndex]
+                                    .AddCardViewModel(playerAttacks.Card);
+                            }
+
                             break;
                         }
                         case PlayerReinforces:
@@ -571,6 +577,11 @@ namespace Games.Risk.ViewModel
                 }
                 else
                 {
+                    if (playerAttacks.Card != null)
+                    {
+                        PlayerViewModels[_application.Engine.CurrentPlayerIndex].AddCardViewModel(playerAttacks.Card);
+                    }
+
                     var armiesInTotal =
                         _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies +
                         _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).Armies;
@@ -699,6 +710,7 @@ namespace Games.Risk.ViewModel
             _graphOfTerritories.Vertices.ForEach(_ =>
             {
                 var territoryStatus = _application.Engine.GetTerritoryStatus(_.Id);
+
                 MapViewModel.StylePoint(
                     _.Id, 
                     _colorPalette[territoryStatus.ControllingPlayerIndex],
@@ -981,7 +993,7 @@ namespace Games.Risk.ViewModel
                         sb.Append(". Territory is conquered");
                     }
 
-                    if (playerAttacks.PlayerGetsACard)
+                    if (playerAttacks.Card != null)
                     {
                         sb.Append($", and player {playerAttacks.PlayerIndex + 1} gets a card");
                     }

@@ -9,7 +9,7 @@
         xmlns:graph="clr-namespace:Craft.UIElements.Graph;assembly=Craft.UIElements"
         xmlns:valueConverters="clr-namespace:Craft.UI.Utils.ValueConverters;assembly=Craft.UI.Utils"
         mc:Ignorable="d"
-        Title="Risk Game" Height="800" Width="1400"
+        Title="Risk Game" Height="800" Width="1500"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
 
     <Window.Resources>
@@ -41,7 +41,7 @@
 
         <Grid Background="DarkGray">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="245"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -97,16 +97,46 @@
                                 Converter={StaticResource BooleanMatchToBrushConverter},
                                 ConverterParameter={StaticResource True}}">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="200"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" FontSize="20" FontWeight="Bold"
-                                           Padding="10"
-                                           Text="{Binding Name}"/>
-                                <Rectangle Grid.Column="1" Width="20" Height="20" Margin="10"
+                                <Rectangle Grid.Column="0" Width="20" Height="20" Margin="10"
                                            Fill="{Binding Brush}"
                                            Stroke="Black"/>
+                                <TextBlock Grid.Column="1" FontSize="20" FontWeight="Bold"
+                                           Padding="0, 5, 0, 10"
+                                           Text="{Binding Name}"/>
+                                <Canvas Grid.Column="2" Width="55">
+                                    <ItemsControl ItemsSource="{Binding CardViewModels}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <Canvas/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style>
+                                                <Setter Property="Canvas.Left">
+                                                    <Setter.Value>
+                                                        <Binding Path="Offset"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Rectangle Margin="5" 
+                                                           Width="22"
+                                                           Height="32"
+                                                           Fill="BurlyWood"
+                                                           Stroke="Black"
+                                                           StrokeThickness="1">
+                                                </Rectangle>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Canvas>
                             </Grid>
                         </Border>
                     </DataTemplate>

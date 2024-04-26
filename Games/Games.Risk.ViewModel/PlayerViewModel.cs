@@ -1,5 +1,7 @@
+using System.Collections.ObjectModel;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
+using Games.Risk.Application;
 
 namespace Games.Risk.ViewModel
 {
@@ -28,6 +30,22 @@ namespace Games.Risk.ViewModel
                 _hasInitiative = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public ObservableCollection<CardViewModel> CardViewModels { get; }
+
+        public PlayerViewModel()
+        {
+            CardViewModels = new ObservableCollection<CardViewModel>();
+        }
+
+        public void AddCardViewModel(
+            Card card)
+        {
+            CardViewModels.Add(new CardViewModel
+            {
+                Offset = CardViewModels.Count * 5
+            });
         }
     }
 }

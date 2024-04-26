@@ -343,7 +343,7 @@ namespace Games.Risk.Application
 
             _territoryWasJustConquered = false;
             var defendingPlayerIndex = _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex;
-            var attackerGetsACard = false;
+            Card card = null;
 
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
             {
@@ -366,8 +366,8 @@ namespace Games.Risk.Application
 
                 if (!_currentPlayerHasConqueredATerritory)
                 {
-                    _cards[CurrentPlayerIndex].Add(new Card());
-                    attackerGetsACard = true;
+                    card = new Card();
+                    _cards[CurrentPlayerIndex].Add(card);
                 }
 
                 _currentPlayerHasConqueredATerritory = true;
@@ -383,7 +383,7 @@ namespace Games.Risk.Application
                 CasualtiesDefender = casualtiesDefender,
                 TerritoryConquered = _territoryWasJustConquered,
                 DiceRolledByAttacker = diceCountAttacker,
-                PlayerGetsACard = attackerGetsACard
+                Card = card
             };
 
             CurrentPlayerMayReinforce = false;
