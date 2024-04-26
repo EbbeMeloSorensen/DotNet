@@ -108,7 +108,7 @@
                                 <TextBlock Grid.Column="1" FontSize="20" FontWeight="Bold"
                                            Padding="0, 5, 0, 10"
                                            Text="{Binding Name}"/>
-                                <Canvas Grid.Column="2" Width="55">
+                                <Canvas Grid.Column="2" Width="55" Background="Red">
                                     <ItemsControl ItemsSource="{Binding CardViewModels}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -117,7 +117,7 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemContainerStyle>
                                             <Style>
-                                                <Setter Property="Canvas.Left">
+                                                <Setter Property="Canvas.Top">
                                                     <Setter.Value>
                                                         <Binding Path="Offset"/>
                                                     </Setter.Value>
@@ -126,9 +126,9 @@
                                         </ItemsControl.ItemContainerStyle>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Rectangle Margin="5" 
-                                                           Width="22"
-                                                           Height="32"
+                                                <Rectangle Margin="0" 
+                                                           Width="50"
+                                                           Height="25"
                                                            Fill="BurlyWood"
                                                            Stroke="Black"
                                                            StrokeThickness="1">
