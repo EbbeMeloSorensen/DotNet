@@ -290,37 +290,29 @@ namespace Games.Risk.Application
                 hand.Count(_ => _.Type == CardType.Horse) > 0 &&
                 hand.Count(_ => _.Type == CardType.Soldier) > 0)
             {
-                throw new NotImplementedException();
+                cards.AddRange(GetCards(hand, CardType.Soldier, 1));
+                cards.AddRange(GetCards(hand, CardType.Horse, 1));
+                cards.AddRange(GetCards(hand, CardType.Cannon, 1));
             }
 
             if (hand.Count(_ => _.Type == CardType.Cannon) > 2)
             {
-                throw new NotImplementedException();
+                cards.AddRange(GetCards(hand, CardType.Cannon, 3));
             }
 
             if (hand.Count(_ => _.Type == CardType.Horse) > 2)
             {
-                throw new NotImplementedException();
+                cards.AddRange(GetCards(hand, CardType.Horse, 3));
             }
 
             if (hand.Count(_ => _.Type == CardType.Soldier) > 2)
             {
-                cards = hand.Select(_ => new
-                    {
-                        ExtraArmiesForIndividualCard = _territoryStatusMap[_.TerritoryIndex].ControllingPlayerIndex ==
-                                                       CurrentPlayerIndex
-                            ? 2
-                            : 0,
-                        Card = _
-                    }).OrderByDescending(_ => _.ExtraArmiesForIndividualCard)
-                    .Select(_ => _.Card)
-                    .Take(3)
-                    .ToList();
+                cards.AddRange(GetCards(hand, CardType.Soldier, 3));
             }
 
             if (!cards.Any())
             {
-                throw new InvalidDataException();
+                return;
             }
 
             var temp = 0;
@@ -351,6 +343,25 @@ namespace Games.Risk.Application
 
             _hands[CurrentPlayerIndex] = _hands[CurrentPlayerIndex].Except(cards).ToList();
             _cardSetsTradedForTroops++;
+        }
+
+        private IEnumerable<Card> GetCards(
+            IEnumerable<Card> hand,
+            CardType cardType,
+            int nCards)
+        {
+            return hand
+                .Where(_ => _.Type == cardType)
+                .Select(_ => new
+                {
+                    ExtraArmiesForIndividualCard = _territoryStatusMap[_.TerritoryIndex].ControllingPlayerIndex ==
+                                                   CurrentPlayerIndex
+                        ? 2
+                        : 0,
+                    Card = _
+                }).OrderByDescending(_ => _.ExtraArmiesForIndividualCard)
+                .Select(_ => _.Card)
+                .Take(nCards);
         }
 
         public IGameEvent TransferArmies(
