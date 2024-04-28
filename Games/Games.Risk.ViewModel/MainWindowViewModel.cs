@@ -425,7 +425,7 @@ namespace Games.Risk.ViewModel
             // Diagnotics: Make the game fully automatic by making the player pass
             if (PlayerHasInitiative)
             {
-                //await Pass();
+                await Pass();
             }
         }
 

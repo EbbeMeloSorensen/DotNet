@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils.Linq;
@@ -340,8 +339,8 @@ namespace Games.Risk.Application
             }
 
             extraArmiesInTotal = ExtraArmiesForCurrentPlayer + extraArmiesForControlledTerritories;
-
             _hands[CurrentPlayerIndex] = _hands[CurrentPlayerIndex].Except(cards).ToList();
+            _drawPile.AddRange(cards.Shuffle(_random));
             _cardSetsTradedForTroops++;
         }
 
