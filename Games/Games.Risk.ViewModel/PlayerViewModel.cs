@@ -40,11 +40,12 @@ namespace Games.Risk.ViewModel
         }
 
         public void AddCardViewModel(
-            Card card)
+            string territory,
+            CardType cardType)
         {
-            CardViewModels.Add(new CardViewModel(card.Type)
+            CardViewModels.Add(new CardViewModel(cardType)
             {
-                Territory = card.Territory,
+                Territory = territory,
                 Offset = CardViewModels.Count * 13
             });
         }

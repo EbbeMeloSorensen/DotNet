@@ -359,7 +359,9 @@ namespace Games.Risk.ViewModel
                             if (playerAttacks.Card != null)
                             {
                                 PlayerViewModels[_application.Engine.CurrentPlayerIndex]
-                                    .AddCardViewModel(playerAttacks.Card);
+                                    .AddCardViewModel(
+                                        _territoryNameMap[playerAttacks.Card.TerritoryIndex],
+                                        playerAttacks.Card.Type);
                             }
 
                             break;
@@ -579,7 +581,9 @@ namespace Games.Risk.ViewModel
                 {
                     if (playerAttacks.Card != null)
                     {
-                        PlayerViewModels[_application.Engine.CurrentPlayerIndex].AddCardViewModel(playerAttacks.Card);
+                        PlayerViewModels[_application.Engine.CurrentPlayerIndex].AddCardViewModel(
+                            _territoryNameMap[playerAttacks.Card.TerritoryIndex],
+                            playerAttacks.Card.Type);
                     }
 
                     var armiesInTotal =
@@ -1055,32 +1059,8 @@ namespace Games.Risk.ViewModel
                 LogMessageCategory.Information,
                 $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
 
-            var continents =  _application.Engine.AssignExtraArmiesForControlledContinents();
-
-            if (!continents.Any())
-            {
-                return;
-            }
-
-            if (PlayerHasInitiative)
-            {
-                ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
-            }
-
-            var sb = new StringBuilder($"  Player {_application.Engine.CurrentPlayerIndex + 1}");
-            sb.Append($" gets {_application.Engine.ExtraArmiesForCurrentPlayer} extra armies");
-            sb.Append(" for entirely controlling the continent");
-            
-            if (continents.Count() > 1)
-            {   
-                sb.Append("s");
-            }
-
-            sb.Append($": {continents.Aggregate((c, n) => $"{c}, {n}")}");
-
-            _application.Logger?.WriteLine(
-                LogMessageCategory.Information,
-                sb.ToString());
+            AssignExtraArmiesForControlledContinents();
+            AssignExtraArmiesForCards();
         }
 
         private List<Continent> GenerateContinents()
@@ -1137,6 +1117,76 @@ namespace Games.Risk.ViewModel
                 {4, new SolidColorBrush(Colors.Orange)},
                 {5, new SolidColorBrush(Colors.MediumPurple)}
             };
+        }
+
+        private void AssignExtraArmiesForControlledContinents()
+        {
+            var continents = _application.Engine.AssignExtraArmiesForControlledContinents();
+
+            if (!continents.Any())
+            {
+                return;
+            }
+
+            if (PlayerHasInitiative)
+            {
+                ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
+            }
+
+            var sb = new StringBuilder($"  Player {_application.Engine.CurrentPlayerIndex + 1}");
+            sb.Append($" gets {_application.Engine.ExtraArmiesForCurrentPlayer} extra armies");
+            sb.Append(" for entirely controlling the continent");
+
+            if (continents.Count() > 1)
+            {
+                sb.Append("s");
+            }
+
+            sb.Append($": {continents.Aggregate((c, n) => $"{c}, {n}")}");
+
+            _application.Logger?.WriteLine(
+                LogMessageCategory.Information,
+                sb.ToString());
+        }
+
+        private void AssignExtraArmiesForCards()
+        {
+            _application.Engine.AssignExtraArmiesForCards(
+                out var extraArmiesForControlledTerritories,
+                out var extraArmiesInTotal);
+
+            if (extraArmiesInTotal == 0)
+            {
+                return;
+            }
+
+            // Player gets armies for cards
+            var playerViewModel = PlayerViewModels[_application.Engine.CurrentPlayerIndex];
+            var cardViewModels = playerViewModel.CardViewModels;
+
+            cardViewModels.Clear();
+
+            _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).ForEach(_ =>
+            {
+                playerViewModel.AddCardViewModel(
+                    _territoryNameMap[_.TerritoryIndex],
+                    _.Type);
+            });
+
+            SyncControlsWithApplication();
+
+            var sb = new StringBuilder($"  Player {_application.Engine.CurrentPlayerIndex + 1}");
+            sb.Append($" gets {extraArmiesInTotal} extra armies");
+            sb.Append(" for trading in 3 cards");
+
+            if (extraArmiesForControlledTerritories > 0)
+            {
+                sb.Append($" ({extraArmiesForControlledTerritories} for controlled territories)");
+            }
+
+            _application.Logger?.WriteLine(
+                LogMessageCategory.Information,
+                sb.ToString());
         }
     }
 }

@@ -10,14 +10,14 @@
 
     public class Card
     {
-        public string Territory { get; }
+        public int TerritoryIndex { get; }
         public CardType Type { get; }
 
         public Card(
-            string territory,
+            int territoryIndex,
             CardType type)
         {
-            Territory = territory;
+            TerritoryIndex = territoryIndex;
             Type = type;
         }
     }

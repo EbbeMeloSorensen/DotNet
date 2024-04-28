@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils.Linq;
@@ -22,8 +23,9 @@ namespace Games.Risk.Application
         private int _conqueringTerritoryId;
         private int _conqueredTerritoryId;
         private int _armiesInFinalAttack;
-        private List<Card>[] _cards;
+        private List<Card>[] _hands;
         private List<Card> _drawPile;
+        private int _cardSetsTradedForTroops;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -69,8 +71,9 @@ namespace Games.Risk.Application
             _random = random;
             _players = players;
             _continents = new List<Continent>();
-            _cards = Enumerable.Repeat(0, playerCount).Select(_ => new List<Card>()).ToArray();
+            _hands = Enumerable.Repeat(0, playerCount).Select(_ => new List<Card>()).ToArray();
             _drawPile = GenerateCards().Shuffle(_random).ToList();
+            _cardSetsTradedForTroops = 0;
         }
 
         public void Initialize(
@@ -224,6 +227,12 @@ namespace Games.Risk.Application
             return _territoryStatusMap[territoryId];
         }
 
+        public List<Card> GetHand(
+            int playerIndex)
+        {
+            return _hands[playerIndex];
+        }
+
         public IEnumerable<int> IndexesOfHostileNeighbourTerritories(
             int territoryId)
         {
@@ -259,6 +268,89 @@ namespace Games.Risk.Application
             });
 
             return result;
+        }
+
+        public void AssignExtraArmiesForCards(
+            out int extraArmiesForControlledTerritories,
+            out int extraArmiesInTotal)
+        {
+            extraArmiesForControlledTerritories = 0;
+            extraArmiesInTotal = 0;
+
+            var hand = _hands[CurrentPlayerIndex];
+
+            if (hand.Count < 3)
+            {
+                return;
+            }
+
+            var cards = new List<Card>();
+
+            if (hand.Count(_ => _.Type == CardType.Cannon) > 0 &&
+                hand.Count(_ => _.Type == CardType.Horse) > 0 &&
+                hand.Count(_ => _.Type == CardType.Soldier) > 0)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (hand.Count(_ => _.Type == CardType.Cannon) > 2)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (hand.Count(_ => _.Type == CardType.Horse) > 2)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (hand.Count(_ => _.Type == CardType.Soldier) > 2)
+            {
+                cards = hand.Select(_ => new
+                    {
+                        ExtraArmiesForIndividualCard = _territoryStatusMap[_.TerritoryIndex].ControllingPlayerIndex ==
+                                                       CurrentPlayerIndex
+                            ? 2
+                            : 0,
+                        Card = _
+                    }).OrderByDescending(_ => _.ExtraArmiesForIndividualCard)
+                    .Select(_ => _.Card)
+                    .Take(3)
+                    .ToList();
+            }
+
+            if (!cards.Any())
+            {
+                throw new InvalidDataException();
+            }
+
+            var temp = 0;
+
+            cards.ForEach(_ =>
+            {
+                if (_territoryStatusMap[_.TerritoryIndex].ControllingPlayerIndex != CurrentPlayerIndex)
+                {
+                    return;
+                }
+
+                temp += 2;
+                _territoryStatusMap[_.TerritoryIndex].Armies += 2;
+            });
+
+            extraArmiesForControlledTerritories += temp;
+
+            if (_cardSetsTradedForTroops < 5)
+            {
+                ExtraArmiesForCurrentPlayer += 2 + 2 * (_cardSetsTradedForTroops + 1);
+            }
+            else
+            {
+                ExtraArmiesForCurrentPlayer += 5 * (_cardSetsTradedForTroops - 2);
+            }
+
+            extraArmiesInTotal = ExtraArmiesForCurrentPlayer + extraArmiesForControlledTerritories;
+
+            _hands[CurrentPlayerIndex] = _hands[CurrentPlayerIndex].Except(cards).ToList();
+            _cardSetsTradedForTroops++;
         }
 
         public IGameEvent TransferArmies(
@@ -366,7 +458,7 @@ namespace Games.Risk.Application
                 {
                     card = _drawPile.First();
                     _drawPile = _drawPile.Skip(1).ToList();
-                    _cards[CurrentPlayerIndex].Add(card);
+                    _hands[CurrentPlayerIndex].Add(card);
                 }
 
                 _currentPlayerHasConqueredATerritory = true;
@@ -776,53 +868,53 @@ namespace Games.Risk.Application
         {
             return new List<Card>
             {
-                new Card("Alaska", CardType.Soldier),
-                new Card("Northwest Territory", CardType.Cannon),
-                new Card("Greenland", CardType.Horse),
-                new Card("Alberta", CardType.Horse),
-                new Card("Ontario", CardType.Horse),
-                new Card("Quebec", CardType.Horse),
-                new Card("Western United States", CardType.Cannon),
-                new Card("Eastern United States", CardType.Cannon),
-                new Card("Central America", CardType.Cannon),
+                new Card(0, CardType.Soldier),
+                new Card(1, CardType.Cannon),
+                new Card(2, CardType.Horse),
+                new Card(3, CardType.Horse),
+                new Card(4, CardType.Horse),
+                new Card(5, CardType.Horse),
+                new Card(6, CardType.Cannon),
+                new Card(7, CardType.Cannon),
+                new Card(8, CardType.Cannon),
 
-                new Card("Venezuela", CardType.Soldier),
-                new Card("Peru", CardType.Soldier),
-                new Card("Argentina", CardType.Soldier),
-                new Card("Brazil", CardType.Cannon),
+                new Card(9, CardType.Soldier),
+                new Card(10, CardType.Soldier),
+                new Card(11, CardType.Soldier),
+                new Card(12, CardType.Cannon),
 
-                new Card("Iceland", CardType.Soldier),
-                new Card("Scandinavia", CardType.Horse),
-                new Card("Great Britain", CardType.Cannon),
-                new Card("Northern Europe", CardType.Cannon),
-                new Card("Ukraine", CardType.Horse),
-                new Card("Western Europe", CardType.Cannon),
-                new Card("Southern Europe", CardType.Cannon),
+                new Card(13, CardType.Soldier),
+                new Card(14, CardType.Horse),
+                new Card(15, CardType.Cannon),
+                new Card(16, CardType.Cannon),
+                new Card(17, CardType.Horse),
+                new Card(18, CardType.Cannon),
+                new Card(19, CardType.Cannon),
 
-                new Card("North Africa", CardType.Horse),
-                new Card("Egypt", CardType.Soldier),
-                new Card("East Africa", CardType.Soldier),
-                new Card("Congo", CardType.Soldier),
-                new Card("South Africa", CardType.Cannon),
-                new Card("Madagascar", CardType.Horse),
+                new Card(20, CardType.Horse),
+                new Card(21, CardType.Soldier),
+                new Card(22, CardType.Soldier),
+                new Card(23, CardType.Soldier),
+                new Card(24, CardType.Cannon),
+                new Card(25, CardType.Horse),
 
-                new Card("Siberia", CardType.Horse),
-                new Card("Ural", CardType.Horse),
-                new Card("Yakutsk", CardType.Horse),
-                new Card("Kamchatka", CardType.Soldier),
-                new Card("Irkutsk", CardType.Horse),
-                new Card("Afghanistan", CardType.Horse),
-                new Card("Mongolia", CardType.Soldier),
-                new Card("Japan", CardType.Cannon),
-                new Card("China", CardType.Soldier),
-                new Card("Middle East", CardType.Soldier),
-                new Card("India", CardType.Horse),
-                new Card("Siam", CardType.Soldier),
+                new Card(26, CardType.Horse),
+                new Card(27, CardType.Horse),
+                new Card(28, CardType.Horse),
+                new Card(29, CardType.Soldier),
+                new Card(30, CardType.Horse),
+                new Card(31, CardType.Horse),
+                new Card(32, CardType.Soldier),
+                new Card(33, CardType.Cannon),
+                new Card(34, CardType.Soldier),
+                new Card(35, CardType.Soldier),
+                new Card(36, CardType.Horse),
+                new Card(37, CardType.Soldier),
 
-                new Card("Indonesia", CardType.Cannon),
-                new Card("New Guinea", CardType.Soldier),
-                new Card("Western Australia", CardType.Cannon),
-                new Card("Eastern Australia", CardType.Cannon)
+                new Card(38, CardType.Cannon),
+                new Card(39, CardType.Soldier),
+                new Card(40, CardType.Cannon),
+                new Card(41, CardType.Cannon)
             };
         }
     }
