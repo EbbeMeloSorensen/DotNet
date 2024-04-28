@@ -42,9 +42,10 @@ namespace Games.Risk.ViewModel
         public void AddCardViewModel(
             Card card)
         {
-            CardViewModels.Add(new CardViewModel
+            CardViewModels.Add(new CardViewModel(card.Type)
             {
-                Offset = CardViewModels.Count * 5
+                Territory = card.Territory,
+                Offset = CardViewModels.Count * 13
             });
         }
     }

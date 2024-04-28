@@ -23,6 +23,7 @@ namespace Games.Risk.Application
         private int _conqueredTerritoryId;
         private int _armiesInFinalAttack;
         private List<Card>[] _cards;
+        private List<Card> _drawPile;
 
         // An array with a boolean for each player. A boolean with a value of true indicates that the given player is a computer player
         private bool[] _players;
@@ -54,7 +55,7 @@ namespace Games.Risk.Application
 
         public Engine(
             bool[] players,
-            bool pseudoRandomNumbers,
+            Random random,
             IGraph<LabelledVertex, EmptyEdge> graphOfTerritories)
         {
             _graphOfTerritories = graphOfTerritories;
@@ -65,14 +66,11 @@ namespace Games.Risk.Application
                 throw new ArgumentOutOfRangeException("Invalid number of players");
             }
 
-            _random = pseudoRandomNumbers
-                ? new Random(0)
-                : new Random((int)DateTime.UtcNow.Ticks);
-
+            _random = random;
             _players = players;
             _continents = new List<Continent>();
-
             _cards = Enumerable.Repeat(0, playerCount).Select(_ => new List<Card>()).ToArray();
+            _drawPile = GenerateCards().Shuffle(_random).ToList();
         }
 
         public void Initialize(
@@ -148,7 +146,7 @@ namespace Games.Risk.Application
 
                 var chosenCandidate = bestAttackOptions.Shuffle(_random).First();
 
-                if (chosenCandidate.OpportunityRating > 0)
+                if (chosenCandidate.OpportunityRating > 1)
                 {
                     return Attack(
                         chosenCandidate.IndexOfTerritoryWhereAttackOriginates,
@@ -366,7 +364,8 @@ namespace Games.Risk.Application
 
                 if (!_currentPlayerHasConqueredATerritory)
                 {
-                    card = new Card();
+                    card = _drawPile.First();
+                    _drawPile = _drawPile.Skip(1).ToList();
                     _cards[CurrentPlayerIndex].Add(card);
                 }
 
@@ -771,6 +770,60 @@ namespace Games.Risk.Application
 
                 playerId = (playerId + 1) % PlayerCount;
             }
+        }
+
+        private List<Card> GenerateCards()
+        {
+            return new List<Card>
+            {
+                new Card("Alaska", CardType.Soldier),
+                new Card("Northwest Territory", CardType.Cannon),
+                new Card("Greenland", CardType.Horse),
+                new Card("Alberta", CardType.Horse),
+                new Card("Ontario", CardType.Horse),
+                new Card("Quebec", CardType.Horse),
+                new Card("Western United States", CardType.Cannon),
+                new Card("Eastern United States", CardType.Cannon),
+                new Card("Central America", CardType.Cannon),
+
+                new Card("Venezuela", CardType.Soldier),
+                new Card("Peru", CardType.Soldier),
+                new Card("Argentina", CardType.Soldier),
+                new Card("Brazil", CardType.Cannon),
+
+                new Card("Iceland", CardType.Soldier),
+                new Card("Scandinavia", CardType.Horse),
+                new Card("Great Britain", CardType.Cannon),
+                new Card("Northern Europe", CardType.Cannon),
+                new Card("Ukraine", CardType.Horse),
+                new Card("Western Europe", CardType.Cannon),
+                new Card("Southern Europe", CardType.Cannon),
+
+                new Card("North Africa", CardType.Horse),
+                new Card("Egypt", CardType.Soldier),
+                new Card("East Africa", CardType.Soldier),
+                new Card("Congo", CardType.Soldier),
+                new Card("South Africa", CardType.Cannon),
+                new Card("Madagascar", CardType.Horse),
+
+                new Card("Siberia", CardType.Horse),
+                new Card("Ural", CardType.Horse),
+                new Card("Yakutsk", CardType.Horse),
+                new Card("Kamchatka", CardType.Soldier),
+                new Card("Irkutsk", CardType.Horse),
+                new Card("Afghanistan", CardType.Horse),
+                new Card("Mongolia", CardType.Soldier),
+                new Card("Japan", CardType.Cannon),
+                new Card("China", CardType.Soldier),
+                new Card("Middle East", CardType.Soldier),
+                new Card("India", CardType.Horse),
+                new Card("Siam", CardType.Soldier),
+
+                new Card("Indonesia", CardType.Cannon),
+                new Card("New Guinea", CardType.Soldier),
+                new Card("Western Australia", CardType.Cannon),
+                new Card("Eastern Australia", CardType.Cannon)
+            };
         }
     }
 }

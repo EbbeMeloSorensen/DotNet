@@ -1,21 +1,14 @@
 ﻿using GalaSoft.MvvmLight;
+using Games.Risk.Application;
 
 namespace Games.Risk.ViewModel
 {
-    public enum CardType
-    {
-        Soldier,
-        Horse,
-        Cannon,
-        Joker
-    }
-
     public class CardViewModel : ViewModelBase
     {
         private string _territory;
         private bool _bottomSide;
         private double _offset;
-        private CardType _cardType;
+        private string _cardTypeString;
 
         public string Territory
         {
@@ -47,14 +40,27 @@ namespace Games.Risk.ViewModel
             }
         }
 
-        public CardType CardType
+        public string CardTypeString
         {
-            get => _cardType;
+            get => _cardTypeString;
             set
             {
-                _cardType = value;
+                _cardTypeString = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public CardViewModel(
+            CardType cardType)
+        {
+            CardTypeString = cardType switch
+            {
+                CardType.Soldier => "s",
+                CardType.Horse => "h",
+                CardType.Cannon=> "c",
+                CardType.Joker=> "j",
+                _ => CardTypeString
+            };
         }
     }
 }

@@ -449,7 +449,7 @@ namespace Games.Risk.ViewModel
             var tempArray = Enumerable.Repeat(true, playerCount).ToArray();
             var indexOfPlayer = _random.Next(0, playerCount);
             tempArray[indexOfPlayer] = false;
-            _application.Engine = new Engine(tempArray, _pseudoRandomNumbers, _graphOfTerritories);
+            _application.Engine = new Engine(tempArray, _random, _graphOfTerritories);
             _application.Engine.Initialize(_continents);
             _indexOfActiveTerritory = null;
             _indexOfTargetTerritory = null;

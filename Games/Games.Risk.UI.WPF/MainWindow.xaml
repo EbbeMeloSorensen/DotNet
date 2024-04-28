@@ -102,13 +102,13 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Rectangle Grid.Column="0" Width="20" Height="20" Margin="10"
+                                <Rectangle Grid.Column="0" Width="40" Height="40" Margin="10"
                                            Fill="{Binding Brush}"
                                            Stroke="Black"/>
                                 <TextBlock Grid.Column="1" FontSize="20" FontWeight="Bold"
-                                           Padding="0, 5, 0, 10"
+                                           Padding="0, 40, 0, 10"
                                            Text="{Binding Name}"/>
-                                <Canvas Grid.Column="2" Width="55" Background="Red">
+                                <Canvas Grid.Column="2" Width="122" Height="114">
                                     <ItemsControl ItemsSource="{Binding CardViewModels}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -126,13 +126,18 @@
                                         </ItemsControl.ItemContainerStyle>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Rectangle Margin="0" 
-                                                           Width="50"
-                                                           Height="25"
-                                                           Fill="BurlyWood"
-                                                           Stroke="Black"
-                                                           StrokeThickness="1">
-                                                </Rectangle>
+                                                <Grid>
+                                                    <Rectangle Margin="1,1,1,1" 
+                                                               Width="120"
+                                                               Height="60"
+                                                               Fill="BurlyWood"
+                                                               Stroke="Black"
+                                                               StrokeThickness="1"/>
+                                                    <TextBlock Text="{Binding Territory}" Padding="3, 0, 0, 0"
+                                                               FontSize="10"/>
+                                                    <TextBlock Text="{Binding CardTypeString}"
+                                                               FontSize="9" HorizontalAlignment="Right" Padding="0, 0, 3, 0"/>
+                                                </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
