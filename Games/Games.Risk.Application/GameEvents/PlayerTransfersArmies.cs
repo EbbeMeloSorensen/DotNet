@@ -7,8 +7,9 @@
         public int ArmiesTransfered { get; set; }
 
         public PlayerTransfersArmies(
-            int playerIndex) : base(
-                playerIndex, true)
+            int playerIndex,
+            bool turnGoesToNextPlayer) : base(
+                playerIndex, turnGoesToNextPlayer)
         {
         }
     }

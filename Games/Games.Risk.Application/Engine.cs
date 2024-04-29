@@ -108,14 +108,16 @@ namespace Games.Risk.Application
 
                 if (armiesLeftInConqueringTerritory - 1 == _armiesInFinalAttack)
                 {
+                    // Transfer all armies except one to the conquered territory (since all armies participating in the last attack must be conquered)
                     return TransferArmies(
                         _conqueringTerritoryId,
                         _conqueredTerritoryId,
                         _armiesInFinalAttack,
-                        true,
+                        false,
                         true);
                 }
 
+                // If leaving behind an isolated territory, then transfer as many troops as possible. Otherwise transfer half, rounded up
                 var isolatedTerritoryEstablished = _graphOfTerritories.NeighborIds(_conqueringTerritoryId)
                     .All(neighborId => _territoryStatusMap[neighborId].ControllingPlayerIndex == CurrentPlayerIndex);
 
@@ -127,7 +129,7 @@ namespace Games.Risk.Application
                     _conqueringTerritoryId,
                     _conqueredTerritoryId,
                     armyTransferCount,
-                    true,
+                    false,
                     true);
             }
 
@@ -271,10 +273,10 @@ namespace Games.Risk.Application
 
         public void AssignExtraArmiesForCards(
             out int extraArmiesForControlledTerritories,
-            out int extraArmiesInTotal)
+            out int extraArmiesInTotalForCards)
         {
             extraArmiesForControlledTerritories = 0;
-            extraArmiesInTotal = 0;
+            extraArmiesInTotalForCards = 0;
 
             var hand = _hands[CurrentPlayerIndex];
 
@@ -331,14 +333,16 @@ namespace Games.Risk.Application
 
             if (_cardSetsTradedForTroops < 5)
             {
-                ExtraArmiesForCurrentPlayer += 2 + 2 * (_cardSetsTradedForTroops + 1);
+                extraArmiesInTotalForCards = 2 + 2 * (_cardSetsTradedForTroops + 1);
             }
             else
             {
-                ExtraArmiesForCurrentPlayer += 5 * (_cardSetsTradedForTroops - 2);
+                extraArmiesInTotalForCards = 5 * (_cardSetsTradedForTroops - 2);
             }
 
-            extraArmiesInTotal = ExtraArmiesForCurrentPlayer + extraArmiesForControlledTerritories;
+            extraArmiesInTotalForCards += extraArmiesForControlledTerritories;
+
+            ExtraArmiesForCurrentPlayer += extraArmiesInTotalForCards;
             _hands[CurrentPlayerIndex] = _hands[CurrentPlayerIndex].Except(cards).ToList();
             _drawPile.AddRange(cards.Shuffle(_random));
             _cardSetsTradedForTroops++;
@@ -371,7 +375,7 @@ namespace Games.Risk.Application
             bool postAttack)
         {
             var gameEvent = new PlayerTransfersArmies(
-                CurrentPlayerIndex)
+                CurrentPlayerIndex, turnGoesToNextPlayer)
             {
                 Vertex1 = initialTerritoryIndex,
                 Vertex2 = destinationTerritoryIndex,
