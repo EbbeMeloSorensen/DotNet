@@ -8,6 +8,7 @@
         public int CasualtiesAttacker { get; set; }
         public int CasualtiesDefender { get; set; }
         public bool TerritoryConquered { get; set; }
+        public bool DefendingPlayerDefeated { get; set; }
         public int DiceRolledByAttacker { get; set; }
         public Card Card { get; set; }
 

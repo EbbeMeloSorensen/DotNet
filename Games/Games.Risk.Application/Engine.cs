@@ -448,6 +448,7 @@ namespace Games.Risk.Application
             _territoryWasJustConquered = false;
             var defendingPlayerIndex = _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex;
             Card card = null;
+            var defendingPlayerDefeated = false;
 
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
             {
@@ -467,12 +468,30 @@ namespace Games.Risk.Application
                     GameDecided = true;
                     GameInProgress = false;
                 }
-
-                if (!_currentPlayerHasConqueredATerritory)
+                else
                 {
-                    card = _drawPile.First();
-                    _drawPile = _drawPile.Skip(1).ToList();
-                    _hands[CurrentPlayerIndex].Add(card);
+                    // Should the attacking player receive a card?
+                    if (!_currentPlayerHasConqueredATerritory)
+                    {
+                        card = _drawPile.First();
+                        _drawPile = _drawPile.Skip(1).ToList();
+                        _hands[CurrentPlayerIndex].Add(card);
+                    }
+
+                    // Did the defending player loose the last territory, thus being entirely defeated?
+                    if (!_territoryStatusMap.Any(_ => _.Value.ControllingPlayerIndex == defendingPlayerIndex))
+                    {
+                        defendingPlayerDefeated = true;
+
+                        if (_hands[defendingPlayerIndex].Any())
+                        {
+                            var a = 0;
+                        }
+
+                        // Attacking player gets the cards of the defeated player
+                        _hands[CurrentPlayerIndex].AddRange(_hands[defendingPlayerIndex]);
+                        _hands[defendingPlayerIndex].Clear();
+                    }
                 }
 
                 _currentPlayerHasConqueredATerritory = true;
@@ -488,6 +507,7 @@ namespace Games.Risk.Application
                 CasualtiesDefender = casualtiesDefender,
                 TerritoryConquered = _territoryWasJustConquered,
                 DiceRolledByAttacker = diceCountAttacker,
+                DefendingPlayerDefeated = defendingPlayerDefeated,
                 Card = card
             };
 

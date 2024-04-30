@@ -29,7 +29,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private const int _delay = 0;
+        private int _delay = 0;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private List<Continent> _continents;
         private Dictionary<int, Brush> _colorPalette;
@@ -356,12 +356,21 @@ namespace Games.Risk.ViewModel
                                 AttackVectorVisible = true;
                             }
 
-                            if (playerAttacks.Card != null)
+                            if (!_application.Engine.GameDecided)
                             {
-                                PlayerViewModels[_application.Engine.CurrentPlayerIndex]
-                                    .AddCardViewModel(
-                                        _territoryNameMap[playerAttacks.Card.TerritoryIndex],
-                                        playerAttacks.Card.Type);
+                                if (playerAttacks.DefendingPlayerDefeated)
+                                {
+                                    _delay = 2000;
+                                    UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
+                                    UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
+                                }
+                                else if (playerAttacks.Card != null)
+                                {
+                                    PlayerViewModels[_application.Engine.CurrentPlayerIndex]
+                                        .AddCardViewModel(
+                                            _territoryNameMap[playerAttacks.Card.TerritoryIndex],
+                                            playerAttacks.Card.Type);
+                                }
                             }
 
                             break;
@@ -396,10 +405,13 @@ namespace Games.Risk.ViewModel
                         SwitchToNextPlayer();
                     }
 
+                    _delay = 0;
                     continue;
                 }
 
                 UpdateCommandAvailability();
+
+                _delay = 0;
                 break;
             }
 
@@ -579,7 +591,12 @@ namespace Games.Risk.ViewModel
                 }
                 else
                 {
-                    if (playerAttacks.Card != null)
+                    if (playerAttacks.DefendingPlayerDefeated)
+                    {
+                        UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
+                        UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
+                    }
+                    else if (playerAttacks.Card != null)
                     {
                         PlayerViewModels[_application.Engine.CurrentPlayerIndex].AddCardViewModel(
                             _territoryNameMap[playerAttacks.Card.TerritoryIndex],
@@ -995,11 +1012,16 @@ namespace Games.Risk.ViewModel
                     if (playerAttacks.TerritoryConquered)
                     {
                         sb.Append(". Territory is conquered");
-                    }
 
-                    if (playerAttacks.Card != null)
-                    {
-                        sb.Append($", and player {playerAttacks.PlayerIndex + 1} gets a card");
+                        if (playerAttacks.Card != null)
+                        {
+                            sb.Append($", and player {playerAttacks.PlayerIndex + 1} gets a card");
+                        }
+
+                        if (playerAttacks.DefendingPlayerDefeated)
+                        {
+                            sb.Append($". Player {playerAttacks.DefendingPlayerIndex + 1} is defeated");
+                        }
                     }
 
                     break;
@@ -1161,18 +1183,7 @@ namespace Games.Risk.ViewModel
             }
 
             // Player gets armies for cards
-            var playerViewModel = PlayerViewModels[_application.Engine.CurrentPlayerIndex];
-            var cardViewModels = playerViewModel.CardViewModels;
-
-            cardViewModels.Clear();
-
-            _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).ForEach(_ =>
-            {
-                playerViewModel.AddCardViewModel(
-                    _territoryNameMap[_.TerritoryIndex],
-                    _.Type);
-            });
-
+            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
             SyncControlsWithApplication();
 
             var sb = new StringBuilder($"  Player {_application.Engine.CurrentPlayerIndex + 1}");
@@ -1187,6 +1198,22 @@ namespace Games.Risk.ViewModel
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
                 sb.ToString());
+        }
+
+        private void UpdateCardViewModels(
+            int playerIndex)
+        {
+            var playerViewModel = PlayerViewModels[playerIndex];
+            var cardViewModels = playerViewModel.CardViewModels;
+
+            cardViewModels.Clear();
+
+            _application.Engine.GetHand(playerIndex).ForEach(_ =>
+            {
+                playerViewModel.AddCardViewModel(
+                    _territoryNameMap[_.TerritoryIndex],
+                    _.Type);
+            });
         }
     }
 }
