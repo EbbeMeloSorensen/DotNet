@@ -138,6 +138,31 @@ namespace Games.Risk.Application
                 return DeployArmies(CurrentPlayerHasReinforced);
             }
 
+            if (_hands[CurrentPlayerIndex].Count > 5)
+            {
+                var a = 0;
+            }
+
+            if (CurrentPlayerMayReinforce || _hands[CurrentPlayerIndex].Count > 5)
+            {
+                // At the beginning of his turn, the player may trade cards for troops, if possible.
+                // If the player has more than 5 cards (should only occur when having defeated another player and taken over his cards)
+                // then the player HAS to trade cards right away even though it is not at the beginning of his turn
+
+                AssignExtraArmiesForCards(
+                    out var extraArmiesForControlledTerritories,
+                    out var extraArmiesInTotalForCards);
+
+                if (extraArmiesInTotalForCards > 0)
+                {
+                    return new PlayerTradesInCards(CurrentPlayerIndex)
+                    {
+                        ArmiesReceivedForCards = extraArmiesInTotalForCards - extraArmiesForControlledTerritories,
+                        ArmiesReceivedForControlledTerritories = extraArmiesForControlledTerritories
+                    };
+                }
+            }
+
             var attackOptions = IdentifyAttackOptionsForCurrentPlayer();
 
             if (attackOptions.Any())
@@ -295,18 +320,15 @@ namespace Games.Risk.Application
                 cards.AddRange(GetCards(hand, CardType.Horse, 1));
                 cards.AddRange(GetCards(hand, CardType.Cannon, 1));
             }
-
-            if (hand.Count(_ => _.Type == CardType.Cannon) > 2)
+            else if (hand.Count(_ => _.Type == CardType.Cannon) > 2)
             {
                 cards.AddRange(GetCards(hand, CardType.Cannon, 3));
             }
-
-            if (hand.Count(_ => _.Type == CardType.Horse) > 2)
+            else if (hand.Count(_ => _.Type == CardType.Horse) > 2)
             {
                 cards.AddRange(GetCards(hand, CardType.Horse, 3));
             }
-
-            if (hand.Count(_ => _.Type == CardType.Soldier) > 2)
+            else if (hand.Count(_ => _.Type == CardType.Soldier) > 2)
             {
                 cards.AddRange(GetCards(hand, CardType.Soldier, 3));
             }
