@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
@@ -43,11 +44,18 @@ namespace Games.Risk.ViewModel
             string territory,
             CardType cardType)
         {
-            CardViewModels.Add(new CardViewModel(cardType)
+            var cardViewModel = new CardViewModel(cardType)
             {
                 Territory = territory,
                 Offset = CardViewModels.Count * 13
-            });
+            };
+
+            CardViewModels.Add(cardViewModel);
+
+            cardViewModel.CardClicked += (s, e) =>
+            {
+                throw new NotImplementedException();
+            };
         }
     }
 }

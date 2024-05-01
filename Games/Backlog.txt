@@ -28,8 +28,12 @@ Done:
 
 In progress:
 * Man skal kunne få kort, når man erobrer territorier, og indløse dem for tropper
+  - det skal virke for computer players (ok)
+  - det skal virke for human player
+    - man skal kunne vælge sine kort, når man har initiativet
+      - registrer, når man klikker på dem
 
-Todo 
+Todo
 * Der er noget galt med noget state, der ikke nulstilles, når man starter et nyt spil - så Move-knappen f.eks, er aktiv, selv om der ikke er valgt nogen territorier
 * Alle spillere skal placere tropper i en indledende fase
 * Når man flytter armeer som det sidste i sin tur, skal man via en drop down i Move buttonen kunne vælge mellem: alle eller let me decide

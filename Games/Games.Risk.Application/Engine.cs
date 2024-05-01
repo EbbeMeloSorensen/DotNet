@@ -483,11 +483,6 @@ namespace Games.Risk.Application
                     {
                         defendingPlayerDefeated = true;
 
-                        if (_hands[defendingPlayerIndex].Any())
-                        {
-                            var a = 0;
-                        }
-
                         // Attacking player gets the cards of the defeated player
                         _hands[CurrentPlayerIndex].AddRange(_hands[defendingPlayerIndex]);
                         _hands[defendingPlayerIndex].Clear();

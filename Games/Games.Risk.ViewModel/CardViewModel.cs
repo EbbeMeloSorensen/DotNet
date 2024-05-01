@@ -1,4 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Games.Risk.Application;
 
 namespace Games.Risk.ViewModel
@@ -9,6 +11,8 @@ namespace Games.Risk.ViewModel
         private bool _bottomSide;
         private double _offset;
         private string _cardTypeString;
+        private bool _selected;
+        private RelayCommand _clickedCommand;
 
         public string Territory
         {
@@ -50,6 +54,26 @@ namespace Games.Risk.ViewModel
             }
         }
 
+        public bool Selected
+        {
+            get => _selected;
+            set
+            {
+                _selected = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public RelayCommand ClickedCommand
+        {
+            get
+            {
+                return _clickedCommand ?? (_clickedCommand = new RelayCommand(Clicked));
+            }
+        }
+
+        public event EventHandler CardClicked;
+
         public CardViewModel(
             CardType cardType)
         {
@@ -61,6 +85,23 @@ namespace Games.Risk.ViewModel
                 CardType.Joker=> "j",
                 _ => CardTypeString
             };
+        }
+
+        private void Clicked()
+        {
+            OnCardClicked();
+        }
+
+        private void OnCardClicked()
+        {
+            Selected = !Selected;
+
+            var handler = CardClicked;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
     }
 }
