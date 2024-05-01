@@ -197,7 +197,7 @@ foreach(var sms_station in sms_stations)
             sb.Append($" (Date: {sms_station.datefrom.AsDateTimeString(false)})");
 
             if (insertCount < insertlimit &&
-                sms_station.datefrom > new DateTime(2024, 1, 1))
+                sms_station.datefrom > new DateTime(2023, 1, 1))
             {
                 // Identify the postfix
                 using var statdb_conn = new NpgsqlConnection(statdb_connectionString);
@@ -259,31 +259,33 @@ foreach(var sms_station in sms_stations)
                             }
                         }
 
-                        existingStartTimes.Sort();
-
-                        if (sms_station.datefrom > existingStartTimes.Last())
+                        if (existingStartTimes.Any())
                         {
-                            // Det højdevinkelsæt, der skal indsættes, er nyere end alle de eksisterende
-                            // Derfor skal den seneste trimmes
+                            existingStartTimes.Sort();
 
-                            // Kontrol 1 (Udtræk hele den eksisterende sekvens af højdevinkler for stationen)
-                            insertQueryScript.Add($"SELECT * FROM leeindex WHERE statid = {statId} ORDER BY start_time;");
+                            if (sms_station.datefrom > existingStartTimes.Last())
+                            {
+                                // Det højdevinkelsæt, der skal indsættes, er nyere end alle de eksisterende
+                                // Derfor skal den seneste trimmes
 
-                            var whereClause = $"WHERE statid = {statId} AND start_time = '{existingStartTimes.Last().AsDateTimeString(false)}'";
+                                // Kontrol 1 (Udtræk hele den eksisterende sekvens af højdevinkler for stationen)
+                                insertQueryScript.Add($"SELECT * FROM leeindex WHERE statid = {statId} ORDER BY start_time;");
 
-                            // Kontrol 2 (Udtræk det ene højdevinkelsæt, der skal trimmes)
-                            insertQueryScript.Add($"SELECT * FROM leeindex {whereClause};");
+                                var whereClause = $"WHERE statid = {statId} AND start_time = '{existingStartTimes.Last().AsDateTimeString(false)}'";
 
-                            sb.Clear();
-                            sb.Append($"UPDATE leeindex SET end_time = '{sms_station.datefrom.AsDateTimeString(false)}' ");
-                            sb.Append($"{whereClause};");
-                            insertQueryScript.Add(sb.ToString());
+                                // Kontrol 2 (Udtræk det ene højdevinkelsæt, der skal trimmes)
+                                insertQueryScript.Add($"SELECT * FROM leeindex {whereClause};");
+
+                                sb.Clear();
+                                sb.Append($"UPDATE leeindex SET end_time = '{sms_station.datefrom.AsDateTimeString(false)}' ");
+                                sb.Append($"{whereClause};");
+                                insertQueryScript.Add(sb.ToString());
+                            }
+                            else
+                            {
+                                throw new NotImplementedException();
+                            }
                         }
-                        else
-                        {
-                            throw new NotImplementedException();
-                        }
-
 
                         sb.Clear();
                         sb.Append("INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (");
