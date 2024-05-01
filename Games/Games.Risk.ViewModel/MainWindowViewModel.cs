@@ -360,7 +360,7 @@ namespace Games.Risk.ViewModel
                             {
                                 if (playerAttacks.DefendingPlayerDefeated)
                                 {
-                                    _delay = 2000;
+                                    //_delay = 2000;
                                     UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
                                     UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
                                 }
@@ -375,15 +375,17 @@ namespace Games.Risk.ViewModel
 
                             break;
                         }
-                        case PlayerReinforces:
-                        case PlayerDeploysArmies:
-                        case PlayerTransfersArmies:
+                        case PlayerTradesInCards:
                         {
+                            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
                             break;
                         }
-                        case PlayerPasses playerPasses:
+                        case PlayerReinforces:
+                        case PlayerDeploysArmies:
+                        case PlayerTransfersArmies:
+                        case PlayerPasses:
                         {
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
@@ -405,13 +407,13 @@ namespace Games.Risk.ViewModel
                         SwitchToNextPlayer();
                     }
 
-                    _delay = 0;
+                    //_delay = 0;
                     continue;
                 }
 
                 UpdateCommandAvailability();
 
-                _delay = 0;
+                //_delay = 0;
                 break;
             }
 
@@ -1066,6 +1068,21 @@ namespace Games.Risk.ViewModel
                     sb.Append($" to {_territoryNameMap[playerTransfersArmies.Vertex2]}");
                     break;
                 }
+                case PlayerTradesInCards playerTradesInCards:
+                {
+                    var armiesReceivedInTotal =
+                        playerTradesInCards.ArmiesReceivedForCards +
+                        playerTradesInCards.ArmiesReceivedForControlledTerritories;
+
+                    sb.Append($" trades in 3 cards for {armiesReceivedInTotal} armies");
+
+                    if (playerTradesInCards.ArmiesReceivedForControlledTerritories > 0)
+                    {
+                        sb.Append($" ({playerTradesInCards.ArmiesReceivedForControlledTerritories} for controlled territories)");
+                    }
+
+                    break;
+                }
             }
 
             _application.Logger?.WriteLine(
@@ -1082,7 +1099,12 @@ namespace Games.Risk.ViewModel
                 $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
 
             AssignExtraArmiesForControlledContinents();
-            AssignExtraArmiesForCards();
+
+            // This should be an action instead
+            if (false)
+            {
+                AssignExtraArmiesForCards();
+            }
         }
 
         private List<Continent> GenerateContinents()
