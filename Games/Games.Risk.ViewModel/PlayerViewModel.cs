@@ -54,7 +54,7 @@ namespace Games.Risk.ViewModel
 
             cardViewModel.CardClicked += (s, e) =>
             {
-                throw new NotImplementedException();
+                //throw new NotImplementedException();
             };
         }
     }

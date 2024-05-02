@@ -1,11 +1,11 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
+using System;
 using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Games.Risk.UI.WPF
 {
-    public class BooleanMatchToBrushConverter : IValueConverter
+    public class BooleanMatchToCardBrushConverter : IValueConverter
     {
         public object Convert(
             object value,
@@ -24,8 +24,8 @@ namespace Games.Risk.UI.WPF
             }
 
             return a == b
-                ? new SolidColorBrush(Colors.Orange)
-                : new SolidColorBrush(Colors.DarkGray);
+                ? new SolidColorBrush(Colors.Cornsilk)
+                : new SolidColorBrush(Colors.DarkSeaGreen);
         }
 
         public object ConvertBack(

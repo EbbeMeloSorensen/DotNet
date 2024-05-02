@@ -15,7 +15,8 @@
 
     <Window.Resources>
         <valueConverters:DoubleAdder x:Key="DoubleAdder"/>
-        <local:BooleanMatchToBrushConverter x:Key="BooleanMatchToBrushConverter"/>
+        <local:BooleanMatchToPlayerBrushConverter x:Key="BooleanMatchToPlayerBrushConverter"/>
+        <local:BooleanMatchToCardBrushConverter x:Key="BooleanMatchToCardBrushConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <system:Boolean x:Key="True">True</system:Boolean>
         <system:Boolean x:Key="False">False</system:Boolean>
@@ -95,7 +96,7 @@
                     <DataTemplate>
                         <Border BorderThickness="1" BorderBrush="Black">
                             <Grid Background="{Binding HasInitiative, 
-                                Converter={StaticResource BooleanMatchToBrushConverter},
+                                Converter={StaticResource BooleanMatchToPlayerBrushConverter},
                                 ConverterParameter={StaticResource True}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -131,8 +132,10 @@
                                                     <Rectangle Margin="1,1,1,1" 
                                                                Width="120"
                                                                Height="60"
-                                                               Fill="BurlyWood"
                                                                Stroke="Black"
+                                                               Fill="{Binding Selected, 
+                                                                    Converter={StaticResource BooleanMatchToCardBrushConverter},
+                                                                    ConverterParameter={StaticResource True}}"
                                                                StrokeThickness="1">
                                                         <b:Interaction.Triggers>
                                                             <b:EventTrigger EventName="MouseDown">
