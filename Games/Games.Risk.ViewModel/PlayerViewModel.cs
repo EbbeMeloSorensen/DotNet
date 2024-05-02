@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Media;
+using Craft.Utils;
 using GalaSoft.MvvmLight;
 using Games.Risk.Application;
 
@@ -35,26 +39,31 @@ namespace Games.Risk.ViewModel
 
         public ObservableCollection<CardViewModel> CardViewModels { get; }
 
+        public ObservableObject<List<Card>> SelectedCards { get; }
+            
         public PlayerViewModel()
         {
             CardViewModels = new ObservableCollection<CardViewModel>();
+            SelectedCards = new ObservableObject<List<Card>>();
         }
 
         public void AddCardViewModel(
             string territory,
-            CardType cardType)
+            Card card,
+            bool bottomSideUp)
         {
-            var cardViewModel = new CardViewModel(cardType)
+            var cardViewModel = new CardViewModel(card)
             {
                 Territory = territory,
-                Offset = CardViewModels.Count * 13
+                Offset = CardViewModels.Count * 13,
+                BottomSideUp = bottomSideUp
             };
 
             CardViewModels.Add(cardViewModel);
 
             cardViewModel.CardClicked += (s, e) =>
             {
-                //throw new NotImplementedException();
+                SelectedCards.Object = new List<Card>(CardViewModels.Select(_ => _.Card));
             };
         }
     }

@@ -8,11 +8,13 @@ namespace Games.Risk.ViewModel
     public class CardViewModel : ViewModelBase
     {
         private string _territory;
-        private bool _bottomSide;
+        private bool _bottomSideUp;
         private double _offset;
         private string _cardTypeString;
         private bool _selected;
         private RelayCommand _clickedCommand;
+
+        public Card Card { get; private set; }
 
         public string Territory
         {
@@ -24,12 +26,12 @@ namespace Games.Risk.ViewModel
             }
         }
 
-        public bool BottomSide
+        public bool BottomSideUp
         {
-            get => _bottomSide;
+            get => _bottomSideUp;
             set
             {
-                _bottomSide = value;
+                _bottomSideUp = value;
                 RaisePropertyChanged();
             }
         }
@@ -75,9 +77,11 @@ namespace Games.Risk.ViewModel
         public event EventHandler CardClicked;
 
         public CardViewModel(
-            CardType cardType)
+            Card card)
         {
-            CardTypeString = cardType switch
+            Card = card;
+
+            CardTypeString = card.Type switch
             {
                 CardType.Soldier => "s",
                 CardType.Horse => "h",

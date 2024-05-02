@@ -152,6 +152,14 @@
                                                                Padding="0, 0, 3, 0"
                                                                IsHitTestVisible="False"
                                                                Text="{Binding CardTypeString}"/>
+                                                    <Rectangle Margin="1,1,1,1" 
+                                                               Width="120"
+                                                               Height="60"
+                                                               Stroke="Black"
+                                                               Fill="DarkCyan"
+                                                               StrokeThickness="1"
+                                                               Visibility="{Binding BottomSideUp, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    </Rectangle>
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>

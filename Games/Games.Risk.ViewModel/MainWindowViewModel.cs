@@ -361,15 +361,16 @@ namespace Games.Risk.ViewModel
                                 if (playerAttacks.DefendingPlayerDefeated)
                                 {
                                     //_delay = 2000;
-                                    UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
-                                    UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
+                                    UpdateCardViewModels(_application.Engine.CurrentPlayerIndex, true);
+                                    UpdateCardViewModels(playerAttacks.DefendingPlayerIndex, true);
                                 }
                                 else if (playerAttacks.Card != null)
                                 {
                                     PlayerViewModels[_application.Engine.CurrentPlayerIndex]
                                         .AddCardViewModel(
                                             _territoryNameMap[playerAttacks.Card.TerritoryIndex],
-                                            playerAttacks.Card.Type);
+                                            playerAttacks.Card,
+                                            true);
                                 }
                             }
 
@@ -377,7 +378,7 @@ namespace Games.Risk.ViewModel
                         }
                         case PlayerTradesInCards:
                         {
-                            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
+                            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex, true);
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
                             break;
@@ -595,14 +596,15 @@ namespace Games.Risk.ViewModel
                 {
                     if (playerAttacks.DefendingPlayerDefeated)
                     {
-                        UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
-                        UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
+                        UpdateCardViewModels(_application.Engine.CurrentPlayerIndex, false);
+                        UpdateCardViewModels(playerAttacks.DefendingPlayerIndex, false);
                     }
                     else if (playerAttacks.Card != null)
                     {
                         PlayerViewModels[_application.Engine.CurrentPlayerIndex].AddCardViewModel(
                             _territoryNameMap[playerAttacks.Card.TerritoryIndex],
-                            playerAttacks.Card.Type);
+                            playerAttacks.Card,
+                            false);
                     }
 
                     var armiesInTotal =
@@ -1099,12 +1101,6 @@ namespace Games.Risk.ViewModel
                 $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
 
             AssignExtraArmiesForControlledContinents();
-
-            // This should be an action instead
-            if (false)
-            {
-                AssignExtraArmiesForCards();
-            }
         }
 
         private List<Continent> GenerateContinents()
@@ -1193,37 +1189,9 @@ namespace Games.Risk.ViewModel
                 sb.ToString());
         }
 
-        private void AssignExtraArmiesForCards()
-        {
-            _application.Engine.AssignExtraArmiesForCards(
-                out var extraArmiesForControlledTerritories,
-                out var extraArmiesInTotal);
-
-            if (extraArmiesInTotal == 0)
-            {
-                return;
-            }
-
-            // Player gets armies for cards
-            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
-            SyncControlsWithApplication();
-
-            var sb = new StringBuilder($"  Player {_application.Engine.CurrentPlayerIndex + 1}");
-            sb.Append($" gets {extraArmiesInTotal} extra armies");
-            sb.Append(" for trading in 3 cards");
-
-            if (extraArmiesForControlledTerritories > 0)
-            {
-                sb.Append($" ({extraArmiesForControlledTerritories} for controlled territories)");
-            }
-
-            _application.Logger?.WriteLine(
-                LogMessageCategory.Information,
-                sb.ToString());
-        }
-
         private void UpdateCardViewModels(
-            int playerIndex)
+            int playerIndex,
+            bool bottomSideUp)
         {
             var playerViewModel = PlayerViewModels[playerIndex];
             var cardViewModels = playerViewModel.CardViewModels;
@@ -1234,7 +1202,8 @@ namespace Games.Risk.ViewModel
             {
                 playerViewModel.AddCardViewModel(
                     _territoryNameMap[_.TerritoryIndex],
-                    _.Type);
+                    _,
+                    bottomSideUp);
             });
         }
     }
