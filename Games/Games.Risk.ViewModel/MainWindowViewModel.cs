@@ -488,6 +488,45 @@ namespace Games.Risk.ViewModel
                     });
                 });
 
+            PlayerViewModels[indexOfPlayer].SelectedCards.PropertyChanged += (s, e) =>
+            {
+                var selectedCards = PlayerViewModels[indexOfPlayer].SelectedCards.Object;
+
+                var playerCanTradeInCards =
+                    selectedCards.Count == 3 &&
+                    (selectedCards.Count(_ => _.Type == CardType.Soldier) == 3 ||
+                     selectedCards.Count(_ => _.Type == CardType.Horse) == 3 ||
+                     selectedCards.Count(_ => _.Type == CardType.Cannon) == 3 ||
+                     (selectedCards.Count(_ => _.Type == CardType.Soldier) == 1 &&
+                      selectedCards.Count(_ => _.Type == CardType.Horse) == 1 &&
+                      selectedCards.Count(_ => _.Type == CardType.Cannon) == 1));
+
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    "Selected Cards:");
+
+                PlayerViewModels[indexOfPlayer].SelectedCards.Object.ForEach(card =>
+                {
+                    _application.Logger?.WriteLine(
+                        LogMessageCategory.Information,
+                        $"  {_territoryNameMap[card.TerritoryIndex]}");
+                });
+
+                var message = playerCanTradeInCards
+                    ? "Cards can be traded"
+                    : "Cards cannot be traded";
+
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    message);
+            };
+
+            // Diagnostics (only relevant when players start with cards)
+            for (var i = 0; i < tempArray.Length; i++)
+            {
+                UpdateCardViewModels(i, tempArray[i]);
+            }
+
             _application.Engine.StartGame();
 
             SyncControlsWithApplication();

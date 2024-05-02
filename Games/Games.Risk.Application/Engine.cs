@@ -73,6 +73,15 @@ namespace Games.Risk.Application
             _hands = Enumerable.Repeat(0, playerCount).Select(_ => new List<Card>()).ToArray();
             _drawPile = GenerateCards().Shuffle(_random).ToList();
             _cardSetsTradedForTroops = 0;
+
+            // Diagnostics: Each player starts with some cards
+            for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
+            {
+                for (var x = 0; x < 4; x++)
+                {
+                    _hands[playerIndex].Add(DrawCardFromDrawPile());
+                }
+            }
         }
 
         public void Initialize(
@@ -495,8 +504,7 @@ namespace Games.Risk.Application
                     // Should the attacking player receive a card?
                     if (!_currentPlayerHasConqueredATerritory)
                     {
-                        card = _drawPile.First();
-                        _drawPile = _drawPile.Skip(1).ToList();
+                        card = DrawCardFromDrawPile();
                         _hands[CurrentPlayerIndex].Add(card);
                     }
 
@@ -967,6 +975,14 @@ namespace Games.Risk.Application
                 new Card(40, CardType.Cannon),
                 new Card(41, CardType.Cannon)
             };
+        }
+
+        private Card DrawCardFromDrawPile()
+        {
+            var card = _drawPile.First();
+            _drawPile = _drawPile.Skip(1).ToList();
+
+            return card;
         }
     }
 }

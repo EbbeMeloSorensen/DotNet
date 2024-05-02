@@ -63,7 +63,10 @@ namespace Games.Risk.ViewModel
 
             cardViewModel.CardClicked += (s, e) =>
             {
-                SelectedCards.Object = new List<Card>(CardViewModels.Select(_ => _.Card));
+                SelectedCards.Object = new List<Card>(
+                    CardViewModels
+                        .Where(_ => _.Selected)
+                        .Select(_ => _.Card));
             };
         }
     }
