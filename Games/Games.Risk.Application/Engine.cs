@@ -231,13 +231,20 @@ namespace Games.Risk.Application
 
             switch (option)
             {
+                case TradeInCards tradeInCards:
+                {
+                    return TradeInCards(
+                        tradeInCards.Cards);
+                }
                 case Reinforce _:
                 {
                     return Reinforce();
                 }
                 case Deploy deploy:
                 {
-                    return DeployArmies(deploy.ActiveTerritoryIndex, deploy.Armies);
+                    return DeployArmies(
+                        deploy.ActiveTerritoryIndex, 
+                        deploy.Armies);
                 }
                 case Attack attack:
                 {
@@ -553,6 +560,17 @@ namespace Games.Risk.Application
             _currentPlayerMayTransferArmies = true;
 
             return gameEvent;
+        }
+
+        private IGameEvent TradeInCards(
+            List<Card> cards)
+        {
+            cards.ForEach(_ =>
+            {
+                _hands[CurrentPlayerIndex].Remove(_);
+            });
+
+            return new PlayerTradesInCards(CurrentPlayerIndex);
         }
 
         private IGameEvent Reinforce()

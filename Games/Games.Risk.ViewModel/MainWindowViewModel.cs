@@ -53,9 +53,12 @@ namespace Games.Risk.ViewModel
         private bool _displayAttackVector;
         private int _armiesToDeploy;
         private string _selectedDeployOption;
+        private List<Card> _selectedCards;
+        private bool _currentPlayerCanTradeInSelectedCards;
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
+        private AsyncCommand _tradeInSelectedCardsCommand;
         private AsyncCommand _reinforceCommand;
         private AsyncCommand _deployCommand;
         private AsyncCommand _attackCommand;
@@ -82,6 +85,7 @@ namespace Games.Risk.ViewModel
                 return Proceed();
             }, CanStartGame);
 
+        public AsyncCommand TradeInSelectedCardsCommand => _tradeInSelectedCardsCommand ??= new AsyncCommand(TradeInSelectedCards, CanTradeInSelectedCards);
         public AsyncCommand ReinforceCommand => _reinforceCommand ??= new AsyncCommand(Reinforce, CanReinforce);
         public AsyncCommand DeployCommand => _deployCommand ??= new AsyncCommand(Deploy, CanDeploy);
         public AsyncCommand AttackCommand => _attackCommand ??= new AsyncCommand(Attack, CanAttack);
@@ -490,35 +494,18 @@ namespace Games.Risk.ViewModel
 
             PlayerViewModels[indexOfPlayer].SelectedCards.PropertyChanged += (s, e) =>
             {
-                var selectedCards = PlayerViewModels[indexOfPlayer].SelectedCards.Object;
+                _selectedCards = PlayerViewModels[indexOfPlayer].SelectedCards.Object;
 
-                var playerCanTradeInCards =
-                    selectedCards.Count == 3 &&
-                    (selectedCards.Count(_ => _.Type == CardType.Soldier) == 3 ||
-                     selectedCards.Count(_ => _.Type == CardType.Horse) == 3 ||
-                     selectedCards.Count(_ => _.Type == CardType.Cannon) == 3 ||
-                     (selectedCards.Count(_ => _.Type == CardType.Soldier) == 1 &&
-                      selectedCards.Count(_ => _.Type == CardType.Horse) == 1 &&
-                      selectedCards.Count(_ => _.Type == CardType.Cannon) == 1));
+                _currentPlayerCanTradeInSelectedCards =
+                    _selectedCards.Count == 3 &&
+                    (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 3 ||
+                     _selectedCards.Count(_ => _.Type == CardType.Horse) == 3 ||
+                     _selectedCards.Count(_ => _.Type == CardType.Cannon) == 3 ||
+                     (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 1 &&
+                      _selectedCards.Count(_ => _.Type == CardType.Horse) == 1 &&
+                      _selectedCards.Count(_ => _.Type == CardType.Cannon) == 1));
 
-                _application.Logger?.WriteLine(
-                    LogMessageCategory.Information,
-                    "Selected Cards:");
-
-                PlayerViewModels[indexOfPlayer].SelectedCards.Object.ForEach(card =>
-                {
-                    _application.Logger?.WriteLine(
-                        LogMessageCategory.Information,
-                        $"  {_territoryNameMap[card.TerritoryIndex]}");
-                });
-
-                var message = playerCanTradeInCards
-                    ? "Cards can be traded"
-                    : "Cards cannot be traded";
-
-                _application.Logger?.WriteLine(
-                    LogMessageCategory.Information,
-                    message);
+                UpdateCommandAvailability();
             };
 
             // Diagnostics (only relevant when players start with cards)
@@ -541,6 +528,29 @@ namespace Games.Risk.ViewModel
         private bool CanStartGame()
         {
             return !GameInProgress || PlayerHasInitiative;
+        }
+
+        private async Task TradeInSelectedCards()
+        {
+            var gameEvent = await _application.Engine.PlayerSelectsOption(
+                new TradeInCards
+                {
+                    Cards = _selectedCards
+                });
+
+            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex, false);
+            SyncControlsWithApplication();
+            UpdateCommandAvailability();
+            LogGameEvent(gameEvent);
+        }
+
+        private bool CanTradeInSelectedCards()
+        {
+            return GameInProgress &&
+                   PlayerHasInitiative &&
+                   _currentPlayerCanTradeInSelectedCards &&
+                   _application.Engine.CurrentPlayerMayReinforce &&
+                   !_application.Engine.CurrentPlayerHasMovedTroops;
         }
 
         private async Task Reinforce()
@@ -795,6 +805,7 @@ namespace Games.Risk.ViewModel
         private void UpdateCommandAvailability()
         {
             StartGameCommand.RaiseCanExecuteChanged();
+            TradeInSelectedCardsCommand.RaiseCanExecuteChanged();
             ReinforceCommand.RaiseCanExecuteChanged();
             DeployCommand.RaiseCanExecuteChanged();
             AttackCommand.RaiseCanExecuteChanged();
@@ -1133,7 +1144,11 @@ namespace Games.Risk.ViewModel
 
         private void SwitchToNextPlayer()
         {
+            _selectedCards = null;
+            _currentPlayerCanTradeInSelectedCards = false;
+
             HighlightCurrentPlayer();
+            UpdateCommandAvailability();
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
