@@ -147,11 +147,6 @@ namespace Games.Risk.Application
                 return DeployArmies(CurrentPlayerHasReinforced);
             }
 
-            if (_hands[CurrentPlayerIndex].Count > 5)
-            {
-                var a = 0;
-            }
-
             if (CurrentPlayerMayReinforce || _hands[CurrentPlayerIndex].Count > 5)
             {
                 // At the beginning of his turn, the player may trade cards for troops, if possible.
@@ -526,6 +521,7 @@ namespace Games.Risk.Application
                 CurrentPlayerIndex);
 
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
+            CurrentPlayerHasReinforced = false;
             CurrentPlayerMayReinforce = true;
             _currentPlayerHasConqueredATerritory = false;
             _territoryWasJustConquered = false;
@@ -910,7 +906,7 @@ namespace Games.Risk.Application
                 _territoryStatusMap[vertexId] = new TerritoryStatus
                 {
                     ControllingPlayerIndex = playerId,
-                    Armies = 3
+                    Armies = 1
                 };
 
                 playerId = (playerId + 1) % PlayerCount;
