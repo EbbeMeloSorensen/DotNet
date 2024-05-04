@@ -75,13 +75,13 @@ namespace Games.Risk.Application
             _cardSetsTradedForTroops = 0;
 
             // Diagnostics: Each player starts with some cards
-            for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
-            {
-                for (var x = 0; x < 4; x++)
-                {
-                    _hands[playerIndex].Add(DrawCardFromDrawPile());
-                }
-            }
+            //for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
+            //{
+            //    for (var x = 0; x < 4; x++)
+            //    {
+            //        _hands[playerIndex].Add(DrawCardFromDrawPile());
+            //    }
+            //}
         }
 
         public void Initialize(
@@ -349,41 +349,13 @@ namespace Games.Risk.Application
                 cards.AddRange(GetCards(hand, CardType.Soldier, 3));
             }
 
-            if (!cards.Any())
+            if (cards.Any())
             {
-                return;
+                TradeCardsForArmies(
+                    cards,
+                    out extraArmiesForControlledTerritories,
+                    out extraArmiesInTotalForCards);
             }
-
-            var temp = 0;
-
-            cards.ForEach(_ =>
-            {
-                if (_territoryStatusMap[_.TerritoryIndex].ControllingPlayerIndex != CurrentPlayerIndex)
-                {
-                    return;
-                }
-
-                temp += 2;
-                _territoryStatusMap[_.TerritoryIndex].Armies += 2;
-            });
-
-            extraArmiesForControlledTerritories += temp;
-
-            if (_cardSetsTradedForTroops < 5)
-            {
-                extraArmiesInTotalForCards = 2 + 2 * (_cardSetsTradedForTroops + 1);
-            }
-            else
-            {
-                extraArmiesInTotalForCards = 5 * (_cardSetsTradedForTroops - 2);
-            }
-
-            extraArmiesInTotalForCards += extraArmiesForControlledTerritories;
-
-            ExtraArmiesForCurrentPlayer += extraArmiesInTotalForCards;
-            _hands[CurrentPlayerIndex] = _hands[CurrentPlayerIndex].Except(cards).ToList();
-            _drawPile.AddRange(cards.Shuffle(_random));
-            _cardSetsTradedForTroops++;
         }
 
         private IEnumerable<Card> GetCards(
@@ -565,12 +537,16 @@ namespace Games.Risk.Application
         private IGameEvent TradeInCards(
             List<Card> cards)
         {
-            cards.ForEach(_ =>
-            {
-                _hands[CurrentPlayerIndex].Remove(_);
-            });
+            TradeCardsForArmies(
+                cards, 
+                out var extraArmiesForControlledTerritories,
+                out var extraArmiesInTotalForCards);
 
-            return new PlayerTradesInCards(CurrentPlayerIndex);
+            return new PlayerTradesInCards(CurrentPlayerIndex)
+            {
+                ArmiesReceivedForCards = extraArmiesInTotalForCards - extraArmiesForControlledTerritories,
+                ArmiesReceivedForControlledTerritories = extraArmiesForControlledTerritories
+            };
         }
 
         private IGameEvent Reinforce()
@@ -1001,6 +977,44 @@ namespace Games.Risk.Application
             _drawPile = _drawPile.Skip(1).ToList();
 
             return card;
+        }
+
+        private void TradeCardsForArmies(
+            List<Card> cards,
+            out int extraArmiesForControlledTerritories,
+            out int extraArmiesInTotalForCards)
+        {
+            var temp = 0;
+
+            cards.ForEach(_ =>
+            {
+                if (_territoryStatusMap[_.TerritoryIndex].ControllingPlayerIndex != CurrentPlayerIndex)
+                {
+                    return;
+                }
+
+                temp += 2;
+                _territoryStatusMap[_.TerritoryIndex].Armies += 2;
+            });
+
+            extraArmiesForControlledTerritories = temp;
+
+            if (_cardSetsTradedForTroops < 5)
+            {
+                extraArmiesInTotalForCards = 2 + 2 * (_cardSetsTradedForTroops + 1);
+            }
+            else
+            {
+                extraArmiesInTotalForCards = 5 * (_cardSetsTradedForTroops - 2);
+            }
+
+            ExtraArmiesForCurrentPlayer += extraArmiesInTotalForCards;
+
+            extraArmiesInTotalForCards += extraArmiesForControlledTerritories;
+
+            _hands[CurrentPlayerIndex] = _hands[CurrentPlayerIndex].Except(cards).ToList();
+            _drawPile.AddRange(cards.Shuffle(_random));
+            _cardSetsTradedForTroops++;
         }
     }
 }

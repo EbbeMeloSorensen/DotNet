@@ -286,7 +286,8 @@ namespace Games.Risk.ViewModel
 
                 if (ArmiesToDeploy == 0)
                 {
-                    if (_indexesOfHostileNeighbours.Contains(territoryId))
+                    if (_indexesOfHostileNeighbours.Contains(territoryId) &&
+                        !_application.Engine.CurrentPlayerHasReinforced)
                     {
                         // Select hostile neighbor to active territory
                         SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
@@ -537,6 +538,15 @@ namespace Games.Risk.ViewModel
                 {
                     Cards = _selectedCards
                 });
+
+            _selectedCards = null;
+            _currentPlayerCanTradeInSelectedCards = false;
+            ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
+
+            ActiveTerritoryHighlighted = false;
+            AttackVectorVisible = false;
+            _indexOfActiveTerritory = null;
+            _indexOfTargetTerritory = null;
 
             UpdateCardViewModels(_application.Engine.CurrentPlayerIndex, false);
             SyncControlsWithApplication();
