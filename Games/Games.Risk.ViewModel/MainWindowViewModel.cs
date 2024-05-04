@@ -289,20 +289,48 @@ namespace Games.Risk.ViewModel
                     if (_indexesOfHostileNeighbours.Contains(territoryId) &&
                         !_application.Engine.CurrentPlayerHasReinforced)
                     {
-                        // Select hostile neighbor to active territory
-                        SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
-                        _indexOfTargetTerritory = territoryId;
-                        AttackVectorVisible = true;
+                        if (!_indexOfTargetTerritory.HasValue ||
+                            _indexOfTargetTerritory.Value != territoryId)
+                        {
+                            // Select hostile neighbor to active territory
+                            SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
+                            _indexOfTargetTerritory = territoryId;
+                            AttackVectorVisible = true;
+                        }
+                        else
+                        {
+                            // Deselect active territory, target territory, and vector
+                            _indexOfActiveTerritory = null;
+                            _indexesOfHostileNeighbours = new int[] { };
+                            _indexesOfReachableTerritories = new int[] { };
+                            ActiveTerritoryHighlighted = false;
+                            AttackVectorVisible = false;
+                        }
+
                         UpdateCommandAvailability();
                         return;
                     }
                     
                     if (_indexesOfReachableTerritories.Contains(territoryId))
                     {
-                        // Select territory reachable from active territory
-                        SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
-                        _indexOfTargetTerritory = territoryId;
-                        AttackVectorVisible = true;
+                        if (!_indexOfTargetTerritory.HasValue ||
+                            _indexOfTargetTerritory.Value != territoryId)
+                        {
+                            // Select destination territory reachable from active territory
+                            SelectedTargetVertexCanvasPosition = MapViewModel.PointViewModels[territoryId].Point - new PointD(20, 20);
+                            _indexOfTargetTerritory = territoryId;
+                            AttackVectorVisible = true;
+                        }
+                        else
+                        {
+                            // Deselect active territory, destination territory, and vector
+                            _indexOfActiveTerritory = null;
+                            _indexesOfHostileNeighbours = new int[] { };
+                            _indexesOfReachableTerritories = new int[] { };
+                            ActiveTerritoryHighlighted = false;
+                            AttackVectorVisible = false;
+                        }
+
                         UpdateCommandAvailability();
                         return;
                     }

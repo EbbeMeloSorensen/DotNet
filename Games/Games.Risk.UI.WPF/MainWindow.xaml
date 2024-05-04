@@ -211,13 +211,16 @@
                          Canvas.Top="{Binding SelectedVertexCanvasPosition.Y}"/>
             </Canvas>
 
-            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="500"
+            <Canvas Grid.Column="1" Grid.Row="1" Width="1100" Height="500" IsHitTestVisible="False"
                     Visibility="{Binding AttackVectorVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Ellipse Fill="Transparent" Stroke="Black" StrokeThickness="3" 
-                         Width="40" Height="40" 
+                <Ellipse Fill="Transparent" 
+                         Stroke="Black" 
+                         StrokeThickness="3" 
+                         Width="40" 
+                         Height="40" 
                          Canvas.Left="{Binding SelectedTargetVertexCanvasPosition.X}" 
                          Canvas.Top="{Binding SelectedTargetVertexCanvasPosition.Y}"/>
-                <Line Stroke="Black" StrokeThickness="3" 
+                <Line Stroke="Black" StrokeThickness="3" IsHitTestVisible="False" 
                       X1="{Binding SelectedVertexCanvasPosition.X, Converter={StaticResource DoubleAdder}, ConverterParameter={StaticResource Shift}}"
                       Y1="{Binding SelectedVertexCanvasPosition.Y, Converter={StaticResource DoubleAdder}, ConverterParameter={StaticResource Shift}}"
                       X2="{Binding SelectedTargetVertexCanvasPosition.X, Converter={StaticResource DoubleAdder}, ConverterParameter={StaticResource Shift}}"
