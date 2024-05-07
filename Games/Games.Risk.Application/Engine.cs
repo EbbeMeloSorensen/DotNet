@@ -23,6 +23,7 @@ namespace Games.Risk.Application
         private int _conqueredTerritoryId;
         private int _armiesInFinalAttack;
         private List<Card>[] _hands;
+        private int[] _armiesToDeploy;
         private List<Card> _drawPile;
         private int _cardSetsTradedForTroops;
 
@@ -73,6 +74,18 @@ namespace Games.Risk.Application
             _hands = Enumerable.Repeat(0, playerCount).Select(_ => new List<Card>()).ToArray();
             _drawPile = GenerateCards().Shuffle(_random).ToList();
             _cardSetsTradedForTroops = 0;
+
+            var troopsPrPlayer = playerCount switch
+            {
+                2 => 40,
+                3 => 35,
+                4 => 30,
+                5 => 25,
+                6 => 20,
+                _ => 0
+            };
+
+            _armiesToDeploy = new int[playerCount];
 
             // Diagnostics: Each player starts with some cards
             //for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
