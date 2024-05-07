@@ -38,6 +38,8 @@ namespace Games.Risk.Application
 
         public bool GameInProgress { get; private set; }
 
+        public bool SetupPhaseComplete { get; private set; }
+
         public bool GameDecided { get; private set; }
 
         public int ExtraArmiesForCurrentPlayer { get; private set; }
@@ -74,18 +76,19 @@ namespace Games.Risk.Application
             _hands = Enumerable.Repeat(0, playerCount).Select(_ => new List<Card>()).ToArray();
             _drawPile = GenerateCards().Shuffle(_random).ToList();
             _cardSetsTradedForTroops = 0;
+            SetupPhaseComplete = false;
 
             var troopsPrPlayer = playerCount switch
             {
                 2 => 40,
                 3 => 35,
-                4 => 30,
+                4 => 12,
                 5 => 25,
                 6 => 20,
-                _ => 0
+                _ => throw new ArgumentOutOfRangeException()
             };
 
-            _armiesToDeploy = new int[playerCount];
+            _armiesToDeploy = Enumerable.Repeat(troopsPrPlayer, playerCount).ToArray();
 
             // Diagnostics: Each player starts with some cards
             //for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
@@ -109,13 +112,11 @@ namespace Games.Risk.Application
             //DistributeTerritoriesAmongPlayers2();
 
             GameInProgress = true;
-            CurrentPlayerIndex = 0;
             CurrentPlayerMayReinforce = true;
             _currentPlayerMayTransferArmies = true;
             _currentPlayerHasConqueredATerritory = false;
 
-            Logger?.WriteLine(LogMessageCategory.Information,
-                $"New Game Started - Player {CurrentPlayerIndex + 1} begins");
+            //Logger?.WriteLine(LogMessageCategory.Information, "New Game Started");
         }
 
         public async Task<IGameEvent> ExecuteNextEvent()
@@ -157,7 +158,7 @@ namespace Games.Risk.Application
 
             if (ExtraArmiesForCurrentPlayer > 0)
             {
-                return DeployArmies(CurrentPlayerHasReinforced);
+                return DeployArmies(CurrentPlayerHasReinforced || !SetupPhaseComplete);
             }
 
             if (CurrentPlayerMayReinforce || _hands[CurrentPlayerIndex].Count > 5)
@@ -283,6 +284,12 @@ namespace Games.Risk.Application
             return _hands[playerIndex];
         }
 
+        public int ArmiesLeftInPool(
+            int playerIndex)
+        {
+            return _armiesToDeploy[playerIndex];
+        }
+
         public IEnumerable<int> IndexesOfHostileNeighbourTerritories(
             int territoryId)
         {
@@ -297,6 +304,17 @@ namespace Games.Risk.Application
             var reachable = GetConnectedComponent(territoryId, CurrentPlayerIndex, handled);
             reachable.Remove(territoryId);
             return reachable;
+        }
+
+        public void AssignAnArmyFromInitialPool()
+        {
+            _armiesToDeploy[CurrentPlayerIndex]--;
+            ExtraArmiesForCurrentPlayer = 1;
+
+            if (_armiesToDeploy.All(_ => _ == 0))
+            {
+                SetupPhaseComplete = true;
+            }
         }
 
         public List<string> AssignExtraArmiesForControlledContinents()
@@ -922,8 +940,13 @@ namespace Games.Risk.Application
                     Armies = 1
                 };
 
+                _armiesToDeploy[playerId]--;
+
                 playerId = (playerId + 1) % PlayerCount;
             }
+
+            // The player after the one that got the last territory starts placing troops
+            CurrentPlayerIndex = playerId;
         }
 
         private List<Card> GenerateCards()

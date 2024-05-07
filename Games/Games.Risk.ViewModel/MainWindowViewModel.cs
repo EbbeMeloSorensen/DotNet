@@ -537,7 +537,7 @@ namespace Games.Risk.ViewModel
                 UpdateCommandAvailability();
             };
 
-            // Diagnostics (only relevant when players start with cards)
+            // Diagnostics (only makes a difference when players start with cards, which they usually don't)
             for (var i = 0; i < tempArray.Length; i++)
             {
                 UpdateCardViewModels(i, tempArray[i]);
@@ -545,13 +545,34 @@ namespace Games.Risk.ViewModel
 
             _application.Engine.StartGame();
 
-            SyncControlsWithApplication();
-            HighlightCurrentPlayer();
-            UpdateCommandAvailability();
-
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
                 "New game started");
+
+            for (var i = 0; i < playerCount; i++)
+            {
+                var territoryNames = new List<string>();
+
+                for (var j = 0; j < _graphOfTerritories.Vertices.Count; j++)
+                {
+                    if (_application.Engine.GetTerritoryStatus(j).ControllingPlayerIndex == i)
+                    {
+                        territoryNames.Add(_territoryNameMap[j]);
+                    }
+                }
+
+                territoryNames.Sort();
+
+                var sb = new StringBuilder($"Player {i + 1} controls {territoryNames.Count} territories: ");
+                sb.Append($"{territoryNames.Aggregate((c, n) => $"{c}, {n}")}");
+
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    sb.ToString());
+            }
+
+            SyncControlsWithApplication();
+            SwitchToNextPlayer();
         }
 
         private bool CanStartGame()
@@ -587,6 +608,7 @@ namespace Games.Risk.ViewModel
             return GameInProgress &&
                    PlayerHasInitiative &&
                    _currentPlayerCanTradeInSelectedCards &&
+                   _application.Engine.SetupPhaseComplete &&
                    _application.Engine.CurrentPlayerMayReinforce &&
                    !_application.Engine.CurrentPlayerHasMovedTroops;
         }
@@ -611,6 +633,7 @@ namespace Games.Risk.ViewModel
         {
             return GameInProgress &&
                    PlayerHasInitiative &&
+                   _application.Engine.SetupPhaseComplete &&
                    _application.Engine.CurrentPlayerMayReinforce &&
                    !_application.Engine.CurrentPlayerHasMovedTroops &&
                    _application.Engine.ExtraArmiesForCurrentPlayer == 0;
@@ -734,6 +757,7 @@ namespace Games.Risk.ViewModel
                    ArmiesToDeploy == 0 &&
                    _indexOfActiveTerritory.HasValue &&
                    _indexOfTargetTerritory.HasValue &&
+                   _application.Engine.SetupPhaseComplete &&
                    !_application.Engine.CurrentPlayerHasReinforced &&
                    !_application.Engine.CurrentPlayerHasMovedTroops &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
@@ -774,6 +798,7 @@ namespace Games.Risk.ViewModel
                    ArmiesToDeploy == 0 &&
                    _indexOfActiveTerritory.HasValue &&
                    _indexOfTargetTerritory.HasValue &&
+                   _application.Engine.SetupPhaseComplete &&
                    !_application.Engine.CurrentPlayerHasMovedTroops &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex == _application.Engine.CurrentPlayerIndex;
@@ -1192,7 +1217,14 @@ namespace Games.Risk.ViewModel
                 LogMessageCategory.Information,
                 $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
 
-            AssignExtraArmiesForControlledContinents();
+            if (!_application.Engine.SetupPhaseComplete)
+            {
+                AssignAnArmyFromInitialPool();
+            }
+            else
+            {
+                AssignExtraArmiesForControlledContinents();
+            }
         }
 
         private List<Continent> GenerateContinents()
@@ -1249,6 +1281,23 @@ namespace Games.Risk.ViewModel
                 {4, new SolidColorBrush(Colors.Orange)},
                 {5, new SolidColorBrush(Colors.MediumPurple)}
             };
+        }
+
+        private void AssignAnArmyFromInitialPool()
+        {
+            _application.Engine.AssignAnArmyFromInitialPool();
+
+            if (PlayerHasInitiative)
+            {
+                ArmiesToDeploy = 1;
+            }
+
+            var sb = new StringBuilder($"  Player {_application.Engine.CurrentPlayerIndex + 1}");
+            sb.Append($" gets an army from the initial pool ({_application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex)} left)");
+
+            _application.Logger?.WriteLine(
+                LogMessageCategory.Information,
+                sb.ToString());
         }
 
         private void AssignExtraArmiesForControlledContinents()
