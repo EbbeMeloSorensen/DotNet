@@ -197,7 +197,7 @@ foreach(var sms_station in sms_stations)
             sb.Append($" (Date: {sms_station.datefrom.AsDateTimeString(false)})");
 
             if (insertCount < insertlimit &&
-                sms_station.datefrom > new DateTime(2023, 1, 1))
+                sms_station.datefrom > new DateTime(2022, 1, 1))
             {
                 // Identify the postfix
                 using var statdb_conn = new NpgsqlConnection(statdb_connectionString);
@@ -244,6 +244,8 @@ foreach(var sms_station in sms_stations)
 
                     if (includeInsertStatements)
                     {
+                        var endTimeForNewElevationAngleSet = "'infinity'";
+
                         // Hent den pulje af højdevinkelsæt, som pågældende station allerede har
                         var existingStartTimes = new List<DateTime>();
 
@@ -263,27 +265,59 @@ foreach(var sms_station in sms_stations)
                         {
                             existingStartTimes.Sort();
 
+                            // Kontrol 1 (Udtræk hele den eksisterende sekvens af højdevinkler for stationen)
+                            insertQueryScript.Add($"SELECT * FROM leeindex WHERE statid = {statId} ORDER BY start_time;");
+
                             if (sms_station.datefrom > existingStartTimes.Last())
                             {
                                 // Det højdevinkelsæt, der skal indsættes, er nyere end alle de eksisterende
                                 // Derfor skal den seneste trimmes
 
-                                // Kontrol 1 (Udtræk hele den eksisterende sekvens af højdevinkler for stationen)
-                                insertQueryScript.Add($"SELECT * FROM leeindex WHERE statid = {statId} ORDER BY start_time;");
-
-                                var whereClause = $"WHERE statid = {statId} AND start_time = '{existingStartTimes.Last().AsDateTimeString(false)}'";
+                                var whereClauseForRowToBeUpdated = $"WHERE statid = {statId} AND start_time = '{existingStartTimes.Last().AsDateTimeString(false)}'";
 
                                 // Kontrol 2 (Udtræk det ene højdevinkelsæt, der skal trimmes)
-                                insertQueryScript.Add($"SELECT * FROM leeindex {whereClause};");
+                                insertQueryScript.Add($"SELECT * FROM leeindex {whereClauseForRowToBeUpdated};");
 
                                 sb.Clear();
                                 sb.Append($"UPDATE leeindex SET end_time = '{sms_station.datefrom.AsDateTimeString(false)}' ");
-                                sb.Append($"{whereClause};");
+                                sb.Append($"{whereClauseForRowToBeUpdated};");
                                 insertQueryScript.Add(sb.ToString());
                             }
                             else
                             {
-                                throw new NotImplementedException();
+                                // Det højdevinkelsæt, der skal indsættes, er ældre end et, der allerede er indsat,
+                                // så sættet før skal have trimmet end_time, mens sættet efter 
+
+                                //insertQueryScript.Add($"--HERE, WE NEED TO INSERT AN ELEVATION ANGLE SET RATHER THAN APPEND ONE");
+
+                                sb.Clear();
+                                sb = new StringBuilder($"WHERE statid = {statId} AND start_time = ");
+
+                                var mostRecentStartTimeOlderThanTheOneToBeInserted = 
+                                    existingStartTimes
+                                        .Where(_ => _ < sms_station.datefrom)
+                                        .OrderBy(_ => _)
+                                        .Last();
+
+                                sb.Append($"'{mostRecentStartTimeOlderThanTheOneToBeInserted.AsDateTimeString(false)}'");
+
+                                var whereClauseForRowToBeUpdated = sb.ToString();
+
+                                // Kontrol 2 (Udtræk det ene højdevinkelsæt, der skal trimmes)
+                                insertQueryScript.Add($"SELECT * FROM leeindex {whereClauseForRowToBeUpdated};");
+
+                                sb.Clear();
+                                sb.Append($"UPDATE leeindex SET end_time = '{sms_station.datefrom.AsDateTimeString(false)}' ");
+                                sb.Append($"{whereClauseForRowToBeUpdated};");
+                                insertQueryScript.Add(sb.ToString());
+
+                                var oldestStartTimeMoreRecentThanTheOneToBeInserted = 
+                                    existingStartTimes
+                                        .Where(_ => _ > sms_station.datefrom)
+                                        .OrderBy(_ => _)
+                                        .First();
+
+                                endTimeForNewElevationAngleSet = $"'{oldestStartTimeMoreRecentThanTheOneToBeInserted.AsDateTimeString(false)}'";
                             }
                         }
 
@@ -291,7 +325,7 @@ foreach(var sms_station in sms_stations)
                         sb.Append("INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (");
                         sb.Append($"{statId}, ");
                         sb.Append($"'{sms_station.datefromAsLongDBString()}', ");
-                        sb.Append("'infinity', ");
+                        sb.Append($"{endTimeForNewElevationAngleSet}, ");
                         sb.Append($"{sms_station.angle_s}, ");
                         sb.Append($"{sms_station.angle_sw}, ");
                         sb.Append($"{sms_station.angle_w}, ");
@@ -301,9 +335,6 @@ foreach(var sms_station in sms_stations)
                         sb.Append($"{sms_station.angle_e}, ");
                         sb.Append($"{sms_station.angle_se}, ");
                         sb.Append($"{sms_station.angleindex});");
-
-                        //INSERT INTO position_tmp VALUES
-                        //(500520,'station','2018-12-04 10:31:55.000','infinity',57.57048816,10.10736043,8.00000000),
 
                         insertQueryScript.Add(sb.ToString());
                     }

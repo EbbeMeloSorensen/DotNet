@@ -45,3 +45,27 @@ UPDATE leeindex SET start_time = '2023-02-23 11:00:00' WHERE statid = 598120 AND
 UPDATE leeindex SET end_time = '2023-01-30 11:00:00' WHERE statid = 516920 AND start_time = '2015-10-07 00:00:00';
 INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (516920, '2023-01-30 11:00:00', 'infinity', 2, 1, 4, 7, 6, 7, 5, 2, 3);
 
+-- 08-05-2024
+UPDATE leeindex SET end_time = '2024-05-07 10:00:00' WHERE statid = 585520 AND start_time = '2022-07-22 10:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (585520, '2024-05-07 10:00:00', 'infinity', 12, 17, 21, 12, 17, 26, 33, 23, 19);
+
+UPDATE leeindex SET end_time = '2024-05-06 10:00:00' WHERE statid = 574020 AND start_time = '2022-07-21 10:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (574020, '2024-05-06 10:00:00', 'infinity', 7, 8, 24, 5, 22, 16, 7, 10, 12);
+
+UPDATE leeindex SET end_time = '2022-09-27 10:00:00' WHERE statid = 610200 AND start_time = '2015-10-13 00:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (610200, '2022-09-27 10:00:00', '2022-11-16 11:00:00', 7, 8, 11, 8, 6, 5, 9, 8, 8);
+
+UPDATE leeindex SET end_time = '2022-08-23 10:00:00' WHERE statid = 608800 AND start_time = '2015-10-06 00:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (608800, '2022-08-23 10:00:00', '2023-09-19 10:00:00', 41, 40, 29, 45, 36, 13, 25, 31, 34);
+
+UPDATE leeindex SET end_time = '2022-02-23 11:00:00' WHERE statid = 618400 AND start_time = '2008-10-25 00:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (618400, '2022-02-23 11:00:00', 'infinity', 90, 80, 70, 60, 50, 40, 30, 20, 62);
+
+UPDATE leeindex SET end_time = '2022-02-07 11:00:00' WHERE statid = 557820 AND start_time = '2016-05-04 00:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (557820, '2022-02-07 11:00:00', '2022-05-10 10:00:00', 41, 28, 11, 4, 7, 5, 5, 23, 21);
+
+UPDATE leeindex SET end_time = '2022-01-24 11:00:00' WHERE statid = 556020 AND start_time = '2016-05-11 00:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (556020, '2022-01-24 11:00:00', '2022-07-21 10:00:00', 13, 12, 10, 17, 22, 19, 12, 11, 13);
+
+UPDATE leeindex SET end_time = '2022-01-24 11:00:00' WHERE statid = 618400 AND start_time = '2008-10-25 00:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (618400, '2022-01-24 11:00:00', '2022-02-23 11:00:00', 5, 10, 15, 20, 25, 30, 35, 40, 19);
