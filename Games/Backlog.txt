@@ -25,17 +25,16 @@ Done:
   - Man skal kunne deselecte active territory (ok)
   - Man skal kunne selecte et andet af sine egne territorier for at få mulighed for at FLYTTE armeer (ok)
 * Når man deployerer, skal man via en drop down i Deploy buttonen kunne vælge mellem: 1, halvdelen eller alle
-
-In progress:
 * Man skal kunne få kort, når man erobrer territorier, og indløse dem for tropper
   - det skal virke for computer players (ok)
-  - det skal virke for human player
-    - man skal kunne vælge sine kort, når man har initiativet
-      - registrer, når man klikker på dem
+  - det skal virke for human player (ok)
+    - man skal kunne vælge sine kort, når man har initiativet (ok)
+* Alle spillere skal placere tropper i en indledende fase
+
+In progress:
 
 Todo
-* Der er noget galt med noget state, der ikke nulstilles, når man starter et nyt spil - så Move-knappen f.eks, er aktiv, selv om der ikke er valgt nogen territorier
-* Alle spillere skal placere tropper i en indledende fase
+* Når man har 5 kort i starten af sin tur, SKAL man bytte kort
 * Når man flytter armeer som det sidste i sin tur, skal man via en drop down i Move buttonen kunne vælge mellem: alle eller let me decide
 * (Risk) Tildeling af mere sofistikerede ratings for army transfer options
   I) Det bedste er at flytte armeer fra et isoleret område til et frontlinieområde, især hvis:

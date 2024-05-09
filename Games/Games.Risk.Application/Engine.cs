@@ -82,7 +82,7 @@ namespace Games.Risk.Application
             {
                 2 => 40,
                 3 => 35,
-                4 => 13, // 30
+                4 => 30,
                 5 => 25,
                 6 => 20,
                 _ => throw new ArgumentOutOfRangeException()
@@ -601,9 +601,16 @@ namespace Games.Risk.Application
             ExtraArmiesForCurrentPlayer -= armies;
             _territoryStatusMap[territoryIndex].Armies += armies;
 
+            var currentPlayerIndex = CurrentPlayerIndex;
+
+            if (!SetupPhaseComplete)
+            {
+                CurrentPlayerIndex = (CurrentPlayerIndex + 1) % _players.Length;
+            }
+
             return new PlayerDeploysArmies(
-                CurrentPlayerIndex,
-                false)
+                currentPlayerIndex,
+                !SetupPhaseComplete)
             {
                 TerritoryIndexes = new List<int>{ territoryIndex }
             };

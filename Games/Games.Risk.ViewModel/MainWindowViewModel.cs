@@ -37,6 +37,7 @@ namespace Games.Risk.ViewModel
         private PointD _selectedTargetVertexCanvasPosition;
         private bool _activeTerritoryHighlighted;
         private bool _attackVectorVisible;
+        private bool _deployMultipleArmiesPossible;
 
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
@@ -55,6 +56,7 @@ namespace Games.Risk.ViewModel
         private string _selectedDeployOption;
         private List<Card> _selectedCards;
         private bool _currentPlayerCanTradeInSelectedCards;
+        private bool _playerGotCardDuringCurrentTurn;
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
@@ -211,6 +213,21 @@ namespace Games.Risk.ViewModel
             set
             {
                 _attackVectorVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DeployMultipleArmiesPossible
+        {
+            get => _deployMultipleArmiesPossible;
+            set
+            {
+                if (_deployMultipleArmiesPossible == value)
+                {
+                    return;
+                }
+
+                _deployMultipleArmiesPossible = value;
                 RaisePropertyChanged();
             }
         }
@@ -416,8 +433,16 @@ namespace Games.Risk.ViewModel
                             AttackVectorVisible = false;
                             break;
                         }
-                        case PlayerReinforces:
                         case PlayerDeploysArmies:
+                            // If we're in the setup phase, we would like to hang on to the active territory
+                            if (_application.Engine.SetupPhaseComplete)
+                            {
+                                _indexOfActiveTerritory = null;
+                                ActiveTerritoryHighlighted = false;
+                                AttackVectorVisible = false;
+                            }
+                            break;
+                        case PlayerReinforces:
                         case PlayerTransfersArmies:
                         case PlayerPasses:
                         {
@@ -520,6 +545,8 @@ namespace Games.Risk.ViewModel
                         Brush = _colorPalette[playerIndex]
                     });
                 });
+
+            DeployMultipleArmiesPossible = false;
 
             PlayerViewModels[indexOfPlayer].SelectedCards.PropertyChanged += (s, e) =>
             {
@@ -643,14 +670,16 @@ namespace Games.Risk.ViewModel
                    _application.Engine.SetupPhaseComplete &&
                    _application.Engine.CurrentPlayerMayReinforce &&
                    !_application.Engine.CurrentPlayerHasMovedTroops &&
-                   _application.Engine.ExtraArmiesForCurrentPlayer == 0;
+                   _application.Engine.ExtraArmiesForCurrentPlayer == 0 &&
+                   _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() < 5;
         }
 
         private async Task Deploy()
         {
             if (!_indexOfActiveTerritory.HasValue)
             {
-                throw new InvalidOperationException("Deploy called without having selected a territory - should not be possible");
+                throw new InvalidOperationException(
+                    "Deploy called without having selected a territory - should not be possible");
             }
 
             var armiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
@@ -669,9 +698,19 @@ namespace Games.Risk.ViewModel
 
             ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
 
+            if (gameEvent.TurnGoesToNextPlayer)
+            {
+                SwitchToNextPlayer();
+            }
+
             SyncControlsWithApplication();
             UpdateCommandAvailability();
             LogGameEvent(gameEvent);
+
+            if (gameEvent.TurnGoesToNextPlayer)
+            {
+                await Proceed();
+            }
         }
 
         private bool CanDeploy()
@@ -679,7 +718,8 @@ namespace Games.Risk.ViewModel
             return GameInProgress &&
                    PlayerHasInitiative &&
                    _indexOfActiveTerritory.HasValue &&
-                   ArmiesToDeploy > 0;
+                   ArmiesToDeploy > 0 &&
+                   _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() < 5;
         }
 
         private async Task Attack()
@@ -722,6 +762,8 @@ namespace Games.Risk.ViewModel
                             _territoryNameMap[playerAttacks.Card.TerritoryIndex],
                             playerAttacks.Card,
                             false);
+
+                        _playerGotCardDuringCurrentTurn = true;
                     }
 
                     var armiesInTotal =
@@ -767,6 +809,7 @@ namespace Games.Risk.ViewModel
                    _application.Engine.SetupPhaseComplete &&
                    !_application.Engine.CurrentPlayerHasReinforced &&
                    !_application.Engine.CurrentPlayerHasMovedTroops &&
+                   !(!_playerGotCardDuringCurrentTurn && _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5) &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex != _application.Engine.CurrentPlayerIndex;
         }
@@ -807,6 +850,7 @@ namespace Games.Risk.ViewModel
                    _indexOfTargetTerritory.HasValue &&
                    _application.Engine.SetupPhaseComplete &&
                    !_application.Engine.CurrentPlayerHasMovedTroops &&
+                   !(!_playerGotCardDuringCurrentTurn && _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5) &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex == _application.Engine.CurrentPlayerIndex;
         }
@@ -830,8 +874,8 @@ namespace Games.Risk.ViewModel
             else
             {
                 PlayerHasInitiative = false;
-                SyncControlsWithApplication();
                 SwitchToNextPlayer();
+                SyncControlsWithApplication();
                 UpdateCommandAvailability();
                 await Proceed();
             }
@@ -841,7 +885,9 @@ namespace Games.Risk.ViewModel
         {
             return GameInProgress &&
                    PlayerHasInitiative &&
-                   ArmiesToDeploy == 0;
+                   ArmiesToDeploy == 0 &&
+                   !(!_playerGotCardDuringCurrentTurn &&
+                     _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5);
         }
 
         private void SyncControlsWithApplication()
@@ -1221,6 +1267,7 @@ namespace Games.Risk.ViewModel
         {
             _selectedCards = null;
             _currentPlayerCanTradeInSelectedCards = false;
+            _playerGotCardDuringCurrentTurn = false;
 
             HighlightCurrentPlayer();
             UpdateCommandAvailability();
@@ -1232,12 +1279,19 @@ namespace Games.Risk.ViewModel
                     $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
             }
 
+            if (PlayerHasInitiative)
+            {
+                ArmiesToDeploy = _application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex);
+            }
+
             if (!_application.Engine.SetupPhaseComplete)
             {
+                DeployMultipleArmiesPossible = false;
                 AssignAnArmyFromInitialPool();
             }
             else
             {
+                DeployMultipleArmiesPossible = true;
                 AssignExtraArmiesForControlledContinents();
             }
         }
@@ -1302,10 +1356,10 @@ namespace Games.Risk.ViewModel
         {
             _application.Engine.AssignAnArmyFromInitialPool();
 
-            if (PlayerHasInitiative)
-            {
-                ArmiesToDeploy = 1;
-            }
+            //if (PlayerHasInitiative)
+            //{
+            //    ArmiesToDeploy = _application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex) + 1;
+            //}
         }
 
         private void AssignExtraArmiesForControlledContinents()

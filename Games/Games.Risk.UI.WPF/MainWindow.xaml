@@ -79,6 +79,7 @@
                             <TextBlock Grid.Column="0" Text="Deploy" Margin="5, 5, 10, 5"/>
                             <ComboBox Grid.Column="1" Width="45" FontSize="12" FontStyle="Normal" Foreground="Black" 
                                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                                      Visibility="{Binding DeployMultipleArmiesPossible, Converter={StaticResource BooleanToVisibilityConverter}}"
                                       ItemsSource="{Binding DeployOptions}"
                                       SelectedValue="{Binding SelectedDeployOption, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
