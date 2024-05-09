@@ -547,7 +547,7 @@ namespace Games.Risk.ViewModel
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
-                "New game started");
+                $"New game started ({playerCount} players)");
 
             for (var i = 0; i < playerCount; i++)
             {
@@ -569,6 +569,13 @@ namespace Games.Risk.ViewModel
                 _application.Logger?.WriteLine(
                     LogMessageCategory.Information,
                     sb.ToString());
+            }
+
+            for (var i = 0; i < playerCount; i++)
+            {
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    $"Player {i + 1} has {_application.Engine.ArmiesLeftInPool(i)} armies left to deploy");
             }
 
             SyncControlsWithApplication();
@@ -1168,6 +1175,11 @@ namespace Games.Risk.ViewModel
                         .Select(_ => _territoryNameMap[_])
                         .Aggregate((c, n) => $"{c}, {n}"));
 
+                    if (!_application.Engine.SetupPhaseComplete)
+                    {
+                        sb.Append($" ({_application.Engine.ArmiesLeftInPool(playerDeploysArmies.PlayerIndex)} armies left to deploy)");
+                    }
+
                     break;
                 }
                 case PlayerPasses:
@@ -1213,9 +1225,12 @@ namespace Games.Risk.ViewModel
             HighlightCurrentPlayer();
             UpdateCommandAvailability();
 
-            _application.Logger?.WriteLine(
-                LogMessageCategory.Information,
-                $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
+            if (_application.Engine.SetupPhaseComplete)
+            {
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
+            }
 
             if (!_application.Engine.SetupPhaseComplete)
             {
@@ -1291,13 +1306,6 @@ namespace Games.Risk.ViewModel
             {
                 ArmiesToDeploy = 1;
             }
-
-            var sb = new StringBuilder($"  Player {_application.Engine.CurrentPlayerIndex + 1}");
-            sb.Append($" gets an army from the initial pool ({_application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex)} left)");
-
-            _application.Logger?.WriteLine(
-                LogMessageCategory.Information,
-                sb.ToString());
         }
 
         private void AssignExtraArmiesForControlledContinents()

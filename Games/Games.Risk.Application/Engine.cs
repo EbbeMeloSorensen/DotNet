@@ -82,7 +82,7 @@ namespace Games.Risk.Application
             {
                 2 => 40,
                 3 => 35,
-                4 => 12,
+                4 => 13, // 30
                 5 => 25,
                 6 => 20,
                 _ => throw new ArgumentOutOfRangeException()
@@ -115,8 +115,6 @@ namespace Games.Risk.Application
             CurrentPlayerMayReinforce = true;
             _currentPlayerMayTransferArmies = true;
             _currentPlayerHasConqueredATerritory = false;
-
-            //Logger?.WriteLine(LogMessageCategory.Information, "New Game Started");
         }
 
         public async Task<IGameEvent> ExecuteNextEvent()
@@ -158,7 +156,14 @@ namespace Games.Risk.Application
 
             if (ExtraArmiesForCurrentPlayer > 0)
             {
-                return DeployArmies(CurrentPlayerHasReinforced || !SetupPhaseComplete);
+                var gameEvent = DeployArmies(CurrentPlayerHasReinforced || !SetupPhaseComplete);
+
+                if (!SetupPhaseComplete && _armiesToDeploy.Sum() == 0)
+                {
+                    SetupPhaseComplete = true;
+                }
+
+                return gameEvent;
             }
 
             if (CurrentPlayerMayReinforce || _hands[CurrentPlayerIndex].Count > 5)
@@ -311,10 +316,11 @@ namespace Games.Risk.Application
             _armiesToDeploy[CurrentPlayerIndex]--;
             ExtraArmiesForCurrentPlayer = 1;
 
-            if (_armiesToDeploy.All(_ => _ == 0))
-            {
-                SetupPhaseComplete = true;
-            }
+            // Too soon - setup phase is complete AFTER the last army from the pool is placed
+            //if (_armiesToDeploy.All(_ => _ == 0))
+            //{
+            //    SetupPhaseComplete = true;
+            //}
         }
 
         public List<string> AssignExtraArmiesForControlledContinents()

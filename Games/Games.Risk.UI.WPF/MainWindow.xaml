@@ -11,6 +11,7 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Risk Game" Height="800" Width="1500"
+        WindowState="Maximized"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
 
     <Window.Resources>
