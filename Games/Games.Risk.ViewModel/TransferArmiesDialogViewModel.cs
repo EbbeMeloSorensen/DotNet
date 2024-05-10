@@ -46,7 +46,7 @@ public class TransferArmiesDialogViewModel : DialogViewModelBase
     {
         Message = message;
         ArmyTransferOptions = new ObservableCollection<int>(Enumerable.Range(minNumberOfArmies, maxNumberOfArmies - minNumberOfArmies + 1));
-        ArmiesToTransfer = minNumberOfArmies;
+        ArmiesToTransfer = maxNumberOfArmies;
     }
 
     private void OK(object parameter)

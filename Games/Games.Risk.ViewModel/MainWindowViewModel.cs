@@ -29,7 +29,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private int _delay = 0;
+        private int _delay = 100;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private List<Continent> _continents;
         private Dictionary<int, Brush> _colorPalette;
@@ -696,10 +696,18 @@ namespace Games.Risk.ViewModel
                     Armies = armiesToDeploy
                 });
 
-            ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
+            if (_application.Engine.SetupPhaseComplete)
+            {
+                ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
+            }
+            else
+            {
+                ArmiesToDeploy -= 1;
+            }
 
             if (gameEvent.TurnGoesToNextPlayer)
             {
+                // PlayerHasInitiative er stadig sand her, hvilket er et problem..
                 SwitchToNextPlayer();
             }
 
@@ -1269,19 +1277,30 @@ namespace Games.Risk.ViewModel
             _currentPlayerCanTradeInSelectedCards = false;
             _playerGotCardDuringCurrentTurn = false;
 
+            var indexOfPreviousPlayer = 
+                (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) %
+                _application.Engine.PlayerCount;
+
+            PlayerViewModels[indexOfPreviousPlayer].WatchCardsButtonVisible = false;
+
+            foreach (var cardViewModel in PlayerViewModels[indexOfPreviousPlayer].CardViewModels)
+            {
+                cardViewModel.BottomSideUp = true;
+            }
+
             HighlightCurrentPlayer();
             UpdateCommandAvailability();
-
-            if (_application.Engine.SetupPhaseComplete)
-            {
-                _application.Logger?.WriteLine(
-                    LogMessageCategory.Information,
-                    $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
-            }
 
             if (PlayerHasInitiative)
             {
                 ArmiesToDeploy = _application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex);
+
+                var activePlayerViewModel = PlayerViewModels[_application.Engine.CurrentPlayerIndex];
+
+                if (activePlayerViewModel.CardViewModels.Any())
+                {
+                    activePlayerViewModel.WatchCardsButtonVisible = true;
+                }
             }
 
             if (!_application.Engine.SetupPhaseComplete)
@@ -1293,6 +1312,13 @@ namespace Games.Risk.ViewModel
             {
                 DeployMultipleArmiesPossible = true;
                 AssignExtraArmiesForControlledContinents();
+            }
+
+            if (_application.Engine.SetupPhaseComplete)
+            {
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
             }
         }
 

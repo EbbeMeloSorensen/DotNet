@@ -167,6 +167,12 @@
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </Canvas>
+                                <Button Grid.Column="2" Height="30" Width="45"
+                                        HorizontalAlignment="Right" VerticalAlignment="Top"
+                                        Margin="15"
+                                        Content="{Binding WatchCardsButtonText}"
+                                        Command="{Binding ToggleCardsVisibilityCommand}"
+                                        Visibility="{Binding WatchCardsButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

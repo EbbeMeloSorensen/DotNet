@@ -24,7 +24,7 @@ namespace Games.Risk.UI.WPF
             }
 
             return a == b
-                ? new SolidColorBrush(Colors.Orange)
+                ? new SolidColorBrush(Colors.GhostWhite)
                 : new SolidColorBrush(Colors.DarkGray);
         }
 
