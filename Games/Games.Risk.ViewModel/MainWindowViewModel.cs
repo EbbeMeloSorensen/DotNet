@@ -29,7 +29,7 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private int _delay = 100;
+        private int _delay = 0;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private List<Continent> _continents;
         private Dictionary<int, Brush> _colorPalette;
@@ -700,16 +700,6 @@ namespace Games.Risk.ViewModel
             {
                 ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
             }
-            else
-            {
-                ArmiesToDeploy -= 1;
-            }
-
-            if (gameEvent.TurnGoesToNextPlayer)
-            {
-                // PlayerHasInitiative er stadig sand her, hvilket er et problem..
-                SwitchToNextPlayer();
-            }
 
             SyncControlsWithApplication();
             UpdateCommandAvailability();
@@ -717,6 +707,7 @@ namespace Games.Risk.ViewModel
 
             if (gameEvent.TurnGoesToNextPlayer)
             {
+                SwitchToNextPlayer();
                 await Proceed();
             }
         }
@@ -1293,8 +1284,6 @@ namespace Games.Risk.ViewModel
 
             if (PlayerHasInitiative)
             {
-                ArmiesToDeploy = _application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex);
-
                 var activePlayerViewModel = PlayerViewModels[_application.Engine.CurrentPlayerIndex];
 
                 if (activePlayerViewModel.CardViewModels.Any())
@@ -1305,6 +1294,7 @@ namespace Games.Risk.ViewModel
 
             if (!_application.Engine.SetupPhaseComplete)
             {
+                ArmiesToDeploy = _application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex);
                 DeployMultipleArmiesPossible = false;
                 AssignAnArmyFromInitialPool();
             }
