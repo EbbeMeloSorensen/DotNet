@@ -18,6 +18,9 @@ namespace Games.Risk.ViewModel
         private bool _watchCardsButtonVisible;
         private string _watchCardsButtonText;
         private RelayCommand _toggleCardsVisibilityCommand;
+        private int _armiesToDeploy;
+        private string _armiesToDeployText;
+        private bool _armiesToDeployTextVisible;
 
         public string Name { get; set; }
 
@@ -37,6 +40,38 @@ namespace Games.Risk.ViewModel
             set
             {
                 _hasInitiative = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int ArmiesToDeploy
+        {
+            get => _armiesToDeploy;
+            set
+            {
+                _armiesToDeploy = value;
+                ArmiesToDeployText = $"Armies to deploy: {_armiesToDeploy}";
+                ArmiesToDeployTextVisible = _armiesToDeploy > 0;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string ArmiesToDeployText
+        {
+            get => _armiesToDeployText;
+            set
+            {
+                _armiesToDeployText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ArmiesToDeployTextVisible
+        {
+            get => _armiesToDeployTextVisible;
+            set
+            {
+                _armiesToDeployTextVisible = value;
                 RaisePropertyChanged();
             }
         }
@@ -78,6 +113,8 @@ namespace Games.Risk.ViewModel
             CardViewModels = new ObservableCollection<CardViewModel>();
             SelectedCards = new ObservableObject<List<Card>>();
             WatchCardsButtonText = "Watch";
+            ArmiesToDeploy = 0;
+            ArmiesToDeployTextVisible = true;
         }
 
         public void AddCardViewModel(

@@ -61,9 +61,6 @@
 
             <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Top"
                         Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBox Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold"
-                         IsReadOnly="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                         Text="{Binding ArmiesToDeploy, Mode=OneWay}"/>
                 <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
                         Command="{Binding TradeInSelectedCardsCommand}">Trade In</Button>
                 <Button Width="100" Height="50" Margin="10" FontSize="15" FontWeight="Bold" 
@@ -107,12 +104,18 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Rectangle Grid.Column="0" Width="40" Height="40" Margin="10"
-                                           Fill="{Binding Brush}"
-                                           Stroke="Black"/>
-                                <TextBlock Grid.Column="1" FontSize="20" FontWeight="Bold"
-                                           Padding="0, 40, 0, 10"
+                                           VerticalAlignment="Top" Stroke="Black"
+                                           Fill="{Binding Brush}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="20" FontWeight="Bold"
+                                           Padding="0 14 0 10" VerticalAlignment="Top" 
                                            Text="{Binding Name}"/>
-                                <Canvas Grid.Column="2" Width="122" Height="114">
+                                <TextBlock Grid.Column="0" Grid.ColumnSpan="2"
+                                           FontWeight="Bold" FontSize="15" Padding="0 45 20 10"
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                           Text="{Binding ArmiesToDeployText}"
+                                           Visibility="{Binding ArmiesToDeployTextVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <Canvas Grid.Row="0" Grid.Column="2" Width="122" MinHeight="75"
+                                        VerticalAlignment="Top">
                                     <ItemsControl ItemsSource="{Binding CardViewModels}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>

@@ -83,7 +83,7 @@ namespace Games.Risk.Application
                 2 => 40,
                 3 => 35,
                 4 => 30,
-                5 => 25,
+                5 => 12, //25,
                 6 => 20,
                 _ => throw new ArgumentOutOfRangeException()
             };
