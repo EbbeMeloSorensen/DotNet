@@ -288,8 +288,6 @@ foreach(var sms_station in sms_stations)
                                 // Det højdevinkelsæt, der skal indsættes, er ældre end et, der allerede er indsat,
                                 // så sættet før skal have trimmet end_time, mens sættet efter 
 
-                                //insertQueryScript.Add($"--HERE, WE NEED TO INSERT AN ELEVATION ANGLE SET RATHER THAN APPEND ONE");
-
                                 sb.Clear();
                                 sb = new StringBuilder($"WHERE statid = {statId} AND start_time = ");
 

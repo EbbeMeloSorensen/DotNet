@@ -6,7 +6,7 @@ Følgende stationer, som har højdevinkler i sms, er ikke i statdb
   5903 ("Vestervig Test")
   5127 ("Karup Øst (Test)")
 
-Følgen højdevinkelsæt må anses for at være misvisende:
+Følgende højdevinkelsæt må anses for at være misvisende:
   6184 (25, 30, 35, 40, 5, 10, 15, 20)
   6184 (50, 40, 30, 20, 90, 80, 70, 60)
 
