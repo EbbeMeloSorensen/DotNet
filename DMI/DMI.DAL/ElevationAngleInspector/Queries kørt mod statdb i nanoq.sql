@@ -69,3 +69,21 @@ INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, 
 
 UPDATE leeindex SET end_time = '2022-01-24 11:00:00' WHERE statid = 618400 AND start_time = '2008-10-25 00:00:00';
 INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (618400, '2022-01-24 11:00:00', '2022-02-23 11:00:00', 5, 10, 15, 20, 25, 30, 35, 40, 19);
+
+--15-05-2024
+UPDATE leeindex SET end_time = '2024-05-14 10:00:00' WHERE statid = 554020 AND start_time = '2022-07-25 10:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (554020, '2024-05-14 10:00:00', 'infinity', 11, 5, 4, 6, 3, 2, 4, 7, 6);
+
+UPDATE leeindex SET end_time = '2024-05-13 10:00:00' WHERE statid = 548520 AND start_time = '2022-07-07 10:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (548520, '2024-05-13 10:00:00', 'infinity', 17, 13, 29, 35, 19, 50, 35, 25, 24);
+
+UPDATE leeindex SET end_time = '2024-05-13 10:00:00' WHERE statid = 587420 AND start_time = '2022-07-19 10:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (587420, '2024-05-13 10:00:00', 'infinity', 7, 7, 8, 9, 5, 3, 5, 7, 7);
+
+UPDATE leeindex SET end_time = '2024-05-08 10:00:00' WHERE statid = 528120 AND start_time = '2022-04-27 10:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (528120, '2024-05-08 10:00:00', 'infinity', 14, 7, 8, 8, 5, 2, 4, 10, 8);
+
+UPDATE leeindex SET end_time = '2024-05-07 10:00:00' WHERE statid = 585920 AND start_time = '2022-07-22 10:00:00';
+INSERT INTO public.leeindex (statid, start_time, end_time, s, sw, w, nw, n, ne, e, se, index) VALUES (585920, '2024-05-07 10:00:00', 'infinity', 24, 24, 12, 5, 4, 3, 15, 15, 16);
+
+----
