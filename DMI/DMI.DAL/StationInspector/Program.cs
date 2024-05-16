@@ -10,6 +10,13 @@ const bool includeSynopStations = false;
 const bool includePluvioStations = true;
 const bool includeSVKStations = false;
 
+// Business rules
+var checkStartTimeReportType = false; // (should match sms::stationinformation::datefrom)
+var checkStartTimeLatestPosition = false; // (should not be older than sms::stationinformation::datefrom)
+var checkFirstDateObsCode = false; // (should match sms::stationinformation::datefrom)
+
+var _bizRuleViolations = new Dictionary<string, int>(); 
+
 var _countryMap = new Dictionary<int, string>{
     { 0, "Danmark" },
     { 1, "Grønland" },
@@ -53,10 +60,6 @@ var _stationOwnerMap = new Dictionary<int, string>{
     { 10, "PROMICE" },
     { 11, "Forsvaret" }
 };
-
-var checkStartTimeReportType = false; // (should match sms::stationinformation::datefrom)
-var checkStartTimeLatestPosition = false; // (should not be older than sms::stationinformation::datefrom)
-var _bizRuleViolations = new Dictionary<string, int>(); 
 
 var sms_host = "172.25.7.23:5432";
 var sms_user = "ebs";
@@ -528,17 +531,32 @@ using (var streamWriter = new StreamWriter("output.txt"))
                                 first_date.Value == stationInformation.datefrom.Value
                             ) ? "ok" : "INVALID (SHOULD MATCH DATEFROM IN SMS)";
 
-                        var obsCodeOK = 
-                            (obsCodeAsString =="pluvio" && stationInformation.stationtype == 5) ||
-                            (obsCodeAsString =="PSVK" && stationInformation.stationtype == 2)
-                            ? "ok" : "INVALID (SHOULD CORRESPOND TO STATION TYPE IN SMS)";
+                        if (checkFirstDateObsCode && firstDateObsCodeOK != "ok")
+                        {
+                            AppendBizRuleViolation("statdb_parameter::stat_obs_code::first_date should match sms::stationinformation::datefrom");
+                        }
 
-                        PrintLine(streamWriter,  $"    obs_code:                     {"", 40} {$"{obsCodeAsString}", 40}   ({obsCodeOK})");
-                        PrintLine(streamWriter,  $"    first_date (obs_code):        {"", 40} {$"{firstDateAsString}", 40}   ({firstDateObsCodeOK})");
+                        // var obsCodeOK = 
+                        //     (obsCodeAsString =="pluvio" && stationInformation.stationtype == 5) ||
+                        //     (obsCodeAsString =="PSVK" && stationInformation.stationtype == 2)
+                        //     ? "ok" : "INVALID (SHOULD CORRESPOND TO STATION TYPE IN SMS)";
+
+                        line = $"    obs_code:                     {"", 40} {$"{obsCodeAsString}", 40}";
+                        //line += $"   ({obsCodeOK})";
+                        PrintLine(streamWriter, line);
+
+                        line = $"    first_date (obs_code):        {"", 40} {$"{firstDateAsString}", 40}";
+
+                        if (checkFirstDateObsCode)
+                        {
+                            line += $"   ({firstDateObsCodeOK})";
+                        }
+                        
+                        PrintLine(streamWriter, line);
                     }
                     else
                     {
-                        PrintLine(streamWriter,  " NO OBS_CODE IN STATDB_PARAMETER FOR STATION");
+                        PrintLine(streamWriter, " NO OBS_CODE IN STATDB_PARAMETER FOR STATION");
                     }
                 }
             }
@@ -559,12 +577,18 @@ using (var streamWriter = new StreamWriter("output.txt"))
     PrintLine(streamWriter, "");
     PrintLine(streamWriter, "SUMMARY OF DISCREPANCIES");
 
-    foreach (var kvp in _bizRuleViolations)
+    if (!_bizRuleViolations.Any())
     {
-        PrintLine(streamWriter, $"{kvp.Key, 50}: {kvp.Value, 10}");
+        PrintLine(streamWriter, "No discrepancies");
+    }
+    else
+    {
+        foreach (var kvp in _bizRuleViolations)
+        {
+            PrintLine(streamWriter, $"{kvp.Key, 50}: {kvp.Value, 10}");
+        }
     }
 }
-
 
 void AppendBizRuleViolation(
     string businessRule)
@@ -640,7 +664,7 @@ static bool NameMatches(
         return false;
     }
 
-    return nameInStatDB == nameInSMS.ToUpper();
+    return nameInStatDB.ToUpper() == nameInSMS.ToUpper();
 }
 
 static bool ActiveMatches(
