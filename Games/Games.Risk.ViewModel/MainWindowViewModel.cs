@@ -13,6 +13,7 @@ using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.Logging;
 using Craft.DataStructures.Graph;
+using Craft.Utils.Linq;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Graph;
@@ -521,8 +522,17 @@ namespace Games.Risk.ViewModel
 
             // Create engine
             var tempArray = Enumerable.Repeat(true, playerCount).ToArray();
-            var indexOfPlayer = _random.Next(0, playerCount);
-            tempArray[indexOfPlayer] = false;
+
+            var humanPlayers = 1;
+            for (var i = 0; i < humanPlayers; i++)
+            {
+                tempArray[i] = false;
+            }
+
+            tempArray = tempArray.Shuffle(_random).ToArray();
+
+            //var indexOfPlayer = _random.Next(0, playerCount);
+            //tempArray[indexOfPlayer] = false;
             _application.Engine = new Engine(tempArray, _random, _graphOfTerritories);
             _application.Engine.Initialize(_continents);
             _indexOfActiveTerritory = null;
@@ -541,8 +551,12 @@ namespace Games.Risk.ViewModel
                 .ToList()
                 .ForEach(playerIndex =>
                 {
-                    var description = playerIndex == indexOfPlayer ? "you" : "computer";
-                    var name = $"Player {playerIndex + 1} ({description})";
+                    var name = $"Player {playerIndex + 1}";
+
+                    if (tempArray[playerIndex])
+                    {
+                        name += " (computer)";
+                    }
 
                     PlayerViewModels.Add(new PlayerViewModel
                     {
@@ -554,21 +568,21 @@ namespace Games.Risk.ViewModel
 
             DeployMultipleArmiesPossible = false;
 
-            PlayerViewModels[indexOfPlayer].SelectedCards.PropertyChanged += (s, e) =>
-            {
-                _selectedCards = PlayerViewModels[indexOfPlayer].SelectedCards.Object;
+            //PlayerViewModels[indexOfPlayer].SelectedCards.PropertyChanged += (s, e) =>
+            //{
+            //    _selectedCards = PlayerViewModels[indexOfPlayer].SelectedCards.Object;
 
-                _currentPlayerCanTradeInSelectedCards =
-                    _selectedCards.Count == 3 &&
-                    (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 3 ||
-                     _selectedCards.Count(_ => _.Type == CardType.Horse) == 3 ||
-                     _selectedCards.Count(_ => _.Type == CardType.Cannon) == 3 ||
-                     (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 1 &&
-                      _selectedCards.Count(_ => _.Type == CardType.Horse) == 1 &&
-                      _selectedCards.Count(_ => _.Type == CardType.Cannon) == 1));
+            //    _currentPlayerCanTradeInSelectedCards =
+            //        _selectedCards.Count == 3 &&
+            //        (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 3 ||
+            //         _selectedCards.Count(_ => _.Type == CardType.Horse) == 3 ||
+            //         _selectedCards.Count(_ => _.Type == CardType.Cannon) == 3 ||
+            //         (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 1 &&
+            //          _selectedCards.Count(_ => _.Type == CardType.Horse) == 1 &&
+            //          _selectedCards.Count(_ => _.Type == CardType.Cannon) == 1));
 
-                UpdateCommandAvailability();
-            };
+            //    UpdateCommandAvailability();
+            //};
 
             // Diagnostics (only makes a difference when players start with cards, which they usually don't)
             for (var i = 0; i < tempArray.Length; i++)
