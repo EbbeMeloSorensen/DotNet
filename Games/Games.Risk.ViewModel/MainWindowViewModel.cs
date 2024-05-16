@@ -1383,11 +1383,6 @@ namespace Games.Risk.ViewModel
         private void AssignAnArmyFromInitialPool()
         {
             _application.Engine.AssignAnArmyFromInitialPool();
-
-            //if (PlayerHasInitiative)
-            //{
-            //    ArmiesToDeploy = _application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex) + 1;
-            //}
         }
 
         private void AssignExtraArmiesForControlledContinents()
