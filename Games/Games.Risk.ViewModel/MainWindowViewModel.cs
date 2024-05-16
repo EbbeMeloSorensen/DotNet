@@ -401,17 +401,15 @@ namespace Games.Risk.ViewModel
                             {
                                 if (playerAttacks.DefendingPlayerDefeated)
                                 {
-                                    //_delay = 2000;
-                                    UpdateCardViewModels(_application.Engine.CurrentPlayerIndex, true);
-                                    UpdateCardViewModels(playerAttacks.DefendingPlayerIndex, true);
+                                    UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
+                                    UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
                                 }
                                 else if (playerAttacks.Card != null)
                                 {
                                     PlayerViewModels[_application.Engine.CurrentPlayerIndex]
                                         .AddCardViewModel(
                                             _territoryNameMap[playerAttacks.Card.TerritoryIndex],
-                                            playerAttacks.Card,
-                                            true);
+                                            playerAttacks.Card);
                                 }
                             }
 
@@ -419,7 +417,7 @@ namespace Games.Risk.ViewModel
                         }
                         case PlayerTradesInCards:
                         {
-                            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex, true);
+                            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
                             break;
@@ -575,7 +573,7 @@ namespace Games.Risk.ViewModel
             // Diagnostics (only makes a difference when players start with cards, which they usually don't)
             for (var i = 0; i < tempArray.Length; i++)
             {
-                UpdateCardViewModels(i, tempArray[i]);
+                UpdateCardViewModels(i);
             }
 
             for (var i = 0; i < playerCount; i++)
@@ -635,7 +633,7 @@ namespace Games.Risk.ViewModel
             _indexOfActiveTerritory = null;
             _indexOfTargetTerritory = null;
 
-            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex, false);
+            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
             SyncControlsWithApplication();
             UpdateCommandAvailability();
             LogGameEvent(gameEvent);
@@ -766,18 +764,20 @@ namespace Games.Risk.ViewModel
                 {
                     if (playerAttacks.DefendingPlayerDefeated)
                     {
-                        UpdateCardViewModels(_application.Engine.CurrentPlayerIndex, false);
-                        UpdateCardViewModels(playerAttacks.DefendingPlayerIndex, false);
+                        UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
+                        UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
                     }
                     else if (playerAttacks.Card != null)
                     {
                         PlayerViewModels[_application.Engine.CurrentPlayerIndex].AddCardViewModel(
                             _territoryNameMap[playerAttacks.Card.TerritoryIndex],
-                            playerAttacks.Card,
-                            false);
+                            playerAttacks.Card);
 
                         _playerGotCardDuringCurrentTurn = true;
                     }
+
+                    PlayerViewModels[_application.Engine.CurrentPlayerIndex].WatchCardsButtonVisible =
+                        PlayerViewModels[_application.Engine.CurrentPlayerIndex].CardViewModels.Any();
 
                     var armiesInTotal =
                         _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies +
@@ -1287,11 +1287,7 @@ namespace Games.Risk.ViewModel
                 _application.Engine.PlayerCount;
 
             PlayerViewModels[indexOfPreviousPlayer].WatchCardsButtonVisible = false;
-
-            foreach (var cardViewModel in PlayerViewModels[indexOfPreviousPlayer].CardViewModels)
-            {
-                cardViewModel.BottomSideUp = true;
-            }
+            PlayerViewModels[indexOfPreviousPlayer].HandHidden = true;
 
             HighlightCurrentPlayer();
             UpdateCommandAvailability();
@@ -1426,8 +1422,7 @@ namespace Games.Risk.ViewModel
         }
 
         private void UpdateCardViewModels(
-            int playerIndex,
-            bool bottomSideUp)
+            int playerIndex)
         {
             var playerViewModel = PlayerViewModels[playerIndex];
             var cardViewModels = playerViewModel.CardViewModels;
@@ -1438,9 +1433,10 @@ namespace Games.Risk.ViewModel
             {
                 playerViewModel.AddCardViewModel(
                     _territoryNameMap[_.TerritoryIndex],
-                    _,
-                    bottomSideUp);
+                    _);
             });
+
+            playerViewModel.WatchCardsButtonVisible = cardViewModels.Any() && PlayerHasInitiative;
         }
     }
 }

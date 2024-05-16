@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6A729A33-78C0-44EC-8EFC-A7E9E179EAD0}"
 	ProjectSection(SolutionItems) = preProject
 		Backlog.txt = Backlog.txt
+		Evalutaion.txt = Evalutaion.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Pig.UI.WPF", "Games.Pig.UI.WPF\Games.Pig.UI.WPF.csproj", "{51AB0C12-B08C-4DE8-B097-17DEAC8C8A89}"
@@ -40,11 +41,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Race.ViewModel", "Gam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Race.UI.WPF", "Games.Race.UI.WPF\Games.Race.UI.WPF.csproj", "{CAC11EFA-ADFE-4B1E-9D95-3004948BF5BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Risk.Application", "Games.Risk.Application\Games.Risk.Application.csproj", "{128EDB5F-DBBB-4298-B84A-38393A86C582}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Risk.Application", "Games.Risk.Application\Games.Risk.Application.csproj", "{128EDB5F-DBBB-4298-B84A-38393A86C582}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Risk.ViewModel", "Games.Risk.ViewModel\Games.Risk.ViewModel.csproj", "{F04254D6-78D1-4C6A-964E-2971B7039CE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Risk.ViewModel", "Games.Risk.ViewModel\Games.Risk.ViewModel.csproj", "{F04254D6-78D1-4C6A-964E-2971B7039CE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.Risk.UI.WPF", "Games.Risk.UI.WPF\Games.Risk.UI.WPF.csproj", "{EF1B3DDC-2748-4663-97C6-4B1BF70F1736}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games.Risk.UI.WPF", "Games.Risk.UI.WPF\Games.Risk.UI.WPF.csproj", "{EF1B3DDC-2748-4663-97C6-4B1BF70F1736}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
