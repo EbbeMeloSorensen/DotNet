@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using System.Text;
+using Npgsql;
 using StationInspector;
 
 const bool includeStationsFromDenmark = true;
@@ -14,6 +15,7 @@ const bool includeSVKStations = false;
 var checkStartTimeReportType = false; // (should match sms::stationinformation::datefrom)
 var checkStartTimeLatestPosition = false; // (should not be older than sms::stationinformation::datefrom)
 var checkFirstDateObsCode = false; // (should match sms::stationinformation::datefrom)
+var checkPosition = true; // (should match sms::stationinformation::wgs_lat and sms::stationinformation::wgs_long)
 
 var _bizRuleViolations = new Dictionary<string, int>(); 
 
@@ -183,6 +185,8 @@ var statdb_parameter_password = "Vm6PAkPh";
 var statdb_parameter_database = "statdb_parameter";
 var statdb_parameter_connectionString = $"Host={statdb_parameter_host};Username={statdb_parameter_user};Password={statdb_parameter_password};Database={statdb_parameter_database}";
 
+var sb = new StringBuilder();
+
 using (var streamWriter = new StreamWriter("output.txt"))
 {
     foreach (var stationInformation in stationInformations)
@@ -259,8 +263,8 @@ using (var streamWriter = new StreamWriter("output.txt"))
                     }
                 }
 
-                var icaoIdMatches = ICAOIDMatches(stationInformation.stationid_icao, icao_id) ? "ok" : "INVALID (DIFFERS FROM SMS)";
-                var countryMatches = CountryMatches(stationInformation.country, country) ? "ok" : "INVALID";
+                var icaoIdOK = ICAOIDMatches(stationInformation.stationid_icao, icao_id) ? "ok" : "INVALID (DIFFERS FROM SMS)";
+                var countryOK = CountryMatches(stationInformation.country, country) ? "ok" : "INVALID";
                 var sourceOK = source == "ing" ? "ok" : "INVALID";
                 var dateFromOK = dateFromAsString != "<null>" ? "ok" : "INVALID";
                 var dateToOK = dateToAsString == "<null>" ? "ok" : "INVALID";
@@ -271,8 +275,8 @@ using (var streamWriter = new StreamWriter("output.txt"))
 
                 PrintLine(streamWriter,  "");
                 PrintLine(streamWriter,  $"    station id:                   {stationIdDMIAsString, 40} {statidAsString, 40}");
-                PrintLine(streamWriter,  $"    icao id:                      {stationIdIcaoAsString, 40} {icao_idAsString, 40}   ({icaoIdMatches})");
-                PrintLine(streamWriter,  $"    country:                      {countryAsString, 40} {statdb_countryAsString, 40}   ({countryMatches})");
+                PrintLine(streamWriter,  $"    icao id:                      {stationIdIcaoAsString, 40} {icao_idAsString, 40}   ({icaoIdOK})");
+                PrintLine(streamWriter,  $"    country:                      {countryAsString, 40} {statdb_countryAsString, 40}   ({countryOK})");
                 PrintLine(streamWriter,  $"    source:                       {"", 40} {sourceAsString, 40}   ({sourceOK})");
                 PrintLine(streamWriter,  $"    datefrom (sms):               {$"{dateFromAsString}", 40} {"", 40}   ({dateFromOK})");
                 PrintLine(streamWriter,  $"    dateto   (sms):               {$"{dateToAsString}", 40} {"", 40}   ({dateToOK})");
@@ -382,10 +386,10 @@ using (var streamWriter = new StreamWriter("output.txt"))
                             (!stationInformation.datefrom.HasValue ||
                             stationInformation.datefrom.Value <= start_time.Value) ? "ok" : "INVALID (SHOULD NOT BE OLDER THAN DATEFROM IN SMS)";
 
-                        if (startTimeLatestPositionOK != "ok" && checkStartTimeLatestPosition)
-                        {
-                            AppendBizRuleViolation("start_time of latest position in statdb should not be earlier than sms::stationinformation::datefrom");
-                        }
+                        // if (startTimeLatestPositionOK != "ok" && checkStartTimeLatestPosition)
+                        // {
+                        //     AppendBizRuleViolation("start_time of latest position in statdb should not be earlier than sms::stationinformation::datefrom");
+                        // }
 
                         if (latitudeMatches == "INVALID")
                         {
@@ -423,19 +427,38 @@ using (var streamWriter = new StreamWriter("output.txt"))
                             }
                         }
 
-                        PrintLine(streamWriter,  $"    entity:                       {"", 40} {entityAsString, 40}   ({entityOK})");
+                        sb.Clear();
+                        sb.Append($"    entity:                       {"", 40} {entityAsString, 40}");
+                        sb.Append($"   ({entityOK})");
+                        PrintLine(streamWriter, sb.ToString());
 
-                        var line1 = $"    start_time (latest position): {"", 40} {startTimeAsString, 40}";
-
+                        sb.Clear();
+                        sb.Append($"    start_time (latest position): {"", 40} {startTimeAsString, 40}");
                         if (checkStartTimeLatestPosition)
                         {
-                            line1 = $"{line1}   ({startTimeLatestPositionOK})";
-                        }
+                            sb.Append($"   ({startTimeLatestPositionOK})");
 
-                        PrintLine(streamWriter,  line1);
-                        PrintLine(streamWriter,  $"    latitude:                     {wgsLatAsString, 40} {latitudeAsString, 40}   ({latitudeMatches})");
-                        PrintLine(streamWriter,  $"    longitude:                    {wgsLongAsString, 40} {longitudeAsString, 40}   ({longitudeMatches})");
-                        PrintLine(streamWriter,  $"    height:                       {hhaAsString, 40} {heightAsString, 40}   ({heightMatches})");
+                            if (startTimeLatestPositionOK != "ok")
+                            {
+                                AppendBizRuleViolation("start_time of latest position in statdb should not be earlier than sms::stationinformation::datefrom");
+                            }
+                        }
+                        PrintLine(streamWriter,  sb.ToString());
+
+                        sb.Clear();
+                        sb.Append($"    latitude:                     {wgsLatAsString, 40} {latitudeAsString, 40}");
+                        sb.Append($"   ({latitudeMatches})");
+                        PrintLine(streamWriter, sb.ToString());
+
+                        sb.Clear();
+                        sb.Append($"    longitude:                    {wgsLongAsString, 40} {longitudeAsString, 40}");
+                        sb.Append($"   ({longitudeMatches})");
+                        PrintLine(streamWriter, sb.ToString());
+
+                        sb.Clear();
+                        sb.Append($"    height:                       {hhaAsString, 40} {heightAsString, 40}");
+                        sb.Append($"   ({heightMatches})");
+                        PrintLine(streamWriter, sb.ToString());
                     }
                     else
                     {
@@ -478,25 +501,26 @@ using (var streamWriter = new StreamWriter("output.txt"))
                         start_time_report_type.Value == stationInformation.datefrom.Value
                     ) ? "ok" : "INVALID (SHOULD MATCH DATEFROM IN SMS)";
 
-                if (checkStartTimeReportType && startTimeReportTypeOK != "ok")
-                {
-                    AppendBizRuleViolation("statdb::report_type::start_time should match sms::stationinformation::datefrom");
-                }
-
                 var reportTypeAsString = !string.IsNullOrEmpty(report_type) ? report_type : "<null>";
                 var startTimeReportTypeAsString = start_time_report_type.HasValue ? start_time_report_type.Value.AsDateTimeString(false) : "<null>";
                 var frequencyAsString = !string.IsNullOrEmpty(frequency) ? frequency : "<null>";
 
                 PrintLine(streamWriter,  $"    report_type:                  {"", 40} {reportTypeAsString, 40}   ({reportTypeOK})");
 
-                var line = $"    start_time (report type):     {"", 40} {startTimeReportTypeAsString, 40}";
+                sb.Clear();
+                sb.Append($"    start_time (report type):     {"", 40} {startTimeReportTypeAsString, 40}");
 
                 if (checkStartTimeReportType)
                 {
-                    line += $"   ({startTimeReportTypeOK})";
+                    sb.Append($"   ({startTimeReportTypeOK})");
+
+                    if (startTimeReportTypeOK != "ok")
+                    {
+                        AppendBizRuleViolation("statdb::report_type::start_time should match sms::stationinformation::datefrom");
+                    }
                 }
 
-                PrintLine(streamWriter, line);
+                PrintLine(streamWriter, sb.ToString());
 
                 // STAT_OBS_CODE TABLE (IN STATDB_PARAMETER)
 
@@ -541,7 +565,7 @@ using (var streamWriter = new StreamWriter("output.txt"))
                         //     (obsCodeAsString =="PSVK" && stationInformation.stationtype == 2)
                         //     ? "ok" : "INVALID (SHOULD CORRESPOND TO STATION TYPE IN SMS)";
 
-                        line = $"    obs_code:                     {"", 40} {$"{obsCodeAsString}", 40}";
+                        var line = $"    obs_code:                     {"", 40} {$"{obsCodeAsString}", 40}";
                         //line += $"   ({obsCodeOK})";
                         PrintLine(streamWriter, line);
 
