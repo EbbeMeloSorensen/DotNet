@@ -21,6 +21,7 @@ namespace Games.Risk.ViewModel
         private int _armiesToDeploy;
         private string _armiesToDeployText;
         private bool _armiesToDeployTextVisible;
+        private bool _handHidden;
 
         public string Name { get; set; }
 
@@ -76,6 +77,23 @@ namespace Games.Risk.ViewModel
             }
         }
 
+        public bool HandHidden
+        {
+            get => _handHidden;
+            set
+            {
+                _handHidden = value;
+
+                CardViewModels
+                    .ToList()
+                    .ForEach(_ => _.BottomSideUp = _handHidden);
+
+                WatchCardsButtonText = HandHidden ? "Watch" : "Hide";
+
+                RaisePropertyChanged();
+            }
+        }
+
         public ObservableCollection<CardViewModel> CardViewModels { get; }
 
         public ObservableObject<List<Card>> SelectedCards { get; }
@@ -119,14 +137,13 @@ namespace Games.Risk.ViewModel
 
         public void AddCardViewModel(
             string territory,
-            Card card,
-            bool bottomSideUp)
+            Card card)
         {
             var cardViewModel = new CardViewModel(card)
             {
                 Territory = territory,
                 Offset = CardViewModels.Count * 13,
-                BottomSideUp = bottomSideUp
+                BottomSideUp = HandHidden
             };
 
             CardViewModels.Add(cardViewModel);
@@ -142,15 +159,15 @@ namespace Games.Risk.ViewModel
 
         private void ToggleCardsVisibility()
         {
+            HandHidden = !HandHidden;
+
             CardViewModels.ToList().ForEach(_ =>
             {
-                _.BottomSideUp = !_.BottomSideUp;
+                _.BottomSideUp = HandHidden;
                 _.Selected = false;
             });
 
             SelectedCards.Object = new List<Card>();
-
-            WatchCardsButtonText = CardViewModels.First().BottomSideUp ? "Watch" : "Hide";
         }
     }
 }

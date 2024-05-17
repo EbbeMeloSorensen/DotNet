@@ -1,0 +1,7 @@
+Evaluering
+
+RISK:
+Det har været væsentligt tungere at udvikle, end du havde forventet.
+- Det er svært at teste - mange test cases er møjsommelige at arrangere
+- Du har smurt state ud i en pærevælling, både i engine og i main view model, og så er der mange steder, hvor state vedligeholdes
+- Du har fået lavet lidt af en pyramid of doom med en masse if then else konstruktioner

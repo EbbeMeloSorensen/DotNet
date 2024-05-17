@@ -315,12 +315,6 @@ namespace Games.Risk.Application
         {
             _armiesToDeploy[CurrentPlayerIndex]--;
             ExtraArmiesForCurrentPlayer = 1;
-
-            // Too soon - setup phase is complete AFTER the last army from the pool is placed
-            //if (_armiesToDeploy.All(_ => _ == 0))
-            //{
-            //    SetupPhaseComplete = true;
-            //}
         }
 
         public List<string> AssignExtraArmiesForControlledContinents()
