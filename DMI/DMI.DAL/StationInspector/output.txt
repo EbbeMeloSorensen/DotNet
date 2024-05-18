@@ -1,0 +1,1571 @@
+5005 (Uggerby - Pluvio)
+
+    station id:                                                       5005                                   500520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-16 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                          Uggerby                                  UGGERBY   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  57.57048816                              57.57048816   (ok)
+    longitude:                                                 10.10736043                              10.10736043   (ok)
+    height:                                                              8                                        8   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-16 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-16 00:00:00
+---------------------------------------------------------------
+5009 (Nørre Lyngby N - Pluvio)
+
+    station id:                                                       5009                                   500920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2010-04-13 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                   Nørre Lyngby N                           NØRRE LYNGBY N   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2021-09-20 09:05:25
+    latitude:                                                    57.421918                                57.421918   (ok)
+    longitude:                                                    9.761176                                 9.761176   (ok)
+    height:                                                             22                                       22   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2010-04-13 00:00:00
+---------------------------------------------------------------
+5015 (Lendum - Pluvio)
+
+    station id:                                                       5015                                   501520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-11-04 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Lendum                                   LENDUM   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  57.40291783                              57.40291783   (ok)
+    longitude:                                                 10.27039683                              10.27039683   (ok)
+    height:                                                             61                                       61   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-16 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-11-04 00:00:00
+---------------------------------------------------------------
+5031 (Byrum - Pluvio)
+
+    station id:                                                       5031                                   503120
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2010-04-13 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                            Byrum                                    BYRUM   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  57.27456126                              57.27456126   (ok)
+    longitude:                                                   11.029239                                11.029239   (ok)
+    height:                                                              5                                        5   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2010-04-13 00:00:00
+---------------------------------------------------------------
+5035 (Voerså Hede - Pluvio)
+
+    station id:                                                       5035                                   503520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-16 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                      Voerså Hede                              VOERSÅ HEDE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  57.22145526                              57.22145526   (ok)
+    longitude:                                                 10.47099487                              10.47099487   (ok)
+    height:                                                             22                                       22   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-16 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-16 00:00:00
+---------------------------------------------------------------
+5042 (Møllegård Huse - Pluvio)
+
+    station id:                                                       5042                                   504220
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2014-10-30 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                   Møllegård Huse                           MØLLEGÅRD HUSE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.95644792                              56.95644792   (ok)
+    longitude:                                                  10.2232032                               10.2232032   (ok)
+    height:                                                              7                                        7   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2014-10-30 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2014-10-30 00:00:00
+---------------------------------------------------------------
+5065 (Mørkeskov - Pluvio)
+
+    station id:                                                       5065                                   506520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-11-02 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                        Mørkeskov                                MØRKESKOV   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.81404483                              56.81404483   (ok)
+    longitude:                                                  9.82445418                               9.82445418   (ok)
+    height:                                                             85                                       85   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-15 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-11-02 00:00:00
+---------------------------------------------------------------
+5070 (Havnø - Pluvio)
+
+    station id:                                                       5070                                   507020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-15 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                            Havnø                                    HAVNØ   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.71574124                              56.71574124   (ok)
+    longitude:                                                 10.16443721                              10.16443721   (ok)
+    height:                                                              2                                        2   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-15 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-15 00:00:00
+---------------------------------------------------------------
+5075 (Hannerup - Pluvio)
+
+    station id:                                                       5075                                   507520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-11-02 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                         Hannerup                                 HANNERUP   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.65090121                              56.65090121   (ok)
+    longitude:                                                  9.70119576                               9.70119576   (ok)
+    height:                                                             48                                       48   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-15 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-11-02 00:00:00
+---------------------------------------------------------------
+5081 (Gatten - Pluvio)
+
+    station id:                                                       5081                                   508120
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-11-03 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Gatten                                   GATTEN   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                   56.8789632                               56.8789632   (ok)
+    longitude:                                                  9.40406788                               9.40406788   (ok)
+    height:                                                             22                                       22   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-11-03 00:00:00
+---------------------------------------------------------------
+5085 (Aggersund - Pluvio)
+
+    station id:                                                       5085                                   508520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2014-10-29 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                        Aggersund                                AGGERSUND   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  57.01428108                              57.01428108   (ok)
+    longitude:                                                  9.28768974                               9.28768974   (ok)
+    height:                                                              8                                        8   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-16 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2014-10-29 00:00:00
+---------------------------------------------------------------
+5089 (Lild Strand - Pluvio)
+
+    station id:                                                       5089                                   508920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2010-04-13 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                      Lild Strand                              LILD STRAND   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  57.15178135                              57.15178135   (ok)
+    longitude:                                                   8.9648744                                8.9648744   (ok)
+    height:                                                              6                                        6   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2010-04-13 00:00:00
+---------------------------------------------------------------
+5095 (Nørre Vorupør - Pluvio)
+
+    station id:                                                       5095                                   509520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-02-22 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                    Nørre Vorupør                            NØRRE VORUPØR   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.95096474                              56.95096474   (ok)
+    longitude:                                                  8.37694339                               8.37694339   (ok)
+    height:                                                             16                                       16   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-15 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-02-22 00:00:00
+---------------------------------------------------------------
+5101 (Silstrup Test 1 - Pluvio)
+
+    station id:                                                       5101                                   510120
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2023-01-01 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                  Silstrup Test 1                          SILSTRUP TEST 1   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2022-10-25 00:00:00
+    latitude:                                                     56.92997                        56.92996565554513   (ok)
+    longitude:                                                     8.64124                        8.641237593508066   (ok)
+    height:                                                             42                                       42   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2022-10-25 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2022-10-25 00:00:00
+---------------------------------------------------------------
+5102 (Silstrup Test 2 - Pluvio)
+
+    station id:                                                       5102                                   510220
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2023-01-01 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                  Silstrup Test 2                          SILSTRUP TEST 2   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2022-10-25 00:00:00
+    latitude:                                                     56.92997                        56.92996565554513   (ok)
+    longitude:                                                     8.64124                        8.641237593508066   (ok)
+    height:                                                             42                                       42   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2022-10-25 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2022-10-25 00:00:00
+---------------------------------------------------------------
+5103 (Silstrup Test 3 - Pluvio)
+
+    station id:                                                       5103                                   510320
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2023-01-01 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                  Silstrup Test 3                          SILSTRUP TEST 3   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2022-10-25 00:00:00
+    latitude:                                                     56.92997                        56.92996565554513   (ok)
+    longitude:                                                     8.64124                        8.641237593508066   (ok)
+    height:                                                             42                                       42   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2022-10-25 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2022-10-25 00:00:00
+---------------------------------------------------------------
+5105 (Erslev - Pluvio)
+
+    station id:                                                       5105                                   510520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-15 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Erslev                                   ERSLEV   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.83339821                              56.83339821   (ok)
+    longitude:                                                  8.72956089                               8.72956089   (ok)
+    height:                                                             26                                       26   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-15 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-15 00:00:00
+---------------------------------------------------------------
+5109 (Junget - Pluvio)
+
+    station id:                                                       5109                                   510920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2010-07-24 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Junget                                   JUNGET   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.76372652                              56.76372652   (ok)
+    longitude:                                                  9.09454849                               9.09454849   (ok)
+    height:                                                             21                                       21   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2010-07-24 00:00:00
+---------------------------------------------------------------
+5126 (Karup Vest (Test) - Pluvio)
+NO MATCHING STATION IN STATDB
+---------------------------------------------------------------
+5135 (Grønbæk - Pluvio)
+
+    station id:                                                       5135                                   513520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2010-01-18 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                          Grønbæk                                  GRØNBÆK   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.27632458                              56.27632458   (ok)
+    longitude:                                                  9.62134882                               9.62134882   (ok)
+    height:                                                             25                                       25   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-01-18 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2010-01-18 00:00:00
+---------------------------------------------------------------
+5140 (Hald - Pluvio)
+
+    station id:                                                       5140                                   514020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-14 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                             Hald                                     HALD   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.56650499                              56.56650499   (ok)
+    longitude:                                                 10.10036778                              10.10036778   (ok)
+    height:                                                             75                                       75   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-14 00:00:00
+---------------------------------------------------------------
+5150 (Hevringholm - Pluvio)
+
+    station id:                                                       5150                                   515020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-14 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                      Hevringholm                              HEVRINGHOLM   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.50622732                              56.50622732   (ok)
+    longitude:                                                 10.44034124                              10.44034124   (ok)
+    height:                                                             12                                       12   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-14 00:00:00
+---------------------------------------------------------------
+5160 (Sibirien - Pluvio)
+
+    station id:                                                       5160                                   516020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-14 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                         Sibirien                                 SIBIRIEN   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.11029777                              56.11029777   (ok)
+    longitude:                                                 10.54662999                              10.54662999   (ok)
+    height:                                                             14                                       14   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-14 00:00:00
+---------------------------------------------------------------
+5165 (Tranebjerg Øst - Pluvio)
+
+    station id:                                                       5165                                   516520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-09-26 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                   Tranebjerg Øst                           TRANEBJERG ØST   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.83220409                              55.83220409   (ok)
+    longitude:                                                 10.61852275                              10.61852275   (ok)
+    height:                                                             18                                       18   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-11-18 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-09-26 00:00:00
+---------------------------------------------------------------
+5169 (Hov - Pluvio)
+
+    station id:                                                       5169                                   516920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-02-24 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                              Hov                                      HOV   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2023-01-30 00:00:00
+    latitude:                                                    55.911527                                 55.91153   (ok)
+    longitude:                                                   10.252999                                   10.253   (ok)
+    height:                                                            1.5                                      1.5   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-12 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2010-04-12 00:00:00
+---------------------------------------------------------------
+5185 (Flensted - Pluvio)
+
+    station id:                                                       5185                                   518520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2015-07-20 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                         Flensted                                 FLENSTED   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.14961762                              56.14961762   (ok)
+    longitude:                                                  9.78754421                               9.78754421   (ok)
+    height:                                                             96                                       96   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2015-07-20 00:00:00
+---------------------------------------------------------------
+5199 (Gludsted Plantage Nv - Pluvio)
+
+    station id:                                                       5199                                   519920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2013-09-17 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                             Gludsted Plantage Nv                     GLUDSTED PLANTAGE NV   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.07609704                              56.07609704   (ok)
+    longitude:                                                  9.32981085                               9.32981085   (ok)
+    height:                                                             85                                       85   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2013-09-17 00:00:00
+    obs_code:                                                                                                   DMI
+    first_date (obs_code):                                                                      2013-09-17 00:00:00
+---------------------------------------------------------------
+5202 (Nørre Snede - Pluvio)
+
+    station id:                                                       5202                                   520220
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-10-17 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                      Nørre Snede                              NØRRE SNEDE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.96025462                              55.96025462   (ok)
+    longitude:                                                  9.37681411                               9.37681411   (ok)
+    height:                                                             91                                       91   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2011-10-17 00:00:00
+    obs_code:                                                                                                   DMI
+    first_date (obs_code):                                                                      2011-10-17 00:00:00
+---------------------------------------------------------------
+5205 (Vestbirk - Pluvio)
+
+    station id:                                                       5205                                   520520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-14 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                         Vestbirk                                 VESTBIRK   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.96098747                              55.96098747   (ok)
+    longitude:                                                  9.70217788                               9.70217788   (ok)
+    height:                                                             56                                       56   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-14 00:00:00
+---------------------------------------------------------------
+5220 (Juelsminde - Pluvio)
+
+    station id:                                                       5220                                   522020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-02-21 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                       Juelsminde                               JUELSMINDE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.71017671                              55.71017671   (ok)
+    longitude:                                                  9.99623401                               9.99623401   (ok)
+    height:                                                             24                                       24   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-02-21 00:00:00
+---------------------------------------------------------------
+5225 (Hesselballe - Pluvio)
+
+    station id:                                                       5225                                   522520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-11-02 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                      Hesselballe                              HESSELBALLE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.83107483                              55.83107483   (ok)
+    longitude:                                                  9.55305757                               9.55305757   (ok)
+    height:                                                             69                                       69   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-11-02 00:00:00
+---------------------------------------------------------------
+5269 (Blåhøj Kirkeby - Pluvio)
+
+    station id:                                                       5269                                   526920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-02-21 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                   Blåhøj Kirkeby                           BLÅHØJ KIRKEBY   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.85280196                              55.85280196   (ok)
+    longitude:                                                  9.01623358                               9.01623358   (ok)
+    height:                                                             52                                       52   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-02-21 00:00:00
+---------------------------------------------------------------
+5272 (Brande - Pluvio)
+
+    station id:                                                       5272                                   527220
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-10-17 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Brande                                   BRANDE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.96543799                              55.96543799   (ok)
+    longitude:                                                  9.11681863                               9.11681863   (ok)
+    height:                                                             48                                       48   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2011-10-17 00:00:00
+    obs_code:                                                                                                   DMI
+    first_date (obs_code):                                                                      2011-10-17 00:00:00
+---------------------------------------------------------------
+5276 (Voulund Testfelt P - Pluvio)
+
+    station id:                                                       5276                                   527620
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-04-16 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                               Voulund Testfelt P                       VOULUND TESTFELT P   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.03724265                              56.03724265   (ok)
+    longitude:                                                  9.15935697                               9.15935697   (ok)
+    height:                                                             67                                       67   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-04-16 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-04-16 00:00:00
+---------------------------------------------------------------
+5277 (Høgild - Pluvio)
+
+    station id:                                                       5277                                   527720
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-10-17 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Høgild                                   HØGILD   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.06256477                              56.06256477   (ok)
+    longitude:                                                  8.98538938                               8.98538938   (ok)
+    height:                                                             43                                       43   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2011-10-17 00:00:00
+    obs_code:                                                                                                  Hobe
+    first_date (obs_code):                                                                      2011-10-17 00:00:00
+---------------------------------------------------------------
+5278 (Voulund Testfelt P2 - Pluvio)
+
+    station id:                                                       5278                                   527820
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2021-05-11 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                              Voulund Testfelt P2                      VOULUND TESTFELT P2   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2022-03-22 00:00:00
+    latitude:                                                  56.03724265                       56.037242649306975   (ok)
+    longitude:                                                  9.15935697                        9.159356973669464   (ok)
+    height:                                                             67                                       67   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2022-03-22 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2022-03-22 00:00:00
+---------------------------------------------------------------
+5290 (Semb - Pluvio)
+
+    station id:                                                       5290                                   529020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2010-05-04 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                             Semb                                     SEMB   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.65525901                              56.65525901   (ok)
+    longitude:                                                  8.54755185                               8.54755185   (ok)
+    height:                                                             23                                       23   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2010-05-04 00:00:00
+---------------------------------------------------------------
+5296 (Trans - Pluvio)
+
+    station id:                                                       5296                                   529620
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2012-06-12 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                            Trans                                    TRANS   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.50315965                              56.50315965   (ok)
+    longitude:                                                  8.14645009                               8.14645009   (ok)
+    height:                                                             15                                       15   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2012-06-12 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2012-06-12 00:00:00
+---------------------------------------------------------------
+5300 (Øby - Pluvio)
+
+    station id:                                                       5300                                   530020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-10-28 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                              Øby                                      ØBY   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.26008126                              56.26008126   (ok)
+    longitude:                                                  8.16534935                               8.16534935   (ok)
+    height:                                                              3                                        3   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-10-28 00:00:00
+---------------------------------------------------------------
+5305 (Grønbjerg - Pluvio)
+
+    station id:                                                       5305                                   530520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2015-07-20 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                        Grønbjerg                                GRØNBJERG   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2021-05-28 09:54:27
+    latitude:                                                    56.183725                                56.183725   (ok)
+    longitude:                                                    8.487126                                 8.487126   (ok)
+    height:                                                             35                                       35   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2015-07-20 00:00:00
+---------------------------------------------------------------
+5320 (Skovlund - Pluvio)
+
+    station id:                                                       5320                                   532020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-10-28 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                         Skovlund                                 SKOVLUND   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.72463202                              55.72463202   (ok)
+    longitude:                                                   8.6932431                                8.6932431   (ok)
+    height:                                                             38                                       38   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-10-28 00:00:00
+---------------------------------------------------------------
+5329 (Outrup - Pluvio)
+
+    station id:                                                       5329                                   532920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2012-10-25 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Outrup                                   OUTRUP   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.72302232                              55.72302232   (ok)
+    longitude:                                                   8.3326914                                8.3326914   (ok)
+    height:                                                             18                                       18   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2012-10-25 00:00:00
+---------------------------------------------------------------
+5343 (Holsted - Pluvio)
+MULTIPLE MATCHING STATIONS IN STATDB
+---------------------------------------------------------------
+5345 (Ribe Renseanlæg - Pluvio)
+
+    station id:                                                       5345                                   534520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-09-27 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                  Ribe Renseanlæg                          RIBE RENSEANLÆG   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.32900305                              55.32900305   (ok)
+    longitude:                                                  8.74362544                               8.74362544   (ok)
+    height:                                                              3                                        3   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-09-27 00:00:00
+---------------------------------------------------------------
+5350 (Bredebro - Pluvio)
+
+    station id:                                                       5350                                   535020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-02-23 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                         Bredebro                                 BREDEBRO   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.05621411                              55.05621411   (ok)
+    longitude:                                                  8.83272503                               8.83272503   (ok)
+    height:                                                              6                                        6   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-02-23 00:00:00
+---------------------------------------------------------------
+5355 (Emmerlev Klev - Pluvio)
+
+    station id:                                                       5355                                   535520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-09 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                    Emmerlev Klev                            EMMERLEV KLEV   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  54.98715867                              54.98715867   (ok)
+    longitude:                                                  8.66524986                               8.66524986   (ok)
+    height:                                                              8                                        8   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-09 00:00:00
+---------------------------------------------------------------
+5365 (Kliplev - Pluvio)
+
+    station id:                                                       5365                                   536520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-09-28 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                          Kliplev                                  KLIPLEV   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  54.93156734                              54.93156734   (ok)
+    longitude:                                                  9.41160431                               9.41160431   (ok)
+    height:                                                             44                                       44   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-09-28 00:00:00
+---------------------------------------------------------------
+5375 (Nørreløkke - Pluvio)
+
+    station id:                                                       5375                                   537520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-09-28 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                       Nørreløkke                               NØRRELØKKE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.06457738                              55.06457738   (ok)
+    longitude:                                                  9.67999884                               9.67999884   (ok)
+    height:                                                              8                                        8   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-09-28 00:00:00
+---------------------------------------------------------------
+5381 (Rangstrup - Pluvio)
+
+    station id:                                                       5381                                   538120
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2015-07-21 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                        Rangstrup                                RANGSTRUP   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.14701564                              55.14701564   (ok)
+    longitude:                                                  9.20573597                               9.20573597   (ok)
+    height:                                                             52                                       52   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2015-07-21 00:00:00
+---------------------------------------------------------------
+5395 (Hajstrup - Pluvio)
+
+    station id:                                                       5395                                   539520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-09 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                         Hajstrup                                 HAJSTRUP   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.25549324                              55.25549324   (ok)
+    longitude:                                                  9.66843334                               9.66843334   (ok)
+    height:                                                             23                                       23   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-09 00:00:00
+---------------------------------------------------------------
+5400 (Båring - Pluvio)
+
+    station id:                                                       5400                                   540020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-11-04 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Båring                                   BÅRING   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.49352294                              55.49352294   (ok)
+    longitude:                                                  9.89526775                               9.89526775   (ok)
+    height:                                                             63                                       63   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-11-04 00:00:00
+---------------------------------------------------------------
+5406 (Tørresø - Pluvio)
+
+    station id:                                                       5406                                   540620
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2014-10-28 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                          Tørresø                                  TØRRESØ   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.58148811                              55.58148811   (ok)
+    longitude:                                                 10.39300154                              10.39300154   (ok)
+    height:                                                              3                                        3   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2014-10-28 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2014-10-28 00:00:00
+---------------------------------------------------------------
+5408 (H. C. Andersen Airport - Pluvio)
+
+    station id:                                                       5408                                   540820
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2018-11-26 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                           H. C. Andersen Airport                   H. C. ANDERSEN AIRPORT   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2019-08-26 11:59:37
+    latitude:                                                    55.474875                                55.474875   (ok)
+    longitude:                                                   10.330487                                10.330487   (ok)
+    height:                                                             14                                       14   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2018-11-26 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2018-11-26 00:00:00
+---------------------------------------------------------------
+5435 (Bøjden - Pluvio)
+
+    station id:                                                       5435                                   543520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-11-01 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Bøjden                                   BØJDEN   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.09782519                              55.09782519   (ok)
+    longitude:                                                 10.10085421                              10.10085421   (ok)
+    height:                                                             23                                       23   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-11-01 00:00:00
+---------------------------------------------------------------
+5440 (Ulbølle - Pluvio)
+
+    station id:                                                       5440                                   544020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-11-01 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                          Ulbølle                                  ULBØLLE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.07205256                              55.07205256   (ok)
+    longitude:                                                 10.42485071                              10.42485071   (ok)
+    height:                                                             26                                       26   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-11-01 00:00:00
+---------------------------------------------------------------
+5450 (Søndenbro - Pluvio)
+
+    station id:                                                       5450                                   545020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-09 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                        Søndenbro                                SØNDENBRO   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  54.75667383                              54.75667383   (ok)
+    longitude:                                                 10.70941313                              10.70941313   (ok)
+    height:                                                              7                                        7   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-09 00:00:00
+---------------------------------------------------------------
+5455 (Rudkøbing - Pluvio)
+
+    station id:                                                       5455                                   545520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-09 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                        Rudkøbing                                RUDKØBING   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  54.94625653                              54.94625653   (ok)
+    longitude:                                                   10.723398                                10.723398   (ok)
+    height:                                                              8                                        8   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-09 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-09 00:00:00
+---------------------------------------------------------------
+5469 (Juelsberg - Pluvio)
+
+    station id:                                                       5469                                   546920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2015-11-19 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                        Juelsberg                                JUELSBERG   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2020-08-19 08:10:47
+    latitude:                                                    55.347422                                55.347422   (ok)
+    longitude:                                                   10.761788                                10.761788   (ok)
+    height:                                                              8                                        8   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2015-11-19 00:00:00
+---------------------------------------------------------------
+5499 (Mulstrup - Pluvio)
+
+    station id:                                                       5499                                   549920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-06-21 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                         Mulstrup                                 MULSTRUP   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2021-06-14 08:13:23
+    latitude:                                                    55.402586                                55.402586   (ok)
+    longitude:                                                   11.864839                                11.864839   (ok)
+    height:                                                             39                                       39   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-06-21 00:00:00
+---------------------------------------------------------------
+5510 (Rye - Pluvio)
+
+    station id:                                                       5510                                   551020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2015-07-21 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                              Rye                                      Rye   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2022-12-16 08:04:04
+    latitude:                                                     55.51832                                 55.51832   (ok)
+    longitude:                                                   11.232875                                11.232875   (ok)
+    height:                                                              8                                        8   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-08 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2015-07-21 00:00:00
+---------------------------------------------------------------
+5529 (Havnsø - Pluvio)
+
+    station id:                                                       5529                                   552920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-09-22 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Havnsø                                   HAVNSØ   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.74891075                              55.74891075   (ok)
+    longitude:                                                 11.33736904                              11.33736904   (ok)
+    height:                                                              9                                        9   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-09-22 00:00:00
+---------------------------------------------------------------
+5537 (Mørkøv Syd - Pluvio)
+
+    station id:                                                       5537                                   553720
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2012-03-01 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                       Mørkøv Syd                               MØRKØV SYD   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.63664356                              55.63664356   (ok)
+    longitude:                                                 11.49420379                              11.49420379   (ok)
+    height:                                                             35                                       35   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2012-03-01 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2012-03-01 00:00:00
+---------------------------------------------------------------
+5545 (Kollekolle - Pluvio)
+
+    station id:                                                       5545                                   554520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2015-07-22 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                       Kollekolle                               KOLLEKOLLE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.86874384                              55.86874384   (ok)
+    longitude:                                                 11.60638588                              11.60638588   (ok)
+    height:                                                             29                                       29   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-08 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2015-07-22 00:00:00
+---------------------------------------------------------------
+5575 (Græsted - Pluvio)
+
+    station id:                                                       5575                                   557520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-09-19 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                          Græsted                                  GRÆSTED   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  56.04289911                              56.04289911   (ok)
+    longitude:                                                 12.29175803                              12.29175803   (ok)
+    height:                                                             36                                       36   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-08 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-09-19 00:00:00
+---------------------------------------------------------------
+5735 (Livgardens Kaserne - Pluvio)
+
+    station id:                                                       5735                                   573520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2012-07-24 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                               Livgardens Kaserne                       LIVGARDENS KASERNE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2019-10-07 14:38:08
+    latitude:                                                    55.685754                                55.685754   (ok)
+    longitude:                                                   12.576792                                12.576792   (ok)
+    height:                                                              6                                        6   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-01-14 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2012-07-24 00:00:00
+---------------------------------------------------------------
+5880 (Møllebjerggård - Pluvio)
+
+    station id:                                                       5880                                   588020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-11-11 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                   Møllebjerggård                           MØLLEBJERGGÅRD   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.29311762                              55.29311762   (ok)
+    longitude:                                                 12.42181013                              12.42181013   (ok)
+    height:                                                             37                                       37   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-08 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-11-11 00:00:00
+---------------------------------------------------------------
+5889 (Orup - Pluvio)
+
+    station id:                                                       5889                                   588920
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-06-21 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                             Orup                                     ORUP   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.20759914                              55.20759914   (ok)
+    longitude:                                                 12.09807024                              12.09807024   (ok)
+    height:                                                             38                                       38   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-06-21 00:00:00
+---------------------------------------------------------------
+5935 (Køng - Pluvio)
+
+    station id:                                                       5935                                   593520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2011-06-21 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                             Køng                                     KØNG   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.09868146                              55.09868146   (ok)
+    longitude:                                                 11.82848464                              11.82848464   (ok)
+    height:                                                              4                                        4   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-08 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2011-06-21 00:00:00
+---------------------------------------------------------------
+5945 (Nørreby - Pluvio)
+
+    station id:                                                       5945                                   594520
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2012-03-13 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                          Nørreby                                  NØRREBY   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  54.97997255                              54.97997255   (ok)
+    longitude:                                                  11.5335558                               11.5335558   (ok)
+    height:                                                             13                                       13   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-08 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2012-03-13 00:00:00
+---------------------------------------------------------------
+5970 (Rødbyhavn - Pluvio)
+
+    station id:                                                       5970                                   597020
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2009-12-21 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                        Rødbyhavn                                RØDBYHAVN   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  54.65731355                              54.65731355   (ok)
+    longitude:                                                 11.35152286                              11.35152286   (ok)
+    height:                                                              2                                        2   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2009-12-21 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2009-12-21 00:00:00
+---------------------------------------------------------------
+5981 (Bjørup - Pluvio)
+
+    station id:                                                       5981                                   598120
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2023-02-23 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                           Bjørup                                   Bjørup   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2023-02-23 00:00:00
+    latitude:                                                    54.779292                        54.77926009900296   (INVALID (DIFFERS FROM SMS BY 3.1900997036871104E-05))
+    longitude:                                                    11.93103                       11.931044451594348   (INVALID (DIFFERS FROM SMS BY 1.445159434787513E-05))
+    height:                                                             21                                       21   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2023-02-23 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2023-02-23 00:00:00
+---------------------------------------------------------------
+5986 (Neble - Pluvio)
+
+    station id:                                                       5986                                   598620
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2012-09-27 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                            Neble                                    NEBLE   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2021-06-08 19:04:05
+    latitude:                                                        54.96                                    54.96   (ok)
+    longitude:                                                       12.24                                    12.24   (ok)
+    height:                                                              2                                        2   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2012-09-27 00:00:00
+---------------------------------------------------------------
+5994 (Østerlars - Pluvio)
+
+    station id:                                                       5994                                   599420
+    icao id:                                                        <null>                                   <null>   (ok)
+    country:                                                       Danmark                                  Danmark   (ok)
+    source:                                                                                                     ing   (ok)
+    datefrom (sms):                                    2010-04-13 00:00:00                                            (ok)
+    dateto   (sms):                                                 <null>                                            (ok)
+    station type:                                                   Pluvio                                         
+    station owner:                                                     DMI                                         
+    name:                                                        Østerlars                                ØSTERLARS   (ok)
+    status:                                                         active                                   active   (ok)
+    entity:                                                                                                 station   (ok)
+    start_time (latest position):                                                               2018-12-04 10:31:55
+    latitude:                                                  55.16298782                              55.16298782   (ok)
+    longitude:                                                 14.96830891                              14.96830891   (ok)
+    height:                                                             94                                       94   (ok)
+    report_type:                                                                                              synop   (ok)
+    start_time (report type):                                                                   2010-04-13 00:00:00
+    obs_code:                                                                                                pluvio
+    first_date (obs_code):                                                                      2010-04-13 00:00:00
+---------------------------------------------------------------
+
+SUMMARY OF DISCREPANCIES
+No discrepancies
