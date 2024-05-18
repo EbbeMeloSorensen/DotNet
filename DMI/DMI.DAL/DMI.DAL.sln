@@ -37,7 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElevationAngleInspector", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MigrationScriptGenerator", "MigrationScriptGenerator\MigrationScriptGenerator.csproj", "{FD2093D2-D532-426F-8915-02F7DF204199}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StationInspector", "StationInspector\StationInspector.csproj", "{73CA2CE5-E2E3-4486-8593-8DB47EC07F8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StationInspector", "StationInspector\StationInspector.csproj", "{73CA2CE5-E2E3-4486-8593-8DB47EC07F8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaDataInspector", "MetaDataInspector\MetaDataInspector.csproj", "{BE1EBB0A-C475-4EF6-97F7-EFA9050CBFCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{73CA2CE5-E2E3-4486-8593-8DB47EC07F8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73CA2CE5-E2E3-4486-8593-8DB47EC07F8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73CA2CE5-E2E3-4486-8593-8DB47EC07F8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE1EBB0A-C475-4EF6-97F7-EFA9050CBFCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE1EBB0A-C475-4EF6-97F7-EFA9050CBFCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE1EBB0A-C475-4EF6-97F7-EFA9050CBFCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE1EBB0A-C475-4EF6-97F7-EFA9050CBFCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
