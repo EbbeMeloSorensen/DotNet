@@ -1,11 +1,12 @@
-﻿using MetaDataInspector.Domain.SMS;
-using Npgsql;
+﻿using Npgsql;
+using MetaDataInspector.Domain.SMS;
+using MetaDataInspector.Domain.StatDB;
 
 namespace MetaDataInspector;
 
 public static class DataHelpers
 {
-    public static List<StationInformation> RetrieveStationInformations(
+    public static List<StationInformation> SMS_RetrieveStationInformations(
         bool includeSynopStations,
         bool includeSVKStations,
         bool includePluvioStations)
@@ -77,7 +78,7 @@ public static class DataHelpers
                 {
                     rowCount++;
 
-                    var objectId = sms_reader.GetInt32(0);
+                    int objectId = sms_reader.GetInt32(0);
                     string? stationname = sms_reader.IsDBNull(1) ? null : sms_reader.GetString(1);
                     int? stationid_dmi = sms_reader.IsDBNull(2) ? null : sms_reader.GetInt32(2);
                     int? stationtype = sms_reader.IsDBNull(3) ? null : sms_reader.GetInt32(3);
@@ -120,5 +121,50 @@ public static class DataHelpers
         }
 
         return stationInformations;
+    }
+
+    public static List<Station> StatDB_RetrieveStations()
+    {
+        var stations = new List<Station>();
+
+        try
+        {
+            var statdb_host = "nanoq.dmi.dk";
+            var statdb_user = "ebs";
+            var statdb_password = "Vm6PAkPh";
+            var statdb_database = "statdb";
+            var statdb_connectionString = $"Host={statdb_host};Username={statdb_user};Password={statdb_password};Database={statdb_database}";
+
+            using var statdb_conn = new NpgsqlConnection(statdb_connectionString);
+            statdb_conn.Open();
+
+            var statdb_query =
+                "SELECT " +
+                "statid, " +
+                "icao_id, " +
+                "country, " +
+                "source " +
+                "FROM station " +
+                "WHERE source = 'ing'";
+
+            using (var statdb_cmd = new NpgsqlCommand(statdb_query, statdb_conn))
+            using (var statdb_reader = statdb_cmd.ExecuteReader())
+            {
+                if (statdb_reader.Read())
+                {
+                    int? statid = statdb_reader.IsDBNull(0) ? null : statdb_reader.GetInt32(0);
+                    string? icao_id = statdb_reader.IsDBNull(1) ? null : statdb_reader.GetString(1);
+                    string? country = statdb_reader.IsDBNull(2) ? null : statdb_reader.GetString(2);
+                    string? source = statdb_reader.IsDBNull(3) ? null : statdb_reader.GetString(3);
+                }
+            }
+
+        }
+        catch (PostgresException excp)
+        {
+            throw excp;
+        }
+
+        return stations;
     }
 }

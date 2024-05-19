@@ -5,7 +5,7 @@ const bool includeStationsFromGreenland = false;
 const bool includeStationsFromFaroeIslands = false;
 const bool includeStationsWithoutCountry = false;
 
-var stationInformations = DataHelpers.RetrieveStationInformations(
+var stationInformations = DataHelpers.SMS_RetrieveStationInformations(
     includeSynopStations: false,
     includeSVKStations: false,
     includePluvioStations: true);
@@ -36,4 +36,6 @@ foreach (var si in stationInformations)
 
     // Fra det gamle script
     //PrintLine(streamWriter, $"    source:                       {"",40} {sourceAsString,40}   ({sourceOK})");
+
+    streamWriter.PrintLine("---------------------------------------------------------------");
 }
