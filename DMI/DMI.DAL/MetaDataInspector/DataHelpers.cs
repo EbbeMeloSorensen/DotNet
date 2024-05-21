@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using System.Text;
+using Npgsql;
 using MetaDataInspector.Domain.SMS;
 using MetaDataInspector.Domain.StatDB;
 
@@ -63,7 +64,6 @@ public static class DataHelpers
                 "wgs_long " +
                 "FROM sde.stationinformation " +
                 "WHERE gdb_to_date = '9999-12-31 23:59:59.000000'" +
-                //" AND stationtype IN (0, 5)" +
                 $" AND stationtype IN ({stationTypeFilterAsCSV})" +
                 " AND status = 1" +
                 " ORDER BY stationid_dmi";// +
@@ -138,24 +138,36 @@ public static class DataHelpers
             using var statdb_conn = new NpgsqlConnection(statdb_connectionString);
             statdb_conn.Open();
 
-            var statdb_query =
+            var queryBuilder = new StringBuilder(
                 "SELECT " +
                 "statid, " +
                 "icao_id, " +
                 "country, " +
                 "source " +
-                "FROM station " +
-                "WHERE source = 'ing'";
+                "FROM station"
+            );
 
-            using (var statdb_cmd = new NpgsqlCommand(statdb_query, statdb_conn))
+            queryBuilder.AppendLine(" WHERE source = 'ing'");
+
+            using (var statdb_cmd = new NpgsqlCommand(queryBuilder.ToString(), statdb_conn))
             using (var statdb_reader = statdb_cmd.ExecuteReader())
             {
-                if (statdb_reader.Read())
+                while (statdb_reader.Read())
                 {
                     int? statid = statdb_reader.IsDBNull(0) ? null : statdb_reader.GetInt32(0);
                     string? icao_id = statdb_reader.IsDBNull(1) ? null : statdb_reader.GetString(1);
                     string? country = statdb_reader.IsDBNull(2) ? null : statdb_reader.GetString(2);
                     string? source = statdb_reader.IsDBNull(3) ? null : statdb_reader.GetString(3);
+
+                    var station = new Station
+                    {
+                        statid = statid,
+                        icao_id = icao_id,
+                        country = country,
+                        source = source
+                    };
+
+                    stations.Add(station);
                 }
             }
 
