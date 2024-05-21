@@ -7,5 +7,6 @@ public class Station
     public string? country { get; set; }
     public string? source { get; set; }
 
-    public string CountryAsString => country != null ? country : "<null>";
+    public string IcaoIDAsString => !string.IsNullOrEmpty(icao_id) ? icao_id : "<null>";
+    public string CountryAsString => !string.IsNullOrEmpty(country) ? country : "<null>";
 }

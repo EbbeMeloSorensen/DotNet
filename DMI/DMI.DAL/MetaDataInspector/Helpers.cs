@@ -106,7 +106,7 @@ public static class Helpers
 
         var icaoIDOK = icaoIDMatches ? "ok" : "INVALID (DIFFERS FROM SMS)";
 
-        var sb = new StringBuilder($"    icao id:                      {si.CountryasString,40} {s.CountryAsString,40}");
+        var sb = new StringBuilder($"    icao id:                      {si.StationIDICAOAsString,40} {s.IcaoIDAsString,40}");
 
         if (evaluate)
         {
@@ -115,5 +115,4 @@ public static class Helpers
 
         sw.PrintLine(sb.ToString());
     }
-
 }

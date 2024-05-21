@@ -8,8 +8,8 @@ const bool includeStationsWithoutCountry = false;
 var stations = DataHelpers.StatDB_RetrieveStations();
 
 var stationInformations = DataHelpers.SMS_RetrieveStationInformations(
-    includeSynopStations: false,
-    includeSVKStations: false,
+    includeSynopStations: true,
+    includeSVKStations: true,
     includePluvioStations: true);
 
 using var sw = new StreamWriter("output.txt");
