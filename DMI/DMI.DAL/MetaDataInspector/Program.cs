@@ -1,13 +1,14 @@
 ﻿using MetaDataInspector;
+using MetaDataInspector.Inspectors;
 
 const bool includeStationsFromDenmark = true;
 const bool includeStationsFromGreenland = false;
 const bool includeStationsFromFaroeIslands = false;
 const bool includeStationsWithoutCountry = false;
 
-var stations = DataHelpers.StatDB_RetrieveStations();
+var stations = StatDB.RetrieveStations();
 
-var stationInformations = DataHelpers.SMS_RetrieveStationInformations(
+var stationInformations = SMS.RetrieveStationInformations(
     includeSynopStations: true,
     includeSVKStations: true,
     includePluvioStations: true);
@@ -43,9 +44,9 @@ foreach (var si in stationInformations)
     {
         var s = matchingStations.Single();
 
+        sw.InspectStationID(si, s);
         sw.InspectIcaoID(si, s, true);
         sw.InspectCountry(si, s, true);
-        // sw.PrintLine($"    station id:                   {si.StationIDDMIAsString,40}");
         // sw.PrintLine($"    datefrom (sms):               {si.DateFromAsString,40}");
         // sw.PrintLine($"    dateto (sms):                 {si.DateToAsString,40}");
         // sw.PrintLine($"    station type:                 {si.StationTypeAsString,40}");
