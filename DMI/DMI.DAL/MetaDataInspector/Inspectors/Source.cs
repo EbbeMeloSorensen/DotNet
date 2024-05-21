@@ -9,6 +9,6 @@ public static class Source
         this StreamWriter sw,
         Station s)
     {
-        sw.PrintLine($"    source:                       {"",40} {s.SourceAsString,40})");
+        sw.PrintLine($"    source:                       {"",40} {s.SourceAsString,40}");
     }
 }

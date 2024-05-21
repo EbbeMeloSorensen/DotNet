@@ -20,7 +20,8 @@ public static class Helpers
 
     public static string AsDateTimeString(
         this DateTime dateTime,
-        bool includeMilliseconds)
+        bool includeMilliseconds,
+        bool omitTimeIfZero)
     {
         var year = dateTime.Year;
         var month = dateTime.Month.ToString().PadLeft(2, '0');
@@ -29,17 +30,27 @@ public static class Helpers
         var hour = dateTime.Hour.ToString().PadLeft(2, '0');
         var minute = dateTime.Minute.ToString().PadLeft(2, '0');
         var second = dateTime.Second.ToString().PadLeft(2, '0');
+        var millisecond = dateTime.Millisecond.ToString().PadLeft(3, '0');
 
-        var result = $"{year}-{month}-{day} {hour}:{minute}:{second}";
+        var sb = new StringBuilder($"{year}-{month}-{day}");
+
+        if (hour == "00" &&
+            minute == "00" &&
+            second == "00" &&
+            millisecond == "000" &&
+            omitTimeIfZero)
+        {
+            return sb.ToString();
+        }
+
+        sb.Append($" {hour}:{minute}:{second}");
 
         if (includeMilliseconds)
         {
-            var millisecond = dateTime.Millisecond.ToString().PadLeft(3, '0');
-
-            result += $".{millisecond}";
+            sb.Append($".{millisecond}");
         }
 
-        return result;
+        return sb.ToString();
     }
 
     public static void PrintLine(
