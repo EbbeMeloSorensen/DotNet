@@ -47,13 +47,11 @@ foreach (var si in stationInformations)
         sw.InspectStationID(si, s);
         sw.InspectIcaoID(si, s, true);
         sw.InspectCountry(si, s, true);
-        // sw.PrintLine($"    datefrom (sms):               {si.DateFromAsString,40}");
-        // sw.PrintLine($"    dateto (sms):                 {si.DateToAsString,40}");
-        // sw.PrintLine($"    station type:                 {si.StationTypeAsString,40}");
-        // sw.PrintLine($"    station owner:                {si.StationOwnerAsString,40}");
-
-        // Fra det gamle script
-        //PrintLine(sw, $"    source:                       {"",40} {sourceAsString,40}   ({sourceOK})");
+        sw.InspectDateFrom(si);
+        sw.InspectDateTo(si);
+        sw.InspectStationType(si);
+        sw.InspectStationOwner(si);
+        sw.InspectSource(s);
     }
 
     sw.PrintLine("-----------------------------------------------------------------------------------------------------------------------------------------------");
