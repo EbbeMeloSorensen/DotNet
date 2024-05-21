@@ -1,4 +1,8 @@
-﻿namespace MetaDataInspector;
+﻿using System.Text;
+using MetaDataInspector.Domain.SMS;
+using MetaDataInspector.Domain.StatDB;
+
+namespace MetaDataInspector;
 
 public static class Helpers
 {
@@ -39,10 +43,43 @@ public static class Helpers
     }
 
     public static void PrintLine(
-        this StreamWriter streamWriter,
+        this StreamWriter sw,
         string line)
     {
         Console.WriteLine(line);
-        streamWriter.WriteLine(line);
+        sw.WriteLine(line);
+    }
+
+    public static void InspectCountry(
+        this StreamWriter sw,
+        StationInformation si,
+        Station s,
+        bool evaluate)
+    {
+        var countryMatches = false;
+
+        if (!si.country.HasValue)
+        {
+            countryMatches = s.country == null;
+        }
+        else if (s.country == null)
+        {
+            countryMatches = false;
+        }
+        else
+        {
+            countryMatches = s.country == si.CountryasString;
+        }
+
+        var countryOK = countryMatches ? "ok" : "INVALID";
+
+        var sb = new StringBuilder($"    country:                      {si.CountryasString,40} {s.CountryAsString,40}");
+
+        if (evaluate)
+        {
+            sb.Append($"   ({countryOK})");
+        }
+
+        sw.PrintLine(sb.ToString());
     }
 }
