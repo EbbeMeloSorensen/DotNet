@@ -43,7 +43,7 @@ foreach (var si in stationInformations)
     {
         var s = matchingStations.Single();
 
-        //sw.PrintLine($"    icao id:                      {si.StationIDICAOAsString,40}");
+        sw.InspectIcaoID(si, s, true);
         sw.InspectCountry(si, s, true);
         // sw.PrintLine($"    station id:                   {si.StationIDDMIAsString,40}");
         // sw.PrintLine($"    datefrom (sms):               {si.DateFromAsString,40}");

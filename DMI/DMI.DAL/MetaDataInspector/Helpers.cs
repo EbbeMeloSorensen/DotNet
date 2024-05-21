@@ -82,4 +82,38 @@ public static class Helpers
 
         sw.PrintLine(sb.ToString());
     }
+
+    public static void InspectIcaoID(
+        this StreamWriter sw,
+        StationInformation si,
+        Station s,
+        bool evaluate)
+    {
+        var icaoIDMatches = false;
+
+        if (string.IsNullOrEmpty(si.stationid_icao))
+        {
+            icaoIDMatches = string.IsNullOrEmpty(s.icao_id);
+        }
+        else if (string.IsNullOrEmpty(s.icao_id))
+        {
+            icaoIDMatches = false;
+        }
+        else
+        {
+            icaoIDMatches = s.icao_id == si.stationid_icao;
+        }
+
+        var icaoIDOK = icaoIDMatches ? "ok" : "INVALID (DIFFERS FROM SMS)";
+
+        var sb = new StringBuilder($"    icao id:                      {si.CountryasString,40} {s.CountryAsString,40}");
+
+        if (evaluate)
+        {
+            sb.Append($"   ({icaoIDOK})");
+        }
+
+        sw.PrintLine(sb.ToString());
+    }
+
 }
