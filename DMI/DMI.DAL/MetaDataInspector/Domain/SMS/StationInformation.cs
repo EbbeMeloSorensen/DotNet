@@ -72,8 +72,8 @@ public class StationInformation
     public string AccessAddressAsString => accessaddress != null ? $"{accessaddress}" : "<null>";
     public string CountryasString => country.HasValue ? $"{_countryMap[country.Value]}" : "<null>";
     public string StatusAsString => status.HasValue? $"{_statusMap[status.Value]}" : "<null>";
-    public string DateFromAsString => datefrom.HasValue ? $"{datefrom.Value.AsDateTimeString(false)}" : "<null>";
-    public string DateToAsString => dateto.HasValue ? $"{dateto.Value.AsDateTimeString(false)}" : "<null>";
+    public string DateFromAsString => datefrom.HasValue ? $"{datefrom.Value.AsDateTimeString(false, true)}" : "<null>";
+    public string DateToAsString => dateto.HasValue ? $"{dateto.Value.AsDateTimeString(false, true)}" : "<null>";
     public string StationOwnerAsString => stationowner.HasValue ? $"{_stationOwnerMap[stationowner.Value]}" : "<null>";
     public string StationIDICAOAsString => stationid_icao != null ? stationid_icao : "<null>";
     public string HHAAsString => hha != null ? $"{hha}" : "<null>";
