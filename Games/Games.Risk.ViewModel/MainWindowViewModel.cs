@@ -52,7 +52,6 @@ namespace Games.Risk.ViewModel
         private int? _indexOfTargetTerritory;
         private int[] _indexesOfHostileNeighbours;
         private int[] _indexesOfReachableTerritories;
-        private bool _displayAttackVector;
         private string _selectedDeployOption;
         private List<Card> _selectedCards;
         private bool _currentPlayerCanTradeInSelectedCards;
@@ -114,16 +113,6 @@ namespace Games.Risk.ViewModel
                 _application.Logger = _loggingActive
                     ? _viewModelLogger
                     : null;
-            }
-        }
-
-        public bool DisplayAttackVector
-        {
-            get => _displayAttackVector;
-            set
-            {
-                _displayAttackVector = value;
-                RaisePropertyChanged();
             }
         }
 
@@ -237,7 +226,6 @@ namespace Games.Risk.ViewModel
             LogViewModel = new LogViewModel(maxLineCount);
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
             LoggingActive = true;
-            DisplayAttackVector = true;
             PlayerViewModels = new ObservableCollection<PlayerViewModel>();
 
             _continents = GenerateContinents();
@@ -379,7 +367,7 @@ namespace Games.Risk.ViewModel
             {
                 if (_application.Engine.NextEventOccursAutomatically)
                 {
-                    await Delay(_delay);
+                    //await Delay(_delay);
 
                     var gameEvent = await _application.Engine.ExecuteNextEvent();
 
@@ -387,16 +375,31 @@ namespace Games.Risk.ViewModel
                     {
                         case PlayerAttacks playerAttacks:
                         {
-                            if (DisplayAttackVector)
-                            {
-                                var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
-                                var point2 = MapViewModel.PointViewModels[playerAttacks.Vertex2].Point;
+                            var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
+                            var point2 = MapViewModel.PointViewModels[playerAttacks.Vertex2].Point;
 
-                                SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
-                                SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
-                                ActiveTerritoryHighlighted = true;
-                                AttackVectorVisible = true;
+                            if (_indexOfActiveTerritory != playerAttacks.Vertex1)
+                            {
+                                AttackVectorVisible = false;
                             }
+
+                            SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
+                            SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
+                            ActiveTerritoryHighlighted = true;
+
+                            if (_indexOfActiveTerritory != playerAttacks.Vertex1)
+                            {
+                                await Delay(_delay, "(after highlighting active territory)");
+                            }
+
+                            AttackVectorVisible = true;
+
+                            if (_indexOfActiveTerritory != playerAttacks.Vertex1)
+                            {
+                                await Delay(_delay, "(after highligting target territory)");
+                            }
+
+                            _indexOfActiveTerritory = playerAttacks.Vertex1;
 
                             if (!_application.Engine.GameDecided)
                             {
@@ -429,6 +432,7 @@ namespace Games.Risk.ViewModel
                                 _indexOfActiveTerritory = null;
                                 ActiveTerritoryHighlighted = false;
                                 AttackVectorVisible = false;
+                                _delay = 0; //500;
                             }
 
                             if (playerDeploysArmies.TurnGoesToNextPlayer)
@@ -454,25 +458,24 @@ namespace Games.Risk.ViewModel
 
                     LogGameEvent(gameEvent);
 
-                    //await Delay(_delay);
-
-                    // Måske lidt overkill - prøv bare at opdatere de 2 vertices, der er i spil
                     SyncControlsWithApplication();
 
-                    await Delay(_delay);
+                    if (!(gameEvent is PlayerPasses))
+                    {
+                        await Delay(_delay, "(generally after event)");
+                    }
 
                     if (gameEvent.TurnGoesToNextPlayer)
                     {
                         SwitchToNextPlayer();
+                        await Delay(_delay, "(after switching to next player)");
                     }
 
-                    //_delay = 0;
                     continue;
                 }
 
                 UpdateCommandAvailability();
 
-                //_delay = 0;
                 break;
             }
 
@@ -531,8 +534,6 @@ namespace Games.Risk.ViewModel
 
             tempArray = tempArray.Shuffle(_random).ToArray();
 
-            //var indexOfPlayer = _random.Next(0, playerCount);
-            //tempArray[indexOfPlayer] = false;
             _application.Engine = new Engine(tempArray, _random, _graphOfTerritories);
             _application.Engine.Initialize(_continents);
             _indexOfActiveTerritory = null;
@@ -568,21 +569,31 @@ namespace Games.Risk.ViewModel
 
             DeployMultipleArmiesPossible = false;
 
-            //PlayerViewModels[indexOfPlayer].SelectedCards.PropertyChanged += (s, e) =>
-            //{
-            //    _selectedCards = PlayerViewModels[indexOfPlayer].SelectedCards.Object;
+            for (var playerIndex = 0; playerIndex < playerCount; playerIndex++)
+            {
+                if (tempArray[playerIndex])
+                {
+                    continue;
+                }
 
-            //    _currentPlayerCanTradeInSelectedCards =
-            //        _selectedCards.Count == 3 &&
-            //        (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 3 ||
-            //         _selectedCards.Count(_ => _.Type == CardType.Horse) == 3 ||
-            //         _selectedCards.Count(_ => _.Type == CardType.Cannon) == 3 ||
-            //         (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 1 &&
-            //          _selectedCards.Count(_ => _.Type == CardType.Horse) == 1 &&
-            //          _selectedCards.Count(_ => _.Type == CardType.Cannon) == 1));
+                var dummy = playerIndex;
 
-            //    UpdateCommandAvailability();
-            //};
+                PlayerViewModels[dummy].SelectedCards.PropertyChanged += (s, e) =>
+                {
+                    _selectedCards = PlayerViewModels[dummy].SelectedCards.Object;
+
+                    _currentPlayerCanTradeInSelectedCards =
+                        _selectedCards.Count == 3 &&
+                        (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 3 ||
+                         _selectedCards.Count(_ => _.Type == CardType.Horse) == 3 ||
+                         _selectedCards.Count(_ => _.Type == CardType.Cannon) == 3 ||
+                         (_selectedCards.Count(_ => _.Type == CardType.Soldier) == 1 &&
+                          _selectedCards.Count(_ => _.Type == CardType.Horse) == 1 &&
+                          _selectedCards.Count(_ => _.Type == CardType.Cannon) == 1));
+
+                    UpdateCommandAvailability();
+                };
+            }
 
             // Diagnostics (only makes a difference when players start with cards, which they usually don't)
             for (var i = 0; i < tempArray.Length; i++)
@@ -659,7 +670,7 @@ namespace Games.Risk.ViewModel
                    PlayerHasInitiative &&
                    _currentPlayerCanTradeInSelectedCards &&
                    _application.Engine.SetupPhaseComplete &&
-                   _application.Engine.CurrentPlayerMayReinforce &&
+                   _application.Engine.CurrentPlayerMayReinforce && // Det her er lidt problematisk, for generelt skal man trade kort i starten af sin tur, men man skal også hvis man har for mange kort pga at man har slået en anden spiller ud
                    !_application.Engine.CurrentPlayerHasMovedTroops;
         }
 
@@ -714,10 +725,12 @@ namespace Games.Risk.ViewModel
 
             if (_application.Engine.SetupPhaseComplete)
             {
+                // Update the number of armies to deploy for the current player
                 PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy = _application.Engine.ExtraArmiesForCurrentPlayer;
             }
             else
             {
+                // Update the number of armies to deploy for the previous player (since the turn went to the next player)
                 var previousPlayerIndex =
                     (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) %
                     _application.Engine.PlayerCount;
@@ -729,7 +742,7 @@ namespace Games.Risk.ViewModel
             UpdateCommandAvailability();
             LogGameEvent(gameEvent);
 
-            await Delay(_delay);
+            //await Delay(_delay);
 
             if (gameEvent.TurnGoesToNextPlayer)
             {
@@ -828,6 +841,14 @@ namespace Games.Risk.ViewModel
 
         private bool CanAttack()
         {
+            if (_application.Engine != null &&
+                _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
+                !_playerGotCardDuringCurrentTurn)
+            {
+                // Player must trade cards
+                return false;
+            }
+
             return GameInProgress && 
                    PlayerHasInitiative &&
                    PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy == 0 &&
@@ -836,7 +857,6 @@ namespace Games.Risk.ViewModel
                    _application.Engine.SetupPhaseComplete &&
                    !_application.Engine.CurrentPlayerHasReinforced &&
                    !_application.Engine.CurrentPlayerHasMovedTroops &&
-                   !(!_playerGotCardDuringCurrentTurn && _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5) &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex != _application.Engine.CurrentPlayerIndex;
         }
@@ -870,6 +890,14 @@ namespace Games.Risk.ViewModel
 
         private bool CanMove()
         {
+            if (_application.Engine != null &&
+                _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
+                !_playerGotCardDuringCurrentTurn)
+            {
+                // Player must trade cards
+                return false;
+            }
+
             return GameInProgress &&
                    PlayerHasInitiative &&
                    PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy == 0 &&
@@ -877,7 +905,6 @@ namespace Games.Risk.ViewModel
                    _indexOfTargetTerritory.HasValue &&
                    _application.Engine.SetupPhaseComplete &&
                    !_application.Engine.CurrentPlayerHasMovedTroops &&
-                   !(!_playerGotCardDuringCurrentTurn && _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5) &&
                    _application.Engine.GetTerritoryStatus(_indexOfActiveTerritory.Value).Armies > 1 &&
                    _application.Engine.GetTerritoryStatus(_indexOfTargetTerritory.Value).ControllingPlayerIndex == _application.Engine.CurrentPlayerIndex;
         }
@@ -910,11 +937,17 @@ namespace Games.Risk.ViewModel
 
         private bool CanPass()
         {
+            if (_application.Engine != null &&
+                _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
+                !_playerGotCardDuringCurrentTurn)
+            {
+                // Player must trade cards
+                return false;
+            }
+
             return GameInProgress &&
                    PlayerHasInitiative &&
-                   PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy == 0 &&
-                   !(!_playerGotCardDuringCurrentTurn &&
-                     _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5);
+                   PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy == 0;
         }
 
         private void SyncControlsWithApplication()
@@ -1163,12 +1196,24 @@ namespace Games.Risk.ViewModel
         }
 
         private async Task Delay(
-            int milliSeconds)
+            int milliSeconds,
+            string tag)
         {
             if (milliSeconds > 0)
             {
                 await Task.Delay(milliSeconds);
             }
+
+            var sb = new StringBuilder("----------------------------------------------------------");
+
+            if (tag != null)
+            {
+                sb.Append(tag);
+            }
+
+            _application.Logger?.WriteLine(
+                LogMessageCategory.Information,
+                sb.ToString());
         }
 
         private void LogGameEvent(

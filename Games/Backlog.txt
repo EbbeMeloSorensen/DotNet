@@ -36,11 +36,15 @@ Done:
 In progress:
 
 Todo
+* Mht hvilke muligheder man som spiller har på et givet tidspunkt, er det blevet lidt rigeligt komplekst - 
+  især når man efter at have udslettet en modstander potentielt er tvunget til at bytte kort med det samme - 
+  måske skulle du lade det afgøre af en tilstandsmaskine i stedet.
+* Når man erobrer et territorium, skal det erobrede område blive det nye akrive område (fordi man ofte i praksis fortsætter med at angribe derfra)
 * Der skal kunne være et vilkårligt antal (evt ingen) af spillerne, der er human controlled
+* Man skal kunne pause og resume spillet
 * En spiller, der er død, skal bare skippe (det kan passende være et nyt game event), og der skal tegnes et skelethoved for vedkommende
 * I setup fasen skal der være samme mulighed som under det resterende spil for at sætte flere armeer på samme felt. Hvis man gør det, så skal man springes over et antal gange
   - benyt samme mekanisme som når en spiller er død med at skippe
-* Når man erobrer et territorium, skal det erobrede område blive det nye akrive område (fordi man ofte i praksis fortsætter med at angribe derfra)
 * Når man trader kort ind (generelt når antallet af kort ændrer sig) skal det opdateres, om "watch cards"-knappen er synlig
 * Der skal være en MinHeight for PlayerView, og så skal den udvides i takt med at man får flere kort 
 * Når man starter sin tur, skal der ikke være nogen selectede kort hos nogen spillere

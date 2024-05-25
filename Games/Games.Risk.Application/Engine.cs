@@ -198,7 +198,7 @@ namespace Games.Risk.Application
 
                 var chosenCandidate = bestAttackOptions.Shuffle(_random).First();
 
-                if (chosenCandidate.OpportunityRating > 1)
+                if (chosenCandidate.OpportunityRating > 0)
                 {
                     return Attack(
                         chosenCandidate.IndexOfTerritoryWhereAttackOriginates,
