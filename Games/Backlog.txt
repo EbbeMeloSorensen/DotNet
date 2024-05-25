@@ -32,6 +32,7 @@ Done:
 * Alle spillere skal placere tropper i en indledende fase
 * Når man har 5 kort i starten af sin tur, SKAL man bytte kort
 * Når man flytter armeer som det sidste i sin tur eller efter et angreb, skal default være, at man flytter så mange tropper som muligt
+* Når man erobrer et territorium, skal det erobrede område blive det nye akrive område (fordi man ofte i praksis fortsætter med at angribe derfra)
 
 In progress:
 
@@ -39,7 +40,9 @@ Todo
 * Mht hvilke muligheder man som spiller har på et givet tidspunkt, er det blevet lidt rigeligt komplekst - 
   især når man efter at have udslettet en modstander potentielt er tvunget til at bytte kort med det samme - 
   måske skulle du lade det afgøre af en tilstandsmaskine i stedet.
-* Når man erobrer et territorium, skal det erobrede område blive det nye akrive område (fordi man ofte i praksis fortsætter med at angribe derfra)
+  Fsa det at være tvunget til at bytte kort - det er man, når:
+  1) Man starter sin tur med 5 kort
+  2) Man efter at have udslettet en modstander og overtaget dennes kort har mere end 5 kort
 * Der skal kunne være et vilkårligt antal (evt ingen) af spillerne, der er human controlled
 * Man skal kunne pause og resume spillet
 * En spiller, der er død, skal bare skippe (det kan passende være et nyt game event), og der skal tegnes et skelethoved for vedkommende

@@ -350,7 +350,7 @@ namespace Games.Risk.ViewModel
                     .IndexesOfHostileNeighbourTerritories(territoryId)
                     .ToArray();
 
-                // Identify hostile neighbors the player can attack
+                // Identify other controlled territories reachable from active territory
                 _indexesOfReachableTerritories = _application.Engine
                     .IndexesOfReachableTerritories(territoryId)
                     .ToArray();
@@ -827,9 +827,18 @@ namespace Games.Risk.ViewModel
                         false,
                         true);
 
+                    _indexOfActiveTerritory = _indexOfTargetTerritory;
+
                     _indexesOfHostileNeighbours = _application.Engine
                         .IndexesOfHostileNeighbourTerritories(_indexOfActiveTerritory.Value)
                         .ToArray();
+
+                    _indexesOfReachableTerritories = _application.Engine
+                        .IndexesOfReachableTerritories(_indexOfActiveTerritory.Value)
+                        .ToArray();
+
+                    SelectedVertexCanvasPosition = MapViewModel.PointViewModels[_indexOfActiveTerritory.Value].Point - new PointD(20, 20);
+                    ActiveTerritoryHighlighted = true;
                 }
 
                 AttackVectorVisible = false;
