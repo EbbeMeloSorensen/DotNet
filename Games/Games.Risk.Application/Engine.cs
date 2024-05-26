@@ -83,8 +83,8 @@ namespace Games.Risk.Application
                 2 => 40,
                 3 => 35,
                 4 => 30,
-                5 => 12, //25,
-                6 => 3, //20
+                5 => 25, //25,
+                6 => 20, //20
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -108,8 +108,8 @@ namespace Games.Risk.Application
 
         public void StartGame()
         {
-            //DistributeTerritoriesAmongPlayers();
-            DistributeTerritoriesAmongPlayers2();
+            DistributeTerritoriesAmongPlayers();
+            //DistributeTerritoriesAmongPlayers2();
 
             GameInProgress = true;
             CurrentPlayerMayReinforce = true;
