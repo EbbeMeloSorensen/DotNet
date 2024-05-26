@@ -56,6 +56,7 @@ namespace Games.Risk.ViewModel
         private List<Card> _selectedCards;
         private bool _currentPlayerCanTradeInSelectedCards;
         private bool _playerGotCardDuringCurrentTurn;
+        private bool _tradingCardsAfterDefeatingOpponent;
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
@@ -495,12 +496,6 @@ namespace Games.Risk.ViewModel
             }
 
             UpdateCommandAvailability();
-
-            // Diagnotics: Make the game fully automatic by making the player pass
-            if (PlayerHasInitiative)
-            {
-                //await Pass();
-            }
         }
 
         private void OpenSettingsDialog(
@@ -536,6 +531,7 @@ namespace Games.Risk.ViewModel
             _application.Engine.Initialize(_continents);
             _indexOfActiveTerritory = null;
             _indexOfTargetTerritory = null;
+            PlayerHasInitiative = false;
 
             _application.Engine.StartGame();
 
@@ -648,6 +644,12 @@ namespace Games.Risk.ViewModel
             _selectedCards = null;
             _currentPlayerCanTradeInSelectedCards = false;
 
+            if (_tradingCardsAfterDefeatingOpponent &&
+                _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count < 5)
+            {
+                _tradingCardsAfterDefeatingOpponent = false;
+            }
+
             PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy = 
                 _application.Engine.ExtraArmiesForCurrentPlayer;
 
@@ -668,7 +670,7 @@ namespace Games.Risk.ViewModel
                    PlayerHasInitiative &&
                    _currentPlayerCanTradeInSelectedCards &&
                    _application.Engine.SetupPhaseComplete &&
-                   _application.Engine.CurrentPlayerMayReinforce && // Det her er lidt problematisk, for generelt skal man trade kort i starten af sin tur, men man skal også hvis man har for mange kort pga at man har slået en anden spiller ud
+                   (_application.Engine.CurrentPlayerMayReinforce || _tradingCardsAfterDefeatingOpponent)&&
                    !_application.Engine.CurrentPlayerHasMovedTroops;
         }
 
@@ -792,6 +794,11 @@ namespace Games.Risk.ViewModel
                     {
                         UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
                         UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
+
+                        if (_application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count > 5)
+                        {
+                            _tradingCardsAfterDefeatingOpponent = true;
+                        }
                     }
                     else if (playerAttacks.Card != null)
                     {
@@ -849,9 +856,10 @@ namespace Games.Risk.ViewModel
 
         private bool CanAttack()
         {
-            if (_application.Engine != null &&
-                _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
-                !_playerGotCardDuringCurrentTurn)
+            if (_tradingCardsAfterDefeatingOpponent ||
+                (_application.Engine != null &&
+                 _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
+                 !_playerGotCardDuringCurrentTurn))
             {
                 // Player must trade cards
                 return false;
@@ -898,9 +906,10 @@ namespace Games.Risk.ViewModel
 
         private bool CanMove()
         {
-            if (_application.Engine != null &&
-                _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
-                !_playerGotCardDuringCurrentTurn)
+            if (_tradingCardsAfterDefeatingOpponent ||
+                (_application.Engine != null &&
+                 _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
+                 !_playerGotCardDuringCurrentTurn))
             {
                 // Player must trade cards
                 return false;
@@ -945,9 +954,10 @@ namespace Games.Risk.ViewModel
 
         private bool CanPass()
         {
-            if (_application.Engine != null &&
-                _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
-                !_playerGotCardDuringCurrentTurn)
+            if (_tradingCardsAfterDefeatingOpponent ||
+                (_application.Engine != null &&
+                 _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
+                 !_playerGotCardDuringCurrentTurn))
             {
                 // Player must trade cards
                 return false;
@@ -1346,8 +1356,11 @@ namespace Games.Risk.ViewModel
         private void SwitchToNextPlayer()
         {
             _selectedCards = null;
+            _indexOfActiveTerritory = null;
+            _indexOfTargetTerritory = null;
             _currentPlayerCanTradeInSelectedCards = false;
             _playerGotCardDuringCurrentTurn = false;
+            _tradingCardsAfterDefeatingOpponent = false;
 
             var indexOfPreviousPlayer = 
                 (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) %
@@ -1356,6 +1369,8 @@ namespace Games.Risk.ViewModel
             PlayerViewModels[indexOfPreviousPlayer].WatchCardsButtonVisible = false;
             PlayerViewModels[indexOfPreviousPlayer].HandHidden = true;
 
+            ActiveTerritoryHighlighted = false;
+            AttackVectorVisible = false;
             HighlightCurrentPlayer();
             UpdateCommandAvailability();
 
@@ -1489,6 +1504,7 @@ namespace Games.Risk.ViewModel
             var playerViewModel = PlayerViewModels[playerIndex];
             var cardViewModels = playerViewModel.CardViewModels;
 
+            playerViewModel.Height = 0;
             cardViewModels.Clear();
 
             _application.Engine.GetHand(playerIndex).ForEach(_ =>

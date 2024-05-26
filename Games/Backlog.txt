@@ -33,6 +33,8 @@ Done:
 * Når man har 5 kort i starten af sin tur, SKAL man bytte kort
 * Når man flytter armeer som det sidste i sin tur eller efter et angreb, skal default være, at man flytter så mange tropper som muligt
 * Når man erobrer et territorium, skal det erobrede område blive det nye akrive område (fordi man ofte i praksis fortsætter med at angribe derfra)
+* Bug: Hvis du trykker new game 2 gange efter hinanden, så vises show/hide knappen for kortene for mange spillere, inkl computer spillere
+* Bug: Når man er færdig med setup fasen, så er Deploy-knappen stadig aktiv, og så kan man placere sine tropper på en anden spillers territorium
 
 In progress:
 

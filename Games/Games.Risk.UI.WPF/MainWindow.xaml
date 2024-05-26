@@ -114,8 +114,9 @@
                                            HorizontalAlignment="Right" VerticalAlignment="Bottom"
                                            Text="{Binding ArmiesToDeployText}"
                                            Visibility="{Binding ArmiesToDeployTextVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                <Canvas Grid.Row="0" Grid.Column="2" Width="122" MinHeight="75"
-                                        VerticalAlignment="Top">
+                                <Canvas Grid.Row="0" Grid.Column="2" Width="122"
+                                        MinHeight="75" VerticalAlignment="Top"
+                                        Height="{Binding Height}">
                                     <ItemsControl ItemsSource="{Binding CardViewModels}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>

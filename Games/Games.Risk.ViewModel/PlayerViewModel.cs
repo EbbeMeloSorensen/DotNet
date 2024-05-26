@@ -13,6 +13,7 @@ namespace Games.Risk.ViewModel
     {
         private bool _hasInitiative;
         private Brush _brush;
+        private double _height;
         private bool _watchCardsButtonVisible;
         private string _watchCardsButtonText;
         private RelayCommand _toggleCardsVisibilityCommand;
@@ -29,6 +30,16 @@ namespace Games.Risk.ViewModel
             set
             {
                 _brush = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double Height
+        {
+            get => _height;
+            set
+            {
+                _height = value;
                 RaisePropertyChanged();
             }
         }
@@ -146,6 +157,7 @@ namespace Games.Risk.ViewModel
             };
 
             CardViewModels.Add(cardViewModel);
+            Height = 62 + (CardViewModels.Count - 1) * 13;
 
             cardViewModel.CardClicked += (s, e) =>
             {
