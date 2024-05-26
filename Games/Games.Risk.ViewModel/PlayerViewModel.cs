@@ -1,12 +1,10 @@
-using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Documents;
 using System.Windows.Media;
-using Craft.Utils;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Craft.Utils;
 using Games.Risk.Application;
 
 namespace Games.Risk.ViewModel
@@ -133,6 +131,7 @@ namespace Games.Risk.ViewModel
             WatchCardsButtonText = "Watch";
             ArmiesToDeploy = 0;
             ArmiesToDeployTextVisible = true;
+            HandHidden = true;
         }
 
         public void AddCardViewModel(

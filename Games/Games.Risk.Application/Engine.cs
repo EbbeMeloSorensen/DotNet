@@ -84,20 +84,20 @@ namespace Games.Risk.Application
                 3 => 35,
                 4 => 30,
                 5 => 12, //25,
-                6 => 20,
+                6 => 3, //20
                 _ => throw new ArgumentOutOfRangeException()
             };
 
             _armiesToDeploy = Enumerable.Repeat(troopsPrPlayer, playerCount).ToArray();
 
             // Diagnostics: Each player starts with some cards
-            //for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
-            //{
-            //    for (var x = 0; x < 4; x++)
-            //    {
-            //        _hands[playerIndex].Add(DrawCardFromDrawPile());
-            //    }
-            //}
+            for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
+            {
+                for (var x = 0; x < 3; x++)
+                {
+                    _hands[playerIndex].Add(DrawCardFromDrawPile());
+                }
+            }
         }
 
         public void Initialize(
@@ -108,8 +108,8 @@ namespace Games.Risk.Application
 
         public void StartGame()
         {
-            DistributeTerritoriesAmongPlayers();
-            //DistributeTerritoriesAmongPlayers2();
+            //DistributeTerritoriesAmongPlayers();
+            DistributeTerritoriesAmongPlayers2();
 
             GameInProgress = true;
             CurrentPlayerMayReinforce = true;
@@ -883,48 +883,48 @@ namespace Games.Risk.Application
         {
             _territoryStatusMap = new Dictionary<int, TerritoryStatus>
             {
-                [0] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 3 },
-                [1] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [2] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [3] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [4] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [5] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [6] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [7] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [8] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [9] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [10] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [11] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [12] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [13] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [14] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [15] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [16] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [17] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [18] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [19] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [20] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [21] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [22] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [23] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [24] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [25] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [26] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [27] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [28] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [29] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [30] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [31] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [32] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [33] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [34] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [35] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [36] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [37] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [38] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [39] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [40] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 },
-                [41] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 3 }
+                [0] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [1] = new TerritoryStatus { ControllingPlayerIndex = 1, Armies = 1 },
+                [2] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 1 },
+                [3] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [4] = new TerritoryStatus { ControllingPlayerIndex = 4, Armies = 1 },
+                [5] = new TerritoryStatus { ControllingPlayerIndex = 5, Armies = 1 },
+                [6] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [7] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [8] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [9] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [10] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [11] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [12] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [13] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [14] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [15] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [16] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [17] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [18] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [19] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [20] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [21] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [22] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [23] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [24] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [25] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [26] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [27] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [28] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [29] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [30] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [31] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [32] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [33] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [34] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [35] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [36] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [37] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [38] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [39] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [40] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
+                [41] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 }
             };
         }
 

@@ -367,8 +367,6 @@ namespace Games.Risk.ViewModel
             {
                 if (_application.Engine.NextEventOccursAutomatically)
                 {
-                    //await Delay(_delay);
-
                     var gameEvent = await _application.Engine.ExecuteNextEvent();
 
                     switch (gameEvent)
@@ -432,7 +430,7 @@ namespace Games.Risk.ViewModel
                                 _indexOfActiveTerritory = null;
                                 ActiveTerritoryHighlighted = false;
                                 AttackVectorVisible = false;
-                                _delay = 0; //500;
+                                //_delay = 0; //500;
                             }
 
                             if (playerDeploysArmies.TurnGoesToNextPlayer)
@@ -468,7 +466,7 @@ namespace Games.Risk.ViewModel
                     if (gameEvent.TurnGoesToNextPlayer)
                     {
                         SwitchToNextPlayer();
-                        await Delay(_delay, "(after switching to next player)");
+                        await Delay(_delay, "(after switching to next player - 1)");
                     }
 
                     continue;
@@ -747,6 +745,7 @@ namespace Games.Risk.ViewModel
             if (gameEvent.TurnGoesToNextPlayer)
             {
                 SwitchToNextPlayer();
+                await Delay(_delay, "(after switching to next player - 2)");
                 await Proceed();
             }
         }
@@ -1213,16 +1212,16 @@ namespace Games.Risk.ViewModel
                 await Task.Delay(milliSeconds);
             }
 
-            var sb = new StringBuilder("----------------------------------------------------------");
+            //var sb = new StringBuilder("----------------------------------------------------------");
 
-            if (tag != null)
-            {
-                sb.Append(tag);
-            }
+            //if (tag != null)
+            //{
+            //    sb.Append(tag);
+            //}
 
-            _application.Logger?.WriteLine(
-                LogMessageCategory.Information,
-                sb.ToString());
+            //_application.Logger?.WriteLine(
+            //    LogMessageCategory.Information,
+            //    sb.ToString());
         }
 
         private void LogGameEvent(
