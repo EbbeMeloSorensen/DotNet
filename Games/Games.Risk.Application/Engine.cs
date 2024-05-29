@@ -91,13 +91,13 @@ namespace Games.Risk.Application
             _armiesToDeploy = Enumerable.Repeat(troopsPrPlayer, playerCount).ToArray();
 
             // Diagnostics: Each player starts with some cards
-            for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
-            {
-                for (var x = 0; x < 3; x++)
-                {
-                    _hands[playerIndex].Add(DrawCardFromDrawPile());
-                }
-            }
+            //for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
+            //{
+            //    for (var x = 0; x < 3; x++)
+            //    {
+            //        _hands[playerIndex].Add(DrawCardFromDrawPile());
+            //    }
+            //}
         }
 
         public void Initialize(
@@ -287,6 +287,11 @@ namespace Games.Risk.Application
             int playerIndex)
         {
             return _hands[playerIndex];
+        }
+
+        public void CompleteSetupHaseIfPoolIsEmpty()
+        {
+            SetupPhaseComplete = _armiesToDeploy.Sum() == 0;
         }
 
         public int ArmiesLeftInPool(

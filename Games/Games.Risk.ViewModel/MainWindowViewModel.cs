@@ -57,6 +57,7 @@ namespace Games.Risk.ViewModel
         private bool _currentPlayerCanTradeInSelectedCards;
         private bool _playerGotCardDuringCurrentTurn;
         private bool _tradingCardsAfterDefeatingOpponent;
+        private int?[] _activeTerritoryDuringSetupPhase; 
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
@@ -346,15 +347,18 @@ namespace Games.Risk.ViewModel
                 ActiveTerritoryHighlighted = true;
                 AttackVectorVisible = false;
 
-                // Identify hostile neighboring territories the player can attack
-                _indexesOfHostileNeighbours = _application.Engine
-                    .IndexesOfHostileNeighbourTerritories(territoryId)
-                    .ToArray();
+                if (_application.Engine.SetupPhaseComplete)
+                {
+                    // Identify hostile neighboring territories the player can attack
+                    _indexesOfHostileNeighbours = _application.Engine
+                        .IndexesOfHostileNeighbourTerritories(territoryId)
+                        .ToArray();
 
-                // Identify other controlled territories reachable from active territory
-                _indexesOfReachableTerritories = _application.Engine
-                    .IndexesOfReachableTerritories(territoryId)
-                    .ToArray();
+                    // Identify other controlled territories reachable from active territory
+                    _indexesOfReachableTerritories = _application.Engine
+                        .IndexesOfReachableTerritories(territoryId)
+                        .ToArray();
+                }
 
                 UpdateCommandAvailability();
             };
@@ -519,13 +523,15 @@ namespace Games.Risk.ViewModel
             // Create engine
             var tempArray = Enumerable.Repeat(true, playerCount).ToArray();
 
-            var humanPlayers = 1;
+            var humanPlayers = 3;
             for (var i = 0; i < humanPlayers; i++)
             {
                 tempArray[i] = false;
             }
 
             tempArray = tempArray.Shuffle(_random).ToArray();
+
+            _activeTerritoryDuringSetupPhase = new int?[playerCount];
 
             _application.Engine = new Engine(tempArray, _random, _graphOfTerritories);
             _application.Engine.Initialize(_continents);
@@ -735,14 +741,16 @@ namespace Games.Risk.ViewModel
                     (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) %
                     _application.Engine.PlayerCount;
 
-                PlayerViewModels[previousPlayerIndex].ArmiesToDeploy = _application.Engine.ArmiesLeftInPool(previousPlayerIndex);
+                PlayerViewModels[previousPlayerIndex].ArmiesToDeploy =
+                    _application.Engine.ArmiesLeftInPool(previousPlayerIndex);
+
+                _activeTerritoryDuringSetupPhase[previousPlayerIndex] = _indexOfActiveTerritory.Value;
+                _application.Engine.CompleteSetupHaseIfPoolIsEmpty();
             }
 
             SyncControlsWithApplication();
             UpdateCommandAvailability();
             LogGameEvent(gameEvent);
-
-            //await Delay(_delay);
 
             if (gameEvent.TurnGoesToNextPlayer)
             {
@@ -1369,7 +1377,6 @@ namespace Games.Risk.ViewModel
             PlayerViewModels[indexOfPreviousPlayer].WatchCardsButtonVisible = false;
             PlayerViewModels[indexOfPreviousPlayer].HandHidden = true;
 
-            ActiveTerritoryHighlighted = false;
             AttackVectorVisible = false;
             HighlightCurrentPlayer();
             UpdateCommandAvailability();
@@ -1384,18 +1391,30 @@ namespace Games.Risk.ViewModel
                 }
             }
 
-            if (!_application.Engine.SetupPhaseComplete)
+            if (_application.Engine.SetupPhaseComplete)
             {
+                ActiveTerritoryHighlighted = false;
+                DeployMultipleArmiesPossible = true;
+                AssignExtraArmiesForControlledContinents();
+            }
+            else
+            {
+                if (PlayerHasInitiative && _activeTerritoryDuringSetupPhase[_application.Engine.CurrentPlayerIndex].HasValue)
+                {
+                    _indexOfActiveTerritory = _activeTerritoryDuringSetupPhase[_application.Engine.CurrentPlayerIndex].Value;
+                    SelectedVertexCanvasPosition = MapViewModel.PointViewModels[_indexOfActiveTerritory.Value].Point - new PointD(20, 20);
+                    ActiveTerritoryHighlighted = true;
+                }
+                else
+                {
+                    ActiveTerritoryHighlighted = false;
+                }
+
                 PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy =
                     _application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex);
 
                 DeployMultipleArmiesPossible = false;
                 AssignAnArmyFromInitialPool();
-            }
-            else
-            {
-                DeployMultipleArmiesPossible = true;
-                AssignExtraArmiesForControlledContinents();
             }
 
             if (_application.Engine.SetupPhaseComplete)
