@@ -374,93 +374,8 @@ namespace Games.Risk.ViewModel
                 {
                     var gameEvent = await _application.Engine.ExecuteNextEvent();
 
-                    switch (gameEvent)
-                    {
-                        case PlayerAttacks playerAttacks:
-                        {
-                            var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
-                            var point2 = MapViewModel.PointViewModels[playerAttacks.Vertex2].Point;
-
-                            if (_indexOfActiveTerritory != playerAttacks.Vertex1)
-                            {
-                                AttackVectorVisible = false;
-                            }
-
-                            SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
-                            SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
-                            ActiveTerritoryHighlighted = true;
-
-                            if (_indexOfActiveTerritory != playerAttacks.Vertex1)
-                            {
-                                await Delay(_delay, "(after highlighting active territory)");
-                            }
-
-                            AttackVectorVisible = true;
-
-                            if (_indexOfActiveTerritory != playerAttacks.Vertex1)
-                            {
-                                await Delay(_delay, "(after highligting target territory)");
-                            }
-
-                            _indexOfActiveTerritory = playerAttacks.Vertex1;
-
-                            if (!_application.Engine.GameDecided)
-                            {
-                                if (playerAttacks.DefendingPlayerDefeated)
-                                {
-                                    UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
-                                    UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
-                                }
-                                else if (playerAttacks.Card != null)
-                                {
-                                    PlayerViewModels[_application.Engine.CurrentPlayerIndex]
-                                        .AddCardViewModel(
-                                            _territoryNameMap[playerAttacks.Card.TerritoryIndex],
-                                            playerAttacks.Card);
-                                }
-                            }
-
-                            break;
-                        }
-                        case PlayerTradesInCards:
-                        {
-                            UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
-                            ActiveTerritoryHighlighted = false;
-                            AttackVectorVisible = false;
-                            break;
-                        }
-                        case PlayerDeploysArmies playerDeploysArmies:
-                            if (_application.Engine.SetupPhaseComplete)
-                            {
-                                _indexOfActiveTerritory = null;
-                                ActiveTerritoryHighlighted = false;
-                                AttackVectorVisible = false;
-                                //_delay = 0; //500;
-                            }
-
-                            if (playerDeploysArmies.TurnGoesToNextPlayer)
-                            {
-                                var indexOfPreviousPlayer =
-                                    (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) %
-                                    _application.Engine.PlayerCount;
-
-                                PlayerViewModels[indexOfPreviousPlayer].ArmiesToDeploy =
-                                    _application.Engine.ArmiesLeftInPool(indexOfPreviousPlayer);
-                            }
-
-                            break;
-                        case PlayerReinforces:
-                        case PlayerTransfersArmies:
-                        case PlayerPasses:
-                        {
-                            ActiveTerritoryHighlighted = false;
-                            AttackVectorVisible = false;
-                            break;
-                        }
-                    }
-
+                    await HandleGameEvent(gameEvent);
                     LogGameEvent(gameEvent);
-
                     SyncControlsWithApplication();
 
                     if (!(gameEvent is PlayerPasses))
@@ -1240,6 +1155,97 @@ namespace Games.Risk.ViewModel
             //_application.Logger?.WriteLine(
             //    LogMessageCategory.Information,
             //    sb.ToString());
+        }
+
+        private async Task HandleGameEvent(
+            IGameEvent gameEvent)
+        {
+            switch (gameEvent)
+            {
+                case PlayerAttacks playerAttacks:
+                    {
+                        var point1 = MapViewModel.PointViewModels[playerAttacks.Vertex1].Point;
+                        var point2 = MapViewModel.PointViewModels[playerAttacks.Vertex2].Point;
+
+                        if (_indexOfActiveTerritory != playerAttacks.Vertex1)
+                        {
+                            AttackVectorVisible = false;
+                        }
+
+                        SelectedVertexCanvasPosition = point1 - new PointD(20, 20);
+                        SelectedTargetVertexCanvasPosition = point2 - new PointD(20, 20);
+                        ActiveTerritoryHighlighted = true;
+
+                        if (_indexOfActiveTerritory != playerAttacks.Vertex1)
+                        {
+                            await Delay(_delay, "(after highlighting active territory)");
+                        }
+
+                        AttackVectorVisible = true;
+
+                        if (_indexOfActiveTerritory != playerAttacks.Vertex1)
+                        {
+                            await Delay(_delay, "(after highligting target territory)");
+                        }
+
+                        _indexOfActiveTerritory = playerAttacks.Vertex1;
+
+                        if (!_application.Engine.GameDecided)
+                        {
+                            if (playerAttacks.DefendingPlayerDefeated)
+                            {
+                                UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
+                                UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
+                            }
+                            else if (playerAttacks.Card != null)
+                            {
+                                PlayerViewModels[_application.Engine.CurrentPlayerIndex]
+                                    .AddCardViewModel(
+                                        _territoryNameMap[playerAttacks.Card.TerritoryIndex],
+                                        playerAttacks.Card);
+                            }
+                        }
+
+                        break;
+                    }
+                case PlayerTradesInCards:
+                    {
+                        UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
+                        ActiveTerritoryHighlighted = false;
+                        AttackVectorVisible = false;
+                        break;
+                    }
+                case PlayerDeploysArmies playerDeploysArmies:
+                    {
+                        if (_application.Engine.SetupPhaseComplete)
+                        {
+                            _indexOfActiveTerritory = null;
+                            ActiveTerritoryHighlighted = false;
+                            AttackVectorVisible = false;
+                            //_delay = 0; //500;
+                        }
+
+                        if (playerDeploysArmies.TurnGoesToNextPlayer)
+                        {
+                            var indexOfPreviousPlayer =
+                                (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) %
+                                _application.Engine.PlayerCount;
+
+                            PlayerViewModels[indexOfPreviousPlayer].ArmiesToDeploy =
+                                _application.Engine.ArmiesLeftInPool(indexOfPreviousPlayer);
+                        }
+
+                        break;
+                    }
+                case PlayerReinforces:
+                case PlayerTransfersArmies:
+                case PlayerPasses:
+                    {
+                        ActiveTerritoryHighlighted = false;
+                        AttackVectorVisible = false;
+                        break;
+                    }
+            }
         }
 
         private void LogGameEvent(
