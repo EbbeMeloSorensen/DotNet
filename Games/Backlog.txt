@@ -39,6 +39,7 @@ Done:
 In progress:
 
 Todo
+* Bug: Gul player, som er lige efter grøn, får 3 armeeer pr tur efter at hae taget Afrika, men får dem tilsyneladende ikke...
 * Mht hvilke muligheder man som spiller har på et givet tidspunkt, er det blevet lidt rigeligt komplekst - 
   især når man efter at have udslettet en modstander potentielt er tvunget til at bytte kort med det samme - 
   måske skulle du lade det afgøre af en tilstandsmaskine i stedet.
