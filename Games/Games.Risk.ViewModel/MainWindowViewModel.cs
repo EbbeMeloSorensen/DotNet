@@ -398,10 +398,6 @@ namespace Games.Risk.ViewModel
                     LogMessageCategory.Information,
                     $"Game decided. Player {_application.Engine.CurrentPlayerIndex + 1} wins");
             }
-            //else
-            //{
-            //    PlayerHasInitiative = true;
-            //}
 
             UpdateCommandAvailability();
         }
@@ -441,7 +437,6 @@ namespace Games.Risk.ViewModel
             _application.Engine.Initialize(_continents);
             _indexOfActiveTerritory = null;
             _indexOfTargetTerritory = null;
-            //PlayerHasInitiative = false;
 
             _application.Engine.StartGame();
 
@@ -856,7 +851,6 @@ namespace Games.Risk.ViewModel
             }
             else
             {
-                //PlayerHasInitiative = false;
                 SwitchToNextPlayer();
                 SyncControlsWithApplication();
                 UpdateCommandAvailability();
@@ -884,7 +878,6 @@ namespace Games.Risk.ViewModel
         {
             GameInProgress = _application.Engine.GameInProgress;
             GameDecided = _application.Engine.GameDecided;
-            //PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
 
             // Colors and numbers on map
             _graphOfTerritories.Vertices.ForEach(_ =>
