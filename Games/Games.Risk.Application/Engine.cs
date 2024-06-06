@@ -55,6 +55,8 @@ namespace Games.Risk.Application
             get => _players[CurrentPlayerIndex];
         }
 
+        public bool CurrentPlayerIsAutomatic => _players[CurrentPlayerIndex];
+
         public ILogger Logger { get; set; }
 
         public Engine(
@@ -108,8 +110,9 @@ namespace Games.Risk.Application
 
         public void StartGame()
         {
-            DistributeTerritoriesAmongPlayers();
+            //DistributeTerritoriesAmongPlayers();
             //DistributeTerritoriesAmongPlayers2();
+            DistributeTerritoriesAmongPlayers3();
 
             GameInProgress = true;
             CurrentPlayerMayReinforce = true;
@@ -389,25 +392,6 @@ namespace Games.Risk.Application
             }
         }
 
-        private IEnumerable<Card> GetCards(
-            IEnumerable<Card> hand,
-            CardType cardType,
-            int nCards)
-        {
-            return hand
-                .Where(_ => _.Type == cardType)
-                .Select(_ => new
-                {
-                    ExtraArmiesForIndividualCard = _territoryStatusMap[_.TerritoryIndex].ControllingPlayerIndex ==
-                                                   CurrentPlayerIndex
-                        ? 2
-                        : 0,
-                    Card = _
-                }).OrderByDescending(_ => _.ExtraArmiesForIndividualCard)
-                .Select(_ => _.Card)
-                .Take(nCards);
-        }
-
         public IGameEvent TransferArmies(
             int initialTerritoryIndex,
             int destinationTerritoryIndex,
@@ -439,6 +423,25 @@ namespace Games.Risk.Application
             CurrentPlayerHasMovedTroops = !postAttack;
 
             return gameEvent;
+        }
+
+        private IEnumerable<Card> GetCards(
+            IEnumerable<Card> hand,
+            CardType cardType,
+            int nCards)
+        {
+            return hand
+                .Where(_ => _.Type == cardType)
+                .Select(_ => new
+                {
+                    ExtraArmiesForIndividualCard = _territoryStatusMap[_.TerritoryIndex].ControllingPlayerIndex ==
+                                                   CurrentPlayerIndex
+                        ? 2
+                        : 0,
+                    Card = _
+                }).OrderByDescending(_ => _.ExtraArmiesForIndividualCard)
+                .Select(_ => _.Card)
+                .Take(nCards);
         }
 
         private IEnumerable<int> IndexesOfControlledTerritories(
@@ -930,6 +933,55 @@ namespace Games.Risk.Application
                 [39] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
                 [40] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 },
                 [41] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 20 }
+            };
+        }
+
+        private void DistributeTerritoriesAmongPlayers3()
+        {
+            _territoryStatusMap = new Dictionary<int, TerritoryStatus>
+            {
+                [0] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [1] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [2] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [3] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [4] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [5] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [6] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [7] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [8] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [9] = new TerritoryStatus { ControllingPlayerIndex = 0, Armies = 1 },
+                [10] = new TerritoryStatus { ControllingPlayerIndex = 1, Armies = 1 },
+                [11] = new TerritoryStatus { ControllingPlayerIndex = 1, Armies = 1 },
+                [12] = new TerritoryStatus { ControllingPlayerIndex = 1, Armies = 1 },
+                [13] = new TerritoryStatus { ControllingPlayerIndex = 1, Armies = 1 },
+                [14] = new TerritoryStatus { ControllingPlayerIndex = 1, Armies = 1 },
+                [15] = new TerritoryStatus { ControllingPlayerIndex = 1, Armies = 1 },
+                [16] = new TerritoryStatus { ControllingPlayerIndex = 1, Armies = 1 },
+                [17] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 1 },
+                [18] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 1 },
+                [19] = new TerritoryStatus { ControllingPlayerIndex = 2, Armies = 1 },
+                [20] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [21] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [22] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [23] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [24] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [25] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [26] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [27] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [28] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [29] = new TerritoryStatus { ControllingPlayerIndex = 3, Armies = 1 },
+                [30] = new TerritoryStatus { ControllingPlayerIndex = 4, Armies = 1 },
+                [31] = new TerritoryStatus { ControllingPlayerIndex = 4, Armies = 1 },
+                [32] = new TerritoryStatus { ControllingPlayerIndex = 4, Armies = 1 },
+                [33] = new TerritoryStatus { ControllingPlayerIndex = 4, Armies = 1 },
+                [34] = new TerritoryStatus { ControllingPlayerIndex = 4, Armies = 1 },
+                [35] = new TerritoryStatus { ControllingPlayerIndex = 5, Armies = 1 },
+                [36] = new TerritoryStatus { ControllingPlayerIndex = 5, Armies = 1 },
+                [37] = new TerritoryStatus { ControllingPlayerIndex = 5, Armies = 1 },
+                [38] = new TerritoryStatus { ControllingPlayerIndex = 5, Armies = 1 },
+                [39] = new TerritoryStatus { ControllingPlayerIndex = 5, Armies = 1 },
+                [40] = new TerritoryStatus { ControllingPlayerIndex = 5, Armies = 1 },
+                [41] = new TerritoryStatus { ControllingPlayerIndex = 5, Armies = 1 }
             };
         }
 

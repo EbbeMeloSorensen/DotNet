@@ -44,7 +44,6 @@ namespace Games.Risk.ViewModel
         private bool _loggingActive;
         private readonly Application.Application _application;
 
-        private bool _playerHasInitiative;
         private bool _gameInProgress;
         private bool _gameDecided;
         private string _gameResultMessage;
@@ -115,16 +114,6 @@ namespace Games.Risk.ViewModel
                 _application.Logger = _loggingActive
                     ? _viewModelLogger
                     : null;
-            }
-        }
-
-        public bool PlayerHasInitiative
-        {
-            get => _playerHasInitiative;
-            private set
-            {
-                _playerHasInitiative = value;
-                RaisePropertyChanged();
             }
         }
 
@@ -262,7 +251,7 @@ namespace Games.Risk.ViewModel
 
             MapViewModel.VertexClicked += (s, e) =>
             {
-                if (!PlayerHasInitiative)
+                if (_application.Engine.CurrentPlayerIsAutomatic)
                 {
                     return;
                 }
@@ -383,18 +372,18 @@ namespace Games.Risk.ViewModel
                         await Delay(_delay, "(generally after event)");
                     }
 
-                    if (gameEvent.TurnGoesToNextPlayer)
+                    if (!gameEvent.TurnGoesToNextPlayer)
                     {
-                        SwitchToNextPlayer();
-                        await Delay(_delay, "(after switching to next player - 1)");
+                        continue;
                     }
 
-                    continue;
+                    SwitchToNextPlayer();
+                    await Delay(_delay, "(after switching to next player - 1)");
                 }
-
-                UpdateCommandAvailability();
-
-                break;
+                else
+                {
+                    break;
+                }
             }
 
             if (_application.Engine.GameDecided)
@@ -409,10 +398,10 @@ namespace Games.Risk.ViewModel
                     LogMessageCategory.Information,
                     $"Game decided. Player {_application.Engine.CurrentPlayerIndex + 1} wins");
             }
-            else
-            {
-                PlayerHasInitiative = true;
-            }
+            //else
+            //{
+            //    PlayerHasInitiative = true;
+            //}
 
             UpdateCommandAvailability();
         }
@@ -452,7 +441,7 @@ namespace Games.Risk.ViewModel
             _application.Engine.Initialize(_continents);
             _indexOfActiveTerritory = null;
             _indexOfTargetTerritory = null;
-            PlayerHasInitiative = false;
+            //PlayerHasInitiative = false;
 
             _application.Engine.StartGame();
 
@@ -551,7 +540,7 @@ namespace Games.Risk.ViewModel
 
         private bool CanStartGame()
         {
-            return !GameInProgress || PlayerHasInitiative;
+            return !GameInProgress || !_application.Engine.CurrentPlayerIsAutomatic;
         }
 
         private async Task TradeInSelectedCards()
@@ -588,7 +577,7 @@ namespace Games.Risk.ViewModel
         private bool CanTradeInSelectedCards()
         {
             return GameInProgress &&
-                   PlayerHasInitiative &&
+                   !_application.Engine.CurrentPlayerIsAutomatic &&
                    _currentPlayerCanTradeInSelectedCards &&
                    _application.Engine.SetupPhaseComplete &&
                    (_application.Engine.CurrentPlayerMayReinforce || _tradingCardsAfterDefeatingOpponent)&&
@@ -614,7 +603,7 @@ namespace Games.Risk.ViewModel
         private bool CanReinforce()
         {
             return GameInProgress &&
-                   PlayerHasInitiative &&
+                   !_application.Engine.CurrentPlayerIsAutomatic &&
                    _application.Engine.SetupPhaseComplete &&
                    _application.Engine.CurrentPlayerMayReinforce &&
                    !_application.Engine.CurrentPlayerHasMovedTroops &&
@@ -678,7 +667,7 @@ namespace Games.Risk.ViewModel
         private bool CanDeploy()
         {
             return GameInProgress &&
-                   PlayerHasInitiative &&
+                   !_application.Engine.CurrentPlayerIsAutomatic &&
                    _indexOfActiveTerritory.HasValue &&
                    PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy > 0 &&
                    _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() < 5;
@@ -788,8 +777,8 @@ namespace Games.Risk.ViewModel
                 return false;
             }
 
-            return GameInProgress && 
-                   PlayerHasInitiative &&
+            return GameInProgress &&
+                   !_application.Engine.CurrentPlayerIsAutomatic &&
                    PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy == 0 &&
                    _indexOfActiveTerritory.HasValue &&
                    _indexOfTargetTerritory.HasValue &&
@@ -839,7 +828,7 @@ namespace Games.Risk.ViewModel
             }
 
             return GameInProgress &&
-                   PlayerHasInitiative &&
+                   !_application.Engine.CurrentPlayerIsAutomatic &&
                    PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy == 0 &&
                    _indexOfActiveTerritory.HasValue &&
                    _indexOfTargetTerritory.HasValue &&
@@ -867,7 +856,7 @@ namespace Games.Risk.ViewModel
             }
             else
             {
-                PlayerHasInitiative = false;
+                //PlayerHasInitiative = false;
                 SwitchToNextPlayer();
                 SyncControlsWithApplication();
                 UpdateCommandAvailability();
@@ -887,7 +876,7 @@ namespace Games.Risk.ViewModel
             }
 
             return GameInProgress &&
-                   PlayerHasInitiative &&
+                   !_application.Engine.CurrentPlayerIsAutomatic &&
                    PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy == 0;
         }
 
@@ -895,7 +884,7 @@ namespace Games.Risk.ViewModel
         {
             GameInProgress = _application.Engine.GameInProgress;
             GameDecided = _application.Engine.GameDecided;
-            PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
+            //PlayerHasInitiative = !_application.Engine.NextEventOccursAutomatically;
 
             // Colors and numbers on map
             _graphOfTerritories.Vertices.ForEach(_ =>
@@ -1387,7 +1376,7 @@ namespace Games.Risk.ViewModel
             HighlightCurrentPlayer();
             UpdateCommandAvailability();
 
-            if (PlayerHasInitiative)
+            if (!_application.Engine.CurrentPlayerIsAutomatic)
             {
                 var activePlayerViewModel = PlayerViewModels[_application.Engine.CurrentPlayerIndex];
 
@@ -1399,13 +1388,18 @@ namespace Games.Risk.ViewModel
 
             if (_application.Engine.SetupPhaseComplete)
             {
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
+
                 ActiveTerritoryHighlighted = false;
                 DeployMultipleArmiesPossible = true;
                 AssignExtraArmiesForControlledContinents();
             }
             else
             {
-                if (PlayerHasInitiative && _activeTerritoryDuringSetupPhase[_application.Engine.CurrentPlayerIndex].HasValue)
+                if (!_application.Engine.CurrentPlayerIsAutomatic && 
+                    _activeTerritoryDuringSetupPhase[_application.Engine.CurrentPlayerIndex].HasValue)
                 {
                     _indexOfActiveTerritory = _activeTerritoryDuringSetupPhase[_application.Engine.CurrentPlayerIndex].Value;
                     SelectedVertexCanvasPosition = MapViewModel.PointViewModels[_indexOfActiveTerritory.Value].Point - new PointD(20, 20);
@@ -1421,13 +1415,6 @@ namespace Games.Risk.ViewModel
 
                 DeployMultipleArmiesPossible = false;
                 AssignAnArmyFromInitialPool();
-            }
-
-            if (_application.Engine.SetupPhaseComplete)
-            {
-                _application.Logger?.WriteLine(
-                    LogMessageCategory.Information,
-                    $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
             }
         }
 
@@ -1501,7 +1488,7 @@ namespace Games.Risk.ViewModel
                 return;
             }
 
-            if (PlayerHasInitiative)
+            if (!_application.Engine.CurrentPlayerIsAutomatic)
             {
                 PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy =
                     _application.Engine.ExtraArmiesForCurrentPlayer;
@@ -1539,7 +1526,7 @@ namespace Games.Risk.ViewModel
                     _);
             });
 
-            playerViewModel.WatchCardsButtonVisible = cardViewModels.Any() && PlayerHasInitiative;
+            playerViewModel.WatchCardsButtonVisible = cardViewModels.Any() && !_application.Engine.CurrentPlayerIsAutomatic;
         }
     }
 }
