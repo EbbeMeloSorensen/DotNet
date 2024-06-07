@@ -24,6 +24,7 @@ namespace Games.Risk.Application
         private int _armiesInFinalAttack;
         private List<Card>[] _hands;
         private int[] _armiesToDeploy;
+        private bool[] _playerDefeated;
         private List<Card> _drawPile;
         private int _cardSetsTradedForTroops;
 
@@ -52,7 +53,7 @@ namespace Games.Risk.Application
 
         public bool NextEventOccursAutomatically
         {
-            get => _players[CurrentPlayerIndex];
+            get => _players[CurrentPlayerIndex] || _playerDefeated[CurrentPlayerIndex];
         }
 
         public bool CurrentPlayerIsAutomatic => _players[CurrentPlayerIndex];
@@ -86,11 +87,12 @@ namespace Games.Risk.Application
                 3 => 35,
                 4 => 30,
                 5 => 25, //25,
-                6 => 20, //20
+                6 => 2, //20
                 _ => throw new ArgumentOutOfRangeException()
             };
 
             _armiesToDeploy = Enumerable.Repeat(troopsPrPlayer, playerCount).ToArray();
+            _playerDefeated = Enumerable.Repeat(false, playerCount).ToArray();
 
             // Diagnostics: Each player starts with some cards
             //for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
@@ -111,8 +113,8 @@ namespace Games.Risk.Application
         public void StartGame()
         {
             //DistributeTerritoriesAmongPlayers();
-            //DistributeTerritoriesAmongPlayers2();
-            DistributeTerritoriesAmongPlayers3();
+            DistributeTerritoriesAmongPlayers2();
+            //DistributeTerritoriesAmongPlayers3();
 
             GameInProgress = true;
             CurrentPlayerMayReinforce = true;
@@ -155,6 +157,11 @@ namespace Games.Risk.Application
                     armyTransferCount,
                     false,
                     true);
+            }
+
+            if (_playerDefeated[CurrentPlayerIndex])
+            {
+                throw new NotImplementedException();
             }
 
             if (ExtraArmiesForCurrentPlayer > 0)
@@ -492,7 +499,6 @@ namespace Games.Risk.Application
             _territoryWasJustConquered = false;
             var defendingPlayerIndex = _territoryStatusMap[targetTerritoryIndex].ControllingPlayerIndex;
             Card card = null;
-            var defendingPlayerDefeated = false;
 
             if (_territoryStatusMap[targetTerritoryIndex].Armies == 0)
             {
@@ -524,7 +530,7 @@ namespace Games.Risk.Application
                     // Did the defending player loose the last territory, thus being entirely defeated?
                     if (!_territoryStatusMap.Any(_ => _.Value.ControllingPlayerIndex == defendingPlayerIndex))
                     {
-                        defendingPlayerDefeated = true;
+                        _playerDefeated[defendingPlayerIndex] = true;
 
                         // Attacking player gets the cards of the defeated player
                         _hands[CurrentPlayerIndex].AddRange(_hands[defendingPlayerIndex]);
@@ -545,7 +551,7 @@ namespace Games.Risk.Application
                 CasualtiesDefender = casualtiesDefender,
                 TerritoryConquered = _territoryWasJustConquered,
                 DiceRolledByAttacker = diceCountAttacker,
-                DefendingPlayerDefeated = defendingPlayerDefeated,
+                DefendingPlayerDefeated = _playerDefeated[defendingPlayerIndex],
                 Card = card
             };
 
@@ -554,6 +560,7 @@ namespace Games.Risk.Application
             return gameEvent;
         }
 
+        // Kaldes fra ExecuteNextEvent samt PlayerSelectsOption, dvs både når computeren agerer og når en spiller agerer
         private IGameEvent Pass()
         {
             var gameEvent = new PlayerPasses(
