@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\skull-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="StructureMap" Version="4.7.1" />
   </ItemGroup>
 
@@ -16,6 +20,10 @@
     <ProjectReference Include="..\..\Craft\Craft.UI.Utils\Craft.UI.Utils.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
     <ProjectReference Include="..\Games.Risk.ViewModel\Games.Risk.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\skull-icon.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -21,6 +21,7 @@ namespace Games.Risk.ViewModel
         private string _armiesToDeployText;
         private bool _armiesToDeployTextVisible;
         private bool _handHidden;
+        private bool _defeated;
 
         public string Name { get; set; }
 
@@ -103,6 +104,16 @@ namespace Games.Risk.ViewModel
             }
         }
 
+        public bool Defeated
+        {
+            get => _defeated;
+            set
+            {
+                _defeated = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ObservableCollection<CardViewModel> CardViewModels { get; }
 
         public ObservableObject<List<Card>> SelectedCards { get; }
@@ -143,6 +154,7 @@ namespace Games.Risk.ViewModel
             ArmiesToDeploy = 0;
             ArmiesToDeployTextVisible = true;
             HandHidden = true;
+            Defeated = false;
         }
 
         public void AddCardViewModel(

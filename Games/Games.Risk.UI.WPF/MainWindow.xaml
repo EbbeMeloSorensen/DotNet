@@ -170,6 +170,9 @@
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
+                                    <Image Source="images/skull-icon.png" Height="64"
+                                           Canvas.Left="30" Canvas.Top="5"
+                                           Visibility="{Binding Defeated, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 </Canvas>
                                 <Button Grid.Column="2" Height="30" Width="45"
                                         HorizontalAlignment="Right" VerticalAlignment="Top"

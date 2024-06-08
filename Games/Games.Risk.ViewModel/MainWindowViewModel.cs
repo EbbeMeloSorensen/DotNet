@@ -423,7 +423,7 @@ namespace Games.Risk.ViewModel
             // Create engine
             var tempArray = Enumerable.Repeat(true, playerCount).ToArray();
 
-            var humanPlayers = 3;
+            var humanPlayers = 2;
             for (var i = 0; i < humanPlayers; i++)
             {
                 tempArray[i] = false;
@@ -694,6 +694,7 @@ namespace Games.Risk.ViewModel
                 {
                     GameResultMessage = "Congratulations\nYou won!";
                     ActiveTerritoryHighlighted = false;
+                    PlayerViewModels[playerAttacks.DefendingPlayerIndex].Defeated = true;
                 }
                 else
                 {
@@ -701,6 +702,7 @@ namespace Games.Risk.ViewModel
                     {
                         UpdateCardViewModels(_application.Engine.CurrentPlayerIndex);
                         UpdateCardViewModels(playerAttacks.DefendingPlayerIndex);
+                        PlayerViewModels[playerAttacks.DefendingPlayerIndex].Defeated = true;
 
                         if (_application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count > 5)
                         {
@@ -1126,17 +1128,6 @@ namespace Games.Risk.ViewModel
             {
                 await Task.Delay(milliSeconds);
             }
-
-            //var sb = new StringBuilder("----------------------------------------------------------");
-
-            //if (tag != null)
-            //{
-            //    sb.Append(tag);
-            //}
-
-            //_application.Logger?.WriteLine(
-            //    LogMessageCategory.Information,
-            //    sb.ToString());
         }
 
         private async Task HandleGameEvent(
@@ -1171,6 +1162,16 @@ namespace Games.Risk.ViewModel
                         }
 
                         _indexOfActiveTerritory = playerAttacks.Vertex1;
+
+                        if (_application.Engine.GameDecided)
+                        {
+                            var a = 0;
+                        }
+
+                        if (playerAttacks.DefendingPlayerDefeated)
+                        {
+                            PlayerViewModels[playerAttacks.DefendingPlayerIndex].Defeated = true;
+                        }
 
                         if (!_application.Engine.GameDecided)
                         {
@@ -1222,6 +1223,7 @@ namespace Games.Risk.ViewModel
                 case PlayerReinforces:
                 case PlayerTransfersArmies:
                 case PlayerPasses:
+                case PlayerIsSkipped:
                     {
                         ActiveTerritoryHighlighted = false;
                         AttackVectorVisible = false;
@@ -1317,6 +1319,11 @@ namespace Games.Risk.ViewModel
                 case PlayerPasses:
                 {
                     sb.Append(" passes");
+                    break;
+                }
+                case PlayerIsSkipped:
+                {
+                    sb.Append(" is skipped");
                     break;
                 }
                 case PlayerTransfersArmies playerTransfersArmies:
