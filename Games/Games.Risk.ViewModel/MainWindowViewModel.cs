@@ -30,7 +30,8 @@ namespace Games.Risk.ViewModel
         private readonly IDialogService _applicationDialogService;
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
-        private int _delay = 0;
+        private int _playerCount;
+        private int _delay;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private List<Continent> _continents;
         private Dictionary<int, Brush> _colorPalette;
@@ -38,7 +39,6 @@ namespace Games.Risk.ViewModel
         private PointD _selectedTargetVertexCanvasPosition;
         private bool _activeTerritoryHighlighted;
         private bool _attackVectorVisible;
-        private bool _deployMultipleArmiesPossible;
 
         private ViewModelLogger _viewModelLogger;
         private bool _loggingActive;
@@ -56,7 +56,8 @@ namespace Games.Risk.ViewModel
         private bool _currentPlayerCanTradeInSelectedCards;
         private bool _playerGotCardDuringCurrentTurn;
         private bool _tradingCardsAfterDefeatingOpponent;
-        private int?[] _activeTerritoryDuringSetupPhase; 
+        private int?[] _activeTerritoryDuringSetupPhase;
+        private int[] _repetitions;
 
         private RelayCommand<object> _openSettingsDialogCommand;
         private AsyncCommand _startGameCommand;
@@ -183,21 +184,6 @@ namespace Games.Risk.ViewModel
             set
             {
                 _attackVectorVisible = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool DeployMultipleArmiesPossible
-        {
-            get => _deployMultipleArmiesPossible;
-            set
-            {
-                if (_deployMultipleArmiesPossible == value)
-                {
-                    return;
-                }
-
-                _deployMultipleArmiesPossible = value;
                 RaisePropertyChanged();
             }
         }
@@ -352,6 +338,7 @@ namespace Games.Risk.ViewModel
                 UpdateCommandAvailability();
             };
 
+            LoadSettingsFromConfigFile();
             _application.Logger?.WriteLine(LogMessageCategory.Information, "Risk Game - starting up");
         }
 
@@ -359,6 +346,19 @@ namespace Games.Risk.ViewModel
         {
             while (!_application.Engine.GameDecided)
             {
+                // Denne konstruktion faciliterer muligheden for at en spiller kan angive, at et antal af de næste armeer skal placeres samme sted,
+                // så man undgår at skulle klikke mange gange under setup
+                if (!_application.Engine.SetupPhaseComplete &&
+                    !_application.Engine.CurrentPlayerIsAutomatic &&
+                    _indexOfActiveTerritory.HasValue)
+                {
+                    if (_repetitions[_application.Engine.CurrentPlayerIndex] > 0)
+                    {
+                        await Deploy();
+                        continue;
+                    }
+                }
+
                 if (_application.Engine.NextEventOccursAutomatically)
                 {
                     var gameEvent = await _application.Engine.ExecuteNextEvent();
@@ -405,25 +405,21 @@ namespace Games.Risk.ViewModel
         private void OpenSettingsDialog(
             object owner)
         {
-            var dialogViewModel = new SettingsDialogViewModel();
+            var settingsDialogViewModel = new SettingsDialogViewModel(_playerCount, _delay);
 
-            _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            if (_applicationDialogService.ShowDialog(settingsDialogViewModel, owner as Window) == DialogResult.OK)
+            {
+                _playerCount = settingsDialogViewModel.PlayerCount;
+                _delay = settingsDialogViewModel.Delay;
+            }
         }
 
         private void StartGame()
         {
-            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var settings = configFile.AppSettings.Settings;
-
-            if (!int.TryParse(settings["PlayerCount"]?.Value, out var playerCount))
-            {
-                throw new InvalidDataException("Invalid Config file");
-            }
-
             // Create engine
-            var tempArray = Enumerable.Repeat(true, playerCount).ToArray();
+            var tempArray = Enumerable.Repeat(true, _playerCount).ToArray();
 
-            var humanPlayers = 2;
+            var humanPlayers = 1;
             for (var i = 0; i < humanPlayers; i++)
             {
                 tempArray[i] = false;
@@ -431,18 +427,18 @@ namespace Games.Risk.ViewModel
 
             tempArray = tempArray.Shuffle(_random).ToArray();
 
-            _activeTerritoryDuringSetupPhase = new int?[playerCount];
-
+            _activeTerritoryDuringSetupPhase = new int?[_playerCount];
             _application.Engine = new Engine(tempArray, _random, _graphOfTerritories);
             _application.Engine.Initialize(_continents);
             _indexOfActiveTerritory = null;
             _indexOfTargetTerritory = null;
+            _repetitions = new int[_playerCount];
 
             _application.Engine.StartGame();
 
             _application.Logger?.WriteLine(
                 LogMessageCategory.Information,
-                $"New game started ({playerCount} players)");
+                $"New game started ({_playerCount} players)");
 
             PlayerViewModels.Clear();
 
@@ -466,9 +462,7 @@ namespace Games.Risk.ViewModel
                     });
                 });
 
-            DeployMultipleArmiesPossible = false;
-
-            for (var playerIndex = 0; playerIndex < playerCount; playerIndex++)
+            for (var playerIndex = 0; playerIndex < _playerCount; playerIndex++)
             {
                 if (tempArray[playerIndex])
                 {
@@ -500,7 +494,7 @@ namespace Games.Risk.ViewModel
                 UpdateCardViewModels(i);
             }
 
-            for (var i = 0; i < playerCount; i++)
+            for (var i = 0; i < _playerCount; i++)
             {
                 var territoryNames = new List<string>();
 
@@ -522,13 +516,14 @@ namespace Games.Risk.ViewModel
                     sb.ToString());
             }
 
-            for (var i = 0; i < playerCount; i++)
+            for (var i = 0; i < _playerCount; i++)
             {
                 _application.Logger?.WriteLine(
                     LogMessageCategory.Information,
                     $"Player {i + 1} has {_application.Engine.ArmiesLeftInPool(i)} armies left to deploy");
             }
 
+            SelectedDeployOption = "1";
             SyncControlsWithApplication();
             SwitchToNextPlayer();
         }
@@ -640,11 +635,32 @@ namespace Games.Risk.ViewModel
                     (_application.Engine.CurrentPlayerIndex + _application.Engine.PlayerCount - 1) %
                     _application.Engine.PlayerCount;
 
-                PlayerViewModels[previousPlayerIndex].ArmiesToDeploy =
-                    _application.Engine.ArmiesLeftInPool(previousPlayerIndex);
-
+                var armiesLeftInPoolForPreviousPlayer = _application.Engine.ArmiesLeftInPool(previousPlayerIndex);
+                PlayerViewModels[previousPlayerIndex].ArmiesToDeploy = armiesLeftInPoolForPreviousPlayer;
                 _activeTerritoryDuringSetupPhase[previousPlayerIndex] = _indexOfActiveTerritory.Value;
-                _application.Engine.CompleteSetupHaseIfPoolIsEmpty();
+                _application.Engine.CompleteSetupPhaseIfPoolIsEmpty();
+
+                // Determine repetitions during setup phase
+                if (_repetitions[previousPlayerIndex] > 0)
+                {
+                    _repetitions[previousPlayerIndex]--;
+                }
+                else
+                {
+                    var repetitions = SelectedDeployOption switch
+                    {
+                        "All" => armiesLeftInPoolForPreviousPlayer,
+                        "10" => 9,
+                        "5" => 4,
+                        "2" => 1,
+                        _ => 0
+                    };
+
+                    repetitions = Math.Min(repetitions, armiesLeftInPoolForPreviousPlayer);
+                    _repetitions[previousPlayerIndex] = repetitions;
+                }
+
+                await Delay(_delay, "after deployment");
             }
 
             SyncControlsWithApplication();
@@ -1163,11 +1179,6 @@ namespace Games.Risk.ViewModel
 
                         _indexOfActiveTerritory = playerAttacks.Vertex1;
 
-                        if (_application.Engine.GameDecided)
-                        {
-                            var a = 0;
-                        }
-
                         if (playerAttacks.DefendingPlayerDefeated)
                         {
                             PlayerViewModels[playerAttacks.DefendingPlayerIndex].Defeated = true;
@@ -1393,7 +1404,6 @@ namespace Games.Risk.ViewModel
                     $"Turn goes to Player {_application.Engine.CurrentPlayerIndex + 1}");
 
                 ActiveTerritoryHighlighted = false;
-                DeployMultipleArmiesPossible = true;
                 AssignExtraArmiesForControlledContinents();
             }
             else
@@ -1413,7 +1423,6 @@ namespace Games.Risk.ViewModel
                 PlayerViewModels[_application.Engine.CurrentPlayerIndex].ArmiesToDeploy =
                     _application.Engine.ArmiesLeftInPool(_application.Engine.CurrentPlayerIndex);
 
-                DeployMultipleArmiesPossible = false;
                 AssignAnArmyFromInitialPool();
             }
         }
@@ -1527,6 +1536,21 @@ namespace Games.Risk.ViewModel
             });
 
             playerViewModel.WatchCardsButtonVisible = cardViewModels.Any() && !_application.Engine.CurrentPlayerIsAutomatic;
+        }
+
+        private void LoadSettingsFromConfigFile()
+        {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+
+            if (!int.TryParse(settings["PlayerCount"]?.Value, out var playerCount) ||
+                !int.TryParse(settings["Delay"]?.Value, out var delay))
+            {
+                throw new InvalidDataException("Invalid Config file");
+            }
+
+            _playerCount = playerCount;
+            _delay = delay;
         }
     }
 }

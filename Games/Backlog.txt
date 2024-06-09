@@ -40,11 +40,18 @@ Done:
 * Der skal være en MinHeight for PlayerView, og så skal den udvides i takt med at man får flere kort 
 * Når man starter sin tur, skal der ikke være nogen selectede kort hos nogen spillere
 * Når man starter sin tur, skal alle kort vende på bagsiden opad
+* En spiller, der er død, skal bare skippe (det kan passende være et nyt game event), og der skal tegnes et skelethoved for vedkommende
+* Under setup skal det være muligt at placere et vilkårligt antal armeer, og så skal man springe over de andre gange
 
 In progress:
+* Når computer players placerer tropper i den indledende fase, skal det vises med den der cirkel
 
 Todo
-* En spiller, der er død, skal bare skippe (det kan passende være et nyt game event), og der skal tegnes et skelethoved for vedkommende
+* Antallet af spillere skal kunne sættes i settings
+* Delay, dvs game speed, skal kunne sættes i settings
+* Spillernavne skal kunne sættes i settings
+* Bug: (Spillet mod Cecilie) Det glippede tilsyneladende med at få ekstra armeer i Ukraine, selv om et Ukraine kort blev traded in
+* Bug: (Spillet mod Cecilie) Move knappen var tilsyneladende aktiv, selv om der kun var ét territorium aktivt 
 * Mht hvilke muligheder man som spiller har på et givet tidspunkt, er det blevet lidt rigeligt komplekst - 
   især når man efter at have udslettet en modstander potentielt er tvunget til at bytte kort med det samme - 
   måske skulle du lade det afgøre af en tilstandsmaskine i stedet.

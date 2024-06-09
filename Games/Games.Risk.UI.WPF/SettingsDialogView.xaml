@@ -15,16 +15,32 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Margin="0, 0, 10, 0" Text="Players:"/>
-            <ComboBox Grid.Column="1"
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="0, 0, 10, 0" Text="Players:"/>
+            <ComboBox Grid.Row="0" Grid.Column="1"
                       ItemsSource="{Binding PlayerCountOptions}"
                       SelectedValue="{Binding PlayerCount, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0, 0, 10, 0" Text="Delay:"/>
+            <ComboBox Grid.Row="1" Grid.Column="1"
+                      ItemsSource="{Binding DelayOptions}"
+                      SelectedValue="{Binding Delay, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
 
-        <Button Grid.Row="1" Margin="2" Content="Save" HorizontalAlignment="Right" 
-                Command="{Binding SaveSettingsCommand}"/>
+        <Grid Grid.Row="1" Margin="4">
+            <Button Content="OK" HorizontalAlignment="Left" Margin="135,70,0,0" VerticalAlignment="Top" Width="75"
+                    IsDefault="True"
+                    Command="{Binding OKCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Content="Cancel" HorizontalAlignment="Left" Margin="215,70,0,0" VerticalAlignment="Top" Width="75"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        </Grid>
     </Grid>
 </UserControl>

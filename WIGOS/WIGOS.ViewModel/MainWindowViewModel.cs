@@ -704,7 +704,7 @@ namespace WIGOS.ViewModel
 
         private void InitializeLogViewModel(ILogger logger)
         {
-            LogViewModel = new LogViewModel();
+            LogViewModel = new LogViewModel(200);
             _logger = new ViewModelLogger(logger, LogViewModel);
         }
 

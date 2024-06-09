@@ -299,7 +299,7 @@ namespace Games.Risk.Application
             return _hands[playerIndex];
         }
 
-        public void CompleteSetupHaseIfPoolIsEmpty()
+        public void CompleteSetupPhaseIfPoolIsEmpty()
         {
             SetupPhaseComplete = _armiesToDeploy.Sum() == 0;
         }
