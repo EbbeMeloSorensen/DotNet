@@ -525,7 +525,9 @@ namespace Games.Risk.ViewModel
 
             SelectedDeployOption = "1";
             SyncControlsWithApplication();
+            await Delay(_delay, "");
             await SwitchToNextPlayer();
+            await Delay(_delay, "");
         }
 
         private bool CanStartGame()
@@ -659,13 +661,13 @@ namespace Games.Risk.ViewModel
                     repetitions = Math.Min(repetitions, armiesLeftInPoolForPreviousPlayer);
                     _repetitions[previousPlayerIndex] = repetitions;
                 }
-
-                await Delay(_delay, "after deployment");
             }
 
             SyncControlsWithApplication();
             UpdateCommandAvailability();
             LogGameEvent(gameEvent);
+
+            await Delay(_delay, "after deployment");
 
             if (gameEvent.TurnGoesToNextPlayer)
             {
@@ -1393,6 +1395,7 @@ namespace Games.Risk.ViewModel
             PlayerViewModels[indexOfPreviousPlayer].WatchCardsButtonVisible = false;
             PlayerViewModels[indexOfPreviousPlayer].HandHidden = true;
 
+            ActiveTerritoryHighlighted = false;
             AttackVectorVisible = false;
             HighlightCurrentPlayer();
             UpdateCommandAvailability();
