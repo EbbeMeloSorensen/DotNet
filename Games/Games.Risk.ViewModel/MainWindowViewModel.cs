@@ -82,10 +82,10 @@ namespace Games.Risk.ViewModel
             _openSettingsDialogCommand ??= new RelayCommand<object>(OpenSettingsDialog);
 
         public AsyncCommand StartGameCommand => _startGameCommand ??= new AsyncCommand(
-            () =>
+            async () =>
             {
-                StartGame();
-                return Proceed();
+                await StartGame();
+                await Proceed();
             }, CanStartGame);
 
         public AsyncCommand TradeInSelectedCardsCommand => _tradeInSelectedCardsCommand ??= new AsyncCommand(TradeInSelectedCards, CanTradeInSelectedCards);
@@ -377,7 +377,7 @@ namespace Games.Risk.ViewModel
                         continue;
                     }
 
-                    SwitchToNextPlayer();
+                    await SwitchToNextPlayer();
                     await Delay(_delay, "(after switching to next player - 1)");
                 }
                 else
@@ -414,7 +414,7 @@ namespace Games.Risk.ViewModel
             }
         }
 
-        private void StartGame()
+        private async Task StartGame()
         {
             // Create engine
             var tempArray = Enumerable.Repeat(true, _playerCount).ToArray();
@@ -525,7 +525,7 @@ namespace Games.Risk.ViewModel
 
             SelectedDeployOption = "1";
             SyncControlsWithApplication();
-            SwitchToNextPlayer();
+            await SwitchToNextPlayer();
         }
 
         private bool CanStartGame()
@@ -669,7 +669,7 @@ namespace Games.Risk.ViewModel
 
             if (gameEvent.TurnGoesToNextPlayer)
             {
-                SwitchToNextPlayer();
+                await SwitchToNextPlayer();
                 await Delay(_delay, "(after switching to next player - 2)");
                 await Proceed();
             }
@@ -869,7 +869,7 @@ namespace Games.Risk.ViewModel
             }
             else
             {
-                SwitchToNextPlayer();
+                await SwitchToNextPlayer();
                 SyncControlsWithApplication();
                 UpdateCommandAvailability();
                 await Proceed();
@@ -1211,12 +1211,22 @@ namespace Games.Risk.ViewModel
                     }
                 case PlayerDeploysArmies playerDeploysArmies:
                     {
+                        AttackVectorVisible = false;
+
+                        foreach (var territoryIndex in playerDeploysArmies.TerritoryIndexes)
+                        {
+                            _indexOfActiveTerritory = territoryIndex;
+                            var point = MapViewModel.PointViewModels[territoryIndex].Point;
+                            SelectedVertexCanvasPosition = point - new PointD(20, 20);
+                            ActiveTerritoryHighlighted = true;
+                            await Delay(_delay, "");
+                        };
+
                         if (_application.Engine.SetupPhaseComplete)
                         {
                             _indexOfActiveTerritory = null;
                             ActiveTerritoryHighlighted = false;
                             AttackVectorVisible = false;
-                            //_delay = 0; //500;
                         }
 
                         if (playerDeploysArmies.TurnGoesToNextPlayer)
@@ -1367,7 +1377,7 @@ namespace Games.Risk.ViewModel
                 sb.ToString());
         }
 
-        private void SwitchToNextPlayer()
+        private async Task SwitchToNextPlayer()
         {
             _selectedCards = null;
             _indexOfActiveTerritory = null;
@@ -1411,6 +1421,7 @@ namespace Games.Risk.ViewModel
                 if (!_application.Engine.CurrentPlayerIsAutomatic && 
                     _activeTerritoryDuringSetupPhase[_application.Engine.CurrentPlayerIndex].HasValue)
                 {
+                    await Delay(_delay, "");
                     _indexOfActiveTerritory = _activeTerritoryDuringSetupPhase[_application.Engine.CurrentPlayerIndex].Value;
                     SelectedVertexCanvasPosition = MapViewModel.PointViewModels[_indexOfActiveTerritory.Value].Point - new PointD(20, 20);
                     ActiveTerritoryHighlighted = true;
