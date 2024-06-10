@@ -370,7 +370,7 @@ namespace Games.Risk.ViewModel
 
                     if (!(gameEvent is PlayerPasses))
                     {
-                        await Delay(_delay, "(generally after event)");
+                        //await Delay(_delay, "(generally after event)");
                     }
 
                     if (!gameEvent.TurnGoesToNextPlayer)
@@ -379,6 +379,11 @@ namespace Games.Risk.ViewModel
                     }
 
                     await SwitchToNextPlayer();
+
+                    if (_application.Engine.CurrentPlayerIsAutomatic)
+                    {
+                        await Delay(_delay, "after switching to next automatic player");
+                    }
                 }
                 else
                 {
@@ -667,7 +672,7 @@ namespace Games.Risk.ViewModel
             UpdateCommandAvailability();
             LogGameEvent(gameEvent);
 
-            await Delay(_delay, "after deployment");
+            //await Delay(_delay, "after deployment");
 
             if (gameEvent.TurnGoesToNextPlayer)
             {
@@ -1231,11 +1236,11 @@ namespace Games.Risk.ViewModel
 
                         foreach (var territoryIndex in playerDeploysArmies.TerritoryIndexes)
                         {
-                            await Delay(_delay, "C");
                             _indexOfActiveTerritory = territoryIndex;
                             var point = MapViewModel.PointViewModels[territoryIndex].Point;
                             SelectedVertexCanvasPosition = point - new PointD(20, 20);
                             ActiveTerritoryHighlighted = true;
+                            await Delay(_delay, "C");
                         };
 
                         if (_application.Engine.SetupPhaseComplete)
