@@ -51,6 +51,8 @@ namespace Games.Risk.Application
 
         public bool CurrentPlayerHasMovedTroops { get; private set; }
 
+        public bool CurrentPlayerReceivedACard{ get; private set; }
+
         public bool NextEventOccursAutomatically
         {
             get => _players[CurrentPlayerIndex] || _playerDefeated[CurrentPlayerIndex];
@@ -208,7 +210,9 @@ namespace Games.Risk.Application
 
                 var chosenCandidate = bestAttackOptions.Shuffle(_random).First();
 
-                if (chosenCandidate.OpportunityRating > 0)
+                var opportunityRatingThreshold = CurrentPlayerReceivedACard ? 1 : 0;
+
+                if (chosenCandidate.OpportunityRating > opportunityRatingThreshold)
                 {
                     return Attack(
                         chosenCandidate.IndexOfTerritoryWhereAttackOriginates,
@@ -521,6 +525,7 @@ namespace Games.Risk.Application
                     {
                         card = DrawCardFromDrawPile();
                         _hands[CurrentPlayerIndex].Add(card);
+                        CurrentPlayerReceivedACard = true;
                     }
 
                     // Did the defending player loose the last territory, thus being entirely defeated?
@@ -1122,6 +1127,8 @@ namespace Games.Risk.Application
             CurrentPlayerHasReinforced = false;
             CurrentPlayerMayReinforce = true;
             CurrentPlayerHasMovedTroops = false;
+            CurrentPlayerHasMovedTroops = false;
+            CurrentPlayerReceivedACard = false;
             _currentPlayerHasConqueredATerritory = false;
             _currentPlayerMayTransferArmies = true;
             _territoryWasJustConquered = false;

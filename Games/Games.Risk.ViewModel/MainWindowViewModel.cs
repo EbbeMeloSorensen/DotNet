@@ -54,7 +54,6 @@ namespace Games.Risk.ViewModel
         private string _selectedDeployOption;
         private List<Card> _selectedCards;
         private bool _currentPlayerCanTradeInSelectedCards;
-        private bool _playerGotCardDuringCurrentTurn;
         private bool _tradingCardsAfterDefeatingOpponent;
         private int?[] _activeTerritoryDuringSetupPhase;
         private int[] _repetitions;
@@ -737,8 +736,6 @@ namespace Games.Risk.ViewModel
                         PlayerViewModels[_application.Engine.CurrentPlayerIndex].AddCardViewModel(
                             _territoryNameMap[playerAttacks.Card.TerritoryIndex],
                             playerAttacks.Card);
-
-                        _playerGotCardDuringCurrentTurn = true;
                     }
 
                     PlayerViewModels[_application.Engine.CurrentPlayerIndex].WatchCardsButtonVisible =
@@ -766,6 +763,7 @@ namespace Games.Risk.ViewModel
                         true);
 
                     _indexOfActiveTerritory = _indexOfTargetTerritory;
+                    _indexOfTargetTerritory = null;
 
                     _indexesOfHostileNeighbours = _application.Engine
                         .IndexesOfHostileNeighbourTerritories(_indexOfActiveTerritory.Value)
@@ -791,7 +789,7 @@ namespace Games.Risk.ViewModel
             if (_tradingCardsAfterDefeatingOpponent ||
                 (_application.Engine != null &&
                  _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
-                 !_playerGotCardDuringCurrentTurn))
+                 !_application.Engine.CurrentPlayerReceivedACard))
             {
                 // Player must trade cards
                 return false;
@@ -841,7 +839,7 @@ namespace Games.Risk.ViewModel
             if (_tradingCardsAfterDefeatingOpponent ||
                 (_application.Engine != null &&
                  _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
-                 !_playerGotCardDuringCurrentTurn))
+                 !_application.Engine.CurrentPlayerReceivedACard))
             {
                 // Player must trade cards
                 return false;
@@ -888,7 +886,7 @@ namespace Games.Risk.ViewModel
             if (_tradingCardsAfterDefeatingOpponent ||
                 (_application.Engine != null &&
                  _application.Engine.GetHand(_application.Engine.CurrentPlayerIndex).Count() >= 5 &&
-                 !_playerGotCardDuringCurrentTurn))
+                 !_application.Engine.CurrentPlayerReceivedACard))
             {
                 // Player must trade cards
                 return false;
@@ -1154,7 +1152,7 @@ namespace Games.Risk.ViewModel
             int milliSeconds,
             string tag)
         {
-            if (LoggingActive && !string.IsNullOrEmpty(tag))
+            if (LoggingActive && !string.IsNullOrEmpty(tag) && false)
             {
                 _application.Logger?.WriteLine(
                     LogMessageCategory.Information,
@@ -1404,7 +1402,6 @@ namespace Games.Risk.ViewModel
             _indexOfActiveTerritory = null;
             _indexOfTargetTerritory = null;
             _currentPlayerCanTradeInSelectedCards = false;
-            _playerGotCardDuringCurrentTurn = false;
             _tradingCardsAfterDefeatingOpponent = false;
 
             var indexOfPreviousPlayer = 
