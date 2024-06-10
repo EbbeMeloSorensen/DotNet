@@ -354,6 +354,7 @@ namespace Games.Risk.ViewModel
                 {
                     if (_repetitions[_application.Engine.CurrentPlayerIndex] > 0)
                     {
+                        await Delay(_delay, "E");
                         await Deploy();
                         continue;
                     }
@@ -378,7 +379,6 @@ namespace Games.Risk.ViewModel
                     }
 
                     await SwitchToNextPlayer();
-                    await Delay(_delay, "(after switching to next player - 1)");
                 }
                 else
                 {
@@ -525,9 +525,9 @@ namespace Games.Risk.ViewModel
 
             SelectedDeployOption = "1";
             SyncControlsWithApplication();
-            await Delay(_delay, "");
+            await Delay(_delay, "A");
             await SwitchToNextPlayer();
-            await Delay(_delay, "");
+            await Delay(_delay, "B");
         }
 
         private bool CanStartGame()
@@ -672,7 +672,7 @@ namespace Games.Risk.ViewModel
             if (gameEvent.TurnGoesToNextPlayer)
             {
                 await SwitchToNextPlayer();
-                await Delay(_delay, "(after switching to next player - 2)");
+                await Delay(_delay, "(after switching to next player in Deploy method)");
                 await Proceed();
             }
         }
@@ -923,6 +923,13 @@ namespace Games.Risk.ViewModel
 
         private void UpdateCommandAvailability()
         {
+            if (LoggingActive && false)
+            {
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    "Updating command availability");
+            }
+
             StartGameCommand.RaiseCanExecuteChanged();
             TradeInSelectedCardsCommand.RaiseCanExecuteChanged();
             ReinforceCommand.RaiseCanExecuteChanged();
@@ -1142,6 +1149,13 @@ namespace Games.Risk.ViewModel
             int milliSeconds,
             string tag)
         {
+            if (LoggingActive && !string.IsNullOrEmpty(tag))
+            {
+                _application.Logger?.WriteLine(
+                    LogMessageCategory.Information,
+                    tag);
+            }
+
             if (milliSeconds > 0)
             {
                 await Task.Delay(milliSeconds);
@@ -1217,11 +1231,11 @@ namespace Games.Risk.ViewModel
 
                         foreach (var territoryIndex in playerDeploysArmies.TerritoryIndexes)
                         {
+                            await Delay(_delay, "C");
                             _indexOfActiveTerritory = territoryIndex;
                             var point = MapViewModel.PointViewModels[territoryIndex].Point;
                             SelectedVertexCanvasPosition = point - new PointD(20, 20);
                             ActiveTerritoryHighlighted = true;
-                            await Delay(_delay, "");
                         };
 
                         if (_application.Engine.SetupPhaseComplete)
@@ -1424,7 +1438,7 @@ namespace Games.Risk.ViewModel
                 if (!_application.Engine.CurrentPlayerIsAutomatic && 
                     _activeTerritoryDuringSetupPhase[_application.Engine.CurrentPlayerIndex].HasValue)
                 {
-                    await Delay(_delay, "");
+                    await Delay(_delay, "D");
                     _indexOfActiveTerritory = _activeTerritoryDuringSetupPhase[_application.Engine.CurrentPlayerIndex].Value;
                     SelectedVertexCanvasPosition = MapViewModel.PointViewModels[_indexOfActiveTerritory.Value].Point - new PointD(20, 20);
                     ActiveTerritoryHighlighted = true;

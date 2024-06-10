@@ -42,13 +42,16 @@ Done:
 * Når man starter sin tur, skal alle kort vende på bagsiden opad
 * En spiller, der er død, skal bare skippe (det kan passende være et nyt game event), og der skal tegnes et skelethoved for vedkommende
 * Under setup skal det være muligt at placere et vilkårligt antal armeer, og så skal man springe over de andre gange
+* Når computer players placerer tropper i den indledende fase, skal det vises med den der cirkel
+* Delay, dvs game speed, skal kunne sættes i settings
 
 In progress:
-* Når computer players placerer tropper i den indledende fase, skal det vises med den der cirkel
+* Der er et delay mellem at det aktive territorium highlightes under setup og så det at deploy-knappen aktiveres - det skal helst ske samtidig
+* Når man klikker på deploy-knappen, skal man helst se effekten, dvs det at der er flere tropper, med det samme
 
 Todo
+* Om en automatisk spiller er aggresiv eller ej afgøres af om den har fået et kort i runden
 * Antallet af spillere skal kunne sættes i settings
-* Delay, dvs game speed, skal kunne sættes i settings
 * Spillernavne skal kunne sættes i settings
 * Bug: (Spillet mod Cecilie) Det glippede tilsyneladende med at få ekstra armeer i Ukraine, selv om et Ukraine kort blev traded in
 * Bug: (Spillet mod Cecilie) Move knappen var tilsyneladende aktiv, selv om der kun var ét territorium aktivt 
