@@ -28,12 +28,12 @@
                       ItemsSource="{Binding PlayerCountOptions}"
                       SelectedValue="{Binding PlayerCount, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Margin="0, 0, 10, 0" Text="Human players:"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0, 0, 10, 0" Text="Human players:"/>
             <ComboBox Grid.Row="1" Grid.Column="1"
                       ItemsSource="{Binding HumanPlayerCountOptions}"
                       SelectedValue="{Binding HumanPlayerCount, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0, 0, 10, 0" Text="Delay:"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="0, 0, 10, 0" Text="Delay:"/>
             <ComboBox Grid.Row="2" Grid.Column="1"
                       ItemsSource="{Binding DelayOptions}"
                       SelectedValue="{Binding Delay, UpdateSourceTrigger=PropertyChanged}"/>
