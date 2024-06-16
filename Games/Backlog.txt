@@ -52,6 +52,7 @@ In progress:
 
 Todo
 * Antallet af human players skal kunne sættes i settings
+* Man skal ikke kunne reinforce, når der er valgt et territorium
 * Spillernavne skal kunne sættes i settings
 * Bug: (Spillet mod Cecilie) Det glippede tilsyneladende med at få ekstra armeer i Ukraine, selv om et Ukraine kort blev traded in
 * Bug: (Spillet mod Cecilie) Move knappen var tilsyneladende aktiv, selv om der kun var ét territorium aktivt 
