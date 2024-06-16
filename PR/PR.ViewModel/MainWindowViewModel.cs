@@ -101,7 +101,7 @@ namespace PR.ViewModel
                 dataIOHandler, 
                 logger);
 
-            LogViewModel = new LogViewModel();
+            LogViewModel = new LogViewModel(200);
             _logger = new ViewModelLogger(logger, LogViewModel);
             //_unitOfWorkFactory.Initialize(_logger);
 
