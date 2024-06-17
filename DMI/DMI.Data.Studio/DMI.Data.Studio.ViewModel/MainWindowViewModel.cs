@@ -273,7 +273,11 @@ namespace DMI.Data.Studio.ViewModel
             GeometryEditorViewModel = new GeometryEditorViewModel(-1);
             GeometryEditorViewModel.InitializeWorldWindow(worldWindowFocus, worldWindowSize, false);
 
-            ChronologyViewModel = new ChronologyViewModel(new DateTime(2015, 1, 1), DateTime.UtcNow.TruncateToMilliseconds(), 50, 240);
+            ChronologyViewModel = new ChronologyViewModel(
+                new DateTime(2015, 1, 1), 
+                DateTime.UtcNow.TruncateToMilliseconds(), 
+                50, 
+                240);
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
                 smsDataProvider,
@@ -301,8 +305,8 @@ namespace DMI.Data.Studio.ViewModel
             TimeSeriesViewModel.Logger = _logger;
 
             _includeOperationIntervalBars = true;
-            _includeObservationIntervalBars = false;
-            _includeTransactionTimeIntervalBars = true;
+            _includeObservationIntervalBars = true;
+            _includeTransactionTimeIntervalBars = false;
             _showSMSDBList = true;
             _showStatDBList = false;
 
@@ -439,7 +443,9 @@ namespace DMI.Data.Studio.ViewModel
                 }
             }
 
-            if (IncludeObservationIntervalBars)
+            // Udkommenteret, fordi det medfører for mange kald til repoet.
+            // Det bruges i øvrigt bare til at identificere et passende starttidspunkt
+            if (IncludeObservationIntervalBars && false)
             {
                 if (stationInformationsIncluded)
                 {

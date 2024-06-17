@@ -7,7 +7,6 @@ using Craft.Logging;
 using Craft.Utils;
 using DMI.FD.Domain;
 using DMI.FD.Domain.IO;
-using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.IO;
 
@@ -202,6 +201,8 @@ namespace DMI.Data.Studio.Application
                     }
                 }
 
+                Logger?.WriteLine(LogMessageCategory.Debug, $"  Processing station {nanoqStationId}..");
+
                 // Filen er IKKE genereret, så generer den (så det går hurtigt næste gang) og returner listen
                 using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
                 {
@@ -218,7 +219,9 @@ namespace DMI.Data.Studio.Application
                         {
                             var startYear = 1953;
                             //var lastYear = 1953;
-                            var lastYear = 2000; // Det går ret langsomt, hvis vi skal op i de nyeste tabeller, som der er meget data i
+                            //var startYear = 1985;
+                            var lastYear = 2024;
+                            //var lastYear = 2000; // Det går ret langsomt, hvis vi skal op i de nyeste tabeller, som der er meget data i
 
                             var nYears = lastYear - startYear + 1;
                             var yearCount = 0;
@@ -227,6 +230,8 @@ namespace DMI.Data.Studio.Application
 
                             for (var year = startYear; year <= lastYear; year++)
                             {
+                                Logger?.WriteLine(LogMessageCategory.Debug, $"    Retrieving observations for {year}..");
+
                                 var startTime = new DateTime(year, 1, 1);
                                 var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
 
@@ -285,6 +290,10 @@ namespace DMI.Data.Studio.Application
                                     streamWriter.Write($"{minute2}:");
                                     streamWriter.Write($"{second2}");
                                     streamWriter.WriteLine();
+
+                                    result.Add(new Tuple<DateTime, DateTime>(
+                                        new DateTime(t1.Year, t1.Month, t1.Day, t1.Hour, t1.Minute, t1.Second),
+                                        new DateTime(t2.Year, t2.Month, t2.Day, t2.Hour, t2.Minute, t2.Second)));
                                 }
                             }
                         }
