@@ -71,7 +71,7 @@ namespace DMI.SMS.ViewModel
             _application = application;
             _applicationDialogService = applicationDialogService;
 
-            LogViewModel = new LogViewModel();
+            LogViewModel = new LogViewModel(200);
 
             _application.Logger = new ViewModelLogger(_application.Logger, LogViewModel);
             //_application.Logger = null; // Set to null to disable logging

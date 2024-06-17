@@ -45,8 +45,8 @@ namespace DMI.Data.Studio.ViewModel
 
             var timeWindow = TimeSpan.FromDays(7);
             var utcNow = DateTime.UtcNow;
-            //_timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
-            _timeAtOrigo = new DateTime(2022, _timeAtOrigo.Month, _timeAtOrigo.Day, 0, 0, 0, DateTimeKind.Utc);
+            _timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
+            //_timeAtOrigo = new DateTime(2022, _timeAtOrigo.Month, _timeAtOrigo.Day, 0, 0, 0, DateTimeKind.Utc);
             var tFocus = _timeAtOrigo + timeWindow / 2;
             var xFocus = (tFocus - _timeAtOrigo) / TimeSpan.FromDays(1.0);
 
@@ -119,7 +119,7 @@ namespace DMI.Data.Studio.ViewModel
             {
                 var statId = int.Parse(_nanoqStationId);
 
-                Logger?.WriteLine(LogMessageCategory.Information, "  Retrieving station..", "general", true);
+                Logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving station {_nanoqStationId}..", "general", true);
 
                 var observingFacility = unitOfWork.ObservingFacilities
                     .Find(_ => _.StatId == statId)

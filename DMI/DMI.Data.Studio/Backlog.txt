@@ -7,10 +7,19 @@ Done:
 * Man skal kunne køre stationfetcher fra DMI.Data.Studio og ikke bare fra DMI.SMS
 * Lav en viewmodel med tilhørende view, der viser en TIDSSERIE for en valgt station under anvendelse af et af de plugins,
   der ligger under DMI.ObsDB
+* Find lige ud af, hvad mekanismen er mht at hente tidsserier ind i tidsserie viewet, og opdater dokumentationen i dit Confluence
+  space: DMI Data Studio.
+  Mht at hive observationsdata trækkes der pt på plugin, der hedder DMI.ObsDB.Persistence.PostgreSQL, men man kan trække
+  fra ethvert compliant plugin. DMI.ObsDB.Persistence.PostgreSQL gør det at den genererer SQL til at trække fra OBSDB, og
+  så transformerer den data, så det passer med den generelle model (WMDR). Den er i øvrigt temmelig langsom.
+  Den trækker i øvrigt indtil videre kun temp_dry. Det er mest relevant at kigge på de aktive synopstationer som f.eks. Gedser (6149)
 
-Todo:
+In progress:
 * Den feature, der viser smalle gule bjælker for hvornår en station har foretaget målinger, skal basere sig på et DMI.ObsDB
   plugin og ikke på et file repo
+
+Todo:
+* Dokumenter mekanismen til at hente observationer passende i dit Confluence site
 * Lav en feature, hvor man for de valgte stationer kan generere datafiler over de rå observationer samt filer over tidsintervaller
   - det må meget gerne ligge tilgængeligt i konsol-applikationen, så det kan køres fra Linux
 * Gør det muligt at eksportere en tidsserie til WMDR-format

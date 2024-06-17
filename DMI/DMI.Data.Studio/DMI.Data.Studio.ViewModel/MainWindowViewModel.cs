@@ -242,7 +242,7 @@ namespace DMI.Data.Studio.ViewModel
             _observableForClassifyRecordsWithCondition.Object = true;
             _selectedOveralTabIndex = 0;
 
-            LogViewModel = new LogViewModel();
+            LogViewModel = new LogViewModel(200);
 
             TaskViewModel = new TaskViewModel();
 
@@ -441,7 +441,7 @@ namespace DMI.Data.Studio.ViewModel
 
             if (IncludeObservationIntervalBars)
             {
-                if (stationInformationsIncluded && false)
+                if (stationInformationsIncluded)
                 {
                     _selectedStationInformations.ForEach(async s =>
                     {
@@ -458,7 +458,7 @@ namespace DMI.Data.Studio.ViewModel
                     });
                 }
 
-                if (stationsIncluded && false)
+                if (stationsIncluded)
                 {
                     _selectedStations.ForEach(async s =>
                     {
