@@ -2,22 +2,25 @@
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using Craft.ViewModels.Dialogs;
-using System.Windows;
 
 namespace Games.Risk.ViewModel
 {
     public class SettingsDialogViewModel : DialogViewModelBase
     {
         private int _playerCount;
-        private int _playerCountPersisted;
+        private readonly int _playerCountPersisted;
+        private int _humanPlayerCount;
+        private readonly int _humanPlayerCountPersisted;
         private int _delay;
-        private int _delayPersisted;
+        private readonly int _delayPersisted;
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
         public ObservableCollection<int> PlayerCountOptions { get; }
+        public ObservableCollection<int> HumanPlayerCountOptions { get; }
         public ObservableCollection<int> DelayOptions { get; }
 
         public int PlayerCount
@@ -26,6 +29,16 @@ namespace Games.Risk.ViewModel
             set
             {
                 _playerCount = value;
+                OKCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public int HumanPlayerCount
+        {
+            get => _humanPlayerCount;
+            set
+            {
+                _humanPlayerCount = value;
                 OKCommand.RaiseCanExecuteChanged();
             }
         }
@@ -52,15 +65,19 @@ namespace Games.Risk.ViewModel
 
         public SettingsDialogViewModel(
             int playerCount,
+            int humanPlayerCount,
             int delay)
         {
             PlayerCountOptions = new ObservableCollection<int>(Enumerable.Range(2, 5));
+            HumanPlayerCountOptions = new ObservableCollection<int>(Enumerable.Range(2, 5));
             DelayOptions = new ObservableCollection<int>(new[] { 0, 100, 200, 300, 500, 800, 1300 });
 
             PlayerCount = playerCount;
+            HumanPlayerCount = humanPlayerCount;
             Delay = delay;
 
             _playerCountPersisted = PlayerCount;
+            _humanPlayerCountPersisted = HumanPlayerCount;
             _delayPersisted = Delay;
         }
 
@@ -68,6 +85,7 @@ namespace Games.Risk.ViewModel
             object parameter)
         {
             AddOrUpdateAppSettings("PlayerCount", $"{PlayerCount}");
+            AddOrUpdateAppSettings("HumanPlayerCount", $"{HumanPlayerCount}");
             AddOrUpdateAppSettings("Delay", $"{Delay}");
             CloseDialogWithResult(parameter as Window, DialogResult.OK);
         }
@@ -77,6 +95,7 @@ namespace Games.Risk.ViewModel
         {
             return
                 PlayerCount != _playerCountPersisted ||
+                HumanPlayerCount != _humanPlayerCountPersisted ||
                 Delay != _delayPersisted;
         }
 

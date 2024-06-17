@@ -31,6 +31,7 @@ namespace Games.Risk.ViewModel
         private const bool _pseudoRandomNumbers = true;
         private readonly Random _random;
         private int _playerCount;
+        private int _humanPlayerCount;
         private int _delay;
         private IGraph<LabelledVertex, EmptyEdge> _graphOfTerritories;
         private List<Continent> _continents;
@@ -409,11 +410,12 @@ namespace Games.Risk.ViewModel
         private void OpenSettingsDialog(
             object owner)
         {
-            var settingsDialogViewModel = new SettingsDialogViewModel(_playerCount, _delay);
+            var settingsDialogViewModel = new SettingsDialogViewModel(_playerCount, _humanPlayerCount, _delay);
 
             if (_applicationDialogService.ShowDialog(settingsDialogViewModel, owner as Window) == DialogResult.OK)
             {
                 _playerCount = settingsDialogViewModel.PlayerCount;
+                _humanPlayerCount = settingsDialogViewModel.HumanPlayerCount;
                 _delay = settingsDialogViewModel.Delay;
             }
         }
@@ -423,8 +425,7 @@ namespace Games.Risk.ViewModel
             // Create engine
             var tempArray = Enumerable.Repeat(true, _playerCount).ToArray();
 
-            var humanPlayers = 1;
-            for (var i = 0; i < humanPlayers; i++)
+            for (var i = 0; i < _humanPlayerCount; i++)
             {
                 tempArray[i] = false;
             }
@@ -1574,12 +1575,15 @@ namespace Games.Risk.ViewModel
             var settings = configFile.AppSettings.Settings;
 
             if (!int.TryParse(settings["PlayerCount"]?.Value, out var playerCount) ||
-                !int.TryParse(settings["Delay"]?.Value, out var delay))
+                !int.TryParse(settings["HumanPlayerCount"]?.Value, out var humanPlayerCount) ||
+                !int.TryParse(settings["Delay"]?.Value, out var delay)
+                )
             {
                 throw new InvalidDataException("Invalid Config file");
             }
 
             _playerCount = playerCount;
+            _humanPlayerCount = humanPlayerCount;
             _delay = delay;
         }
     }

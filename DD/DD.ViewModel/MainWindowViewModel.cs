@@ -16,7 +16,6 @@ namespace DD.ViewModel
         private readonly Application.Application _application;
 
         public SceneCollectionViewModel SceneCollectionViewModel { get; }
-        public GraphViewModel MapViewModel { get; }
         public BoardViewModelBase BoardViewModel { get; }
         public ActOutSceneViewModelBase ActOutSceneViewModel { get; }
         public LogViewModel LogViewModel { get; }
@@ -41,7 +40,7 @@ namespace DD.ViewModel
         {
             _application = application;
 
-            LogViewModel = new LogViewModel();
+            LogViewModel = new LogViewModel(200);
 
             _viewModelLogger = new ViewModelLogger(_application.Logger, LogViewModel);
 
@@ -65,8 +64,6 @@ namespace DD.ViewModel
             engine.BoardTileMode = BoardTileMode.Square;
 
             _application.Engine = engine;
-
-            MapViewModel = new GraphViewModel(1200, 900);
 
             BoardViewModel = engine.BoardTileMode == BoardTileMode.Square
                 ? new BoardViewModel(
