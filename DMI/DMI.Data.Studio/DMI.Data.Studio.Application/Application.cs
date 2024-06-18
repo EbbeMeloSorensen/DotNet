@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils;
+using Craft.Utils.Linq;
 using DMI.FD.Domain;
 using DMI.FD.Domain.IO;
-using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.IO;
 
@@ -160,20 +160,23 @@ namespace DMI.Data.Studio.Application
         public async Task<List<Tuple<DateTime, DateTime>>> ExtractObservationIntervals(
             string nanoqStationId,
             string parameter,
-            double maxTolerableDifferenceBetweenTwoObservationsInDays,
+            double maxTolerableDifferenceBetweenTwoObservationsInHours,
+            int firstYear,
+            int lastYear,
+            bool useCacheIfPossible,
             ProgressCallback progressCallback = null)
         {
             return await Task.Run(() =>
             {
                 var result = new List<Tuple<DateTime, DateTime>>();
 
-                var fileName = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_intervals.txt");
-                var file = new FileInfo(fileName);
+                var cacheName = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_intervals.txt");
+                var file = new FileInfo(cacheName);
 
-                if (file.Exists)
+                if (file.Exists && useCacheIfPossible)
                 {
                     // Filen er allerede genereret, så læs den og returner
-                    using (var streamReader = new StreamReader(fileName))
+                    using (var streamReader = new StreamReader(cacheName))
                     {
                         string line;
 
@@ -202,6 +205,8 @@ namespace DMI.Data.Studio.Application
                     }
                 }
 
+                Logger?.WriteLine(LogMessageCategory.Debug, $"  Processing station {nanoqStationId}..");
+
                 // Filen er IKKE genereret, så generer den (så det går hurtigt næste gang) og returner listen
                 using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
                 {
@@ -216,17 +221,15 @@ namespace DMI.Data.Studio.Application
 
                         if (timeSeries != null)
                         {
-                            var startYear = 1953;
-                            //var lastYear = 1953;
-                            var lastYear = 2000; // Det går ret langsomt, hvis vi skal op i de nyeste tabeller, som der er meget data i
-
-                            var nYears = lastYear - startYear + 1;
+                            var nYears = lastYear - firstYear + 1;
                             var yearCount = 0;
 
                             var timeStamps = new List<DateTime>();
 
-                            for (var year = startYear; year <= lastYear; year++)
+                            for (var year = firstYear; year <= lastYear; year++)
                             {
+                                Logger?.WriteLine(LogMessageCategory.Debug, $"    Retrieving observations for {year}..");
+
                                 var startTime = new DateTime(year, 1, 1);
                                 var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
 
@@ -243,14 +246,14 @@ namespace DMI.Data.Studio.Application
                                 }
                             }
 
-                            var intervals = ConvertToIntervals(timeStamps, maxTolerableDifferenceBetweenTwoObservationsInDays);
+                            var intervals = ConvertToIntervals(timeStamps, maxTolerableDifferenceBetweenTwoObservationsInHours);
 
                             if (!Directory.Exists(@"C:\Data\Stations"))
                             {
                                 Directory.CreateDirectory(@"C:\Data\Stations");
                             }
 
-                            using (var streamWriter = new StreamWriter(fileName))
+                            using (var streamWriter = new StreamWriter(cacheName))
                             {
                                 foreach (var interval in intervals)
                                 {
@@ -285,8 +288,14 @@ namespace DMI.Data.Studio.Application
                                     streamWriter.Write($"{minute2}:");
                                     streamWriter.Write($"{second2}");
                                     streamWriter.WriteLine();
+
+                                    result.Add(new Tuple<DateTime, DateTime>(
+                                        new DateTime(t1.Year, t1.Month, t1.Day, t1.Hour, t1.Minute, t1.Second),
+                                        new DateTime(t2.Year, t2.Month, t2.Day, t2.Hour, t2.Minute, t2.Second)));
                                 }
                             }
+
+                            AnalyzeTimeSeries(timeStamps);
                         }
                     }
                 }
@@ -829,9 +838,9 @@ namespace DMI.Data.Studio.Application
             return stationDataRaw;
         }
 
-        private List<Tuple<DateTime, DateTime>> ConvertToIntervals(
+        private static List<Tuple<DateTime, DateTime>> ConvertToIntervals(
             List<DateTime> observationTimes,
-            double maxTolerableDifferenceBetweenTwoObservationsInDays)
+            double maxTolerableDifferenceBetweenTwoObservationsInHours)
         {
             var result = new List<Tuple<DateTime, DateTime>>();
 
@@ -850,7 +859,7 @@ namespace DMI.Data.Studio.Application
                 var t2 = observationTimes[i];
                 var diff = t2 - t1;
 
-                if (diff.TotalDays > maxTolerableDifferenceBetweenTwoObservationsInDays)
+                if (diff.TotalHours > maxTolerableDifferenceBetweenTwoObservationsInHours)
                 {
                     result.Add(new Tuple<DateTime, DateTime>(
                         startOfCurrentInterval, t1));
@@ -863,6 +872,42 @@ namespace DMI.Data.Studio.Application
                 startOfCurrentInterval, observationTimes.Last()));
 
             return result;
+        }
+
+        public static void AnalyzeTimeSeries(
+            List<DateTime> observationTimes)
+        {
+            var observationSpacings = observationTimes
+                .AdjacenPairs().ToList()
+                .Select(_ => _.Item2 - _.Item1)
+                .Distinct()
+                .ToList();
+
+            var temp = observationTimes
+                .AdjacenPairs().ToList()
+                .Select(_ => new { TimeStamp = _.Item1, Span = (_.Item2 - _.Item1).TotalMinutes });
+
+            while(temp.Any())
+            {
+                var startTime = temp.First().TimeStamp;
+                var span = temp.First().Span;
+
+                temp = temp.Skip(1);
+
+                var endTime = startTime;
+
+                if (temp.Any())
+                {
+                    var observationSegment = temp.TakeWhile(_ => _.Span == span).ToList();
+                    var last = observationSegment.Last();
+                    endTime = last.TimeStamp + TimeSpan.FromMinutes(last.Span);
+                    temp = temp.Skip(observationSegment.Count);
+                    var c = temp.Count();
+                }
+            }
+
+
+            throw new NotImplementedException("Under construction");
         }
     }
 }

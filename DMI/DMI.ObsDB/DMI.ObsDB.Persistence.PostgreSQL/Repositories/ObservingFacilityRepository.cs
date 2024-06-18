@@ -175,7 +175,9 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
         {
             var observingFacilities = new List<ObservingFacility>();
 
-            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            var connectionString = ConnectionStringProvider.GetConnectionString();
+
+            using (var conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
 

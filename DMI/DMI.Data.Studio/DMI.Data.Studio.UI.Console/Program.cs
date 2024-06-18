@@ -93,22 +93,22 @@ namespace DMI.Data.Studio.UI.Console
         {
             System.Console.Write("Extracting observation intervals...\nProgress: ");
 
-            var nanoqStationId = "603000";
-            var parameter = "temp_dry";
-            var maxTolerableDifferenceBetweenTwoObservationsInDays = 20.0;
-
             var result = await GetApplication().ExtractObservationIntervals(
-                nanoqStationId,
-                parameter,
-                maxTolerableDifferenceBetweenTwoObservationsInDays,
+                options.StatID,
+                options.Parameter,
+                int.Parse(options.Tolerance),
+                int.Parse(options.FirstYear),
+                int.Parse(options.LastYear),
+                false,
                 (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
                 return false;
             });
+
             System.Console.WriteLine("\nDone");
-            System.Console.WriteLine($"\nResult: {result.Count}");
+            System.Console.WriteLine($"\nOperational intervals: {result.Count}");
         }
 
         private static Application.Application GetApplication()

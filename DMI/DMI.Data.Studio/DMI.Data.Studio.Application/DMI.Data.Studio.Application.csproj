@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
+    <ProjectReference Include="..\..\..\Craft\Craft.Utils\Craft.Utils.csproj" />
     <ProjectReference Include="..\..\DMI.FD\DMI.FD.Domain.IO\DMI.FD.Domain.IO.csproj" />
     <ProjectReference Include="..\..\DMI.ObsDB\DMI.ObsDB.Persistence\DMI.ObsDB.Persistence.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.Application\DMI.SMS.Application.csproj" />
