@@ -838,7 +838,7 @@ namespace DMI.Data.Studio.Application
             return stationDataRaw;
         }
 
-        private List<Tuple<DateTime, DateTime>> ConvertToIntervals(
+        private static List<Tuple<DateTime, DateTime>> ConvertToIntervals(
             List<DateTime> observationTimes,
             double maxTolerableDifferenceBetweenTwoObservationsInHours)
         {
@@ -874,7 +874,7 @@ namespace DMI.Data.Studio.Application
             return result;
         }
 
-        private void AnalyzeTimeSeries(
+        public static void AnalyzeTimeSeries(
             List<DateTime> observationTimes)
         {
             var observationSpacings = observationTimes
