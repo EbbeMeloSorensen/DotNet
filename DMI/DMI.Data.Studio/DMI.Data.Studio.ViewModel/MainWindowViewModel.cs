@@ -308,7 +308,7 @@ namespace DMI.Data.Studio.ViewModel
             _includeObservationIntervalBars = true;
             _includeTransactionTimeIntervalBars = false;
             _showSMSDBList = true;
-            _showStatDBList = false;
+            _showStatDBList = true;
 
             //DrawRoughOutlineOfDenmarkOnMap();
             DrawMapOfDenmark();
@@ -1042,7 +1042,10 @@ namespace DMI.Data.Studio.ViewModel
             var intervals = await _application.ExtractObservationIntervals(
                 nanoqStationId,
                 parameter,
-                maxTolerableDifferenceBetweenTwoObservationsInDays);
+                maxTolerableDifferenceBetweenTwoObservationsInDays,
+                1953,
+                2000,
+                true);
 
             return intervals;
         }

@@ -2,7 +2,7 @@
   "profiles": {
     "DMI.Data.Studio.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "intervals"
+      "commandLineArgs": "intervals -s 603000 -p temp_dry -f 1953 -l 1962 -t 24"
     }
   }
 }
