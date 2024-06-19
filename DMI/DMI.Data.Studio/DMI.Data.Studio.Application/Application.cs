@@ -295,7 +295,7 @@ namespace DMI.Data.Studio.Application
                                 }
                             }
 
-                            AnalyzeTimeSeries(timeStamps);
+                            //AnalyzeTimeSeries(timeStamps);
                         }
                     }
                 }
@@ -874,14 +874,10 @@ namespace DMI.Data.Studio.Application
             return result;
         }
 
-        public static void AnalyzeTimeSeries(
+        public static List<Chunk> AnalyzeTimeSeries(
             List<DateTime> observationTimes)
         {
-            var observationSpacings = observationTimes
-                .AdjacenPairs().ToList()
-                .Select(_ => _.Item2 - _.Item1)
-                .Distinct()
-                .ToList();
+            var result = new List<Chunk>();
 
             var temp = observationTimes
                 .AdjacenPairs().ToList()
@@ -889,25 +885,31 @@ namespace DMI.Data.Studio.Application
 
             while(temp.Any())
             {
-                var startTime = temp.First().TimeStamp;
-                var span = temp.First().Span;
-
-                temp = temp.Skip(1);
-
-                var endTime = startTime;
-
-                if (temp.Any())
+                // Extract a chunk
+                var chunk = new Chunk
                 {
-                    var observationSegment = temp.TakeWhile(_ => _.Span == span).ToList();
-                    var last = observationSegment.Last();
-                    endTime = last.TimeStamp + TimeSpan.FromMinutes(last.Span);
-                    temp = temp.Skip(observationSegment.Count);
-                    var c = temp.Count();
-                }
+                    StartTime = temp.First().TimeStamp
+                };
+
+                var span = temp.First().Span;
+                var observationSegment = temp.TakeWhile(_ => _.Span == span).ToList();
+                var last = observationSegment.Last();
+                chunk.EndTime = last.TimeStamp + TimeSpan.FromMinutes(last.Span);
+                chunk.ObservationCount = observationSegment.Count + 1;
+                temp = temp.Skip(observationSegment.Count + 1);
+
+                result.Add(chunk);
+
+                // Det er ikke så godt det her - du misser f.eks. den sidste
+                // Hvad med at spørge chatgpt om hvordan du bør gøre
+
+                // Man kan også se sådan på det, at ud af de mange intervaller, du får lavet, skal nogle klassificeres som MELLEMRUM mellem bjælker,
+                // mens andre skal klassificeres som en DEL af en bjælke.
+                // Bemærk, at det altså også skal virke, hvis den FØRSTE måling står alene
+                // overvej i øvrigt om cachen kan gøres binær...
             }
 
-
-            throw new NotImplementedException("Under construction");
+            return result;
         }
     }
 }
