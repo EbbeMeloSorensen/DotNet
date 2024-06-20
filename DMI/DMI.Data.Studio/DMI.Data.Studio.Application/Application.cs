@@ -879,11 +879,33 @@ namespace DMI.Data.Studio.Application
         {
             var result = new List<Chunk>();
 
-            var temp = observationTimes
+            var bits = observationTimes
                 .AdjacenPairs().ToList()
                 .Select(_ => new { TimeStamp = _.Item1, Span = (_.Item2 - _.Item1).TotalMinutes });
 
-            while(temp.Any())
+            var minSpan = bits.Min(_ => _.Span);
+
+            while (bits.Any())
+            {
+                var bitsInChunk = bits
+                    .TakeWhile(_ => _.Span == minSpan);
+
+                var observationCount = bitsInChunk.Count() + 1;
+
+                bits = bits.Skip(observationCount);
+
+                var chunk = new Chunk
+                {
+                    StartTime = bits.First().TimeStamp,
+                    ObservationCount = observationCount
+                };
+
+                result.Add(chunk);
+            }
+
+
+            /*
+            while (temp.Any())
             {
                 // Extract a chunk
                 var chunk = new Chunk
@@ -908,6 +930,7 @@ namespace DMI.Data.Studio.Application
                 // Bemærk, at det altså også skal virke, hvis den FØRSTE måling står alene
                 // overvej i øvrigt om cachen kan gøres binær...
             }
+            */
 
             return result;
         }
