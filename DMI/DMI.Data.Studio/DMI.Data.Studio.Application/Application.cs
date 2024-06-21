@@ -901,17 +901,23 @@ namespace DMI.Data.Studio.Application
 
                 if (temp.Any())
                 {
-                    var extraStampsInChunk = temp
-                        .TakeWhile(_ => _.Spacing == minSpacing)
-                        .Count();
+                    var extraTimeStampsInChunk = temp
+                        .TakeWhile(_ => _.Spacing == minSpacing);
 
-                    chunk.ObservationCount = extraStampsInChunk + 1;
-                    //chunk.EndTime = chunk.StartTime + 
-                    temp = temp.Skip(extraStampsInChunk);
+                    var count = extraTimeStampsInChunk.Count();
+
+                    chunk.ObservationCount = count + 1;
+
+                    chunk.EndTime = extraTimeStampsInChunk.Any() 
+                        ? extraTimeStampsInChunk.Last().TimeStamp 
+                        : chunk.StartTime;
+
+                    temp = temp.Skip(count);
                 }
                 else
                 {
                     chunk.ObservationCount = 1;
+                    chunk.EndTime = chunk.StartTime;
                 }
 
                 chunks.Add(chunk);

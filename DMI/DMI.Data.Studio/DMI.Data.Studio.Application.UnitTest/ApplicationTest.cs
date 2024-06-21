@@ -84,6 +84,28 @@ namespace DMI.Data.Studio.Application.UnitTest
                 .Select(_ => _.ObservationCount)
                 .SequenceEqual(new List<int> { 4, 1, 3, 1 })
                 .Should().BeTrue();
+
+            chunks
+                .Select(_ => _.StartTime)
+                .SequenceEqual(new List<DateTime>
+                {
+                    new DateTime(2024, 7, 24, 0, 0, 0),
+                    new DateTime(2024, 7, 24, 5, 0, 0),
+                    new DateTime(2024, 7, 25, 1, 0, 0),
+                    new DateTime(2024, 7, 26, 7, 0, 0)
+                })
+                .Should().BeTrue();
+
+            chunks
+                .Select(_ => _.EndTime)
+                .SequenceEqual(new List<DateTime>
+                {
+                    new DateTime(2024, 7, 24, 3, 0, 0),
+                    new DateTime(2024, 7, 24, 5, 0, 0),
+                    new DateTime(2024, 7, 25, 3, 0, 0),
+                    new DateTime(2024, 7, 26, 7, 0, 0)
+                })
+                .Should().BeTrue();
         }
 
         [Fact]
@@ -115,7 +137,115 @@ namespace DMI.Data.Studio.Application.UnitTest
                 .Select(_ => _.ObservationCount)
                 .SequenceEqual(new List<int> { 1, 3, 1, 3, 1 })
                 .Should().BeTrue();
+
+            chunks
+                .Select(_ => _.StartTime)
+                .SequenceEqual(new List<DateTime>
+                {
+                    new DateTime(2024, 7, 23, 3, 0, 0),
+                    new DateTime(2024, 7, 24, 1, 0, 0),
+                    new DateTime(2024, 7, 24, 5, 0, 0),
+                    new DateTime(2024, 7, 25, 1, 0, 0),
+                    new DateTime(2024, 7, 26, 7, 0, 0)
+                })
+                .Should().BeTrue();
+
+            chunks
+                .Select(_ => _.EndTime)
+                .SequenceEqual(new List<DateTime>
+                {
+                    new DateTime(2024, 7, 23, 3, 0, 0),
+                    new DateTime(2024, 7, 24, 3, 0, 0),
+                    new DateTime(2024, 7, 24, 5, 0, 0),
+                    new DateTime(2024, 7, 25, 3, 0, 0),
+                    new DateTime(2024, 7, 26, 7, 0, 0)
+                })
+                .Should().BeTrue();
         }
 
+        [Fact]
+        public void Test4()
+        {
+            // Arrange
+            var observationTimes = new List<DateTime>
+            {
+                new DateTime(2024, 7, 24, 1, 0, 0),
+                new DateTime(2024, 7, 24, 3, 0, 0),
+                new DateTime(2024, 7, 24, 5, 0, 0),
+                new DateTime(2024, 8, 24, 1, 0, 0),
+                new DateTime(2024, 8, 24, 3, 0, 0),
+                new DateTime(2024, 8, 24, 5, 0, 0),
+            };
+
+            // Act
+            var chunks = Application.AnalyzeTimeSeries(observationTimes);
+
+            // Assert
+            chunks
+                .Select(_ => _.ObservationCount)
+                .SequenceEqual(new List<int> { 3, 3 })
+                .Should().BeTrue();
+
+            chunks
+                .Select(_ => _.StartTime)
+                .SequenceEqual(new List<DateTime>
+                {
+                    new DateTime(2024, 7, 24, 1, 0, 0),
+                    new DateTime(2024, 8, 24, 1, 0, 0),
+                })
+                .Should().BeTrue();
+
+            chunks
+                .Select(_ => _.EndTime)
+                .SequenceEqual(new List<DateTime>
+                {
+                    new DateTime(2024, 7, 24, 5, 0, 0),
+                    new DateTime(2024, 8, 24, 5, 0, 0),
+                })
+                .Should().BeTrue();
+        }
+
+        //[Fact]
+        //public void Test5()
+        //{
+        //    // Arrange
+        //    var observationTimes = new List<DateTime>
+        //    {
+        //        new DateTime(2024, 7, 24, 1, 0, 0),
+        //        new DateTime(2024, 7, 24, 2, 0, 0),
+        //        new DateTime(2024, 7, 24, 3, 0, 0),
+
+        //        new DateTime(2024, 8, 24, 1, 0, 0),
+        //        new DateTime(2024, 8, 24, 3, 0, 0),
+        //        new DateTime(2024, 8, 24, 5, 0, 0),
+        //    };
+
+        //    // Act
+        //    var chunks = Application.AnalyzeTimeSeries(observationTimes);
+
+        //    // Assert
+        //    chunks
+        //        .Select(_ => _.ObservationCount)
+        //        .SequenceEqual(new List<int> { 3, 3 })
+        //        .Should().BeTrue();
+
+        //    chunks
+        //        .Select(_ => _.StartTime)
+        //        .SequenceEqual(new List<DateTime>
+        //        {
+        //            new DateTime(2024, 7, 24, 1, 0, 0),
+        //            new DateTime(2024, 8, 24, 1, 0, 0),
+        //        })
+        //        .Should().BeTrue();
+
+        //    chunks
+        //        .Select(_ => _.EndTime)
+        //        .SequenceEqual(new List<DateTime>
+        //        {
+        //            new DateTime(2024, 7, 24, 3, 0, 0),
+        //            new DateTime(2024, 8, 24, 5, 0, 0),
+        //        })
+        //        .Should().BeTrue();
+        //}
     }
 }
