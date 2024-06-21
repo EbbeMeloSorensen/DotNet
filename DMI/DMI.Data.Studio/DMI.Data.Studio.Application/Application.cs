@@ -892,45 +892,46 @@ namespace DMI.Data.Studio.Application
 
                 var observationCount = bitsInChunk.Count() + 1;
 
-                bits = bits.Skip(observationCount);
+                if (observationCount > 1)
+                {
+                    bits = bits.Skip(observationCount);
+                }
+                else
+                {
+                    bits = bits.Skip(1);
+                }
 
                 var chunk = new Chunk
                 {
-                    StartTime = bits.First().TimeStamp,
+                    //StartTime = bits.First().TimeStamp,
                     ObservationCount = observationCount
                 };
 
                 result.Add(chunk);
             }
 
+            return result;
+        }
 
-            /*
-            while (temp.Any())
+        public static List<Chunk> AnalyzeTimeSeries2(
+            List<DateTime> observationTimes)
+        {
+            var result = new List<Chunk>();
+
+            var spacings = observationTimes
+                .AdjacenPairs()
+                .Select(_ => (int) (_.Item2 - _.Item1).TotalMinutes)
+                .ToList();
+
+            var minSpacing = spacings.Min();
+
+            spacings.Add(0);
+
+            var a = observationTimes.Zip(spacings, (timestamp, spacing) => new
             {
-                // Extract a chunk
-                var chunk = new Chunk
-                {
-                    StartTime = temp.First().TimeStamp
-                };
-
-                var span = temp.First().Span;
-                var observationSegment = temp.TakeWhile(_ => _.Span == span).ToList();
-                var last = observationSegment.Last();
-                chunk.EndTime = last.TimeStamp + TimeSpan.FromMinutes(last.Span);
-                chunk.ObservationCount = observationSegment.Count + 1;
-                temp = temp.Skip(observationSegment.Count + 1);
-
-                result.Add(chunk);
-
-                // Det er ikke så godt det her - du misser f.eks. den sidste
-                // Hvad med at spørge chatgpt om hvordan du bør gøre
-
-                // Man kan også se sådan på det, at ud af de mange intervaller, du får lavet, skal nogle klassificeres som MELLEMRUM mellem bjælker,
-                // mens andre skal klassificeres som en DEL af en bjælke.
-                // Bemærk, at det altså også skal virke, hvis den FØRSTE måling står alene
-                // overvej i øvrigt om cachen kan gøres binær...
-            }
-            */
+                TimeStamp = timestamp,
+                Spacing = spacing
+            });
 
             return result;
         }
