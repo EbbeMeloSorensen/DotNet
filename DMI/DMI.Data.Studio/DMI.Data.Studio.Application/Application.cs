@@ -877,63 +877,47 @@ namespace DMI.Data.Studio.Application
         public static List<Chunk> AnalyzeTimeSeries(
             List<DateTime> observationTimes)
         {
-            var result = new List<Chunk>();
+            var chunks = new List<Chunk>();
 
-            var bits = observationTimes
-                .AdjacenPairs().ToList()
-                .Select(_ => new { TimeStamp = _.Item1, Span = (_.Item2 - _.Item1).TotalMinutes });
+            var spacings = new List<int> { 0 };
 
-            var minSpan = bits.Min(_ => _.Span);
-
-            while (bits.Any())
-            {
-                var bitsInChunk = bits
-                    .TakeWhile(_ => _.Span == minSpan);
-
-                var observationCount = bitsInChunk.Count() + 1;
-
-                if (observationCount > 1)
-                {
-                    bits = bits.Skip(observationCount);
-                }
-                else
-                {
-                    bits = bits.Skip(1);
-                }
-
-                var chunk = new Chunk
-                {
-                    //StartTime = bits.First().TimeStamp,
-                    ObservationCount = observationCount
-                };
-
-                result.Add(chunk);
-            }
-
-            return result;
-        }
-
-        public static List<Chunk> AnalyzeTimeSeries2(
-            List<DateTime> observationTimes)
-        {
-            var result = new List<Chunk>();
-
-            var spacings = observationTimes
+            spacings.AddRange(observationTimes
                 .AdjacenPairs()
-                .Select(_ => (int) (_.Item2 - _.Item1).TotalMinutes)
-                .ToList();
+                .Select(_ => (int)(_.Item2 - _.Item1).TotalMinutes));
 
-            var minSpacing = spacings.Min();
+            var minSpacing = spacings.Skip(1).Min();
 
-            spacings.Add(0);
-
-            var a = observationTimes.Zip(spacings, (timestamp, spacing) => new
+            var temp = observationTimes.Zip(spacings, (timestamp, spacing) => new
             {
                 TimeStamp = timestamp,
                 Spacing = spacing
             });
 
-            return result;
+            while (temp.Any())
+            {
+                var chunk = new Chunk { StartTime = temp.First().TimeStamp };
+
+                temp = temp.Skip(1);
+
+                if (temp.Any())
+                {
+                    var extraStampsInChunk = temp
+                        .TakeWhile(_ => _.Spacing == minSpacing)
+                        .Count();
+
+                    chunk.ObservationCount = extraStampsInChunk + 1;
+                    //chunk.EndTime = chunk.StartTime + 
+                    temp = temp.Skip(extraStampsInChunk);
+                }
+                else
+                {
+                    chunk.ObservationCount = 1;
+                }
+
+                chunks.Add(chunk);
+            }
+
+            return chunks;
         }
     }
 }
