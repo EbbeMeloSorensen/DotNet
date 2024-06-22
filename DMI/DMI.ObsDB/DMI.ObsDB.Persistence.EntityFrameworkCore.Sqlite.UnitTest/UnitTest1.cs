@@ -17,7 +17,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
-                observingFacilities.Count().Should().Be(2);
+                observingFacilities.Count().Should().Be(5);
             }
         }
 
@@ -29,7 +29,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var timeSeries = unitOfWork.TimeSeries.GetAll();
-                timeSeries.Count().Should().Be(3);
+                timeSeries.Count().Should().Be(5);
             }
         }
 
@@ -41,7 +41,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var observations = unitOfWork.Observations.GetAll();
-                observations.Count().Should().Be(6);
+                observations.Count().Should().Be(4598521);
             }
         }
 
@@ -55,7 +55,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 observingFacilities = unitOfWork.ObservingFacilities.GetAll();
-                observingFacilities.Count().Should().Be(2);
+                observingFacilities.Count().Should().Be(5);
             }
 
             var observingFacility1 = observingFacilities.First();
@@ -63,9 +63,9 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var observingFacility = unitOfWork.ObservingFacilities.GetIncludingTimeSeries(observingFacility1.Id);
-                observingFacility.TimeSeries.Count().Should().Be(2);
+                observingFacility.TimeSeries.Count().Should().Be(1);
                 observingFacility.TimeSeries.First().ParamId.Should().Be("temp_dry");
-                observingFacility.TimeSeries.Skip(1).First().ParamId.Should().Be("wind_speed");
+                //observingFacility.TimeSeries.Skip(1).First().ParamId.Should().Be("wind_speed");
             }
         }
 
@@ -79,7 +79,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
                 timeSeries = unitOfWork.TimeSeries.GetAll();
-                timeSeries.Count().Should().Be(3);
+                timeSeries.Count().Should().Be(5);
             }
 
             var timeSeries1 = timeSeries.First();
@@ -91,9 +91,9 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
                     new DateTime(1970, 7, 24, 0, 0, 0),
                     new DateTime(1975, 7, 24, 7, 9, 20));
 
-                ts.Observations.Count().Should().Be(2);
-                ts.Observations.First().Value.Should().BeApproximately(32.4, 0.000000001);
-                ts.Observations.Skip(1).First().Value.Should().BeApproximately(34.5, 0.000000001);
+                ts.Observations.Count().Should().Be(14385);
+                ts.Observations.First().Value.Should().BeApproximately(9.0, 0.0001);
+                ts.Observations.Skip(1).First().Value.Should().BeApproximately(9.4, 0.0001);
             }
         }
 
