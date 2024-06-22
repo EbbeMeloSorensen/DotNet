@@ -8,6 +8,7 @@ using Craft.Utils;
 using Craft.Utils.Linq;
 using DMI.FD.Domain;
 using DMI.FD.Domain.IO;
+using DMI.ObsDB.Domain.Entities;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.IO;
 
@@ -170,13 +171,13 @@ namespace DMI.Data.Studio.Application
             {
                 var result = new List<Tuple<DateTime, DateTime>>();
 
-                var cacheName = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_intervals.txt");
-                var file = new FileInfo(cacheName);
+                var cacheName2 = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_intervals.txt");
+                var file = new FileInfo(cacheName2);
 
                 if (file.Exists && useCacheIfPossible)
                 {
                     // Filen er allerede genereret, så læs den og returner
-                    using (var streamReader = new StreamReader(cacheName))
+                    using (var streamReader = new StreamReader(cacheName2))
                     {
                         string line;
 
@@ -208,6 +209,8 @@ namespace DMI.Data.Studio.Application
                 Logger?.WriteLine(LogMessageCategory.Debug, $"  Processing station {nanoqStationId}..");
 
                 // Filen er IKKE genereret, så generer den (så det går hurtigt næste gang) og returner listen
+                TimeSeries timeSeries = null;
+
                 using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
                 {
                     var observingFacility = unitOfWork.ObservingFacilities
@@ -215,88 +218,74 @@ namespace DMI.Data.Studio.Application
 
                     if (observingFacility != null && observingFacility.TimeSeries != null)
                     {
-                        var timeSeries = observingFacility.TimeSeries
+                        timeSeries = observingFacility.TimeSeries
                             .Where(_ => _.ParamId == parameter)
                             .SingleOrDefault();
+                    }
+                }
 
-                        if (timeSeries != null)
-                        {
-                            var nYears = lastYear - firstYear + 1;
-                            var yearCount = 0;
+                if (timeSeries == null)
+                {
+                    return result;
+                }
 
-                            var timeStamps = new List<DateTime>();
+                // Der er åbenbart en tidsserie - nu skal vi hente observationer ud for den, og det gør vi lige år for år
+                var timeStamps = new List<DateTime>();
+                var nYears = lastYear - firstYear + 1;
+                var yearCount = 0;
 
-                            for (var year = firstYear; year <= lastYear; year++)
-                            {
-                                Logger?.WriteLine(LogMessageCategory.Debug, $"    Retrieving observations for {year}..");
+                for (var year = firstYear; year <= lastYear; year++)
+                {
+                    Logger?.WriteLine(LogMessageCategory.Debug, $"    Retrieving observations for {year}..");
 
-                                var startTime = new DateTime(year, 1, 1);
-                                var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
+                    var startTime = new DateTime(year, 1, 1);
+                    var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
 
-                                timeSeries = unitOfWork.TimeSeries.GetIncludingObservations(
-                                    timeSeries.Id, startTime, endTime);
+                    using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
+                    {
+                        var ts = unitOfWork.TimeSeries.GetIncludingObservations(
+                            timeSeries.Id, startTime, endTime);
 
-                                timeStamps.AddRange(timeSeries.Observations.Select(_ => _.Time));
+                        timeStamps.AddRange(ts.Observations.Select(_ => _.Time));
+                    }
 
-                                yearCount++;
+                    yearCount++;
 
-                                if (progressCallback != null)
-                                {
-                                    progressCallback.Invoke(0.0 + 100.0 * yearCount / nYears, "");
-                                }
-                            }
+                    if (progressCallback != null)
+                    {
+                        progressCallback.Invoke(0.0 + 100.0 * yearCount / nYears, "");
+                    }
+                }
 
-                            var intervals = ConvertToIntervals(timeStamps, maxTolerableDifferenceBetweenTwoObservationsInHours);
+                var cacheName1 = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_chunks.txt");
 
-                            if (!Directory.Exists(@"C:\Data\Stations"))
-                            {
-                                Directory.CreateDirectory(@"C:\Data\Stations");
-                            }
+                using (var streamWriter = new StreamWriter(cacheName1))
+                {
+                    var chunks = AnalyzeTimeSeries(timeStamps, streamWriter);
+                }
 
-                            using (var streamWriter = new StreamWriter(cacheName))
-                            {
-                                foreach (var interval in intervals)
-                                {
-                                    var t1 = interval.Item1;
-                                    var t2 = interval.Item2;
+                // Nu laver vi "intervaller", hvor vi opererer med en tolerance for hvor langt observationer kan være fra hinanden
+                // og stadig blive opfattet som værende en del af samme interval
+                var intervals = ConvertToIntervals(timeStamps, maxTolerableDifferenceBetweenTwoObservationsInHours);
 
-                                    var year1 = $"{t1.Year}";
-                                    var month1 = $"{t1.Month}".PadLeft(2, '0');
-                                    var day1 = $"{t1.Day}".PadLeft(2, '0');
-                                    var hour1 = $"{t1.Hour}".PadLeft(2, '0');
-                                    var minute1 = $"{t1.Minute}".PadLeft(2, '0');
-                                    var second1 = $"{t1.Second}".PadLeft(2, '0');
+                if (!Directory.Exists(@"C:\Data\Stations"))
+                {
+                    Directory.CreateDirectory(@"C:\Data\Stations");
+                }
 
-                                    var year2 = $"{t2.Year}";
-                                    var month2 = $"{t2.Month}".PadLeft(2, '0');
-                                    var day2 = $"{t2.Day}".PadLeft(2, '0');
-                                    var hour2 = $"{t2.Hour}".PadLeft(2, '0');
-                                    var minute2 = $"{t2.Minute}".PadLeft(2, '0');
-                                    var second2 = $"{t2.Second}".PadLeft(2, '0');
+                using (var streamWriter = new StreamWriter(cacheName2))
+                {
+                    foreach (var interval in intervals)
+                    {
+                        var t1 = interval.Item1;
+                        var t2 = interval.Item2;
 
-                                    streamWriter.Write($"{year1}-");
-                                    streamWriter.Write($"{month1}-");
-                                    streamWriter.Write($"{day1} ");
-                                    streamWriter.Write($"{hour1}:");
-                                    streamWriter.Write($"{minute1}:");
-                                    streamWriter.Write($"{second1}");
-                                    streamWriter.Write(" - ");
-                                    streamWriter.Write($"{year2}-");
-                                    streamWriter.Write($"{month2}-");
-                                    streamWriter.Write($"{day2} ");
-                                    streamWriter.Write($"{hour2}:");
-                                    streamWriter.Write($"{minute2}:");
-                                    streamWriter.Write($"{second2}");
-                                    streamWriter.WriteLine();
+                        WriteInterval(streamWriter, t1, t2);
+                        streamWriter.WriteLine();
 
-                                    result.Add(new Tuple<DateTime, DateTime>(
-                                        new DateTime(t1.Year, t1.Month, t1.Day, t1.Hour, t1.Minute, t1.Second),
-                                        new DateTime(t2.Year, t2.Month, t2.Day, t2.Hour, t2.Minute, t2.Second)));
-                                }
-                            }
-
-                            //AnalyzeTimeSeries(timeStamps);
-                        }
+                        result.Add(new Tuple<DateTime, DateTime>(
+                            new DateTime(t1.Year, t1.Month, t1.Day, t1.Hour, t1.Minute, t1.Second),
+                            new DateTime(t2.Year, t2.Month, t2.Day, t2.Hour, t2.Minute, t2.Second)));
                     }
                 }
 
@@ -875,7 +864,8 @@ namespace DMI.Data.Studio.Application
         }
 
         public static List<Chunk> AnalyzeTimeSeries(
-            List<DateTime> observationTimes)
+            List<DateTime> observationTimes,
+            TextWriter writer)
         {
             var chunks = new List<Chunk>();
 
@@ -885,7 +875,37 @@ namespace DMI.Data.Studio.Application
                 .AdjacenPairs()
                 .Select(_ => (int)(_.Item2 - _.Item1).TotalMinutes));
 
-            var minSpacing = spacings.Skip(1).Min();
+            // Identify frequencies in use
+            var spacingOccurrences = new Dictionary<int, int>();
+            
+            spacings.ForEach(_ =>
+            {
+                if (!spacingOccurrences.ContainsKey(_))
+                {
+                    spacingOccurrences[_] = 0;
+                }
+
+                spacingOccurrences[_]++;
+            });
+
+            var commonSpacings = new List<int>();
+
+            foreach (var kvp in spacingOccurrences)
+            {
+                var percentage = 1.0 * kvp.Value / (observationTimes.Count + 1);
+
+                if (percentage > 0.001)
+                {
+                    commonSpacings.Add(kvp.Key);
+                }
+            }
+
+            commonSpacings.Sort();
+            commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}");
+
+            writer.Write("Common spacings: ");
+            writer.Write(commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}"));
+            writer.WriteLine();
 
             var temp = observationTimes.Zip(spacings, (timestamp, spacing) => new
             {
@@ -896,13 +916,13 @@ namespace DMI.Data.Studio.Application
             while (temp.Any())
             {
                 var chunk = new Chunk { StartTime = temp.First().TimeStamp };
-
                 temp = temp.Skip(1);
+                var spacingForChunk = temp.First().Spacing;
 
-                if (temp.Any())
+                if (temp.Any() && commonSpacings.Contains(spacingForChunk))
                 {
                     var extraTimeStampsInChunk = temp
-                        .TakeWhile(_ => _.Spacing == minSpacing);
+                        .TakeWhile(_ => _.Spacing == spacingForChunk);
 
                     var count = extraTimeStampsInChunk.Count();
 
@@ -920,10 +940,58 @@ namespace DMI.Data.Studio.Application
                     chunk.EndTime = chunk.StartTime;
                 }
 
+                var spacing = (chunk.EndTime - chunk.StartTime).TotalMinutes / (chunk.ObservationCount - 1);
+
+                WriteInterval(writer, chunk.StartTime, chunk.EndTime);
+                writer.Write($" {chunk.ObservationCount,5}");
+
+                if (chunk.ObservationCount > 1)
+                {
+                    writer.Write($" {spacing}");
+                }
+
+                writer.WriteLine();
+
                 chunks.Add(chunk);
             }
 
             return chunks;
+        }
+
+        private static void WriteInterval(
+            TextWriter writer,
+            DateTime t1,
+            DateTime t2)
+        {
+            var year1 = $"{t1.Year}";
+            var month1 = $"{t1.Month}".PadLeft(2, '0');
+            var day1 = $"{t1.Day}".PadLeft(2, '0');
+            var hour1 = $"{t1.Hour}".PadLeft(2, '0');
+            var minute1 = $"{t1.Minute}".PadLeft(2, '0');
+            var second1 = $"{t1.Second}".PadLeft(2, '0');
+
+            writer.Write($"{year1}-");
+            writer.Write($"{month1}-");
+            writer.Write($"{day1} ");
+            writer.Write($"{hour1}:");
+            writer.Write($"{minute1}:");
+            writer.Write($"{second1}");
+
+            writer.Write(" - ");
+
+            var year2 = $"{t2.Year}";
+            var month2 = $"{t2.Month}".PadLeft(2, '0');
+            var day2 = $"{t2.Day}".PadLeft(2, '0');
+            var hour2 = $"{t2.Hour}".PadLeft(2, '0');
+            var minute2 = $"{t2.Minute}".PadLeft(2, '0');
+            var second2 = $"{t2.Second}".PadLeft(2, '0');
+
+            writer.Write($"{year2}-");
+            writer.Write($"{month2}-");
+            writer.Write($"{day2} ");
+            writer.Write($"{hour2}:");
+            writer.Write($"{minute2}:");
+            writer.Write($"{second2}");
         }
     }
 }

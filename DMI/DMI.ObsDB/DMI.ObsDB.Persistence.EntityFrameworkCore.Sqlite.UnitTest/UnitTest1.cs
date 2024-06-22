@@ -97,6 +97,41 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
             }
         }
 
+        // Her undersøger vi, hvad der sker, når man bruger samme unit of work til at hente observationer fra samme repo.
+        // Det er tilsyneladende ikke uden implikationer
+        [Fact]
+        public void Test_Read_TimeSeries_With_Observations_2()
+        {
+            var unitOfWorkFactory = new UnitOfWorkFactory();
+
+            IEnumerable<TimeSeries> timeSeries;
+
+            using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                timeSeries = unitOfWork.TimeSeries.GetAll();
+                timeSeries.Count().Should().Be(5);
+            }
+
+            var timeSeries1 = timeSeries.First();
+
+            // Bemærk, at vi har årene som den ydre løkke her og det at lave en unit of work som den indre,
+            // hvilket indebærer, at vi laver en unit of work for hvert år.
+            // Hvis man bytter rundt på det og dermed genbruger samme unit of work, så virker det ikke
+            for (var year = 1954; year <= 1954; year++)
+            {
+                using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    var startTime = new DateTime(year, 1, 1);
+                    var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
+
+                    var check = unitOfWork.TimeSeries.GetIncludingObservations(
+                        timeSeries1.Id, startTime, endTime);
+
+                    check.Observations.Count().Should().Be(2878);
+                }
+            }
+        }
+
         [Fact]
         public void Test_Delete_All_Observations()
         {

@@ -12,5 +12,10 @@ namespace DMI.ObsDB.Domain.Entities
         public DateTime Time { get; set; }
 
         public double Value { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Time} - {Value}";
+        }
     }
 }
