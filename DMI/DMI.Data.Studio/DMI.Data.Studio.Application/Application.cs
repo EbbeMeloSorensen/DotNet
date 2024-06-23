@@ -219,6 +219,25 @@ namespace DMI.Data.Studio.Application
 
                 if (file2.Exists)
                 {
+                    using (var streamReader = new StreamReader(cacheName1))
+                    {
+                        string line;
+                        var skipCount = 1;
+
+                        while ((line = streamReader.ReadLine()) != null)
+                        {
+                            if (skipCount > 0)
+                            {
+                                skipCount--;
+                                continue;
+                            }
+
+                            var startTimeAsText = line.Substring(0, 19);
+                            var endTimeAsText = line.Substring(21, 19);
+                            var observationCountAsText = line.Substring(42, 5);
+                        }
+                    }
+
                     throw new NotImplementedException();
                 }
                 else
