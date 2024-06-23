@@ -209,64 +209,78 @@ namespace DMI.Data.Studio.Application
                 Logger?.WriteLine(LogMessageCategory.Debug, $"  Processing station {nanoqStationId}..");
 
                 // Filen er IKKE genereret, så generer den (så det går hurtigt næste gang) og returner listen
-                TimeSeries timeSeries = null;
 
-                using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
+                // I første omgang skal vi have fat i chunks. De er muligvis allerede lavet
+                var cacheName1 = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_chunks.txt");
+
+                var file2 = new FileInfo(cacheName1);
+
+                List<Chunk> chunks;
+
+                if (file2.Exists)
                 {
-                    var observingFacility = unitOfWork.ObservingFacilities
-                        .GetIncludingTimeSeries(int.Parse(nanoqStationId));
-
-                    if (observingFacility != null && observingFacility.TimeSeries != null)
-                    {
-                        timeSeries = observingFacility.TimeSeries
-                            .Where(_ => _.ParamId == parameter)
-                            .SingleOrDefault();
-                    }
+                    throw new NotImplementedException();
                 }
-
-                if (timeSeries == null)
+                else
                 {
-                    return result;
-                }
-
-                // Der er åbenbart en tidsserie - nu skal vi hente observationer ud for den, og det gør vi lige år for år
-                var timeStamps = new List<DateTime>();
-                var nYears = lastYear - firstYear + 1;
-                var yearCount = 0;
-
-                for (var year = firstYear; year <= lastYear; year++)
-                {
-                    Logger?.WriteLine(LogMessageCategory.Debug, $"    Retrieving observations for {year}..");
-
-                    var startTime = new DateTime(year, 1, 1);
-                    var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
+                    TimeSeries timeSeries = null;
 
                     using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
                     {
-                        var ts = unitOfWork.TimeSeries.GetIncludingObservations(
-                            timeSeries.Id, startTime, endTime);
+                        var observingFacility = unitOfWork.ObservingFacilities
+                            .GetIncludingTimeSeries(int.Parse(nanoqStationId));
 
-                        timeStamps.AddRange(ts.Observations.Select(_ => _.Time));
+                        if (observingFacility != null && observingFacility.TimeSeries != null)
+                        {
+                            timeSeries = observingFacility.TimeSeries
+                                .Where(_ => _.ParamId == parameter)
+                                .SingleOrDefault();
+                        }
                     }
 
-                    yearCount++;
-
-                    if (progressCallback != null)
+                    if (timeSeries == null)
                     {
-                        progressCallback.Invoke(0.0 + 100.0 * yearCount / nYears, "");
+                        return result;
                     }
-                }
 
-                var cacheName1 = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_chunks.txt");
+                    // Der er åbenbart en tidsserie - nu skal vi hente observationer ud for den, og det gør vi lige år for år
+                    var timeStamps = new List<DateTime>();
+                    var nYears = lastYear - firstYear + 1;
+                    var yearCount = 0;
 
-                using (var streamWriter = new StreamWriter(cacheName1))
-                {
-                    var chunks = AnalyzeTimeSeries(timeStamps, streamWriter);
+                    for (var year = firstYear; year <= lastYear; year++)
+                    {
+                        Logger?.WriteLine(LogMessageCategory.Debug, $"    Retrieving observations for {year}..");
+
+                        var startTime = new DateTime(year, 1, 1);
+                        var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
+
+                        using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
+                        {
+                            var ts = unitOfWork.TimeSeries.GetIncludingObservations(
+                                timeSeries.Id, startTime, endTime);
+
+                            timeStamps.AddRange(ts.Observations.Select(_ => _.Time));
+                        }
+
+                        yearCount++;
+
+                        if (progressCallback != null)
+                        {
+                            progressCallback.Invoke(0.0 + 100.0 * yearCount / nYears, "");
+                        }
+                    }
+
+                    using (var streamWriter = new StreamWriter(cacheName1))
+                    {
+                        chunks = AnalyzeTimeSeries(timeStamps, streamWriter);
+                    }
                 }
 
                 // Nu laver vi "intervaller", hvor vi opererer med en tolerance for hvor langt observationer kan være fra hinanden
                 // og stadig blive opfattet som værende en del af samme interval
-                var intervals = ConvertToIntervals(timeStamps, maxTolerableDifferenceBetweenTwoObservationsInHours);
+                //var intervals = ConvertToIntervals(timeStamps, maxTolerableDifferenceBetweenTwoObservationsInHours);
+                var intervals = new List<Tuple<DateTime, DateTime>>();
 
                 if (!Directory.Exists(@"C:\Data\Stations"))
                 {
@@ -865,7 +879,7 @@ namespace DMI.Data.Studio.Application
 
         public static List<Chunk> AnalyzeTimeSeries(
             List<DateTime> observationTimes,
-            TextWriter writer)
+            TextWriter writer = null)
         {
             var chunks = new List<Chunk>();
 
@@ -880,6 +894,8 @@ namespace DMI.Data.Studio.Application
             
             spacings.ForEach(_ =>
             {
+                if (_ <= 0) return;
+
                 if (!spacingOccurrences.ContainsKey(_))
                 {
                     spacingOccurrences[_] = 0;
@@ -892,6 +908,9 @@ namespace DMI.Data.Studio.Application
 
             foreach (var kvp in spacingOccurrences)
             {
+                // NB: For korte tidsserier kan en spacing, der reelt er mellem forskellige "segmenter" i tidsserien,
+                // godt forveksles med en, der svarer til en gængs frekvens
+
                 var percentage = 1.0 * kvp.Value / (observationTimes.Count + 1);
 
                 if (percentage > 0.001)
@@ -903,9 +922,12 @@ namespace DMI.Data.Studio.Application
             commonSpacings.Sort();
             commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}");
 
-            writer.Write("Common spacings: ");
-            writer.Write(commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}"));
-            writer.WriteLine();
+            if (writer != null)
+            {
+                writer.Write("Common spacings: ");
+                writer.Write(commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}"));
+                writer.WriteLine();
+            }
 
             var temp = observationTimes.Zip(spacings, (timestamp, spacing) => new
             {
@@ -917,10 +939,13 @@ namespace DMI.Data.Studio.Application
             {
                 var chunk = new Chunk { StartTime = temp.First().TimeStamp };
                 temp = temp.Skip(1);
-                var spacingForChunk = temp.First().Spacing;
 
-                if (temp.Any() && commonSpacings.Contains(spacingForChunk))
+                if (temp.Any() && 
+                    commonSpacings.Contains(temp.First().Spacing) &&
+                    !(temp.Skip(1).Any() && temp.First().Spacing > temp.Skip(1).First().Spacing))
                 {
+                    var spacingForChunk = temp.First().Spacing;
+
                     var extraTimeStampsInChunk = temp
                         .TakeWhile(_ => _.Spacing == spacingForChunk);
 
@@ -940,17 +965,20 @@ namespace DMI.Data.Studio.Application
                     chunk.EndTime = chunk.StartTime;
                 }
 
-                var spacing = (chunk.EndTime - chunk.StartTime).TotalMinutes / (chunk.ObservationCount - 1);
-
-                WriteInterval(writer, chunk.StartTime, chunk.EndTime);
-                writer.Write($" {chunk.ObservationCount,5}");
-
-                if (chunk.ObservationCount > 1)
+                if (writer != null)
                 {
-                    writer.Write($" {spacing}");
-                }
+                    var spacing = (chunk.EndTime - chunk.StartTime).TotalMinutes / (chunk.ObservationCount - 1);
 
-                writer.WriteLine();
+                    WriteInterval(writer, chunk.StartTime, chunk.EndTime);
+                    writer.Write($" {chunk.ObservationCount,5}");
+
+                    if (chunk.ObservationCount > 1)
+                    {
+                        writer.Write($" {spacing}");
+                    }
+
+                    writer.WriteLine();
+                }
 
                 chunks.Add(chunk);
             }
