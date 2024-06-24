@@ -13,10 +13,12 @@ Done:
   fra ethvert compliant plugin. DMI.ObsDB.Persistence.PostgreSQL gør det at den genererer SQL til at trække fra OBSDB, og
   så transformerer den data, så det passer med den generelle model (WMDR). Den er i øvrigt temmelig langsom.
   Den trækker i øvrigt indtil videre kun temp_dry. Det er mest relevant at kigge på de aktive synopstationer som f.eks. Gedser (6149)
-
-In progress:
 * Den feature, der viser smalle gule bjælker for hvornår en station har foretaget målinger, skal basere sig på et DMI.ObsDB
   plugin og ikke på et file repo
+
+In progress:
+* Progress feedback for den komponent, der genererer gule bjælker
+* Stabiliser den komponent, der genererer gule bjælker
 
 Todo:
 * Dokumenter mekanismen til at hente observationer passende i dit Confluence site

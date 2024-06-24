@@ -996,13 +996,19 @@ namespace DMI.Data.Studio.Application
             }
 
             commonSpacings.Sort();
-            commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}");
 
             if (writer != null)
             {
                 writer.Write("Common spacings: ");
-                writer.Write(commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}"));
-                writer.WriteLine();
+
+                if (commonSpacings.Any())
+                {
+                    writer.WriteLine(commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}"));
+                }
+                else
+                {
+                    writer.WriteLine("None");
+                }
             }
 
             var temp = observationTimes.Zip(spacings, (timestamp, spacing) => new

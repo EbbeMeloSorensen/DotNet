@@ -1044,7 +1044,7 @@ namespace DMI.Data.Studio.ViewModel
                 parameter,
                 maxTolerableDifferenceBetweenTwoObservationsInDays,
                 1953,
-                1963,
+                2000,
                 true);
 
             return intervals;
