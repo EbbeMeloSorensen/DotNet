@@ -210,16 +210,20 @@ namespace DMI.Data.Studio.Application
 
                 // Filen er IKKE genereret, så generer den (så det går hurtigt næste gang) og returner listen
 
-                // I første omgang skal vi have fat i chunks. De er muligvis allerede lavet
-                var cacheName1 = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_chunks.txt");
+                // I første omgang skal vi have fat i chunks. De er muligvis allerede lavet, og i så fald læser vi dem fra cachen
+                var chunkCacheName = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_chunks.txt");
 
-                var file2 = new FileInfo(cacheName1);
+                var chunkFile = new FileInfo(chunkCacheName);
 
-                List<Chunk> chunks;
+                Queue<Chunk> chunks;
 
-                if (file2.Exists)
+                if (chunkFile.Exists)
                 {
-                    using (var streamReader = new StreamReader(cacheName1))
+                    // Read chunks from cache
+
+                    chunks = new Queue<Chunk>();
+
+                    using (var streamReader = new StreamReader(chunkCacheName))
                     {
                         string line;
                         var skipCount = 1;
@@ -233,15 +237,34 @@ namespace DMI.Data.Studio.Application
                             }
 
                             var startTimeAsText = line.Substring(0, 19);
-                            var endTimeAsText = line.Substring(21, 19);
-                            var observationCountAsText = line.Substring(42, 5);
+                            var endTimeAsText = line.Substring(22, 19);
+                            var observationCountAsText = line.Substring(42, 5).Trim();
+
+                            if (!startTimeAsText.TryParsingAsDateTime(out var startTime))
+                            {
+                                throw new InvalidDataException("Apparently the chunks file is corrupt");
+                            }
+
+                            if (!endTimeAsText.TryParsingAsDateTime(out var endTime))
+                            {
+                                throw new InvalidDataException("Apparently the chunks file is corrupt");
+                            }
+
+                            var observationCount = int.Parse(observationCountAsText);
+
+                            chunks.Enqueue(new Chunk
+                            {
+                                StartTime = startTime,
+                                EndTime = endTime,
+                                ObservationCount = observationCount
+                            });
                         }
                     }
-
-                    throw new NotImplementedException();
                 }
                 else
                 {
+                    // Generate chunks by reading from database
+
                     TimeSeries timeSeries = null;
 
                     using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
@@ -290,16 +313,50 @@ namespace DMI.Data.Studio.Application
                         }
                     }
 
-                    using (var streamWriter = new StreamWriter(cacheName1))
+                    // Der kan åbenbart være dubletter, så det tager vi lige hånd om
+                    timeStamps = timeStamps.Distinct().ToList();
+                    timeStamps.Sort();
+
+                    using (var streamWriter = new StreamWriter(chunkCacheName))
                     {
+                        // Bemærk: Denne både laver chunks og skriver til fil
                         chunks = AnalyzeTimeSeries(timeStamps, streamWriter);
                     }
                 }
 
-                // Nu laver vi "intervaller", hvor vi opererer med en tolerance for hvor langt observationer kan være fra hinanden
-                // og stadig blive opfattet som værende en del af samme interval
+                // Nu er vi så klar til at generere samlingen af intervaller med udgangspunkt i listen af chunks
+
+                // (denne konstruktion blev før brugt til at lave intervaller direkte ud fra timeStamps, men vi vil hellere lave det ud
+                // fra chunks, da det er væsentligt hurtigere) 
                 //var intervals = ConvertToIntervals(timeStamps, maxTolerableDifferenceBetweenTwoObservationsInHours);
+
                 var intervals = new List<Tuple<DateTime, DateTime>>();
+
+                while (chunks.Any())
+                {
+                    var firstChunkInNewInterval = chunks.Dequeue();
+                    var startTime = firstChunkInNewInterval.StartTime;
+                    var endTime = firstChunkInNewInterval.EndTime;
+
+                    // Under construction (hvis der er flere, og afstanden er mindre end tolerancen, så siger vi, at næste chunk gøres til en del af samme interval)
+
+                    while(chunks.TryPeek(out var chunk))
+                    {
+                        var chunkSpacingInDays = (chunk.StartTime - endTime).TotalDays;
+
+                        if (chunkSpacingInDays < 1)
+                        {
+                            chunks.Dequeue();
+                            endTime = chunk.EndTime;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    intervals.Add(new Tuple<DateTime, DateTime>(startTime, endTime));
+                }
 
                 if (!Directory.Exists(@"C:\Data\Stations"))
                 {
@@ -896,11 +953,11 @@ namespace DMI.Data.Studio.Application
             return result;
         }
 
-        public static List<Chunk> AnalyzeTimeSeries(
+        public static Queue<Chunk> AnalyzeTimeSeries(
             List<DateTime> observationTimes,
             TextWriter writer = null)
         {
-            var chunks = new List<Chunk>();
+            var chunks = new Queue<Chunk>();
 
             var spacings = new List<int> { 0 };
 
@@ -999,7 +1056,7 @@ namespace DMI.Data.Studio.Application
                     writer.WriteLine();
                 }
 
-                chunks.Add(chunk);
+                chunks.Enqueue(chunk);
             }
 
             return chunks;
