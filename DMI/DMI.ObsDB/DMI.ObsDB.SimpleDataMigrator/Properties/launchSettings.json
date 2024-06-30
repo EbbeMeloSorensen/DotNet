@@ -2,7 +2,7 @@
   "profiles": {
     "DMI.ObsDB.SimpleDataMigrator": {
       "commandName": "Project",
-      "commandLineArgs": "migrate -l 9999999 -y 1953 -q 1975"
+      "commandLineArgs": "migrate -l 9999999 -y 1953 -q 1963"
     }
   }
 }

@@ -52,6 +52,8 @@ foreach (var si in stationInformations)
         sw.InspectStationType(si);
         sw.InspectStationOwner(si);
         sw.InspectSource(s);
+        sw.InspectName(si);
+        sw.InspectStatus(si);
     }
 
     sw.PrintLine("-----------------------------------------------------------------------------------------------------------------------------------------------");
