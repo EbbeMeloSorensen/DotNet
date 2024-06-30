@@ -17,10 +17,14 @@ Done:
   plugin og ikke på et file repo
 
 In progress:
-* Progress feedback for den komponent, der genererer gule bjælker
-* Stabiliser den komponent, der genererer gule bjælker
 
 Todo:
+* Lav et sqlite-plugin for StatDB
+* Omdøb ObsDB-serien til Wigos
+* Man skal kunne importere en json fil med statdb-data
+* Det skal være lettere at finde specificere et tidsinterval for tidsserieviewet
+* Progress feedback for den komponent, der genererer gule bjælker
+* Stabiliser den komponent, der genererer gule bjælker
 * Dokumenter mekanismen til at hente observationer passende i dit Confluence site
 * Lav en feature, hvor man for de valgte stationer kan generere datafiler over de rå observationer samt filer over tidsintervaller
   - det må meget gerne ligge tilgængeligt i konsol-applikationen, så det kan køres fra Linux

@@ -58,6 +58,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Persistence.EntityFra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{E6215713-4959-42CE-A15F-D7495D203E21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite", "DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite\DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite.csproj", "{AFEDFD92-5BEF-4388-A2D3-669A224F89D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -164,6 +166,10 @@ Global
 		{E6215713-4959-42CE-A15F-D7495D203E21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6215713-4959-42CE-A15F-D7495D203E21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6215713-4959-42CE-A15F-D7495D203E21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFEDFD92-5BEF-4388-A2D3-669A224F89D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFEDFD92-5BEF-4388-A2D3-669A224F89D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFEDFD92-5BEF-4388-A2D3-669A224F89D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFEDFD92-5BEF-4388-A2D3-669A224F89D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
