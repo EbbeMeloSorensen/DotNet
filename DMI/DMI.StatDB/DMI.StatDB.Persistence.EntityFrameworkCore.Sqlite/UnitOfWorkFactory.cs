@@ -31,25 +31,70 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite
 
         private static void SeedDatabase(StatDBContext context)
         {
+            var station1 = new Station
+            {
+                Country = "Danmark",
+                StatID = 603000,
+                IcaoId = "",
+                Source = "ingres"
+            };
+
+            var station2 = new Station
+            {
+                Country = "Danmark",
+                StatID = 604200,
+                IcaoId = "",
+                Source = "ingres"
+            };
+
             var stations = new List<Station>
             {
-                new Station
+                station1,
+                station2
+            };
+
+            var positions = new List<Position>
+            {
+                new Position
                 {
-                    Country = "Danmark",
-                    StatID = 603000,
-                    IcaoId = "",
-                    Source = "ingres"
+                    Lat = 9.12,
+                    Long = 56.34,
+                    StartTime = new DateTime(2012, 7, 24, 13, 0, 0),
+                    EndTime = new DateTime(2019, 7, 24, 13, 0, 0),
+                    Station = station1,
+                    Entity = "station"
                 },
-                new Station
+                new Position
                 {
-                    Country = "Danmark",
-                    StatID = 604200,
-                    IcaoId = "",
-                    Source = "ingres"
+                    Lat = 9.12,
+                    Long = 55.34,
+                    StartTime = new DateTime(2019, 7, 24, 13, 0, 0),
+                    EndTime = new DateTime(2023, 7, 24, 13, 0, 0),
+                    Station = station1,
+                    Entity = "station"
+                },
+                new Position
+                {
+                    Lat = 9.12,
+                    Long = 56.34,
+                    StartTime = new DateTime(2011, 7, 24, 13, 0, 0),
+                    EndTime = new DateTime(2016, 7, 24, 13, 0, 0),
+                    Station = station2,
+                    Entity = "station"
+                },
+                new Position
+                {
+                    Lat = 9.12,
+                    Long = 55.34,
+                    StartTime = new DateTime(2016, 7, 24, 13, 0, 0),
+                    EndTime = new DateTime(2023, 7, 24, 13, 0, 0),
+                    Station = station2,
+                    Entity = "station"
                 }
             };
 
             context.Stations.AddRange(stations);
+            context.Positions.AddRange(positions);
             context.SaveChanges();
         }
     }

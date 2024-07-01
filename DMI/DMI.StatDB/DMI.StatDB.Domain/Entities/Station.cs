@@ -9,7 +9,6 @@ namespace DMI.StatDB.Domain.Entities
         private string _country;
         private string _source;
 
-
         public int StatID
         {
             get { return _statid; }
