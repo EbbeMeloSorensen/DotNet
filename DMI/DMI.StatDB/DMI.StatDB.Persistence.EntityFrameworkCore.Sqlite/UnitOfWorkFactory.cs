@@ -5,7 +5,7 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
-        public void Initialize(ILogger logger)
+        static UnitOfWorkFactory()
         {
             using var context = new StatDBContext();
             context.Database.EnsureCreated();
@@ -13,6 +13,10 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite
             if (context.Stations.Any()) return;
 
             SeedDatabase(context);
+        }
+
+        public void Initialize(ILogger logger)
+        {
         }
 
         public Task<bool> CheckRepositoryConnection()
@@ -32,12 +36,16 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite
                 new Station
                 {
                     Country = "Danmark",
-                    StatID = 603000
+                    StatID = 603000,
+                    IcaoId = "",
+                    Source = "ingres"
                 },
                 new Station
                 {
                     Country = "Danmark",
-                    StatID = 604200
+                    StatID = 604200,
+                    IcaoId = "",
+                    Source = "ingres"
                 }
             };
 
