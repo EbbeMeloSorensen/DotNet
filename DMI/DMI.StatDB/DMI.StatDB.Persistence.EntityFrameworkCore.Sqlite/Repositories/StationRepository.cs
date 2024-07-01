@@ -63,9 +63,11 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
             var stations = predicates.Any()
                 ? DBContext.Stations
+                    .Include(_ => _.Positions)
                     .Where(predicates.Aggregate((c, n) => c.And(n)))
                     .ToList()
                 : DBContext.Stations
+                    .Include(_ => _.Positions)
                     .ToList();
 
             return stations;
