@@ -89,6 +89,23 @@ namespace DMI.StatDB.Application
             });
         }
 
+        public async Task ImportData(
+            string fileName,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
+                progressCallback?.Invoke(0.0, "Importing data");
+
+                //UIDataProvider.ExportData("StatDBData_Export.json");
+                UIDataProvider.ImportData(fileName);
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed importing data");
+            });
+        }
+
         public async Task ExportData(
             ProgressCallback progressCallback = null)
         {

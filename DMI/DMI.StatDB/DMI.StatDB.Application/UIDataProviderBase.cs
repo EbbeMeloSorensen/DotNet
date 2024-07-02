@@ -49,6 +49,42 @@ namespace DMI.StatDB.Application
         public abstract IList<Station> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates);
 
+        public void ImportData(
+            string fileName)
+        {
+            var extension = Path.GetExtension(fileName)?.ToLower();
+
+            if (extension == null)
+            {
+                throw new ArgumentException();
+            }
+
+            IList<Station> stations;
+            IList<Position> positions;
+
+            switch (extension)
+            {
+                case ".xml":
+                {
+                    _dataIOHandler.ImportDataFromXML(
+                        fileName, out stations, out positions);
+                    break;
+                }
+                case ".json":
+                {
+                    _dataIOHandler.ImportDataFromJson(
+                        fileName, out stations, out positions);
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentException();
+                }
+            }
+
+            LoadStations(stations);
+        }
+
         public void ExportData(string fileName)
         {
             var extension = Path.GetExtension(fileName)?.ToLower();
@@ -88,5 +124,8 @@ namespace DMI.StatDB.Application
                 }
             }
         }
+
+        protected abstract void LoadStations(
+            IList<Station> stations);
     }
 }

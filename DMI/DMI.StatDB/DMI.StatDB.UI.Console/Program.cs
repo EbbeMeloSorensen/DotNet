@@ -11,17 +11,13 @@ namespace DMI.StatDB.UI.Console
         {
             System.Console.WriteLine("DMI.StatDB.UI.Console");
 
-            //System.Console.WriteLine("Counting Station records...");
-            //System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllStations().Count}");
-
-            //await MakeBreakfast(application);
-            //await ExportData(application);
-
             await Parser.Default.ParseArguments<
                     Breakfast,
+                    Import,
                     Export>(args)
                 .MapResult(
                     (Breakfast options) => MakeBreakfast(),
+                    (Import options) => Import(options),
                     (Export options) => Export(),
                     errs => Task.FromResult(0));
 
@@ -31,6 +27,19 @@ namespace DMI.StatDB.UI.Console
         {
             System.Console.Write("Making breakfast...\nProgress: ");
             await GetApplication().MakeBreakfast((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task Import(
+            Import options)
+        {
+            System.Console.Write("Importing data...\nProgress: ");
+            await GetApplication().ImportData(options.FileName, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

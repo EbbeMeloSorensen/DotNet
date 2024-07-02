@@ -188,6 +188,11 @@ namespace DMI.StatDB.UIDataProvider.Persistence
             return stations;
         }
 
+        protected override void LoadStations(IList<Station> stations)
+        {
+            throw new NotImplementedException();
+        }
+
         private Station IncludeInCache(
             Station stationFromRepository)
         {
