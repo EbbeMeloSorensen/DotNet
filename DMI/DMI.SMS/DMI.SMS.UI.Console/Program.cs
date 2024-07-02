@@ -19,9 +19,6 @@ namespace DMI.SMS.UI.Console
         {
             System.Console.WriteLine("DMI.SMS.UI.Console");
 
-            // Works
-            //await GenerateSQLScriptForTurningElevationAngles(application);
-
             // Override arguments
             //args = new string[3] {"export", "-f", "test.json"};
 

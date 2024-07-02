@@ -10,9 +10,9 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite
             using var context = new StatDBContext();
             context.Database.EnsureCreated();
 
-            if (context.Stations.Any()) return;
+            //if (context.Stations.Any()) return;
 
-            SeedDatabase(context);
+            //SeedDatabase(context);
         }
 
         public void Initialize(ILogger logger)

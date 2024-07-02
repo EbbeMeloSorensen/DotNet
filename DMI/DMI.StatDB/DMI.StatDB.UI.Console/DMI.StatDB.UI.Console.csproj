@@ -8,13 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\DMI.StatDB.Application\DMI.StatDB.Application.csproj" />
-    <ProjectReference Include="..\DMI.StatDB.Persistence.Npgsql\DMI.StatDB.Persistence.Npgsql.csproj" />
+    <ProjectReference Include="..\DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite\DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite.csproj" />
     <ProjectReference Include="..\DMI.StatDB.UIDataProvider.Persistence\DMI.StatDB.UIDataProvider.Persistence.csproj" />
   </ItemGroup>
 

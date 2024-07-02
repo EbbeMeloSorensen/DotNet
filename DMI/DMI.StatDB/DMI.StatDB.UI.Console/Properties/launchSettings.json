@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DMI.StatDB.UI.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "export"
+    }
+  }
+}
