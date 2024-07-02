@@ -23,15 +23,17 @@ namespace DMI.SMS.UI.Console
             //await GenerateSQLScriptForTurningElevationAngles(application);
 
             // Override arguments
-            args = new string[3] {"export", "-f", "test.json"};
+            //args = new string[3] {"export", "-f", "test.json"};
 
             await Parser.Default.ParseArguments<
                     Lunch,
                     Export,
+                    Import,
                     Script>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
+                    (Import options) => Import(options),
                     (Script options) => Script(options),
                     errs => Task.FromResult(0));
         }
@@ -52,7 +54,24 @@ namespace DMI.SMS.UI.Console
         {
             System.Console.Write("Exporting...\nProgress: ");
 
-            await GetApplication().ExportData(options.FileName, (progress, nameOfSubtask) =>
+            await GetApplication().ExportData(
+                options.FileName,
+                options.ExcludeSupercededRows,
+                (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task Import(Import options)
+        {
+            System.Console.Write("Import...\nProgress: ");
+
+            await GetApplication().ImportData(options.FileName, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

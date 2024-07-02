@@ -854,6 +854,7 @@ namespace DMI.Data.Studio.ViewModel
 
             await _smsApplication.ExportData(
                 dialog.FileName,
+                false,
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;

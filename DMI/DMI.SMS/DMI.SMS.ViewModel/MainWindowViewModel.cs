@@ -203,8 +203,10 @@ namespace DMI.SMS.ViewModel
             TaskViewModel.Show("Exporting data", false);
             RefreshCommandAvailability();
 
+
             await _application.ExportData(
                 dialog.FileName,
+                excludeSupercededRows: false,
                 (progress, currentActivity) =>
                 {
                     TaskViewModel.Progress = progress;

@@ -7,6 +7,7 @@ using Craft.Utils;
 using Craft.Logging;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.IO;
+using System.Linq.Expressions;
 
 namespace DMI.SMS.Application
 {
@@ -143,6 +144,7 @@ namespace DMI.SMS.Application
 
         public async Task ExportData(
             string fileName,
+            bool excludeSupercededRows,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(() =>
@@ -150,7 +152,19 @@ namespace DMI.SMS.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
                 progressCallback?.Invoke(2.0, "Exporting data");
 
-                UIDataProvider.ExportData(fileName, null);
+                if (excludeSupercededRows)
+                {
+                    var predicates = new List<Expression<Func<StationInformation, bool>>>()
+                    {
+                        _ => _.GdbToDate == new DateTime(9999, 12, 31, 23, 59, 59)
+                    };
+
+                    UIDataProvider.ExportData(fileName, predicates);
+                }
+                else
+                {
+                    UIDataProvider.ExportData(fileName, null);
+                }
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, $"Completed exporting data to file: {fileName}");
