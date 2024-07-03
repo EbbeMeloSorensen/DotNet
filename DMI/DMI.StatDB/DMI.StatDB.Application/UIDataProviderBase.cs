@@ -83,6 +83,7 @@ namespace DMI.StatDB.Application
             }
 
             LoadStations(stations);
+            LoadPositions(positions);
         }
 
         public void ExportData(string fileName)
@@ -127,5 +128,8 @@ namespace DMI.StatDB.Application
 
         protected abstract void LoadStations(
             IList<Station> stations);
+
+        protected abstract void LoadPositions(
+            IList<Position> positions);
     }
 }

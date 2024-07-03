@@ -196,6 +196,14 @@ namespace DMI.StatDB.UIDataProvider.Persistence
             }
         }
 
+        protected override void LoadPositions(IList<Position> positions)
+        {
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.Positions.Load(positions);
+            }
+        }
+
         private Station IncludeInCache(
             Station stationFromRepository)
         {
