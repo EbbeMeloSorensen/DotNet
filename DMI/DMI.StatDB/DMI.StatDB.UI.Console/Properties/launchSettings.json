@@ -2,7 +2,7 @@
   "profiles": {
     "DMI.StatDB.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "import -f C:\Data\StatDBData_Export.json"
+      "commandLineArgs": "import -f C://Data//StatDBData_Export.json"
     }
   }
 }

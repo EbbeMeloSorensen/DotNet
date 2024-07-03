@@ -190,7 +190,10 @@ namespace DMI.StatDB.UIDataProvider.Persistence
 
         protected override void LoadStations(IList<Station> stations)
         {
-            throw new NotImplementedException();
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.Stations.Load(stations);
+            }
         }
 
         private Station IncludeInCache(
