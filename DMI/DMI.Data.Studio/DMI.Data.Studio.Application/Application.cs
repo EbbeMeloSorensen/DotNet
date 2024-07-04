@@ -170,8 +170,6 @@ namespace DMI.Data.Studio.Application
             return await Task.Run(() =>
             {
                 var result = new List<Tuple<DateTime, DateTime>>();
-                return result; // temporarily outcommented
-
                 var cacheName2 = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_intervals.txt");
                 var file = new FileInfo(cacheName2);
 
