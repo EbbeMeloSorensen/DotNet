@@ -173,8 +173,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             get { return _translationX; }
             set
             {
-                _translationX = value;
-                RaisePropertyChanged();
+                if (!XAxisLocked)
+                {
+                    _translationX = value;
+                    RaisePropertyChanged();
+                }
             }
         }
 
@@ -184,8 +187,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             get { return _translationY; }
             set
             {
-                _translationY = value;
-                RaisePropertyChanged();
+                if (!YAxisLocked)
+                {
+                    _translationY = value;
+                    RaisePropertyChanged();
+                }
             }
         }
 

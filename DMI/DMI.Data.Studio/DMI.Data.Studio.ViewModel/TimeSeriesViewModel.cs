@@ -60,6 +60,9 @@ namespace DMI.Data.Studio.ViewModel
                 _timeAtOrigo,
                 null);
 
+            ScatterChartViewModel.GeometryEditorViewModel.YAxisLocked = true;
+            ScatterChartViewModel.ShowPanningButtons = true; // Gør ingen forskel...
+
             ScatterChartViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured +=
                 GeometryEditorViewModel_WorldWindowMajorUpdateOccured;
 
