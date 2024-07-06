@@ -10,14 +10,14 @@ namespace Craft.UIElements.GuiTest.Tab4
 {
     public class Tab4ViewModel : ViewModelBase
     {
-        private string _greeting = "Greeting from Tab4ViewModel";
+        private string _timeAtCursor;
 
-        public string Greeting
+        public string TimeAtCursor
         {
-            get { return _greeting; }
+            get { return _timeAtCursor; }
             set
             {
-                _greeting = value;
+                _timeAtCursor = value;
                 RaisePropertyChanged();
             }
         }
@@ -26,11 +26,12 @@ namespace Craft.UIElements.GuiTest.Tab4
 
         public Tab4ViewModel()
         {
-            var now = DateTime.UtcNow.TruncateToMilliseconds();
             var startTime = DateTime.UtcNow.TruncateToMilliseconds() - new TimeSpan(0, 15, 0);
             var endTime = DateTime.UtcNow.TruncateToMilliseconds() + new TimeSpan(0, 15, 0);
             ChronologyViewModel = new ChronologyViewModel(startTime, endTime, 50, 240);
             DrawSomeDummyStuff();
+
+            TimeAtCursor = "Coming soon: Time at cursor";
         }
 
         private void DrawSomeDummyStuff()

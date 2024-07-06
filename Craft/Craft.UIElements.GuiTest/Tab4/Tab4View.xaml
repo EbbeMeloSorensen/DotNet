@@ -8,7 +8,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <!--<Button Content="{Binding Greeting}"/>-->
-        <chronology:ChronologyView DataContext="{Binding ChronologyViewModel}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <chronology:ChronologyView Grid.Row="0" DataContext="{Binding ChronologyViewModel}"/>
+        <TextBlock Grid.Row="1" HorizontalAlignment="Stretch"
+                   Text="{Binding TimeAtCursor}"/>
     </Grid>
 </UserControl>

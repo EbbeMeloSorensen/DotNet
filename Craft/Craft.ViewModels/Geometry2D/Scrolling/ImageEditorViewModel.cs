@@ -80,13 +80,8 @@ namespace Craft.ViewModels.Geometry2D.Scrolling
 
         public ObservableObject<PointD?> MousePositionWorld { get; }
 
-        public ImageEditorViewModel()
+        public ImageEditorViewModel() : this(0, 0)
         {
-            ImageWidth = 0;
-            ImageHeight = 0;
-            ScrollOffset = new PointD { X = 0, Y = 0 };
-            ScrollOffset = new PointD { X = 0, Y = 0 };
-            Magnification = 1;
         }
 
         public ImageEditorViewModel(

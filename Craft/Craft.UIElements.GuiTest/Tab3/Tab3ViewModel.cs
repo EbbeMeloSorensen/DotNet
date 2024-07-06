@@ -797,8 +797,11 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             ImageEditorViewModel.MousePositionWorld.PropertyChanged += (s, e) =>
             {
+                var x = (int)Math.Round(ImageEditorViewModel.MousePositionWorld.Object.X);
+                var y = (int)Math.Round(ImageEditorViewModel.MousePositionWorld.Object.Y);
+
                 CursorPositionForImageEditorViewModelAsText = ImageEditorViewModel.MousePositionWorld.Object != null
-                    ? $"({ImageEditorViewModel.MousePositionWorld.Object.X:N2}, {-ImageEditorViewModel.MousePositionWorld.Object.Y:N2})"
+                    ? $"({x}, {y})"
                     : "";
             };
         }
