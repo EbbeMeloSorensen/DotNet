@@ -120,7 +120,7 @@ namespace Craft.Algorithms.GuiTest.Tab2
             else
             {
                 var canvasPositionForMouseMove = e.GetPosition(Canvas).AsPointD();
-                ViewModel.MouseWorldPosition = canvasPositionForMouseMove / ViewModel.Magnification;
+                ViewModel.MousePositionWorld.Object = canvasPositionForMouseMove / ViewModel.Magnification;
 
                 if (_draggingPoint)
                 {

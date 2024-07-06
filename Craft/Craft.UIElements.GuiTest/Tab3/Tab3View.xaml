@@ -106,7 +106,7 @@
                                      Text="{Binding GeometryEditorViewModel3.WorldWindowSize.Height, Mode=OneWay, StringFormat=N3}"/>
                             <TextBlock Grid.Column="3" Grid.Row="0" Margin="3" Text="Cursor Position:"/>
                             <TextBox Grid.Column="4" Grid.Row="0" Margin="1" IsReadOnly="True" Width="100"
-                                     Text="{Binding CursorPositionAsText, Mode=OneWay}"/>
+                                     Text="{Binding CursorPositionForGeometryEditorViewModel3AsText, Mode=OneWay}"/>
                             <CheckBox Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Content="Lock X Axis"
                                       IsChecked="{Binding GeometryEditorViewModel3.XAxisLocked}"/>
                             <CheckBox Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="2" Content="Lock Y Axis"
@@ -340,7 +340,15 @@
             </TabControl>
         </TabItem>
         <TabItem Header="Scrolling">
-            <scrolling:ImageEditorView DataContext="{Binding ImageEditorViewModel}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <scrolling:ImageEditorView Grid.Row="0" DataContext="{Binding ImageEditorViewModel}"/>
+                <TextBlock Grid.Row="1" HorizontalAlignment="Stretch"
+                           Text="{Binding CursorPositionForImageEditorViewModelAsText}"/>
+            </Grid>
         </TabItem>
     </TabControl>
 </UserControl>

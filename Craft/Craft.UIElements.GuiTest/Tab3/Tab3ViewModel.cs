@@ -32,7 +32,8 @@ namespace Craft.UIElements.GuiTest.Tab3
         private int _worldWindowMajorUpdateCountForGeometryEditorViewModel4;
         private int _worldWindowUpdateCountForCoordinateSystemViewModel;
         private int _worldWindowMajorUpdateCountForCoordinateSystemViewModel;
-        private string _cursorPositionAsText;
+        private string _cursorPositionForGeometryEditorViewModel3AsText;
+        private string _cursorPositionForImageEditorViewModelAsText;
         private string _timeAtMousePositionAsText1;
         private string _timeAtMousePositionAsText2;
         private Stopwatch _stopwatch;
@@ -93,12 +94,22 @@ namespace Craft.UIElements.GuiTest.Tab3
             }
         }
 
-        public string CursorPositionAsText
+        public string CursorPositionForGeometryEditorViewModel3AsText
         {
-            get { return _cursorPositionAsText; }
+            get { return _cursorPositionForGeometryEditorViewModel3AsText; }
             set
             {
-                _cursorPositionAsText = value;
+                _cursorPositionForGeometryEditorViewModel3AsText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string CursorPositionForImageEditorViewModelAsText
+        {
+            get { return _cursorPositionForImageEditorViewModelAsText; }
+            set
+            {
+                _cursorPositionForImageEditorViewModelAsText = value;
                 RaisePropertyChanged();
             }
         }
@@ -162,7 +173,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         public CoordinateSystemViewModel CoordinateSystemViewModel1 { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel1 { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel2 { get; private set; }
-        public ImageEditorViewModel ImageEditorViewModel { get; }
+        public ImageEditorViewModel ImageEditorViewModel { get; private set; }
 
         public Tab3ViewModel()
         {
@@ -184,8 +195,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             InitializeCoordinateSysteViewModel(worldWindowFocus, worldWindowSize);
             InitializeTimeSeriesViewModel1();
             InitializeTimeSeriesViewModel2();
-
-            ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
+            InitializeImageEditorViewModel();
 
             DrawAHouse(GeometryEditorViewModel1);
             DrawAHouse(GeometryEditorViewModel2);
@@ -517,7 +527,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             GeometryEditorViewModel3.MousePositionWorld.PropertyChanged += (s, e) =>
             {
-                CursorPositionAsText = GeometryEditorViewModel3.MousePositionWorld.Object.HasValue
+                CursorPositionForGeometryEditorViewModel3AsText = GeometryEditorViewModel3.MousePositionWorld.Object.HasValue
                     ? $"({GeometryEditorViewModel3.MousePositionWorld.Object.Value.X:N2}, {-GeometryEditorViewModel3.MousePositionWorld.Object.Value.Y:N2})"
                     : "";
             };
@@ -778,6 +788,18 @@ namespace Craft.UIElements.GuiTest.Tab3
                 TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
                     TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.X + TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowSize.Width,
                     TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+            };
+        }
+
+        private void InitializeImageEditorViewModel()
+        {
+            ImageEditorViewModel = new ImageEditorViewModel(1200, 900);
+
+            ImageEditorViewModel.MousePositionWorld.PropertyChanged += (s, e) =>
+            {
+                CursorPositionForImageEditorViewModelAsText = ImageEditorViewModel.MousePositionWorld.Object != null
+                    ? $"({ImageEditorViewModel.MousePositionWorld.Object.X:N2}, {-ImageEditorViewModel.MousePositionWorld.Object.Y:N2})"
+                    : "";
             };
         }
     }

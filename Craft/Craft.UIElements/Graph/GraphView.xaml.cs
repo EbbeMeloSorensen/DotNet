@@ -123,7 +123,7 @@ namespace Craft.UIElements.Graph
             else
             {
                 var canvasPositionForMouseMove = e.GetPosition(Canvas).AsPointD();
-                ViewModel.MouseWorldPosition = canvasPositionForMouseMove / ViewModel.Magnification;
+                ViewModel.MousePositionWorld.Object = canvasPositionForMouseMove / ViewModel.Magnification;
 
                 if (_draggingPoint)
                 {

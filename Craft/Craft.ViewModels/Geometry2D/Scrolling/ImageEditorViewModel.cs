@@ -10,7 +10,7 @@ namespace Craft.ViewModels.Geometry2D.Scrolling
         private PointD _scrollableOffset;
         private PointD _scrollOffset;
         private double _magnification;
-        private PointD _mouseWorldPosition;
+        //private PointD _mouseWorldPosition;
 
         public double ImageWidth
         {
@@ -67,16 +67,18 @@ namespace Craft.ViewModels.Geometry2D.Scrolling
             }
         }
 
-        public PointD MouseWorldPosition
-        {
-            get { return _mouseWorldPosition; }
-            set
-            {
-                if (value.Equals(_mouseWorldPosition)) return;
-                _mouseWorldPosition = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public PointD MouseWorldPosition
+        //{
+        //    get { return _mouseWorldPosition; }
+        //    set
+        //    {
+        //        if (value.Equals(_mouseWorldPosition)) return;
+        //        _mouseWorldPosition = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
+        public ObservableObject<PointD?> MousePositionWorld { get; }
 
         public ImageEditorViewModel()
         {
@@ -96,6 +98,7 @@ namespace Craft.ViewModels.Geometry2D.Scrolling
             ScrollOffset = new PointD { X = 0, Y = 0 };
             ScrollOffset = new PointD { X = 0, Y = 0 };
             Magnification = 1;
+            MousePositionWorld = new ObservableObject<PointD?>();
         }
     }
 }

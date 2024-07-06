@@ -102,9 +102,8 @@ namespace Craft.UIElements.Geometry2D.Scrolling
             }
             else
             {
-                ViewModel.MouseWorldPosition = (ViewModel.ScrollOffset + mouseClientPosition) / ViewModel.Magnification;
+                ViewModel.MousePositionWorld.Object = (ViewModel.ScrollOffset + mouseClientPosition) / ViewModel.Magnification;
             }
         }
-
     }
 }

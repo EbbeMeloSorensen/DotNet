@@ -119,7 +119,7 @@ namespace Craft.UIElements.Chronology
             }
             else
             {
-                ViewModel.MouseWorldPosition = (ViewModel.ScrollOffset + mouseClientPosition) / ViewModel.Magnification;
+                ViewModel.MousePositionWorld.Object = (ViewModel.ScrollOffset + mouseClientPosition) / ViewModel.Magnification;
             }
         }
     }
