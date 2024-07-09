@@ -173,6 +173,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         public CoordinateSystemViewModel CoordinateSystemViewModel1 { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel1 { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel2 { get; private set; }
+        public TimeSeriesViewModel TimeSeriesViewModel3 { get; private set; }
         public ImageEditorViewModel ImageEditorViewModel { get; private set; }
 
         public Tab3ViewModel()
@@ -195,6 +196,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             InitializeCoordinateSysteViewModel(worldWindowFocus, worldWindowSize);
             InitializeTimeSeriesViewModel1();
             InitializeTimeSeriesViewModel2();
+            InitializeTimeSeriesViewModel3();
             InitializeImageEditorViewModel();
 
             DrawAHouse(GeometryEditorViewModel1);
@@ -789,6 +791,105 @@ namespace Craft.UIElements.GuiTest.Tab3
                     TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.X + TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowSize.Width,
                     TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
             };
+        }
+
+        private void InitializeTimeSeriesViewModel3()
+        {
+            //var timeSpan = TimeSpan.FromDays(1);
+            var timeSpan = TimeSpan.FromMinutes(1);
+            var utcNow = DateTime.UtcNow;
+            var timeAtOrigo = utcNow.Date; // Sådan her er det altid pr definition (så bør TimeSeriesViewmodellen nojk )
+            var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1); // Focus on
+            var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
+
+            var thirtySecondsFromNowAsScalar = (DateTime.UtcNow + TimeSpan.FromSeconds(30) - timeAtOrigo).TotalDays;
+
+            TimeSeriesViewModel3 = new TimeSeriesViewModel(
+                new Point(xFocus, 0),
+                new Size(timeSpan.TotalDays, 3),
+                true,
+                40,
+                40,
+                1,
+                timeAtOrigo,
+                null)
+            {
+                LockWorldWindowOnDynamicXValue = false,
+                StaticXValue = thirtySecondsFromNowAsScalar,
+                ShowXAxisLabels = true,
+                ShowYAxisLabels = false,
+                ShowVerticalGridLines = true,
+                ShowHorizontalGridLines = true,
+                ShowVerticalAxis = false,
+                Fraction = 0.9,
+                ShowPanningButtons = true
+            };
+
+            TimeSeriesViewModel3.GeometryEditorViewModel.YAxisLocked = true;
+
+            /*
+            TimeSeriesViewModel2.TimeAtMousePosition.PropertyChanged += (s, e) =>
+            {
+                TimeAtMousePositionAsText2 = TimeSeriesViewModel2.TimeAtMousePosition.Object.HasValue
+                    ? TimeSeriesViewModel2.TimeAtMousePosition.Object.Value.ToString()
+                    : "";
+            };
+
+            TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
+            {
+                // Når man dragger, så skal man træde ud af det mode, hvor den følger tiden
+                TimeSeriesViewModel2.LockWorldWindowOnDynamicXValue = false;
+
+                // Den skal også fjerne de overordnede dato labels
+                TimeSeriesViewModel2.XAxisOverallLabel1 = "";
+                TimeSeriesViewModel2.XAxisOverallLabel2 = "";
+            };
+
+            TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+            {
+                var x0 = e.WorldWindowUpperLeft.X;
+                var x1 = e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width;
+                var y0 = e.WorldWindowUpperLeft.Y;
+                var y1 = e.WorldWindowUpperLeft.Y + e.WorldWindowSize.Height;
+
+                var lineViewModels = _timeStampsOfInterest
+                    .Select(_ => (_ - TimeSeriesViewModel2.TimeAtOrigo).TotalDays)
+                    .Where(_ => _ > x0 && _ < x1)
+                    .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), 1.0, _curveBrush))
+                    .ToList();
+
+                lineViewModels.ForEach(_ => TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(_));
+            };
+
+            TimeSeriesViewModel2.GeometryEditorViewModel.UpdateModelCallBack = () =>
+            {
+                /////////////////////////////////////////////////////////////////////////////////////////
+                // Her er vi, når der fra User Controllen kommer en anmodning om at der skal gentegnes //
+                // dvs det sker ret tit...                                                             //
+                // NÅR det sker, har man mulighed for at opdatere DynamicXValue, hvilket så kan        //
+                // udvirke, at WorldWindow flyttes                                                     //
+                /////////////////////////////////////////////////////////////////////////////////////////
+
+                // Update the x value of interest
+                // Sæt den til current time
+                var nowAsScalar = (DateTime.UtcNow - TimeSeriesViewModel2.TimeAtOrigo).TotalDays;
+                TimeSeriesViewModel2.DynamicXValue = nowAsScalar;
+            };
+
+            TimeSeriesViewModel2.PanLeftClicked += (s, e) =>
+            {
+                TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                    TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.X - TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowSize.Width,
+                    TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+            };
+
+            TimeSeriesViewModel2.PanRightClicked += (s, e) =>
+            {
+                TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                    TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.X + TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowSize.Width,
+                    TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+            };
+            */
         }
 
         private void InitializeImageEditorViewModel()

@@ -337,6 +337,38 @@
                         </TextBlock>
                     </Grid>
                 </TabItem>
+                <TabItem Header="Time Series III">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <scrollFree:CoordinateSystemView Grid.Row="0" DataContext="{Binding TimeSeriesViewModel3}" />
+                        <!--<Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Time:"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="1" IsReadOnly="True"
+                                     Text="{Binding TimeAtMousePositionAsText2}"/>
+                            <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Focus on current time"
+                                      IsChecked="{Binding TimeSeriesViewModel2.LockWorldWindowOnDynamicXValue}"/>
+                        </Grid>-->
+                        <TextBlock Grid.Row="2" TextWrapping="Wrap">
+                            Here, we have a CoordinateSystemView with an underlying TimeSerieViewModel initialized
+                            with a time interval that goes from current time to 7 hour back. When a major update of
+                            the World Window position occurs, the ViewModel hosting the TimeSerieViewModel clears
+                            the Lines collection of the GeometryEditorViewModel (owned by the TimeSeriesViewModel)
+                            and then adds a number of lines representing timestamps of interest
+                        </TextBlock>
+                    </Grid>
+                </TabItem>
             </TabControl>
         </TabItem>
         <TabItem Header="Scrolling">
