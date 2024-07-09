@@ -90,7 +90,7 @@ namespace DMI.SMS.UIElements
             }
             else
             {
-                ViewModel.MouseWorldPosition = (ViewModel.ScrollOffset + mouseClientPosition) / ViewModel.Magnification;
+                ViewModel.MousePositionWorld.Object = (ViewModel.ScrollOffset + mouseClientPosition) / ViewModel.Magnification;
             }
         }
     }
