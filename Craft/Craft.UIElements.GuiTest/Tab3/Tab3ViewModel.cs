@@ -754,6 +754,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                     .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), 1.0, _curveBrush))
                     .ToList();
 
+                // Bemærk, at det ikke er nødvendigt at cleare samlingen af LineViewModels, da det gøres af
+                // CoordinateSystemViewModellens "UpdateCoordinateSystemForGeometryEditorViewModel" method
                 lineViewModels.ForEach(_ => TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(_));
             };
 
@@ -832,38 +834,51 @@ namespace Craft.UIElements.GuiTest.Tab3
                 TimeSeriesViewModel2.XAxisOverallLabel1 = "";
                 TimeSeriesViewModel2.XAxisOverallLabel2 = "";
             };
+            */
 
-            TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+            TimeSeriesViewModel3.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
                 var x0 = e.WorldWindowUpperLeft.X;
                 var x1 = e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width;
                 var y0 = e.WorldWindowUpperLeft.Y;
                 var y1 = e.WorldWindowUpperLeft.Y + e.WorldWindowSize.Height;
 
-                var lineViewModels = _timeStampsOfInterest
-                    .Select(_ => (_ - TimeSeriesViewModel2.TimeAtOrigo).TotalDays)
-                    .Where(_ => _ > x0 && _ < x1)
-                    .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), 1.0, _curveBrush))
-                    .ToList();
+                // Tegn en linie fra 1990 til 2010
+                var tStart1 = new DateTime(1990, 1, 1, 0, 0, 0);
+                var tEnd1 = new DateTime(2010, 1, 1, 0, 0, 0);
+                var tStart2 = new DateTime(2010, 1, 1, 0, 0, 0);
+                var tEnd2 = new DateTime(2020, 1, 1, 0, 0, 0);
 
-                lineViewModels.ForEach(_ => TimeSeriesViewModel2.GeometryEditorViewModel.LineViewModels.Add(_));
+                var xStart1 = TimeSeriesViewModel.ConvertDateTimeToXValue(tStart1);
+                var xEnd1 = TimeSeriesViewModel.ConvertDateTimeToXValue(tEnd1);
+                var xStart2 = TimeSeriesViewModel.ConvertDateTimeToXValue(tStart2);
+                var xEnd2 = TimeSeriesViewModel.ConvertDateTimeToXValue(tEnd2);
+                var y = y0 + (y1 - y0) / 2;
+
+                // Tegn en dummy line
+                TimeSeriesViewModel3.GeometryEditorViewModel.AddLine(
+                    new PointD(xStart1, y), new PointD(xEnd1, y), 1, _curveBrush);
+
+                // Tegn et par dummy rektangler
+                var barHeight = 0.2;
+                TimeSeriesViewModel3.GeometryEditorViewModel.ClearShapes();
+                
+                TimeSeriesViewModel3.GeometryEditorViewModel.AddShape(1, new RectangleViewModel
+                {
+                    Point = new PointD(xStart1 + (xEnd1 - xStart1) / 2, y),
+                    Width = xEnd1 - xStart1,
+                    Height = barHeight
+                });
+
+                TimeSeriesViewModel3.GeometryEditorViewModel.AddShape(2, new RectangleViewModel
+                {
+                    Point = new PointD(xStart2 + (xEnd2 - xStart2) / 2, y - barHeight),
+                    Width = xEnd2 - xStart2,
+                    Height = barHeight
+                });
             };
 
-            TimeSeriesViewModel2.GeometryEditorViewModel.UpdateModelCallBack = () =>
-            {
-                /////////////////////////////////////////////////////////////////////////////////////////
-                // Her er vi, når der fra User Controllen kommer en anmodning om at der skal gentegnes //
-                // dvs det sker ret tit...                                                             //
-                // NÅR det sker, har man mulighed for at opdatere DynamicXValue, hvilket så kan        //
-                // udvirke, at WorldWindow flyttes                                                     //
-                /////////////////////////////////////////////////////////////////////////////////////////
-
-                // Update the x value of interest
-                // Sæt den til current time
-                var nowAsScalar = (DateTime.UtcNow - TimeSeriesViewModel2.TimeAtOrigo).TotalDays;
-                TimeSeriesViewModel2.DynamicXValue = nowAsScalar;
-            };
-
+            /*
             TimeSeriesViewModel2.PanLeftClicked += (s, e) =>
             {
                 TimeSeriesViewModel2.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
