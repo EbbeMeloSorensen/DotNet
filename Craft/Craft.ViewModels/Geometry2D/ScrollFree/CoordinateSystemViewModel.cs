@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
@@ -319,6 +320,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public event EventHandler PanLeftClicked;
         public event EventHandler PanRightClicked;
 
+        public ObservableCollection<LabelViewModel> AxisTickLabelViewModels { get; }
+
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
 
         public RelayCommand PanLeftCommand
@@ -352,6 +355,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _worldWindowExpansionFactor = worldWindowExpansionFactor;
             _xAxisOverallLabel1Alignment = "Center";
             Fraction = 0.5;
+
+            AxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
 
             GeometryEditorViewModel = 
                 new GeometryEditorViewModel(-1)
@@ -413,10 +418,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 (1 + 2 * _worldWindowExpansionFactor) * (y1 - y0));
 
             // Clear the grid lines
-            GeometryEditorViewModel.ClearLines();
+            //GeometryEditorViewModel.ClearLines();
 
             // Clear the labels
             GeometryEditorViewModel.ClearLabels();
+            AxisTickLabelViewModels.Clear();
 
             if (ShowHorizontalGridLines || ShowYAxisLabels)
             {
@@ -472,14 +478,21 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 if (_showYAxisLabels)
                 {
-                    GeometryEditorViewModel.AddLabel(
-                        Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture),
-                        new PointD(x0 + dx * 0.8, y),
-                        20,
-                        20,
-                        new PointD(-10, 0),
-                        0.0,
-                        0);
+                    var point = new PointD(x0 + dx * 0.8, y);
+
+                    var labelViewModel = new LabelViewModel
+                    {
+                        Text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture),
+                        Point = new PointD(point.X, GeometryEditorViewModel._yAxisFactor * point.Y),
+                        Width = 20,
+                        Height = 20,
+                        Shift = new PointD(-10, 0),
+                        Opacity = 0.0,
+                        FixedViewPortXCoordinate = 0,
+                        FixedViewPortYCoordinate = null
+                    };
+
+                    AxisTickLabelViewModels.Add(labelViewModel);
                 }
 
                 y += lineSpacingY_World;
@@ -534,15 +547,21 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 if (ShowXAxisLabels)
                 {
-                    GeometryEditorViewModel.AddLabel(
-                        Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture),
-                        new PointD(x, y0 + dy),
-                        labelWidth,
-                        labelHeight,
-                        new PointD(0, labelHeight / 2),
-                        0.0,
-                        null,
-                        GeometryEditorViewModel.MarginBottomOffset);
+                    var point = new PointD(x, y0 + dy);
+
+                    var labelViewModel = new LabelViewModel
+                    {
+                        Text = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture),
+                        Point = new PointD(point.X, GeometryEditorViewModel._yAxisFactor * point.Y),
+                        Width = labelWidth,
+                        Height = labelHeight,
+                        Shift = new PointD(0, labelHeight / 2),
+                        Opacity = 0.0,
+                        FixedViewPortXCoordinate = null,
+                        FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                    };
+
+                    AxisTickLabelViewModels.Add(labelViewModel);
                 }
 
                 x += lineSpacingX_World;

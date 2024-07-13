@@ -13,7 +13,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
     public class GeometryEditorViewModel : ViewModelBase
     {
-        private int _yAxisFactor;
+        public int _yAxisFactor;
         private double? _initialScalingX;
         private double? _initialScalingY;
         private Point? _initialWorldWindowFocus;

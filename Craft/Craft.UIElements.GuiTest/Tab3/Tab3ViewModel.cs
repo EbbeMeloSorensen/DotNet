@@ -650,7 +650,8 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void InitializeTimeSeriesViewModel1()
         {
-            var timeSpan = TimeSpan.FromDays(7); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
+            //var timeSpan = TimeSpan.FromDays(7); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
+            var timeSpan = TimeSpan.FromDays(300); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
             var tFocus = DateTime.UtcNow - timeSpan / 2; // Specificer, hvilken x-værdi vi skal fokusere på
             var xFocus = TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
             var worldWindowHeight = 3;
@@ -667,7 +668,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 ShowVerticalGridLines = true,
             };
 
-            TimeSeriesViewModel1.GeometryEditorViewModel.YAxisLocked = true;
+            TimeSeriesViewModel1.GeometryEditorViewModel.YAxisLocked = false;
 
             TimeSeriesViewModel1.TimeAtMousePosition.PropertyChanged += (s, e) =>
             {
@@ -678,6 +679,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             TimeSeriesViewModel1.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
+                return;
                 var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
                 var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
 

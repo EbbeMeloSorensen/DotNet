@@ -329,6 +329,7 @@
                         <TextBlock Text="{Binding Text}" 
                                    FontFamily="Segoe UI"
                                    FontSize="12.3"
+                                   FontWeight="Bold"
                                    TextAlignment="Center"
                                    VerticalAlignment="Center"/>
                     </Grid>

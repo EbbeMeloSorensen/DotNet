@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
 using Craft.Logging;
 using Craft.Utils;
@@ -80,7 +81,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 (1 + 2 * _worldWindowExpansionFactor) * (y1 - y0));
 
             GeometryEditorViewModel.ClearLines();
-            GeometryEditorViewModel.ClearLabels();
+            //GeometryEditorViewModel.ClearLabels();
+            AxisTickLabelViewModels.Clear();
 
             if (ShowHorizontalGridLines || ShowYAxisLabels)
             {
@@ -377,13 +379,21 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                     if (year % modulo == 0)
                     {
-                        GeometryEditorViewModel.AddLabel(
-                            label,
-                            new PointD(x, y0 + dy),
-                            labelWidth,
-                            labelHeight,
-                            new PointD(0, labelHeight / 2),
-                            0.0);
+                        var point = new PointD(x, y0 + dy);
+
+                        var labelViewModel = new LabelViewModel
+                        {
+                            Text = label,
+                            Point = new PointD(point.X, GeometryEditorViewModel._yAxisFactor * point.Y),
+                            Width = labelWidth,
+                            Height = labelHeight,
+                            Shift = new PointD(0, labelHeight / 2),
+                            Opacity = 0.0,
+                            FixedViewPortXCoordinate = null,
+                            FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                        };
+
+                        AxisTickLabelViewModels.Add(labelViewModel);
 
                         labelCount++;
                     }
@@ -412,13 +422,21 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                     if (month == 1 || (month - 1) % modulo == 0)
                     {
-                        GeometryEditorViewModel.AddLabel(
-                            label,
-                            new PointD(x, y0 + dy),
-                            labelWidth,
-                            labelHeight,
-                            new PointD(0, labelHeight / 2),
-                            0.0);
+                        var point = new PointD(x, y0 + dy);
+
+                        var labelViewModel = new LabelViewModel
+                        {
+                            Text = label,
+                            Point = new PointD(point.X, GeometryEditorViewModel._yAxisFactor * point.Y),
+                            Width = labelWidth,
+                            Height = labelHeight,
+                            Shift = new PointD(0, labelHeight / 2),
+                            Opacity = 0.0,
+                            FixedViewPortXCoordinate = null,
+                            FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                        };
+
+                        AxisTickLabelViewModels.Add(labelViewModel);
 
                         labelCount++;
                     }
@@ -447,13 +465,21 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                     if (day == 1 || (day - 1 ) % modulo == 0 && day <= maxDayLabel)
                     {
-                        GeometryEditorViewModel.AddLabel(
-                            label,
-                            new PointD(x, y0 + dy),
-                            labelWidth,
-                            labelHeight,
-                            new PointD(0, labelHeight / 2),
-                            0.0);
+                        var point = new PointD(x, y0 + dy);
+
+                        var labelViewModel = new LabelViewModel
+                        {
+                            Text = label,
+                            Point = new PointD(point.X, GeometryEditorViewModel._yAxisFactor * point.Y),
+                            Width = labelWidth,
+                            Height = labelHeight,
+                            Shift = new PointD(0, labelHeight / 2),
+                            Opacity = 0.0,
+                            FixedViewPortXCoordinate = null,
+                            FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                        };
+
+                        AxisTickLabelViewModels.Add(labelViewModel);
 
                         labelCount++;
                     }
@@ -500,13 +526,21 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                     if (ShowXAxisLabels)
                     {
-                        GeometryEditorViewModel.AddLabel(
-                            label,
-                            new PointD(x, y0 + dy),
-                            labelWidth,
-                            labelHeight,
-                            new PointD(0, labelHeight / 2),
-                            0.0);
+                        var point = new PointD(x, y0 + dy);
+
+                        var labelViewModel = new LabelViewModel
+                        {
+                            Text = label,
+                            Point = new PointD(point.X, GeometryEditorViewModel._yAxisFactor * point.Y),
+                            Width = labelWidth,
+                            Height = labelHeight,
+                            Shift = new PointD(0, labelHeight / 2),
+                            Opacity = 0.0,
+                            FixedViewPortXCoordinate = null,
+                            FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                        };
+
+                        AxisTickLabelViewModels.Add(labelViewModel);
 
                         labelCount++;
                     }
