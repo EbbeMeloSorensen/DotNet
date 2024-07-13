@@ -820,7 +820,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 ShowYAxisLabels = false,
                 ShowVerticalGridLines = true,
                 ShowHorizontalGridLines = true,
-                ShowVerticalAxis = false,
+                ShowVerticalAxis = true,
                 Fraction = 0.9,
                 ShowPanningButtons = true
             };
