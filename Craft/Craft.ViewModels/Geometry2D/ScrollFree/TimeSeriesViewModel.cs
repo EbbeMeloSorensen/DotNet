@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Windows;
 using Craft.Logging;
 using Craft.Utils;
@@ -8,11 +7,30 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
     public class TimeSeriesViewModel : CoordinateSystemViewModel
     {
+        private static TimeSpan _timeSpanOfOneDay;
+
+        public static DateTime TimeAtOrigo { get; }
+
+        static TimeSeriesViewModel()
+        {
+            // Dette er en konvention, vi opererer med
+            TimeAtOrigo = DateTime.Now.Date;
+
+            // Denne skal vi bruge igen og igen - den repræsenterer det time span, der svarer til enheded i koordinatsystemet
+            // hvilket vi pr konvention sætter til 1 dag
+            _timeSpanOfOneDay = TimeSpan.FromDays(1.0);
+        }
+
+        // Omregning af tidspunkt til x-værdi i koordinatsystemet
+        public static double ConvertDateTimeToXValue(DateTime dateTime)
+        {
+            return (dateTime - TimeAtOrigo) / _timeSpanOfOneDay;
+        }
+
         private ILogger _logger;
 
-        public DateTime TimeAtOrigo { get; }
-
         public ObservableObject<DateTime?> TimeAtMousePosition { get; }
+
 
         public TimeSeriesViewModel(
             Point worldWindowFocus,
@@ -21,11 +39,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double marginX,
             double marginY,
             double expansionFactor,
-            DateTime timeAtOrigo,
             ILogger logger) : base(worldWindowFocus, worldWindowSize, fitAspectRatio, marginX, marginY, expansionFactor)
         {
             _logger = logger;
-            TimeAtOrigo = timeAtOrigo;
 
             TimeAtMousePosition = new ObservableObject<DateTime?>();
 

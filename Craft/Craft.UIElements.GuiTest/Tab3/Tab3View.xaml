@@ -17,7 +17,7 @@
 
     <TabControl SelectedIndex="0">
         <TabItem Header="ScrollFree">
-            <TabControl SelectedIndex="0">
+            <TabControl SelectedIndex="5">
                 <TabItem Header="Basic">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -330,7 +330,7 @@
                         </Grid>
                         <TextBlock Grid.Row="2" TextWrapping="Wrap">
                             Here, we have a CoordinateSystemView with an underlying TimeSerieViewModel initialized
-                            with a time interval that goes from current time to 7 hour back. When a major update of
+                            with a time interval that goes from current time to 1 minute into the future. When a major update of
                             the World Window position occurs, the ViewModel hosting the TimeSerieViewModel clears
                             the Lines collection of the GeometryEditorViewModel (owned by the TimeSeriesViewModel)
                             and then adds a number of lines representing timestamps of interest

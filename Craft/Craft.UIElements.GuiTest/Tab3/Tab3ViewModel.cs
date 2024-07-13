@@ -650,11 +650,9 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void InitializeTimeSeriesViewModel1()
         {
-            var timeSpan = TimeSpan.FromDays(7);
-            var utcNow = DateTime.UtcNow;
-            var timeAtOrigo = utcNow.Date;
-            var tFocus = utcNow - timeSpan / 2;
-            var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
+            var timeSpan = TimeSpan.FromDays(7); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
+            var tFocus = DateTime.UtcNow - timeSpan / 2; // Specificer, hvilken x-værdi vi skal fokusere på
+            var xFocus = TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
             var worldWindowHeight = 3;
 
             TimeSeriesViewModel1 = new TimeSeriesViewModel(
@@ -664,10 +662,9 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 40,
                 1,
-                timeAtOrigo,
                 null)
             {
-                ShowVerticalGridLines = true
+                ShowVerticalGridLines = true,
             };
 
             TimeSeriesViewModel1.GeometryEditorViewModel.YAxisLocked = true;
@@ -685,9 +682,9 @@ namespace Craft.UIElements.GuiTest.Tab3
                 var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
 
                 var points = new List<PointD>();
-                for (var x = x0; x <= x1; x += 0.1)
+                for (var x = x0; x <= x1; x += 0.05)
                 {
-                    points.Add(new PointD(x, Math.Sin(3 * x))); // (sinus)
+                    points.Add(new PointD(x, -Math.Cos(x * Math.PI * 2))); // (cosinus curve with a frequency of one cycle pr day)
                 }
 
                 TimeSeriesViewModel1.GeometryEditorViewModel.ClearPolylines();
@@ -698,14 +695,12 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void InitializeTimeSeriesViewModel2()
         {
-            //var timeSpan = TimeSpan.FromDays(1);
-            var timeSpan = TimeSpan.FromMinutes(1);
-            var utcNow = DateTime.UtcNow;
-            var timeAtOrigo = utcNow.Date; // Sådan her er det altid pr definition (så bør TimeSeriesViewmodellen nojk )
-            var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1); // Focus on
-            var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
+            var timeSpan = TimeSpan.FromMinutes(1); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
+            var tFocus = DateTime.UtcNow + timeSpan / 2; // Specificer, hvilken x-værdi vi skal fokusere på. Bemærk, at dette er i fremtiden, da vi gerne vil vise en streg for current time
+            var xFocus = TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
 
-            var thirtySecondsFromNowAsScalar = (DateTime.UtcNow + TimeSpan.FromSeconds(30) - timeAtOrigo).TotalDays;
+            var thirtySecondsFromNowAsScalar = TimeSeriesViewModel.ConvertDateTimeToXValue(
+                DateTime.UtcNow + TimeSpan.FromSeconds(30));
 
             TimeSeriesViewModel2 = new TimeSeriesViewModel(
                 new Point(xFocus, 0),
@@ -714,7 +709,6 @@ namespace Craft.UIElements.GuiTest.Tab3
                 0,
                 40,
                 1,
-                timeAtOrigo,
                 null)
             {
                 LockWorldWindowOnDynamicXValue = false,
@@ -755,7 +749,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 var y1 = e.WorldWindowUpperLeft.Y + e.WorldWindowSize.Height;
 
                 var lineViewModels = _timeStampsOfInterest
-                    .Select(_ => (_ - TimeSeriesViewModel2.TimeAtOrigo).TotalDays)
+                    .Select(TimeSeriesViewModel.ConvertDateTimeToXValue)
                     .Where(_ => _ > x0 && _ < x1)
                     .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y1), 1.0, _curveBrush))
                     .ToList();
@@ -774,7 +768,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 // Update the x value of interest
                 // Sæt den til current time
-                var nowAsScalar = (DateTime.UtcNow - TimeSeriesViewModel2.TimeAtOrigo).TotalDays;
+                var nowAsScalar = TimeSeriesViewModel.ConvertDateTimeToXValue(DateTime.UtcNow);
                 TimeSeriesViewModel2.DynamicXValue = nowAsScalar;
             };
 
@@ -795,14 +789,10 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void InitializeTimeSeriesViewModel3()
         {
-            //var timeSpan = TimeSpan.FromDays(1);
-            var timeSpan = TimeSpan.FromMinutes(1);
-            var utcNow = DateTime.UtcNow;
-            var timeAtOrigo = utcNow.Date; // Sådan her er det altid pr definition (så bør TimeSeriesViewmodellen nojk )
-            var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromMinutes(1); // Focus on
-            var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
-
-            var thirtySecondsFromNowAsScalar = (DateTime.UtcNow + TimeSpan.FromSeconds(30) - timeAtOrigo).TotalDays;
+            var years = 50;
+            var timeSpan = TimeSpan.FromDays(365.25 * years); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
+            var tFocus = DateTime.UtcNow - timeSpan / 2; // Specificer, hvilken x-værdi vi skal fokusere på.
+            var xFocus = TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
 
             TimeSeriesViewModel3 = new TimeSeriesViewModel(
                 new Point(xFocus, 0),
@@ -811,18 +801,16 @@ namespace Craft.UIElements.GuiTest.Tab3
                 40,
                 40,
                 1,
-                timeAtOrigo,
                 null)
             {
                 LockWorldWindowOnDynamicXValue = false,
-                StaticXValue = thirtySecondsFromNowAsScalar,
                 ShowXAxisLabels = true,
                 ShowYAxisLabels = false,
-                ShowVerticalGridLines = true,
-                ShowHorizontalGridLines = true,
+                ShowVerticalGridLines = false,
+                ShowHorizontalGridLines = false,
                 ShowVerticalAxis = true,
                 Fraction = 0.9,
-                ShowPanningButtons = true
+                ShowPanningButtons = false
             };
 
             TimeSeriesViewModel3.GeometryEditorViewModel.YAxisLocked = true;
