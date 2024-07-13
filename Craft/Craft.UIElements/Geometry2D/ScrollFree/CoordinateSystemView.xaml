@@ -117,6 +117,15 @@
                 </TextBlock.Visibility>
             </TextBlock>
 
+            <!-- Horizontal axis -->
+            <Line Stroke="Black"
+                StrokeThickness="1"
+                X1="{Binding GeometryEditorViewModel.MarginLeft}"
+                X2="{Binding GeometryEditorViewModel.ViewPortSize.Width}"
+                Y1="{Binding GeometryEditorViewModel.MarginBottomOffset}"
+                Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
+            </Line>
+
             <!-- Vertical axis -->
             <Line Stroke="Black"
                   StrokeThickness="1"
@@ -131,15 +140,6 @@
                         </Binding.ConverterParameter>
                     </Binding>
                 </Line.Visibility>
-            </Line>
-
-            <!-- Horizontal axis -->
-            <Line Stroke="Black"
-                StrokeThickness="1"
-                X1="{Binding GeometryEditorViewModel.MarginLeft}"
-                X2="{Binding GeometryEditorViewModel.ViewPortSize.Width}"
-                Y1="{Binding GeometryEditorViewModel.MarginBottomOffset}"
-                Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
             </Line>
         </Canvas>
 

@@ -807,7 +807,7 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 LockWorldWindowOnDynamicXValue = false,
                 ShowXAxisLabels = true,
-                ShowYAxisLabels = false,
+                ShowYAxisLabels = true,
                 ShowVerticalGridLines = false,
                 ShowHorizontalGridLines = false,
                 ShowVerticalAxis = true,

@@ -335,6 +335,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
     </Canvas>
 </UserControl>
