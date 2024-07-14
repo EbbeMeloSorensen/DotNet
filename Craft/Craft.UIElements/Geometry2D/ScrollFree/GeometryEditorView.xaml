@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:scrollFree="clr-namespace:Craft.ViewModels.Geometry2D.ScrollFree;assembly=Craft.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance scrollFree:GeometryEditorViewModel}">
 
     <Canvas Name="Canvas" 
             ClipToBounds="True"
@@ -212,31 +214,6 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
-        <Rectangle Fill="{Binding MarginBrush}" 
-                   Width="{Binding MarginLeft}" 
-                   Height="{Binding ViewPortSize.Height}">
-            <Rectangle.Visibility>
-                <Binding Path="ShowMarginLeft" Converter="{StaticResource BooleanToVisibilityConverter}">
-                    <Binding.ConverterParameter>
-                        <system:Boolean>True</system:Boolean>
-                    </Binding.ConverterParameter>
-                </Binding>
-            </Rectangle.Visibility>
-        </Rectangle>
-
-        <Rectangle Fill="{Binding MarginBrush}" 
-                   Height="{Binding MarginBottom}" 
-                   Width="{Binding ViewPortSize.Width}"
-                   Canvas.Top="{Binding MarginBottomOffset}">
-            <Rectangle.Visibility>
-                <Binding Path="ShowMarginBottom" Converter="{StaticResource BooleanToVisibilityConverter}">
-                    <Binding.ConverterParameter>
-                        <system:Boolean>True</system:Boolean>
-                    </Binding.ConverterParameter>
-                </Binding>
-            </Rectangle.Visibility>
-        </Rectangle>
-
         <ItemsControl ItemsSource="{Binding PointViewModels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -330,6 +307,7 @@
                                    FontFamily="Segoe UI"
                                    FontSize="12.3"
                                    FontWeight="Bold"
+                                   Foreground="OrangeRed"
                                    TextAlignment="Center"
                                    VerticalAlignment="Center"/>
                     </Grid>

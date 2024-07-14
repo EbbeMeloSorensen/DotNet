@@ -6,8 +6,9 @@
              xmlns:local="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:valueConverters="clr-namespace:Craft.UI.Utils.ValueConverters;assembly=Craft.UI.Utils"
+             xmlns:scrollFree="clr-namespace:Craft.ViewModels.Geometry2D.ScrollFree;assembly=Craft.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance scrollFree:CoordinateSystemViewModel}">
 
     <UserControl.Resources>
         <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -15,9 +16,36 @@
 
     <Grid>
         <local:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
-        <Canvas>
+        <Canvas ClipToBounds="True">
 
-            <!--Axis Tick Labels-->
+            <!-- Left margin -->
+            <Rectangle Fill="{Binding GeometryEditorViewModel.MarginBrush}" 
+                       Width="{Binding GeometryEditorViewModel.MarginLeft}" 
+                       Height="{Binding GeometryEditorViewModel.ViewPortSize.Height}">
+                <Rectangle.Visibility>
+                    <Binding Path="GeometryEditorViewModel.ShowMarginLeft" Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Rectangle.Visibility>
+            </Rectangle>
+
+            <!-- Bottom margin -->
+            <Rectangle Fill="{Binding  GeometryEditorViewModel.MarginBrush}" 
+                       Height="{Binding GeometryEditorViewModel.MarginBottom}" 
+                       Width="{Binding GeometryEditorViewModel.ViewPortSize.Width}"
+                       Canvas.Top="{Binding GeometryEditorViewModel.MarginBottomOffset}">
+                <Rectangle.Visibility>
+                    <Binding Path="ShowMarginBottom" Converter="{StaticResource BooleanToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Rectangle.Visibility>
+            </Rectangle>
+
+            <!-- Axis Tick Labels -->
             <ItemsControl ItemsSource="{Binding AxisTickLabelViewModels}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

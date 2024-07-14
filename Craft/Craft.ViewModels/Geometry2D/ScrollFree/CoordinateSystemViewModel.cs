@@ -418,7 +418,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 (1 + 2 * _worldWindowExpansionFactor) * (y1 - y0));
 
             // Clear the grid lines
-            //GeometryEditorViewModel.ClearLines();
+            GeometryEditorViewModel.ClearLines();
 
             // Clear the labels
             GeometryEditorViewModel.ClearLabels();

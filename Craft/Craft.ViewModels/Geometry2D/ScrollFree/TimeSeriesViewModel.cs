@@ -81,7 +81,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 (1 + 2 * _worldWindowExpansionFactor) * (y1 - y0));
 
             GeometryEditorViewModel.ClearLines();
-            //GeometryEditorViewModel.ClearLabels();
             AxisTickLabelViewModels.Clear();
 
             if (ShowHorizontalGridLines || ShowYAxisLabels)

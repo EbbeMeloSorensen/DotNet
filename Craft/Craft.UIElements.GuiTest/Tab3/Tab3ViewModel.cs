@@ -650,8 +650,8 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void InitializeTimeSeriesViewModel1()
         {
-            //var timeSpan = TimeSpan.FromDays(7); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
-            var timeSpan = TimeSpan.FromDays(300); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
+            var timeSpan = TimeSpan.FromDays(7); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
+            //var timeSpan = TimeSpan.FromDays(300); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
             var tFocus = DateTime.UtcNow - timeSpan / 2; // Specificer, hvilken x-værdi vi skal fokusere på
             var xFocus = TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
             var worldWindowHeight = 3;
@@ -679,7 +679,6 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             TimeSeriesViewModel1.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
-                return;
                 var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
                 var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
 
@@ -817,7 +816,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 ShowPanningButtons = false
             };
 
-            TimeSeriesViewModel3.GeometryEditorViewModel.YAxisLocked = true;
+            //TimeSeriesViewModel3.GeometryEditorViewModel.YAxisLocked = true;
+            TimeSeriesViewModel3.GeometryEditorViewModel.YAxisLocked = false;
 
             /*
             TimeSeriesViewModel2.TimeAtMousePosition.PropertyChanged += (s, e) =>
@@ -845,6 +845,9 @@ namespace Craft.UIElements.GuiTest.Tab3
                 var y0 = e.WorldWindowUpperLeft.Y;
                 var y1 = e.WorldWindowUpperLeft.Y + e.WorldWindowSize.Height;
 
+                TimeSeriesViewModel3.GeometryEditorViewModel.ClearShapes();
+                TimeSeriesViewModel3.GeometryEditorViewModel.ClearLabels();
+
                 // Tegn en linie fra 1990 til 2010
                 var tStart1 = new DateTime(1990, 1, 1, 0, 0, 0);
                 var tEnd1 = new DateTime(2010, 1, 1, 0, 0, 0);
@@ -855,7 +858,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 var xEnd1 = TimeSeriesViewModel.ConvertDateTimeToXValue(tEnd1);
                 var xStart2 = TimeSeriesViewModel.ConvertDateTimeToXValue(tStart2);
                 var xEnd2 = TimeSeriesViewModel.ConvertDateTimeToXValue(tEnd2);
-                var y = y0 + (y1 - y0) / 2;
+                var y = 0;
 
                 // Tegn en dummy line
                 TimeSeriesViewModel3.GeometryEditorViewModel.AddLine(
@@ -863,8 +866,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 // Tegn et par dummy rektangler
                 var barHeight = 0.2;
-                TimeSeriesViewModel3.GeometryEditorViewModel.ClearShapes();
-                
+
                 TimeSeriesViewModel3.GeometryEditorViewModel.AddShape(1, new RectangleViewModel
                 {
                     Point = new PointD(xStart1 + (xEnd1 - xStart1) / 2, y),
@@ -878,6 +880,10 @@ namespace Craft.UIElements.GuiTest.Tab3
                     Width = xEnd2 - xStart2,
                     Height = barHeight
                 });
+
+                // Tegn nogle dummy labels
+                TimeSeriesViewModel3.GeometryEditorViewModel.AddLabel(
+                    "Bamse", new PointD(xStart1, y), 50, 30, new PointD(25, 0), 1.0);
             };
 
             /*

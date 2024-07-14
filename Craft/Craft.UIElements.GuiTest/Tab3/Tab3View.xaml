@@ -17,7 +17,7 @@
 
     <TabControl SelectedIndex="0">
         <TabItem Header="ScrollFree">
-            <TabControl SelectedIndex="5">
+            <TabControl SelectedIndex="4">
                 <TabItem Header="Basic">
                     <Grid>
                         <Grid.RowDefinitions>
