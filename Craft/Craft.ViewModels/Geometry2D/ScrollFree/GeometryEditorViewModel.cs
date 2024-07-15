@@ -27,6 +27,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Size _scaling;
         private Matrix _transformationMatrix;
         private double _translationX;
+        private double _translationXMin;
+        private double _translationXMax;
+        private double _translationYMin;
+        private double _translationYMax;
         private double _translationY;
         private Brush _defaultBrush;
         private Brush _backgroundBrush;
@@ -98,23 +102,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             get { return _worldWindowUpperLeft; }
             set
             {
-                var worldWindowUpperLeftBeforeX = _worldWindowUpperLeft.X;
-                var worldWindowUpperLeftBeforeY = _worldWindowUpperLeft.Y;
-
                 _worldWindowUpperLeft.X = Math.Max(value.X, WorldWindowUpperLeftLimit.X);
                 _worldWindowUpperLeft.Y = Math.Max(value.Y, WorldWindowUpperLeftLimit.Y);
                 _worldWindowUpperLeft.X = Math.Min(_worldWindowUpperLeft.X, WorldWindowBottomRightLimit.X - WorldWindowSize.Width);
                 _worldWindowUpperLeft.Y = Math.Min(_worldWindowUpperLeft.Y, WorldWindowBottomRightLimit.Y - WorldWindowSize.Height);
-
-                var offsetX = worldWindowUpperLeftBeforeX - _worldWindowUpperLeft.X;
-                var offsetY = worldWindowUpperLeftBeforeY - _worldWindowUpperLeft.Y;
-
-                if (Math.Abs(offsetX) > 0 ||
-                    Math.Abs(offsetY) > 0)
-                {
-                    TranslationX += offsetX * Scaling.Width;
-                    TranslationY += offsetY * Scaling.Height;
-                }
 
                 UpdateTransformationMatrix();
                 RaisePropertyChanged();
@@ -168,7 +159,19 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 if (!XAxisLocked)
                 {
-                    _translationX = value;
+                    if (value < _translationXMin)
+                    {
+                        _translationX = _translationXMin;
+                    }
+                    else if (value > _translationXMax)
+                    {
+                        _translationX = _translationXMax;
+                    }
+                    else
+                    {
+                        _translationX = value;
+                    }
+
                     RaisePropertyChanged();
                 }
             }
@@ -513,6 +516,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
             TranslationX = 0;
             TranslationY = 0;
+
+            _translationXMin = -100;
+            _translationXMax = 100;
+            _translationYMin = -100;
+            _translationYMax = 100;
 
             foreach (var polylineViewModel in PolylineViewModels)
             {
