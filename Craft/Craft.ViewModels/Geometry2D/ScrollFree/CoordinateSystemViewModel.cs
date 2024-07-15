@@ -435,8 +435,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             GeometryEditorViewModel =  new GeometryEditorViewModel(-1);
 
-            GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(0, 0);
-
             GeometryEditorViewModel.InitializeWorldWindow(worldWindowFocus, worldWindowSize, fitAspectRatio);
 
             GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>

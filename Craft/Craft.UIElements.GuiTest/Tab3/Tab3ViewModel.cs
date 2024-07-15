@@ -178,11 +178,6 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         public Tab3ViewModel()
         {
-            GeometryEditorViewModel1 = new GeometryEditorViewModel();
-
-            GeometryEditorViewModel2 = new GeometryEditorViewModel(-1);
-            GeometryEditorViewModel2.InitializeWorldWindow(new Point(300, 112.5));
-
             var worldWindowFocus = new Point(
                 (_x1 + _x0) / 2,
                 (_y1 + _y0) / 2);
@@ -191,6 +186,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 _x1 - _x0,
                 _y1 - _y0);
 
+            InitializeGeometryEditorViewModel1();
+            InitializeGeometryEditorViewModel2();
             InitializeGeometryEditorViewModel3(worldWindowFocus, worldWindowSize);
             InitializeGeometryEditorViewModel4(worldWindowFocus, worldWindowSize);
             InitializeCoordinateSysteViewModel(worldWindowFocus, worldWindowSize);
@@ -484,6 +481,19 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 y += spacingY;
             }
+        }
+
+        private void InitializeGeometryEditorViewModel1()
+        {
+            GeometryEditorViewModel1 = new GeometryEditorViewModel();
+            GeometryEditorViewModel1.WorldWindowUpperLeftLimit = new Point(-100, -100);
+            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(800, 800);
+        }
+
+        private void InitializeGeometryEditorViewModel2()
+        {
+            GeometryEditorViewModel2 = new GeometryEditorViewModel(-1);
+            GeometryEditorViewModel2.InitializeWorldWindow(new Point(300, 112.5));
         }
 
         private void InitializeGeometryEditorViewModel3(

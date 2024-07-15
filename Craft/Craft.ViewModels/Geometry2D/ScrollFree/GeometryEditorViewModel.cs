@@ -144,7 +144,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     MousePositionWorld.Object.Value.X - _mousePositionViewport.X * _worldWindowSize.Width / _viewPortSize.Width,
                     MousePositionWorld.Object.Value.Y - _mousePositionViewport.Y * _worldWindowSize.Height / _viewPortSize.Height);
 
-                UpdatePoints2();
+                UpdatePoints();
 
                 RaisePropertyChanged();
             }
@@ -506,10 +506,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 }
             }
 
-            UpdatePoints2();
+            UpdatePoints();
         }
 
-        public void UpdatePoints2()
+        public void UpdatePoints()
         {
             TranslationX = 0;
             TranslationY = 0;
@@ -771,7 +771,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         // This method is called from the View class
         public void OnWorldWindowMajorUpdateOccured()
         {
-            UpdatePoints2();
+            UpdatePoints();
 
             var handler = WorldWindowMajorUpdateOccured;
 
