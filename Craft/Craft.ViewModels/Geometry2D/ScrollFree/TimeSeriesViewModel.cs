@@ -81,11 +81,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 (1 + 2 * _worldWindowExpansionFactor) * (y1 - y0));
 
             GeometryEditorViewModel.ClearLines();
-            AxisTickLabelViewModels.Clear();
+            XAxisTickLabelViewModels.Clear();
+            YAxisTickLabelViewModels.Clear();
 
             if (ShowHorizontalGridLines || ShowYAxisLabels)
             {
-                DrawHorizontalGridLinesAndOrLabels(x0, dx, thickness);
+                DrawHorizontalGridLinesAndOrLabels();
             }
 
             if (ShowVerticalGridLines || ShowXAxisLabels)
@@ -392,7 +393,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             FixedViewPortYCoordinate = MarginBottomOffset
                         };
 
-                        AxisTickLabelViewModels.Add(labelViewModel);
+                        XAxisTickLabelViewModels.Add(labelViewModel);
 
                         labelCount++;
                     }
@@ -435,7 +436,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             FixedViewPortYCoordinate = MarginBottomOffset
                         };
 
-                        AxisTickLabelViewModels.Add(labelViewModel);
+                        XAxisTickLabelViewModels.Add(labelViewModel);
 
                         labelCount++;
                     }
@@ -478,7 +479,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             FixedViewPortYCoordinate = MarginBottomOffset
                         };
 
-                        AxisTickLabelViewModels.Add(labelViewModel);
+                        XAxisTickLabelViewModels.Add(labelViewModel);
 
                         labelCount++;
                     }
@@ -539,7 +540,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             FixedViewPortYCoordinate = MarginBottomOffset
                         };
 
-                        AxisTickLabelViewModels.Add(labelViewModel);
+                        XAxisTickLabelViewModels.Add(labelViewModel);
 
                         labelCount++;
                     }

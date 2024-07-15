@@ -45,8 +45,65 @@
                 </Rectangle.Visibility>
             </Rectangle>
 
-            <!-- Axis Tick Labels -->
-            <ItemsControl ItemsSource="{Binding AxisTickLabelViewModels}">
+            <!-- X Axis Tick Labels -->
+            <ItemsControl ItemsSource="{Binding XAxisTickLabelViewModels}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource LabelPositionConverter}">
+                                    <Binding Path="Point.X"/>
+                                    <Binding Path="DataContext.GeometryEditorViewModel.WorldWindowUpperLeft.X" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    <Binding Path="DataContext.GeometryEditorViewModel.Scaling.Width" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    <Binding Path="Width"/>
+                                    <Binding Path="Shift.X"/>
+                                    <Binding Path="FixedViewPortXCoordinate"/>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Canvas.Top">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource LabelPositionConverter}">
+                                    <Binding Path="Point.Y"/>
+                                    <Binding Path="DataContext.GeometryEditorViewModel.WorldWindowUpperLeft.Y" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    <Binding Path="DataContext.GeometryEditorViewModel.Scaling.Height" 
+                                         RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    <Binding Path="Height"/>
+                                    <Binding Path="Shift.Y"/>
+                                    <Binding Path="FixedViewPortYCoordinate"/>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Rectangle Fill="DarkSeaGreen"
+                                   Stroke="Black"
+                                   Opacity="{Binding Opacity}"
+                                   Width="{Binding Width}" 
+                                   Height="{Binding Height}"/>
+                            <TextBlock Text="{Binding Text}" 
+                                   FontFamily="Segoe UI"
+                                   FontSize="12.3"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Y Axis Tick Labels -->
+            <ItemsControl ItemsSource="{Binding YAxisTickLabelViewModels}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas/>

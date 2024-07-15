@@ -387,7 +387,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         public event EventHandler PanLeftClicked;
         public event EventHandler PanRightClicked;
 
-        public ObservableCollection<LabelViewModel> AxisTickLabelViewModels { get; }
+        public ObservableCollection<LabelViewModel> XAxisTickLabelViewModels { get; }
+        public ObservableCollection<LabelViewModel> YAxisTickLabelViewModels { get; }
 
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
 
@@ -428,7 +429,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             ShowMarginLeft = marginX > 0;
             ShowMarginBottom = marginY > 0;
 
-            AxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
+            XAxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
+            YAxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
 
             GeometryEditorViewModel = 
                 new GeometryEditorViewModel(-1)
@@ -480,10 +482,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var y0 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y - GeometryEditorViewModel.WorldWindowSize.Height;
             var y1 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y;
 
-            // We want margins and thickness to be independent on scaling
-            var dx = MarginLeft / GeometryEditorViewModel.Scaling.Width;
-            var dy = MarginBottom / GeometryEditorViewModel.Scaling.Height;
-
             _expandedWorldWindowUpperLeft = new Point(
                 x0 - _worldWindowExpansionFactor * (x1 - x0),
                 y0 - _worldWindowExpansionFactor * (y1 - y0));
@@ -495,25 +493,20 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             // Clear the grid lines
             GeometryEditorViewModel.ClearLines();
 
-            // Clear the labels
-            GeometryEditorViewModel.ClearLabels();
-            AxisTickLabelViewModels.Clear();
-
             if (ShowHorizontalGridLines || ShowYAxisLabels)
             {
-                DrawHorizontalGridLinesAndOrLabels(x0, dx, 1.0);
+                YAxisTickLabelViewModels.Clear();
+                DrawHorizontalGridLinesAndOrLabels();
             }
 
             if (ShowVerticalGridLines || ShowXAxisLabels)
             {
-                DrawVerticalGridLinesAndOrLabels(y0, dy, 1.0);
+                XAxisTickLabelViewModels.Clear();
+                DrawVerticalGridLinesAndOrLabels();
             }
         }
 
-        protected void DrawHorizontalGridLinesAndOrLabels(
-            double x0,
-            double dx,
-            double thickness)
+        protected void DrawHorizontalGridLinesAndOrLabels()
         {
             // 1: Find ud af spacing af horisontale grid lines
             var lineSpacingY_ViewPort_Min = 75.0;
@@ -547,37 +540,32 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     GeometryEditorViewModel.AddLine(
                         new PointD(_expandedWorldWindowUpperLeft.X, y),
                         new PointD(_expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width, y),
-                        thickness,
+                        1,
                         _gridBrush);
                 }
 
                 if (_showYAxisLabels)
                 {
-                    var point = new PointD(x0 + dx * 0.8, y);
-
                     var labelViewModel = new LabelViewModel
                     {
                         Text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture),
-                        Point = new PointD(point.X, GeometryEditorViewModel._yAxisFactor * point.Y),
+                        Point = new PointD(0, GeometryEditorViewModel._yAxisFactor * y),
                         Width = MarginLeft,
                         Height = 20,
-                        Shift = new PointD(-10, 0),
+                        Shift = new PointD(0, 0),
                         Opacity = 0.5,
                         FixedViewPortXCoordinate = 0,
                         FixedViewPortYCoordinate = null
                     };
 
-                    AxisTickLabelViewModels.Add(labelViewModel);
+                    YAxisTickLabelViewModels.Add(labelViewModel);
                 }
 
                 y += lineSpacingY_World;
             }
         }
 
-        protected virtual void DrawVerticalGridLinesAndOrLabels(
-            double y0,
-            double dy,
-            double thickness)
+        protected virtual void DrawVerticalGridLinesAndOrLabels()
         {
             // 1: Find ud af spacing af vertikale grid lines
             var lineSpacingX_ViewPort_Min = 75.0;
@@ -609,6 +597,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             // Find ud af første x-værdi
             var x = Math.Floor(_expandedWorldWindowUpperLeft.X / lineSpacingX_World) * lineSpacingX_World;
 
+            var y0 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y - GeometryEditorViewModel.WorldWindowSize.Height;
+            var dy = MarginBottom / GeometryEditorViewModel.Scaling.Height;
+
             while (x < _expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width)
             {
                 if (ShowVerticalGridLines)
@@ -616,7 +607,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     GeometryEditorViewModel.AddLine(
                         new PointD(x, _expandedWorldWindowUpperLeft.Y),
                         new PointD(x, _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height),
-                        thickness,
+                        1,
                         _gridBrush);
                 }
 
@@ -636,7 +627,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         FixedViewPortYCoordinate = MarginBottomOffset
                     };
 
-                    AxisTickLabelViewModels.Add(labelViewModel);
+                    XAxisTickLabelViewModels.Add(labelViewModel);
                 }
 
                 x += lineSpacingX_World;
