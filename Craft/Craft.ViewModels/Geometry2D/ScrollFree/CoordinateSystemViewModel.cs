@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
@@ -432,10 +433,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             XAxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
             YAxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
 
-            GeometryEditorViewModel = 
-                new GeometryEditorViewModel(-1)
-                {
-                };
+            GeometryEditorViewModel =  new GeometryEditorViewModel(-1);
+
+            GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(0, 0);
 
             GeometryEditorViewModel.InitializeWorldWindow(worldWindowFocus, worldWindowSize, fitAspectRatio);
 
@@ -469,7 +469,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             };
         }
 
-        protected virtual void UpdateCoordinateSystemForGeometryEditorViewModel()
+        private void UpdateCoordinateSystemForGeometryEditorViewModel()
         {
             if (GeometryEditorViewModel.WorldWindowSize.Width < 0.000000001 ||
                 GeometryEditorViewModel.WorldWindowSize.Height < 0.000000001)
@@ -505,63 +505,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        protected void DrawHorizontalGridLinesAndOrLabels()
+        private void DrawHorizontalGridLinesAndOrLabels()
         {
-            // 1: Find ud af spacing af horisontale grid lines
-            var lineSpacingY_ViewPort_Min = 75.0;
-            var lineSpacingY_World_Min = lineSpacingY_ViewPort_Min / GeometryEditorViewModel.Scaling.Height;
-            var lineSpacingY_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingY_World_Min)));
-
-            // Her er lineSpacingX_World f.eks. 0.01, 0.1, 1, 10, 100 eller 1000
-
-            if (lineSpacingY_World / 5 >= lineSpacingY_World_Min)
-            {
-                // Hvis den landede på f.eks. 10, så er der plads til at have en grid line for hver 2, dvs ved 0, 2, 4, 6, 8, 10 osv
-                lineSpacingY_World /= 5;
-            }
-            else if (lineSpacingY_World / 2 >= lineSpacingY_World_Min)
-            {
-                // Hvis den landede på f.eks. 10, så er der plads til at have en grid line for hver 5, dvs ved 0, 5, 10, 15 osv
-                lineSpacingY_World /= 2;
-            }
-
-            // Hvor mange decimaler er der generelt på et tick?
-            // (Det skal vi bruge for at kompensere for afrundingsfejl, så der ikke f.eks. kommer til at stå 0.60000000000012)
-            var labelDecimals = (int)Math.Max(0, Math.Ceiling(-Math.Log10(lineSpacingY_World)));
-
-            // Find ud af første y-værdi
-            var y = Math.Floor(_expandedWorldWindowUpperLeft.Y / lineSpacingY_World) * lineSpacingY_World;
-
-            while (y < _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height)
-            {
-                if (ShowHorizontalGridLines)
-                {
-                    GeometryEditorViewModel.AddLine(
-                        new PointD(_expandedWorldWindowUpperLeft.X, y),
-                        new PointD(_expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width, y),
-                        1,
-                        _gridBrush);
-                }
-
-                if (_showYAxisLabels)
-                {
-                    var labelViewModel = new LabelViewModel
-                    {
-                        Text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture),
-                        Point = new PointD(0, GeometryEditorViewModel._yAxisFactor * y),
-                        Width = MarginLeft,
-                        Height = 20,
-                        Shift = new PointD(0, 0),
-                        Opacity = 0.5,
-                        FixedViewPortXCoordinate = 0,
-                        FixedViewPortYCoordinate = null
-                    };
-
-                    YAxisTickLabelViewModels.Add(labelViewModel);
-                }
-
-                y += lineSpacingY_World;
-            }
+            //DrawHorizontalGridLinesAndOrLabels_Common();
+            DrawHorizontalGridLinesAndOrLabels_Special();
         }
 
         protected virtual void DrawVerticalGridLinesAndOrLabels()
@@ -663,6 +610,118 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
 
             GeometryEditorViewModel.OnWorldWindowMajorUpdateOccured();
+        }
+
+        private void DrawHorizontalGridLinesAndOrLabels_Common()
+        {
+            // 1: Find ud af spacing af horisontale grid lines
+            var lineSpacingY_ViewPort_Min = 75.0;
+            var lineSpacingY_World_Min = lineSpacingY_ViewPort_Min / GeometryEditorViewModel.Scaling.Height;
+            var lineSpacingY_World = Math.Pow(10, Math.Ceiling(Math.Log10(lineSpacingY_World_Min)));
+
+            // Her er lineSpacingX_World f.eks. 0.01, 0.1, 1, 10, 100 eller 1000
+
+            if (lineSpacingY_World / 5 >= lineSpacingY_World_Min)
+            {
+                // Hvis den landede på f.eks. 10, så er der plads til at have en grid line for hver 2, dvs ved 0, 2, 4, 6, 8, 10 osv
+                lineSpacingY_World /= 5;
+            }
+            else if (lineSpacingY_World / 2 >= lineSpacingY_World_Min)
+            {
+                // Hvis den landede på f.eks. 10, så er der plads til at have en grid line for hver 5, dvs ved 0, 5, 10, 15 osv
+                lineSpacingY_World /= 2;
+            }
+
+            // Hvor mange decimaler er der generelt på et tick?
+            // (Det skal vi bruge for at kompensere for afrundingsfejl, så der ikke f.eks. kommer til at stå 0.60000000000012)
+            var labelDecimals = (int)Math.Max(0, Math.Ceiling(-Math.Log10(lineSpacingY_World)));
+
+            // Find ud af første y-værdi
+            var y = Math.Floor(_expandedWorldWindowUpperLeft.Y / lineSpacingY_World) * lineSpacingY_World;
+
+            while (y < _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height)
+            {
+                if (ShowHorizontalGridLines)
+                {
+                    GeometryEditorViewModel.AddLine(
+                        new PointD(_expandedWorldWindowUpperLeft.X, y),
+                        new PointD(_expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width, y),
+                        1,
+                        _gridBrush);
+                }
+
+                if (_showYAxisLabels)
+                {
+                    var labelViewModel = new LabelViewModel
+                    {
+                        Text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture),
+                        Point = new PointD(0, GeometryEditorViewModel._yAxisFactor * y),
+                        Width = MarginLeft,
+                        Height = 20,
+                        Shift = new PointD(0, 0),
+                        Opacity = 0.5,
+                        FixedViewPortXCoordinate = 0,
+                        FixedViewPortYCoordinate = null
+                    };
+
+                    YAxisTickLabelViewModels.Add(labelViewModel);
+                }
+
+                y += lineSpacingY_World;
+            }
+        }
+
+        private void DrawHorizontalGridLinesAndOrLabels_Special()
+        {
+            var customLabels = new List<string>
+            {
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G"
+            };
+
+            // 1: Find ud af spacing af horisontale grid lines
+            var labelHeight = 30.0;
+            var lineSpacingY_ViewPort = labelHeight;
+            var lineSpacingY_World = lineSpacingY_ViewPort / GeometryEditorViewModel.Scaling.Height;
+
+            // Find ud af første y-værdi
+            var y = 0.0;
+
+            foreach (var customLabel in customLabels)
+            {
+                if (ShowHorizontalGridLines)
+                {
+                    GeometryEditorViewModel.AddLine(
+                        new PointD(_expandedWorldWindowUpperLeft.X, y),
+                        new PointD(_expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width, y),
+                        1,
+                        _gridBrush);
+                }
+
+                if (_showYAxisLabels)
+                {
+                    var labelViewModel = new LabelViewModel
+                    {
+                        Text = customLabel,
+                        Point = new PointD(0, GeometryEditorViewModel._yAxisFactor * y),
+                        Width = MarginLeft,
+                        Height = labelHeight,
+                        Shift = new PointD(0, labelHeight / 2),
+                        Opacity = 0.5,
+                        FixedViewPortXCoordinate = 0,
+                        FixedViewPortYCoordinate = null
+                    };
+
+                    YAxisTickLabelViewModels.Add(labelViewModel);
+                }
+
+                y -= lineSpacingY_World;
+            }
         }
     }
 }
