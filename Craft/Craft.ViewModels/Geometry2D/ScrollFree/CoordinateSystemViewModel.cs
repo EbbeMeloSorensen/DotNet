@@ -19,7 +19,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private double _marginBottomOffset;
         private bool _showMarginLeft;
         private bool _showMarginBottom;
-
         private bool _showHorizontalAxis;
         private bool _showVerticalAxis;
         private bool _showHorizontalGridLines;
@@ -560,7 +559,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     {
                         Text = Math.Round(y, labelDecimals).ToString(CultureInfo.InvariantCulture),
                         Point = new PointD(point.X, GeometryEditorViewModel._yAxisFactor * point.Y),
-                        Width = 20,
+                        Width = MarginLeft,
                         Height = 20,
                         Shift = new PointD(-10, 0),
                         Opacity = 0.5,
