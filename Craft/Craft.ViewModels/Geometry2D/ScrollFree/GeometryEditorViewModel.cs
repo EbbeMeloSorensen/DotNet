@@ -30,17 +30,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private double _translationY;
         private Brush _defaultBrush;
         private Brush _backgroundBrush;
-        private Brush _marginBrush;
         private Dictionary<int, ShapeViewModel> _shapeViewModelMap;
         private bool _xAxisLocked;
         private bool _yAxisLocked;
         private bool _aspectRatioLocked;
-
-        private double _marginLeft;
-        private double _marginBottom;
-        private double _marginBottomOffset;
-        private bool _showMarginLeft; 
-        private bool _showMarginBottom; 
 
         public ObservableObject<Point?> MousePositionWorld { get; }
 
@@ -225,72 +218,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        public double MarginLeft
-        {
-            get { return _marginLeft; }
-            set
-            {
-                _marginLeft = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public double MarginBottom
-        {
-            get { return _marginBottom; }
-            set
-            {
-                _marginBottom = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public double MarginBottomOffset
-        {
-            get { return _marginBottomOffset; }
-            set
-            {
-                _marginBottomOffset = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool ShowMarginLeft
-        {
-            get { return _showMarginLeft; }
-            set
-            {
-                _showMarginLeft = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool ShowMarginBottom
-        {
-            get { return _showMarginBottom; }
-            set
-            {
-                _showMarginBottom = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public Brush BackgroundBrush
         {
             get => _backgroundBrush;
             set
             {
                 _backgroundBrush = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public Brush MarginBrush
-        {
-            get => _marginBrush;
-            set
-            {
-                _marginBrush = value;
                 RaisePropertyChanged();
             }
         }
@@ -339,7 +272,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _initialScalingY = 1;
 
             _backgroundBrush = new SolidColorBrush(Colors.WhiteSmoke);
-            _marginBrush = new SolidColorBrush(Colors.White);
             _defaultBrush = new SolidColorBrush(Colors.Black);
             _shapeViewModelMap = new Dictionary<int, ShapeViewModel>();
 
@@ -372,7 +304,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         InitializeScalingAndWorldWindow();
                     }
                         
-                    MarginBottomOffset = ViewPortSize.Height - MarginBottom;
+                    //MarginBottomOffset = ViewPortSize.Height - MarginBottom;
 
                     break;
             }

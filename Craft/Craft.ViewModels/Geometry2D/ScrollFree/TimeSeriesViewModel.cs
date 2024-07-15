@@ -68,8 +68,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var y1 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y;
 
             // We want margins and thickness to be independent on scaling
-            var dx = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
-            var dy = GeometryEditorViewModel.MarginBottom / GeometryEditorViewModel.Scaling.Height;
+            var dx = MarginLeft / GeometryEditorViewModel.Scaling.Width;
+            var dy = MarginBottom / GeometryEditorViewModel.Scaling.Height;
             var thickness = 1;
 
             _expandedWorldWindowUpperLeft = new Point(
@@ -389,7 +389,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             Shift = new PointD(0, labelHeight / 2),
                             Opacity = 0.0,
                             FixedViewPortXCoordinate = null,
-                            FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                            FixedViewPortYCoordinate = MarginBottomOffset
                         };
 
                         AxisTickLabelViewModels.Add(labelViewModel);
@@ -432,7 +432,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             Shift = new PointD(0, labelHeight / 2),
                             Opacity = 0.0,
                             FixedViewPortXCoordinate = null,
-                            FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                            FixedViewPortYCoordinate = MarginBottomOffset
                         };
 
                         AxisTickLabelViewModels.Add(labelViewModel);
@@ -475,7 +475,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             Shift = new PointD(0, labelHeight / 2),
                             Opacity = 0.0,
                             FixedViewPortXCoordinate = null,
-                            FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                            FixedViewPortYCoordinate = MarginBottomOffset
                         };
 
                         AxisTickLabelViewModels.Add(labelViewModel);
@@ -536,7 +536,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                             Shift = new PointD(0, labelHeight / 2),
                             Opacity = 0.0,
                             FixedViewPortXCoordinate = null,
-                            FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                            FixedViewPortYCoordinate = MarginBottomOffset
                         };
 
                         AxisTickLabelViewModels.Add(labelViewModel);

@@ -19,11 +19,11 @@
         <Canvas ClipToBounds="True">
 
             <!-- Left margin -->
-            <Rectangle Fill="{Binding GeometryEditorViewModel.MarginBrush}" 
-                       Width="{Binding GeometryEditorViewModel.MarginLeft}" 
+            <Rectangle Fill="{Binding MarginBrush}" 
+                       Width="{Binding MarginLeft}" 
                        Height="{Binding GeometryEditorViewModel.ViewPortSize.Height}">
                 <Rectangle.Visibility>
-                    <Binding Path="GeometryEditorViewModel.ShowMarginLeft" Converter="{StaticResource BooleanToVisibilityConverter}">
+                    <Binding Path="ShowMarginLeft" Converter="{StaticResource BooleanToVisibilityConverter}">
                         <Binding.ConverterParameter>
                             <system:Boolean>True</system:Boolean>
                         </Binding.ConverterParameter>
@@ -32,10 +32,10 @@
             </Rectangle>
 
             <!-- Bottom margin -->
-            <Rectangle Fill="{Binding  GeometryEditorViewModel.MarginBrush}" 
-                       Height="{Binding GeometryEditorViewModel.MarginBottom}" 
+            <Rectangle Fill="{Binding MarginBrush}" 
+                       Height="{Binding MarginBottom}" 
                        Width="{Binding GeometryEditorViewModel.ViewPortSize.Width}"
-                       Canvas.Top="{Binding GeometryEditorViewModel.MarginBottomOffset}">
+                       Canvas.Top="{Binding MarginBottomOffset}">
                 <Rectangle.Visibility>
                     <Binding Path="ShowMarginBottom" Converter="{StaticResource BooleanToVisibilityConverter}">
                         <Binding.ConverterParameter>
@@ -103,9 +103,9 @@
             </ItemsControl>
 
             <!-- Overall labels for the x axis -->
-            <Grid Canvas.Left="{Binding GeometryEditorViewModel.MarginLeft}"
-                  Canvas.Top="{Binding GeometryEditorViewModel.MarginBottomOffset}"
-                  Height="{Binding GeometryEditorViewModel.MarginBottom}">
+            <Grid Canvas.Left="{Binding MarginLeft}"
+                  Canvas.Top="{Binding MarginBottomOffset}"
+                  Height="{Binding MarginBottom}">
                 <TextBlock Background="Transparent"
                            Width="{Binding GeometryEditorViewModel.ViewPortSize.Width}" 
                            Height="20"
@@ -123,10 +123,10 @@
             </Grid>
 
             <!-- Little square to the lower right of origo that hides axis labels, thereby preventing them from overlapping -->
-            <Rectangle Fill="{Binding GeometryEditorViewModel.MarginBrush}"
-                       Canvas.Top="{Binding GeometryEditorViewModel.MarginBottomOffset}"
-                       Width="{Binding GeometryEditorViewModel.MarginLeft}" 
-                       Height="{Binding GeometryEditorViewModel.MarginBottom}">
+            <Rectangle Fill="{Binding MarginBrush}"
+                       Canvas.Top="{Binding MarginBottomOffset}"
+                       Width="{Binding MarginLeft}" 
+                       Height="{Binding MarginBottom}">
             </Rectangle>
 
             <!-- Vertical line representing static x value -->
@@ -135,7 +135,7 @@
                   X1="{Binding StaticXValueViewPort}"
                   X2="{Binding StaticXValueViewPort}"
                   Y1="0"
-                  Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
+                  Y2="{Binding MarginBottomOffset}">
                 <Line.Visibility>
                     <Binding Path="ShowStaticXValue" Converter="{StaticResource BooleanToVisibilityConverter}">
                         <Binding.ConverterParameter>
@@ -151,7 +151,7 @@
                   X1="{Binding DynamicXValueViewPort}"
                   X2="{Binding DynamicXValueViewPort}"
                   Y1="0"
-                  Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
+                  Y2="{Binding MarginBottomOffset}">
                 <Line.Visibility>
                     <Binding Path="ShowDynamicXValue" Converter="{StaticResource BooleanToVisibilityConverter}">
                         <Binding.ConverterParameter>
@@ -180,7 +180,7 @@
                   X1="{Binding DynamicXValueViewPortWhenLocked}"
                   X2="{Binding DynamicXValueViewPortWhenLocked}"
                   Y1="0"
-                  Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
+                  Y2="{Binding MarginBottomOffset}">
                 <Line.Visibility>
                     <Binding Path="LockWorldWindowOnDynamicXValue" Converter="{StaticResource BooleanToVisibilityConverter}">
                         <Binding.ConverterParameter>
@@ -206,19 +206,19 @@
             <!-- Horizontal axis -->
             <Line Stroke="Black"
                 StrokeThickness="1"
-                X1="{Binding GeometryEditorViewModel.MarginLeft}"
+                X1="{Binding MarginLeft}"
                 X2="{Binding GeometryEditorViewModel.ViewPortSize.Width}"
-                Y1="{Binding GeometryEditorViewModel.MarginBottomOffset}"
-                Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
+                Y1="{Binding MarginBottomOffset}"
+                Y2="{Binding MarginBottomOffset}">
             </Line>
 
             <!-- Vertical axis -->
             <Line Stroke="Black"
                   StrokeThickness="1"
-                  X1="{Binding GeometryEditorViewModel.MarginLeft}"
-                  X2="{Binding GeometryEditorViewModel.MarginLeft}"
+                  X1="{Binding MarginLeft}"
+                  X2="{Binding MarginLeft}"
                   Y1="0"
-                  Y2="{Binding GeometryEditorViewModel.MarginBottomOffset}">
+                  Y2="{Binding MarginBottomOffset}">
                 <Line.Visibility>
                     <Binding Path="ShowVerticalAxis" Converter="{StaticResource BooleanToVisibilityConverter}">
                         <Binding.ConverterParameter>

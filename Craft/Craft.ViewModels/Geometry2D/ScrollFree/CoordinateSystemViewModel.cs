@@ -12,6 +12,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
     public class CoordinateSystemViewModel : ViewModelBase
     {
         protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.35 };
+
+        private Brush _marginBrush;
+        private double _marginLeft;
+        private double _marginBottom;
+        private double _marginBottomOffset;
+        private bool _showMarginLeft;
+        private bool _showMarginBottom;
+
         private bool _showHorizontalAxis;
         private bool _showVerticalAxis;
         private bool _showHorizontalGridLines;
@@ -37,6 +45,66 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected Size _expandedWorldWindowSize;
         private RelayCommand _panLeftCommand;
         private RelayCommand _panRightCommand;
+
+        public Brush MarginBrush
+        {
+            get => _marginBrush;
+            set
+            {
+                _marginBrush = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double MarginLeft
+        {
+            get { return _marginLeft; }
+            set
+            {
+                _marginLeft = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double MarginBottom
+        {
+            get { return _marginBottom; }
+            set
+            {
+                _marginBottom = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double MarginBottomOffset
+        {
+            get { return _marginBottomOffset; }
+            set
+            {
+                _marginBottomOffset = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowMarginLeft
+        {
+            get { return _showMarginLeft; }
+            set
+            {
+                _showMarginLeft = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowMarginBottom
+        {
+            get { return _showMarginBottom; }
+            set
+            {
+                _showMarginBottom = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public double Fraction { get; set; }
 
@@ -75,7 +143,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
                 var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
 
-                var marginInWorldDistance = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
+                var marginInWorldDistance = MarginLeft / GeometryEditorViewModel.Scaling.Width;
 
                 ShowStaticXValue =
                     StaticXValue >= x0 + marginInWorldDistance &&
@@ -157,7 +225,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
                         var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
 
-                        var marginInWorldDistance = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
+                        var marginInWorldDistance = MarginLeft / GeometryEditorViewModel.Scaling.Width;
 
                         ShowDynamicXValue =
                             DynamicXValue >= x0 + marginInWorldDistance &&
@@ -348,6 +416,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double marginY,
             double worldWindowExpansionFactor)
         {
+            _marginBrush = new SolidColorBrush(Colors.White);
             _showHorizontalAxis = true;
             _showVerticalAxis = true;
             _showHorizontalGridLines = true;
@@ -355,16 +424,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             _worldWindowExpansionFactor = worldWindowExpansionFactor;
             _xAxisOverallLabel1Alignment = "Center";
             Fraction = 0.5;
+            MarginLeft = marginX;
+            MarginBottom = marginY;
+            ShowMarginLeft = marginX > 0;
+            ShowMarginBottom = marginY > 0;
 
             AxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
 
             GeometryEditorViewModel = 
                 new GeometryEditorViewModel(-1)
                 {
-                    MarginLeft = marginX,
-                    MarginBottom = marginY,
-                    ShowMarginLeft = marginX > 0,
-                    ShowMarginBottom = marginY > 0
                 };
 
             GeometryEditorViewModel.InitializeWorldWindow(worldWindowFocus, worldWindowSize, fitAspectRatio);
@@ -384,6 +453,13 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             GeometryEditorViewModel.PropertyChanged += (s, e) =>
             {
+                switch (e.PropertyName)
+                {
+                    case "ViewPortSize":
+                        MarginBottomOffset = GeometryEditorViewModel.ViewPortSize.Height - MarginBottom;
+                        break;
+                }
+
                 if (!LockWorldWindowOnDynamicXValue ||
                     e.PropertyName != "WorldWindowUpperLeft" ||
                     IsWorldWindowEnclosedByExpandedWorldWindow()) return;
@@ -406,8 +482,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             var y1 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y;
 
             // We want margins and thickness to be independent on scaling
-            var dx = GeometryEditorViewModel.MarginLeft / GeometryEditorViewModel.Scaling.Width;
-            var dy = GeometryEditorViewModel.MarginBottom / GeometryEditorViewModel.Scaling.Height;
+            var dx = MarginLeft / GeometryEditorViewModel.Scaling.Width;
+            var dy = MarginBottom / GeometryEditorViewModel.Scaling.Height;
 
             _expandedWorldWindowUpperLeft = new Point(
                 x0 - _worldWindowExpansionFactor * (x1 - x0),
@@ -487,7 +563,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         Width = 20,
                         Height = 20,
                         Shift = new PointD(-10, 0),
-                        Opacity = 0.0,
+                        Opacity = 0.5,
                         FixedViewPortXCoordinate = 0,
                         FixedViewPortYCoordinate = null
                     };
@@ -556,9 +632,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         Width = labelWidth,
                         Height = labelHeight,
                         Shift = new PointD(0, labelHeight / 2),
-                        Opacity = 0.0,
+                        Opacity = 0.5,
                         FixedViewPortXCoordinate = null,
-                        FixedViewPortYCoordinate = GeometryEditorViewModel.MarginBottomOffset
+                        FixedViewPortYCoordinate = MarginBottomOffset
                     };
 
                     AxisTickLabelViewModels.Add(labelViewModel);
