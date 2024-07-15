@@ -489,7 +489,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             // Diagnostics
             GeometryEditorViewModel1.WorldWindowUpperLeftLimit = new Point(-100, -100);
-            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(800, 800);
+            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(700, 600);
         }
 
         private void InitializeGeometryEditorViewModel2()

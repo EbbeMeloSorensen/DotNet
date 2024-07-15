@@ -185,7 +185,19 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 if (!YAxisLocked)
                 {
-                    _translationY = value;
+                    if (value < _translationYMin)
+                    {
+                        _translationY = _translationYMin;
+                    }
+                    else if (value > _translationYMax)
+                    {
+                        _translationY = _translationYMax;
+                    }
+                    else
+                    {
+                        _translationY = value;
+                    }
+
                     RaisePropertyChanged();
                 }
             }
@@ -517,10 +529,16 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             TranslationX = 0;
             TranslationY = 0;
 
-            _translationXMin = -100;
-            _translationXMax = 100;
-            _translationYMin = -100;
-            _translationYMax = 100;
+            _translationXMin = -50;
+            _translationXMax = 50;
+            _translationYMin = -50;
+            _translationYMax = 50;
+
+            _translationXMax = (WorldWindowUpperLeft.X - WorldWindowUpperLeftLimit.X) * Scaling.Width;
+            _translationXMin = (WorldWindowUpperLeft.X + WorldWindowSize.Width - WorldWindowBottomRightLimit.X) * Scaling.Width;
+
+            _translationYMax = (WorldWindowUpperLeft.Y - WorldWindowUpperLeftLimit.Y) * Scaling.Height;
+            _translationYMin = (WorldWindowUpperLeft.Y + WorldWindowSize.Height - WorldWindowBottomRightLimit.Y) * Scaling.Height;
 
             foreach (var polylineViewModel in PolylineViewModels)
             {
