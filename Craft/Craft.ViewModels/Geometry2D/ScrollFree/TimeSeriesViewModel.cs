@@ -32,7 +32,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public ObservableObject<DateTime?> TimeAtMousePosition { get; }
 
-
         public TimeSeriesViewModel(
             Point worldWindowFocus,
             Size worldWindowSize,
@@ -54,56 +53,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             };
         }
 
-        protected override void UpdateCoordinateSystemForGeometryEditorViewModel()
+        protected override void DrawVerticalGridLinesAndOrLabels()
         {
-            if (GeometryEditorViewModel.WorldWindowSize.Width < 0.000000001 ||
-                GeometryEditorViewModel.WorldWindowSize.Height < 0.000000001)
-            {
-                return;
-            }
-
             var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
             var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
             var y0 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y - GeometryEditorViewModel.WorldWindowSize.Height;
-            var y1 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y;
 
-            // We want margins and thickness to be independent on scaling
-            var dx = MarginLeft / GeometryEditorViewModel.Scaling.Width;
             var dy = MarginBottom / GeometryEditorViewModel.Scaling.Height;
-            var thickness = 1;
 
-            _expandedWorldWindowUpperLeft = new Point(
-                x0 - _worldWindowExpansionFactor * (x1 - x0),
-                y0 - _worldWindowExpansionFactor * (y1 - y0));
-
-            _expandedWorldWindowSize = new Size(
-                (1 + 2 * _worldWindowExpansionFactor) * (x1 - x0),
-                (1 + 2 * _worldWindowExpansionFactor) * (y1 - y0));
-
-            GeometryEditorViewModel.ClearLines();
-            XAxisTickLabelViewModels.Clear();
-            YAxisTickLabelViewModels.Clear();
-
-            if (ShowHorizontalGridLines || ShowYAxisLabels)
-            {
-                DrawHorizontalGridLinesAndOrLabels();
-            }
-
-            if (ShowVerticalGridLines || ShowXAxisLabels)
-            {
-                DrawVerticalGridLinesAndOrLabels(x0, y0, x1, y1, dx, dy, thickness);
-            }
-        }
-
-        protected virtual void DrawVerticalGridLinesAndOrLabels(
-            double x0,
-            double y0,
-            double x1,
-            double y1,
-            double dx,
-            double dy,
-            double thickness)
-        {
             var lineSpacingX_ViewPort_Min = 75.0;
             var lineSpacingX_World_Min = lineSpacingX_ViewPort_Min / GeometryEditorViewModel.Scaling.Width;
 
@@ -520,7 +477,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         GeometryEditorViewModel.AddLine(
                             new PointD(x, _expandedWorldWindowUpperLeft.Y),
                             new PointD(x, _expandedWorldWindowUpperLeft.Y + _expandedWorldWindowSize.Height),
-                            thickness,
+                            1,
                             _gridBrush);
                     }
 

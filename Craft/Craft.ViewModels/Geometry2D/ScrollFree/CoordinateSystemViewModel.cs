@@ -490,7 +490,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 (1 + 2 * _worldWindowExpansionFactor) * (x1 - x0),
                 (1 + 2 * _worldWindowExpansionFactor) * (y1 - y0));
 
-            // Clear the grid lines
             GeometryEditorViewModel.ClearLines();
 
             if (ShowHorizontalGridLines || ShowYAxisLabels)
@@ -599,6 +598,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             var y0 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y - GeometryEditorViewModel.WorldWindowSize.Height;
             var dy = MarginBottom / GeometryEditorViewModel.Scaling.Height;
+            var y = y0 + dy;
 
             while (x < _expandedWorldWindowUpperLeft.X + _expandedWorldWindowSize.Width)
             {
@@ -613,12 +613,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 if (ShowXAxisLabels)
                 {
-                    var point = new PointD(x, y0 + dy);
-
                     var labelViewModel = new LabelViewModel
                     {
                         Text = Math.Round(x, labelDecimals).ToString(CultureInfo.InvariantCulture),
-                        Point = new PointD(point.X, GeometryEditorViewModel._yAxisFactor * point.Y),
+                        Point = new PointD(x, GeometryEditorViewModel._yAxisFactor * y),
                         Width = labelWidth,
                         Height = labelHeight,
                         Shift = new PointD(0, labelHeight / 2),
