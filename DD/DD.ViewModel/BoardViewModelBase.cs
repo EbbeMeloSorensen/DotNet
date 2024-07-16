@@ -419,8 +419,8 @@ public abstract class BoardViewModelBase : ImageEditorViewModel
     public void PlayerClickedOnBoard()
     {
         // Todo: Determine the index of the square that the user clicked
-        var indexX = (int)System.Math.Floor(MouseWorldPosition.X / TileCenterSpacing);
-        var indexY = (int)System.Math.Floor(MouseWorldPosition.Y / TileCenterSpacing);
+        var indexX = (int)System.Math.Floor(MousePositionWorld.Object.X / TileCenterSpacing);
+        var indexY = (int)System.Math.Floor(MousePositionWorld.Object.Y / TileCenterSpacing);
         var squareIndex = indexY * Columns + indexX;
 
         OnPlayerClickedSquare(squareIndex);
