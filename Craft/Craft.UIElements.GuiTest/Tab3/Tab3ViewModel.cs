@@ -489,7 +489,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             // Diagnostics
             GeometryEditorViewModel1.WorldWindowUpperLeftLimit = new Point(-100, -100);
-            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(700, 600);
+            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(700, 300);
         }
 
         private void InitializeGeometryEditorViewModel2()
@@ -603,15 +603,14 @@ namespace Craft.UIElements.GuiTest.Tab3
                 false,
                 25,
                 25,
-                1)
+                1,
+                XAxisMode.Cartesian)
             {
                 LockWorldWindowOnDynamicXValue = false,
                 StaticXValue = 4.0,
                 ShowXAxisLabels = true,
                 ShowYAxisLabels = true
             };
-
-            //CoordinateSystemViewModel1.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(0, 0);
 
             CoordinateSystemViewModel1.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
@@ -677,6 +676,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 25,
                 40,
                 1,
+                XAxisMode.Cartesian,
                 null)
             {
                 ShowVerticalGridLines = true,
@@ -724,6 +724,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 0,
                 40,
                 1,
+                XAxisMode.Cartesian,
                 null)
             {
                 LockWorldWindowOnDynamicXValue = false,
@@ -818,6 +819,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 40,
                 40,
                 1,
+                XAxisMode.CustomTickLabels,
                 null)
             {
                 LockWorldWindowOnDynamicXValue = false,
@@ -832,6 +834,9 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             //TimeSeriesViewModel3.GeometryEditorViewModel.YAxisLocked = true;
             TimeSeriesViewModel3.GeometryEditorViewModel.YAxisLocked = false;
+
+            TimeSeriesViewModel3.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(double.MinValue, 0);
+
 
             /*
             TimeSeriesViewModel2.TimeAtMousePosition.PropertyChanged += (s, e) =>
@@ -872,14 +877,14 @@ namespace Craft.UIElements.GuiTest.Tab3
                 var xEnd1 = TimeSeriesViewModel.ConvertDateTimeToXValue(tEnd1);
                 var xStart2 = TimeSeriesViewModel.ConvertDateTimeToXValue(tStart2);
                 var xEnd2 = TimeSeriesViewModel.ConvertDateTimeToXValue(tEnd2);
-                var y = 0;
 
                 // Tegn en dummy line
-                TimeSeriesViewModel3.GeometryEditorViewModel.AddLine(
-                    new PointD(xStart1, y), new PointD(xEnd1, y), 1, _curveBrush);
+                //TimeSeriesViewModel3.GeometryEditorViewModel.AddLine(
+                //    new PointD(xStart1, y), new PointD(xEnd1, y), 1, _curveBrush);
 
                 // Tegn et par dummy rektangler
                 var barHeight = 0.2;
+                var y = -barHeight / 2;
 
                 TimeSeriesViewModel3.GeometryEditorViewModel.AddShape(1, new RectangleViewModel
                 {

@@ -10,6 +10,14 @@ using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
+    public enum XAxisMode
+    {
+        Cartesian,
+        CustomTickLabels
+    }
+
+    public delegate void UpdateHorizontalGridLinesAndOrLabelsCallBack();
+
     public class CoordinateSystemViewModel : ViewModelBase
     {
         protected Brush _gridBrush = new SolidColorBrush(Colors.Gray) { Opacity = 0.35 };
@@ -45,6 +53,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected Size _expandedWorldWindowSize;
         private RelayCommand _panLeftCommand;
         private RelayCommand _panRightCommand;
+        private UpdateHorizontalGridLinesAndOrLabelsCallBack _updateHorizontalGridLinesAndOrLabelsCallBack;
 
         public Brush MarginBrush
         {
@@ -402,7 +411,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             bool fitAspectRatio,
             double marginX,
             double marginY,
-            double worldWindowExpansionFactor)
+            double worldWindowExpansionFactor,
+            XAxisMode xAxisMode)
         {
             _marginBrush = new SolidColorBrush(Colors.White);
             _showHorizontalAxis = true;
@@ -419,6 +429,20 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             XAxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
             YAxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
+
+            switch (xAxisMode)
+            {
+                case XAxisMode.CustomTickLabels:
+                {
+                    _updateHorizontalGridLinesAndOrLabelsCallBack = DrawHorizontalGridLinesAndOrLabels_Special;
+                    break;
+                }
+                default:
+                {
+                    _updateHorizontalGridLinesAndOrLabelsCallBack = DrawHorizontalGridLinesAndOrLabels_Common;
+                    break;
+                }
+            }
 
             GeometryEditorViewModel =  new GeometryEditorViewModel(-1);
 
@@ -492,25 +516,19 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             if (ShowHorizontalGridLines || ShowYAxisLabels)
             {
-                YAxisTickLabelViewModels.Clear();
-                DrawHorizontalGridLinesAndOrLabels();
+                _updateHorizontalGridLinesAndOrLabelsCallBack();
             }
 
             if (ShowVerticalGridLines || ShowXAxisLabels)
             {
-                XAxisTickLabelViewModels.Clear();
                 DrawVerticalGridLinesAndOrLabels();
             }
         }
 
-        private void DrawHorizontalGridLinesAndOrLabels()
-        {
-            //DrawHorizontalGridLinesAndOrLabels_Common();
-            DrawHorizontalGridLinesAndOrLabels_Special();
-        }
-
         protected virtual void DrawVerticalGridLinesAndOrLabels()
         {
+            XAxisTickLabelViewModels.Clear();
+
             // 1: Find ud af spacing af vertikale grid lines
             var lineSpacingX_ViewPort_Min = 75.0;
             var lineSpacingX_World_Min = lineSpacingX_ViewPort_Min / GeometryEditorViewModel.Scaling.Width;
@@ -612,6 +630,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         private void DrawHorizontalGridLinesAndOrLabels_Common()
         {
+            YAxisTickLabelViewModels.Clear();
+
             // 1: Find ud af spacing af horisontale grid lines
             var lineSpacingY_ViewPort_Min = 75.0;
             var lineSpacingY_World_Min = lineSpacingY_ViewPort_Min / GeometryEditorViewModel.Scaling.Height;
@@ -671,6 +691,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         private void DrawHorizontalGridLinesAndOrLabels_Special()
         {
+            YAxisTickLabelViewModels.Clear();
+
             var customLabels = new List<string>
             {
                 "A",

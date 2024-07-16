@@ -88,13 +88,13 @@ Done:
   - Når den automatisk flytter world window, så svarer det til, at man panorerer, dvs grid lines og labels flytter ikke med - det ser ikke godt ud
     .. det kunne være fint, hvis man lige holdt styr på, hvor langt den var kravlet og så "emulerede", at den laver en major update med jævne mellemrum
 * Tilføj en ObservableObject for MouseWorldPosition - ovevej senere at erstatte Dependency propertyen
+* Margenerne skal tegnes foran de almindelige labels
 
 In progress:
-* Margenerne skal tegnes foran de almindelige labels
 * Du skal bruge en mere simpel valueconverter for de almindelige labels
 * Der skal være mulighed for at override de labels, der tegnes i margen området - særligt for y aksens labels
 * Der skal stå noget meningsfyldt i bjælken under labels såsom dato, så man ikke er i tvivl om, hvilket tidsinterval man ser på
-* Bemærk lige, at du i Tab3 (Line of sight) benytter en Polygon, som du binder til en "PointCollection", 
+* Bemærk lige, at du i Tab3 af Craft.Algorithms.GuiTest (Line of sight) benytter en Polygon, som du binder til en "PointCollection", 
   når du tegner 3-kanter. Det står i kontrast til hvordan du tegner polygoner i GeometryEditorView, hvor du binder
   til en PolygonViewModel, som har en string property - det er nok en kende tungere end den første metode
 * Refaktorer tegning af grid lines, så de tegnes med polylines i stedet for lines

@@ -136,7 +136,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                     MousePositionWorld.Object.Value.Y - _mousePositionViewport.Y * _worldWindowSize.Height / _viewPortSize.Height);
 
                 UpdatePoints();
-
                 RaisePropertyChanged();
             }
         }

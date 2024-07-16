@@ -39,7 +39,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             double marginX,
             double marginY,
             double expansionFactor,
-            ILogger logger) : base(worldWindowFocus, worldWindowSize, fitAspectRatio, marginX, marginY, expansionFactor)
+            XAxisMode xAxisMode,
+            ILogger logger) : base(worldWindowFocus, worldWindowSize, fitAspectRatio, marginX, marginY, expansionFactor, xAxisMode)
         {
             _logger = logger;
 
@@ -55,6 +56,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         protected override void DrawVerticalGridLinesAndOrLabels()
         {
+            XAxisTickLabelViewModels.Clear();
+
             var x0 = GeometryEditorViewModel.WorldWindowUpperLeft.X;
             var x1 = GeometryEditorViewModel.WorldWindowUpperLeft.X + GeometryEditorViewModel.WorldWindowSize.Width;
             var y0 = -GeometryEditorViewModel.WorldWindowUpperLeft.Y - GeometryEditorViewModel.WorldWindowSize.Height;
