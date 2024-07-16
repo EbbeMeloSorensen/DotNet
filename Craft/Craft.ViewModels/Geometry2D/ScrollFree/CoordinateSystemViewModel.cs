@@ -119,19 +119,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        private void UpdateStaticXValueViewPort()
-        {
-            if (_staticXValue.HasValue)
-            {
-                StaticXValueViewPort =
-                    GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_staticXValue.Value);
-            }
-            else
-            {
-                ShowStaticXValue = false;
-            }
-        }
-
         public double StaticXValueViewPort
         {
             get => _staticXValueViewPort;
@@ -465,6 +452,19 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                 GeometryEditorViewModel.OnWorldWindowMajorUpdateOccured();
             };
+        }
+
+        private void UpdateStaticXValueViewPort()
+        {
+            if (_staticXValue.HasValue)
+            {
+                StaticXValueViewPort =
+                    GeometryEditorViewModel.ConvertWorldXCoordinateToViewPortXCoordinate(_staticXValue.Value);
+            }
+            else
+            {
+                ShowStaticXValue = false;
+            }
         }
 
         private void UpdateCoordinateSystemForGeometryEditorViewModel()

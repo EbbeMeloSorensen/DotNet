@@ -529,11 +529,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             TranslationX = 0;
             TranslationY = 0;
 
-            _translationXMin = -50;
-            _translationXMax = 50;
-            _translationYMin = -50;
-            _translationYMax = 50;
-
             _translationXMax = (WorldWindowUpperLeft.X - WorldWindowUpperLeftLimit.X) * Scaling.Width;
             _translationXMin = (WorldWindowUpperLeft.X + WorldWindowSize.Width - WorldWindowBottomRightLimit.X) * Scaling.Width;
 

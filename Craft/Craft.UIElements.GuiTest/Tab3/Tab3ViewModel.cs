@@ -611,6 +611,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 ShowYAxisLabels = true
             };
 
+            //CoordinateSystemViewModel1.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(0, 0);
+
             CoordinateSystemViewModel1.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
                 WorldWindowUpdateCountForCoordinateSystemViewModel++;
