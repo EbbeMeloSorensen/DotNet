@@ -10,7 +10,8 @@
         xmlns:tab4="clr-namespace:Craft.UIElements.GuiTest.Tab4"
         xmlns:tab5="clr-namespace:Craft.UIElements.GuiTest.Tab5"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="700">
+        Title="MainWindow" Height="700" Width="700"
+        WindowState="Normal">
     <TabControl SelectedIndex="2">
         <TabItem Header="Traffic Light">
             <tab1:Tab1View DataContext="{Binding Tab1ViewModel}"/>

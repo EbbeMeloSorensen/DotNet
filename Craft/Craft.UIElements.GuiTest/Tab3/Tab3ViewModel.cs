@@ -216,9 +216,20 @@ namespace Craft.UIElements.GuiTest.Tab3
         private void DrawAHouse(
             GeometryEditorViewModel geometryEditorViewModel)
         {
+            var wwLimitBrush = new SolidColorBrush(Colors.BlanchedAlmond);
+
+            geometryEditorViewModel.AddPolygon(new List<PointD>
+                {
+                    new PointD(-100, -100),
+                    new PointD(-100, 600),
+                    new PointD(600, 600),
+                    new PointD(600, -100)
+                },
+                1.0,
+                wwLimitBrush);
+
             // Frame
             var frameBrush = new SolidColorBrush(Colors.DarkRed);
-
             geometryEditorViewModel.AddPolygon(new List<PointD>
                 {
                     new PointD(0, 0),
@@ -489,7 +500,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             // Diagnostics
             GeometryEditorViewModel1.WorldWindowUpperLeftLimit = new Point(-100, -100);
-            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(700, 300);
+            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(600, 600);
         }
 
         private void InitializeGeometryEditorViewModel2()
@@ -883,7 +894,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 //    new PointD(xStart1, y), new PointD(xEnd1, y), 1, _curveBrush);
 
                 // Tegn et par dummy rektangler
-                var barHeight = 0.2;
+                var barHeight = 30 / TimeSeriesViewModel3.GeometryEditorViewModel.Scaling.Height;
                 var y = -barHeight / 2;
 
                 TimeSeriesViewModel3.GeometryEditorViewModel.AddShape(1, new RectangleViewModel
