@@ -97,6 +97,7 @@ namespace DMI.Data.Studio.ViewModel
         public StationListViewModel StationListViewModel { get; private set; }
         public GeometryEditorViewModel GeometryEditorViewModel { get; private set; }
         public ChronologyViewModel ChronologyViewModel { get; private set; }
+        public Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel ChronologyViewModel2 { get; private set; }
         public StatisticsViewModel StatisticsViewModel { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel { get; private set; }
 
@@ -279,6 +280,41 @@ namespace DMI.Data.Studio.ViewModel
                 50, 
                 240);
 
+            var years = 10;
+            var timeSpan = TimeSpan.FromDays(365.25 * years);
+            var tFocus = DateTime.UtcNow - timeSpan / 2;
+            var xFocus = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
+
+            ChronologyViewModel2 = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
+                new Point(xFocus, 0),
+                new Size(timeSpan.TotalDays, 1),
+                true,
+                40,
+                40,
+                1,
+                XAxisMode.CustomTickLabels,
+                null)
+            {
+                LockWorldWindowOnDynamicXValue = false,
+                ShowXAxisLabels = true,
+                ShowYAxisLabels = true,
+                ShowVerticalGridLines = false,
+                ShowHorizontalGridLines = false,
+                ShowVerticalAxis = true,
+                Fraction = 0.9,
+                ShowPanningButtons = false,
+            };
+
+            ChronologyViewModel2.GeometryEditorViewModel.InitializeWorldWindow(new Size(0.1, 1), new Point(xFocus, 0)); 
+
+            var tMin = new DateTime(1940, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var tMax = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var xMin = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMin);
+            var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
+
+            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(xMin, 0);
+            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10);
+
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
                 smsDataProvider,
                 applicationDialogService,
@@ -397,6 +433,7 @@ namespace DMI.Data.Studio.ViewModel
         {
             ChronologyViewModel.VerticalLineViewModels.Clear();
             ChronologyViewModel.TimeIntervalBarViewModels.Clear();
+            ChronologyViewModel2.GeometryEditorViewModel.ClearShapes();
 
             // Determine if there is anything to draw at all
             // (and thus whether the view should be visible)
@@ -550,6 +587,10 @@ namespace DMI.Data.Studio.ViewModel
                 var rowCharacteristicsMap = StationInformationListViewModel.RowCharacteristicsMap.Object;
 
                 StationInformation previousStationInformation = null;
+                var customLabelsForNewView = new List<string>();
+                var barHeight = 20;
+                var y = -barHeight / 2;
+
                 foreach (var stationInformation in _selectedStationInformations)
                 {
                     if (IncludeOperationIntervalBars)
@@ -563,6 +604,16 @@ namespace DMI.Data.Studio.ViewModel
                             {
                                 endTime = stationInformation.DateTo.Value;
                             }
+
+                            var xStart = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(startTime);
+                            var xEnd = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(endTime);
+
+                            ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, new GreenBar
+                            {
+                                Point = new PointD(xStart + (xEnd - xStart) / 2, y),
+                                Width = xEnd - xStart,
+                                Height = barHeight
+                            });
 
                             var leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (startTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
                             var right = widthOfLaneLabelColumn + totalWidthOfMainPart * (endTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
@@ -581,8 +632,12 @@ namespace DMI.Data.Studio.ViewModel
                                     Height = heightPrPositionRecord,
                                     Brush = _rowConditionToBrushMap[rowCondition]
                                 });
+
+                            customLabelsForNewView.Add(stationInformation.StationIDDMI.ToString());
                         }
                     }
+
+                    ChronologyViewModel2.CustomXAxisLabels.Object = customLabelsForNewView;
 
                     if (IncludeTransactionTimeIntervalBars)
                     {
@@ -635,6 +690,16 @@ namespace DMI.Data.Studio.ViewModel
                             // Make bars for the observation intervals (originating from ObsDB)
                             foreach (var interval in intervals)
                             {
+                                var xStart = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(interval.Item1);
+                                var xEnd = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(interval.Item2);
+
+                                ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, new YellowBar
+                                {
+                                    Point = new PointD(xStart + (xEnd - xStart) / 2, y),
+                                    Width = xEnd - xStart,
+                                    Height = barHeight * barHeightRatio
+                                });
+
                                 var leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item1 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
                                 var right = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item2 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
                                 var width = right - leftOfBar;
@@ -656,6 +721,7 @@ namespace DMI.Data.Studio.ViewModel
                     previousStationInformation = stationInformation;
 
                     timeIntervalBarCount++;
+                    y -= barHeight;
                 }
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Craft.UIElements.GuiTest.Tab3;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 
 namespace Craft.UIElements.GuiTest
@@ -17,6 +18,7 @@ namespace Craft.UIElements.GuiTest
             return item switch
             {
                 RotatableRectangleViewModel => element.FindResource("RotatableRectangle") as DataTemplate,
+                YellowBar => element.FindResource("YellowBar") as DataTemplate,
                 RectangleViewModel => element.FindResource("DoorAndWindow") as DataTemplate,
                 RotatableEllipseViewModel => element.FindResource("RotatableEllipse") as DataTemplate,
                 EllipseViewModel => element.FindResource("Sun") as DataTemplate,

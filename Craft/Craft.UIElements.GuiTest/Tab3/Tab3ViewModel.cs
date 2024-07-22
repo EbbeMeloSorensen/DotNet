@@ -244,16 +244,15 @@ namespace Craft.UIElements.GuiTest.Tab3
             // Door
             var doorAndWindowFrameBrush = new SolidColorBrush(Colors.GhostWhite);
 
-            geometryEditorViewModel.AddPolyline(
-                new List<PointD>
-                {
-                    new PointD(50, 0),
-                    new PointD(50, 150),
-                    new PointD(150, 150),
-                    new PointD(150, 0)
-                },
-                2.0,
-                doorAndWindowFrameBrush);
+            //geometryEditorViewModel.AddPolyline(new List<PointD>
+            //    {
+            //        new PointD(50, 0),
+            //        new PointD(50, 150),
+            //        new PointD(150, 150),
+            //        new PointD(150, 0)
+            //    },
+            //    2.0,
+            //    doorAndWindowFrameBrush);
 
             geometryEditorViewModel.AddShape(1, new RectangleViewModel
             {
@@ -264,14 +263,14 @@ namespace Craft.UIElements.GuiTest.Tab3
             });
 
             // Window
-            geometryEditorViewModel.AddPolyline(new List<PointD>
-            {
-                new PointD(250, 75),
-                new PointD(250, 150),
-                new PointD(350, 150),
-                new PointD(350, 75),
-                new PointD(250, 75)
-            }, 2.0, doorAndWindowFrameBrush);
+            //geometryEditorViewModel.AddPolyline(new List<PointD>
+            //{
+            //    new PointD(250, 75),
+            //    new PointD(250, 150),
+            //    new PointD(350, 150),
+            //    new PointD(350, 75),
+            //    new PointD(250, 75)
+            //}, 2.0, doorAndWindowFrameBrush);
 
             geometryEditorViewModel.AddShape(2, new RectangleViewModel
             {
@@ -507,6 +506,9 @@ namespace Craft.UIElements.GuiTest.Tab3
         {
             GeometryEditorViewModel2 = new GeometryEditorViewModel(-1);
             GeometryEditorViewModel2.InitializeWorldWindow(new Point(300, 112.5));
+
+            GeometryEditorViewModel2.WorldWindowUpperLeftLimit = new Point(-100, -600);
+            GeometryEditorViewModel2.WorldWindowBottomRightLimit = new Point(600, 100);
         }
 
         private void InitializeGeometryEditorViewModel3(
@@ -691,6 +693,8 @@ namespace Craft.UIElements.GuiTest.Tab3
                 null)
             {
                 ShowVerticalGridLines = true,
+                ShowHorizontalGridLines = true,
+                ShowYAxisLabels = true
             };
 
             TimeSeriesViewModel1.GeometryEditorViewModel.YAxisLocked = false;
@@ -823,6 +827,11 @@ namespace Craft.UIElements.GuiTest.Tab3
             var tFocus = DateTime.UtcNow - timeSpan / 2; // Specificer, hvilken x-værdi vi skal fokusere på.
             var xFocus = TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
 
+            var tMin = new DateTime(1953, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var tMax = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var xMin = TimeSeriesViewModel.ConvertDateTimeToXValue(tMin);
+            var xMax = TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
+
             TimeSeriesViewModel3 = new TimeSeriesViewModel(
                 new Point(xFocus, 0),
                 new Size(timeSpan.TotalDays, 3),
@@ -840,14 +849,21 @@ namespace Craft.UIElements.GuiTest.Tab3
                 ShowHorizontalGridLines = false,
                 ShowVerticalAxis = true,
                 Fraction = 0.9,
-                ShowPanningButtons = false
+                ShowPanningButtons = false,
             };
 
             //TimeSeriesViewModel3.GeometryEditorViewModel.YAxisLocked = true;
             TimeSeriesViewModel3.GeometryEditorViewModel.YAxisLocked = false;
 
-            TimeSeriesViewModel3.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(double.MinValue, 0);
+            TimeSeriesViewModel3.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(xMin, 0);
+            TimeSeriesViewModel3.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10);
 
+            TimeSeriesViewModel3.CustomXAxisLabels.Object = new List<string>
+            {
+                "Rip",
+                "Rap",
+                "Rup"
+            };
 
             /*
             TimeSeriesViewModel2.TimeAtMousePosition.PropertyChanged += (s, e) =>
@@ -878,7 +894,6 @@ namespace Craft.UIElements.GuiTest.Tab3
                 TimeSeriesViewModel3.GeometryEditorViewModel.ClearShapes();
                 TimeSeriesViewModel3.GeometryEditorViewModel.ClearLabels();
 
-                // Tegn en linie fra 1990 til 2010
                 var tStart1 = new DateTime(1990, 1, 1, 0, 0, 0);
                 var tEnd1 = new DateTime(2010, 1, 1, 0, 0, 0);
                 var tStart2 = new DateTime(2010, 1, 1, 0, 0, 0);
@@ -891,7 +906,7 @@ namespace Craft.UIElements.GuiTest.Tab3
 
                 // Tegn en dummy line
                 //TimeSeriesViewModel3.GeometryEditorViewModel.AddLine(
-                //    new PointD(xStart1, y), new PointD(xEnd1, y), 1, _curveBrush);
+                //    new PointD(xStart1, -1.5), new PointD(xEnd1, 1.5), 1, _curveBrush);
 
                 // Tegn et par dummy rektangler
                 var barHeight = 30 / TimeSeriesViewModel3.GeometryEditorViewModel.Scaling.Height;
@@ -901,10 +916,10 @@ namespace Craft.UIElements.GuiTest.Tab3
                 {
                     Point = new PointD(xStart1 + (xEnd1 - xStart1) / 2, y),
                     Width = xEnd1 - xStart1,
-                    Height = barHeight
+                    Height = barHeight * 1
                 });
 
-                TimeSeriesViewModel3.GeometryEditorViewModel.AddShape(2, new RectangleViewModel
+                TimeSeriesViewModel3.GeometryEditorViewModel.AddShape(2, new YellowBar
                 {
                     Point = new PointD(xStart2 + (xEnd2 - xStart2) / 2, y - barHeight),
                     Width = xEnd2 - xStart2,

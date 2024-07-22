@@ -9,6 +9,12 @@ using Craft.Utils;
 
 namespace Craft.ViewModels.Geometry2D.ScrollFree
 {
+    public enum ROIAlignment
+    {
+        Center,
+        TopLeft
+    }
+
     public delegate void UpdateModelCallBack();
 
     public class GeometryEditorViewModel : ViewModelBase
@@ -23,6 +29,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         protected Size _viewPortSize;
         protected Size _worldWindowSize;
         private Point _mousePositionViewport;
+        private double? _worldWindowUpperLeftOverride_X;
+        private double? _worldWindowUpperLeftOverride_Y;
         protected Point _worldWindowUpperLeft;
         private Size _scaling;
         private Matrix _transformationMatrix;
@@ -38,6 +46,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private bool _xAxisLocked;
         private bool _yAxisLocked;
         private bool _aspectRatioLocked;
+        private ROIAlignment _roiAlignment = ROIAlignment.TopLeft;
 
         public ObservableObject<Point?> MousePositionWorld { get; }
 
@@ -50,6 +59,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 RaisePropertyChanged();
             }
         }
+
 
         public Size ViewPortSize
         {
@@ -99,7 +109,30 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         public Point WorldWindowUpperLeft
         {
-            get { return _worldWindowUpperLeft; }
+            get
+            {
+                if (_worldWindowUpperLeftOverride_X.HasValue)
+                {
+                    if (_worldWindowUpperLeftOverride_Y.HasValue)
+                    {
+                        return new Point(
+                            _worldWindowUpperLeftOverride_X.Value,
+                            _worldWindowUpperLeftOverride_Y.Value);
+                    }
+
+                    return new Point(
+                        _worldWindowUpperLeftOverride_X.Value,
+                        _worldWindowUpperLeft.Y);
+                }
+                else if (_worldWindowUpperLeftOverride_Y.HasValue)
+                {
+                    return new Point(
+                        _worldWindowUpperLeft.X,
+                        _worldWindowUpperLeftOverride_Y.Value);
+                }
+                
+                return _worldWindowUpperLeft;
+            }
             set
             {
                 _worldWindowUpperLeft.X = Math.Max(value.X, WorldWindowUpperLeftLimit.X);
@@ -377,7 +410,12 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
         // Kaldes:
         // - Når ViewPorten initialiseres, dvs første gang den sættes og altså ikke når den ændres
-        // - Hvis hosten kalder en af de 4 InitializeWorldWindow metoder til placering af World Window
+        // - Hvis hosten kalder en af de 4 InitializeWorldWindow metoder til placering af World Window.
+        // Bemærk, at det f.eks giver fin mening at kalde denne method umiddelbart efter at have kaldt
+        // GeometryEditorViewModel-klassens constructor, også selv om Viewporten på dette tidspunkt
+        // ikke er initialiseret endnu. I den situation er sigtet blot at initialisere de variable,
+        // der vil skulle bruges, når metoden kaldes igen i forbindelse med at viewporten initialiseres.
+
         private void InitializeScalingAndWorldWindow()
         {
             if (ViewPortSize.Width < double.Epsilon)
@@ -482,6 +520,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         Scaling = new Size(
                             ViewPortSize.Width / (_initialWorldWindowSize.Value.Width),
                             ViewPortSize.Height / _initialWorldWindowSize.Value.Height);
+                        
+                        // Her kan man f.eks. sætte Scaling.Height til 1, hvis man gerne vil have det sådan
 
                         WorldWindowUpperLeft = new Point(
                             _initialWorldWindowFocus.Value.X - _initialWorldWindowSize.Value.Width / 2,
@@ -761,8 +801,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 0,
                 0,
                 _scaling.Height,
-                -_worldWindowUpperLeft.X * _scaling.Width,
-                -_worldWindowUpperLeft.Y * _scaling.Height);
+                -WorldWindowUpperLeft.X * _scaling.Width,
+                -WorldWindowUpperLeft.Y * _scaling.Height);
         }
 
         protected void UpdateWorldWindowSize()
@@ -773,6 +813,52 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             WorldWindowSize = new Size(
                 _viewPortSize.Width / _scaling.Width,
                 _viewPortSize.Height / _scaling.Height);
+
+            if (WorldWindowSize.Width > WorldWindowBottomRightLimit.X - WorldWindowUpperLeftLimit.X)
+            {
+                switch (_roiAlignment)
+                {
+                    case ROIAlignment.Center:
+                        {
+                            var dx = (WorldWindowSize.Width - (WorldWindowBottomRightLimit.X - WorldWindowUpperLeftLimit.X)) / 2;
+                            _worldWindowUpperLeftOverride_X = WorldWindowUpperLeftLimit.X - dx;
+                            break;
+                        }
+                    case ROIAlignment.TopLeft:
+                        {
+                            _worldWindowUpperLeftOverride_X = WorldWindowUpperLeftLimit.X;
+                            break;
+                        }
+                }
+            }
+            else
+            {
+                _worldWindowUpperLeftOverride_X = null;
+            }
+
+            if (WorldWindowSize.Height > WorldWindowBottomRightLimit.Y - WorldWindowUpperLeftLimit.Y)
+            {
+                switch (_roiAlignment)
+                {
+                    case ROIAlignment.Center:
+                        {
+                            var dy = (WorldWindowSize.Height - (WorldWindowBottomRightLimit.Y - WorldWindowUpperLeftLimit.Y)) / 2;
+                            _worldWindowUpperLeftOverride_Y = WorldWindowUpperLeftLimit.Y - dy;
+                            break;
+                        }
+                    case ROIAlignment.TopLeft:
+                        {
+                            _worldWindowUpperLeftOverride_Y = WorldWindowUpperLeftLimit.Y;
+                            break;
+                        }
+                }
+            }
+            else
+            {
+                _worldWindowUpperLeftOverride_Y = null;
+            }
+
+            WorldWindowUpperLeft = WorldWindowUpperLeft; // For at trigge, at den notificerer viewet
         }
 
         // This method is called from the View class

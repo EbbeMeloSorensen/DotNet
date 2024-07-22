@@ -7,6 +7,7 @@ using DMI.SMS.Domain.Entities;
 using GalaSoft.MvvmLight;
 using Craft.Logging;
 using Craft.Utils;
+using Craft.ViewModels.Geometry2D.ScrollFree;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -57,7 +58,7 @@ namespace DMI.Data.Studio.ViewModel
                 25,
                 60,
                 1.0,
-                _timeAtOrigo,
+                XAxisMode.Cartesian,
                 null);
 
             ScatterChartViewModel.GeometryEditorViewModel.YAxisLocked = true;
@@ -106,6 +107,7 @@ namespace DMI.Data.Studio.ViewModel
 
         private void UpdateCurve()
         {
+            return; // Crasher i London
             if (_t1 <= _t0)
             {
                 return;

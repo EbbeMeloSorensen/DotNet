@@ -17,6 +17,12 @@ Done:
   plugin og ikke på et file repo
 
 In progress:
+* Rund det nye Chronology2 view af, så det fuldt og helt kan erstatte det gamle
+  - der er en problematik i at man først beregner barHeight, når viewporten er initialiseret - det kunne være hensigtsmæssigt,
+    hvis man havde mulighed for at sætte vertikal skalering til 1, samtidig med at man beder den om selv at beregne horisontal
+    skalering. Lige nu er det jo sådan at man definerer dimensionerne for sit World Window - både horisontalt og vertikalt,
+    og så beregner den vertikal og horisontal skalering, så det kommer til at passe.
+* Lav en kobling mellem det nye Chronology2 view og det andet tidsserie view, så man let kan inspicere en tidsserie
 
 Todo:
 * Lav et sqlite-plugin for StatDB

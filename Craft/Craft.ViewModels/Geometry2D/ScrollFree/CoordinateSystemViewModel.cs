@@ -54,7 +54,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private RelayCommand _panLeftCommand;
         private RelayCommand _panRightCommand;
         private UpdateHorizontalGridLinesAndOrLabelsCallBack _updateHorizontalGridLinesAndOrLabelsCallBack;
-
+        
         public Brush MarginBrush
         {
             get => _marginBrush;
@@ -381,6 +381,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public ObservableObject<List<string>> CustomXAxisLabels { get; }
+
         public event EventHandler PanLeftClicked;
         public event EventHandler PanRightClicked;
 
@@ -429,6 +431,18 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             XAxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
             YAxisTickLabelViewModels = new ObservableCollection<LabelViewModel>();
+
+            CustomXAxisLabels = new ObservableObject<List<string>>
+            {
+                Object = new List<string>()
+            };
+
+            CustomXAxisLabels.PropertyChanged += (s, e) =>
+            {
+                if (_updateHorizontalGridLinesAndOrLabelsCallBack == null) return;
+
+                _updateHorizontalGridLinesAndOrLabelsCallBack();
+            };
 
             switch (xAxisMode)
             {
@@ -693,26 +707,15 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
             YAxisTickLabelViewModels.Clear();
 
-            var customLabels = new List<string>
-            {
-                "A",
-                "B",
-                "C",
-                "D",
-                "E",
-                "F",
-                "G"
-            };
-
             // 1: Find ud af spacing af horisontale grid lines
-            var labelHeight = 30.0;
+            var labelHeight = 20.0;
             var lineSpacingY_ViewPort = labelHeight;
             var lineSpacingY_World = lineSpacingY_ViewPort / GeometryEditorViewModel.Scaling.Height;
 
             // Find ud af første y-værdi
             var y = 0.0;
 
-            foreach (var customLabel in customLabels)
+            foreach (var label in CustomXAxisLabels.Object)
             {
                 if (ShowHorizontalGridLines)
                 {
@@ -727,7 +730,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 {
                     var labelViewModel = new LabelViewModel
                     {
-                        Text = customLabel,
+                        Text = label,
                         Point = new PointD(0, GeometryEditorViewModel._yAxisFactor * y),
                         Width = MarginLeft,
                         Height = labelHeight,
