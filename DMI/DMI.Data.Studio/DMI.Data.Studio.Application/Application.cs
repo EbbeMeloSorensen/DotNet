@@ -268,14 +268,25 @@ namespace DMI.Data.Studio.Application
 
                     using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
                     {
-                        var observingFacility = unitOfWork.ObservingFacilities
-                            .GetIncludingTimeSeries(int.Parse(nanoqStationId));
+                        // The observing facility might not be there, since observations are retrieved from
+                        // a different repository than the stations
 
-                        if (observingFacility != null && observingFacility.TimeSeries != null)
+                        try
                         {
-                            timeSeries = observingFacility.TimeSeries
-                                .Where(_ => _.ParamId == parameter)
-                                .SingleOrDefault();
+                            var observingFacility = unitOfWork.ObservingFacilities
+                                .GetIncludingTimeSeries(int.Parse(nanoqStationId));
+
+                            if (observingFacility != null && observingFacility.TimeSeries != null)
+                            {
+                                timeSeries = observingFacility.TimeSeries
+                                    .Where(_ => _.ParamId == parameter)
+                                    .SingleOrDefault();
+                            }
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            // Just swallow the exception for now
+                            Logger?.WriteLine(LogMessageCategory.Debug, $"    Station {nanoqStationId} was not found in observation repository");
                         }
                     }
 
