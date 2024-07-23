@@ -107,7 +107,8 @@ namespace DMI.Data.Studio.ViewModel
 
         private void UpdateCurve()
         {
-            return; // Crasher i London
+            //return; // Earlier precaution for avoiding crashes caused by the Time Series view
+
             if (_t1 <= _t0)
             {
                 return;

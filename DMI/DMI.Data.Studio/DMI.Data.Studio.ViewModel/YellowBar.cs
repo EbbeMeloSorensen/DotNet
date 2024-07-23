@@ -2,10 +2,6 @@
 
 namespace DMI.Data.Studio.ViewModel
 {
-    public class GreenBar : RectangleViewModel
-    {
-    }
-
     public class YellowBar : RectangleViewModel
     {
     }

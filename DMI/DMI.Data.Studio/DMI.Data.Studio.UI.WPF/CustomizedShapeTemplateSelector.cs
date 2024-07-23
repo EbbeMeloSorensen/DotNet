@@ -20,6 +20,8 @@ namespace DMI.Data.Studio.UI.WPF
 
             return item switch
             {
+                RedBar => element.FindResource("RedBar") as DataTemplate,
+                OrangeBar => element.FindResource("OrangeBar") as DataTemplate,
                 GreenBar => element.FindResource("GreenBar") as DataTemplate,
                 YellowBar => element.FindResource("YellowBar") as DataTemplate,
                 _ => throw new ArgumentException("item doesn't correspond to any DataTemplate")

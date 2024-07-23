@@ -24,6 +24,21 @@
     
     <DataTemplate x:Key="YellowBar">
         <Canvas>
+            <Rectangle Fill="PaleGoldenrod"
+                       Stroke="Black"
+                       Width="{Binding Width}" 
+                       Height="{Binding Height}">
+                <Rectangle.RenderTransform>
+                    <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </Canvas>
+    </DataTemplate>
+
+    <DataTemplate x:Key="OrangeBar">
+        <Canvas>
             <Rectangle Fill="Orange"
                        Stroke="Black"
                        Width="{Binding Width}" 
@@ -36,5 +51,20 @@
             </Rectangle>
         </Canvas>
     </DataTemplate>
-    
+
+    <DataTemplate x:Key="RedBar">
+        <Canvas>
+            <Rectangle Fill="DarkRed"
+                       Stroke="Black"
+                       Width="{Binding Width}" 
+                       Height="{Binding Height}">
+                <Rectangle.RenderTransform>
+                    <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </Canvas>
+    </DataTemplate>
+
 </ResourceDictionary>
