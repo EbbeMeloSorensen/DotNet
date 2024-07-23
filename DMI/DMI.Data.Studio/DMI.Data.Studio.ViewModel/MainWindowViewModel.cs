@@ -312,7 +312,8 @@ namespace DMI.Data.Studio.ViewModel
             ChronologyViewModel2.GeometryEditorViewModel.InitializeWorldWindow(new Size(0.1, 1), new Point(xFocus, 0)); 
 
             var tMin = new DateTime(1940, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var tMax = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            //var tMax = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var tMax = new DateTime(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var xMin = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMin);
             var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
 
@@ -346,7 +347,7 @@ namespace DMI.Data.Studio.ViewModel
 
             _includeOperationIntervalBars = true;
             _includeObservationIntervalBars = true;
-            _includeTransactionTimeIntervalBars = false;
+            _includeTransactionTimeIntervalBars = true;
             _showSMSDBList = true;
             _showStatDBList = true;
 
@@ -441,6 +442,7 @@ namespace DMI.Data.Studio.ViewModel
             if (_maintainNewChronologyView)
             {
                 ChronologyViewModel2.GeometryEditorViewModel.ClearShapes();
+                ChronologyViewModel2.GeometryEditorViewModel.ClearLabels();
                 ChronologyViewModel2.CustomXAxisLabels.Object = new List<string>();
             }
 
@@ -689,6 +691,27 @@ namespace DMI.Data.Studio.ViewModel
                                 Height = heightPrPositionRecord,
                                 Brush = _transactionTimeIntervalBrush
                             });
+
+                        if (_maintainNewChronologyView)
+                        {
+                            var xStart = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(startTime);
+                            var xEnd = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(endTime);
+
+                            ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, new GrayBar
+                            {
+                                Point = new PointD(xStart + (xEnd - xStart) / 2, y),
+                                Width = xEnd - xStart,
+                                Height = barHeight
+                            });
+
+                            ChronologyViewModel2.GeometryEditorViewModel.AddLabel(
+                                label,
+                                new PointD(xEnd, y),
+                                100,
+                                20,
+                                new PointD(50, 0),
+                                0.0);
+                        }
                     }
 
                     if (IncludeObservationIntervalBars)

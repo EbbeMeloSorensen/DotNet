@@ -37,6 +37,21 @@
         </Canvas>
     </DataTemplate>
 
+    <DataTemplate x:Key="GrayBar">
+        <Canvas>
+            <Rectangle Fill="DarkSlateGray"
+                       Stroke="Black"
+                       Width="{Binding Width}" 
+                       Height="{Binding Height}">
+                <Rectangle.RenderTransform>
+                    <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </Canvas>
+    </DataTemplate>
+
     <DataTemplate x:Key="OrangeBar">
         <Canvas>
             <Rectangle Fill="Orange"
