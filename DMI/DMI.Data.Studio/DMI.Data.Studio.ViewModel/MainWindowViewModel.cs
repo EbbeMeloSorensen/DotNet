@@ -309,6 +309,7 @@ namespace DMI.Data.Studio.ViewModel
                 ShowPanningButtons = false,
             };
 
+            ChronologyViewModel2.GeometryEditorViewModel.YScalingLocked = true;
             ChronologyViewModel2.GeometryEditorViewModel.InitializeWorldWindow(new Size(0.1, 1), new Point(xFocus, 0)); 
 
             var tMin = new DateTime(1940, 1, 1, 0, 0, 0, DateTimeKind.Utc);
