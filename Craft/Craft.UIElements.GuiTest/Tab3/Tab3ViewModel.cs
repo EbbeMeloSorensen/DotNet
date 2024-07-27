@@ -509,6 +509,9 @@ namespace Craft.UIElements.GuiTest.Tab3
 
             GeometryEditorViewModel2.WorldWindowUpperLeftLimit = new Point(-100, -600);
             GeometryEditorViewModel2.WorldWindowBottomRightLimit = new Point(600, 100);
+
+            GeometryEditorViewModel2.XScalingLocked = true;
+            GeometryEditorViewModel2.YScalingLocked = false;
         }
 
         private void InitializeGeometryEditorViewModel3(

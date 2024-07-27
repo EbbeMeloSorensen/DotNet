@@ -199,12 +199,15 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
             if (!ViewModel.AspectRatioLocked)
             {
-                if (Keyboard.IsKeyDown(Key.LeftCtrl))
+                if (ViewModel.YScalingLocked || Keyboard.IsKeyDown(Key.LeftCtrl))
                 {
+                    // Only x scaling is affected, i.e. image is stretched horizontally
                     yFactor = 1.0;
                 }
-                else if (Keyboard.IsKeyDown(Key.LeftAlt))
+                
+                if (ViewModel.XScalingLocked || Keyboard.IsKeyDown(Key.LeftAlt))
                 {
+                    // Only y scaling is affected, i.e. image is stretched vertically
                     xFactor = 1.0;
                 }
             }

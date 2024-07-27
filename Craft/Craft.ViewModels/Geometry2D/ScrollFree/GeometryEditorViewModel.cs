@@ -46,6 +46,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private bool _xAxisLocked;
         private bool _yAxisLocked;
         private bool _aspectRatioLocked;
+        private bool _xScalingLocked;
+        private bool _yScalingLocked;
         private ROIAlignment _roiAlignment = ROIAlignment.TopLeft;
 
         public ObservableObject<Point?> MousePositionWorld { get; }
@@ -261,6 +263,26 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             set
             {
                 _aspectRatioLocked = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool XScalingLocked
+        {
+            get { return _xScalingLocked; }
+            set
+            {
+                _xScalingLocked = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool YScalingLocked
+        {
+            get { return _yScalingLocked; }
+            set
+            {
+                _yScalingLocked = value;
                 RaisePropertyChanged();
             }
         }
