@@ -21,6 +21,7 @@ using DMI.SMS.ViewModel;
 using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
+using System.Configuration;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -467,78 +468,8 @@ namespace DMI.Data.Studio.ViewModel
                 return;
             }
 
-            // Identify earliest time
-            var startTimes = new List<DateTime>();
+            var earliestTime = new DateTime(1950, 1, 1);
 
-            if (IncludeOperationIntervalBars)
-            {
-                if (stationsIncluded)
-                {
-                    foreach (var station in _selectedStations)
-                    {
-                        foreach (var position in station.Positions)
-                        {
-                            startTimes.Add(position.StartTime);
-                        }
-                    }
-                }
-
-                if (stationInformationsIncluded)
-                {
-                    startTimes.AddRange(_selectedStationInformations
-                        .Select(s => s.DateFrom)
-                        .Where(d => d.HasValue)
-                        .Select(d => d.Value));
-                }
-            }
-
-            // Udkommenteret, fordi det medfører for mange kald til repoet.
-            // Det bruges i øvrigt bare til at identificere et passende starttidspunkt
-            if (IncludeObservationIntervalBars && false)
-            {
-                if (stationInformationsIncluded)
-                {
-                    _selectedStationInformations.ForEach(async s =>
-                    {
-                        if (s.StationIDDMI.HasValue)
-                        {
-                            var stationId = $"{s.StationIDDMI.Value}".PadLeft(5, '0');
-                            var intervals = await GetObservationIntervalsForStation(stationId); // 1
-
-                            if (intervals != null)
-                            {
-                                startTimes.AddRange(intervals.Select(i => i.Item1));
-                            }
-                        }
-                    });
-                }
-
-                if (stationsIncluded)
-                {
-                    _selectedStations.ForEach(async s =>
-                    {
-                        var stationId = s.StatID.ToString();
-                        stationId = stationId.Substring(0, stationId.Length - 2);
-                        stationId = $"{stationId}".PadLeft(5, '0');
-
-                        var intervals = await GetObservationIntervalsForStation(stationId); // 2
-
-                        if (intervals != null)
-                        {
-                            startTimes.AddRange(intervals.Select(i => i.Item1));
-                        }
-                    });
-                }
-            }
-
-            var earliestTime = new DateTime(1945, 1, 1);
-
-            if (startTimes.Any())
-            {
-                earliestTime = startTimes.Min();
-            }
-
-            // (earliest time identified)
             // Now set latest time to current time, and derive number of years and days
             
             var latestTime = DateTime.UtcNow.TruncateToMilliseconds();
@@ -594,14 +525,16 @@ namespace DMI.Data.Studio.ViewModel
             }
 
             var timeIntervalBarCount = 0;
+
+            var customLabelsForNewView = new List<string>();
+            var barHeight = 20;
+            var y = -barHeight / 2;
+
             if (stationInformationsIncluded)
             {
                 var rowCharacteristicsMap = StationInformationListViewModel.RowCharacteristicsMap.Object;
 
                 StationInformation previousStationInformation = null;
-                var customLabelsForNewView = new List<string>();
-                var barHeight = 20;
-                var y = -barHeight / 2;
 
                 foreach (var stationInformation in _selectedStationInformations)
                 {
@@ -766,11 +699,6 @@ namespace DMI.Data.Studio.ViewModel
                     timeIntervalBarCount++;
                     y -= barHeight;
                 }
-
-                if (_maintainNewChronologyView)
-                {
-                    ChronologyViewModel2.CustomXAxisLabels.Object = customLabelsForNewView;
-                }
             }
 
             if (stationsIncluded)
@@ -787,6 +715,20 @@ namespace DMI.Data.Studio.ViewModel
                         {
                             endTime = position.EndTime.Value;
                         }
+
+                        var xStart = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(startTime);
+                        var xEnd = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(endTime);
+
+                        RectangleViewModel bar = new GrayBar
+                        {
+                            Point = new PointD(xStart + (xEnd - xStart) / 2, y),
+                            Width = xEnd - xStart,
+                            Height = barHeight
+                        };
+
+                        ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, bar);
+
+                        customLabelsForNewView.Add(station.StatID.ToString());
 
                         var leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (startTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
                         var right = widthOfLaneLabelColumn + totalWidthOfMainPart * (endTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
@@ -818,6 +760,34 @@ namespace DMI.Data.Studio.ViewModel
                                 // Make bars for the observation intervals (originating from ObsDB)
                                 foreach (var interval in intervals)
                                 {
+                                    var xStartInterval = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(interval.Item1);
+                                    var xEndInterval = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(interval.Item2);
+
+                                    var contained = xStartInterval >= xStart && xEndInterval <= xEnd;
+                                    var outside = xEndInterval < xStart || xStartInterval > xEnd;
+
+                                    RectangleViewModel bar2;
+                                    
+                                    if (contained)
+                                    {
+                                        bar2 = new GreenBar();
+                                    }
+                                    else if (outside)
+                                    {
+                                        bar2 = new OrangeBar();
+                                    }
+                                    else
+                                    {
+                                        bar2 = new RedBar();
+                                    }
+
+                                    bar2.Point = new PointD(xStartInterval + (xEndInterval - xStartInterval) / 2, y);
+                                    bar2.Width = xEndInterval - xStartInterval;
+                                    bar2.Height = barHeight * barHeightRatio;
+
+
+                                    ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, bar2);
+
                                     leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item1 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
                                     right = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item2 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
                                     width = right - leftOfBar;
@@ -837,8 +807,14 @@ namespace DMI.Data.Studio.ViewModel
                         }
 
                         timeIntervalBarCount++;
+                        y -= barHeight;
                     }
                 }
+            }
+
+            if (_maintainNewChronologyView)
+            {
+                ChronologyViewModel2.CustomXAxisLabels.Object = customLabelsForNewView;
             }
         }
 
