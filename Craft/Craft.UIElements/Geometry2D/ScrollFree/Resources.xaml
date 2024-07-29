@@ -13,6 +13,7 @@
     <valueConverters:LabelPositionConverter x:Key="LabelPositionConverter"/>
     <valueConverters:DoubleScaler x:Key="DoubleScaler"/>
     <scrollFree:ShapeTemplateSelector x:Key="ShapeTemplateSelector"/>
+    <scrollFree:LabelTemplateSelector x:Key="LabelTemplateSelector"/>
 
     <DataTemplate x:Key="Rectangle">
         <Rectangle Fill="DarkSlateGray" Width="{Binding Width}" Height="{Binding Height}">
@@ -90,6 +91,17 @@
                 </Line.RenderTransform>
             </Line>
         </Canvas>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Label">
+        <TextBlock Text="{Binding Text}"
+                   Width="{Binding Width}" 
+                   Height="{Binding Height}"
+                   FontFamily="Segoe UI"
+                   FontSize="12.3"
+                   Foreground="Black"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"/>
     </DataTemplate>
 
 </ResourceDictionary>

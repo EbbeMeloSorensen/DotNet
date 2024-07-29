@@ -257,7 +257,8 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <ItemsControl ItemsSource="{Binding LabelViewModels}">
+        <ItemsControl ItemsSource="{Binding LabelViewModels}"
+                      ItemTemplateSelector="{StaticResource LabelTemplateSelector}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -295,24 +296,6 @@
                     </Setter>
                 </Style>
             </ItemsControl.ItemContainerStyle>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Rectangle Fill="DarkSeaGreen"
-                                   Stroke="Black"
-                                   Opacity="{Binding Opacity}"
-                                   Width="{Binding Width}" 
-                                   Height="{Binding Height}"/>
-                        <TextBlock Text="{Binding Text}" 
-                                   FontFamily="Segoe UI"
-                                   FontSize="12.3"
-                                   FontWeight="Bold"
-                                   Foreground="OrangeRed"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
         </ItemsControl>
     </Canvas>
 </UserControl>

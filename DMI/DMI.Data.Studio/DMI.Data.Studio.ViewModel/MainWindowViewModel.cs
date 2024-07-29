@@ -313,14 +313,14 @@ namespace DMI.Data.Studio.ViewModel
             ChronologyViewModel2.GeometryEditorViewModel.YScalingLocked = true;
             ChronologyViewModel2.GeometryEditorViewModel.InitializeWorldWindow(new Size(0.1, 1), new Point(xFocus, 0)); 
 
-            var tMin = new DateTime(1940, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            //var tMax = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var tMax = new DateTime(2100, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var tMin = new DateTime(1950, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var tMax = new DateTime(2050, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var xMin = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMin);
             var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
 
             ChronologyViewModel2.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(xMin, 0);
-            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10);
+            //ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10);
+            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 1540 + 40);
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
                 smsDataProvider,
@@ -639,7 +639,7 @@ namespace DMI.Data.Studio.ViewModel
                             });
 
                             ChronologyViewModel2.GeometryEditorViewModel.AddLabel(
-                                label,
+                                $" {label}",
                                 new PointD(xEnd, y),
                                 100,
                                 20,
@@ -816,6 +816,11 @@ namespace DMI.Data.Studio.ViewModel
             {
                 ChronologyViewModel2.CustomXAxisLabels.Object = customLabelsForNewView;
             }
+
+            var tMax = new DateTime(2050, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
+
+            //ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, totalHeightOfMainPart);
         }
 
         private void OpenSettingsDialog(

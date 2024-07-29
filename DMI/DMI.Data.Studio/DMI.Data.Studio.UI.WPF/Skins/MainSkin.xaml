@@ -6,6 +6,7 @@
     <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
     <local:CustomizedShapeTemplateSelector x:Key="ShapeTemplateSelector"/>
+    <local:CustomizedLabelTemplateSelector x:Key="LabelTemplateSelector"/>
 
     <DataTemplate x:Key="GreenBar">
         <Canvas>
@@ -80,6 +81,23 @@
                 </Rectangle.RenderTransform>
             </Rectangle>
         </Canvas>
+    </DataTemplate>
+
+    <DataTemplate x:Key="TransactionTimeIntervalLabel">
+        <Grid>
+            <TextBlock Text="{Binding Text}" 
+                       FontFamily="Segoe UI"
+                       FontSize="12.3"
+                       Foreground="DarkSlateGray"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"/>
+            <Path Stroke="DarkSlateGray"
+                  StrokeThickness="1">
+                <Path.Data>
+                    <LineGeometry StartPoint="0 0" EndPoint="0 20"/>
+                </Path.Data>
+            </Path>
+        </Grid>
     </DataTemplate>
 
 </ResourceDictionary>

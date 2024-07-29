@@ -86,18 +86,13 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Rectangle Fill="DarkSeaGreen"
-                                   Stroke="Black"
-                                   Opacity="{Binding Opacity}"
+                        <TextBlock Text="{Binding Text}"
                                    Width="{Binding Width}" 
-                                   Height="{Binding Height}"/>
-                            <TextBlock Text="{Binding Text}" 
+                                   Height="{Binding Height}"
                                    FontFamily="Segoe UI"
                                    FontSize="12.3"
                                    TextAlignment="Center"
                                    VerticalAlignment="Center"/>
-                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -143,18 +138,13 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Rectangle Fill="DarkSeaGreen"
-                                   Stroke="Black"
-                                   Opacity="{Binding Opacity}"
+                        <TextBlock Text="{Binding Text}"
                                    Width="{Binding Width}" 
-                                   Height="{Binding Height}"/>
-                            <TextBlock Text="{Binding Text}" 
+                                   Height="{Binding Height}"
                                    FontFamily="Segoe UI"
                                    FontSize="12.3"
                                    TextAlignment="Center"
                                    VerticalAlignment="Center"/>
-                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
