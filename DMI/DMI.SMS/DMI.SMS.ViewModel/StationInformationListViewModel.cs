@@ -49,7 +49,7 @@ namespace DMI.SMS.ViewModel
         private Dictionary<RowCondition, Brush> _conditionToBrushMap = new Dictionary<RowCondition, Brush>
         {
             { RowCondition.Current, new SolidColorBrush(Colors.DarkGreen) },
-            { RowCondition.OutDated, new SolidColorBrush(Colors.DarkOrange) },
+            { RowCondition.OutDated, new SolidColorBrush(Colors.PaleGoldenrod) },
             { RowCondition.Deleted, new SolidColorBrush(Colors.DarkRed) }
         };
 

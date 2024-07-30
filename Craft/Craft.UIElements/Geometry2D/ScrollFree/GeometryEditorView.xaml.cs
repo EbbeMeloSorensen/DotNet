@@ -168,9 +168,14 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                     mouseViewPosition.Y - _mouseDownViewport.Y
                 );
 
+                if (mouseOffsetViewPort.Y < -30)
+                {
+                    var a = 0;
+                }
+
                 var x = ViewModel.XAxisLocked
-                    ? ViewModel.WorldWindowUpperLeft.X
-                    : _worldWindowUpperLeftInitial.X - mouseOffsetViewPort.X / ViewModel.Scaling.Width;
+                ? ViewModel.WorldWindowUpperLeft.X
+                : _worldWindowUpperLeftInitial.X - mouseOffsetViewPort.X / ViewModel.Scaling.Width;
 
                 var y = ViewModel.YAxisLocked
                     ? ViewModel.WorldWindowUpperLeft.Y

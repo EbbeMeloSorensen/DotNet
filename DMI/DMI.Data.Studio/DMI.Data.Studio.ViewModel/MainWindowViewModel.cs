@@ -21,7 +21,6 @@ using DMI.SMS.ViewModel;
 using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
-using System.Configuration;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -319,7 +318,7 @@ namespace DMI.Data.Studio.ViewModel
             var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
 
             ChronologyViewModel2.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(xMin, 0);
-            //ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10);
+            //ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 1);
             ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 1540 + 40);
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
@@ -348,8 +347,8 @@ namespace DMI.Data.Studio.ViewModel
             TimeSeriesViewModel.Logger = _logger;
 
             _includeOperationIntervalBars = true;
-            _includeObservationIntervalBars = true;
-            _includeTransactionTimeIntervalBars = true;
+            _includeObservationIntervalBars = false;
+            _includeTransactionTimeIntervalBars = false;
             _showSMSDBList = true;
             _showStatDBList = true;
 
@@ -820,7 +819,7 @@ namespace DMI.Data.Studio.ViewModel
             var tMax = new DateTime(2050, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
 
-            //ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, totalHeightOfMainPart);
+            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, totalHeightOfMainPart + 40);
         }
 
         private void OpenSettingsDialog(
