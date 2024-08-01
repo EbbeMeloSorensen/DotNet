@@ -17,7 +17,7 @@
 
     <TabControl SelectedIndex="0">
         <TabItem Header="ScrollFree">
-            <TabControl SelectedIndex="1">
+            <TabControl SelectedIndex="0">
                 <TabItem Header="Basic">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -25,16 +25,53 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <scrollFree:GeometryEditorView
-                            Grid.Row="0" DataContext="{Binding GeometryEditorViewModel1}"/>
-                        <CheckBox Grid.Row="1" Content="Windmill rotates" IsChecked="{Binding WindMillInHouseDrawingsRotates}"/>
-                        <StackPanel Grid.Row="1" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                                       DataContext="{Binding GeometryEditorViewModel1}"/>
+                        <CheckBox Grid.Row="1" Grid.Column="0" Content="Windmill rotates" 
+                                  IsChecked="{Binding WindMillInHouseDrawingsRotates}"/>
+                        <StackPanel Grid.Row="1" Grid.Column="2" Margin="10">
                             <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"
                                     Command="{Binding ZoomInForGeometryEditor1Command}" >Zoom In</Button>
                             <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" 
                                     Command="{Binding ZoomOutForGeometryEditor1Command}" >Zoom Out</Button>
                         </StackPanel>
-                        <TextBlock Grid.Row="2" TextWrapping="Wrap">
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Margin="0, 0, 0, 0" 
+                                       HorizontalAlignment="Center" Text="Min"/>
+                            <TextBlock Grid.Row="0" Grid.Column="2" Margin="0, 0, 0, 0" 
+                                       HorizontalAlignment="Center" Text="Max"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0, 0, 10, 0" 
+                                       HorizontalAlignment="Center" Text="X"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" TextAlignment="Center"
+                                     Text="{Binding WorldWindowLimitLeftForGeometryEditorViewModel1}"/>
+                            <TextBox Grid.Row="1" Grid.Column="2" TextAlignment="Center"
+                                     Text="{Binding WorldWindowLimitRightForGeometryEditorViewModel1}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="0, 0, 10, 0" 
+                                       HorizontalAlignment="Center" Text="Y"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" TextAlignment="Center"
+                                     Text="{Binding WorldWindowLimitTopForGeometryEditorViewModel1}"/>
+                            <TextBox Grid.Row="2" Grid.Column="2" TextAlignment="Center"
+                                     Text="{Binding WorldWindowLimitBottomForGeometryEditorViewModel1}"/>
+                            <Button Grid.Row="0" Grid.Column="3" Grid.RowSpan="3" Margin="3, 3, 0, 0"
+                                    Content="Apply" Command="{Binding ApplyWorldWindowLimitsForGeometryEditor1Command}"/>
+                        </Grid>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" TextWrapping="Wrap">
                             Here, we have a basic GeometryEditorView with an underlying GeometryEditorViewModel where Scaling is 
                             initialized to Sx = 1 and Sy = 1, and where the Y axis points downwards.
                         </TextBlock>

@@ -4,12 +4,12 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using System.Diagnostics;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Geometry2D.Scrolling;
-using System.Diagnostics;
 
 namespace Craft.UIElements.GuiTest.Tab3
 {
@@ -28,6 +28,10 @@ namespace Craft.UIElements.GuiTest.Tab3
         private double _y1 = 1.0;
 
         private bool _windMillInHouseDrawingsRotates;
+        private double _worldWindowLimitLeftForGeometryEditorViewModel1;
+        private double _worldWindowLimitRightForGeometryEditorViewModel1;
+        private double _worldWindowLimitTopForGeometryEditorViewModel1;
+        private double _worldWindowLimitBottomForGeometryEditorViewModel1;
         private int _worldWindowUpdateCountForGeometryEditorViewModel4;
         private int _worldWindowMajorUpdateCountForGeometryEditorViewModel4;
         private int _worldWindowUpdateCountForCoordinateSystemViewModel;
@@ -39,6 +43,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         private Stopwatch _stopwatch;
         private List<DateTime> _timeStampsOfInterest;
 
+        private RelayCommand _applyWorldWindowLimitsForGeometryEditor1Command;
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
         private RelayCommand _zoomInForGeometryEditor2Command;
@@ -60,6 +65,46 @@ namespace Craft.UIElements.GuiTest.Tab3
             set
             {
                 _worldWindowUpdateCountForGeometryEditorViewModel4 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double WorldWindowLimitLeftForGeometryEditorViewModel1
+        {
+            get { return _worldWindowLimitLeftForGeometryEditorViewModel1; }
+            set
+            {
+                _worldWindowLimitLeftForGeometryEditorViewModel1 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double WorldWindowLimitRightForGeometryEditorViewModel1
+        {
+            get { return _worldWindowLimitRightForGeometryEditorViewModel1; }
+            set
+            {
+                _worldWindowLimitRightForGeometryEditorViewModel1 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double WorldWindowLimitTopForGeometryEditorViewModel1
+        {
+            get { return _worldWindowLimitTopForGeometryEditorViewModel1; }
+            set
+            {
+                _worldWindowLimitTopForGeometryEditorViewModel1 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double WorldWindowLimitBottomForGeometryEditorViewModel1
+        {
+            get { return _worldWindowLimitBottomForGeometryEditorViewModel1; }
+            set
+            {
+                _worldWindowLimitBottomForGeometryEditorViewModel1 = value;
                 RaisePropertyChanged();
             }
         }
@@ -131,6 +176,14 @@ namespace Craft.UIElements.GuiTest.Tab3
             {
                 _timeAtMousePositionAsText2 = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public RelayCommand ApplyWorldWindowLimitsForGeometryEditor1Command
+        {
+            get
+            {
+                return _applyWorldWindowLimitsForGeometryEditor1Command ?? (_applyWorldWindowLimitsForGeometryEditor1Command = new RelayCommand(ApplyWorldWindowLimitsForGeometryEditor1));
             }
         }
 
@@ -225,7 +278,47 @@ namespace Craft.UIElements.GuiTest.Tab3
                     new PointD(600, 600),
                     new PointD(600, -100)
                 },
-                1.0,
+                3.0,
+                wwLimitBrush);
+
+            geometryEditorViewModel.AddPolygon(new List<PointD>
+                {
+                    new PointD(-100 - 700, -100),
+                    new PointD(-100 - 700, 600),
+                    new PointD(600 - 700, 600),
+                    new PointD(600 - 700, -100)
+                },
+                3.0,
+                wwLimitBrush);
+
+            geometryEditorViewModel.AddPolygon(new List<PointD>
+                {
+                    new PointD(-100 + 700, -100),
+                    new PointD(-100 + 700, 600),
+                    new PointD(600 + 700, 600),
+                    new PointD(600 + 700, -100)
+                },
+                3.0,
+                wwLimitBrush);
+
+            geometryEditorViewModel.AddPolygon(new List<PointD>
+                {
+                    new PointD(-100, -100 - 700),
+                    new PointD(-100, 600 - 700),
+                    new PointD(600, 600 - 700),
+                    new PointD(600, -100 - 700)
+                },
+                3.0,
+                wwLimitBrush);
+
+            geometryEditorViewModel.AddPolygon(new List<PointD>
+                {
+                    new PointD(-100, -100 + 700),
+                    new PointD(-100, 600 + 700),
+                    new PointD(600, 600 + 700),
+                    new PointD(600, -100 + 700)
+                },
+                3.0,
                 wwLimitBrush);
 
             // Frame
@@ -373,7 +466,18 @@ namespace Craft.UIElements.GuiTest.Tab3
                 geometryEditorViewModel.AddLine(new PointD(_x0, _y1), new PointD(_x0, _y0), 1.0, _coordinateSystemBrush);
             }
         }
-        
+
+        private void ApplyWorldWindowLimitsForGeometryEditor1()
+        {
+            // Just to save time
+            WorldWindowLimitBottomForGeometryEditorViewModel1 = 1200;
+
+            var right = WorldWindowLimitRightForGeometryEditorViewModel1;
+            var bottom = WorldWindowLimitBottomForGeometryEditorViewModel1;
+
+            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(right, bottom);
+        }
+
         private void ZoomInForGeometryEditor1()
         {
             GeometryEditorViewModel1.ChangeScaling(1.2);
@@ -497,9 +601,19 @@ namespace Craft.UIElements.GuiTest.Tab3
         {
             GeometryEditorViewModel1 = new GeometryEditorViewModel();
 
+            WorldWindowLimitLeftForGeometryEditorViewModel1 = -100.0;
+            WorldWindowLimitRightForGeometryEditorViewModel1 = 600.0;
+            WorldWindowLimitTopForGeometryEditorViewModel1 = -100.0;
+            WorldWindowLimitBottomForGeometryEditorViewModel1 = 1300.0;
+
             // Diagnostics
-            GeometryEditorViewModel1.WorldWindowUpperLeftLimit = new Point(-100, -100);
-            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(600, 600);
+            GeometryEditorViewModel1.WorldWindowUpperLeftLimit = new Point(
+                WorldWindowLimitLeftForGeometryEditorViewModel1,
+                WorldWindowLimitTopForGeometryEditorViewModel1);
+
+            GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(
+                WorldWindowLimitRightForGeometryEditorViewModel1, 
+                WorldWindowLimitBottomForGeometryEditorViewModel1);
         }
 
         private void InitializeGeometryEditorViewModel2()
@@ -507,11 +621,11 @@ namespace Craft.UIElements.GuiTest.Tab3
             GeometryEditorViewModel2 = new GeometryEditorViewModel(-1);
             GeometryEditorViewModel2.InitializeWorldWindow(new Point(300, 112.5));
 
-            GeometryEditorViewModel2.WorldWindowUpperLeftLimit = new Point(-100, -600);
-            GeometryEditorViewModel2.WorldWindowBottomRightLimit = new Point(600, 100);
+            //GeometryEditorViewModel2.WorldWindowUpperLeftLimit = new Point(-100, -600);
+            //GeometryEditorViewModel2.WorldWindowBottomRightLimit = new Point(600, 100);
 
-            GeometryEditorViewModel2.XScalingLocked = true;
-            GeometryEditorViewModel2.YScalingLocked = false;
+            //GeometryEditorViewModel2.XScalingLocked = true;
+            //GeometryEditorViewModel2.YScalingLocked = false;
         }
 
         private void InitializeGeometryEditorViewModel3(
