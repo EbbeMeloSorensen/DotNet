@@ -139,8 +139,20 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 _worldWindowUpperLeft.X = Math.Max(value.X, WorldWindowUpperLeftLimit.X);
                 _worldWindowUpperLeft.Y = Math.Max(value.Y, WorldWindowUpperLeftLimit.Y);
-                _worldWindowUpperLeft.X = Math.Min(_worldWindowUpperLeft.X, WorldWindowBottomRightLimit.X - WorldWindowSize.Width);
-                _worldWindowUpperLeft.Y = Math.Min(_worldWindowUpperLeft.Y, WorldWindowBottomRightLimit.Y - WorldWindowSize.Height);
+
+                // Old version that apparently doesn't work
+                //_worldWindowUpperLeft.X = Math.Min(_worldWindowUpperLeft.X, WorldWindowBottomRightLimit.X - WorldWindowSize.Width);
+                //_worldWindowUpperLeft.Y = Math.Min(_worldWindowUpperLeft.Y, WorldWindowBottomRightLimit.Y - WorldWindowSize.Height);
+
+                if (value.X + WorldWindowSize.Width > WorldWindowBottomRightLimit.X)
+                {
+                    _worldWindowUpperLeft.X = WorldWindowBottomRightLimit.X - WorldWindowSize.Width;
+                }
+
+                if (value.Y + WorldWindowSize.Height > WorldWindowBottomRightLimit.Y)
+                {
+                    _worldWindowUpperLeft.Y = WorldWindowBottomRightLimit.Y - WorldWindowSize.Height;
+                }
 
                 UpdateTransformationMatrix();
                 RaisePropertyChanged();

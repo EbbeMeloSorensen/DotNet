@@ -469,12 +469,12 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void ApplyWorldWindowLimitsForGeometryEditor1()
         {
-            // Just to save time
-            WorldWindowLimitBottomForGeometryEditorViewModel1 = 1200;
-
+            var left = WorldWindowLimitLeftForGeometryEditorViewModel1;
             var right = WorldWindowLimitRightForGeometryEditorViewModel1;
+            var top = WorldWindowLimitTopForGeometryEditorViewModel1;
             var bottom = WorldWindowLimitBottomForGeometryEditorViewModel1;
 
+            GeometryEditorViewModel1.WorldWindowUpperLeftLimit = new Point(left, top);
             GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(right, bottom);
         }
 
@@ -604,7 +604,9 @@ namespace Craft.UIElements.GuiTest.Tab3
             WorldWindowLimitLeftForGeometryEditorViewModel1 = -100.0;
             WorldWindowLimitRightForGeometryEditorViewModel1 = 600.0;
             WorldWindowLimitTopForGeometryEditorViewModel1 = -100.0;
-            WorldWindowLimitBottomForGeometryEditorViewModel1 = 1300.0;
+            //WorldWindowLimitBottomForGeometryEditorViewModel1 = 300.0;
+            WorldWindowLimitBottomForGeometryEditorViewModel1 = 600.0;
+            //WorldWindowLimitBottomForGeometryEditorViewModel1 = 1300.0;
 
             // Diagnostics
             GeometryEditorViewModel1.WorldWindowUpperLeftLimit = new Point(
