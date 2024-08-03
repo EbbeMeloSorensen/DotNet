@@ -318,8 +318,8 @@ namespace DMI.Data.Studio.ViewModel
             var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
 
             ChronologyViewModel2.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(xMin, 0);
-            //ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 1);
-            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 1540 + 40);
+            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10);
+            //ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 1540 + 40);
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
                 smsDataProvider,

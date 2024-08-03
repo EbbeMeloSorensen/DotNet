@@ -49,6 +49,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private bool _xScalingLocked;
         private bool _yScalingLocked;
         private ROIAlignment _roiAlignment = ROIAlignment.TopLeft;
+        private Point _worldWindowUpperLeftLimit;
+        private Point _worldWindowBottomRightLimit;
 
         public ObservableObject<Point?> MousePositionWorld { get; }
 
@@ -61,7 +63,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 RaisePropertyChanged();
             }
         }
-
 
         public Size ViewPortSize
         {
@@ -105,9 +106,29 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
-        public Point WorldWindowUpperLeftLimit { get; set; }
+        public Point WorldWindowUpperLeftLimit
+        {
+            get => _worldWindowUpperLeftLimit;
+            set
+            {
+                _worldWindowUpperLeftLimit = value;
+                UpdateWorldWindowPositionOverrides();
+                EnsureWorldWindowIsWithinLimits();
+                UpdateTransformationMatrix();
+            }
+        }
 
-        public Point WorldWindowBottomRightLimit { get; set; }
+        public Point WorldWindowBottomRightLimit 
+        {
+            get => _worldWindowBottomRightLimit; 
+            set
+            {
+                _worldWindowBottomRightLimit = value;
+                UpdateWorldWindowPositionOverrides();
+                EnsureWorldWindowIsWithinLimits();
+                UpdateTransformationMatrix();
+            }
+        }
 
         public Point WorldWindowUpperLeft
         {
@@ -137,23 +158,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
             set
             {
-                _worldWindowUpperLeft.X = Math.Max(value.X, WorldWindowUpperLeftLimit.X);
-                _worldWindowUpperLeft.Y = Math.Max(value.Y, WorldWindowUpperLeftLimit.Y);
+                _worldWindowUpperLeft = value;
 
-                // Old version that apparently doesn't work
-                //_worldWindowUpperLeft.X = Math.Min(_worldWindowUpperLeft.X, WorldWindowBottomRightLimit.X - WorldWindowSize.Width);
-                //_worldWindowUpperLeft.Y = Math.Min(_worldWindowUpperLeft.Y, WorldWindowBottomRightLimit.Y - WorldWindowSize.Height);
-
-                if (value.X + WorldWindowSize.Width > WorldWindowBottomRightLimit.X)
-                {
-                    _worldWindowUpperLeft.X = WorldWindowBottomRightLimit.X - WorldWindowSize.Width;
-                }
-
-                if (value.Y + WorldWindowSize.Height > WorldWindowBottomRightLimit.Y)
-                {
-                    _worldWindowUpperLeft.Y = WorldWindowBottomRightLimit.Y - WorldWindowSize.Height;
-                }
-
+                EnsureWorldWindowIsWithinLimits();
                 UpdateTransformationMatrix();
                 RaisePropertyChanged();
             }
@@ -848,49 +855,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 _viewPortSize.Width / _scaling.Width,
                 _viewPortSize.Height / _scaling.Height);
 
-            if (WorldWindowSize.Width > WorldWindowBottomRightLimit.X - WorldWindowUpperLeftLimit.X)
-            {
-                switch (_roiAlignment)
-                {
-                    case ROIAlignment.Center:
-                        {
-                            var dx = (WorldWindowSize.Width - (WorldWindowBottomRightLimit.X - WorldWindowUpperLeftLimit.X)) / 2;
-                            _worldWindowUpperLeftOverride_X = WorldWindowUpperLeftLimit.X - dx;
-                            break;
-                        }
-                    case ROIAlignment.TopLeft:
-                        {
-                            _worldWindowUpperLeftOverride_X = WorldWindowUpperLeftLimit.X;
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                _worldWindowUpperLeftOverride_X = null;
-            }
-
-            if (WorldWindowSize.Height > WorldWindowBottomRightLimit.Y - WorldWindowUpperLeftLimit.Y)
-            {
-                switch (_roiAlignment)
-                {
-                    case ROIAlignment.Center:
-                        {
-                            var dy = (WorldWindowSize.Height - (WorldWindowBottomRightLimit.Y - WorldWindowUpperLeftLimit.Y)) / 2;
-                            _worldWindowUpperLeftOverride_Y = WorldWindowUpperLeftLimit.Y - dy;
-                            break;
-                        }
-                    case ROIAlignment.TopLeft:
-                        {
-                            _worldWindowUpperLeftOverride_Y = WorldWindowUpperLeftLimit.Y;
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                _worldWindowUpperLeftOverride_Y = null;
-            }
+            UpdateWorldWindowPositionOverrides();
 
             WorldWindowUpperLeft = WorldWindowUpperLeft; // For at trigge, at den notificerer viewet
         }
@@ -962,6 +927,74 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         {
 
             return (worldYCoordinate - _worldWindowUpperLeft.Y) * _scaling.Height;
+        }
+
+        private void EnsureWorldWindowIsWithinLimits()
+        {
+            // Push the World Window to the left if it exceeds the limit to the right
+            if (_worldWindowUpperLeft.X + WorldWindowSize.Width > WorldWindowBottomRightLimit.X)
+            {
+                _worldWindowUpperLeft.X = WorldWindowBottomRightLimit.X - WorldWindowSize.Width;
+            }
+
+            // Push the World Window up if it exceeds the bottom limit
+            if (_worldWindowUpperLeft.Y + WorldWindowSize.Height > WorldWindowBottomRightLimit.Y)
+            {
+                _worldWindowUpperLeft.Y = WorldWindowBottomRightLimit.Y - WorldWindowSize.Height;
+            }
+
+            // Push the World Window to the right if it exceeds the limit to the left
+            _worldWindowUpperLeft.X = Math.Max(_worldWindowUpperLeft.X, WorldWindowUpperLeftLimit.X);
+
+            // Push the World Window down if it exceeds the bottom limit
+            _worldWindowUpperLeft.Y = Math.Max(_worldWindowUpperLeft.Y, WorldWindowUpperLeftLimit.Y);
+        }
+
+        private void UpdateWorldWindowPositionOverrides()
+        {
+            if (WorldWindowSize.Width > WorldWindowBottomRightLimit.X - WorldWindowUpperLeftLimit.X)
+            {
+                switch (_roiAlignment)
+                {
+                    case ROIAlignment.Center:
+                        {
+                            var dx = (WorldWindowSize.Width - (WorldWindowBottomRightLimit.X - WorldWindowUpperLeftLimit.X)) / 2;
+                            _worldWindowUpperLeftOverride_X = WorldWindowUpperLeftLimit.X - dx;
+                            break;
+                        }
+                    case ROIAlignment.TopLeft:
+                        {
+                            _worldWindowUpperLeftOverride_X = WorldWindowUpperLeftLimit.X;
+                            break;
+                        }
+                }
+            }
+            else
+            {
+                _worldWindowUpperLeftOverride_X = null;
+            }
+
+            if (WorldWindowSize.Height > WorldWindowBottomRightLimit.Y - WorldWindowUpperLeftLimit.Y)
+            {
+                switch (_roiAlignment)
+                {
+                    case ROIAlignment.Center:
+                        {
+                            var dy = (WorldWindowSize.Height - (WorldWindowBottomRightLimit.Y - WorldWindowUpperLeftLimit.Y)) / 2;
+                            _worldWindowUpperLeftOverride_Y = WorldWindowUpperLeftLimit.Y - dy;
+                            break;
+                        }
+                    case ROIAlignment.TopLeft:
+                        {
+                            _worldWindowUpperLeftOverride_Y = WorldWindowUpperLeftLimit.Y;
+                            break;
+                        }
+                }
+            }
+            else
+            {
+                _worldWindowUpperLeftOverride_Y = null;
+            }
         }
     }
 }
