@@ -89,8 +89,13 @@ Done:
     .. det kunne være fint, hvis man lige holdt styr på, hvor langt den var kravlet og så "emulerede", at den laver en major update med jævne mellemrum
 * Tilføj en ObservableObject for MouseWorldPosition - ovevej senere at erstatte Dependency propertyen
 * Margenerne skal tegnes foran de almindelige labels
+* Placer SelectedRegion rigtigt.
+  - den skal vel bruge transformationen ligesom de almindelige shapes. De bruger i øvrigt en ItemTemplate, men det skal selected region jo ikke gøre
+    i og med at den ikke indgår i en collection
 
 In progress:
+* Selected Region skal bruges til at vedligeholde et observableobject, som kan sættes udefra
+* Det skal kunne konfigureres sådan at SelectedRegion går helt fra top til bund (eller fra venstre til højre) i stedet for at være et vindue
 * Du skal bruge en mere simpel valueconverter for de almindelige labels
 * Der skal være mulighed for at override de labels, der tegnes i margen området - særligt for y aksens labels
 * Der skal stå noget meningsfyldt i bjælken under labels såsom dato, så man ikke er i tvivl om, hvilket tidsinterval man ser på

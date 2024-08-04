@@ -297,5 +297,36 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
+
+        <!-- Selected Region -->
+        <Rectangle Stroke="Black"
+                   Fill="DarkCyan"
+                   Opacity="0.25"
+                   Width="{Binding SelectedRegion.Width}"
+                   Height="{Binding SelectedRegion.Height}">
+            <Canvas.Left>
+                <MultiBinding Converter="{StaticResource ShapePositionConverter}">
+                    <Binding Path="SelectedRegion.Point.X"/>
+                    <Binding Path="SelectedRegion.Width"/>
+                    <Binding Path="DataContext.Scaling.Width" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                </MultiBinding>
+            </Canvas.Left>
+            <Canvas.Top>
+                <MultiBinding Converter="{StaticResource ShapePositionConverter}">
+                    <Binding Path="SelectedRegion.Point.Y"/>
+                    <Binding Path="SelectedRegion.Height"/>
+                    <Binding Path="DataContext.Scaling.Width" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                </MultiBinding>
+            </Canvas.Top>
+            <Rectangle.RenderTransform>
+                <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+            </Rectangle.RenderTransform>
+            <Rectangle.Visibility>
+                <Binding Path="SelectedRegionVisible" Converter="{StaticResource BooleanToVisibilityConverter}"/>
+            </Rectangle.Visibility>
+        </Rectangle>
+
     </Canvas>
 </UserControl>

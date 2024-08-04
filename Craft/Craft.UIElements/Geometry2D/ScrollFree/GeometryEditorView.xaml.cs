@@ -16,6 +16,7 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
         private Point _mouseDownViewport;
         private Point _worldWindowUpperLeftInitial;
         private bool _dragging;
+        private bool _alternativeDraggingMode;
 
         private GeometryEditorViewModel ViewModel => DataContext as GeometryEditorViewModel;
 
@@ -72,6 +73,18 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             {
                 _worldWindowUpperLeftInitial = ViewModel.WorldWindowUpperLeft;
                 _dragging = true;
+
+                if (Keyboard.IsKeyDown(Key.LeftCtrl))
+                {
+                    _alternativeDraggingMode = Keyboard.IsKeyDown(Key.LeftCtrl);
+
+                    ViewModel.SelectedRegion.Point = new Utils.PointD(
+                        ViewModel.ConvertViewPortXCoordinateToWorldXCoordinate(_mouseDownViewport.X), 
+                        ViewModel.ConvertViewPortYCoordinateToWorldYCoordinate(_mouseDownViewport.Y));
+
+                    ViewModel.SelectedRegionVisible = true;
+                }
+
                 Canvas.CaptureMouse();
             }
             else
@@ -92,6 +105,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             if (_dragging)
             {
                 _dragging = false;
+                _alternativeDraggingMode = false;
+                //ViewModel.SelectedRegionVisible = false;
                 Canvas.ReleaseMouseCapture();
                 ViewModel.OnWorldWindowMajorUpdateOccured();
             }
@@ -168,25 +183,28 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                     mouseViewPosition.Y - _mouseDownViewport.Y
                 );
 
-                if (mouseOffsetViewPort.Y < -30)
+                if (_alternativeDraggingMode)
                 {
-                    var a = 0;
+                    ViewModel.SelectedRegion.Width = 2 * Math.Abs(mouseOffsetViewPort.X) / ViewModel.Scaling.Width;
+                    ViewModel.SelectedRegion.Height = 2 * Math.Abs(mouseOffsetViewPort.Y) / ViewModel.Scaling.Height;
                 }
+                else
+                {
+                    var x = ViewModel.XAxisLocked
+                    ? ViewModel.WorldWindowUpperLeft.X
+                    : _worldWindowUpperLeftInitial.X - mouseOffsetViewPort.X / ViewModel.Scaling.Width;
 
-                var x = ViewModel.XAxisLocked
-                ? ViewModel.WorldWindowUpperLeft.X
-                : _worldWindowUpperLeftInitial.X - mouseOffsetViewPort.X / ViewModel.Scaling.Width;
+                    var y = ViewModel.YAxisLocked
+                        ? ViewModel.WorldWindowUpperLeft.Y
+                        : _worldWindowUpperLeftInitial.Y - mouseOffsetViewPort.Y / ViewModel.Scaling.Height;
 
-                var y = ViewModel.YAxisLocked
-                    ? ViewModel.WorldWindowUpperLeft.Y
-                    : _worldWindowUpperLeftInitial.Y - mouseOffsetViewPort.Y / ViewModel.Scaling.Height;
+                    ViewModel.WorldWindowUpperLeft = new Point(x, y);
 
-                ViewModel.WorldWindowUpperLeft = new Point(x, y);
+                    ViewModel.TranslationX = mouseOffsetViewPort.X;
+                    ViewModel.TranslationY = mouseOffsetViewPort.Y;
 
-                ViewModel.TranslationX = mouseOffsetViewPort.X;
-                ViewModel.TranslationY = mouseOffsetViewPort.Y;
-
-                ViewModel.OnWorldWindowUpdateOccured();
+                    ViewModel.OnWorldWindowUpdateOccured();
+                }
             }
         }
 

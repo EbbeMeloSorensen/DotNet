@@ -52,6 +52,20 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Point _worldWindowUpperLeftLimit;
         private Point _worldWindowBottomRightLimit;
 
+        private bool _selectedRegionVisible;
+
+        public RectangleViewModel SelectedRegion { get; }
+
+        public bool SelectedRegionVisible
+        {
+            get => _selectedRegionVisible;
+            set
+            {
+                _selectedRegionVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ObservableObject<Point?> MousePositionWorld { get; }
 
         public string ImagePath
@@ -376,6 +390,10 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             LabelViewModels = new ObservableCollection<LabelViewModel>();
 
             PropertyChanged += GeometryEditorViewModel_PropertyChanged;
+
+            // I første omngang placeres den i vinduet og gøres lidt mindre end det (senere skal det afhænge af brugerinteraktion)
+            SelectedRegion = new RectangleViewModel();
+            SelectedRegionVisible = false;
         }
 
         private void GeometryEditorViewModel_PropertyChanged(
