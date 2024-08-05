@@ -314,7 +314,7 @@
                 <MultiBinding Converter="{StaticResource ShapePositionConverter}">
                     <Binding Path="SelectedRegionWindow.Point.Y"/>
                     <Binding Path="SelectedRegionWindow.Height"/>
-                    <Binding Path="DataContext.Scaling.Width" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                    <Binding Path="DataContext.Scaling.Height" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                 </MultiBinding>
             </Canvas.Top>
             <Rectangle.RenderTransform>
