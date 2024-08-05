@@ -78,11 +78,11 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                 {
                     _alternativeDraggingMode = Keyboard.IsKeyDown(Key.LeftCtrl);
 
-                    ViewModel.SelectedRegion.Point = new Utils.PointD(
+                    ViewModel.SelectedRegionWindow.Point = new Utils.PointD(
                         ViewModel.ConvertViewPortXCoordinateToWorldXCoordinate(_mouseDownViewport.X), 
                         ViewModel.ConvertViewPortYCoordinateToWorldYCoordinate(_mouseDownViewport.Y));
 
-                    ViewModel.SelectedRegionVisible = true;
+                    ViewModel.SelectedRegionWindowVisible = true;
                 }
 
                 Canvas.CaptureMouse();
@@ -104,9 +104,19 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
             if (_dragging)
             {
+                if (_alternativeDraggingMode)
+                {
+                    ViewModel.SelectedRegion.Object = new Utils.BoundingBox
+                    {
+                        Left = ViewModel.SelectedRegionWindow.Point.X - ViewModel.SelectedRegionWindow.Width / 2,
+                        Top = ViewModel.SelectedRegionWindow.Point.Y - ViewModel.SelectedRegionWindow.Height / 2,
+                        Width = ViewModel.SelectedRegionWindow.Width,
+                        Height = ViewModel.SelectedRegionWindow.Height
+                    };
+                }
+
                 _dragging = false;
                 _alternativeDraggingMode = false;
-                //ViewModel.SelectedRegionVisible = false;
                 Canvas.ReleaseMouseCapture();
                 ViewModel.OnWorldWindowMajorUpdateOccured();
             }
@@ -185,8 +195,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
                 if (_alternativeDraggingMode)
                 {
-                    ViewModel.SelectedRegion.Width = 2 * Math.Abs(mouseOffsetViewPort.X) / ViewModel.Scaling.Width;
-                    ViewModel.SelectedRegion.Height = 2 * Math.Abs(mouseOffsetViewPort.Y) / ViewModel.Scaling.Height;
+                    ViewModel.SelectedRegionWindow.Width = 2 * Math.Abs(mouseOffsetViewPort.X) / ViewModel.Scaling.Width;
+                    ViewModel.SelectedRegionWindow.Height = 2 * Math.Abs(mouseOffsetViewPort.Y) / ViewModel.Scaling.Height;
                 }
                 else
                 {

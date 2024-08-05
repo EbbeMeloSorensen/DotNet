@@ -298,23 +298,23 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
-        <!-- Selected Region -->
+        <!-- Selected Region Window -->
         <Rectangle Stroke="Black"
                    Fill="DarkCyan"
                    Opacity="0.25"
-                   Width="{Binding SelectedRegion.Width}"
-                   Height="{Binding SelectedRegion.Height}">
+                   Width="{Binding SelectedRegionWindow.Width}"
+                   Height="{Binding SelectedRegionWindow.Height}">
             <Canvas.Left>
                 <MultiBinding Converter="{StaticResource ShapePositionConverter}">
-                    <Binding Path="SelectedRegion.Point.X"/>
-                    <Binding Path="SelectedRegion.Width"/>
+                    <Binding Path="SelectedRegionWindow.Point.X"/>
+                    <Binding Path="SelectedRegionWindow.Width"/>
                     <Binding Path="DataContext.Scaling.Width" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                 </MultiBinding>
             </Canvas.Left>
             <Canvas.Top>
                 <MultiBinding Converter="{StaticResource ShapePositionConverter}">
-                    <Binding Path="SelectedRegion.Point.Y"/>
-                    <Binding Path="SelectedRegion.Height"/>
+                    <Binding Path="SelectedRegionWindow.Point.Y"/>
+                    <Binding Path="SelectedRegionWindow.Height"/>
                     <Binding Path="DataContext.Scaling.Width" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                 </MultiBinding>
             </Canvas.Top>

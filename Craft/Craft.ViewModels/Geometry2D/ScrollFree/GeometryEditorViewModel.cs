@@ -52,21 +52,22 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private Point _worldWindowUpperLeftLimit;
         private Point _worldWindowBottomRightLimit;
 
-        private bool _selectedRegionVisible;
+        private bool _selectedRegionWindowVisible;
 
-        public RectangleViewModel SelectedRegion { get; }
+        public RectangleViewModel SelectedRegionWindow { get; }
 
-        public bool SelectedRegionVisible
+        public bool SelectedRegionWindowVisible
         {
-            get => _selectedRegionVisible;
+            get => _selectedRegionWindowVisible;
             set
             {
-                _selectedRegionVisible = value;
+                _selectedRegionWindowVisible = value;
                 RaisePropertyChanged();
             }
         }
 
         public ObservableObject<Point?> MousePositionWorld { get; }
+        public ObservableObject<BoundingBox?> SelectedRegion { get; }
 
         public string ImagePath
         {
@@ -380,8 +381,6 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             WorldWindowUpperLeftLimit = new Point(double.MinValue, double.MinValue);
             WorldWindowBottomRightLimit = new Point(double.MaxValue, double.MaxValue);
 
-            MousePositionWorld = new ObservableObject<Point?> { Object = null };
-
             PolygonViewModels = new ObservableCollection<PolygonViewModel>();
             PolylineViewModels = new ObservableCollection<PolylineViewModel>();
             PointViewModels = new ObservableCollection<PointViewModel>();
@@ -389,11 +388,14 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             LineViewModels = new ObservableCollection<LineViewModel>();
             LabelViewModels = new ObservableCollection<LabelViewModel>();
 
+            MousePositionWorld = new ObservableObject<Point?> { Object = null };
+            SelectedRegion = new ObservableObject<BoundingBox?> { Object = null };
+
             PropertyChanged += GeometryEditorViewModel_PropertyChanged;
 
             // I første omngang placeres den i vinduet og gøres lidt mindre end det (senere skal det afhænge af brugerinteraktion)
-            SelectedRegion = new RectangleViewModel();
-            SelectedRegionVisible = false;
+            SelectedRegionWindow = new RectangleViewModel();
+            SelectedRegionWindowVisible = false;
         }
 
         private void GeometryEditorViewModel_PropertyChanged(

@@ -106,6 +106,7 @@ In progress:
 * Lav CoordinateSystemViewModel sådan at WorldWindow starter ved koordinatakserne og ikke helt ude i kanten
 
 Todo:
+* Måske skal du have Undo/Redo historik på det at man ændrer selected region
 * Vis koordinater for ImageEditorView, som er under Tab3
 * Vis tidspunkt for ChronologyView
 * Du bør strømline det der med MinorWindowUpdate og MajorWindowUpdate. Der er brug for at identificere, at brugeren interagerer - pt er det jo sådan,
