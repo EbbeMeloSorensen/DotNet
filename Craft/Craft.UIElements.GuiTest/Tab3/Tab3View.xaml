@@ -32,8 +32,24 @@
                         </Grid.ColumnDefinitions>
                         <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
                                                        DataContext="{Binding GeometryEditorViewModel1}"/>
-                        <CheckBox Grid.Row="1" Grid.Column="0" Content="Windmill rotates" 
+                        <StackPanel Grid.Row="1" Grid.Column="0">
+                            <CheckBox Content="Windmill rotates" 
                                   IsChecked="{Binding WindMillInHouseDrawingsRotates}"/>
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="ROI, X"/>
+                                <TextBox Grid.Row="0" Margin="10,0,0,0" Grid.Column="1" IsReadOnly="True" Text="{Binding ROIXAsText}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="ROI, Y"/>
+                                <TextBox Grid.Row="1" Margin="10,0,0,0" Grid.Column="1" IsReadOnly="True" Text="{Binding ROIYAsText}"/>
+                            </Grid>
+                        </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="2" Margin="10">
                             <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"
                                     Command="{Binding ZoomInForGeometryEditor1Command}" >Zoom In</Button>

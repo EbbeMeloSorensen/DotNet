@@ -76,11 +76,14 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
 
                 if (Keyboard.IsKeyDown(Key.LeftCtrl))
                 {
-                    _alternativeDraggingMode = Keyboard.IsKeyDown(Key.LeftCtrl);
+                    _alternativeDraggingMode = true;
 
                     ViewModel.SelectedRegionWindow.Point = new Utils.PointD(
                         ViewModel.ConvertViewPortXCoordinateToWorldXCoordinate(_mouseDownViewport.X), 
                         ViewModel.ConvertViewPortYCoordinateToWorldYCoordinate(_mouseDownViewport.Y));
+
+                    ViewModel.SelectedRegionWindow.Width = 0;
+                    ViewModel.SelectedRegionWindow.Height = 0;
 
                     ViewModel.SelectedRegionWindowVisible = true;
                 }

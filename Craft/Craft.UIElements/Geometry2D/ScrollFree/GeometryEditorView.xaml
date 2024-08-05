@@ -299,9 +299,8 @@
         </ItemsControl>
 
         <!-- Selected Region Window -->
-        <Rectangle Stroke="Black"
-                   Fill="DarkCyan"
-                   Opacity="0.25"
+        <Rectangle Fill="DarkCyan"
+                   Opacity="0.2"
                    Width="{Binding SelectedRegionWindow.Width}"
                    Height="{Binding SelectedRegionWindow.Height}">
             <Canvas.Left>

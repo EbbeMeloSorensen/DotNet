@@ -42,12 +42,34 @@ namespace Craft.UIElements.GuiTest.Tab3
         private string _timeAtMousePositionAsText2;
         private Stopwatch _stopwatch;
         private List<DateTime> _timeStampsOfInterest;
+        private string _roiXAsText;
+        private string _roiYAsText;
 
         private RelayCommand _applyWorldWindowLimitsForGeometryEditor1Command;
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
         private RelayCommand _zoomInForGeometryEditor2Command;
         private RelayCommand _zoomOutForGeometryEditor2Command;
+
+        public string ROIXAsText
+        {
+            get => _roiXAsText;
+            set
+            {
+                _roiXAsText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string ROIYAsText
+        {
+            get => _roiYAsText;
+            set
+            {
+                _roiYAsText = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public bool WindMillInHouseDrawingsRotates
         {
@@ -616,6 +638,16 @@ namespace Craft.UIElements.GuiTest.Tab3
             GeometryEditorViewModel1.WorldWindowBottomRightLimit = new Point(
                 WorldWindowLimitRightForGeometryEditorViewModel1, 
                 WorldWindowLimitBottomForGeometryEditorViewModel1);
+
+            GeometryEditorViewModel1.SelectedRegion.PropertyChanged += (s, e) =>
+            {
+                var left = GeometryEditorViewModel1.SelectedRegion.Object.Left;
+                var right = GeometryEditorViewModel1.SelectedRegion.Object.Right;
+                var top = GeometryEditorViewModel1.SelectedRegion.Object.Top;
+                var bottom = GeometryEditorViewModel1.SelectedRegion.Object.Bottom;
+                ROIXAsText = $"X: {left:F2} - {right:F2}";
+                ROIYAsText = $"Y: {top:F2} - {bottom:F2}";
+            };
         }
 
         private void InitializeGeometryEditorViewModel2()
