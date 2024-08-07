@@ -83,7 +83,7 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                         ViewModel.ConvertViewPortYCoordinateToWorldYCoordinate(_mouseDownViewport.Y));
 
                     ViewModel.SelectedRegionWindow.Width = 0;
-                    ViewModel.SelectedRegionWindow.Height = ViewModel.SelectedRegionLimitedVertically ? 0 : double.MaxValue;
+                    ViewModel.SelectedRegionWindow.Height = ViewModel.SelectedRegionLimitedVertically ? 0 : 2000;
 
                     ViewModel.SelectedRegionWindowVisible = true;
                 }
@@ -114,7 +114,7 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                         Left = ViewModel.SelectedRegionWindow.Point.X - ViewModel.SelectedRegionWindow.Width / 2,
                         Top = ViewModel.SelectedRegionWindow.Point.Y - ViewModel.SelectedRegionWindow.Height / 2,
                         Width = ViewModel.SelectedRegionWindow.Width,
-                        Height = ViewModel.SelectedRegionLimitedVertically ? ViewModel.SelectedRegionWindow.Height : double.MaxValue
+                        Height = ViewModel.SelectedRegionLimitedVertically ? ViewModel.SelectedRegionWindow.Height : 2000
                     };
                 }
 

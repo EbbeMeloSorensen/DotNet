@@ -872,6 +872,8 @@ namespace Craft.UIElements.GuiTest.Tab3
             };
 
             TimeSeriesViewModel1.GeometryEditorViewModel.YAxisLocked = false;
+            TimeSeriesViewModel1.GeometryEditorViewModel.SelectRegionPossible = true;
+            TimeSeriesViewModel1.GeometryEditorViewModel.SelectedRegionLimitedVertically = false;
 
             TimeSeriesViewModel1.TimeAtMousePosition.PropertyChanged += (s, e) =>
             {

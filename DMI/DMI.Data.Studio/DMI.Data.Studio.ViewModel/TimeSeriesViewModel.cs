@@ -60,10 +60,24 @@ namespace DMI.Data.Studio.ViewModel
                 null);
 
             ScatterChartViewModel.GeometryEditorViewModel.YAxisLocked = true;
-            ScatterChartViewModel.ShowPanningButtons = true; // Gør ingen forskel...
+            ScatterChartViewModel.ShowPanningButtons = true;
 
             ScatterChartViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured +=
                 GeometryEditorViewModel_WorldWindowMajorUpdateOccured;
+
+            ScatterChartViewModel.PanLeftClicked += (s, e) =>
+            {
+                ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                    ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X - ScatterChartViewModel.GeometryEditorViewModel.WorldWindowSize.Width,
+                    ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+            };
+
+            ScatterChartViewModel.PanRightClicked += (s, e) =>
+            {
+                ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft = new Point(
+                    ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + ScatterChartViewModel.GeometryEditorViewModel.WorldWindowSize.Width,
+                    ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
+            };
 
             _selectedStationInformations.PropertyChanged += _selectedStationInformations_PropertyChanged;
         }

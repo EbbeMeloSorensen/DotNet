@@ -332,6 +332,21 @@ namespace DMI.Data.Studio.ViewModel
                 obsDBUnitOfWorkFactory,
                 StationInformationListViewModel.SelectedStationInformations);
 
+            TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
+            {
+                // Set the roi in the chronology view 
+                var worldWindowUpperLeft = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft;
+                var worldWindowSize = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowSize;
+
+                ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object = new BoundingBox
+                {
+                    Left = worldWindowUpperLeft.X,
+                    Top = worldWindowUpperLeft.Y,
+                    Width = worldWindowSize.Width,
+                    Height = 2000
+                };
+            };
+
             TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
                 // Set the roi in the chronology view 
@@ -340,10 +355,10 @@ namespace DMI.Data.Studio.ViewModel
 
                 ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object = new BoundingBox
                 {
-                    Left = worldWindowUpperLeft.X, 
+                    Left = worldWindowUpperLeft.X,
                     Top = worldWindowUpperLeft.Y,
                     Width = worldWindowSize.Width,
-                    Height = worldWindowSize.Height
+                    Height = 2000
                 };
             };
 
