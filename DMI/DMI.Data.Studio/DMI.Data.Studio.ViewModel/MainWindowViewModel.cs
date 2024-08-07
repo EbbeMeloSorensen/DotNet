@@ -310,6 +310,8 @@ namespace DMI.Data.Studio.ViewModel
             };
 
             ChronologyViewModel2.GeometryEditorViewModel.YScalingLocked = true;
+            ChronologyViewModel2.GeometryEditorViewModel.SelectRegionPossible = true;
+            ChronologyViewModel2.GeometryEditorViewModel.SelectedRegionLimitedVertically = false;
             ChronologyViewModel2.GeometryEditorViewModel.InitializeWorldWindow(new Size(0.1, 1), new Point(xFocus, 0)); 
 
             var tMin = new DateTime(1950, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -318,8 +320,7 @@ namespace DMI.Data.Studio.ViewModel
             var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
 
             ChronologyViewModel2.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(xMin, 0);
-            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10);
-            //ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 1540 + 40);
+            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10000);
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
                 smsDataProvider,
@@ -330,6 +331,21 @@ namespace DMI.Data.Studio.ViewModel
             TimeSeriesViewModel = new TimeSeriesViewModel(
                 obsDBUnitOfWorkFactory,
                 StationInformationListViewModel.SelectedStationInformations);
+
+            TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
+            {
+                // Set the roi in the chronology view 
+                var worldWindowUpperLeft = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft;
+                var worldWindowSize = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowSize;
+
+                ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object = new BoundingBox
+                {
+                    Left = worldWindowUpperLeft.X, 
+                    Top = worldWindowUpperLeft.Y,
+                    Width = worldWindowSize.Width,
+                    Height = worldWindowSize.Height
+                };
+            };
 
             StationListViewModel.SelectedStations.PropertyChanged += 
                 SelectedStations_PropertyChanged;

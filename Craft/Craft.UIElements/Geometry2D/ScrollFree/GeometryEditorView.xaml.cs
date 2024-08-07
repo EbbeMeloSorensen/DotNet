@@ -74,7 +74,7 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                 _worldWindowUpperLeftInitial = ViewModel.WorldWindowUpperLeft;
                 _dragging = true;
 
-                if (Keyboard.IsKeyDown(Key.LeftCtrl))
+                if (ViewModel.SelectRegionPossible && Keyboard.IsKeyDown(Key.LeftCtrl))
                 {
                     _alternativeDraggingMode = true;
 
@@ -83,7 +83,7 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                         ViewModel.ConvertViewPortYCoordinateToWorldYCoordinate(_mouseDownViewport.Y));
 
                     ViewModel.SelectedRegionWindow.Width = 0;
-                    ViewModel.SelectedRegionWindow.Height = 0;
+                    ViewModel.SelectedRegionWindow.Height = ViewModel.SelectedRegionLimitedVertically ? 0 : double.MaxValue;
 
                     ViewModel.SelectedRegionWindowVisible = true;
                 }
@@ -114,7 +114,7 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                         Left = ViewModel.SelectedRegionWindow.Point.X - ViewModel.SelectedRegionWindow.Width / 2,
                         Top = ViewModel.SelectedRegionWindow.Point.Y - ViewModel.SelectedRegionWindow.Height / 2,
                         Width = ViewModel.SelectedRegionWindow.Width,
-                        Height = ViewModel.SelectedRegionWindow.Height
+                        Height = ViewModel.SelectedRegionLimitedVertically ? ViewModel.SelectedRegionWindow.Height : double.MaxValue
                     };
                 }
 
@@ -199,7 +199,10 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
                 if (_alternativeDraggingMode)
                 {
                     ViewModel.SelectedRegionWindow.Width = 2 * Math.Abs(mouseOffsetViewPort.X) / ViewModel.Scaling.Width;
-                    ViewModel.SelectedRegionWindow.Height = 2 * Math.Abs(mouseOffsetViewPort.Y) / ViewModel.Scaling.Height;
+
+                    ViewModel.SelectedRegionWindow.Height = ViewModel.SelectedRegionLimitedVertically
+                        ? 2 * Math.Abs(mouseOffsetViewPort.Y) / ViewModel.Scaling.Height
+                        : 2000;
                 }
                 else
                 {

@@ -55,6 +55,8 @@
                                     Command="{Binding ZoomInForGeometryEditor1Command}" >Zoom In</Button>
                             <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" 
                                     Command="{Binding ZoomOutForGeometryEditor1Command}" >Zoom Out</Button>
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" 
+                                    Command="{Binding SetSelectedRegionForGeometryEditor1Command}">Set ROI</Button>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.Column="1">
                             <Grid.RowDefinitions>

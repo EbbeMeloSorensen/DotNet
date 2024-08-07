@@ -28,6 +28,11 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             return (dateTime - TimeAtOrigo) / _timeSpanOfOneDay;
         }
 
+        public static DateTime ConvertXValueToDateTime(double xValue)
+        {
+            return TimeAtOrigo + xValue * (_timeSpanOfOneDay);
+        }
+
         private ILogger _logger;
 
         public ObservableObject<DateTime?> TimeAtMousePosition { get; }

@@ -51,7 +51,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
         private ROIAlignment _roiAlignment = ROIAlignment.TopLeft;
         private Point _worldWindowUpperLeftLimit;
         private Point _worldWindowBottomRightLimit;
-
+        private bool _selectRegionPossible;
+        private bool _selectedRegionLimitedVertically;
         private bool _selectedRegionWindowVisible;
 
         public RectangleViewModel SelectedRegionWindow { get; }
@@ -321,6 +322,26 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
         }
 
+        public bool SelectRegionPossible
+        {
+            get => _selectRegionPossible;
+            set
+            {
+                _selectRegionPossible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool SelectedRegionLimitedVertically
+        {
+            get => _selectedRegionLimitedVertically;
+            set
+            {
+                _selectedRegionLimitedVertically = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public Brush BackgroundBrush
         {
             get => _backgroundBrush;
@@ -390,6 +411,25 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
             MousePositionWorld = new ObservableObject<Point?> { Object = null };
             SelectedRegion = new ObservableObject<BoundingBox?> { Object = null };
+
+            SelectedRegion.PropertyChanged += (s, e) =>
+            {
+                var bb = SelectedRegion.Object;
+
+                if (bb == null)
+                {
+                    SelectedRegionWindowVisible = false;
+                }
+                else
+                {
+                    SelectedRegionWindow.Point = new PointD(
+                        bb.Left + bb.Width / 2,
+                        bb.Top + bb.Height / 2);
+
+                    SelectedRegionWindow.Width = bb.Width;
+                    SelectedRegionWindow.Height = bb.Height;
+                }
+            };
 
             PropertyChanged += GeometryEditorViewModel_PropertyChanged;
 

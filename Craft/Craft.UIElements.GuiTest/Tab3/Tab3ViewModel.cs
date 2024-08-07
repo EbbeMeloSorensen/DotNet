@@ -48,6 +48,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         private RelayCommand _applyWorldWindowLimitsForGeometryEditor1Command;
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
+        private RelayCommand _setSelectedRegionForGeometryEditor1Command;
         private RelayCommand _zoomInForGeometryEditor2Command;
         private RelayCommand _zoomOutForGeometryEditor2Command;
 
@@ -222,6 +223,14 @@ namespace Craft.UIElements.GuiTest.Tab3
             get
             {
                 return _zoomOutForGeometryEditor1Command ?? (_zoomOutForGeometryEditor1Command = new RelayCommand(ZoomOutForGeometryEditor1));
+            }
+        }
+
+        public RelayCommand SetSelectedRegionForGeometryEditor1Command
+        {
+            get
+            {
+                return _setSelectedRegionForGeometryEditor1Command ?? (_setSelectedRegionForGeometryEditor1Command = new RelayCommand(SetSelectedRegionForGeometryEditor1));
             }
         }
 
@@ -510,6 +519,17 @@ namespace Craft.UIElements.GuiTest.Tab3
             GeometryEditorViewModel1.ChangeScaling(1 / 1.2);
         }
 
+        private void SetSelectedRegionForGeometryEditor1()
+        {
+            GeometryEditorViewModel1.SelectedRegion.Object = new BoundingBox
+            {
+                Left = 300 - 95.0 / 2,
+                Top = 112.5 - 70.0 / 2,
+                Width = 95,
+                Height = 70
+            };
+        }
+
         private void ZoomInForGeometryEditor2()
         {
             GeometryEditorViewModel2.ChangeScaling(1.2);
@@ -621,14 +641,17 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void InitializeGeometryEditorViewModel1()
         {
-            GeometryEditorViewModel1 = new GeometryEditorViewModel();
+            GeometryEditorViewModel1 = new GeometryEditorViewModel
+            {
+                SelectRegionPossible = true,
+                //SelectedRegionLimitedVertically = false
+                SelectedRegionLimitedVertically = true
+            };
 
             WorldWindowLimitLeftForGeometryEditorViewModel1 = -100.0;
             WorldWindowLimitRightForGeometryEditorViewModel1 = 600.0;
             WorldWindowLimitTopForGeometryEditorViewModel1 = -100.0;
-            //WorldWindowLimitBottomForGeometryEditorViewModel1 = 300.0;
             WorldWindowLimitBottomForGeometryEditorViewModel1 = 600.0;
-            //WorldWindowLimitBottomForGeometryEditorViewModel1 = 1300.0;
 
             // Diagnostics
             GeometryEditorViewModel1.WorldWindowUpperLeftLimit = new Point(

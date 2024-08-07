@@ -44,16 +44,14 @@ namespace DMI.Data.Studio.ViewModel
             _obsDBUnitOfWorkFactory = obsDBUnitOfWorkFactory;
             _selectedStationInformations = selectedStationInformations;
 
-            var timeWindow = TimeSpan.FromDays(7);
+            var timeWindow = TimeSpan.FromDays(365);
             var utcNow = DateTime.UtcNow;
-            _timeAtOrigo = utcNow.Date - TimeSpan.FromDays(7);
-            //_timeAtOrigo = new DateTime(2022, _timeAtOrigo.Month, _timeAtOrigo.Day, 0, 0, 0, DateTimeKind.Utc);
-            var tFocus = _timeAtOrigo + timeWindow / 2;
-            var xFocus = (tFocus - _timeAtOrigo) / TimeSpan.FromDays(1.0);
+            var tFocus = utcNow.Date - timeWindow / 2;
+            var xFocus = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
 
             ScatterChartViewModel = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
                 new Point(xFocus, 10),
-                new Size(14, 30),
+                new Size(timeWindow.TotalDays, 30),
                 true,
                 25,
                 60,
@@ -92,15 +90,15 @@ namespace DMI.Data.Studio.ViewModel
 
         private void GeometryEditorViewModel_WorldWindowMajorUpdateOccured(
             object? sender, 
-            Craft.ViewModels.Geometry2D.ScrollFree.WorldWindowUpdatedEventArgs e)
+            WorldWindowUpdatedEventArgs e)
         {
             ScatterChartViewModel.GeometryEditorViewModel.ClearPolylines();
 
             var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
             var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
 
-            _t0 = _timeAtOrigo + x0 * (_timeSpanForXUnit);
-            _t1 = _timeAtOrigo + x1 * (_timeSpanForXUnit);
+            _t0 = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertXValueToDateTime(x0);
+            _t1 = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertXValueToDateTime(x1);
 
             UpdateCurve();
         }
