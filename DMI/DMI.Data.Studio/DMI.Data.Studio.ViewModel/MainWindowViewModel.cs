@@ -322,6 +322,41 @@ namespace DMI.Data.Studio.ViewModel
             ChronologyViewModel2.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(xMin, 0);
             ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10000);
 
+            ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.PropertyChanged += (s, e) =>
+            {
+                //var timeWindow = TimeSpan.FromDays(365);
+                //var utcNow = DateTime.UtcNow;
+                //var tFocus = utcNow.Date - timeWindow / 2;
+                //var xFocus = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
+
+                //ScatterChartViewModel = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
+                //    new Point(xFocus, 10),
+                //    new Size(timeWindow.TotalDays, 30),
+                //    true,
+                //    25,
+                //    60,
+                //    1.0,
+                //    XAxisMode.Cartesian,
+                //    null);
+
+                var timeWindow = TimeSpan.FromDays(365);
+                var utcNow = DateTime.UtcNow;
+                var tFocus = utcNow.Date - timeWindow / 2;
+                var xFocus = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
+
+                var bb = ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object;
+
+                var focus = new Point(
+                    bb.Left + bb.Width / 2,
+                    //xFocus,
+                    10);
+
+                var size = new Size(bb.Width, 30);
+                var fitAspectRatio = true;
+
+                TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.InitializeWorldWindow(focus, size, fitAspectRatio);
+            };
+
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
                 smsDataProvider,
                 applicationDialogService,
@@ -334,32 +369,14 @@ namespace DMI.Data.Studio.ViewModel
 
             TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
-                // Set the roi in the chronology view 
-                var worldWindowUpperLeft = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft;
-                var worldWindowSize = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowSize;
-
-                ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object = new BoundingBox
-                {
-                    Left = worldWindowUpperLeft.X,
-                    Top = worldWindowUpperLeft.Y,
-                    Width = worldWindowSize.Width,
-                    Height = 2000
-                };
+                return;
+                SyncRoiInChronologyViewWithTimeSeriesView();
             };
 
             TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
-                // Set the roi in the chronology view 
-                var worldWindowUpperLeft = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft;
-                var worldWindowSize = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowSize;
-
-                ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object = new BoundingBox
-                {
-                    Left = worldWindowUpperLeft.X,
-                    Top = worldWindowUpperLeft.Y,
-                    Width = worldWindowSize.Width,
-                    Height = 2000
-                };
+                return;
+                SyncRoiInChronologyViewWithTimeSeriesView();
             };
 
             StationListViewModel.SelectedStations.PropertyChanged += 
@@ -1270,6 +1287,20 @@ namespace DMI.Data.Studio.ViewModel
             {
                 GeometryEditorViewModel.AddPolygon(polygon.Select(p => new PointD(p[1], p[0])), lineThickness, brush);
             }
+        }
+
+        private void SyncRoiInChronologyViewWithTimeSeriesView()
+        {
+            var worldWindowUpperLeft = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft;
+            var worldWindowSize = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowSize;
+
+            ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object = new BoundingBox
+            {
+                Left = worldWindowUpperLeft.X,
+                Top = worldWindowUpperLeft.Y,
+                Width = worldWindowSize.Width,
+                Height = 2000
+            };
         }
     }
 }

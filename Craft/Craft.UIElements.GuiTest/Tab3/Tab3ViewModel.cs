@@ -49,6 +49,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         private RelayCommand _zoomInForGeometryEditor1Command;
         private RelayCommand _zoomOutForGeometryEditor1Command;
         private RelayCommand _setSelectedRegionForGeometryEditor1Command;
+        private RelayCommand _setWorldWindowForGeometryEditor1Command;
         private RelayCommand _zoomInForGeometryEditor2Command;
         private RelayCommand _zoomOutForGeometryEditor2Command;
 
@@ -231,6 +232,14 @@ namespace Craft.UIElements.GuiTest.Tab3
             get
             {
                 return _setSelectedRegionForGeometryEditor1Command ?? (_setSelectedRegionForGeometryEditor1Command = new RelayCommand(SetSelectedRegionForGeometryEditor1));
+            }
+        }
+
+        public RelayCommand SetWorldWindowForGeometryEditor1Command
+        {
+            get
+            {
+                return _setWorldWindowForGeometryEditor1Command ?? (_setWorldWindowForGeometryEditor1Command = new RelayCommand(SetWorldWindowForGeometryEditor1));
             }
         }
 
@@ -521,13 +530,27 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void SetSelectedRegionForGeometryEditor1()
         {
+            var roiWidth = 95.0 * 1.5;
+            var roiHeight = 70.0 * 1.5;
+
             GeometryEditorViewModel1.SelectedRegion.Object = new BoundingBox
             {
-                Left = 300 - 95.0 / 2,
-                Top = 112.5 - 70.0 / 2,
-                Width = 95,
-                Height = 70
+                Left = 300 - roiWidth / 2,
+                Top = 112.5 - roiHeight / 2,
+                Width = roiWidth,
+                Height = roiHeight
             };
+        }
+
+        private void SetWorldWindowForGeometryEditor1()
+        {
+            var wwWidth = 95.0 * 1.5;
+            var wwHeight = 70.0 * 1.5;
+
+            var focus = new Point(300, 112.5);
+            var size = new Size(wwWidth, wwHeight);
+
+            GeometryEditorViewModel1.InitializeWorldWindow(focus, size, false);
         }
 
         private void ZoomInForGeometryEditor2()

@@ -57,6 +57,8 @@
                                     Command="{Binding ZoomOutForGeometryEditor1Command}" >Zoom Out</Button>
                             <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" 
                                     Command="{Binding SetSelectedRegionForGeometryEditor1Command}">Set ROI</Button>
+                            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" 
+                                    Command="{Binding SetWorldWindowForGeometryEditor1Command}">Set WW</Button>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.Column="1">
                             <Grid.RowDefinitions>

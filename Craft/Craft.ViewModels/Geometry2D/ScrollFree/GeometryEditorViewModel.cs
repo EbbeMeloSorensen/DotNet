@@ -662,6 +662,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             }
 
             UpdatePoints();
+            OnWorldWindowMajorUpdateOccured();
         }
 
         public void UpdatePoints()
