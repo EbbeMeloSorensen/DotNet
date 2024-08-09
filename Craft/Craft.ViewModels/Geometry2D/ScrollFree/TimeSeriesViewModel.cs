@@ -28,6 +28,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             return (dateTime - TimeAtOrigo) / _timeSpanOfOneDay;
         }
 
+        // Omregning af x-værdi i koordinatsystemet til tidspunkt 
         public static DateTime ConvertXValueToDateTime(double xValue)
         {
             return TimeAtOrigo + xValue * (_timeSpanOfOneDay);

@@ -53,7 +53,7 @@ namespace DMI.Data.Studio.ViewModel
                 new Point(xFocus, 10),
                 new Size(timeWindow.TotalDays, 30),
                 true,
-                25,
+                0,
                 60,
                 1.0,
                 XAxisMode.Cartesian,
