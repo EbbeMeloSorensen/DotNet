@@ -324,21 +324,6 @@ namespace DMI.Data.Studio.ViewModel
 
             ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.PropertyChanged += (s, e) =>
             {
-                //var timeWindow = TimeSpan.FromDays(365);
-                //var utcNow = DateTime.UtcNow;
-                //var tFocus = utcNow.Date - timeWindow / 2;
-                //var xFocus = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
-
-                //ScatterChartViewModel = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
-                //    new Point(xFocus, 10),
-                //    new Size(timeWindow.TotalDays, 30),
-                //    true,
-                //    25,
-                //    60,
-                //    1.0,
-                //    XAxisMode.Cartesian,
-                //    null);
-
                 var timeWindow = TimeSpan.FromDays(365);
                 var utcNow = DateTime.UtcNow;
                 var tFocus = utcNow.Date - timeWindow / 2;
@@ -348,13 +333,15 @@ namespace DMI.Data.Studio.ViewModel
 
                 var focus = new Point(
                     bb.Left + bb.Width / 2,
-                    //xFocus,
                     10);
 
                 var size = new Size(bb.Width, 30);
                 var fitAspectRatio = true;
 
-                TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.InitializeWorldWindow(focus, size, fitAspectRatio);
+                if (!TimeViewsInSync())
+                {
+                    TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.InitializeWorldWindow(focus, size, fitAspectRatio);
+                }
             };
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
@@ -369,13 +356,11 @@ namespace DMI.Data.Studio.ViewModel
 
             TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
-                return;
                 SyncRoiInChronologyViewWithTimeSeriesView();
             };
 
             TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
-                return;
                 SyncRoiInChronologyViewWithTimeSeriesView();
             };
 
@@ -395,7 +380,7 @@ namespace DMI.Data.Studio.ViewModel
             TimeSeriesViewModel.Logger = _logger;
 
             _includeOperationIntervalBars = true;
-            _includeObservationIntervalBars = false;
+            _includeObservationIntervalBars = true;
             _includeTransactionTimeIntervalBars = false;
             _showSMSDBList = true;
             _showStatDBList = true;
@@ -422,11 +407,6 @@ namespace DMI.Data.Studio.ViewModel
 
             UpdateMapView();
             UpdateChronologyView();
-
-            if (_selectedStationInformations.Count > 0)
-            {
-                //SelectedOveralTabIndex = 1;
-            }
         }
 
         private void SelectedStations_PropertyChanged(
@@ -1301,6 +1281,30 @@ namespace DMI.Data.Studio.ViewModel
                 Width = worldWindowSize.Width,
                 Height = 2000
             };
+        }
+
+        private bool TimeViewsInSync()
+        {
+            var bb1 = ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object;
+
+            if (bb1 == null)
+            {
+                return false;
+            }
+
+            var bb2 = new BoundingBox
+            {
+                Left = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X,
+                Width = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowSize.Width,
+            };
+
+            if (Math.Abs(bb1.Left - bb2.Left) > 0.00000001 ||
+                Math.Abs(bb1.Width - bb2.Width) > 0.00000001)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

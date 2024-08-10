@@ -109,7 +109,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TabControl Grid.Row="0">
+                        <TabControl Grid.Row="0" SelectedIndex="1">
                             <TabItem Header="Geospatial">
                                 <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
                             </TabItem>
@@ -129,7 +129,7 @@
                         <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Margin="2" 
                                       HorizontalAlignment="Stretch" Height="2" Background="Gray"/>
 
-                        <TabControl Grid.Row="1">
+                        <TabControl Grid.Row="1" SelectedIndex="1">
                             <TabItem Header="Station Properties">
                                 <uiElementsSMS:StationInformationDetailsView 
                                     DataContext="{Binding StationInformationDetailsViewModel}"/>

@@ -377,15 +377,15 @@ namespace Craft.UIElements.GuiTest.Tab3
             // Door
             var doorAndWindowFrameBrush = new SolidColorBrush(Colors.GhostWhite);
 
-            //geometryEditorViewModel.AddPolyline(new List<PointD>
-            //    {
-            //        new PointD(50, 0),
-            //        new PointD(50, 150),
-            //        new PointD(150, 150),
-            //        new PointD(150, 0)
-            //    },
-            //    2.0,
-            //    doorAndWindowFrameBrush);
+            geometryEditorViewModel.AddPolyline(new List<PointD>
+                {
+                    new PointD(50, 0),
+                    new PointD(50, 150),
+                    new PointD(150, 150),
+                    new PointD(150, 0)
+                },
+                2.0,
+                doorAndWindowFrameBrush);
 
             geometryEditorViewModel.AddShape(1, new RectangleViewModel
             {
@@ -396,14 +396,14 @@ namespace Craft.UIElements.GuiTest.Tab3
             });
 
             // Window
-            //geometryEditorViewModel.AddPolyline(new List<PointD>
-            //{
-            //    new PointD(250, 75),
-            //    new PointD(250, 150),
-            //    new PointD(350, 150),
-            //    new PointD(350, 75),
-            //    new PointD(250, 75)
-            //}, 2.0, doorAndWindowFrameBrush);
+            geometryEditorViewModel.AddPolyline(new List<PointD>
+            {
+                new PointD(250, 75),
+                new PointD(250, 150),
+                new PointD(350, 150),
+                new PointD(350, 75),
+                new PointD(250, 75)
+            }, 2.0, doorAndWindowFrameBrush);
 
             geometryEditorViewModel.AddShape(2, new RectangleViewModel
             {

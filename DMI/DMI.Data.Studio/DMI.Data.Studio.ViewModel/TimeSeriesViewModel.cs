@@ -23,8 +23,6 @@ namespace DMI.Data.Studio.ViewModel
         private double _curveThickness = 1.0;
         private readonly ObsDB.Persistence.IUnitOfWorkFactory _obsDBUnitOfWorkFactory;
         private readonly ObjectCollection<StationInformation> _selectedStationInformations;
-        private DateTime _timeAtOrigo;
-        private TimeSpan _timeSpanForXUnit = TimeSpan.FromDays(1);
         private string _nanoqStationId;
         private DateTime _t0;
         private DateTime _t1;
@@ -44,7 +42,7 @@ namespace DMI.Data.Studio.ViewModel
             _obsDBUnitOfWorkFactory = obsDBUnitOfWorkFactory;
             _selectedStationInformations = selectedStationInformations;
 
-            var timeWindow = TimeSpan.FromDays(365);
+            var timeWindow = TimeSpan.FromDays(60);
             var utcNow = DateTime.UtcNow;
             var tFocus = utcNow.Date - timeWindow / 2;
             var xFocus = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
@@ -59,8 +57,9 @@ namespace DMI.Data.Studio.ViewModel
                 XAxisMode.Cartesian,
                 null);
 
-            ScatterChartViewModel.GeometryEditorViewModel.YAxisLocked = true;
+            ScatterChartViewModel.GeometryEditorViewModel.YAxisLocked = false;
             ScatterChartViewModel.ShowPanningButtons = true;
+            ScatterChartViewModel.ShowYAxisLabels = false;
 
             ScatterChartViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured +=
                 GeometryEditorViewModel_WorldWindowMajorUpdateOccured;
@@ -193,7 +192,7 @@ namespace DMI.Data.Studio.ViewModel
                     var t = observation.Time;
 
                     // Find the x coordinate that corresponds to the current time
-                    var x = (t - _timeAtOrigo) / _timeSpanForXUnit;
+                    var x = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(t);
 
                     // Add the point to the polyline
                     points.Add(new PointD(x, observation.Value));
