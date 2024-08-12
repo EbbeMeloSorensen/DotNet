@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using DMI.SMS.Domain.Entities;
+using DMI.StatDB.Domain.Entities;
 using GalaSoft.MvvmLight;
 using Craft.Logging;
 using Craft.Utils;
@@ -22,7 +23,7 @@ namespace DMI.Data.Studio.ViewModel
         private Brush _curveBrush = new SolidColorBrush(Colors.Black);
         private double _curveThickness = 1.0;
         private readonly ObsDB.Persistence.IUnitOfWorkFactory _obsDBUnitOfWorkFactory;
-        private readonly ObjectCollection<StationInformation> _selectedStationInformations;
+        private readonly ObjectCollection<Station> _selectedStations;
         private string _nanoqStationId;
         private DateTime _t0;
         private DateTime _t1;
@@ -37,10 +38,10 @@ namespace DMI.Data.Studio.ViewModel
 
         public TimeSeriesViewModel(
             ObsDB.Persistence.IUnitOfWorkFactory obsDBUnitOfWorkFactory,
-            ObjectCollection<StationInformation> selectedStationInformations)
+            ObjectCollection<Station> selectedStations)
         {
             _obsDBUnitOfWorkFactory = obsDBUnitOfWorkFactory;
-            _selectedStationInformations = selectedStationInformations;
+            _selectedStations = selectedStations;
 
             var timeWindow = TimeSpan.FromDays(60);
             var utcNow = DateTime.UtcNow;
@@ -78,24 +79,24 @@ namespace DMI.Data.Studio.ViewModel
                     ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y);
             };
 
-            _selectedStationInformations.PropertyChanged += _selectedStationInformations_PropertyChanged;
+            _selectedStations.PropertyChanged += _selectedStations_PropertyChanged;
         }
 
-        private void _selectedStationInformations_PropertyChanged(
-            object? sender,
+        private void _selectedStations_PropertyChanged(
+            object? sender, 
             System.ComponentModel.PropertyChangedEventArgs e)
         {
             ScatterChartViewModel.GeometryEditorViewModel.ClearPolylines();
 
-            var stationInformations = sender as ObjectCollection<StationInformation>;
+            var stations = sender as ObjectCollection<Station>;
 
-            if (stationInformations == null || stationInformations.Objects.Count() == 0)
+            if (stations == null || stations.Objects.Count() != 1)
             {
                 _nanoqStationId = null;
             }
-            else if (stationInformations.Objects.Count() == 1)
+            else
             {
-                _nanoqStationId = $"{stationInformations.Objects.Single().StationIDDMI}00";
+                _nanoqStationId = $"{stations.Objects.Single().StatID}";
             }
 
             UpdateCurve();
@@ -118,14 +119,12 @@ namespace DMI.Data.Studio.ViewModel
 
         private void UpdateCurve()
         {
-            //return; // Earlier precaution for avoiding crashes caused by the Time Series view
-
             if (_t1 <= _t0)
             {
                 return;
             }
 
-            Logger?.WriteLine(LogMessageCategory.Information, "TimeSeries view:");
+            //Logger?.WriteLine(LogMessageCategory.Information, "TimeSeries view:");
 
             if (_nanoqStationId == null)
             {
@@ -136,20 +135,20 @@ namespace DMI.Data.Studio.ViewModel
             {
                 var statId = int.Parse(_nanoqStationId);
 
-                Logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving station {_nanoqStationId}..", "general", true);
+                //Logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving station {_nanoqStationId}..", "general", true);
 
                 var observingFacility = unitOfWork.ObservingFacilities
                     .Find(_ => _.StatId == statId)
                     .SingleOrDefault();
 
-                Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
+                //Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
 
                 if (observingFacility == null)
                 {
                     return;
                 }
 
-                Logger?.WriteLine(LogMessageCategory.Information, "  Retrieving timeseries..", "general", true);
+                //Logger?.WriteLine(LogMessageCategory.Information, "  Retrieving timeseries..", "general", true);
 
                 observingFacility = unitOfWork.ObservingFacilities
                     .GetIncludingTimeSeries(observingFacility.Id);
@@ -163,7 +162,7 @@ namespace DMI.Data.Studio.ViewModel
                     .Where(_ => _.ParamId == "temp_dry")
                     .SingleOrDefault();
 
-                Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
+                //Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
 
                 if (timeSeries == null)
                 {

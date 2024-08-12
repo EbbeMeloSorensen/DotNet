@@ -352,7 +352,7 @@ namespace DMI.Data.Studio.ViewModel
 
             TimeSeriesViewModel = new TimeSeriesViewModel(
                 obsDBUnitOfWorkFactory,
-                StationInformationListViewModel.SelectedStationInformations);
+                StationListViewModel.SelectedStations);
 
             TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpdateOccured += (s, e) =>
             {
@@ -675,7 +675,7 @@ namespace DMI.Data.Studio.ViewModel
                         }
                     }
 
-                    if (IncludeObservationIntervalBars)
+                    if (IncludeObservationIntervalBars && false)
                     {
                         var stationId = stationInformation.StationIDDMI.HasValue
                             ? $"{stationInformation.StationIDDMI.Value}".PadLeft(5, '0')

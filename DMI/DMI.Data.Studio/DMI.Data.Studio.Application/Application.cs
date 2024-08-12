@@ -214,51 +214,11 @@ namespace DMI.Data.Studio.Application
 
                 var chunkFile = new FileInfo(chunkCacheName);
 
-                Queue<Chunk> chunks;
+                var chunks = new Queue<Chunk>();
 
                 if (chunkFile.Exists)
                 {
-                    // Read chunks from cache
-
-                    chunks = new Queue<Chunk>();
-
-                    using (var streamReader = new StreamReader(chunkCacheName))
-                    {
-                        string line;
-                        var skipCount = 1;
-
-                        while ((line = streamReader.ReadLine()) != null)
-                        {
-                            if (skipCount > 0)
-                            {
-                                skipCount--;
-                                continue;
-                            }
-
-                            var startTimeAsText = line.Substring(0, 19);
-                            var endTimeAsText = line.Substring(22, 19);
-                            var observationCountAsText = line.Substring(42, 5).Trim();
-
-                            if (!startTimeAsText.TryParsingAsDateTime(out var startTime))
-                            {
-                                throw new InvalidDataException("Apparently the chunks file is corrupt");
-                            }
-
-                            if (!endTimeAsText.TryParsingAsDateTime(out var endTime))
-                            {
-                                throw new InvalidDataException("Apparently the chunks file is corrupt");
-                            }
-
-                            var observationCount = int.Parse(observationCountAsText);
-
-                            chunks.Enqueue(new Chunk
-                            {
-                                StartTime = startTime,
-                                EndTime = endTime,
-                                ObservationCount = observationCount
-                            });
-                        }
-                    }
+                    chunks = ReadChunksFile(chunkCacheName);
                 }
                 else
                 {
@@ -296,23 +256,59 @@ namespace DMI.Data.Studio.Application
                     }
 
                     // Der er åbenbart en tidsserie - nu skal vi hente observationer ud for den, og det gør vi lige år for år
-                    var timeStamps = new List<DateTime>();
+                    //var timeStamps = new List<DateTime>();
                     var nYears = lastYear - firstYear + 1;
                     var yearCount = 0;
 
                     for (var year = firstYear; year <= lastYear; year++)
                     {
-                        Logger?.WriteLine(LogMessageCategory.Debug, $"    Retrieving observations for {year}..");
+                        var chunkCacheNameForGivenYear = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_chunks_{year}.txt");
+                        var chunkFileForGivenYear = new FileInfo(chunkCacheNameForGivenYear);
 
-                        var startTime = new DateTime(year, 1, 1);
-                        var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
+                        Queue<Chunk> chunksForGivenYear;
 
-                        using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
+                        if (chunkFileForGivenYear.Exists)
                         {
-                            var ts = unitOfWork.TimeSeries.GetIncludingObservations(
-                                timeSeries.Id, startTime, endTime);
+                            chunksForGivenYear = ReadChunksFile(chunkCacheNameForGivenYear);
 
-                            timeStamps.AddRange(ts.Observations.Select(_ => _.Time));
+                            //if (chunksForGivenYear.Any() && chunks.Any())
+                            //{
+                            //    var chunk1 = chunks.Last();
+                            //    var chunk2 = chunksForGivenYear.First();
+
+                            //    // Todo: Determine if they should be spliced into one chunk
+                            //}
+                        }
+                        else
+                        {
+                            var timeStampsForGivenYear = new List<DateTime>();
+
+                            Logger?.WriteLine(LogMessageCategory.Debug, $"    Retrieving observations for {year}..");
+
+                            var startTime = new DateTime(year, 1, 1);
+                            var endTime = new DateTime(year, 12, 31, 23, 59, 59, 999);
+
+                            using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
+                            {
+                                var ts = unitOfWork.TimeSeries.GetIncludingObservations(
+                                    timeSeries.Id, startTime, endTime);
+
+                                //timeStamps.AddRange(ts.Observations.Select(_ => _.Time));
+                                timeStampsForGivenYear.AddRange(ts.Observations.Select(_ => _.Time));
+
+                                // Der kan åbenbart være dubletter, så det tager vi lige hånd om
+                                timeStampsForGivenYear = timeStampsForGivenYear.Distinct().ToList();
+                                timeStampsForGivenYear.Sort();
+
+                                chunksForGivenYear = AnalyzeTimeSeries(timeStampsForGivenYear, out var commonSpacings);
+                                WriteChunksFile(chunkCacheNameForGivenYear, commonSpacings, chunksForGivenYear);
+                            }
+                        }
+
+                        while (chunksForGivenYear.Any())
+                        {
+                            var chunk = chunksForGivenYear.Dequeue();
+                            chunks.Enqueue(chunk);
                         }
 
                         yearCount++;
@@ -322,23 +318,17 @@ namespace DMI.Data.Studio.Application
                             progressCallback.Invoke(0.0 + 100.0 * yearCount / nYears, "");
                         }
                     }
+                }
 
-                    // Der kan åbenbart være dubletter, så det tager vi lige hånd om
-                    timeStamps = timeStamps.Distinct().ToList();
-                    timeStamps.Sort();
+                WriteChunksFile(chunkCacheName, new List<int>(), chunks);
 
-                    using (var streamWriter = new StreamWriter(chunkCacheName))
-                    {
-                        // Bemærk: Denne både laver chunks og skriver til fil
-                        chunks = AnalyzeTimeSeries(timeStamps, streamWriter);
-                    }
+                var dir = new DirectoryInfo(@"C:\Data\Stations");
+                foreach (var file2 in dir.EnumerateFiles($"{nanoqStationId}_chunks_*.txt"))
+                {
+                    file2.Delete();
                 }
 
                 // Nu er vi så klar til at generere samlingen af intervaller med udgangspunkt i listen af chunks
-
-                // (denne konstruktion blev før brugt til at lave intervaller direkte ud fra timeStamps, men vi vil hellere lave det ud
-                // fra chunks, da det er væsentligt hurtigere) 
-                //var intervals = ConvertToIntervals(timeStamps, maxTolerableDifferenceBetweenTwoObservationsInHours);
 
                 var intervals = new List<Tuple<DateTime, DateTime>>();
 
@@ -347,8 +337,6 @@ namespace DMI.Data.Studio.Application
                     var firstChunkInNewInterval = chunks.Dequeue();
                     var startTime = firstChunkInNewInterval.StartTime;
                     var endTime = firstChunkInNewInterval.EndTime;
-
-                    // Under construction (hvis der er flere, og afstanden er mindre end tolerancen, så siger vi, at næste chunk gøres til en del af samme interval)
 
                     while(chunks.TryPeek(out var chunk))
                     {
@@ -965,7 +953,7 @@ namespace DMI.Data.Studio.Application
 
         public static Queue<Chunk> AnalyzeTimeSeries(
             List<DateTime> observationTimes,
-            TextWriter writer = null)
+            out List<int> commonSpacings)
         {
             var chunks = new Queue<Chunk>();
 
@@ -990,7 +978,7 @@ namespace DMI.Data.Studio.Application
                 spacingOccurrences[_]++;
             });
 
-            var commonSpacings = new List<int>();
+            commonSpacings = new List<int>();
 
             foreach (var kvp in spacingOccurrences)
             {
@@ -1006,20 +994,6 @@ namespace DMI.Data.Studio.Application
             }
 
             commonSpacings.Sort();
-
-            if (writer != null)
-            {
-                writer.Write("Common spacings: ");
-
-                if (commonSpacings.Any())
-                {
-                    writer.WriteLine(commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}"));
-                }
-                else
-                {
-                    writer.WriteLine("None");
-                }
-            }
 
             var temp = observationTimes.Zip(spacings, (timestamp, spacing) => new
             {
@@ -1055,21 +1029,6 @@ namespace DMI.Data.Studio.Application
                 {
                     chunk.ObservationCount = 1;
                     chunk.EndTime = chunk.StartTime;
-                }
-
-                if (writer != null)
-                {
-                    var spacing = (chunk.EndTime - chunk.StartTime).TotalMinutes / (chunk.ObservationCount - 1);
-
-                    WriteInterval(writer, chunk.StartTime, chunk.EndTime);
-                    writer.Write($" {chunk.ObservationCount,5}");
-
-                    if (chunk.ObservationCount > 1)
-                    {
-                        writer.Write($" {spacing}");
-                    }
-
-                    writer.WriteLine();
                 }
 
                 chunks.Enqueue(chunk);
@@ -1112,6 +1071,87 @@ namespace DMI.Data.Studio.Application
             writer.Write($"{hour2}:");
             writer.Write($"{minute2}:");
             writer.Write($"{second2}");
+        }
+
+        private static void WriteChunksFile(
+            string fileName,
+            List<int> commonSpacings,
+            Queue<Chunk> chunks)
+        {
+            using (var writer = new StreamWriter(fileName))
+            {
+                writer.Write("Common spacings: ");
+
+                if (commonSpacings.Any())
+                {
+                    writer.WriteLine(commonSpacings.Select(_ => $"{_}").Aggregate((c, n) => $"{c}, {n}"));
+                }
+                else
+                {
+                    writer.WriteLine("None");
+                }
+
+                foreach (var chunk in chunks)
+                {
+                    var spacing = (chunk.EndTime - chunk.StartTime).TotalMinutes / (chunk.ObservationCount - 1);
+
+                    WriteInterval(writer, chunk.StartTime, chunk.EndTime);
+                    writer.Write($" {chunk.ObservationCount,5}");
+
+                    if (chunk.ObservationCount > 1)
+                    {
+                        writer.Write($" {spacing}");
+                    }
+
+                    writer.WriteLine();
+                }
+            }
+        }
+
+        private static Queue<Chunk> ReadChunksFile(
+            string fileName)
+        {
+            var chunks = new Queue<Chunk>();
+
+            using (var streamReader = new StreamReader(fileName))
+            {
+                string line;
+                var skipCount = 1;
+
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    if (skipCount > 0)
+                    {
+                        skipCount--;
+                        continue;
+                    }
+
+                    var startTimeAsText = line.Substring(0, 19);
+                    var endTimeAsText = line.Substring(22, 19);
+                    var observationCountAsText = line.Substring(42, 5).Trim();
+
+                    if (!startTimeAsText.TryParsingAsDateTime(out var startTime))
+                    {
+                        throw new InvalidDataException("Apparently the chunks file is corrupt");
+                    }
+
+                    if (!endTimeAsText.TryParsingAsDateTime(out var endTime))
+                    {
+                        throw new InvalidDataException("Apparently the chunks file is corrupt");
+                    }
+
+                    var observationCount = int.Parse(observationCountAsText);
+
+                    chunks.Enqueue(new Chunk
+                    {
+                        StartTime = startTime,
+                        EndTime = endTime,
+                        ObservationCount = observationCount
+                    });
+                }
+            }
+
+            return chunks;
         }
     }
 }

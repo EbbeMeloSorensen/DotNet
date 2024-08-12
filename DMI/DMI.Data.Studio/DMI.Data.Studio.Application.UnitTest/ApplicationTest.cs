@@ -27,7 +27,8 @@ namespace DMI.Data.Studio.Application.UnitTest
             };
 
             // Act
-            var chunks = Application.AnalyzeTimeSeries(observationTimes);
+            var chunks = Application.AnalyzeTimeSeries(
+                observationTimes, out var commonSpacings);
 
             // Assert
             chunks
@@ -77,7 +78,8 @@ namespace DMI.Data.Studio.Application.UnitTest
             };
 
             // Act
-            var chunks = Application.AnalyzeTimeSeries(observationTimes);
+            var chunks = Application.AnalyzeTimeSeries(
+                observationTimes, out var commonSpacings);
 
             // Assert
             chunks
@@ -130,7 +132,8 @@ namespace DMI.Data.Studio.Application.UnitTest
             };
 
             // Act
-            var chunks = Application.AnalyzeTimeSeries(observationTimes);
+            var chunks = Application.AnalyzeTimeSeries(
+                observationTimes, out var commonSpacings);
 
             // Assert
             chunks
@@ -178,7 +181,8 @@ namespace DMI.Data.Studio.Application.UnitTest
             };
 
             // Act
-            var chunks = Application.AnalyzeTimeSeries(observationTimes);
+            var chunks = Application.AnalyzeTimeSeries(
+                observationTimes, out var commonSpacings);
 
             // Assert
             chunks
