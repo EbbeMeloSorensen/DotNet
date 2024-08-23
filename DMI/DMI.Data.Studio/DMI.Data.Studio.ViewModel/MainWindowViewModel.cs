@@ -47,6 +47,7 @@ namespace DMI.Data.Studio.ViewModel
         private bool _includeOperationIntervalBars;
         private bool _includeObservationIntervalBars;
         private bool _includeTransactionTimeIntervalBars;
+        private bool _includeDetailedTimeSeriesView;
         private bool _showSMSDBList;
         private bool _showStatDBList;
         private RelayCommand<object> _openSettingsDialogCommand;
@@ -66,6 +67,7 @@ namespace DMI.Data.Studio.ViewModel
         private bool _classifyRecordsWithCondition;
         private readonly ObservableObject<bool> _observableForClassifyRecordsWithCondition;
         private int _selectedOveralTabIndex;
+        private int _selectedDetailTabIndex;
 
         private Application.Application _application;
         private SMS.Application.Application _smsApplication;
@@ -140,6 +142,25 @@ namespace DMI.Data.Studio.ViewModel
             }
         }
 
+        public bool IncludeDetailedTimeSeriesView
+        {
+            get { return _includeDetailedTimeSeriesView; }
+            set
+            {
+                _includeDetailedTimeSeriesView = value;
+                ChronologyViewModel2.GeometryEditorViewModel.SelectRegionPossible = _includeDetailedTimeSeriesView;
+                TimeSeriesViewModel.Active = _includeDetailedTimeSeriesView;
+
+                if (!_includeDetailedTimeSeriesView)
+                {
+                    SelectedDetailTabIndex = 0;
+                }
+
+                RaisePropertyChanged();
+                UpdateChronologyView();
+            }
+        }
+
         public bool ShowSMSDBList
         {
             get { return _showSMSDBList; }
@@ -166,6 +187,16 @@ namespace DMI.Data.Studio.ViewModel
             set
             {
                 _selectedOveralTabIndex = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int SelectedDetailTabIndex
+        {
+            get { return _selectedDetailTabIndex; }
+            set
+            {
+                _selectedDetailTabIndex = value;
                 RaisePropertyChanged();
             }
         }
@@ -312,6 +343,7 @@ namespace DMI.Data.Studio.ViewModel
             ChronologyViewModel2.GeometryEditorViewModel.YScalingLocked = true;
             ChronologyViewModel2.GeometryEditorViewModel.SelectRegionPossible = true;
             ChronologyViewModel2.GeometryEditorViewModel.SelectedRegionLimitedVertically = false;
+            ChronologyViewModel2.GeometryEditorViewModel.SelectRegionPossible = IncludeDetailedTimeSeriesView;
             ChronologyViewModel2.GeometryEditorViewModel.InitializeWorldWindow(new Size(0.1, 1), new Point(xFocus, 0)); 
 
             var tMin = new DateTime(1950, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -324,6 +356,11 @@ namespace DMI.Data.Studio.ViewModel
 
             ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.PropertyChanged += (s, e) =>
             {
+                if (ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object == null)
+                {
+                    return;
+                }
+
                 var timeWindow = TimeSpan.FromDays(365);
                 var utcNow = DateTime.UtcNow;
                 var tFocus = utcNow.Date - timeWindow / 2;
@@ -387,6 +424,8 @@ namespace DMI.Data.Studio.ViewModel
 
             //DrawRoughOutlineOfDenmarkOnMap();
             DrawMapOfDenmark();
+
+            SelectedDetailTabIndex = 0; 
 
             _application.Logger?.WriteLine(LogMessageCategory.Information, "DMI.Data.Studio.UI.WPF started up");
         }

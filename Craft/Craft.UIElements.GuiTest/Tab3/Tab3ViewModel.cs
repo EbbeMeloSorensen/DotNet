@@ -28,6 +28,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         private double _y1 = 1.0;
 
         private bool _windMillInHouseDrawingsRotates;
+        private bool _allowROISelectionForGeometryEditorViewModel1;
         private double _worldWindowLimitLeftForGeometryEditorViewModel1;
         private double _worldWindowLimitRightForGeometryEditorViewModel1;
         private double _worldWindowLimitTopForGeometryEditorViewModel1;
@@ -79,6 +80,22 @@ namespace Craft.UIElements.GuiTest.Tab3
             set
             {
                 _windMillInHouseDrawingsRotates = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool AllowROISelectionForGeometryEditorViewModel1
+        {
+            get { return _allowROISelectionForGeometryEditorViewModel1; }
+            set
+            {
+                _allowROISelectionForGeometryEditorViewModel1 = value;
+
+                if (GeometryEditorViewModel1 != null)
+                {
+                    GeometryEditorViewModel1.SelectRegionPossible = _allowROISelectionForGeometryEditorViewModel1;
+                }
+
                 RaisePropertyChanged();
             }
         }
@@ -271,6 +288,9 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         public Tab3ViewModel()
         {
+            WindMillInHouseDrawingsRotates = false;
+            AllowROISelectionForGeometryEditorViewModel1 = true;
+
             var worldWindowFocus = new Point(
                 (_x1 + _x0) / 2,
                 (_y1 + _y0) / 2);
@@ -666,7 +686,7 @@ namespace Craft.UIElements.GuiTest.Tab3
         {
             GeometryEditorViewModel1 = new GeometryEditorViewModel
             {
-                SelectRegionPossible = true,
+                SelectRegionPossible = AllowROISelectionForGeometryEditorViewModel1,
                 //SelectedRegionLimitedVertically = false
                 SelectedRegionLimitedVertically = true
             };

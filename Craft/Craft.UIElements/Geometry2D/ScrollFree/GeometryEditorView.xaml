@@ -323,7 +323,7 @@
                             RelativeSource={RelativeSource AncestorType=UserControl}}"/>
             </Rectangle.RenderTransform>
             <Rectangle.Visibility>
-                <Binding Path="SelectedRegionVisible" Converter="{StaticResource BooleanToVisibilityConverter}"/>
+                <Binding Path="SelectRegionPossible" Converter="{StaticResource BooleanToVisibilityConverter}"/>
             </Rectangle.Visibility>
         </Rectangle>
 

@@ -15,9 +15,13 @@ Done:
   Den trækker i øvrigt indtil videre kun temp_dry. Det er mest relevant at kigge på de aktive synopstationer som f.eks. Gedser (6149)
 * Den feature, der viser smalle gule bjælker for hvornår en station har foretaget målinger, skal basere sig på et DMI.ObsDB
   plugin og ikke på et file repo
+* Man skal kun kunne vælge én station i stationslisten for statdb
 
 In progress:
 * Der skal være mulighed for at undlade at opdatere tidsserie viewet
+* Der skal være support for flere parametre end bare precip_10min eller temp_dry
+* Der skal være en filter-setting, der muliggøt udtræk af netop de stationer, der indgår i nedbørsberegningerne
+* Der skal være mulighed for at de stationer, der fremsøges i sms, ledes direkte over i listen over stationer i statdb, så man ikke skal "plukke" dem
 * Vis forskellen i position med en lille label, når man i det nye kronologiske view skifter til en ny position
 * Fix det issue, der er med at den tilsyneladende ikke respekterer, når man sætter WorldWindowBottomRightLimit sent
   - kan du reproducere det i Craft.GuiTest?

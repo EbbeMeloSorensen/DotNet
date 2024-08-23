@@ -45,19 +45,22 @@
                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="Condition Classification" IsCheckable="True"
-                          IsChecked="{Binding ClassifyRecordsWithCondition}"/>
-                <MenuItem Header="Operational Time Intervals" IsCheckable="True"
-                          IsChecked="{Binding IncludeOperationIntervalBars}"/>
-                <MenuItem Header="Transaction Time Intervals" IsCheckable="True"
-                          IsChecked="{Binding IncludeTransactionTimeIntervalBars}"/>
-                <MenuItem Header="Observation Time Intervals" IsCheckable="True"
-                          IsChecked="{Binding IncludeObservationIntervalBars}"/>
-                <Separator/>
                 <MenuItem Header="SMS stations" IsCheckable="True"
                           IsChecked="{Binding ShowSMSDBList}"/>
                 <MenuItem Header="StatDB stations" IsCheckable="True"
                           IsChecked="{Binding ShowStatDBList}"/>
+                <Separator/>
+                <MenuItem Header="Operational Time Intervals" IsCheckable="True"
+                          IsChecked="{Binding IncludeOperationIntervalBars}"/>
+                <MenuItem Header="Observation Time Intervals" IsCheckable="True"
+                          IsChecked="{Binding IncludeObservationIntervalBars}"/>
+                <MenuItem Header="Transaction Time Intervals" IsCheckable="True"
+                          IsChecked="{Binding IncludeTransactionTimeIntervalBars}"/>
+                <MenuItem Header="Detailed Time Series" IsCheckable="True"
+                          IsChecked="{Binding IncludeDetailedTimeSeriesView}"/>
+                <!--<Separator/>-->
+                <!--<MenuItem Header="Condition Classification" IsCheckable="True"
+                          IsChecked="{Binding ClassifyRecordsWithCondition}"/>-->
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="About" 
@@ -101,7 +104,8 @@
                 <uiElementsStatDB:StationListView DataContext="{Binding StationListViewModel}"/>
             </Grid>
 
-            <TabControl Grid.Row="0" Grid.Column="2" SelectedIndex="{Binding SelectedOveralTabIndex}">
+            <TabControl Grid.Row="0" Grid.Column="2"
+                        SelectedIndex="{Binding SelectedOveralTabIndex}">
                 <TabItem Header="Selected Records">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -129,12 +133,14 @@
                         <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Margin="2" 
                                       HorizontalAlignment="Stretch" Height="2" Background="Gray"/>
 
-                        <TabControl Grid.Row="1" SelectedIndex="1">
+                        <TabControl Grid.Row="1" 
+                                    SelectedIndex="{Binding SelectedDetailTabIndex}">
                             <TabItem Header="Station Properties">
                                 <uiElementsSMS:StationInformationDetailsView 
                                     DataContext="{Binding StationInformationDetailsViewModel}"/>
                             </TabItem>
-                            <TabItem Header="Time Series">
+                            <TabItem Header="Time Series"
+                                     Visibility="{Binding IncludeDetailedTimeSeriesView, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <scrollFree:CoordinateSystemView 
                                     DataContext="{Binding TimeSeriesViewModel.ScatterChartViewModel}" />
                             </TabItem>

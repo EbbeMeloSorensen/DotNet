@@ -34,7 +34,9 @@
                                                        DataContext="{Binding GeometryEditorViewModel1}"/>
                         <StackPanel Grid.Row="1" Grid.Column="0">
                             <CheckBox Content="Windmill rotates" 
-                                  IsChecked="{Binding WindMillInHouseDrawingsRotates}"/>
+                                      IsChecked="{Binding WindMillInHouseDrawingsRotates}"/>
+                            <CheckBox Content="Allow ROI selection"
+                                      IsChecked="{Binding AllowROISelectionForGeometryEditorViewModel1}"/>
                             <Grid Margin="5">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>

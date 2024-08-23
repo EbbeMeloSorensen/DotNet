@@ -34,6 +34,8 @@ namespace DMI.Data.Studio.ViewModel
             set => _logger = value;
         }
 
+        public bool Active { get; set; }
+
         public Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel ScatterChartViewModel { get; set; }
 
         public TimeSeriesViewModel(
@@ -123,7 +125,7 @@ namespace DMI.Data.Studio.ViewModel
 
         private void UpdateCurve()
         {
-            if (_t1 <= _t0)
+            if (!Active || _t1 <= _t0)
             {
                 return;
             }

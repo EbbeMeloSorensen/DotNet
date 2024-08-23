@@ -33,7 +33,7 @@
         </Expander>
 
         <ListBox Grid.Row="3" Margin="1" x:Name="StationsListBox" 
-                 SelectionMode="Extended" DisplayMemberPath="DisplayText" 
+                 SelectionMode="Single" DisplayMemberPath="DisplayText" 
                  ItemsSource="{Binding StationViewModels}">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="SelectionChanged">
