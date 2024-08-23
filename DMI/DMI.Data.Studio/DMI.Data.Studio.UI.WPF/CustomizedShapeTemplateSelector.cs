@@ -15,6 +15,8 @@ namespace DMI.Data.Studio.UI.WPF
 
             return item switch
             {
+                LightGreenBar => element.FindResource("LightGreenBar") as DataTemplate,
+                LightRedBar => element.FindResource("LightRedBar") as DataTemplate,
                 GrayBar => element.FindResource("GrayBar") as DataTemplate,
                 RedBar => element.FindResource("RedBar") as DataTemplate,
                 OrangeBar => element.FindResource("OrangeBar") as DataTemplate,

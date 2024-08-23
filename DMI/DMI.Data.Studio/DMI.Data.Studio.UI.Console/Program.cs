@@ -13,12 +13,14 @@ namespace DMI.Data.Studio.UI.Console
                     Die,
                     Lunch,
                     Extract,
-                    Intervals>(args)
+                    Intervals,
+                    Stations>(args)
                 .MapResult(
                     (Die options) => RollADie(options),
                     (Lunch options) => MakeLunch(options),
                     (Extract options) => Extract(options),
                     (Intervals options) => ExtractObservationIntervals(options),
+                    (Stations options) => ExtractStations(options),
                     errs => Task.FromResult(0));
         }
 
@@ -109,6 +111,28 @@ namespace DMI.Data.Studio.UI.Console
 
             System.Console.WriteLine("\nDone");
             System.Console.WriteLine($"\nOperational intervals: {result.Count}");
+        }
+
+        private static async Task ExtractStations(
+            Stations options)
+        {
+            System.Console.Write("Extracting stations...\nProgress: ");
+
+            var result = await GetApplication().ExtractStations(
+                (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+
+            System.Console.WriteLine($"\n{result.Count} Stations:");
+
+            foreach (var stationID in result)
+            {
+                System.Console.WriteLine($"  {stationID}");
+            }
         }
 
         private static Application.Application GetApplication()

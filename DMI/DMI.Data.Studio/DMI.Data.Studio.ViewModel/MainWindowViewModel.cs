@@ -797,7 +797,7 @@ namespace DMI.Data.Studio.ViewModel
                                     
                                     if (contained)
                                     {
-                                        bar2 = new GreenBar();
+                                        bar2 = new LightGreenBar();
                                     }
                                     else if (outside)
                                     {
@@ -805,15 +805,17 @@ namespace DMI.Data.Studio.ViewModel
                                     }
                                     else
                                     {
-                                        bar2 = new RedBar();
+                                        bar2 = new LightRedBar();
                                     }
 
                                     bar2.Point = new PointD(xStartInterval + (xEndInterval - xStartInterval) / 2, y);
                                     bar2.Width = xEndInterval - xStartInterval;
                                     bar2.Height = barHeight * barHeightRatio;
 
-
-                                    ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, bar2);
+                                    if (!(bar2 is OrangeBar))
+                                    {
+                                        ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, bar2);
+                                    }
 
                                     leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item1 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
                                     right = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item2 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
@@ -1161,6 +1163,8 @@ namespace DMI.Data.Studio.ViewModel
             {
                 parameter = "precip_past6h";
             }
+
+            parameter = "precip_past10min";
 
             var intervals = await _application.ExtractObservationIntervals(
                 nanoqStationId,

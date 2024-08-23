@@ -119,8 +119,11 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                 {
                     conn.Open();
 
+                    //var basisTable = "temp_wind_radiation";
+                    var basisTable = "precip_hum_pressure";
+
                     var query = $"SELECT \"timeobs\", \"{paramId}\" " +
-                        $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"temp_wind_radiation_{year}\" " +
+                        $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{basisTable}_{year}\" " +
                         $"WHERE statid = {statId} " +
                         "AND best = true";
 

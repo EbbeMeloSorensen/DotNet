@@ -83,6 +83,36 @@
         </Canvas>
     </DataTemplate>
 
+    <DataTemplate x:Key="LightGreenBar">
+        <Canvas>
+            <Rectangle Fill="LightGreen" 
+                       Stroke="Black"
+                       Width="{Binding Width}" 
+                       Height="{Binding Height}">
+                <Rectangle.RenderTransform>
+                    <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </Canvas>
+    </DataTemplate>
+
+    <DataTemplate x:Key="LightRedBar">
+        <Canvas>
+            <Rectangle Fill="Red" 
+                       Stroke="Black"
+                       Width="{Binding Width}" 
+                       Height="{Binding Height}">
+                <Rectangle.RenderTransform>
+                    <MatrixTransform Matrix="{Binding 
+                            Path=DataContext.TransformationMatrix, 
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </Canvas>
+    </DataTemplate>
+
     <DataTemplate x:Key="TransactionTimeIntervalLabel">
         <Grid>
             <TextBlock Text="{Binding Text}" 

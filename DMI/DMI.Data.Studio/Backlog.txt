@@ -17,6 +17,8 @@ Done:
   plugin og ikke på et file repo
 
 In progress:
+* Der skal være mulighed for at undlade at opdatere tidsserie viewet
+* Vis forskellen i position med en lille label, når man i det nye kronologiske view skifter til en ny position
 * Fix det issue, der er med at den tilsyneladende ikke respekterer, når man sætter WorldWindowBottomRightLimit sent
   - kan du reproducere det i Craft.GuiTest?
 * Rund det nye Chronology2 view af, så det fuldt og helt kan erstatte det gamle

@@ -87,6 +87,8 @@ namespace DMI.Data.Studio.ViewModel
             System.ComponentModel.PropertyChangedEventArgs e)
         {
             ScatterChartViewModel.GeometryEditorViewModel.ClearPolylines();
+            ScatterChartViewModel.GeometryEditorViewModel.ClearPoints();
+            ScatterChartViewModel.GeometryEditorViewModel.ClearShapes();
 
             var stations = sender as ObjectCollection<Station>;
 
@@ -107,6 +109,8 @@ namespace DMI.Data.Studio.ViewModel
             WorldWindowUpdatedEventArgs e)
         {
             ScatterChartViewModel.GeometryEditorViewModel.ClearPolylines();
+            ScatterChartViewModel.GeometryEditorViewModel.ClearPoints();
+            ScatterChartViewModel.GeometryEditorViewModel.ClearShapes();
 
             var x0 = Math.Floor(e.WorldWindowUpperLeft.X);
             var x1 = Math.Ceiling(e.WorldWindowUpperLeft.X + e.WorldWindowSize.Width);
@@ -158,8 +162,10 @@ namespace DMI.Data.Studio.ViewModel
                     return;
                 }
 
+                var parameter = "precip_past10min";
+
                 var timeSeries = observingFacility.TimeSeries
-                    .Where(_ => _.ParamId == "temp_dry")
+                    .Where(_ => _.ParamId == parameter)
                     .SingleOrDefault();
 
                 //Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
@@ -186,6 +192,12 @@ namespace DMI.Data.Studio.ViewModel
 
                 var points = new List<PointD>();
 
+                var binWidth = 0.1;
+                var currentBinStart = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(_t0.Date);
+                var currentBinEnd = currentBinStart + binWidth;
+                var observationsInCurrentBin = 0;
+                var currentSum = 0.0;
+
                 foreach (var observation in timeSeries.Observations)
                 {
                     var t = observation.Time;
@@ -193,11 +205,38 @@ namespace DMI.Data.Studio.ViewModel
                     // Find the x coordinate that corresponds to the current time
                     var x = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(t);
 
+                    if (x > currentBinEnd && observationsInCurrentBin > 0)
+                    {
+                        // We're done with a bin and can draw it
+
+                        var currentAverage = currentSum / observationsInCurrentBin;
+
+                        ScatterChartViewModel.GeometryEditorViewModel.AddShape(1, new GreenBar
+                        {
+                            Point = new PointD((currentBinStart + currentBinEnd) / 2, currentAverage / 2),
+                            Width = binWidth,
+                            Height = currentAverage
+                        });
+
+                        observationsInCurrentBin = 0;
+                        currentSum = 0.0;
+                    }
+
+                    while (x > currentBinEnd)
+                    {
+                        currentBinStart += binWidth;
+                        currentBinEnd += binWidth;
+                    }
+
+                    observationsInCurrentBin++;
+                    currentSum += observation.Value;
+
                     // Add the point to the polyline
-                    points.Add(new PointD(x, observation.Value));
+                    //points.Add(new PointD(x, observation.Value));
+                    //ScatterChartViewModel.GeometryEditorViewModel.AddPoint(new PointD(x, observation.Value), 5, _curveBrush);
                 }
 
-                ScatterChartViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
+                //ScatterChartViewModel.GeometryEditorViewModel.AddPolyline(points, _curveThickness, _curveBrush);
             }
         }
     }

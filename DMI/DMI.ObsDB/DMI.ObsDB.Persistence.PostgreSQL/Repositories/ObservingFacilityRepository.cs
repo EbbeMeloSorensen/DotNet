@@ -115,18 +115,23 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
                 {
                     conn.Open();
 
+                    //var basisTable = "temp_wind_radiation";
+                    var basisTable = "precip_hum_pressure";
+                    //var parameter = "temp_dry";
+                    var parameter = "precip_past10min";
+
                     var query = $"SELECT DISTINCT(\"statid\") " +
-                        $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"temp_wind_radiation_{year}\" " +
+                        $"FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{basisTable}_{year}\" " +
                         $"WHERE statid = {id} " +
-                        "AND temp_dry is not null";
+                        $"AND {parameter} is not null";
 
                     using (var cmd = new NpgsqlCommand(query, conn))
                     using (var reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read())
+                        if (reader.Read() || true)
                         {
                             observingFacility.TimeSeries.Add(
-                                TimeSeriesRepository.GenerateTimeSeries(id, "temp_dry")
+                                TimeSeriesRepository.GenerateTimeSeries(id, parameter)
                             );
 
                             break; // Sikr lige at du ikke forårsager et leak på denne måde

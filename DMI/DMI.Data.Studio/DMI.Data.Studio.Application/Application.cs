@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -361,19 +362,60 @@ namespace DMI.Data.Studio.Application
                     Directory.CreateDirectory(@"C:\Data\Stations");
                 }
 
-                using (var streamWriter = new StreamWriter(cacheName2))
+                if (true)
+                {
+                    using (var streamWriter = new StreamWriter(cacheName2))
+                    {
+                        foreach (var interval in intervals)
+                        {
+                            var t1 = interval.Item1;
+                            var t2 = interval.Item2;
+
+                            WriteInterval(streamWriter, t1, t2);
+                            streamWriter.WriteLine();
+
+                            result.Add(new Tuple<DateTime, DateTime>(
+                                new DateTime(t1.Year, t1.Month, t1.Day, t1.Hour, t1.Minute, t1.Second),
+                                new DateTime(t2.Year, t2.Month, t2.Day, t2.Hour, t2.Minute, t2.Second)));
+                        }
+                    }
+                }
+                else
                 {
                     foreach (var interval in intervals)
                     {
                         var t1 = interval.Item1;
                         var t2 = interval.Item2;
 
-                        WriteInterval(streamWriter, t1, t2);
-                        streamWriter.WriteLine();
-
                         result.Add(new Tuple<DateTime, DateTime>(
                             new DateTime(t1.Year, t1.Month, t1.Day, t1.Hour, t1.Minute, t1.Second),
                             new DateTime(t2.Year, t2.Month, t2.Day, t2.Hour, t2.Minute, t2.Second)));
+                    }
+                }
+
+                return result;
+            });
+        }
+
+        public async Task<List<string>> ExtractStations(
+            ProgressCallback progressCallback = null)
+        {
+            return await Task.Run(() =>
+            {
+                var result = new List<string>();
+
+                using (var unitOfWork = _unitOfWorkFactoryObsDB.GenerateUnitOfWork())
+                {
+                    try
+                    {
+                        var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+
+                        result.AddRange(observingFacilities.Select(_ => $"{_.StatId}"));
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // Just swallow the exception for now
+                        Logger?.WriteLine(LogMessageCategory.Debug, $"    Error trying to retrieve stations");
                     }
                 }
 
