@@ -16,11 +16,12 @@ using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Chronology;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Tasks;
-using DMI.SMS.Application;
 using DMI.SMS.ViewModel;
 using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
+using System.Configuration;
+using DMI.SMS.Application;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -30,7 +31,7 @@ namespace DMI.Data.Studio.ViewModel
 
         // Deprecated
         private Dictionary<SMS.Application.RowCondition, Brush> _rowConditionToBrushMap =
-            new Dictionary<SMS.Application.RowCondition, Brush>
+            new()
             {
                 { SMS.Application.RowCondition.Current, new SolidColorBrush(Colors.DarkGreen) },
                 { SMS.Application.RowCondition.OutDated, new SolidColorBrush(Colors.PaleGoldenrod) },
@@ -50,6 +51,7 @@ namespace DMI.Data.Studio.ViewModel
         private bool _includeDetailedTimeSeriesView;
         private bool _showSMSDBList;
         private bool _showStatDBList;
+        private bool _autoPopulateStatDBStationList;
         private RelayCommand<object> _openSettingsDialogCommand;
         private RelayCommand<object> _openAboutDialogCommand;
         private RelayCommand<object> _createStationInformationCommand;
@@ -181,6 +183,16 @@ namespace DMI.Data.Studio.ViewModel
             }
         }
 
+        public bool AutoPopulateStatDBStationList
+        {
+            get { return _autoPopulateStatDBStationList; }
+            set
+            {
+                _autoPopulateStatDBStationList = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public int SelectedOveralTabIndex
         {
             get { return _selectedOveralTabIndex; }
@@ -259,10 +271,6 @@ namespace DMI.Data.Studio.ViewModel
             _obsDBUnitOfWorkFactory = obsDBUnitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _logger = logger;
-
-            // Vi initialiserer det i de respektive plugins
-            //_smsDataProvider.Initialize(logger);
-            //_statDBDataProvider.Initialize(logger);
 
             _application = new Application.Application(
                 _smsDataProvider,
@@ -421,6 +429,7 @@ namespace DMI.Data.Studio.ViewModel
             _includeTransactionTimeIntervalBars = false;
             _showSMSDBList = true;
             _showStatDBList = true;
+            _autoPopulateStatDBStationList = true;
 
             //DrawRoughOutlineOfDenmarkOnMap();
             DrawMapOfDenmark();
@@ -446,6 +455,25 @@ namespace DMI.Data.Studio.ViewModel
 
             UpdateMapView();
             UpdateChronologyView();
+
+            if (AutoPopulateStatDBStationList &&
+                _selectedStationInformations.Count() == 1)
+            {
+                var rowCharacteristicsMap = StationInformationListViewModel.RowCharacteristicsMap.Object;
+
+                var selectedStationInformationRow = _selectedStationInformations.Single();
+                var rowCondition = rowCharacteristicsMap[selectedStationInformationRow.GdbArchiveOid].RowCondition;
+
+                if (rowCondition == RowCondition.Current &&
+                    selectedStationInformationRow.StationIDDMI.HasValue)
+                {
+                    // Initialize filter for StatDB station list
+                    StationListViewModel.FindStationsViewModel.StationIdFilter = $"{selectedStationInformationRow.StationIDDMI}";
+                    StationListViewModel.FindStationsCommand.Execute(null);
+
+                    // Todo: Programmatisk sæt selected station til noget i listen
+                }
+            }
         }
 
         private void SelectedStations_PropertyChanged(
@@ -641,8 +669,8 @@ namespace DMI.Data.Studio.ViewModel
                             {
                                 RectangleViewModel bar = rowCondition switch
                                 {
-                                    RowCondition.Deleted => new RedBar(),
-                                    RowCondition.OutDated => new YellowBar(),
+                                    SMS.Application.RowCondition.Deleted => new RedBar(),
+                                    SMS.Application.RowCondition.OutDated => new YellowBar(),
                                     _ => new GreenBar()
                                 };
 

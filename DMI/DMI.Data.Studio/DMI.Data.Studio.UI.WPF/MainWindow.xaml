@@ -62,6 +62,10 @@
                 <!--<MenuItem Header="Condition Classification" IsCheckable="True"
                           IsChecked="{Binding ClassifyRecordsWithCondition}"/>-->
             </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem Header="Auto populate Station List" IsCheckable="True"
+                          IsChecked="{Binding AutoPopulateStatDBStationList}"/>
+            </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="About" 
                           Command="{Binding OpenAboutDialogCommand}"

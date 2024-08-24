@@ -19,7 +19,11 @@ Done:
 * Fix det med at den risikerer at fucke med skalering i det nye kronologiske view
 
 In progress:
-* Frem for at bruge filteret i sms skal der være mulighed for at bruge en custom liste, der læses fra en settingsfil
+* Introducer et mode, hvor, når man vælge én station i sms, så dker der følgende for stationsliste viewet:
+  1) StationID Filteret initialiseres med samme stationsid
+  2) Find eksekveres
+  3) Hvis en af de stationer, der returneres, er det stationsid man forventer, så selectes den automatisk, således at det kronologiske view populeres
+* Frem for at bruge filteret for SMS skal der være mulighed for at bruge en custom liste, der læses fra en settingsfil
 * Der skal være mulighed for at undlade at opdatere tidsserie viewet
 * Der skal være support for flere parametre end bare precip_10min eller temp_dry
 * Der skal være en filter-setting, der muliggøt udtræk af netop de stationer, der indgår i nedbørsberegningerne

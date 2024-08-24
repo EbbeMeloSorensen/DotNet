@@ -10,28 +10,19 @@
              d:DataContext="{d:DesignInstance viewModel:FindStationsViewModel}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0">Bamse</Button>
-
-        <Grid Grid.Row="1" Background="Green">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Margin="1,1,3,1" Grid.Row="0" Grid.Column="0" Text="Station Id:"/>
-            <TextBox Margin="1,1,1,1" Grid.Row="0" Grid.Column="1" MinWidth="100"
-                     Text="{Binding StationIdFilter}"/>
-            <TextBlock Margin="1,1,3,1" Grid.Row="1" Grid.Column="0" Text="Country:"/>
-            <TextBox Margin="1,1,1,1" Grid.Row="1" Grid.Column="1" MinWidth="100"
-                     Text="{Binding CountryFilter}"/>
-        </Grid>
+        <TextBlock Margin="1,1,3,1" Grid.Row="0" Grid.Column="0" Text="Station Id:"/>
+        <TextBox Margin="1,1,1,1" Grid.Row="0" Grid.Column="1" MinWidth="100"
+                 Text="{Binding StationIdFilter}"/>
+        <TextBlock Margin="1,1,3,1" Grid.Row="1" Grid.Column="0" Text="Country:"/>
+        <TextBox Margin="1,1,1,1" Grid.Row="1" Grid.Column="1" MinWidth="100"
+                 Text="{Binding CountryFilter}"/>
     </Grid>
 </UserControl>
