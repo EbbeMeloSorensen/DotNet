@@ -16,8 +16,10 @@ Done:
 * Den feature, der viser smalle gule bjælker for hvornår en station har foretaget målinger, skal basere sig på et DMI.ObsDB
   plugin og ikke på et file repo
 * Man skal kun kunne vælge én station i stationslisten for statdb
+* Fix det med at den risikerer at fucke med skalering i det nye kronologiske view
 
 In progress:
+* Frem for at bruge filteret i sms skal der være mulighed for at bruge en custom liste, der læses fra en settingsfil
 * Der skal være mulighed for at undlade at opdatere tidsserie viewet
 * Der skal være support for flere parametre end bare precip_10min eller temp_dry
 * Der skal være en filter-setting, der muliggøt udtræk af netop de stationer, der indgår i nedbørsberegningerne
@@ -33,6 +35,7 @@ In progress:
 * Lav en kobling mellem det nye Chronology2 view og det andet tidsserie view, så man let kan inspicere en tidsserie
 
 Todo:
+* Man skal kunne se tidspunkt for hvor cursoren er i det kronologiske view
 * Lav et sqlite-plugin for StatDB
 * Omdøb ObsDB-serien til Wigos
 * Man skal kunne importere en json fil med statdb-data

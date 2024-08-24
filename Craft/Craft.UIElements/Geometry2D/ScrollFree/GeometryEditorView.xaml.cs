@@ -125,8 +125,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             }
             else if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
-                var xFactor = ViewModel.XAxisLocked ? 1.0 : 2.0;
-                var yFactor = ViewModel.YAxisLocked ? 1.0 : 2.0;
+                var xFactor = ViewModel.XAxisLocked || ViewModel.XScalingLocked ? 1.0 : 2.0;
+                var yFactor = ViewModel.YAxisLocked || ViewModel.YScalingLocked ? 1.0 : 2.0;
 
                 ViewModel.Scaling = new Size(
                     ViewModel.Scaling.Width * xFactor,
@@ -164,8 +164,8 @@ namespace Craft.UIElements.Geometry2D.ScrollFree
             
             if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
-                var xFactor = ViewModel.XAxisLocked ? 1.0 : 0.5;
-                var yFactor = ViewModel.YAxisLocked ? 1.0 : 0.5;
+                var xFactor = ViewModel.XAxisLocked || ViewModel.XScalingLocked ? 1.0 : 0.5;
+                var yFactor = ViewModel.YAxisLocked || ViewModel.YScalingLocked ? 1.0 : 0.5;
 
                 ViewModel.Scaling = new Size(
                     ViewModel.Scaling.Width * xFactor,
