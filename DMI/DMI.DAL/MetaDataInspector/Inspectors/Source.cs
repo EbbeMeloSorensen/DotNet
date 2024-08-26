@@ -1,5 +1,4 @@
 ﻿using MetaDataInspector.Domain.StatDB;
-using System.IO;
 
 namespace MetaDataInspector.Inspectors;
 

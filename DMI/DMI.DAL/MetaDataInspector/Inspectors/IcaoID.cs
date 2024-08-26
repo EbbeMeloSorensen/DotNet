@@ -6,13 +6,13 @@ namespace MetaDataInspector.Inspectors;
 
 public static class IcaoID
 {
-    public static void InspectIcaoID(
+    public static bool InspectIcaoID(
         this StreamWriter sw,
         StationInformation si,
         Station s,
         bool evaluate)
     {
-        var icaoIDMatches = false;
+        bool icaoIDMatches;
 
         if (string.IsNullOrEmpty(si.stationid_icao))
         {
@@ -37,5 +37,7 @@ public static class IcaoID
         }
 
         sw.PrintLine(sb.ToString());
+
+        return icaoIDMatches;
     }
 }

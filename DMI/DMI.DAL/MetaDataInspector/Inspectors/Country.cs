@@ -6,7 +6,7 @@ namespace MetaDataInspector.Inspectors;
 
 public static class Country
 {
-    public static void InspectCountry(
+    public static bool InspectCountry(
         this StreamWriter sw,
         StationInformation si,
         Station s,
@@ -37,5 +37,7 @@ public static class Country
         }
 
         sw.PrintLine(sb.ToString());
+
+        return countryMatches;
     }
 }
