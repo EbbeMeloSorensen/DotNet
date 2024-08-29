@@ -20,24 +20,15 @@ namespace DMI.StatDB.ViewModel
         private int _itemCount;
         private string _itemCountText;
 
-        private ObservableCollection<StationViewModel> _stationViewModels;
-
-        private RelayCommand _selectionChangedCommand;
         private RelayCommand<object> _findStationsCommand;
 
-        public FindStationsViewModel FindStationsViewModel { get; private set; }
+        public FindStationsViewModel FindStationsViewModel { get; }
 
-        public ObservableCollection<StationViewModel> StationViewModels
-        {
-            get { return _stationViewModels; }
-            set
-            {
-                _stationViewModels = value;
-                RaisePropertyChanged();
-            }
-        }
+        public ObservableCollection<StationViewModel> StationViewModels { get; }
 
-        public ObjectCollection<Station> SelectedStations { get; private set; }
+        public ObservableCollection<StationViewModel> SelectedStationViewModels { get; }
+
+        public ObjectCollection<Station> SelectedStations { get; }
 
         public int ItemCount
         {
@@ -61,10 +52,6 @@ namespace DMI.StatDB.ViewModel
             }
         }
 
-        public RelayCommand SelectionChangedCommand
-        {
-            get { return _selectionChangedCommand ?? (_selectionChangedCommand = new RelayCommand(SelectionChanged)); }
-        }
 
         public RelayCommand<object> FindStationsCommand
         {
@@ -82,7 +69,15 @@ namespace DMI.StatDB.ViewModel
             _applicationDialogService = applicationDialogService;
 
             FindStationsViewModel = new FindStationsViewModel();
+            StationViewModels = new ObservableCollection<StationViewModel>();
+            SelectedStationViewModels = new ObservableCollection<StationViewModel>();
+
             SelectedStations = new ObjectCollection<Station>();
+
+            SelectedStationViewModels.CollectionChanged += (s, e) =>
+            {
+                SelectedStations.Objects = SelectedStationViewModels.Select(_ => _.Station);
+            };
         }
 
         private void FindStations(
@@ -157,24 +152,14 @@ namespace DMI.StatDB.ViewModel
 
         private void UpdateStationViewModels()
         {
-            // Selected stations should stay selected
-            var idsOfSelectedStationInformations = new int[] { };
-
-            if (StationViewModels != null)
-            {
-                idsOfSelectedStationInformations = StationViewModels
-                    .Where(svm => svm.IsSelected)
-                    .Select(svm => svm.Station.StatID)
-                    .ToArray();
-            }
-
             //UpdateSorting();
 
-            StationViewModels = new ObservableCollection<StationViewModel>(_stations.Select(s => new StationViewModel
+            StationViewModels.Clear();
+
+            _stations.ToList().ForEach(station =>
             {
-                IsSelected = idsOfSelectedStationInformations.Contains(s.StatID),
-                Station = s
-            }));
+                StationViewModels.Add(new StationViewModel { Station = station });
+            });
         }
 
         private void UpdateItemCountText()
@@ -182,21 +167,6 @@ namespace DMI.StatDB.ViewModel
             ItemCountText = ItemCount == 1
                 ? "1 record"
                 : $"{ItemCount} records";
-        }
-
-        private void SelectionChanged()
-        {
-            UpdateStationSelection();
-        }
-
-        private void UpdateStationSelection()
-        {
-            var temp = _stationViewModels
-                .Where(s => s.IsSelected)
-                .Select(s => s.Station)
-                .ToList();
-
-            SelectedStations.Objects = temp;
         }
     }
 }

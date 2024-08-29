@@ -168,8 +168,8 @@ namespace DMI.Data.Studio.Application
             bool useCacheIfPossible,
             ProgressCallback progressCallback = null)
         {
-            //var outputFolderPath = @"C:\Data\Stations";
-            var outputFolderPath = @".";
+            var outputFolderPath = @"C:\Data\Stations";
+            //var outputFolderPath = @".";
 
             return await Task.Run(() =>
             {
