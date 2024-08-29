@@ -21,23 +21,14 @@ namespace PR.ViewModel
         private Sorting _sorting;
 
         public FindPeopleViewModel FindPeopleViewModel { get; }
-        private ObservableCollection<PersonViewModel> _peopleViewModels;
 
         private RelayCommand<object> _findPeopleCommand;
 
-        public ObservableCollection<PersonViewModel> PersonViewModels
-        {
-            get { return _peopleViewModels; }
-            set
-            {
-                _peopleViewModels = value;
-                RaisePropertyChanged();
-            }
-        }
+        public ObservableCollection<PersonViewModel> PersonViewModels { get; }
+
+        public ObservableCollection<PersonViewModel> SelectedPersonViewModels { get; }
 
         public ObjectCollection<Person> SelectedPeople { get; }
-
-        public ObservableCollection<PersonViewModel> SelectedPersonViewModels { get; set; }
 
         public Sorting Sorting
         {
@@ -71,6 +62,7 @@ namespace PR.ViewModel
 
             _people = new List<Person>();
 
+            PersonViewModels = new ObservableCollection<PersonViewModel>();
             SelectedPersonViewModels = new ObservableCollection<PersonViewModel>();
             SelectedPeople = new ObjectCollection<Person>();
 
@@ -110,8 +102,7 @@ namespace PR.ViewModel
                 }
             }
 
-            PersonViewModels = new ObservableCollection<PersonViewModel>(_people.Select(
-                p => new PersonViewModel { Person = p }));
+            UpdatePersonViewModels();
 
             SelectedPersonViewModels.Clear();
 
@@ -172,8 +163,12 @@ namespace PR.ViewModel
         {
             UpdateSorting();
 
-            PersonViewModels = new ObservableCollection<PersonViewModel>(_people.Select(
-                p => new PersonViewModel { Person = p }));
+            PersonViewModels.Clear();
+
+            _people.ToList().ForEach(person =>
+            {
+                PersonViewModels.Add(new PersonViewModel { Person = person });
+            });
         }
 
         private void FindPeople(object owner)
