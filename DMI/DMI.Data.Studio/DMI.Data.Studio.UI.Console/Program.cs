@@ -93,24 +93,29 @@ namespace DMI.Data.Studio.UI.Console
         private static async Task ExtractObservationIntervals(
             Intervals options)
         {
-            System.Console.Write("Extracting observation intervals...\nProgress: ");
+            var stationIDs = options.StatID.Split(',').ToList();
 
-            var result = await GetApplication().ExtractObservationIntervals(
-                options.StatID,
-                options.Parameter,
-                int.Parse(options.Tolerance),
-                int.Parse(options.FirstYear),
-                int.Parse(options.LastYear),
-                false,
-                (progress, nameOfSubtask) =>
+            foreach (var stationID in stationIDs)
             {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
+                System.Console.Write($"Extracting observation intervals for station {stationID}...\nProgress: ");
 
-            System.Console.WriteLine("\nDone");
-            System.Console.WriteLine($"\nOperational intervals: {result.Count}");
+                var result = await GetApplication().ExtractObservationIntervals(
+                    stationID,
+                    options.Parameter,
+                    int.Parse(options.Tolerance),
+                    int.Parse(options.FirstYear),
+                    int.Parse(options.LastYear),
+                    false,
+                    (progress, nameOfSubtask) =>
+                {
+                    System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                    System.Console.Write($"{progress:F2} %");
+                    return false;
+                });
+
+                System.Console.WriteLine("\nDone");
+                System.Console.WriteLine($"\nOperational intervals: {result.Count}");
+            }
         }
 
         private static async Task ExtractStations(

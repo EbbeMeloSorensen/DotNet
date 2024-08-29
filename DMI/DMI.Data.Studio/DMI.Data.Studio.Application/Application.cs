@@ -168,10 +168,13 @@ namespace DMI.Data.Studio.Application
             bool useCacheIfPossible,
             ProgressCallback progressCallback = null)
         {
+            //var outputFolderPath = @"C:\Data\Stations";
+            var outputFolderPath = @".";
+
             return await Task.Run(() =>
             {
                 var result = new List<Tuple<DateTime, DateTime>>();
-                var cacheName2 = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_intervals.txt");
+                var cacheName2 = Path.Combine(outputFolderPath, $"{nanoqStationId}_intervals.txt");
                 var file = new FileInfo(cacheName2);
 
                 if (file.Exists && useCacheIfPossible)
@@ -211,7 +214,7 @@ namespace DMI.Data.Studio.Application
                 // Filen er IKKE genereret, så generer den (så det går hurtigt næste gang) og returner listen
 
                 // I første omgang skal vi have fat i chunks. De er muligvis allerede lavet, og i så fald læser vi dem fra cachen
-                var chunkCacheName = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_chunks.txt");
+                var chunkCacheName = Path.Combine(outputFolderPath, $"{nanoqStationId}_chunks.txt");
 
                 var chunkFile = new FileInfo(chunkCacheName);
 
@@ -263,7 +266,7 @@ namespace DMI.Data.Studio.Application
 
                     for (var year = firstYear; year <= lastYear; year++)
                     {
-                        var chunkCacheNameForGivenYear = Path.Combine(@"C:\Data\Stations", $"{nanoqStationId}_chunks_{year}.txt");
+                        var chunkCacheNameForGivenYear = Path.Combine(outputFolderPath, $"{nanoqStationId}_chunks_{year}.txt");
                         var chunkFileForGivenYear = new FileInfo(chunkCacheNameForGivenYear);
 
                         Queue<Chunk> chunksForGivenYear;
@@ -323,7 +326,7 @@ namespace DMI.Data.Studio.Application
 
                 WriteChunksFile(chunkCacheName, new List<int>(), chunks);
 
-                var dir = new DirectoryInfo(@"C:\Data\Stations");
+                var dir = new DirectoryInfo(outputFolderPath);
                 foreach (var file2 in dir.EnumerateFiles($"{nanoqStationId}_chunks_*.txt"))
                 {
                     file2.Delete();
@@ -357,9 +360,9 @@ namespace DMI.Data.Studio.Application
                     intervals.Add(new Tuple<DateTime, DateTime>(startTime, endTime));
                 }
 
-                if (!Directory.Exists(@"C:\Data\Stations"))
+                if (!Directory.Exists(outputFolderPath))
                 {
-                    Directory.CreateDirectory(@"C:\Data\Stations");
+                    Directory.CreateDirectory(outputFolderPath);
                 }
 
                 if (true)

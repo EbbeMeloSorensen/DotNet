@@ -31,7 +31,15 @@ var stationInformations = SMS.RetrieveStationInformations(
     includeSVKStations,
     includePluvioStations);
 
+var testStations = new List<int>{5126, 5903, 5904, 6202};
+
+// 5904 (Tranebjerg Syd - Synop) Test ifølge Frans
+// 6202 (Bygholm Landbrugsskole - Synop) Test ifølge Frans
+// 6091 (Sønderho - Synop)
+// 6020 (Horns Rev C - Synop) - Ikke interessant for hydrologerne
+
 var missingStations = 0;
+var multipleStationsInStatDB = 0;
 var nameMismatches = 0;
 var statusMismatches = 0;
 var countryMismatches = 0;
@@ -57,18 +65,45 @@ foreach (var si in stationInformations)
 
     // Identify the Station in statdb that matches the stationinformation
     var matchingStations = stations.Where(_ => _.statid / 100 == si.stationid_dmi);
-    var matchingStationCount = matchingStations.Count();
 
-    if (matchingStationCount == 0)
+    if (matchingStations.Count() == 0)
     {
-        sw.PrintLine("NO MATCHING STATION IN STATDB");
-        missingStations++;
+        if (si.stationid_dmi.HasValue && testStations.Contains(si.stationid_dmi.Value))
+        {
+            // Special case: Vestervig Test which is a test station that should not be in statdb
+            sw.PrintLine("This is a test station that should not be in statdb");
+        }
+        else
+        {
+            sw.PrintLine("NO MATCHING STATION IN STATDB");
+            missingStations++;
+        }
     }
-    else if (matchingStationCount > 1)
+    else if (matchingStations.Count() > 1)
     {
-        sw.PrintLine("MULTIPLE MATCHING STATIONS IN STATDB");
+        if ($"{matchingStations.First().statid}".Substring(0, 4) == "6116")
+        {
+            // Special case: Store Jyndevad which has been bumped
+            matchingStations = matchingStations.Where(_ => _.statid == 611601);
+        }
+        else if ($"{matchingStations.First().statid}".Substring(0, 4) == "6051")
+        {
+            // Special case: Vestervig which has been bumped
+            matchingStations = matchingStations.Where(_ => _.statid == 605101);
+        }
+        else if ($"{matchingStations.First().statid}".Substring(0, 4) == "5343")
+        {
+            // Special case: Holsted that has the same base station id (excluding postfix) as Lund in Sweden
+            matchingStations = matchingStations.Where(_ => _.statid == 534320);
+        }
+        else
+        {
+            sw.PrintLine("MULTIPLE MATCHING STATIONS IN STATDB");
+            multipleStationsInStatDB++;
+        }
     }
-    else
+
+    if (matchingStations.Count() == 1)
     {
         var s = matchingStations.Single();
 
@@ -93,41 +128,42 @@ foreach (var si in stationInformations)
 sw.PrintLine("Summary:");
 sw.PrintLine("");
 sw.PrintLine($"  Stations inspected in SMS: {stationInformations.Count(),4}");
-sw.PrintLine($"          Missing in statdb: {missingStations,4}");
+sw.PrintLine($"                         Missing in statdb: {missingStations,4}");
+sw.PrintLine($"      Multiple matching stations in statdb: {multipleStationsInStatDB,4}");
 
 if (evaluateNames)
 {
-    sw.PrintLine($"            Name mismatches: {nameMismatches,4}");
+    sw.PrintLine($"                           Name mismatches: {nameMismatches,4}");
 }
 
 if (evaluateStatuses)
 {
-    sw.PrintLine($"          Status mismatches: {statusMismatches,4}");
+    sw.PrintLine($"                         Status mismatches: {statusMismatches,4}");
 }
 
 if (evaluateCountries)
 {
-    sw.PrintLine($"         Country mismatches: {countryMismatches,4}");
+    sw.PrintLine($"                        Country mismatches: {countryMismatches,4}");
 }
 
 if (evaluateIcaoIDs)
 {
-    sw.PrintLine($"         ICAO ID mismatches: {icaoIDMismatches,4}");
+    sw.PrintLine($"                        ICAO ID mismatches: {icaoIDMismatches,4}");
 }
 
 if (evaluateLatitudes) 
 {
-    sw.PrintLine($"        Latitude mismatches: {latitudeMismatches,4}"); 
+    sw.PrintLine($"                       Latitude mismatches: {latitudeMismatches,4}"); 
 }
 
 if (evaluateLongitudes) 
 {
-    sw.PrintLine($"       Longitude mismatches: {longitudeMismatches,4}");
+    sw.PrintLine($"                      Longitude mismatches: {longitudeMismatches,4}");
 }
 
 if (evaluateHeights)
 {
-    sw.PrintLine($"          Height mismatches: {heightMismatches,4}");
+    sw.PrintLine($"                         Height mismatches: {heightMismatches,4}");
 }
 
 sw.PrintLine("-----------------------------------------------------------------------------------------------------------------------------------------------");
