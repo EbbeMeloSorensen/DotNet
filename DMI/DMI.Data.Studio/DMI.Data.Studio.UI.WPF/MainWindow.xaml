@@ -122,15 +122,7 @@
                                 <scrollFree:GeometryEditorView DataContext="{Binding GeometryEditorViewModel}"/>
                             </TabItem>
                             <TabItem Header="Temporal">
-                                <!--<Grid>-->
-                                    <!--<Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>-->
-                                    
-                                    <!--<chronology:ChronologyView Grid.Row="0" DataContext="{Binding ChronologyViewModel}"/>-->
-                                    <scrollFree:CoordinateSystemView DataContext="{Binding ChronologyViewModel2}" />
-                                <!--</Grid>-->
+                                <scrollFree:CoordinateSystemView DataContext="{Binding ChronologyViewModel}" />
                             </TabItem>
                         </TabControl>
 

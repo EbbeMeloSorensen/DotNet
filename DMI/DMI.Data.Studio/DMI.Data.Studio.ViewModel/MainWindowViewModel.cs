@@ -13,7 +13,6 @@ using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
-using Craft.ViewModels.Chronology;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using Craft.ViewModels.Tasks;
 using DMI.SMS.ViewModel;
@@ -21,6 +20,7 @@ using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
 using DMI.SMS.Application;
+using Craft.ViewModels.Chronology;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -101,7 +101,7 @@ namespace DMI.Data.Studio.ViewModel
         public StationInformationDetailsViewModel StationInformationDetailsViewModel { get; private set; }
         public StationListViewModel StationListViewModel { get; private set; }
         public GeometryEditorViewModel GeometryEditorViewModel { get; private set; }
-        public Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel ChronologyViewModel2 { get; private set; }
+        public Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel ChronologyViewModel { get; private set; }
         public StatisticsViewModel StatisticsViewModel { get; private set; }
         public TimeSeriesViewModel TimeSeriesViewModel { get; private set; }
 
@@ -146,7 +146,7 @@ namespace DMI.Data.Studio.ViewModel
             set
             {
                 _includeDetailedTimeSeriesView = value;
-                ChronologyViewModel2.GeometryEditorViewModel.SelectRegionPossible = _includeDetailedTimeSeriesView;
+                ChronologyViewModel.GeometryEditorViewModel.SelectRegionPossible = _includeDetailedTimeSeriesView;
                 TimeSeriesViewModel.Active = _includeDetailedTimeSeriesView;
 
                 if (!_includeDetailedTimeSeriesView)
@@ -318,7 +318,7 @@ namespace DMI.Data.Studio.ViewModel
             var tFocus = DateTime.UtcNow - timeSpan / 2;
             var xFocus = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
 
-            ChronologyViewModel2 = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
+            ChronologyViewModel = new Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel(
                 new Point(xFocus, 0),
                 new Size(timeSpan.TotalDays, 1),
                 true,
@@ -338,23 +338,23 @@ namespace DMI.Data.Studio.ViewModel
                 ShowPanningButtons = false,
             };
 
-            ChronologyViewModel2.GeometryEditorViewModel.YScalingLocked = true;
-            ChronologyViewModel2.GeometryEditorViewModel.SelectRegionPossible = true;
-            ChronologyViewModel2.GeometryEditorViewModel.SelectedRegionLimitedVertically = false;
-            ChronologyViewModel2.GeometryEditorViewModel.SelectRegionPossible = IncludeDetailedTimeSeriesView;
-            ChronologyViewModel2.GeometryEditorViewModel.InitializeWorldWindow(new Size(0.1, 1), new Point(xFocus, 0)); 
+            ChronologyViewModel.GeometryEditorViewModel.YScalingLocked = true;
+            ChronologyViewModel.GeometryEditorViewModel.SelectRegionPossible = true;
+            ChronologyViewModel.GeometryEditorViewModel.SelectedRegionLimitedVertically = false;
+            ChronologyViewModel.GeometryEditorViewModel.SelectRegionPossible = IncludeDetailedTimeSeriesView;
+            ChronologyViewModel.GeometryEditorViewModel.InitializeWorldWindow(new Size(0.1, 1), new Point(xFocus, 0)); 
 
             var tMin = new DateTime(1950, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var tMax = new DateTime(2050, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var xMin = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMin);
             var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
 
-            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(xMin, 0);
-            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10000);
+            ChronologyViewModel.GeometryEditorViewModel.WorldWindowUpperLeftLimit = new Point(xMin, 0);
+            ChronologyViewModel.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, 10000);
 
-            ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.PropertyChanged += (s, e) =>
+            ChronologyViewModel.GeometryEditorViewModel.SelectedRegion.PropertyChanged += (s, e) =>
             {
-                if (ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object == null)
+                if (ChronologyViewModel.GeometryEditorViewModel.SelectedRegion.Object == null)
                 {
                     return;
                 }
@@ -364,7 +364,7 @@ namespace DMI.Data.Studio.ViewModel
                 var tFocus = utcNow.Date - timeWindow / 2;
                 var xFocus = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
 
-                var bb = ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object;
+                var bb = ChronologyViewModel.GeometryEditorViewModel.SelectedRegion.Object;
 
                 var focus = new Point(
                     bb.Left + bb.Width / 2,
@@ -443,8 +443,15 @@ namespace DMI.Data.Studio.ViewModel
             var stationInformations = sender as ObjectCollection<StationInformation>;
             _selectedStationInformations = stationInformations.Objects.ToList();
 
+            var logMessage = $"StationInformation selection changed ({_selectedStationInformations.Count} rows selected)";
+            _application.Logger?.WriteLine(LogMessageCategory.Information, logMessage);
+
             UpdateMapView();
-            UpdateChronologyView();
+
+            if (!AutoPopulateStatDBStationList)
+            {
+                UpdateChronologyView();
+            }
 
             if (AutoPopulateStatDBStationList &&
                 _selectedStationInformations.Count() == 1)
@@ -482,6 +489,10 @@ namespace DMI.Data.Studio.ViewModel
         {
             var stations = sender as ObjectCollection<Station>;
             _selectedStations = stations.Objects.ToList();
+
+            var logMessage = $"Station selection changed ({_selectedStations.Count} rows selected)";
+            _application.Logger?.WriteLine(LogMessageCategory.Information, logMessage);
+
             UpdateMapView();
             UpdateChronologyView();
         }
@@ -532,9 +543,19 @@ namespace DMI.Data.Studio.ViewModel
 
         private async void UpdateChronologyView()
         {
-            ChronologyViewModel2.GeometryEditorViewModel.ClearShapes();
-            ChronologyViewModel2.GeometryEditorViewModel.ClearLabels();
-            ChronologyViewModel2.CustomXAxisLabels.Object = new List<string>();
+            var shapesAdded = 0;
+
+            _application.Logger?.WriteLine(LogMessageCategory.Information, "Updating Chronological View");
+
+            var shapesBefore = ChronologyViewModel.GeometryEditorViewModel.ShapeViewModels.Count();
+
+            ChronologyViewModel.GeometryEditorViewModel.ClearShapes();
+            ChronologyViewModel.GeometryEditorViewModel.ClearLabels();
+            ChronologyViewModel.CustomXAxisLabels.Object = new List<string>();
+
+            var shapesAfter = ChronologyViewModel.GeometryEditorViewModel.ShapeViewModels.Count();
+
+            _application.Logger?.WriteLine(LogMessageCategory.Information, $"Shapes: {shapesBefore} -> {shapesAfter}");
 
             // Determine if there is anything to draw at all
             // (and thus whether the view should be visible)
@@ -565,6 +586,11 @@ namespace DMI.Data.Studio.ViewModel
             }
 
             var nStationInformations = 0;
+
+            if (AutoPopulateStatDBStationList)
+            {
+                stationInformationsIncluded = false;
+            }
 
             if (stationInformationsIncluded)
             {
@@ -632,7 +658,8 @@ namespace DMI.Data.Studio.ViewModel
                             bar.Width = xEnd - xStart;
                             bar.Height = barHeight;
 
-                            ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, bar);
+                            ChronologyViewModel.GeometryEditorViewModel.AddShape(1, bar);
+                            shapesAdded++;
 
                             customLabelsForNewView.Add(stationInformation.StationIDDMI.ToString());
                         }
@@ -663,14 +690,16 @@ namespace DMI.Data.Studio.ViewModel
                         var xStart = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(startTime);
                         var xEnd = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(endTime);
 
-                        ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, new GrayBar
+                        ChronologyViewModel.GeometryEditorViewModel.AddShape(1, new GrayBar
                         {
                             Point = new PointD(xStart + (xEnd - xStart) / 2, y),
                             Width = xEnd - xStart,
                             Height = barHeight
                         });
 
-                        ChronologyViewModel2.GeometryEditorViewModel.AddLabel(
+                        shapesAdded++;
+
+                        ChronologyViewModel.GeometryEditorViewModel.AddLabel(
                             $" {label}",
                             new PointD(xEnd, y),
                             100,
@@ -697,12 +726,14 @@ namespace DMI.Data.Studio.ViewModel
                                 var xStart = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(interval.Item1);
                                 var xEnd = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(interval.Item2);
 
-                                ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, new OrangeBar
+                                ChronologyViewModel.GeometryEditorViewModel.AddShape(1, new OrangeBar
                                 {
                                     Point = new PointD(xStart + (xEnd - xStart) / 2, y),
                                     Width = xEnd - xStart,
                                     Height = barHeight * barHeightRatio
                                 });
+
+                                shapesAdded++;
 
                                 var leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item1 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
                                 var right = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item2 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
@@ -743,7 +774,9 @@ namespace DMI.Data.Studio.ViewModel
                             Height = barHeight
                         };
 
-                        ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, bar);
+                        ChronologyViewModel.GeometryEditorViewModel.AddShape(1, bar);
+
+                        shapesAdded++;
 
                         customLabelsForNewView.Add(station.StatID.ToString());
 
@@ -792,7 +825,9 @@ namespace DMI.Data.Studio.ViewModel
 
                                     if (!(bar2 is OrangeBar))
                                     {
-                                        ChronologyViewModel2.GeometryEditorViewModel.AddShape(1, bar2);
+                                        ChronologyViewModel.GeometryEditorViewModel.AddShape(1, bar2);
+
+                                        shapesAdded++;
                                     }
 
                                     leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (interval.Item1 - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
@@ -808,12 +843,14 @@ namespace DMI.Data.Studio.ViewModel
                 }
             }
 
-            ChronologyViewModel2.CustomXAxisLabels.Object = customLabelsForNewView;
+            ChronologyViewModel.CustomXAxisLabels.Object = customLabelsForNewView;
 
             var tMax = new DateTime(2050, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var xMax = Craft.ViewModels.Geometry2D.ScrollFree.TimeSeriesViewModel.ConvertDateTimeToXValue(tMax);
 
-            ChronologyViewModel2.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, totalHeightOfMainPart + 40);
+            ChronologyViewModel.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, totalHeightOfMainPart + 40);
+
+            _application.Logger?.WriteLine(LogMessageCategory.Information, $"Shapes: 0 -> {shapesAdded}");
         }
 
         private void OpenSettingsDialog(
@@ -1242,7 +1279,7 @@ namespace DMI.Data.Studio.ViewModel
             var worldWindowUpperLeft = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowUpperLeft;
             var worldWindowSize = TimeSeriesViewModel.ScatterChartViewModel.GeometryEditorViewModel.WorldWindowSize;
 
-            ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object = new BoundingBox
+            ChronologyViewModel.GeometryEditorViewModel.SelectedRegion.Object = new BoundingBox
             {
                 Left = worldWindowUpperLeft.X,
                 Top = worldWindowUpperLeft.Y,
@@ -1253,7 +1290,7 @@ namespace DMI.Data.Studio.ViewModel
 
         private bool TimeViewsInSync()
         {
-            var bb1 = ChronologyViewModel2.GeometryEditorViewModel.SelectedRegion.Object;
+            var bb1 = ChronologyViewModel.GeometryEditorViewModel.SelectedRegion.Object;
 
             if (bb1 == null)
             {
