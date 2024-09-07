@@ -247,10 +247,15 @@ namespace DMI.Data.Studio.Application
                                     .SingleOrDefault();
                             }
                         }
-                        catch (InvalidOperationException)
+                        catch (System.Net.Sockets.SocketException exception)
                         {
                             // Just swallow the exception for now
-                            Logger?.WriteLine(LogMessageCategory.Debug, $"    Station {nanoqStationId} was not found in observation repository");
+                            Logger?.WriteLine(LogMessageCategory.Debug, $"    Station {nanoqStationId} was not found in observation repository {exception.Message}");
+                        }
+                        catch (InvalidOperationException exception)
+                        {
+                            // Just swallow the exception for now
+                            Logger?.WriteLine(LogMessageCategory.Debug, $"    Station {nanoqStationId} was not found in observation repository { exception.Message}");
                         }
                     }
 

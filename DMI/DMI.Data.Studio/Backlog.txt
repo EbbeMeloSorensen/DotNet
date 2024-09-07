@@ -17,14 +17,22 @@ Done:
   plugin og ikke på et file repo
 * Man skal kun kunne vælge én station i stationslisten for statdb
 * Fix det med at den risikerer at fucke med skalering i det nye kronologiske view
-
-In progress:
-* Introducer et mode, hvor, når man vælge én station i sms, så dker der følgende for stationsliste viewet:
+* Der skal være mulighed for at undlade at opdatere tidsserie viewet
+* Introducer et mode, hvor, når man vælge én station i sms, så sker der følgende for stationsliste viewet:
   1) StationID Filteret initialiseres med samme stationsid
   2) Find eksekveres
   3) Hvis en af de stationer, der returneres, er det stationsid man forventer, så selectes den automatisk, således at det kronologiske view populeres
+* Observationsbjælker skal kun vises for Position bjælker hentet fra statdb
+* Når man genererer gule bjælker, foregår det ved at der læses observationer for et år ad gangen. Observationerne samles i en kæmpe collection in memory,
+  som så fodres til en algoritme, der producerer en chunks fil - det går der for lang tid med. Det vil være bedre, hvis man genererede en chunks 
+  fil for hvert år og så sluttede af med at samle dem i en samlet chunks fil.
+
+In progress:
+* Der skal være mulighed for i Gant-viewet at vise hvor stort afstanden er mellem forskellige lokationer
+  - Tegn en label mellem position bjælker (ok)
+  - Pågældende label skal tegnes med en farve, som man selv vælger (det skal måske være en specialiseret label)
+
 * Frem for at bruge filteret for SMS skal der være mulighed for at bruge en custom liste, der læses fra en settingsfil
-* Der skal være mulighed for at undlade at opdatere tidsserie viewet
 * Der skal være support for flere parametre end bare precip_10min eller temp_dry
 * Der skal være en filter-setting, der muliggøt udtræk af netop de stationer, der indgår i nedbørsberegningerne
 * Der skal være mulighed for at de stationer, der fremsøges i sms, ledes direkte over i listen over stationer i statdb, så man ikke skal "plukke" dem
@@ -39,6 +47,9 @@ In progress:
 * Lav en kobling mellem det nye Chronology2 view og det andet tidsserie view, så man let kan inspicere en tidsserie
 
 Todo:
+* Der bør opereres med cancelling, hvis en bruger vælger en anden station mens den er i gang med at hente observationer for en af dem
+* Hvis man inspicerer en længere tidsperiode og derfor får flere tusinde observationer vist, så skal den ikke lave et punkt pr måling men hellere klumpe dem sammen somehow
+* Det skal vises anderledes, når der er et gap mellem målinger
 * Man skal kunne se tidspunkt for hvor cursoren er i det kronologiske view
 * Lav et sqlite-plugin for StatDB
 * Omdøb ObsDB-serien til Wigos

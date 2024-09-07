@@ -63,6 +63,9 @@ namespace DMI.Data.Studio.ViewModel
         private Brush _observationTimeIntervalBrush = new SolidColorBrush(Colors.Orange);
         private Brush _transactionTimeIntervalBrush = new SolidColorBrush(Colors.DarkSlateGray);
         private Brush _stationIdLabelBrush = new SolidColorBrush(Colors.Black);
+        private Brush _positionDifferenceLabelBackgroundBrushDefault = new SolidColorBrush(Colors.White);
+        private Brush _positionDifferenceLabelBackgroundBrushHighlight = new SolidColorBrush(Colors.Red);
+        private Brush _positionDifferenceLabelForegroundBrush = new SolidColorBrush(Colors.Black);
         private bool _classifyRecordsWithCondition;
         private readonly ObservableObject<bool> _observableForClassifyRecordsWithCondition;
         private int _selectedOveralTabIndex;
@@ -699,13 +702,15 @@ namespace DMI.Data.Studio.ViewModel
 
                         shapesAdded++;
 
-                        ChronologyViewModel.GeometryEditorViewModel.AddLabel(
-                            $" {label}",
-                            new PointD(xEnd, y),
-                            100,
-                            20,
-                            new PointD(50, 0),
-                            0.0);
+                        ChronologyViewModel.GeometryEditorViewModel.LabelViewModels.Add(new TransactionTimeIntervalLabel
+                        {
+                            Text = $" {label}",
+                            Point = new PointD(xEnd, -y),
+                            Width = 100,
+                            Height = 20,
+                            Shift = new PointD(50, 0),
+                            Opacity = 0.0
+                        });
                     }
 
                     if (IncludeObservationIntervalBars && false)
@@ -753,6 +758,10 @@ namespace DMI.Data.Studio.ViewModel
             {
                 foreach (var station in _selectedStations)
                 {
+                    var stationIndex = 0;
+
+                    Position previousPosition = null;
+
                     foreach (var position in station.Positions)
                     {
                         var startTime = position.StartTime;
@@ -779,6 +788,59 @@ namespace DMI.Data.Studio.ViewModel
                         shapesAdded++;
 
                         customLabelsForNewView.Add(station.StatID.ToString());
+
+                        if (previousPosition != null)
+                        {
+                            var labelText = "?";
+                            var labelWidth = 100;
+                            var labelBackgroundBrush = _positionDifferenceLabelBackgroundBrushDefault;
+
+                            if (previousPosition.Lat.HasValue &&
+                                previousPosition.Long.HasValue &&
+                                position.Lat.HasValue &&
+                                position.Long.HasValue)
+                            {
+                                var dx = position.Lat.Value - previousPosition.Lat.Value;
+                                var dy = position.Long.Value - previousPosition.Long.Value;
+
+                                // Using "Euclidean" distance for now
+                                var diff = Math.Sqrt(dx * dx + dy * dy);
+
+                                labelText = $"{diff:N10}";
+
+                                if (position.StartTime.Year == 2018 &&
+                                    position.StartTime.Month == 12 &&
+                                    position.StartTime.Day == 4 &&
+                                    position.StartTime.Hour == 10 &&
+                                    position.StartTime.Minute == 31 &&
+                                    position.StartTime.Second == 55 &&
+                                    position.StartTime == previousPosition.EndTime)
+                                {
+                                    //labelText += $" (sms launch 2018-12-04 10:31:55) Lat: {previousPosition.Lat} -> {position.Lat}, Long: {previousPosition.Long} -> {position.Long}";
+                                    //labelWidth = 1000;
+                                    labelText += $" (sms launch)";
+                                    labelWidth = 150;
+                                }
+                            }
+                            else
+                            {
+                                labelBackgroundBrush = _positionDifferenceLabelBackgroundBrushHighlight;
+                            }
+
+                            var labelViewModel = new PositionDifferenceLabel(
+                                labelBackgroundBrush,
+                                _positionDifferenceLabelForegroundBrush)
+                            {
+                                Text = labelText,
+                                Point = new PointD(xStart, -(y + barHeight / 2)),
+                                Width = labelWidth,
+                                Height = barHeight * 0.75,
+                                Shift = new PointD(0, 0),
+                                Opacity = 0.5
+                            };
+
+                            ChronologyViewModel.GeometryEditorViewModel.LabelViewModels.Add(labelViewModel);
+                        }
 
                         var leftOfBar = widthOfLaneLabelColumn + totalWidthOfMainPart * (startTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
                         var right = widthOfLaneLabelColumn + totalWidthOfMainPart * (endTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
@@ -837,6 +899,7 @@ namespace DMI.Data.Studio.ViewModel
                             }
                         }
 
+                        previousPosition = position;
                         timeIntervalBarCount++;
                         y -= barHeight;
                     }

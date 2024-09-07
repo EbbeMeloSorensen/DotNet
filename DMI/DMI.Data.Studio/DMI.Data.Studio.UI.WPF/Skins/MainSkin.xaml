@@ -130,4 +130,17 @@
         </Grid>
     </DataTemplate>
 
+    <DataTemplate x:Key="PositionDifferenceLabel">
+        <TextBlock Text="{Binding Text}"
+                   Width="{Binding Width}" 
+                   Height="{Binding Height}"
+                   Opacity="{Binding Opacity}"
+                   FontFamily="Segoe UI"
+                   FontSize="12.3"
+                   Background="{Binding BackgroundBrush}"
+                   Foreground="{Binding ForegroundBrush}"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"/>
+    </DataTemplate>
+
 </ResourceDictionary>
