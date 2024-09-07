@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj" />
     <ProjectReference Include="..\..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj" />
     <ProjectReference Include="..\DMI.SMS.Application\DMI.SMS.Application.csproj" />
+    <ProjectReference Include="..\DMI.SMS.Persistence\DMI.SMS.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

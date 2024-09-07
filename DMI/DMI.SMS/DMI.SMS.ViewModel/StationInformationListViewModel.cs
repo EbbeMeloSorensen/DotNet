@@ -11,6 +11,7 @@ using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
+using DMI.SMS.Persistence;
 
 namespace DMI.SMS.ViewModel
 {
@@ -36,7 +37,7 @@ namespace DMI.SMS.ViewModel
             "Wgs_long"
         };
 
-        private readonly IUIDataProvider _dataProvider;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private readonly ObservableObject<bool> _classifyRecordsWithCondition;
         private IList<StationInformation> _stationInformations;
@@ -137,11 +138,11 @@ namespace DMI.SMS.ViewModel
         }
 
         public StationInformationListViewModel(
-            IUIDataProvider dataProvider,
+            IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
             ObservableObject<bool> classifyRecordsWithCondition)
         {
-            _dataProvider = dataProvider;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _classifyRecordsWithCondition = classifyRecordsWithCondition;
 
@@ -162,9 +163,15 @@ namespace DMI.SMS.ViewModel
                 if (FindStationInformationsViewModel.ConditionFilteringInMemoryRequired ||
                     _classifyRecordsWithCondition.Object == true)
                 {
+                    List<StationInformation> records;
+
                     // We cannot make the database count,
                     // so we have to pull the entire dataset into memory and do the counting there
-                    var records = _dataProvider.GetAllStationInformations();
+                    using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                    {
+                        records = unitOfWork.StationInformations.GetAll().ToList();
+                    }
+
                     var localRowCharacteristicsMap = records.GenerateRowCharacteristicsMap();
 
                     // Nu skal du så til gengæld bruge det filter, der jo altså er.
@@ -183,7 +190,12 @@ namespace DMI.SMS.ViewModel
                     }
                     else
                     {
-                        records = _dataProvider.FindStationInformations(FindStationInformationsViewModel.FilterAsExpressionCollection());
+                        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                        {
+                            records = unitOfWork.StationInformations
+                                .Find(FindStationInformationsViewModel.FilterAsExpressionCollection())
+                                .ToList();
+                        }
                     }
 
                     records = records
@@ -194,12 +206,19 @@ namespace DMI.SMS.ViewModel
                 }
                 else
                 {
-                    return _dataProvider.CountStationInformations(FindStationInformationsViewModel.FilterAsExpressionCollection());
+                    using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                    {
+                        return unitOfWork.StationInformations.Count(FindStationInformationsViewModel
+                            .FilterAsExpressionCollection());
+                    }
                 }
             }
             else
             {
-                return _dataProvider.CountAllStationInformations();
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    return unitOfWork.StationInformations.CountAll();
+                }
             }
         }
 
@@ -214,7 +233,11 @@ namespace DMI.SMS.ViewModel
                 if (FindStationInformationsViewModel.ConditionFilteringInMemoryRequired ||
                     _classifyRecordsWithCondition.Object)
                 {
-                    result = _dataProvider.GetAllStationInformations();
+                    using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                    {
+                        result = unitOfWork.StationInformations.GetAll().ToList();
+                    }
+
                     localRowCharacteristicsMap = result.GenerateRowCharacteristicsMap();
 
                     // Nu skal du så til gengæld bruge det filter, der jo altså er
@@ -228,7 +251,12 @@ namespace DMI.SMS.ViewModel
                     }
                     else
                     {
-                        result = _dataProvider.FindStationInformations(FindStationInformationsViewModel.FilterAsExpressionCollection());
+                        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                        {
+                            result = unitOfWork.StationInformations
+                                .Find(FindStationInformationsViewModel.FilterAsExpressionCollection())
+                                .ToList();
+                        }
                     }
 
                     // Nu foretager vi så den filtrering, som skal ske i memory på basis af de row conditions, vi har i characteristics mappet
@@ -238,13 +266,23 @@ namespace DMI.SMS.ViewModel
                 }
                 else
                 {
-                    result = _dataProvider.FindStationInformations(FindStationInformationsViewModel.FilterAsExpressionCollection());
+                    using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                    {
+                        result = unitOfWork.StationInformations
+                            .Find(FindStationInformationsViewModel.FilterAsExpressionCollection())
+                            .ToList();
+                    }
+
                     localRowCharacteristicsMap = result.GenerateRowCharacteristicsMap();
                 }
             }
             else
             {
-                result = _dataProvider.GetAllStationInformations();
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    result = unitOfWork.StationInformations.GetAll().ToList();
+                }
+
                 localRowCharacteristicsMap = result.GenerateRowCharacteristicsMap();
             }
 

@@ -15,6 +15,7 @@ using Craft.ViewModels.Tasks;
 using DMI.SMS.Domain.Entities;
 using System.Diagnostics;
 using Craft.Logging;
+using DMI.SMS.Persistence;
 
 namespace DMI.SMS.ViewModel
 {
@@ -66,6 +67,7 @@ namespace DMI.SMS.ViewModel
 
         public MainWindowViewModel(
             Application.Application application,
+            IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService)
         {
             _application = application;
@@ -84,7 +86,7 @@ namespace DMI.SMS.ViewModel
             _observableForClassifyRecordsWithCondition.Object = true;
 
             StationInformationListViewModel = new StationInformationListViewModel(
-                _application.UIDataProvider,
+                unitOfWorkFactory,
                 applicationDialogService,
                 _observableForClassifyRecordsWithCondition);
 
