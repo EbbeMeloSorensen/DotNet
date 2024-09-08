@@ -6,7 +6,6 @@ using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
-using Craft.ViewModels.Chronology;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Application;
@@ -31,7 +30,6 @@ namespace DMI.StatDB.ViewModel
         }
 
         public StationListViewModel StationListViewModel { get; private set; }
-        public ChronologyViewModel ChronologyViewModel { get; private set; }
         public GeometryEditorViewModel GeometryEditorViewModel { get; private set; }
 
         public MainWindowViewModel(
@@ -48,8 +46,6 @@ namespace DMI.StatDB.ViewModel
                 applicationDialogService);
 
             StationListViewModel.SelectedStations.PropertyChanged += SelectedStations_PropertyChanged;
-
-            ChronologyViewModel = new ChronologyViewModel(new DateTime(2015, 1, 1), DateTime.UtcNow.TruncateToMilliseconds(), 50, 240);
 
             GeometryEditorViewModel = new GeometryEditorViewModel(-1);
             GeometryEditorViewModel.InitializeWorldWindow(new Size(120, 120), new Point(11, 55));
@@ -112,19 +108,6 @@ namespace DMI.StatDB.ViewModel
             var stations = sender as ObjectCollection<Station>;
 
             GeometryEditorViewModel.ClearPoints();
-            ChronologyViewModel.VerticalLineViewModels.Clear();
-            ChronologyViewModel.TimeIntervalBarViewModels.Clear();
-
-            if (stations == null || !stations.Objects.Any())
-            {
-                ChronologyViewModel.IsVisible = false;
-                return;
-            }
-
-            ChronologyViewModel.IsVisible = true;
-
-            // Count total number of position records
-            var nPositions = stations.Objects.Sum(station => station.Positions.Count);
 
             // Identify earliest time
             var startTimes = new List<DateTime>();
@@ -135,49 +118,6 @@ namespace DMI.StatDB.ViewModel
                 {
                     startTimes.Add(position.StartTime);
                 }
-            }
-
-            var earliestTime = new DateTime(1889, 1, 1);
-
-            if (startTimes.Any())
-            {
-                earliestTime = startTimes.Min();
-            }
-
-            var latestTime = DateTime.UtcNow.TruncateToMilliseconds();
-            var nYears = latestTime.Year - earliestTime.Year + 1;
-            var startTimeOfEntireInterval = new DateTime(earliestTime.Year, 1, 1);
-            var endTimeOfEntireInterval = new DateTime(latestTime.Year + 1, 1, 1);
-
-            var totalNumberOfDaysForEntireInterval = (endTimeOfEntireInterval - startTimeOfEntireInterval).TotalDays;
-
-            var widthOfLabelColumn = 50;
-            var widthPrYear = 120;
-            var heightOfHeader = 20;
-            var heightPrPositionRecord = 20;
-            var totalWidthOfMainPart = widthPrYear * nYears;
-            var totalHeightOfMainPart = heightPrPositionRecord * nPositions;
-            var imageWidth = widthOfLabelColumn + totalWidthOfMainPart;
-            var imageHeight = heightOfHeader + totalHeightOfMainPart;
-
-            ChronologyViewModel.ImageWidth = imageWidth;
-            ChronologyViewModel.ImageHeight = imageHeight;
-
-            // Initialize the vertical lines that will mark where the individual years start
-            var year = earliestTime.Year;
-            while (year < endTimeOfEntireInterval.Year)
-            {
-                var x = widthOfLabelColumn + totalWidthOfMainPart * (new DateTime(year, 1, 1) - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
-
-                ChronologyViewModel.VerticalLineViewModels.Add(new VerticalLineViewModel
-                {
-                    X = x,
-                    Header = year.ToString(),
-                    Height = imageHeight
-
-                });
-
-                year++;
             }
 
             // Initialize the time interval bars
@@ -195,32 +135,6 @@ namespace DMI.StatDB.ViewModel
 
                         GeometryEditorViewModel.AddPoint(point, 20, _pointBrush);
                     }
-
-                    //if (position.StartTime.HasValue)
-                    //{
-                        var startTime = position.StartTime;
-                        var endTime = DateTime.UtcNow.TruncateToMilliseconds();
-
-                        if (position.EndTime.HasValue &&
-                            position.EndTime.Value < endTime)
-                        {
-                            endTime = position.EndTime.Value;
-                        }
-
-                        var leftOfBar = widthOfLabelColumn + totalWidthOfMainPart * (startTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
-                        var right = widthOfLabelColumn + totalWidthOfMainPart * (endTime - startTimeOfEntireInterval).TotalDays / totalNumberOfDaysForEntireInterval;
-                        var width = right - leftOfBar;
-
-                        ChronologyViewModel.TimeIntervalBarViewModels.Add(new TimeIntervalBarViewModel
-                        {
-                            Label = station.StatID.ToString(),
-                            Top = heightOfHeader + positionCount * heightPrPositionRecord,
-                            LeftOfBar = leftOfBar,
-                            Width = width,
-                            Height = heightPrPositionRecord,
-                            Brush = new SolidColorBrush(Colors.Gray)
-                        });
-                    //}
 
                     positionCount++;
                 }

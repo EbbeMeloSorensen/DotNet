@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:DMI.StatDB.UI.WPF"
         xmlns:uiElements="clr-namespace:DMI.StatDB.UIElements;assembly=DMI.StatDB.UIElements"
         xmlns:geometry="clr-namespace:Craft.UIElements.Geometry2D;assembly=Craft.UIElements"
-        xmlns:chronology="clr-namespace:Craft.UIElements.Chronology;assembly=Craft.UIElements"
         xmlns:scrollFree="clr-namespace:Craft.UIElements.Geometry2D.ScrollFree;assembly=Craft.UIElements"
         mc:Ignorable="d"
         Title="{Binding MainWindowTitle}"
@@ -32,14 +31,7 @@
 
             <uiElements:StationListView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" DataContext="{Binding StationListViewModel}"/>
 
-            <TabControl Grid.Row="0" Grid.Column="1" SelectedIndex="1">
-                <TabItem Header="Temporal">
-                    <chronology:ChronologyView DataContext="{Binding ChronologyViewModel}"/>
-                </TabItem>
-                <TabItem Header="Geospatial">
-                    <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="1" DataContext="{Binding GeometryEditorViewModel}"/>
-                </TabItem>
-            </TabControl>
+            <scrollFree:GeometryEditorView Grid.Row="0" Grid.Column="1" DataContext="{Binding GeometryEditorViewModel}"/>
 
             <!--<local:StationInformationDetailsView Grid.Row="1" Grid.Column="1" DataContext="{Binding StationInformationDetailsViewModel}"/>-->
         </Grid>

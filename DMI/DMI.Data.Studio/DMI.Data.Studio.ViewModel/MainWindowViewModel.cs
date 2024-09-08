@@ -20,7 +20,6 @@ using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
 using DMI.SMS.Application;
-using Craft.ViewModels.Chronology;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -259,6 +258,7 @@ namespace DMI.Data.Studio.ViewModel
 
         // Parametrene her fås ved dependency injection
         public MainWindowViewModel(
+            SMS.Persistence.IUnitOfWorkFactory smsUnitOfWorkFactory,
             SMS.Application.IUIDataProvider smsDataProvider,
             StatDB.Application.IUIDataProvider statDBDataProvider,
             ObsDB.Persistence.IUnitOfWorkFactory obsDBUnitOfWorkFactory,
@@ -290,7 +290,7 @@ namespace DMI.Data.Studio.ViewModel
             TaskViewModel = new TaskViewModel();
 
             StationInformationListViewModel = new StationInformationListViewModel(
-                smsDataProvider, 
+                smsUnitOfWorkFactory, 
                 _applicationDialogService,
                 _observableForClassifyRecordsWithCondition);
 

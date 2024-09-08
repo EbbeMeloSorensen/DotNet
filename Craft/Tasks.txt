@@ -110,7 +110,6 @@ In progress:
 Todo:
 * Måske skal du have Undo/Redo historik på det at man ændrer selected region
 * Vis koordinater for ImageEditorView, som er under Tab3
-* Vis tidspunkt for ChronologyView
 * Du bør strømline det der med MinorWindowUpdate og MajorWindowUpdate. Der er brug for at identificere, at brugeren interagerer - pt er det jo sådan,
   at MajowUpdate sker af sig selv (når man er i det mode, hvor world window bevæger sig) og i den forbindelse skal man FORBLIVE i slide mode, men når
   der kommer en major update pga at man bruger musens rullehjul for at zoome, så skal den TRÆDE UD af slide mode.

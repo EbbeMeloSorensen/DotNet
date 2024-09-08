@@ -84,16 +84,8 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TabControl Grid.Row="0">
-                    <TabItem Header="Geospatial">
-                        <scrollFree:GeometryEditorView 
-                            DataContext="{Binding GeometryEditorViewModel}"/>
-                    </TabItem>
-                    <TabItem Header="Temporal">
-                        <uiElements:StationInformationCollectionView 
-                            DataContext="{Binding StationInformationCollectionViewModel}"/>
-                    </TabItem>
-                </TabControl>
+                <scrollFree:GeometryEditorView Grid.Row="0" 
+                    DataContext="{Binding GeometryEditorViewModel}"/>
 
                 <GridSplitter Grid.Row="0" 
                               VerticalAlignment="Bottom" 

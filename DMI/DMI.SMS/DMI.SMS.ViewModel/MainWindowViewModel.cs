@@ -60,7 +60,6 @@ namespace DMI.SMS.ViewModel
 
         public StationInformationListViewModel StationInformationListViewModel { get; }
         public StationInformationDetailsViewModel StationInformationDetailsViewModel { get; }
-        public StationInformationCollectionViewModel StationInformationCollectionViewModel { get; }
         public GeometryEditorViewModel GeometryEditorViewModel { get; }
         public TaskViewModel TaskViewModel { get; }
         public LogViewModel LogViewModel { get; }
@@ -96,16 +95,7 @@ namespace DMI.SMS.ViewModel
                 StationInformationListViewModel.SelectedStationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
 
-            StationInformationCollectionViewModel = new StationInformationCollectionViewModel(
-                unitOfWorkFactory,
-                _application.UIDataProvider,
-                StationInformationListViewModel.SelectedStationInformations,
-                StationInformationListViewModel.RowCharacteristicsMap);
-
             _classifyRecordsWithCondition = true;
-
-            StationInformationCollectionViewModel.ImageWidth = 1200;
-            StationInformationCollectionViewModel.ImageHeight = 900;
 
             StationInformationListViewModel.SelectedStationInformations.PropertyChanged += SelectedStationInformations_PropertyChanged;
 
