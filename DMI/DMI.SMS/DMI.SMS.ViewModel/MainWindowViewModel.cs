@@ -97,6 +97,7 @@ namespace DMI.SMS.ViewModel
                 StationInformationListViewModel.RowCharacteristicsMap);
 
             StationInformationCollectionViewModel = new StationInformationCollectionViewModel(
+                unitOfWorkFactory,
                 _application.UIDataProvider,
                 StationInformationListViewModel.SelectedStationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);

@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Media;
 using Craft.Utils;
 using Craft.ViewModels.Geometry2D.Scrolling;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Application;
-//using DMI.Utils;
+using DMI.SMS.Persistence;
 
 namespace DMI.SMS.ViewModel
 {
     public class StationInformationCollectionViewModel : ImageEditorViewModel
     {
         private IUIDataProvider _dataProvider;
+        private IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ObjectCollection<StationInformation> _selectedStationInformations;
         private readonly ObservableObject<Dictionary<int, RowCharacteristics>> _rowConditionMap;
         private IEnumerable<StationInformation> _stationInformations;
@@ -106,11 +107,13 @@ namespace DMI.SMS.ViewModel
         }
 
         public StationInformationCollectionViewModel(
+            IUnitOfWorkFactory unitOfWorkFactory,
             IUIDataProvider dataProvider,
             ObjectCollection<StationInformation> selectedStationInformations,
             ObservableObject<Dictionary<int, RowCharacteristics>> rowConditionMap)
         {
             _dataProvider = dataProvider;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _includeOperationIntervalsBars = true;
             _includeObservationIntervalsBars = false;
             _selectedStationInformations = selectedStationInformations;
