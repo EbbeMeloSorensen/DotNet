@@ -166,14 +166,21 @@ namespace DMI.SMS.ViewModel
                 stationInformation.DateTo = dateTo;
             }
 
-            _application.UIDataProvider.CreateStationInformation(
-                stationInformation, true);
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                stationInformation.ObjectId = unitOfWork.StationInformations.GenerateUniqueObjectId();
+                stationInformation.GlobalId = unitOfWork.StationInformations.GenerateUniqueGlobalId();
+
+                unitOfWork.StationInformations.Add(stationInformation);
+                unitOfWork.Complete();
+            }
+
+            StationInformationListViewModel.AddStationInformation(stationInformation);
         }
 
         public void DeleteSelectedStationInformations()
         {
             throw new NotImplementedException();
-            //_dataProvider.DeletePeople(PersonListViewModel.SelectedPeople.Objects.ToList());
         }
 
         private bool CanDeleteSelectedStationInformations()

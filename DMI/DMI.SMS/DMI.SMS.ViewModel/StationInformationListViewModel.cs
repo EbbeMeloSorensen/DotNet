@@ -132,11 +132,6 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        public void Refresh()
-        {
-            FetchStationInformationsFromRepository();
-        }
-
         public StationInformationListViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
@@ -146,6 +141,7 @@ namespace DMI.SMS.ViewModel
             _applicationDialogService = applicationDialogService;
             _classifyRecordsWithCondition = classifyRecordsWithCondition;
 
+            _stationInformations = new List<StationInformation>();
             _sorting = Sorting.Smart;
 
             FindStationInformationsViewModel = new FindStationInformationsViewModel();
@@ -153,6 +149,30 @@ namespace DMI.SMS.ViewModel
             StationInformations = new ObjectCollection<StationInformation>();
             SelectedStationInformations = new ObjectCollection<StationInformation>();
             RowCharacteristicsMap = new ObservableObject<Dictionary<int, RowCharacteristics>>();
+        }
+
+        public void AddStationInformation(
+            StationInformation stationInformation)
+        {
+            _stationInformations.Add(stationInformation);
+            UpdateStationInformationViewModels();
+
+            // Todo: Make sure the new station information is selected
+
+            //SelectedPersonViewModels.Clear();
+
+            //foreach (var personViewModel in PersonViewModels)
+            //{
+            //    if (personViewModel.Person.Id != person.Id) continue;
+
+            //    SelectedPersonViewModels.Add(personViewModel);
+            //    break;
+            //}
+        }
+
+        public void Refresh()
+        {
+            FetchStationInformationsFromRepository();
         }
 
         private int CountStationInformationsMatchingFilterFromRepository(
@@ -199,7 +219,8 @@ namespace DMI.SMS.ViewModel
                     }
 
                     records = records
-                        .Where(s => FindStationInformationsViewModel.InMemoryConditionFilter.Contains(localRowCharacteristicsMap[s.GdbArchiveOid].RowCondition))
+                        .Where(s => FindStationInformationsViewModel.InMemoryConditionFilter.Contains(
+                            localRowCharacteristicsMap[s.GdbArchiveOid].RowCondition))
                         .ToList();
 
                     return records.Count;
@@ -261,7 +282,8 @@ namespace DMI.SMS.ViewModel
 
                     // Nu foretager vi så den filtrering, som skal ske i memory på basis af de row conditions, vi har i characteristics mappet
                     result = result
-                        .Where(s => FindStationInformationsViewModel.InMemoryConditionFilter.Contains(localRowCharacteristicsMap[s.GdbArchiveOid].RowCondition))
+                        .Where(s => FindStationInformationsViewModel.InMemoryConditionFilter.Contains(
+                            localRowCharacteristicsMap[s.GdbArchiveOid].RowCondition))
                         .ToList();
                 }
                 else
