@@ -7,6 +7,7 @@ using Craft.ViewModels.Dialogs;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.TrafficLight;
 using DMI.SMS.Application;
+using DMI.SMS.Persistence;
 
 namespace DMI.SMS.ViewModel
 {
@@ -16,7 +17,7 @@ namespace DMI.SMS.ViewModel
         private Brush _trafficLightBrushRed = new SolidColorBrush(Colors.Red);
         private Brush _trafficLightBrushGreen = new SolidColorBrush(Colors.Green);
 
-        private readonly IUIDataProvider _dataProvider;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         private string _databaseHostPersisted;
         private string _databasePortPersisted;
@@ -101,9 +102,9 @@ namespace DMI.SMS.ViewModel
         public TrafficLightViewModel TrafficLightViewModel_Database { get; private set; }
 
         public SettingsDialogViewModel(
-            IUIDataProvider dataProvider)
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
-            _dataProvider = dataProvider;
+            _unitOfWorkFactory = unitOfWorkFactory;
 
             TrafficLightViewModel_Database = new TrafficLightViewModel(25);
 
@@ -136,7 +137,7 @@ namespace DMI.SMS.ViewModel
 
                 SaveSettings();
 
-                TrafficLightViewModel_Database.Brush = await _dataProvider.CheckConnection()
+                TrafficLightViewModel_Database.Brush = await _unitOfWorkFactory.CheckRepositoryConnection()
                     ? _trafficLightBrushGreen
                     : _trafficLightBrushRed;
             }

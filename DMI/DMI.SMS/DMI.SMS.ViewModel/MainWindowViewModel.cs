@@ -22,6 +22,7 @@ namespace DMI.SMS.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly Application.Application _application;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private readonly Brush _pointBrush = new SolidColorBrush(Colors.DarkRed);
         private readonly ObservableObject<bool> _observableForClassifyRecordsWithCondition;
@@ -69,6 +70,7 @@ namespace DMI.SMS.ViewModel
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService)
         {
+            _unitOfWorkFactory = unitOfWorkFactory;
             _application = application;
             _applicationDialogService = applicationDialogService;
 
@@ -348,7 +350,7 @@ namespace DMI.SMS.ViewModel
             object owner)
         {
             var dialogViewModel = new SettingsDialogViewModel(
-                _application.UIDataProvider);
+                _unitOfWorkFactory);
 
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }

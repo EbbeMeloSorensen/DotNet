@@ -18,9 +18,13 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
         {
         }
 
-        public override Task<bool> CheckRepositoryConnection()
+        public override async Task<bool> CheckRepositoryConnection()
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                using var context = new SMSDbContext();
+                return context.Database.CanConnect();
+            });
         }
 
         public override IUnitOfWork GenerateUnitOfWork()
