@@ -2,7 +2,7 @@
   "profiles": {
     "DMI.Data.Studio.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "intervals -s 509520,510120,510220,510320,510520,510920,512620,513520,514020,515020,516020,516520,516920,518520,519920,520220,520520,522520,526920,527220,527720,529020,529620 -p precip_past10min -f 1953 -l 2024 -t 24"
+      "commandLineArgs": "intervals -s 530020,530520,532020,532920,534320 -p precip_past10min -f 1953 -l 2024 -t 24"
     }
   }
 }

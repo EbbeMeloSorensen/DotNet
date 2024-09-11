@@ -21,6 +21,31 @@ const bool evaluateLatitudes = true;
 const bool evaluateLongitudes = true;
 const bool evaluateHeights = true;
 
+/*
+var parameters = new List<string>
+{
+    "precip_past24h",
+    "precip_past12h",
+    "precip_past6h",
+    "precip_past3h",
+    "precip_past1h",
+    "precip_past10min",
+    "precip_max_last10min",
+    "precip_max_past1h"
+};
+
+for (var year = 2010; year <= 2024; year++)
+{
+    Console.WriteLine($"{year}");
+
+    foreach (var parameter in parameters)
+    {
+        Console.WriteLine($"  {parameter}");
+        ObsDB.RetrieveObservations(year, parameter, null);
+    }
+}
+*/
+
 var stations = StatDB.RetrieveStations();
 var names = StatDB.RetrieveNames();
 var statuses = StatDB.RetrieveStatuses();
