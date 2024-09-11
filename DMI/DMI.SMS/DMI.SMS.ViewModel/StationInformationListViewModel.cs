@@ -45,8 +45,6 @@ namespace DMI.SMS.ViewModel
         private int _itemCount;
         private string _itemCountText;
 
-        private ObservableCollection<StationInformationViewModel> _stationInformationViewModels;
-
         private Dictionary<RowCondition, Brush> _conditionToBrushMap = new Dictionary<RowCondition, Brush>
         {
             { RowCondition.Current, new SolidColorBrush(Colors.DarkGreen) },
@@ -57,24 +55,17 @@ namespace DMI.SMS.ViewModel
         private Brush _backgroundBrush1 = new SolidColorBrush(Colors.White);
         private Brush _backgroundBrush2 = new SolidColorBrush(Colors.LightGray);
 
-        private RelayCommand<object> _selectionChangedCommand;
         private RelayCommand<object> _findStationInformationsCommand;
         private RelayCommand _clearFiltersCommand;
 
-        public FindStationInformationsViewModel FindStationInformationsViewModel { get; private set; }
+        public FindStationInformationsViewModel FindStationInformationsViewModel { get; }
 
-        public ObservableCollection<StationInformationViewModel> StationInformationViewModels
-        {
-            get { return _stationInformationViewModels; }
-            set
-            {
-                _stationInformationViewModels = value;
-                RaisePropertyChanged();
-            }
-        }
+        public ObservableCollection<StationInformationViewModel> StationInformationViewModels { get; }
+        public ObservableCollection<StationInformationViewModel> SelectedStationInformationViewModels { get; }
 
-        public ObjectCollection<StationInformation> StationInformations { get; private set; }
-        public ObjectCollection<StationInformation> SelectedStationInformations { get; private set; }
+
+        public ObjectCollection<StationInformation> StationInformations { get; }
+        public ObjectCollection<StationInformation> SelectedStationInformations { get; }
 
         public Sorting Sorting
         {
@@ -111,11 +102,6 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        public RelayCommand<object> SelectionChangedCommand
-        {
-            get { return _selectionChangedCommand ?? (_selectionChangedCommand = new RelayCommand<object>(SelectionChanged)); }
-        }
-
         public RelayCommand<object> FindStationInformationsCommand
         {
             get
@@ -146,9 +132,23 @@ namespace DMI.SMS.ViewModel
 
             FindStationInformationsViewModel = new FindStationInformationsViewModel();
 
+            StationInformationViewModels = new ObservableCollection<StationInformationViewModel>();
+            SelectedStationInformationViewModels = new ObservableCollection<StationInformationViewModel>();
+
             StationInformations = new ObjectCollection<StationInformation>();
             SelectedStationInformations = new ObjectCollection<StationInformation>();
+            
             RowCharacteristicsMap = new ObservableObject<Dictionary<int, RowCharacteristics>>();
+
+            SelectedStationInformationViewModels.CollectionChanged += (s, e) =>
+            {
+                SelectedStationInformations.Objects = SelectedStationInformationViewModels.Select(_ => _.StationInformation);
+            };
+        }
+
+        public void Refresh()
+        {
+            FetchStationInformationsFromRepository();
         }
 
         public void AddStationInformation(
@@ -157,22 +157,15 @@ namespace DMI.SMS.ViewModel
             _stationInformations.Add(stationInformation);
             UpdateStationInformationViewModels();
 
-            // Todo: Make sure the new station information is selected
+            SelectedStationInformationViewModels.Clear();
 
-            //SelectedPersonViewModels.Clear();
+            foreach (var stationInformationViewModel in StationInformationViewModels)
+            {
+                if (stationInformationViewModel.StationInformation.GdbArchiveOid != stationInformation.GdbArchiveOid) continue;
 
-            //foreach (var personViewModel in PersonViewModels)
-            //{
-            //    if (personViewModel.Person.Id != person.Id) continue;
-
-            //    SelectedPersonViewModels.Add(personViewModel);
-            //    break;
-            //}
-        }
-
-        public void Refresh()
-        {
-            FetchStationInformationsFromRepository();
+                SelectedStationInformationViewModels.Add(stationInformationViewModel);
+                break;
+            }
         }
 
         private int CountStationInformationsMatchingFilterFromRepository(
@@ -383,15 +376,6 @@ namespace DMI.SMS.ViewModel
                 };
             }).ToList();
 
-            //var stationInformationViewModels = _stationInformations.Select(s => new StationInformationViewModel
-            //{
-            //    StationInformation = s,
-            //    Brush = _conditionToBrushMap[RowCharacteristicsMap.Object[s.GdbArchiveOid].RowCondition],
-            //    Warning1 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForIndividualRecords).Any(),
-            //    Warning2 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForRecordGroupsWithSameObjectId).Any(),
-            //    Warning3 = RowCharacteristicsMap.Object.ContainsKey(s.GdbArchiveOid) && RowCharacteristicsMap.Object[s.GdbArchiveOid].ViolatedBusinessRules.Intersect(businessRulesForCurrentRecordGroupsWithSameStationId).Any()
-            //}).ToList();
-
             var objectIdOfPreviousRow = -1;
             var backgroundBrush = _backgroundBrush2;
 
@@ -407,20 +391,9 @@ namespace DMI.SMS.ViewModel
                 objectIdOfPreviousRow = stationInformationViewModel.StationInformation.ObjectId;
             }
 
-            StationInformationViewModels = new ObservableCollection<StationInformationViewModel>(stationInformationViewModels);
-        }
+            StationInformationViewModels.Clear();
 
-        private void SelectionChanged(object commandParameter)
-        {
-            IList temp = (IList)commandParameter;
-            var stationInformationViewModels = temp.Cast<StationInformationViewModel>();
-
-            UpdateStationInformationSelection(stationInformationViewModels.Select(svm => svm.StationInformation));
-        }
-
-        private void UpdateStationInformationSelection(IEnumerable<StationInformation> stationInformations)
-        {
-            SelectedStationInformations.Objects = stationInformations.Sort();
+            stationInformationViewModels.ForEach(_ => StationInformationViewModels.Add(_));
         }
 
         private void FindStationInformations(
