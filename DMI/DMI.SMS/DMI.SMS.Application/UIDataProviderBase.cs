@@ -66,55 +66,6 @@ namespace DMI.SMS.Application
 
         public abstract void DeleteAllStationInformations();
 
-        public void ExportData(
-            string fileName,
-            IList<Expression<Func<StationInformation, bool>>> predicates)
-        {
-            var extension = Path.GetExtension(fileName)?.ToLower();
-
-            if (extension == null)
-            {
-                throw new ArgumentException();
-            }
-
-            IList<StationInformation> stationInformations;
-
-            if (predicates == null || predicates.Count == 0)
-            {
-                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all stationinformation records from repository..");
-                stationInformations = GetAllStationInformations();
-            }
-            else
-            {
-                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving matching stationinformation records from repository..");
-                stationInformations = FindStationInformations(predicates);
-            }
-
-            _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {stationInformations.Count} stationinformation records");
-
-            switch (extension)
-            {
-                case ".xml":
-                {
-                    _dataIOHandler.ExportDataToXML(stationInformations, fileName);
-                    _logger?.WriteLine(LogMessageCategory.Information, 
-                        $"  Exported {stationInformations.Count} stationinformation records to xml file");
-                    break;
-                }
-                case ".json":
-                {
-                    _dataIOHandler.ExportDataToJson(stationInformations, fileName);
-                    _logger?.WriteLine(LogMessageCategory.Information,
-                        $"  Exported {stationInformations.Count} stationinformation records to json file");
-                    break;
-                }
-                default:
-                {
-                    throw new ArgumentException();
-                }
-            }
-        }
-
         public void ImportData(string fileName)
         {
             //_logger.WriteLineAndStartStopWatch("Importing data..");
