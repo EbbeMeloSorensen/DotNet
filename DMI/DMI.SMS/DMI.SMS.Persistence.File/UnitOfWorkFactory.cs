@@ -28,7 +28,7 @@ namespace DMI.SMS.Persistence.File
 
             var dataIOHandler = new DataIOHandler();
             IList<StationInformation> stationInformations;
-            dataIOHandler.ImportDataFromJson(file.Name, out stationInformations);
+            dataIOHandler.ImportData(file.Name, out stationInformations);
 
             _stationInformationRepository.Load(stationInformations);
 

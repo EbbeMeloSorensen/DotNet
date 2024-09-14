@@ -62,10 +62,7 @@ namespace DMI.SMS.Application
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDataIOHandler _dataIOHandler;
-        private IUIDataProvider _uiDataProvider;
         private ILogger _logger;
-
-        public IUIDataProvider UIDataProvider => _uiDataProvider;
 
         // It must be possible for an external component to set the Logger, e.g. in order to override with a decorator
         public ILogger Logger
@@ -77,20 +74,11 @@ namespace DMI.SMS.Application
         public Application(
             IUnitOfWorkFactory unitOfWorkFactory,
             IDataIOHandler dataIOHandler,
-            IUIDataProvider uiDataProvider,
             ILogger logger)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
-            _uiDataProvider = uiDataProvider;
             _logger = logger;
-        }
-
-        public void Initialize()
-        {
-            Logger?.WriteLine(LogMessageCategory.Debug, "DMI.SMS.UI.WPF - initializing application");
-
-            _uiDataProvider.Initialize(_logger);
         }
 
         public async Task MakeBreakfast(
@@ -192,7 +180,18 @@ namespace DMI.SMS.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
                 progressCallback?.Invoke(2.0, "Importing data");
 
-                UIDataProvider.ImportData(fileName);
+                _dataIOHandler.ImportData(fileName, out var stationInformations);
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    // We reset the values of the identity field because we're not allowed to explicitly set it.
+                    // Notice that this implies that the rows are assigned new primary keys which may be practically unacceptable.
+                    unitOfWork.StationInformations.Load(stationInformations.Select(_ =>
+                    {
+                        _.GdbArchiveOid = 0;
+                        return _;
+                    }));
+                }
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed importing data");
@@ -207,7 +206,11 @@ namespace DMI.SMS.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Clearing Repository..");
                 progressCallback?.Invoke(2.0, "Clearing Repository");
 
-                UIDataProvider.DeleteAllStationInformations();
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    unitOfWork.StationInformations.Clear();
+                    unitOfWork.Complete();
+                }
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed clearing repository");

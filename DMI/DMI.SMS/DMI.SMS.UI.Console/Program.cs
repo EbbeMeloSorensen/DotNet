@@ -73,8 +73,6 @@ namespace DMI.SMS.UI.Console
         {
             var container = StructureMap.Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();
-            //application.Initialize(_host, _port, _database, _schema, _user, _password);
-            application.Initialize();
             return application;
         }
     }

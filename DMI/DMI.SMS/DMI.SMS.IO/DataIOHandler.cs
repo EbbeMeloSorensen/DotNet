@@ -60,35 +60,32 @@ namespace DMI.SMS.IO
             }
         }
 
-        public void ExportDataToXML(
-            IList<StationInformation> stationInformations,
-            string fileName)
+        public void ImportData(
+            string fileName,
+            out IList<StationInformation> stationInformations)
         {
-            using (var streamWriter = new StreamWriter(fileName))
+            var extension = Path.GetExtension(fileName)?.ToLower();
+
+            switch (extension)
             {
-                var smsData = new SMSData
+                case ".xml":
                 {
-                    StationInformations = stationInformations.ToList()
-                };
-
-                XmlSerializer.Serialize(streamWriter, smsData);
+                    ImportDataFromXML(fileName, out stationInformations);
+                    break;
+                }
+                case ".json":
+                {
+                    ImportDataFromJson(fileName, out stationInformations);
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentException();
+                }
             }
         }
 
-        public void ExportDataToJson(
-            IList<StationInformation> stationInformations,
-            string fileName)
-        {
-            var json = JsonConvert.SerializeObject(
-                stationInformations, Formatting.Indented, new DoubleJsonConverter(), new NullableDoubleJsonConverter());
-
-            using (var streamWriter = new StreamWriter(fileName))
-            {
-                streamWriter.WriteLine(json);
-            }
-        }
-
-        public void ImportDataFromXML(
+        private void ImportDataFromXML(
             string fileName,
             out IList<StationInformation> stationInformations)
         {
@@ -99,7 +96,7 @@ namespace DMI.SMS.IO
             }
         }
 
-        public void ImportDataFromJson(
+        private void ImportDataFromJson(
             string fileName,
             out IList<StationInformation> stationInformations)
         {
@@ -386,6 +383,34 @@ namespace DMI.SMS.IO
 
                     streamWriter.WriteLine(line);
                 });
+            }
+        }
+
+        private void ExportDataToXML(
+            IList<StationInformation> stationInformations,
+            string fileName)
+        {
+            using (var streamWriter = new StreamWriter(fileName))
+            {
+                var smsData = new SMSData
+                {
+                    StationInformations = stationInformations.ToList()
+                };
+
+                XmlSerializer.Serialize(streamWriter, smsData);
+            }
+        }
+
+        private void ExportDataToJson(
+            IList<StationInformation> stationInformations,
+            string fileName)
+        {
+            var json = JsonConvert.SerializeObject(
+                stationInformations, Formatting.Indented, new DoubleJsonConverter(), new NullableDoubleJsonConverter());
+
+            using (var streamWriter = new StreamWriter(fileName))
+            {
+                streamWriter.WriteLine(json);
             }
         }
     }

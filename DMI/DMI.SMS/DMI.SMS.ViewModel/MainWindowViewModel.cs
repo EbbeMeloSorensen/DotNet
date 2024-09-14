@@ -79,8 +79,6 @@ namespace DMI.SMS.ViewModel
             _application.Logger = new ViewModelLogger(_application.Logger, LogViewModel);
             //_application.Logger = null; // Set to null to disable logging
 
-            _application.Initialize();
-
             _mainWindowTitle = "SMS Studio";
 
             _observableForClassifyRecordsWithCondition = new ObservableObject<bool>();

@@ -78,25 +78,7 @@ namespace DMI.SMS.Application
 
             IList<StationInformation> stationInformations;
 
-            switch (extension)
-            {
-                case ".xml":
-                {
-                    _dataIOHandler.ImportDataFromXML(
-                        fileName, out stationInformations);
-                    break;
-                }
-                case ".json":
-                {
-                    _dataIOHandler.ImportDataFromJson(
-                        fileName, out stationInformations);
-                    break;
-                }
-                default:
-                {
-                    throw new ArgumentException();
-                }
-            }
+            _dataIOHandler.ImportData(fileName, out stationInformations);
 
             LoadStationInformations(stationInformations);
 

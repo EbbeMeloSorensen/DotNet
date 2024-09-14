@@ -43,7 +43,7 @@ namespace DMI.SMS.IO.UnitTest
             // Dette skrives uden carriage returns - hvorfor gør det det?
             // Hvad er forskellen til den der unit test?
             var dataIOHandler = new DataIOHandler();
-            dataIOHandler.ExportDataToXML(stationInformations, @"C:\Temp\Helvede.xml");
+            dataIOHandler.ExportData(stationInformations, @"C:\Temp\Helvede.xml");
         }
     }
 }

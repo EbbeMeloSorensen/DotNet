@@ -11,19 +11,7 @@ namespace DMI.SMS.IO
             IList<StationInformation> stationInformations,
             string fileName);
 
-        void ExportDataToXML(
-            IList<StationInformation> stationInformations,
-            string fileName);
-
-        void ExportDataToJson(
-            IList<StationInformation> stationInformations,
-            string fileName);
-
-        void ImportDataFromXML(
-            string fileName,
-            out IList<StationInformation> stationInformations);
-
-        void ImportDataFromJson(
+        public void ImportData(
             string fileName,
             out IList<StationInformation> stationInformations);
 
