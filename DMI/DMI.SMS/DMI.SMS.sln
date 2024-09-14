@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.File", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Application", "DMI.SMS.Application\DMI.SMS.Application.csproj", "{0A05299F-B419-448A-9996-CCAC528A3379}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.UIDataProvider.Persistence", "DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj", "{CF2BB80C-2DE5-44D3-938A-C047BAAA6947}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.ViewModels", "..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj", "{0C928134-54E9-488A-B498-C9176686BCB7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.Npgsql", "DMI.SMS.Persistence.Npgsql\DMI.SMS.Persistence.Npgsql.csproj", "{FD5604A3-5FB7-4BD3-A504-E59AD8765C10}"
@@ -324,10 +322,6 @@ Global
 		{0A05299F-B419-448A-9996-CCAC528A3379}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A05299F-B419-448A-9996-CCAC528A3379}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A05299F-B419-448A-9996-CCAC528A3379}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF2BB80C-2DE5-44D3-938A-C047BAAA6947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF2BB80C-2DE5-44D3-938A-C047BAAA6947}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF2BB80C-2DE5-44D3-938A-C047BAAA6947}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF2BB80C-2DE5-44D3-938A-C047BAAA6947}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0C928134-54E9-488A-B498-C9176686BCB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0C928134-54E9-488A-B498-C9176686BCB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C928134-54E9-488A-B498-C9176686BCB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
