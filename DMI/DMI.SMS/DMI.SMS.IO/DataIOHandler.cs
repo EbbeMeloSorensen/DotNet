@@ -35,6 +35,31 @@ namespace DMI.SMS.IO
             }
         }
 
+        public void ExportData(
+            IList<StationInformation> stationInformations,
+            string fileName)
+        {
+            var extension = Path.GetExtension(fileName)?.ToLower();
+
+            switch (extension)
+            {
+                case ".xml":
+                {
+                    ExportDataToXML(stationInformations, fileName);
+                    break;
+                }
+                case ".json":
+                {
+                    ExportDataToJson(stationInformations, fileName);
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentException();
+                }
+            }
+        }
+
         public void ExportDataToXML(
             IList<StationInformation> stationInformations,
             string fileName)

@@ -7,6 +7,10 @@ namespace DMI.SMS.IO
 {
     public interface IDataIOHandler
     {
+        void ExportData(
+            IList<StationInformation> stationInformations,
+            string fileName);
+
         void ExportDataToXML(
             IList<StationInformation> stationInformations,
             string fileName);

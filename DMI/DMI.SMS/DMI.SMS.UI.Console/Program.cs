@@ -6,14 +6,6 @@ namespace DMI.SMS.UI.Console
 {
     class Program
     {
-        // Disse bruger vi i PR.UI.Console, men ikke umiddelbart her
-        //private static string _host;
-        //private static string _port;
-        //private static string _database;
-        //private static string _schema;
-        //private static string _user;
-        //private static string _password;
-
         [SuppressMessage("ReSharper.DPA", "DPA0003: Excessive memory allocations in LOH", MessageId = "type: System.String; size: 85MB")]
         static async Task Main(string[] args)
         {
@@ -25,13 +17,11 @@ namespace DMI.SMS.UI.Console
             await Parser.Default.ParseArguments<
                     Lunch,
                     Export,
-                    Import,
-                    Script>(args)
+                    Import>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
                     (Import options) => Import(options),
-                    (Script options) => Script(options),
                     errs => Task.FromResult(0));
         }
 
@@ -75,18 +65,6 @@ namespace DMI.SMS.UI.Console
                 return false;
             });
 
-            System.Console.WriteLine("\nDone");
-        }
-
-        private static async Task Script(Script options)
-        {
-            System.Console.Write("Generating SQL script...\nProgress: ");
-            await GetApplication().GenerateSQLScriptForAddingWigosIDs((progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
             System.Console.WriteLine("\nDone");
         }
 

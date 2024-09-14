@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Craft.Utils;
+using System.Linq.Expressions;
 using Craft.Logging;
 using DMI.SMS.Domain.Entities;
+using DMI.SMS.Persistence;
+using System.Linq;
 using DMI.SMS.IO;
-using System.Linq.Expressions;
 
 namespace DMI.SMS.Application
 {
@@ -61,6 +60,8 @@ namespace DMI.SMS.Application
             { 32175, new List<int>{ 53361, 53362, 53365 } },                                           // Østerlars
         };
 
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IDataIOHandler _dataIOHandler;
         private IUIDataProvider _uiDataProvider;
         private ILogger _logger;
 
@@ -74,9 +75,13 @@ namespace DMI.SMS.Application
         }
 
         public Application(
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IDataIOHandler dataIOHandler,
             IUIDataProvider uiDataProvider,
             ILogger logger)
         {
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _dataIOHandler = dataIOHandler;
             _uiDataProvider = uiDataProvider;
             _logger = logger;
         }
@@ -152,19 +157,26 @@ namespace DMI.SMS.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
                 progressCallback?.Invoke(2.0, "Exporting data");
 
+                IList<StationInformation> stationInformations;
+
+                List<Expression<Func<StationInformation, bool>>> predicates = null;
+
                 if (excludeSupercededRows)
                 {
-                    var predicates = new List<Expression<Func<StationInformation, bool>>>()
+                    predicates = new List<Expression<Func<StationInformation, bool>>>()
                     {
                         _ => _.GdbToDate == new DateTime(9999, 12, 31, 23, 59, 59)
                     };
+                }
 
-                    UIDataProvider.ExportData(fileName, predicates);
-                }
-                else
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                 {
-                    UIDataProvider.ExportData(fileName, null);
+                    stationInformations = predicates == null 
+                        ? unitOfWork.StationInformations.GetAll().ToList() 
+                        : unitOfWork.StationInformations.Find(predicates).ToList();
                 }
+
+                _dataIOHandler.ExportData(stationInformations, fileName);
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, $"Completed exporting data to file: {fileName}");
@@ -199,21 +211,6 @@ namespace DMI.SMS.Application
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed clearing repository");
-            });
-        }
-
-        public async Task GenerateSQLScriptForAddingWigosIDs(
-            ProgressCallback progressCallback = null)
-        {
-            await Task.Run(() =>
-            {
-                Logger?.WriteLine(LogMessageCategory.Information, "Generating sql script for turning elevation angles..");
-                progressCallback?.Invoke(0.0, "Generating script");
-
-                UIDataProvider.GenerateSQLScriptForAddingWigosIDs("AddWigosIDs.sql");
-
-                progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed generating script");
             });
         }
     }

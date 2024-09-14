@@ -52,9 +52,6 @@ namespace DMI.SMS.Application
         void ExportData(
             string fileName,
             IList<Expression<Func<StationInformation, bool>>> predicates);
-
-        void GenerateSQLScriptForAddingWigosIDs(
-            string fileName);
         
         void ImportData(string fileName);
 

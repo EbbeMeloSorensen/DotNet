@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
     <ProjectReference Include="..\DMI.SMS.IO\DMI.SMS.IO.csproj" />
+    <ProjectReference Include="..\DMI.SMS.Persistence\DMI.SMS.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
