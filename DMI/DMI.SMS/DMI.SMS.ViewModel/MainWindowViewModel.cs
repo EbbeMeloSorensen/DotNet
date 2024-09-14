@@ -92,7 +92,7 @@ namespace DMI.SMS.ViewModel
                 _observableForClassifyRecordsWithCondition);
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
-                _application.UIDataProvider,
+                unitOfWorkFactory,
                 applicationDialogService,
                 StationInformationListViewModel.SelectedStationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
@@ -175,7 +175,8 @@ namespace DMI.SMS.ViewModel
                 unitOfWork.Complete();
             }
 
-            StationInformationListViewModel.AddStationInformation(stationInformation);
+            // Det her giver anledning til problemer relateret til opdatering af row condition dictionaryet
+            //StationInformationListViewModel.AddStationInformation(stationInformation);
         }
 
         public void DeleteSelectedStationInformations()
@@ -204,7 +205,6 @@ namespace DMI.SMS.ViewModel
 
             TaskViewModel.Show("Exporting data", false);
             RefreshCommandAvailability();
-
 
             await _application.ExportData(
                 dialog.FileName,

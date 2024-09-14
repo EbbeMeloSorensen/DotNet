@@ -13,6 +13,7 @@ using Craft.UI.Utils;
 using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Domain.EntityClassExtensions;
+using DMI.SMS.Persistence;
 
 namespace DMI.SMS.ViewModel
 {
@@ -22,7 +23,7 @@ namespace DMI.SMS.ViewModel
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
 
-        private readonly IUIDataProvider _dataProvider;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private readonly ObjectCollection<StationInformation> _selectedStationInformations;
         private readonly ObservableObject<Dictionary<int, RowCharacteristics>> _rowCharacteristicsMap;
@@ -795,12 +796,12 @@ namespace DMI.SMS.ViewModel
         }
 
         public StationInformationDetailsViewModel(
-            IUIDataProvider dataProvider,
+            IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
             ObjectCollection<StationInformation> selectedStationInformations,
             ObservableObject<Dictionary<int, RowCharacteristics>> rowCharacteristicsMap)
         {
-            _dataProvider = dataProvider;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
 
             _selectedStationInformations = selectedStationInformations;
@@ -1155,7 +1156,11 @@ namespace DMI.SMS.ViewModel
 
             CopyControlDataToStationInformation(stationInformation);
 
-            _dataProvider.UpdateStationInformation(stationInformation);
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.StationInformations.Update(stationInformation);
+                unitOfWork.Complete();
+            }
 
             _originalStationname = Stationname;
             _originalAccessAddress = AccessAddress;
@@ -1208,7 +1213,16 @@ namespace DMI.SMS.ViewModel
                 return;
             }
 
-            _dataProvider.DeleteStationInformations(_selectedStationInformations.Objects.ToList());
+            var gdbArchiveOIDs = _selectedStationInformations.Objects.Select(s => s.GdbArchiveOid);
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var stationInformationsForDeletion = unitOfWork.StationInformations
+                    .Find(s => gdbArchiveOIDs.Contains(s.GdbArchiveOid));
+
+                unitOfWork.StationInformations.RemoveRange(stationInformationsForDeletion);
+                unitOfWork.Complete();
+            }
 
             RefreshButtons();
             OnRepositoryOperationPerformed();
@@ -1248,8 +1262,12 @@ namespace DMI.SMS.ViewModel
             newStationInformation.LastEditedUser = SharedData.LoggedInUser;
             newStationInformation.LastEditedDate = currentTime;
 
-            _dataProvider.UpdateStationInformation(stationInformation);
-            _dataProvider.CreateStationInformation(newStationInformation, false);
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.StationInformations.Update(stationInformation);
+                unitOfWork.StationInformations.Add(newStationInformation);
+                unitOfWork.Complete();
+            }
 
             _originalStationname = Stationname;
             _originalAccessAddress = AccessAddress;
@@ -1296,7 +1314,11 @@ namespace DMI.SMS.ViewModel
                 stationInformation.GdbToDate = currentTime;
             }
 
-            _dataProvider.UpdateStationInformations(_selectedStationInformations.Objects.ToList());
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.StationInformations.UpdateRange(_selectedStationInformations.Objects.ToList());
+                unitOfWork.Complete();
+            }
 
             RefreshButtons();
             OnRepositoryOperationPerformed();
@@ -1359,7 +1381,13 @@ namespace DMI.SMS.ViewModel
             dialogViewModel.DateTo.TryParsingAsDateTime(out var dateTo);
             newStationInformation.DateTo = dateTo;
 
-            _dataProvider.CreateStationInformation(newStationInformation, true);
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                newStationInformation.ObjectId = unitOfWork.StationInformations.GenerateUniqueObjectId();
+                newStationInformation.GlobalId = unitOfWork.StationInformations.GenerateUniqueGlobalId();
+                unitOfWork.StationInformations.Add(newStationInformation);
+                unitOfWork.Complete();
+            }
 
             RefreshButtons();
             OnRepositoryOperationPerformed();
@@ -1416,9 +1444,15 @@ namespace DMI.SMS.ViewModel
                 stationInformationNew.LastEditedUser = null;
                 stationInformationNew.LastEditedDate = null;
 
-                _dataProvider.UpdateStationInformation(stationInformationBefore);
-                _dataProvider.UpdateStationInformation(stationInformationAfter);
-                _dataProvider.CreateStationInformation(stationInformationNew, true);
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    unitOfWork.StationInformations.Update(stationInformationBefore);
+                    unitOfWork.StationInformations.Update(stationInformationAfter);
+                    stationInformationNew.ObjectId = unitOfWork.StationInformations.GenerateUniqueObjectId();
+                    stationInformationNew.GlobalId = unitOfWork.StationInformations.GenerateUniqueGlobalId();
+                    unitOfWork.StationInformations.Add(stationInformationNew);
+                    unitOfWork.Complete();
+                }
 
                 OnRepositoryOperationPerformed();
             }
@@ -1448,9 +1482,15 @@ namespace DMI.SMS.ViewModel
                 stationInformationNew.LastEditedUser = null;
                 stationInformationNew.LastEditedDate = null;
 
-                _dataProvider.UpdateStationInformation(stationInformationBefore);
-                _dataProvider.UpdateStationInformation(stationInformationAfter);
-                _dataProvider.CreateStationInformation(stationInformationNew, true);
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    unitOfWork.StationInformations.Update(stationInformationBefore);
+                    unitOfWork.StationInformations.Update(stationInformationAfter);
+                    stationInformationNew.ObjectId = unitOfWork.StationInformations.GenerateUniqueObjectId();
+                    stationInformationNew.GlobalId = unitOfWork.StationInformations.GenerateUniqueGlobalId();
+                    unitOfWork.StationInformations.Add(stationInformationNew);
+                    unitOfWork.Complete();
+                }
 
                 OnRepositoryOperationPerformed();
             }
@@ -1489,10 +1529,16 @@ namespace DMI.SMS.ViewModel
                     stationInformationNewAfter.LastEditedUser = null;
                     stationInformationNewAfter.LastEditedDate = null;
 
-                    _dataProvider.UpdateStationInformation(stationInformationBefore);
-                    _dataProvider.UpdateStationInformation(stationInformationAfter);
-                    _dataProvider.CreateStationInformation(stationInformationNewBefore, false);
-                    _dataProvider.CreateStationInformation(stationInformationNewAfter, true);
+                    using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                    {
+                        unitOfWork.StationInformations.Update(stationInformationBefore);
+                        unitOfWork.StationInformations.Update(stationInformationAfter);
+                        unitOfWork.StationInformations.Add(stationInformationNewBefore);
+                        stationInformationNewAfter.ObjectId = unitOfWork.StationInformations.GenerateUniqueObjectId();
+                        stationInformationNewAfter.GlobalId = unitOfWork.StationInformations.GenerateUniqueGlobalId();
+                        unitOfWork.StationInformations.Add(stationInformationNewAfter);
+                        unitOfWork.Complete();
+                    }
                 }
                 else
                 {
@@ -1524,10 +1570,16 @@ namespace DMI.SMS.ViewModel
                     stationInformationNewAfter.CreatedUser = SharedData.LoggedInUser;
                     stationInformationNewAfter.CreatedDate = currentTime;
 
-                    _dataProvider.UpdateStationInformation(stationInformationBefore);
-                    _dataProvider.UpdateStationInformation(stationInformationAfter);
-                    _dataProvider.CreateStationInformation(stationInformationNewBefore, true);
-                    _dataProvider.CreateStationInformation(stationInformationNewAfter, false);
+                    using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                    {
+                        unitOfWork.StationInformations.Update(stationInformationBefore);
+                        unitOfWork.StationInformations.Update(stationInformationAfter);
+                        stationInformationNewBefore.ObjectId = unitOfWork.StationInformations.GenerateUniqueObjectId();
+                        stationInformationNewBefore.GlobalId = unitOfWork.StationInformations.GenerateUniqueGlobalId();
+                        unitOfWork.StationInformations.Add(stationInformationNewBefore);
+                        unitOfWork.StationInformations.Add(stationInformationNewAfter);
+                        unitOfWork.Complete();
+                    }
                 }
 
                 OnRepositoryOperationPerformed();
