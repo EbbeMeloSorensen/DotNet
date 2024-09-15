@@ -144,7 +144,6 @@ namespace DMI.Data.Studio.UI.Console
         {
             var container = StructureMap.Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();
-            application.Initialize();
             return application;
         }
     }

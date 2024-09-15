@@ -20,6 +20,7 @@ using DMI.SMS.Domain.Entities;
 using DMI.StatDB.ViewModel;
 using DMI.StatDB.Domain.Entities;
 using DMI.SMS.Application;
+using System.Configuration;
 
 namespace DMI.Data.Studio.ViewModel
 {
@@ -34,8 +35,8 @@ namespace DMI.Data.Studio.ViewModel
                 { SMS.Application.RowCondition.Deleted, new SolidColorBrush(Colors.DarkRed) }
             };
 
-        private readonly SMS.Application.IUIDataProvider _smsDataProvider;
         private readonly StatDB.Application.IUIDataProvider _statDBDataProvider;
+        private readonly SMS.Persistence.IUnitOfWorkFactory _smsDBUnitOfWorkFactory;
         private readonly ObsDB.Persistence.IUnitOfWorkFactory _obsDBUnitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private readonly ILogger _logger;
@@ -259,25 +260,27 @@ namespace DMI.Data.Studio.ViewModel
         // Parametrene her fås ved dependency injection
         public MainWindowViewModel(
             SMS.Persistence.IUnitOfWorkFactory smsUnitOfWorkFactory,
-            SMS.Application.IUIDataProvider smsDataProvider,
+            SMS.IO.IDataIOHandler smsDataIOHandler,
             StatDB.Application.IUIDataProvider statDBDataProvider,
             ObsDB.Persistence.IUnitOfWorkFactory obsDBUnitOfWorkFactory,
             IDialogService applicationDialogService,
             ILogger logger)
         {
-            _smsDataProvider = smsDataProvider;
             _statDBDataProvider = statDBDataProvider;
+            _smsDBUnitOfWorkFactory = smsUnitOfWorkFactory;
             _obsDBUnitOfWorkFactory = obsDBUnitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _logger = logger;
 
             _application = new Application.Application(
-                _smsDataProvider,
+                smsUnitOfWorkFactory,
                 _obsDBUnitOfWorkFactory,
                 _logger);
 
             _smsApplication = new SMS.Application.Application(
-                _smsDataProvider, _logger);
+                smsUnitOfWorkFactory,
+                smsDataIOHandler,
+                _logger);
 
             _mainWindowTitle = "DMI Data Studio";
 
@@ -383,7 +386,7 @@ namespace DMI.Data.Studio.ViewModel
             };
 
             StationInformationDetailsViewModel = new StationInformationDetailsViewModel(
-                smsDataProvider,
+                smsUnitOfWorkFactory,
                 applicationDialogService,
                 StationInformationListViewModel.SelectedStationInformations,
                 StationInformationListViewModel.RowCharacteristicsMap);
@@ -446,8 +449,8 @@ namespace DMI.Data.Studio.ViewModel
             var stationInformations = sender as ObjectCollection<StationInformation>;
             _selectedStationInformations = stationInformations.Objects.ToList();
 
-            var logMessage = $"StationInformation selection changed ({_selectedStationInformations.Count} rows selected)";
-            _application.Logger?.WriteLine(LogMessageCategory.Information, logMessage);
+            //var logMessage = $"StationInformation selection changed ({_selectedStationInformations.Count} rows selected)";
+            //_application.Logger?.WriteLine(LogMessageCategory.Information, logMessage);
 
             UpdateMapView();
 
@@ -493,8 +496,8 @@ namespace DMI.Data.Studio.ViewModel
             var stations = sender as ObjectCollection<Station>;
             _selectedStations = stations.Objects.ToList();
 
-            var logMessage = $"Station selection changed ({_selectedStations.Count} rows selected)";
-            _application.Logger?.WriteLine(LogMessageCategory.Information, logMessage);
+            //var logMessage = $"Station selection changed ({_selectedStations.Count} rows selected)";
+            //_application.Logger?.WriteLine(LogMessageCategory.Information, logMessage);
 
             UpdateMapView();
             UpdateChronologyView();
@@ -548,7 +551,7 @@ namespace DMI.Data.Studio.ViewModel
         {
             var shapesAdded = 0;
 
-            _application.Logger?.WriteLine(LogMessageCategory.Information, "Updating Chronological View");
+            //_application.Logger?.WriteLine(LogMessageCategory.Information, "Updating Chronological View");
 
             var shapesBefore = ChronologyViewModel.GeometryEditorViewModel.ShapeViewModels.Count();
 
@@ -558,7 +561,7 @@ namespace DMI.Data.Studio.ViewModel
 
             var shapesAfter = ChronologyViewModel.GeometryEditorViewModel.ShapeViewModels.Count();
 
-            _application.Logger?.WriteLine(LogMessageCategory.Information, $"Shapes: {shapesBefore} -> {shapesAfter}");
+            //_application.Logger?.WriteLine(LogMessageCategory.Information, $"Shapes: {shapesBefore} -> {shapesAfter}");
 
             // Determine if there is anything to draw at all
             // (and thus whether the view should be visible)
@@ -913,14 +916,14 @@ namespace DMI.Data.Studio.ViewModel
 
             ChronologyViewModel.GeometryEditorViewModel.WorldWindowBottomRightLimit = new Point(xMax, totalHeightOfMainPart + 40);
 
-            _application.Logger?.WriteLine(LogMessageCategory.Information, $"Shapes: 0 -> {shapesAdded}");
+            //_application.Logger?.WriteLine(LogMessageCategory.Information, $"Shapes: 0 -> {shapesAdded}");
         }
 
         private void OpenSettingsDialog(
             object owner)
         {
             var dialogViewModel = new SettingsDialogViewModel(
-                _smsDataProvider,
+                _smsDBUnitOfWorkFactory,
                 _statDBDataProvider);
 
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
@@ -1016,7 +1019,12 @@ namespace DMI.Data.Studio.ViewModel
                 newStationInformation.Hhp = double.Parse(dialogViewModel.Hhp, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
             }
 
-            _smsDataProvider.CreateStationInformation(newStationInformation, true);
+            using (var unitOfWork = _smsDBUnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                newStationInformation.ObjectId = unitOfWork.StationInformations.GenerateUniqueObjectId();
+                newStationInformation.GlobalId = unitOfWork.StationInformations.GenerateUniqueGlobalId();
+                unitOfWork.StationInformations.Add(newStationInformation);
+            }
 
             // Vis stationen i list viewet samt på kortet
             StationInformationListViewModel.FindStationInformationsViewModel.NameFilter = newStationInformation.StationName;

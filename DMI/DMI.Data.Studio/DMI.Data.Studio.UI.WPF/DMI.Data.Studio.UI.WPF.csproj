@@ -17,7 +17,6 @@
     <ProjectReference Include="..\..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
     <ProjectReference Include="..\..\DMI.ObsDB\DMI.ObsDB.Persistence.PostgreSQL\DMI.ObsDB.Persistence.PostgreSQL.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.Persistence.EntityFrameworkCore.Sqlite\DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.csproj" />
-    <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj" />
     <ProjectReference Include="..\..\DMI.SMS\DMI.SMS.UIElements\DMI.SMS.UIElements.csproj" />
     <ProjectReference Include="..\..\DMI.StatDB\DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite\DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite.csproj" />
     <ProjectReference Include="..\..\DMI.StatDB\DMI.StatDB.UIDataProvider.Persistence\DMI.StatDB.UIDataProvider.Persistence.csproj" />

@@ -284,6 +284,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\..\Craft\Craft.DataStructures\Craft.DataStructures.csproj", "{9A9715A0-9240-4EFD-8172-33C485E161A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMI.SMS.Persistence.UnitTest", "DMI.SMS.Persistence.UnitTest\DMI.SMS.Persistence.UnitTest.csproj", "{F6BB2F1C-0DD4-4F19-9D6C-93F7C2D3C3A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -406,6 +408,10 @@ Global
 		{9A9715A0-9240-4EFD-8172-33C485E161A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A9715A0-9240-4EFD-8172-33C485E161A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A9715A0-9240-4EFD-8172-33C485E161A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6BB2F1C-0DD4-4F19-9D6C-93F7C2D3C3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6BB2F1C-0DD4-4F19-9D6C-93F7C2D3C3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6BB2F1C-0DD4-4F19-9D6C-93F7C2D3C3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6BB2F1C-0DD4-4F19-9D6C-93F7C2D3C3A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

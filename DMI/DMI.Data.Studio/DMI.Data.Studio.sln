@@ -39,8 +39,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.IO", "..\DMI.SMS\DM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence", "..\DMI.SMS\DMI.SMS.Persistence\DMI.SMS.Persistence.csproj", "{99470AD8-F79B-49EC-B9C4-034ED2D2A401}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.UIDataProvider.Persistence", "..\DMI.SMS\DMI.SMS.UIDataProvider.Persistence\DMI.SMS.UIDataProvider.Persistence.csproj", "{CF072B79-238A-4775-9196-C5831075B0D6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.UIDataProvider.Persistence", "..\DMI.StatDB\DMI.StatDB.UIDataProvider.Persistence\DMI.StatDB.UIDataProvider.Persistence.csproj", "{384DF062-0CB9-49CB-8B22-2C8DAC94E37A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.UIElements", "..\DMI.StatDB\DMI.StatDB.UIElements\DMI.StatDB.UIElements.csproj", "{0885FBE4-250F-4C12-BE85-C90E2BC228C3}"
@@ -400,10 +398,6 @@ Global
 		{99470AD8-F79B-49EC-B9C4-034ED2D2A401}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99470AD8-F79B-49EC-B9C4-034ED2D2A401}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99470AD8-F79B-49EC-B9C4-034ED2D2A401}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF072B79-238A-4775-9196-C5831075B0D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF072B79-238A-4775-9196-C5831075B0D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF072B79-238A-4775-9196-C5831075B0D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF072B79-238A-4775-9196-C5831075B0D6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{384DF062-0CB9-49CB-8B22-2C8DAC94E37A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{384DF062-0CB9-49CB-8B22-2C8DAC94E37A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{384DF062-0CB9-49CB-8B22-2C8DAC94E37A}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq.Expressions;
 using Craft.Logging;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Persistence;
-using System.Linq;
 using DMI.SMS.IO;
 
 namespace DMI.SMS.Application
@@ -133,6 +133,28 @@ namespace DMI.SMS.Application
 
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed breakfast");
             });
+        }
+
+        public async Task ListStationInformations(
+            ProgressCallback progressCallback = null)
+        {
+            IList<StationInformation>? stationInformations = null;
+
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving station informations..");
+                progressCallback?.Invoke(0.0, "Retrieving station informations");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    stationInformations = unitOfWork.StationInformations.GetAll().ToList();
+                }
+
+                progressCallback?.Invoke(100, "");
+            });
+
+            Console.WriteLine();
+            stationInformations?.ToList().ForEach(p => Console.WriteLine($"  {p.StationName}"));
         }
 
         public async Task ExportData(

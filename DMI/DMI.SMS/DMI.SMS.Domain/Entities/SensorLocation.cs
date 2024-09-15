@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace DMI.SMS.Domain.Entities
 {
-    public class SensorLocation : ChildEntity
+    public class SensorLocation : EntityBase
     {
-        private StationInformation _stationinformation;
         private int? _stationid_dmi;
         private string _accessaddress;
         private DateTime? _datefrom;
@@ -18,12 +17,6 @@ namespace DMI.SMS.Domain.Entities
         private double? _sl_easting;
         private double? _sl_geo_lat;
         private double? _sl_geo_long;
-
-        public StationInformation StationInformation
-        {
-            get { return _stationinformation; }
-            set { _stationinformation = value; }
-        }
 
         public int? StationidDMI
         {

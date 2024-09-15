@@ -1,5 +1,4 @@
-﻿using Craft.Persistence;
-using DMI.SMS.Domain.Entities;
+﻿using DMI.SMS.Domain.Entities;
 
 namespace DMI.SMS.Persistence.Repositories
 {

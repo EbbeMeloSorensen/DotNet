@@ -15,7 +15,7 @@ namespace DMI.Data.Studio.ViewModel
         private Brush _trafficLightBrushRed = new SolidColorBrush(Colors.Red);
         private Brush _trafficLightBrushGreen = new SolidColorBrush(Colors.Green);
 
-        private readonly SMS.Application.IUIDataProvider _smsDataProvider;
+        private readonly SMS.Persistence.IUnitOfWorkFactory _unitOfWorkFactorySMS;
         private readonly StatDB.Application.IUIDataProvider _statDBDataProvider;
 
         private string _smsDatabaseHostPersisted;
@@ -148,10 +148,10 @@ namespace DMI.Data.Studio.ViewModel
         public TrafficLightViewModel TrafficLightViewModel_StatDBDatabase { get; private set; }
 
         public SettingsDialogViewModel(
-            SMS.Application.IUIDataProvider smsDataProvider,
+            SMS.Persistence.IUnitOfWorkFactory unitOfWorkFactorySMS,
             StatDB.Application.IUIDataProvider statDBDataProvider)
         {
-            _smsDataProvider = smsDataProvider;
+            _unitOfWorkFactorySMS = unitOfWorkFactorySMS;
             _statDBDataProvider = statDBDataProvider;
 
             TrafficLightViewModel_SMSDatabase = new TrafficLightViewModel(25);
@@ -194,7 +194,7 @@ namespace DMI.Data.Studio.ViewModel
 
                 SaveSettings();
 
-                TrafficLightViewModel_SMSDatabase.Brush = await _smsDataProvider.CheckConnection()
+                TrafficLightViewModel_SMSDatabase.Brush = await _unitOfWorkFactorySMS.CheckRepositoryConnection()
                     ? _trafficLightBrushGreen
                     : _trafficLightBrushRed;
             }

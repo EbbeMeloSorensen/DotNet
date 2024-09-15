@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils;
@@ -65,11 +64,9 @@ namespace DMI.Data.Studio.Application
             { 32175, new List<int>{ 53361, 53362, 53365 } },                                           // Østerlars
         };
 
-        private SMS.Application.IUIDataProvider _smsUiDataProvider;
+        private SMS.Persistence.IUnitOfWorkFactory _unitOfWorkFactorySmsDB;
         private ObsDB.Persistence.IUnitOfWorkFactory _unitOfWorkFactoryObsDB;
         private ILogger _logger;
-
-        public SMS.Application.IUIDataProvider SMSUIDataProvider => _smsUiDataProvider;
 
         // It must be possible for an external component to set the Logger, e.g. in order to override with a decorator
         public ILogger Logger
@@ -79,20 +76,13 @@ namespace DMI.Data.Studio.Application
         }
 
         public Application(
-            SMS.Application.IUIDataProvider smsUIDataProvider,
+            SMS.Persistence.IUnitOfWorkFactory unitOfWorkFactorySmsDB,
             ObsDB.Persistence.IUnitOfWorkFactory unitOfWorkFactoryObsDB,
             ILogger logger)
         {
-            _smsUiDataProvider = smsUIDataProvider;
+            _unitOfWorkFactorySmsDB = unitOfWorkFactorySmsDB;
             _unitOfWorkFactoryObsDB = unitOfWorkFactoryObsDB;
             _logger = logger;
-        }
-
-        public void Initialize()
-        {
-            Logger?.WriteLine(LogMessageCategory.Debug, "DMI.SMS.UI.WPF - initializing application");
-
-            _smsUiDataProvider.Initialize(_logger);
         }
 
         public async Task MakeBreakfast(
@@ -532,14 +522,19 @@ namespace DMI.Data.Studio.Application
 
                 foreach (var historicalTideGaugeStationId in historicalTideGaugeStationIds)
                 {
-                    var smsStation = SMSUIDataProvider.FindStationInformations(
-                        s => s.StationIDDMI.HasValue && 
-                        s.StationIDDMI.Value == historicalTideGaugeStationId &&
-                        s.GdbToDate.Year == 9999);
+                    using (var unitOfWork = _unitOfWorkFactorySmsDB.GenerateUnitOfWork())
+                    {
+                        var smsStation = unitOfWork.StationInformations
+                            .Find(
+                                s => s.StationIDDMI.HasValue &&
+                                s.StationIDDMI.Value == historicalTideGaugeStationId &&
+                                s.GdbToDate.Year == 9999)
+                            .Single();
 
-                    var frieDataStation = smsStation.Single().ConvertToFrieDataStation(convertFromDMIStationIdToKDIStationId);
+                        var frieDataStation = smsStation.ConvertToFrieDataStation(convertFromDMIStationIdToKDIStationId);
 
-                    stations.Add(frieDataStation);
+                        stations.Add(frieDataStation);
+                    }
                 }
 
                 stations = stations.OrderBy(s => s.stationId).ToList();
@@ -940,8 +935,12 @@ namespace DMI.Data.Studio.Application
         private IList<StationInformation> RetrieveAllRows(
             DateTime? rollBackDate)
         {
-            // Fetch all rows
-            var stationDataRaw = SMSUIDataProvider.GetAllStationInformations();
+            IList<StationInformation> stationDataRaw;
+
+            using (var unitOfWork = _unitOfWorkFactorySmsDB.GenerateUnitOfWork())
+            {
+                stationDataRaw = unitOfWork.StationInformations.GetAll().ToList();
+            }
 
             if (rollBackDate.HasValue)
             {
