@@ -157,6 +157,27 @@ namespace DMI.SMS.Application
             stationInformations?.ToList().ForEach(p => Console.WriteLine($"  {p.StationName}"));
         }
 
+        public async Task CreateStationInformation(
+            StationInformation stationInformation,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Creating Station Information..");
+                progressCallback?.Invoke(0.0, "Station Information");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    stationInformation.GlobalId = unitOfWork.StationInformations.GenerateUniqueGlobalId();
+                    unitOfWork.StationInformations.Add(stationInformation);
+                    unitOfWork.Complete();
+                }
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating station Information");
+            });
+        }
+
         public async Task ExportData(
             string fileName,
             bool excludeSupercededRows,

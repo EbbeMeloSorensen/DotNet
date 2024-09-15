@@ -1,5 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using CommandLine;
+using DMI.SMS.Domain.Entities;
 using DMI.SMS.UI.Console.Verbs;
 
 namespace DMI.SMS.UI.Console
@@ -13,19 +15,22 @@ namespace DMI.SMS.UI.Console
             System.Console.WriteLine("DMI.SMS.UI.Console");
 
             // Override arguments
-            //args = new string[3] {"export", "-f", "test.json"};
-            args = new string[3] {"list", "-o", "stationinformations"};
+            //args = new [] {"export", "-f", "test.json"};
+            args = new [] {"list"};
+            //args = new [] { "createStationInformation", "-i", "7913", "-n", "Kylling" };
 
             await Parser.Default.ParseArguments<
                     Lunch,
                     Export,
                     Import,
-                    List>(args)
+                    Verbs.StationInformation.List,
+                    Verbs.StationInformation.Create>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
                     (Import options) => Import(options),
-                    (List options) => List(options),
+                    (Verbs.StationInformation.List options) => List(options),
+                    (Verbs.StationInformation.Create options) => Create(options),
                     errs => Task.FromResult(0));
         }
 
@@ -76,28 +81,37 @@ namespace DMI.SMS.UI.Console
         }
 
         private static async Task List(
-            List options)
+            Verbs.StationInformation.List options)
         {
             System.Console.Write("List...\nProgress: ");
 
-            switch (options.Objects)
+            await GetApplication().ListStationInformations((progress, nameOfSubtask) =>
             {
-                case "stationinformations":
-                {
-                    await GetApplication().ListStationInformations((progress, nameOfSubtask) =>
-                    {
-                        System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                        System.Console.Write($"{progress:F2} %");
-                        return false;
-                    });
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
 
-                    break;
-                }
-                default:
-                {
-                    throw new ArgumentException("Invalid object type");
-                }
-            }
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task Create(
+            Verbs.StationInformation.Create options)
+        {
+            System.Console.Write("Creating Station Information...\nProgress: ");
+
+            var stationInformation = new StationInformation
+            {
+                StationIDDMI = int.Parse(options.StationId),
+                StationName = options.StationName
+            };
+
+            await GetApplication().CreateStationInformation(stationInformation, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
 
             System.Console.WriteLine("\nDone");
         }
