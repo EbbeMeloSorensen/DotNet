@@ -178,6 +178,27 @@ namespace DMI.SMS.Application
             });
         }
 
+        public async Task CreateSensorLocation(
+            SensorLocation sensorLocation,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Creating Sensor Location..");
+                progressCallback?.Invoke(0.0, "Sensor Location");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    sensorLocation.GlobalId = unitOfWork.SensorLocations.GenerateUniqueGlobalId();
+                    unitOfWork.SensorLocations.Add(sensorLocation);
+                    unitOfWork.Complete();
+                }
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating station Information");
+            });
+        }
+
         public async Task ExportData(
             string fileName,
             bool excludeSupercededRows,

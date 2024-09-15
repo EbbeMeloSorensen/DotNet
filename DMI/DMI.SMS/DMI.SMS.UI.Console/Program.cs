@@ -16,21 +16,24 @@ namespace DMI.SMS.UI.Console
 
             // Override arguments
             //args = new [] {"export", "-f", "test.json"};
-            args = new [] {"list"};
+            //args = new [] {"list"};
             //args = new [] { "createStationInformation", "-i", "7913", "-n", "Kylling" };
+            args = new [] { "createSensorLocation", "-i", "7913" };
 
             await Parser.Default.ParseArguments<
                     Lunch,
                     Export,
                     Import,
                     Verbs.StationInformation.List,
-                    Verbs.StationInformation.Create>(args)
+                    Verbs.StationInformation.Create,
+                    Verbs.SensorLocation.Create>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
                     (Import options) => Import(options),
                     (Verbs.StationInformation.List options) => List(options),
-                    (Verbs.StationInformation.Create options) => Create(options),
+                    (Verbs.StationInformation.Create options) => CreateStationInformation(options),
+                    (Verbs.SensorLocation.Create options) => CreateSensorLocation(options),
                     errs => Task.FromResult(0));
         }
 
@@ -95,7 +98,7 @@ namespace DMI.SMS.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        private static async Task Create(
+        private static async Task CreateStationInformation(
             Verbs.StationInformation.Create options)
         {
             System.Console.Write("Creating Station Information...\nProgress: ");
@@ -107,6 +110,26 @@ namespace DMI.SMS.UI.Console
             };
 
             await GetApplication().CreateStationInformation(stationInformation, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task CreateSensorLocation(
+            Verbs.SensorLocation.Create options)
+        {
+            System.Console.Write("Creating Sensor Location...\nProgress: ");
+
+            var sensorLocation = new SensorLocation
+            {
+                StationidDMI = 7913
+            };
+
+            await GetApplication().CreateSensorLocation(sensorLocation, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

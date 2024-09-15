@@ -6,10 +6,10 @@ namespace DMI.SMS.Domain.Entities
     public class SensorLocation : EntityBase
     {
         private int? _stationid_dmi;
-        private string _accessaddress;
+        private string? _accessaddress;
         private DateTime? _datefrom;
         private DateTime? _dateto;
-        private string _comment;
+        private string? _comment;
         private double? _barolevel;
         private int? _status;
         private int? _sl_utm;
@@ -24,7 +24,7 @@ namespace DMI.SMS.Domain.Entities
             set { _stationid_dmi = value; }
         }
 
-        public string AccessAddress
+        public string? AccessAddress
         {
             get { return _accessaddress; }
             set { _accessaddress = value; }
@@ -42,7 +42,7 @@ namespace DMI.SMS.Domain.Entities
             set { _dateto = value; }
         }
 
-        public string Comment
+        public string? Comment
         {
             get { return _comment; }
             set { _comment = value; }
@@ -92,13 +92,13 @@ namespace DMI.SMS.Domain.Entities
 
         public SensorLocation()
         {
-            SensorInformations = new HashSet<SensorInformation>();
-            ImagesOfSensorLocation = new HashSet<ImagesOfSensorLocation>();
-            HardwareAtLocation = new HashSet<HardwareAtLocation>();
+            //SensorInformations = new HashSet<SensorInformation>();
+            //ImagesOfSensorLocation = new HashSet<ImagesOfSensorLocation>();
+            //HardwareAtLocation = new HashSet<HardwareAtLocation>();
         }
 
-        public virtual ICollection<SensorInformation> SensorInformations { get; set; }
-        public virtual ICollection<ImagesOfSensorLocation> ImagesOfSensorLocation { get; set; }
-        public virtual ICollection<HardwareAtLocation> HardwareAtLocation { get; set; }
+        //public virtual ICollection<SensorInformation> SensorInformations { get; set; }
+        //public virtual ICollection<ImagesOfSensorLocation> ImagesOfSensorLocation { get; set; }
+        //public virtual ICollection<HardwareAtLocation> HardwareAtLocation { get; set; }
     }
 }

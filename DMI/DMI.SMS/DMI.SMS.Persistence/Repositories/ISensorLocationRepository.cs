@@ -5,5 +5,6 @@ namespace DMI.SMS.Persistence.Repositories
 {
     public interface ISensorLocationRepository : IRepository<SensorLocation>
     {
+        string GenerateUniqueGlobalId();
     }
 }
