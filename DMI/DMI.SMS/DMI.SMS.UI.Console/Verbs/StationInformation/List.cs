@@ -2,7 +2,7 @@
 
 namespace DMI.SMS.UI.Console.Verbs.StationInformation;
 
-[Verb("list", HelpText = "List objects")]
+[Verb("listStationInformations", HelpText = "List station informations")]
 public sealed class List
 {
 }

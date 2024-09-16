@@ -16,9 +16,10 @@ namespace DMI.SMS.UI.Console
 
             // Override arguments
             //args = new [] {"export", "-f", "test.json"};
-            //args = new [] {"list"};
+            //args = new [] {"listStationInformations"};
             //args = new [] { "createStationInformation", "-i", "7913", "-n", "Kylling" };
-            args = new [] { "createSensorLocation", "-i", "7913" };
+            //args = new [] { "createSensorLocation", "-i", "7913" };
+            args = new [] {"listSensorLocations"};
 
             await Parser.Default.ParseArguments<
                     Lunch,
@@ -26,13 +27,15 @@ namespace DMI.SMS.UI.Console
                     Import,
                     Verbs.StationInformation.List,
                     Verbs.StationInformation.Create,
+                    Verbs.SensorLocation.List,
                     Verbs.SensorLocation.Create>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
                     (Import options) => Import(options),
-                    (Verbs.StationInformation.List options) => List(options),
+                    (Verbs.StationInformation.List options) => ListStationInformations(options),
                     (Verbs.StationInformation.Create options) => CreateStationInformation(options),
+                    (Verbs.SensorLocation.List options) => ListSensorLocations(options),
                     (Verbs.SensorLocation.Create options) => CreateSensorLocation(options),
                     errs => Task.FromResult(0));
         }
@@ -83,7 +86,7 @@ namespace DMI.SMS.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        private static async Task List(
+        private static async Task ListStationInformations(
             Verbs.StationInformation.List options)
         {
             System.Console.Write("List...\nProgress: ");
@@ -110,6 +113,21 @@ namespace DMI.SMS.UI.Console
             };
 
             await GetApplication().CreateStationInformation(stationInformation, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task ListSensorLocations(
+            Verbs.SensorLocation.List options)
+        {
+            System.Console.Write("List...\nProgress: ");
+
+            await GetApplication().ListSensorLocations((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

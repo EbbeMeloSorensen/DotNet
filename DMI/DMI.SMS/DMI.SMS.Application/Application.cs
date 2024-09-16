@@ -178,6 +178,28 @@ namespace DMI.SMS.Application
             });
         }
 
+        public async Task ListSensorLocations(
+            ProgressCallback progressCallback = null)
+        {
+            IList<SensorLocation>? sensorLocations = null;
+
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving sensor locations..");
+                progressCallback?.Invoke(0.0, "Retrieving sensor locations");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    sensorLocations = unitOfWork.SensorLocations.GetAll().ToList();
+                }
+
+                progressCallback?.Invoke(100, "");
+            });
+
+            Console.WriteLine();
+            sensorLocations?.ToList().ForEach(p => Console.WriteLine($"  {p.StationidDMI}"));
+        }
+
         public async Task CreateSensorLocation(
             SensorLocation sensorLocation,
             ProgressCallback progressCallback = null)
