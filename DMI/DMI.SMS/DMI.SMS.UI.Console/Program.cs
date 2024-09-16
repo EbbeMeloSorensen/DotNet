@@ -16,10 +16,11 @@ namespace DMI.SMS.UI.Console
 
             // Override arguments
             //args = new [] {"export", "-f", "test.json"};
-            //args = new [] {"listStationInformations"};
-            //args = new [] { "createStationInformation", "-i", "7913", "-n", "Kylling" };
+            args = new [] {"listStationInformations"};
+            //args = new [] { "createStationInformation", "-i", "7913", "-n", "Bamse" };
+            //args = new [] { "createStationInformation", "-i", "7914", "-n", "Kylling" };
             //args = new [] { "createSensorLocation", "-i", "7913" };
-            args = new [] {"listSensorLocations"};
+            //args = new [] {"listSensorLocations"};
 
             await Parser.Default.ParseArguments<
                     Lunch,
