@@ -1,5 +1,4 @@
-﻿using System;
-using System.Transactions;
+﻿using System.Transactions;
 using DMI.SMS.Persistence.Npgsql.Repositories;
 using DMI.SMS.Persistence.Repositories;
 
@@ -16,6 +15,7 @@ namespace DMI.SMS.Persistence.Npgsql
         public IContactPersonRepository ContactPersons { get; }
         public ILegalOwnerRepository LegalOwners { get; }
         public IStationKeeperRepository StationKeepers { get; }
+        public IElevationAnglesRepository ElevationAnglesRepository { get; }
 
         public UnitOfWork()
         {

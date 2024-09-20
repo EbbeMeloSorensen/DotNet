@@ -1,5 +1,4 @@
-﻿using System;
-using DMI.SMS.Persistence.Repositories;
+﻿using DMI.SMS.Persistence.Repositories;
 
 namespace DMI.SMS.Persistence.Memory
 {
@@ -11,6 +10,7 @@ namespace DMI.SMS.Persistence.Memory
         public ISensorInformationRepository SensorInformations { get; }
         public IContactPersonRepository ContactPersons { get; }
         public ILegalOwnerRepository LegalOwners { get; }
+        public IElevationAnglesRepository ElevationAnglesRepository { get; }
 
         public UnitOfWork(
             IStationInformationRepository stationInformationRepository)

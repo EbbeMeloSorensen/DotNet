@@ -221,6 +221,29 @@ namespace DMI.SMS.Application
             });
         }
 
+        public async Task CreateElevationAngles(
+            ElevationAngles elevationAngles,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Creating Elevation Angles..");
+                progressCallback?.Invoke(0.0, "Elevation Angles");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    throw new NotImplementedException();
+                    //elevationAngles.GlobalId = unitOfWork.E
+                    //sensorLocation.GlobalId = unitOfWork.SensorLocations.GenerateUniqueGlobalId();
+                    //unitOfWork.SensorLocations.Add(sensorLocation);
+                    //unitOfWork.Complete();
+                }
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating station Information");
+            });
+        }
+
         public async Task ExportData(
             string fileName,
             bool excludeSupercededRows,

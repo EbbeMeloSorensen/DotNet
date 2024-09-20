@@ -11,6 +11,7 @@ namespace DMI.SMS.Persistence.File
         public ISensorInformationRepository SensorInformations { get; }
         public IContactPersonRepository ContactPersons { get; }
         public ILegalOwnerRepository LegalOwners { get; }
+        public IElevationAnglesRepository ElevationAnglesRepository { get; }
 
         public UnitOfWork(
             IStationInformationRepository stationInformationRepository)

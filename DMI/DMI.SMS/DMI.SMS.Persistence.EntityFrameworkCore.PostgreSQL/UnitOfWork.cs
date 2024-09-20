@@ -19,6 +19,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL
         public ISensorLocationRepository SensorLocations { get; }
         public ISensorInformationRepository SensorInformations { get; }
         public IImagesOfSensorLocationRepository ImagesOfSensorLocations { get; }
+        public IElevationAnglesRepository ElevationAnglesRepository { get; }
 
         public UnitOfWork(SMSDbContext context)
         {

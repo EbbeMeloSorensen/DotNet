@@ -13,6 +13,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
         public ISensorLocationRepository SensorLocations { get; }
         public ISensorInformationRepository SensorInformations { get; }
         public IImagesOfSensorLocationRepository ImagesOfSensorLocations { get; }
+        public IElevationAnglesRepository ElevationAnglesRepository { get; }
 
         public UnitOfWork(SMSDbContext context)
         {
