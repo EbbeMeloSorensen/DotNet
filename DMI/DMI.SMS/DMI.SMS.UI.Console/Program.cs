@@ -16,11 +16,11 @@ namespace DMI.SMS.UI.Console
 
             // Override arguments
             //args = new [] {"export", "-f", "test.json"};
-            //args = new [] {"listStationInformations"};
-            //args = new [] { "createStationInformation", "-i", "7913", "-n", "Kylling" };
+            args = new [] {"listStationInformations"};
+            //args = new [] { "createStationInformation", "-i", "7913", "-n", "Bamse" };
+            //args = new [] { "createStationInformation", "-i", "7914", "-n", "Kylling" };
             //args = new [] { "createSensorLocation", "-i", "7913" };
             //args = new [] {"listSensorLocations"};
-            args = new [] { "createElevationAngles", "-n", "45" };
 
             await Parser.Default.ParseArguments<
                     Lunch,
@@ -29,8 +29,7 @@ namespace DMI.SMS.UI.Console
                     Verbs.StationInformation.List,
                     Verbs.StationInformation.Create,
                     Verbs.SensorLocation.List,
-                    Verbs.SensorLocation.Create,
-                    Verbs.ElevationAngles.Create>(args)
+                    Verbs.SensorLocation.Create>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
@@ -39,7 +38,6 @@ namespace DMI.SMS.UI.Console
                     (Verbs.StationInformation.Create options) => CreateStationInformation(options),
                     (Verbs.SensorLocation.List options) => ListSensorLocations(options),
                     (Verbs.SensorLocation.Create options) => CreateSensorLocation(options),
-                    (Verbs.ElevationAngles.Create options) => CreateElevationAngles(options),
                     errs => Task.FromResult(0));
         }
 
@@ -156,28 +154,6 @@ namespace DMI.SMS.UI.Console
                 System.Console.Write($"{progress:F2} %");
                 return false;
             });
-
-            System.Console.WriteLine("\nDone");
-        }
-
-        private static async Task CreateElevationAngles(
-            Verbs.ElevationAngles.Create options)
-        {
-            System.Console.Write("Creating Elevation Angles...\nProgress: ");
-
-            var elevationAngles = new ElevationAngles
-            {
-                Angle_N = 45
-            };
-
-            throw new NotImplementedException();
-
-            //await GetApplication().CreateSensorLocation(sensorLocation, (progress, nameOfSubtask) =>
-            //{
-            //    System.Console.SetCursorPosition(10, System.Console.CursorTop);
-            //    System.Console.Write($"{progress:F2} %");
-            //    return false;
-            //});
 
             System.Console.WriteLine("\nDone");
         }

@@ -22,6 +22,8 @@ namespace DMI.SMS.Application
 
     public class Application
     {
+        private static readonly DateTime _maxDate = new DateTime(9999, 12, 31, 23, 59, 59);
+
         private static Dictionary<int, string> _blackListedStationIds = new Dictionary<int, string>
         {
             //{ 6052, "Thyborøn (There is quite a bit of confusion about this one. Ib says it has been owned by DMI since 1961, the according to the sms database, it has been owned by Kystdirektoratet in a period of time). Julia Sommer has so far decided to omit it" },
@@ -168,7 +170,10 @@ namespace DMI.SMS.Application
 
                 using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                 {
+                    stationInformation.ObjectId = unitOfWork.StationInformations.GenerateUniqueObjectId();
                     stationInformation.GlobalId = unitOfWork.StationInformations.GenerateUniqueGlobalId();
+                    stationInformation.GdbFromDate = DateTime.UtcNow;
+                    stationInformation.GdbToDate = _maxDate;
                     unitOfWork.StationInformations.Add(stationInformation);
                     unitOfWork.Complete();
                 }
@@ -211,7 +216,10 @@ namespace DMI.SMS.Application
 
                 using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                 {
+                    sensorLocation.ObjectId = unitOfWork.SensorLocations.GenerateUniqueObjectId();
                     sensorLocation.GlobalId = unitOfWork.SensorLocations.GenerateUniqueGlobalId();
+                    sensorLocation.GdbFromDate = DateTime.UtcNow;
+                    sensorLocation.GdbToDate = _maxDate;
                     unitOfWork.SensorLocations.Add(sensorLocation);
                     unitOfWork.Complete();
                 }
