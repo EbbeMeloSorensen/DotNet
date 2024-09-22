@@ -18,11 +18,18 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
         }
 
         protected override void OnModelCreating(
-            ModelBuilder modelBuilder)
+            ModelBuilder builder)
         {
-            modelBuilder.ApplyConfiguration(new StationInformationConfiguration());
-            modelBuilder.ApplyConfiguration(new SensorLocationConfiguration());
-            modelBuilder.ApplyConfiguration(new ElevationAnglesConfiguration());
+            builder.ApplyConfiguration(new StationInformationConfiguration());
+            builder.ApplyConfiguration(new SensorLocationConfiguration());
+            builder.ApplyConfiguration(new ElevationAnglesConfiguration());
+
+            builder.Entity<ElevationAngles>()
+                .HasOne(_ => _.SensorLocation)
+                .WithMany()
+                .HasForeignKey(_ => _.ParentGdbArchiveOid)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

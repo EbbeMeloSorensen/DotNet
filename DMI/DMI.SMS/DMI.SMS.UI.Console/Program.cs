@@ -19,10 +19,10 @@ namespace DMI.SMS.UI.Console
             //args = new [] { "createStationInformation", "-i", "7913", "-n", "Bamse" };
             //args = new [] { "createStationInformation", "-i", "7914", "-n", "Kylling" };
             //args = new [] {"listStationInformations"};
-            //args = new [] { "createSensorLocation", "-i", "7913" };
+            args = new [] { "createSensorLocation", "-i", "7913" };
             //args = new [] { "createSensorLocation", "-i", "7914" };
             //args = new [] {"listSensorLocations"};
-            args = new [] { "createElevationAngles", "-n", "10" };
+            //args = new [] { "createElevationAngles", "-n", "10" };
 
             await Parser.Default.ParseArguments<
                     Lunch,

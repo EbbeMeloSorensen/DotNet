@@ -18,6 +18,7 @@ namespace DMI.SMS.Domain.Entities
         private string? _anglecomment;
         private string? _serviceid;
 
+
         public SensorLocation SensorLocation
         {
             get { return _sensorLocation; }
