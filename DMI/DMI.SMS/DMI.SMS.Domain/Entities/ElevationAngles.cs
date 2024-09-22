@@ -15,8 +15,8 @@ namespace DMI.SMS.Domain.Entities
         private int? _angle_w;
         private int? _angle_nw;
         private int? _angleindex;
-        private string _anglecomment;
-        private string _serviceid;
+        private string? _anglecomment;
+        private string? _serviceid;
 
         public SensorLocation SensorLocation
         {
@@ -84,13 +84,13 @@ namespace DMI.SMS.Domain.Entities
             set { _angleindex = value; }
         }
 
-        public string AngleComment
+        public string? AngleComment
         {
             get { return _anglecomment; }
             set { _anglecomment = value; }
         }
 
-        public string ServiceId
+        public string? ServiceId
         {
             get { return _serviceid; }
             set { _serviceid = value; }

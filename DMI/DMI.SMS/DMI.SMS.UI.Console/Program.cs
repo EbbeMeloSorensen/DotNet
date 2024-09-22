@@ -16,28 +16,32 @@ namespace DMI.SMS.UI.Console
 
             // Override arguments
             //args = new [] {"export", "-f", "test.json"};
-            args = new [] {"listStationInformations"};
             //args = new [] { "createStationInformation", "-i", "7913", "-n", "Bamse" };
             //args = new [] { "createStationInformation", "-i", "7914", "-n", "Kylling" };
+            //args = new [] {"listStationInformations"};
             //args = new [] { "createSensorLocation", "-i", "7913" };
+            //args = new [] { "createSensorLocation", "-i", "7914" };
             //args = new [] {"listSensorLocations"};
+            args = new [] { "createElevationAngles", "-n", "10" };
 
             await Parser.Default.ParseArguments<
                     Lunch,
                     Export,
                     Import,
-                    Verbs.StationInformation.List,
                     Verbs.StationInformation.Create,
+                    Verbs.StationInformation.List,
+                    Verbs.SensorLocation.Create,
                     Verbs.SensorLocation.List,
-                    Verbs.SensorLocation.Create>(args)
+                    Verbs.ElevationAngles.Create>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
                     (Import options) => Import(options),
-                    (Verbs.StationInformation.List options) => ListStationInformations(options),
                     (Verbs.StationInformation.Create options) => CreateStationInformation(options),
-                    (Verbs.SensorLocation.List options) => ListSensorLocations(options),
+                    (Verbs.StationInformation.List options) => ListStationInformations(options),
                     (Verbs.SensorLocation.Create options) => CreateSensorLocation(options),
+                    (Verbs.SensorLocation.List options) => ListSensorLocations(options),
+                    (Verbs.ElevationAngles.Create options) => CreateElevationAngles(options),
                     errs => Task.FromResult(0));
         }
 
@@ -149,6 +153,36 @@ namespace DMI.SMS.UI.Console
             };
 
             await GetApplication().CreateSensorLocation(sensorLocation, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task CreateElevationAngles(
+            Verbs.ElevationAngles.Create options)
+        {
+            System.Console.Write("Creating ElevationAngles...\nProgress: ");
+
+            var elevationAngles = new ElevationAngles
+            {
+                DateFrom = new DateTime(2024, 9, 22, 1, 1, 1, DateTimeKind.Utc),
+                Angle_N = 10,
+                Angle_NE = 20,
+                Angle_E = 30,
+                Angle_SE = 40,
+                Angle_S = 50,
+                Angle_SW = 60,
+                Angle_W = 70,
+                Angle_NW = 80,
+                AngleIndex = 52,
+                AngleComment = "No comment"
+            };
+
+            await GetApplication().CreateElevationAngles(elevationAngles, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

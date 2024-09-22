@@ -8,6 +8,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
     {
         public DbSet<StationInformation> StationInformations { get; set; }
         public DbSet<SensorLocation> SensorLocations { get; set; }
+        public DbSet<ElevationAngles> ElevationAngles { get; set; }
 
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
@@ -21,6 +22,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
         {
             modelBuilder.ApplyConfiguration(new StationInformationConfiguration());
             modelBuilder.ApplyConfiguration(new SensorLocationConfiguration());
+            modelBuilder.ApplyConfiguration(new ElevationAnglesConfiguration());
         }
     }
 }

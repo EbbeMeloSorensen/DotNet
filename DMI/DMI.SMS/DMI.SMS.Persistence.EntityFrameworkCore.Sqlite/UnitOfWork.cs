@@ -20,6 +20,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
             _context = context;
             StationInformations = new StationInformationRepository(_context);
             SensorLocations = new SensorLocationRepository(_context);
+            ElevationAnglesRepository = new ElevationAnglesRepository(_context);
         }
 
         public int Complete()

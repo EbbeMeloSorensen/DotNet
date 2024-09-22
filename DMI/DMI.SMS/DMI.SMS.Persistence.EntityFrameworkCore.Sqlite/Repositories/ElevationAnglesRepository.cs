@@ -25,5 +25,27 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public int GenerateUniqueObjectId()
+        {
+            var context = Context as SMSDbContext;
+
+            if (context == null)
+            {
+                throw new InvalidCastException();
+            }
+
+            if (!context.SensorLocations.Any())
+            {
+                return 1;
+            }
+
+            return context.ElevationAngles.Max(_ => _.ObjectId) + 1;
+        }
+
+        public string GenerateUniqueGlobalId()
+        {
+            return Guid.NewGuid().ToString();
+        }
     }
 }

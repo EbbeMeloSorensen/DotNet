@@ -5,5 +5,7 @@ namespace DMI.SMS.Persistence.Repositories
 {
     public interface IElevationAnglesRepository : IRepository<ElevationAngles>
     {
+        int GenerateUniqueObjectId();
+        string GenerateUniqueGlobalId();
     }
 }

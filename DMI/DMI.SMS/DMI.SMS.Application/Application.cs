@@ -240,11 +240,10 @@ namespace DMI.SMS.Application
 
                 using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                 {
-                    throw new NotImplementedException();
-                    //elevationAngles.GlobalId = unitOfWork.E
-                    //sensorLocation.GlobalId = unitOfWork.SensorLocations.GenerateUniqueGlobalId();
-                    //unitOfWork.SensorLocations.Add(sensorLocation);
-                    //unitOfWork.Complete();
+                    elevationAngles.ObjectId = unitOfWork.ElevationAnglesRepository.GenerateUniqueObjectId();
+                    elevationAngles.GlobalId = unitOfWork.ElevationAnglesRepository.GenerateUniqueGlobalId();
+                    unitOfWork.ElevationAnglesRepository.Add(elevationAngles);
+                    unitOfWork.Complete();
                 }
 
                 progressCallback?.Invoke(100, "");
