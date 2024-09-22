@@ -19,10 +19,10 @@ namespace DMI.SMS.UI.Console
             //args = new [] { "createStationInformation", "-i", "7913", "-n", "Bamse" };
             //args = new [] { "createStationInformation", "-i", "7914", "-n", "Kylling" };
             //args = new [] {"listStationInformations"};
-            args = new [] { "createSensorLocation", "-i", "7913" };
+            //args = new [] { "createSensorLocation", "-i", "7913" };
             //args = new [] { "createSensorLocation", "-i", "7914" };
             //args = new [] {"listSensorLocations"};
-            //args = new [] { "createElevationAngles", "-n", "10" };
+            args = new [] { "createElevationAngles", "-n", "1", "--ne", "2" };
 
             await Parser.Default.ParseArguments<
                     Lunch,
@@ -169,9 +169,13 @@ namespace DMI.SMS.UI.Console
 
             var elevationAngles = new ElevationAngles
             {
+                GdbFromDate = DateTime.UtcNow,
+                GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59),
+                ParentGuid = "2c1d507d-1375-4f80-a588-3387f07469a6",
+                ParentGdbArchiveOid = 1,
                 DateFrom = new DateTime(2024, 9, 22, 1, 1, 1, DateTimeKind.Utc),
-                Angle_N = 10,
-                Angle_NE = 20,
+                Angle_N = options.Angle_N,
+                Angle_NE = options.Angle_NE,
                 Angle_E = 30,
                 Angle_SE = 40,
                 Angle_S = 50,

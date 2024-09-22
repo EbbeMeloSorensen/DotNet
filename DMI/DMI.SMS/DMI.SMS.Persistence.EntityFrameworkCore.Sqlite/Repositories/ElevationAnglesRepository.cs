@@ -35,7 +35,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.Repositories
                 throw new InvalidCastException();
             }
 
-            if (!context.SensorLocations.Any())
+            if (!context.ElevationAngles.Any())
             {
                 return 1;
             }
