@@ -202,7 +202,8 @@ namespace DMI.SMS.Application
             });
 
             Console.WriteLine();
-            sensorLocations?.ToList().ForEach(p => Console.WriteLine($"  {p.StationidDMI}"));
+            Console.WriteLine($"{"GlobalId",36}, {"StationidDMI",12}");
+            sensorLocations?.ToList().ForEach(_ => Console.WriteLine($"{_.GlobalId,36}, {_.StationidDMI,12}"));
         }
 
         public async Task CreateSensorLocation(
