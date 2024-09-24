@@ -171,7 +171,7 @@ namespace DMI.SMS.UI.Console
             {
                 GdbFromDate = DateTime.UtcNow,
                 GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59),
-                ParentGuid = "2c1d507d-1375-4f80-a588-3387f07469a6",
+                ParentGuid = "2c1d507d-1375-4f80-a588-3387f0766666",
                 ParentGdbArchiveOid = 1,
                 DateFrom = new DateTime(2024, 9, 22, 1, 1, 1, DateTimeKind.Utc),
                 Angle_N = options.Angle_N,
