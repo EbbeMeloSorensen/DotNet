@@ -48,6 +48,17 @@ namespace Craft.DataStructures.IO.UnitTest
         }
 
         [Fact]
+        public void ReadASimpleDirectedGraphFromDotFile()
+        {
+            var lines = File.ReadAllLines(@"C:\Temp\SimpleDirectedGraph.dot");
+            
+            foreach (var line in lines)
+            {
+
+            }
+        }
+
+        [Fact]
         public void WriteGraphAdjacencyMatrixToGraphMLFile()
         {
             // Arrange
