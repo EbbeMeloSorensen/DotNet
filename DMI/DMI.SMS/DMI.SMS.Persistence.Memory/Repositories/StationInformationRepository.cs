@@ -17,6 +17,12 @@ namespace DMI.SMS.Persistence.Memory.Repositories
             _stationInformations = new List<StationInformation>();
         }
 
+        public StationInformation GetByGlobalId(
+            string globalId)
+        {
+            throw new NotImplementedException();
+        }
+
         public StationInformation Get(int id)
         {
             throw new NotImplementedException();

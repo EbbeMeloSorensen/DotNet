@@ -150,6 +150,12 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             return stationInformation;
         }
 
+        public StationInformation GetByGlobalId(
+            string globalId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<StationInformation> GetAll()
         {
             return GetStationInformations(null);

@@ -13,6 +13,15 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Repositories
         {
         }
 
+        public StationInformation GetByGlobalId(
+            string globalId)
+        {
+            var stationInformation = (Context as SMSDbContext).StationInformations
+                .Single(_ => _.GlobalId == globalId && _.GdbToDate.Year == 9999);
+
+            return stationInformation;
+        }
+
         public override void Update(StationInformation stationInformation)
         {
             var sRepo = Get(stationInformation.GdbArchiveOid);

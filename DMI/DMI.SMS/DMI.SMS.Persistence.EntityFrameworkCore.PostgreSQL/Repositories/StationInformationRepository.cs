@@ -2,7 +2,6 @@
 using DMI.SMS.Persistence.Repositories;
 using Craft.Persistence.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 using DMI.SMS.Domain.EntityClassExtensions;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
@@ -11,6 +10,15 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
     {
         public StationInformationRepository(DbContext context) : base(context)
         {
+        }
+
+        public StationInformation GetByGlobalId(
+            string globalId)
+        {
+            var stationInformation = (Context as SMSDbContext).StationInformations
+                .Single(_ => _.GlobalId == globalId && _.GdbToDate.Year == 9999);
+
+            return stationInformation;
         }
 
         public override void Clear()

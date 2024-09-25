@@ -21,7 +21,8 @@ namespace DMI.SMS.UI.Console
             //args = new [] { "createSensorLocation", "-i", "7914" };
             //args = new [] {"listSensorLocations"};
             //args = new [] { "createElevationAngles", "--sl", "c381610b-e488-4f3c-8cee-751ae0cb0b5b", "-n", "1", "--ne", "3" };
-            args = new [] {"listElevationAngles"};
+            //args = new [] {"listElevationAngles"};
+            args = new [] { "createServiceVisitReport", "--si", "40074ef7-77c6-4702-8009-9faeab7058d1" };
 
             await Parser.Default.ParseArguments<
                     Lunch,
@@ -32,7 +33,8 @@ namespace DMI.SMS.UI.Console
                     Verbs.SensorLocation.Create,
                     Verbs.SensorLocation.List,
                     Verbs.ElevationAngles.Create,
-                    Verbs.ElevationAngles.List>(args)
+                    Verbs.ElevationAngles.List,
+                    Verbs.ServiceVisitReport.Create>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
@@ -43,6 +45,7 @@ namespace DMI.SMS.UI.Console
                     (Verbs.SensorLocation.List options) => ListSensorLocations(options),
                     (Verbs.ElevationAngles.Create options) => CreateElevationAngles(options),
                     (Verbs.ElevationAngles.List options) => ListElevationAngles(options),
+                    (Verbs.ServiceVisitReport.Create options) => CreateServiceVisitReport(options),
                     errs => Task.FromResult(0));
         }
 
@@ -202,6 +205,28 @@ namespace DMI.SMS.UI.Console
             System.Console.Write("List elevation angles...\nProgress: ");
 
             await GetApplication().ListElevationAngles((progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task CreateServiceVisitReport(
+            Verbs.ServiceVisitReport.Create options)
+        {
+            System.Console.Write("Creating Service Visit Report...\nProgress: ");
+
+            var serviceVisitReport = new ServiceVisitReport
+            {
+                GdbFromDate = DateTime.UtcNow,
+                GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59),
+                ParentGuid = options.ParentGuid
+            };
+
+            await GetApplication().CreateServiceVisitReport(serviceVisitReport, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

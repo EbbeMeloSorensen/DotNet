@@ -161,6 +161,34 @@ namespace DMI.SMS.Application
             });
         }
 
+        public async Task CreateServiceVisitReport(
+            ServiceVisitReport serviceVisitReport,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Creating Service Visit Report..");
+                progressCallback?.Invoke(0.0, "Service Visit Report");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    var parent = unitOfWork.StationInformations.GetByGlobalId(serviceVisitReport.ParentGuid);
+
+                    //elevationAngles.ObjectId = unitOfWork.ElevationAnglesRepository.GenerateUniqueObjectId();
+                    //elevationAngles.GlobalId = unitOfWork.ElevationAnglesRepository.GenerateUniqueGlobalId();
+                    //elevationAngles.ParentGuid = parent.GlobalId;
+                    //elevationAngles.ParentGdbArchiveOid = parent.GdbArchiveOid;
+                    //unitOfWork.ElevationAnglesRepository.Add(elevationAngles);
+                    //unitOfWork.Complete();
+
+                    throw new NotImplementedException();
+                }
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating service visit report");
+            });
+        }
+
         public async Task CreateSensorLocation(
             SensorLocation sensorLocation,
             ProgressCallback progressCallback = null)
@@ -228,6 +256,10 @@ namespace DMI.SMS.Application
 
                 progressCallback?.Invoke(100, "");
             });
+
+            Console.WriteLine();
+            Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"StationidDMI",12}, {"StationName",20}");
+            stationInformations?.ToList().ForEach(_ => Console.WriteLine($"{_.GdbArchiveOid,13}, {_.GlobalId,36}, {_.StationIDDMI,12}, {_.StationName,20}"));
 
             Console.WriteLine();
             stationInformations?.ToList().ForEach(p => Console.WriteLine($"  {p.StationName}"));

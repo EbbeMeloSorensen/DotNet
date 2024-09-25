@@ -12,6 +12,16 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
         }
 
+        public StationInformation GetByGlobalId(
+            string globalId)
+        {
+            var stationInformation = (Context as SMSDbContext).StationInformations
+                .Single(_ => _.GlobalId == globalId && _.GdbToDate.Year == 9999);
+
+            return stationInformation;
+        }
+
+
         public override void Clear()
         {
             var context = Context as SMSDbContext;

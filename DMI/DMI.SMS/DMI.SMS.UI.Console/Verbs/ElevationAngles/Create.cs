@@ -13,5 +13,4 @@ public sealed class Create
 
     [Option("ne", Required = true, HelpText = "North East")]
     public int Angle_NE { get; set; }
-
 }

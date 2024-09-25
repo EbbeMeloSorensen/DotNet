@@ -24,7 +24,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.Repositories
             string globalId)
         {
             var sensorLocation = (Context as SMSDbContext).SensorLocations
-                .Single(_ => _.GlobalId == globalId);
+                .Single(_ => _.GlobalId == globalId && _.GdbToDate.Year == 9999);
 
             return sensorLocation;
         }

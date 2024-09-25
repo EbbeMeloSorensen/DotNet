@@ -19,6 +19,12 @@ namespace DMI.SMS.Persistence.File.Repositories
             _stationInformations = new List<StationInformation>();
         }
 
+        public StationInformation GetByGlobalId(
+            string globalId)
+        {
+            throw new NotImplementedException();
+        }
+
         public StationInformation Get(int id)
         {
             return _stationInformations.Single(p => p.GdbArchiveOid == id);
