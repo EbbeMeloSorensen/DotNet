@@ -260,9 +260,6 @@ namespace DMI.SMS.Application
             Console.WriteLine();
             Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"StationidDMI",12}, {"StationName",20}");
             stationInformations?.ToList().ForEach(_ => Console.WriteLine($"{_.GdbArchiveOid,13}, {_.GlobalId,36}, {_.StationIDDMI,12}, {_.StationName,20}"));
-
-            Console.WriteLine();
-            stationInformations?.ToList().ForEach(p => Console.WriteLine($"  {p.StationName}"));
         }
 
         public async Task ListSensorLocations(

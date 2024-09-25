@@ -22,7 +22,7 @@ namespace DMI.SMS.UI.Console
             //args = new [] {"listSensorLocations"};
             //args = new [] { "createElevationAngles", "--sl", "c381610b-e488-4f3c-8cee-751ae0cb0b5b", "-n", "1", "--ne", "3" };
             //args = new [] {"listElevationAngles"};
-            args = new [] { "createServiceVisitReport", "--si", "40074ef7-77c6-4702-8009-9faeab7058d1" };
+            //args = new [] { "createServiceVisitReport", "--si", "40074ef7-77c6-4702-8009-9faeab7058d1" };
 
             await Parser.Default.ParseArguments<
                     Lunch,
@@ -106,8 +106,6 @@ namespace DMI.SMS.UI.Console
                 System.Console.Write($"{progress:F2} %");
                 return false;
             });
-
-            System.Console.WriteLine("\nDone");
         }
 
         private static async Task CreateStationInformation(
