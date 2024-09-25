@@ -82,12 +82,24 @@ void CollectGraphDataFromDotFile(
 var vertexLabels = new HashSet<string>();
 var edgeData = new List<Tuple<string, string>>();
 
-//CollectGraphDataFromDotFile(@"C:\Temp\graph1.dot", vertexLabels, edgeData);
-//CollectGraphDataFromDotFile(@"C:\Temp\graph2.dot", vertexLabels, edgeData);
+// Windows
+var useLinux = true;
 
-var directory = new DirectoryInfo("C:\\Users\\B053687\\Git\\DMI_Gitlab\\enterprise-architecture\\catalogs_generated\\aci_dot_files");
+var rootDirectory = useLinux
+    ? "/home/ebs/Git/enterprise-architecture/catalogs_generated/aci_dot_files"
+    : "C:\\Users\\B053687\\Git\\DMI_Gitlab\\enterprise-architecture\\catalogs_generated\\aci_dot_files";
+
+var outputFile = useLinux
+    ? "aci_topoplogy.graphml"
+    : @"C:\Temp\Take1.graphml";
+
+var directory = new DirectoryInfo(rootDirectory);
+
+Console.WriteLine($"Parsing yml files:");
+
 foreach (var file in directory.GetFiles())
 {
+    Console.WriteLine($"  {file.Name}");
     CollectGraphDataFromDotFile(file.FullName, vertexLabels, edgeData);
 }
 
@@ -106,10 +118,17 @@ foreach (var item in edgeData)
     var vertexId1 = vertexIdMap[item.Item1];
     var vertexId2 = vertexIdMap[item.Item2];
 
+    if (vertexId1 == vertexId2)
+    {
+        Console.WriteLine($"    WARNING: {item.Item1} apparently connects to itself...");
+    }
+
     graph.AddEdge(vertexId1, vertexId2);
 }
 
-graph.WriteToFile(@"C:\Temp\Take1.graphml", Format.GraphML);
+
+Console.WriteLine($"Wrinting {outputFile}..");
+graph.WriteToFile(outputFile, Format.GraphML);
 Console.WriteLine("Done");
 
 if (false)
