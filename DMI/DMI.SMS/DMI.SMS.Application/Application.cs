@@ -202,7 +202,8 @@ namespace DMI.SMS.Application
             });
 
             Console.WriteLine();
-            sensorLocations?.ToList().ForEach(p => Console.WriteLine($"  {p.StationidDMI}"));
+            Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"StationidDMI",12}");
+            sensorLocations?.ToList().ForEach(_ => Console.WriteLine($"{_.GdbArchiveOid,13}, {_.GlobalId,36}, {_.StationidDMI,12}"));
         }
 
         public async Task CreateSensorLocation(
@@ -240,8 +241,12 @@ namespace DMI.SMS.Application
 
                 using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                 {
+                    var parent = unitOfWork.SensorLocations.GetByGlobalId(elevationAngles.ParentGuid);
+
                     elevationAngles.ObjectId = unitOfWork.ElevationAnglesRepository.GenerateUniqueObjectId();
                     elevationAngles.GlobalId = unitOfWork.ElevationAnglesRepository.GenerateUniqueGlobalId();
+                    elevationAngles.ParentGuid = parent.GlobalId;
+                    elevationAngles.ParentGdbArchiveOid = parent.GdbArchiveOid;
                     unitOfWork.ElevationAnglesRepository.Add(elevationAngles);
                     unitOfWork.Complete();
                 }

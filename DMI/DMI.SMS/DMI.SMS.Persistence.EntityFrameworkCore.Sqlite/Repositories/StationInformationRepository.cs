@@ -50,9 +50,10 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.Repositories
             throw new NotImplementedException();
         }
 
-        public StationInformation Get(int id)
+        public StationInformation Get(int gdbArchiveOId)
         {
-            var stationInformation = (Context as SMSDbContext).StationInformations.Single(_ => _.GdbArchiveOid == id);
+            var stationInformation = (Context as SMSDbContext).StationInformations
+                .Single(_ => _.GdbArchiveOid == gdbArchiveOId);
 
             return stationInformation;
         }
