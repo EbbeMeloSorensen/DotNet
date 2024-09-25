@@ -1,4 +1,5 @@
-﻿using MetaDataInspector.Domain.SMS;
+﻿using System.Text;
+using MetaDataInspector.Domain.SMS;
 using Npgsql;
 
 namespace MetaDataInspector;
@@ -8,7 +9,9 @@ public static class SMS
     public static List<StationInformation> RetrieveStationInformations(
         bool includeSynopStations,
         bool includeSVKStations,
-        bool includePluvioStations)
+        bool includePluvioStations,
+        bool includeActiveStations,
+        bool includeInactiveStations)
     {
         var stationInformations = new List<StationInformation>();
 
@@ -44,7 +47,23 @@ public static class SMS
                 .Select(_ => _.ToString())
                 .Aggregate((c, n) => $"{c}, {n}");
 
-            var sms_query =
+            var statusFilter = new List<int>();
+
+            if (includeInactiveStations)
+            {
+                statusFilter.Add(0);
+            }
+
+            if (includeActiveStations)
+            {
+                statusFilter.Add(1);
+            }
+
+            var statusFilterAsCSV = statusFilter
+                .Select(_ => _.ToString())
+                .Aggregate((c, n) => $"{c}, {n}");
+
+            var sb = new StringBuilder(
                 "SELECT " +
                 "objectid, " +
                 "stationname, " +
@@ -63,10 +82,10 @@ public static class SMS
                 "FROM sde.stationinformation " +
                 "WHERE gdb_to_date = '9999-12-31 23:59:59.000000'" +
                 $" AND stationtype IN ({stationTypeFilterAsCSV})" +
-                " AND status = 1" +
-                " ORDER BY stationid_dmi";// +
-            //" LIMIT 10";
+                $" AND status IN ({statusFilterAsCSV})");
 
+            sb.Append(" ORDER BY stationid_dmi");
+            var sms_query = sb.ToString();
             var rowCount = 0;
 
             using (var sms_cmd = new NpgsqlCommand(sms_query, sms_conn))

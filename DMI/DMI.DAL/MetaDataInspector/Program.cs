@@ -9,8 +9,12 @@ const bool includeStationsWithoutCountry = false;
 
 // Station Type filter for SMS
 const bool includeSynopStations = true;
-const bool includeSVKStations = true;
-const bool includePluvioStations = true;
+const bool includeSVKStations = false;
+const bool includePluvioStations = false;
+
+// Status filter for SMS
+const bool includeActiveStations = true;
+const bool includeInactiveStations = false;
 
 // Evaluation filter 
 const bool evaluateNames = true;
@@ -54,9 +58,11 @@ var positions = StatDB.RetrievePositions();
 var stationInformations = SMS.RetrieveStationInformations(
     includeSynopStations,
     includeSVKStations,
-    includePluvioStations);
+    includePluvioStations,
+    includeActiveStations,
+    includeInactiveStations);
 
-var testStations = new List<int>{5126, 5903, 5904, 6202};
+var testStations = new List<int>{5126, 5127, 5903, 5904, 6202};
 
 // 5904 (Tranebjerg Syd - Synop) Test ifølge Frans
 // 6202 (Bygholm Landbrugsskole - Synop) Test ifølge Frans

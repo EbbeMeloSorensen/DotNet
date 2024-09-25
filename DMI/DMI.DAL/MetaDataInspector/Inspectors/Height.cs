@@ -64,7 +64,7 @@ public static class Height
 
         var heightOK = heightMatches ? "ok" : $"INVALID ({issue})";
 
-        var sb = new StringBuilder($"    long:                         {$"{si.HHAAsString}",40} {$"{heightAsString}",40}");
+        var sb = new StringBuilder($"    height:                       {$"{si.HHAAsString}",40} {$"{heightAsString}",40}");
 
         if (evaluate)
         {
