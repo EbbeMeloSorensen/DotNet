@@ -11,6 +11,24 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
         }
 
+        public SensorLocation Get(
+            int gdbArchiveOId)
+        {
+            var sensorLocation = (Context as SMSDbContext).SensorLocations
+                .Single(_ => _.GdbArchiveOid == gdbArchiveOId);
+
+            return sensorLocation;
+        }
+
+        public SensorLocation GetByGlobalId(
+            string globalId)
+        {
+            var sensorLocation = (Context as SMSDbContext).SensorLocations
+                .Single(_ => _.GlobalId == globalId);
+
+            return sensorLocation;
+        }
+
         public override void Clear()
         {
             throw new NotImplementedException();

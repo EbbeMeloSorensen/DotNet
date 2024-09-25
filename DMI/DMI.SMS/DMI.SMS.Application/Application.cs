@@ -241,8 +241,12 @@ namespace DMI.SMS.Application
 
                 using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                 {
+                    var parent = unitOfWork.SensorLocations.GetByGlobalId(elevationAngles.ParentGuid);
+
                     elevationAngles.ObjectId = unitOfWork.ElevationAnglesRepository.GenerateUniqueObjectId();
                     elevationAngles.GlobalId = unitOfWork.ElevationAnglesRepository.GenerateUniqueGlobalId();
+                    elevationAngles.ParentGuid = parent.GlobalId;
+                    elevationAngles.ParentGdbArchiveOid = parent.GdbArchiveOid;
                     unitOfWork.ElevationAnglesRepository.Add(elevationAngles);
                     unitOfWork.Complete();
                 }
