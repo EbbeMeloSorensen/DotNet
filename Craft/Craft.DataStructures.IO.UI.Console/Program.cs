@@ -1,6 +1,5 @@
 ﻿using Craft.DataStructures.Graph;
 using Craft.DataStructures.IO;
-using Craft.DataStructures.IO.graphml;
 
 void ParseDotFile(
     string dotFile,
