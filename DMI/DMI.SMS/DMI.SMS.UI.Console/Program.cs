@@ -12,8 +12,6 @@ namespace DMI.SMS.UI.Console
         static async Task Main(
             string[] args)
         {
-            System.Console.WriteLine("DMI.SMS.UI.Console");
-
             // Override arguments
             //args = new [] {"export", "-f", "test.json"};
             //args = new [] { "createStationInformation", "-i", "7913", "-n", "Bamse" };
@@ -22,7 +20,8 @@ namespace DMI.SMS.UI.Console
             //args = new [] { "createSensorLocation", "-i", "7913" };
             //args = new [] { "createSensorLocation", "-i", "7914" };
             //args = new [] {"listSensorLocations"};
-            args = new [] { "createElevationAngles", "-n", "1", "--ne", "2" };
+            //args = new [] { "createElevationAngles", "--sl", "c381610b-e488-4f3c-8cee-751ae0cb0b5b", "-n", "1", "--ne", "3" };
+            args = new [] {"listElevationAngles"};
 
             await Parser.Default.ParseArguments<
                     Lunch,
@@ -32,7 +31,8 @@ namespace DMI.SMS.UI.Console
                     Verbs.StationInformation.List,
                     Verbs.SensorLocation.Create,
                     Verbs.SensorLocation.List,
-                    Verbs.ElevationAngles.Create>(args)
+                    Verbs.ElevationAngles.Create,
+                    Verbs.ElevationAngles.List>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
@@ -42,6 +42,7 @@ namespace DMI.SMS.UI.Console
                     (Verbs.SensorLocation.Create options) => CreateSensorLocation(options),
                     (Verbs.SensorLocation.List options) => ListSensorLocations(options),
                     (Verbs.ElevationAngles.Create options) => CreateElevationAngles(options),
+                    (Verbs.ElevationAngles.List options) => ListElevationAngles(options),
                     errs => Task.FromResult(0));
         }
 
@@ -171,7 +172,7 @@ namespace DMI.SMS.UI.Console
             {
                 GdbFromDate = DateTime.UtcNow,
                 GdbToDate = new DateTime(9999, 12, 31, 23, 59, 59),
-                ParentGuid = "e9931480-2744-4081-9d67-481827bb153c",
+                ParentGuid = options.ParentGuid,
                 DateFrom = new DateTime(2024, 9, 22, 1, 1, 1, DateTimeKind.Utc),
                 Angle_N = options.Angle_N,
                 Angle_NE = options.Angle_NE,
@@ -186,6 +187,21 @@ namespace DMI.SMS.UI.Console
             };
 
             await GetApplication().CreateElevationAngles(elevationAngles, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task ListElevationAngles(
+            Verbs.ElevationAngles.List options)
+        {
+            System.Console.Write("List elevation angles...\nProgress: ");
+
+            await GetApplication().ListElevationAngles((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

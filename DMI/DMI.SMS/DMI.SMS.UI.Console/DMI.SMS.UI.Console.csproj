@@ -18,4 +18,10 @@
     <ProjectReference Include="..\DMI.SMS.Persistence.EntityFrameworkCore.Sqlite\DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Populate.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

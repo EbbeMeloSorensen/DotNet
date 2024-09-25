@@ -137,28 +137,6 @@ namespace DMI.SMS.Application
             });
         }
 
-        public async Task ListStationInformations(
-            ProgressCallback progressCallback = null)
-        {
-            IList<StationInformation>? stationInformations = null;
-
-            await Task.Run(() =>
-            {
-                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving station informations..");
-                progressCallback?.Invoke(0.0, "Retrieving station informations");
-
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    stationInformations = unitOfWork.StationInformations.GetAll().ToList();
-                }
-
-                progressCallback?.Invoke(100, "");
-            });
-
-            Console.WriteLine();
-            stationInformations?.ToList().ForEach(p => Console.WriteLine($"  {p.StationName}"));
-        }
-
         public async Task CreateStationInformation(
             StationInformation stationInformation,
             ProgressCallback progressCallback = null)
@@ -181,29 +159,6 @@ namespace DMI.SMS.Application
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed creating station Information");
             });
-        }
-
-        public async Task ListSensorLocations(
-            ProgressCallback progressCallback = null)
-        {
-            IList<SensorLocation>? sensorLocations = null;
-
-            await Task.Run(() =>
-            {
-                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving sensor locations..");
-                progressCallback?.Invoke(0.0, "Retrieving sensor locations");
-
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    sensorLocations = unitOfWork.SensorLocations.GetAll().ToList();
-                }
-
-                progressCallback?.Invoke(100, "");
-            });
-
-            Console.WriteLine();
-            Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"StationidDMI",12}");
-            sensorLocations?.ToList().ForEach(_ => Console.WriteLine($"{_.GdbArchiveOid,13}, {_.GlobalId,36}, {_.StationidDMI,12}"));
         }
 
         public async Task CreateSensorLocation(
@@ -254,6 +209,74 @@ namespace DMI.SMS.Application
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed creating station Information");
             });
+        }
+
+        public async Task ListStationInformations(
+            ProgressCallback progressCallback = null)
+        {
+            IList<StationInformation>? stationInformations = null;
+
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving station informations..");
+                progressCallback?.Invoke(0.0, "Retrieving station informations");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    stationInformations = unitOfWork.StationInformations.GetAll().ToList();
+                }
+
+                progressCallback?.Invoke(100, "");
+            });
+
+            Console.WriteLine();
+            stationInformations?.ToList().ForEach(p => Console.WriteLine($"  {p.StationName}"));
+        }
+
+        public async Task ListSensorLocations(
+            ProgressCallback progressCallback = null)
+        {
+            IList<SensorLocation>? sensorLocations = null;
+
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving sensor locations..");
+                progressCallback?.Invoke(0.0, "Retrieving sensor locations");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    sensorLocations = unitOfWork.SensorLocations.GetAll().ToList();
+                }
+
+                progressCallback?.Invoke(100, "");
+            });
+
+            Console.WriteLine();
+            Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"StationidDMI",12}");
+            sensorLocations?.ToList().ForEach(_ => Console.WriteLine($"{_.GdbArchiveOid,13}, {_.GlobalId,36}, {_.StationidDMI,12}"));
+        }
+
+        public async Task ListElevationAngles(
+            ProgressCallback progressCallback = null)
+        {
+            IList<ElevationAngles>? elevationAngles = null;
+
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving elevation angles..");
+                progressCallback?.Invoke(0.0, "Retrieving elevation angles");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    elevationAngles = unitOfWork.ElevationAnglesRepository.GetAll().ToList();
+                }
+
+                progressCallback?.Invoke(100, "");
+            });
+
+            Console.WriteLine();
+            Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"ParentId",36}, {"N",5}, {"NE",5}");
+            elevationAngles?.ToList().ForEach(_ => Console.WriteLine($"{_.GdbArchiveOid,13}, {_.GlobalId,36}, {_.ParentGuid,36}, {_.Angle_N,5}, {_.Angle_NE,5}"));
         }
 
         public async Task ExportData(
