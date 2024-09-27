@@ -4,10 +4,8 @@ using DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.EntityConfigurations;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer
 {
-    public class SMSDbContext : DbContext
+    public class SMSDbContext : SMSDbContextBase
     {
-        public DbSet<StationInformation> StationInformations { get; set; }
-
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {

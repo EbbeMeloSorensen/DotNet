@@ -4,10 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL
 {
-    public class SMSDbContext : DbContext
+    public class SMSDbContext : SMSDbContextBase
     {
-        public DbSet<StationInformation> StationInformations { get; set; }
-
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {
