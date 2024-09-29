@@ -9,9 +9,9 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
             using var context = new SMSDbContext();
             context.Database.EnsureCreated();
 
-            //if (context.StationInformations.Any()) return;
+            if (context.StationInformations.Any()) return;
 
-            //SeedDatabase(context);
+            Seeding.SeedDatabase(context);
         }
 
         public override void Initialize(ILogger logger)
