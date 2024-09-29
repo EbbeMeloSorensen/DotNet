@@ -10,7 +10,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.EntityConfigurations
         {
             builder.HasKey(_ => _.GdbArchiveOid);
 
-            /*
             builder.Property(si => si.GdbArchiveOid).HasColumnName("gdb_archive_oid");
             builder.Property(si => si.GlobalId).HasColumnName("globalid");
             builder.Property(si => si.ObjectId).HasColumnName("objectid");
@@ -56,7 +55,6 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.EntityConfigurations
             builder.Property(si => si.Wmorbsnradio).HasColumnName("wmorbsnradio");
             builder.Property(si => si.Wgs_lat).HasColumnName("wgs_lat");
             builder.Property(si => si.Wgs_long).HasColumnName("wgs_long");
-            */
 
             /*
             Property(si => si.StationName)
