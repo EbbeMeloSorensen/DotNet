@@ -8,6 +8,9 @@ Done:
   - Skriv i loggen, hvor mange rækker, der exporteres (OK)
 
 Todo:
+* Væk med den der repo2 ting
+* Lav en facade alla en decorator, der sender deletes og updates i retning af logiske nogen af slagsen
+* Undersøg, om man kan querye SMS-databasen med entityframeworkcore-pluginet
 * Få create/read/update/delete til at virke for DMI.SMS.UI.WPF for et sql server setup
   - Create
     - Den skal respektere alle de ting, den får fra dialogen
