@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Persistence.EntityFrameworkCore.EntityConfigurations;
-using DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.EntityConfigurations;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
 {

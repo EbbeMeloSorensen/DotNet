@@ -1,8 +1,8 @@
-﻿using DMI.SMS.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using DMI.SMS.Domain.Entities;
 
-namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.EntityConfigurations;
+namespace DMI.SMS.Persistence.EntityFrameworkCore.EntityConfigurations;
 
 public class ElevationAnglesConfiguration : IEntityTypeConfiguration<ElevationAngles>
 {

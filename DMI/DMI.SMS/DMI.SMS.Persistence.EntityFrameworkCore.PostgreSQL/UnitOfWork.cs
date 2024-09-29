@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL.Repositories;
-using DMI.SMS.Persistence.Repositories;
-using Microsoft.EntityFrameworkCore;
+﻿using DMI.SMS.Persistence.Repositories;
+using DMI.SMS.Persistence.EntityFrameworkCore.Repositories;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL
 {

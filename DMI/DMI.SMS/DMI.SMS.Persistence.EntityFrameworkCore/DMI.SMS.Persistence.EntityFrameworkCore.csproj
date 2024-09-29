@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Craft\Craft.Persistence.EntityFrameworkCore\Craft.Persistence.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\DMI.SMS.Domain\DMI.SMS.Domain.csproj" />
+    <ProjectReference Include="..\DMI.SMS.Persistence\DMI.SMS.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
-﻿using DMI.SMS.Persistence.EntityFrameworkCore.SqlServer.Repositories;
-using DMI.SMS.Persistence.Repositories;
+﻿using DMI.SMS.Persistence.Repositories;
+using DMI.SMS.Persistence.EntityFrameworkCore.Repositories;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer
 {
