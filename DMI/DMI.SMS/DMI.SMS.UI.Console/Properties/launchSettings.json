@@ -2,7 +2,7 @@
   "profiles": {
     "DMI.SMS.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "export -f C:\\Temp\\export.json"
+      "commandLineArgs": "listStationInformations"
     }
   }
 }

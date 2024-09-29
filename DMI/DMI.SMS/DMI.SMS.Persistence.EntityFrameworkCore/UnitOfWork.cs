@@ -1,11 +1,11 @@
 ﻿using DMI.SMS.Persistence.Repositories;
 using DMI.SMS.Persistence.EntityFrameworkCore.Repositories;
 
-namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
+namespace DMI.SMS.Persistence.EntityFrameworkCore
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly SMSDbContext _context;
+        private readonly SMSDbContextBase _context;
 
         public IStationInformationRepository StationInformations { get; }
         public IContactPersonRepository ContactPersons { get; }
@@ -15,7 +15,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
         public IImagesOfSensorLocationRepository ImagesOfSensorLocations { get; }
         public IElevationAnglesRepository ElevationAnglesRepository { get; }
 
-        public UnitOfWork(SMSDbContext context)
+        public UnitOfWork(SMSDbContextBase context)
         {
             _context = context;
             StationInformations = new StationInformationRepository(_context);

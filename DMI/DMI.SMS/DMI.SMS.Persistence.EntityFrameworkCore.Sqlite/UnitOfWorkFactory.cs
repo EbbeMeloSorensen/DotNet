@@ -9,7 +9,8 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
             using var context = new SMSDbContext();
             context.Database.EnsureCreated();
 
-            if (context.StationInformations.Any()) return;
+            if (context.StationInformations.Any() ||
+                context.SensorLocations.Any()) return;
 
             Seeding.SeedDatabase(context);
         }
