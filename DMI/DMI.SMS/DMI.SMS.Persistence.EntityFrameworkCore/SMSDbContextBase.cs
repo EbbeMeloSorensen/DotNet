@@ -9,6 +9,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore
         public DbSet<StationInformation> StationInformations { get; set; }
         public DbSet<SensorLocation> SensorLocations { get; set; }
         public DbSet<ElevationAngles> ElevationAngles { get; set; }
+        public DbSet<ServiceVisitReport> ServiceVisitReports { get; set; }
 
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
@@ -22,9 +23,17 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore
             modelBuilder.ApplyConfiguration(new StationInformationConfiguration());
             modelBuilder.ApplyConfiguration(new SensorLocationConfiguration());
             modelBuilder.ApplyConfiguration(new ElevationAnglesConfiguration());
+            modelBuilder.ApplyConfiguration(new ServiceVisitReportConfiguration());
 
             modelBuilder.Entity<ElevationAngles>()
                 .HasOne(_ => _.SensorLocation)
+                .WithMany()
+                .HasForeignKey(_ => _.ParentGdbArchiveOid)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ServiceVisitReport>()
+                .HasOne(_ => _.StationInformation)
                 .WithMany()
                 .HasForeignKey(_ => _.ParentGdbArchiveOid)
                 .IsRequired(false)

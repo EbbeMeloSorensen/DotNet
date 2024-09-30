@@ -104,9 +104,36 @@ public static class Seeding
             elevationAngles2
         };
 
+        var serviceVisitReport1 = new ServiceVisitReport
+        {
+            ObjectId = 1,
+            GlobalId = "bce3d933-064a-4439-b6f5-3326471a8356",
+            GdbFromDate = now,
+            GdbToDate = maxDate,
+            ParentGuid = stationInformation1.GlobalId,
+            StationInformation = stationInformation1,
+        };
+
+        var serviceVisitReport2 = new ServiceVisitReport
+        {
+            ObjectId = 1,
+            GlobalId = "bce3d933-064a-4439-b6f5-3326471a8357",
+            GdbFromDate = now,
+            GdbToDate = maxDate,
+            ParentGuid = stationInformation2.GlobalId,
+            StationInformation = stationInformation2,
+        };
+
+        var serviceVisitReports = new List<ServiceVisitReport>
+        {
+            serviceVisitReport1,
+            serviceVisitReport2
+        };
+
         context.StationInformations.AddRange(stationInformations);
         context.SensorLocations.AddRange(sensorLocations);
         context.ElevationAngles.AddRange(elevationAngles);
+        context.ServiceVisitReports.AddRange(serviceVisitReports);
         context.SaveChanges();
     }
 }

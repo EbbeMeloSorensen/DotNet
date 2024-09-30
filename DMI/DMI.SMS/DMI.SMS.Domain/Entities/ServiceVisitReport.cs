@@ -6,7 +6,7 @@ namespace DMI.SMS.Domain.Entities
     {
         private StationInformation _stationinformation;
         private DateTime? _date;
-        private string _serviceId;
+        private string? _serviceId;
 
         public StationInformation StationInformation
         {
@@ -20,7 +20,7 @@ namespace DMI.SMS.Domain.Entities
             set { _date = value; }
         }
 
-        public string ServiceId
+        public string? ServiceId
         {
             get { return _serviceId; }
             set { _serviceId = value; }
