@@ -16,6 +16,7 @@ namespace DMI.SMS.Persistence.Npgsql
         public ILegalOwnerRepository LegalOwners { get; }
         public IStationKeeperRepository StationKeepers { get; }
         public IElevationAnglesRepository ElevationAnglesRepository { get; }
+        public IServiceVisitReportRepository ServiceVisitReportRepository { get; }
 
         public UnitOfWork()
         {

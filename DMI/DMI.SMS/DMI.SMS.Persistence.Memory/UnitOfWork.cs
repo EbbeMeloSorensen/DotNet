@@ -11,6 +11,7 @@ namespace DMI.SMS.Persistence.Memory
         public IContactPersonRepository ContactPersons { get; }
         public ILegalOwnerRepository LegalOwners { get; }
         public IElevationAnglesRepository ElevationAnglesRepository { get; }
+        public IServiceVisitReportRepository ServiceVisitReportRepository { get; }
 
         public UnitOfWork(
             IStationInformationRepository stationInformationRepository)

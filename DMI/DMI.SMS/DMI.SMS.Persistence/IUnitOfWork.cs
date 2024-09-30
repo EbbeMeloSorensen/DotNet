@@ -12,6 +12,7 @@ namespace DMI.SMS.Persistence
         ISensorInformationRepository SensorInformations { get; }
         IImagesOfSensorLocationRepository ImagesOfSensorLocations { get; }
         IElevationAnglesRepository ElevationAnglesRepository { get; }
+        IServiceVisitReportRepository ServiceVisitReportRepository { get; }
 
         int Complete();
     }

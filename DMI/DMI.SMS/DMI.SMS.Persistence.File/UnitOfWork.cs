@@ -1,5 +1,4 @@
-﻿using System;
-using DMI.SMS.Persistence.Repositories;
+﻿using DMI.SMS.Persistence.Repositories;
 
 namespace DMI.SMS.Persistence.File
 {
@@ -12,6 +11,7 @@ namespace DMI.SMS.Persistence.File
         public IContactPersonRepository ContactPersons { get; }
         public ILegalOwnerRepository LegalOwners { get; }
         public IElevationAnglesRepository ElevationAnglesRepository { get; }
+        public IServiceVisitReportRepository ServiceVisitReportRepository { get; }
 
         public UnitOfWork(
             IStationInformationRepository stationInformationRepository)

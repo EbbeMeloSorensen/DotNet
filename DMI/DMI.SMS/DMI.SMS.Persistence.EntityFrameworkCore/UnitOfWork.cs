@@ -14,6 +14,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore
         public ISensorInformationRepository SensorInformations { get; }
         public IImagesOfSensorLocationRepository ImagesOfSensorLocations { get; }
         public IElevationAnglesRepository ElevationAnglesRepository { get; }
+        public IServiceVisitReportRepository ServiceVisitReportRepository { get; }
 
         public UnitOfWork(SMSDbContextBase context)
         {
@@ -21,6 +22,7 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore
             StationInformations = new StationInformationRepository(_context);
             SensorLocations = new SensorLocationRepository(_context);
             ElevationAnglesRepository = new ElevationAnglesRepository(_context);
+            ServiceVisitReportRepository = new ServiceVisitReportRepository(_context);
         }
 
         public int Complete()
