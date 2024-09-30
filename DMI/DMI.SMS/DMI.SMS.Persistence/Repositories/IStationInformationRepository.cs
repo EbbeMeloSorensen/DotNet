@@ -1,8 +1,9 @@
-﻿using DMI.SMS.Domain.Entities;
+﻿using Craft.Persistence;
+using DMI.SMS.Domain.Entities;
 
 namespace DMI.SMS.Persistence.Repositories
 {
-    public interface IStationInformationRepository : IRepositoryType2<StationInformation>
+    public interface IStationInformationRepository : IRepository<StationInformation>
     {
         StationInformation GetByGlobalId(
             string globalId);

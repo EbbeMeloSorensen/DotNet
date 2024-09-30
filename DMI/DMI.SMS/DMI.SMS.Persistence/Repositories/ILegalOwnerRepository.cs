@@ -1,8 +1,9 @@
-﻿using DMI.SMS.Domain.Entities;
+﻿using Craft.Persistence;
+using DMI.SMS.Domain.Entities;
 
 namespace DMI.SMS.Persistence.Repositories
 {
-    public interface ILegalOwnerRepository : IRepositoryType2<LegalOwner>
+    public interface ILegalOwnerRepository : IRepository<LegalOwner>
     {
     }
 }
