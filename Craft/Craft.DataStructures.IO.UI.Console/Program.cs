@@ -86,11 +86,12 @@ var edgeData = new List<Tuple<string, string>>();
 var useLinux = true;
 
 var rootDirectory = useLinux
-    ? "/home/ebs/Git/enterprise-architecture/catalogs_generated/aci_dot_files"
+    //? "/home/ebs/Git/enterprise-architecture/catalogs_generated/aci_dot_files"
+    ? "/home/ebs/Git/enterprise-architecture/catalogs_generated/dot_files_from_marc"
     : "C:\\Users\\B053687\\Git\\DMI_Gitlab\\enterprise-architecture\\catalogs_generated\\aci_dot_files";
 
 var outputFile = useLinux
-    ? "aci_topoplogy.graphml"
+    ? "aci_topoplogy_marc.graphml"
     : @"C:\Temp\Take1.graphml";
 
 var directory = new DirectoryInfo(rootDirectory);
