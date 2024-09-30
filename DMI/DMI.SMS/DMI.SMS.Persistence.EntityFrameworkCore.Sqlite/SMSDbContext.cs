@@ -12,20 +12,5 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Sqlite
             var connectionString = ConnectionStringProvider.GetConnectionString();
             optionsBuilder.UseSqlite(connectionString);
         }
-
-        protected override void OnModelCreating(
-            ModelBuilder builder)
-        {
-            builder.ApplyConfiguration(new StationInformationConfiguration());
-            builder.ApplyConfiguration(new SensorLocationConfiguration());
-            builder.ApplyConfiguration(new ElevationAnglesConfiguration());
-
-            builder.Entity<ElevationAngles>()
-                .HasOne(_ => _.SensorLocation)
-                .WithMany()
-                .HasForeignKey(_ => _.ParentGdbArchiveOid)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
     }
 }

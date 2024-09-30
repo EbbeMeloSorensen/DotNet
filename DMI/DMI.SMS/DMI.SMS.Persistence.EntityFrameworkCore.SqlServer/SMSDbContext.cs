@@ -11,11 +11,5 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.SqlServer
             var connectionString = ConnectionStringProvider.GetConnectionString();
             optionsBuilder.UseSqlServer(connectionString);
         }
-
-        protected override void OnModelCreating(
-            ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfiguration(new StationInformationConfiguration());
-        }
     }
 }

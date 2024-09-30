@@ -12,20 +12,5 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL
             var connectionString = ConnectionStringProvider.GetConnectionString();
             optionsBuilder.UseNpgsql(connectionString);
         }
-
-        protected override void OnModelCreating(
-            ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfiguration(new StationInformationConfiguration());
-            modelBuilder.ApplyConfiguration(new SensorLocationConfiguration());
-            modelBuilder.ApplyConfiguration(new ElevationAnglesConfiguration());
-
-            modelBuilder.Entity<ElevationAngles>()
-                .HasOne(_ => _.SensorLocation)
-                .WithMany()
-                .HasForeignKey(_ => _.ParentGdbArchiveOid)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
     }
 }
