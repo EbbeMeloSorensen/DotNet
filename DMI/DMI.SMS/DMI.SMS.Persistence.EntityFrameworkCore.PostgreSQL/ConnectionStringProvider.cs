@@ -16,12 +16,12 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.PostgreSQL
         {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
-            var host = settings["Host"]?.Value;
-            var port = settings["Port"]?.Value;
-            var database = settings["Database"]?.Value;
-            var schema = settings["Schema"]?.Value;
-            var user = settings["User"]?.Value;
-            var password = settings["Password"]?.Value;
+            var host = settings["SMS_PostgreSQL_Host"]?.Value;
+            var port = settings["SMS_PostgreSQL_Port"]?.Value;
+            var database = settings["SMS_PostgreSQL_Database"]?.Value;
+            var schema = settings["SMS_PostgreSQL_Schema"]?.Value;
+            var user = settings["SMS_PostgreSQL_UserID"]?.Value;
+            var password = settings["SMS_PostgreSQL_Password"]?.Value;
 
             if (string.IsNullOrEmpty(host) ||
                 string.IsNullOrEmpty(port) ||
