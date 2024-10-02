@@ -331,6 +331,11 @@ namespace DMI.SMS.Application
             contactPersons?.ToList().ForEach(_ => Console.WriteLine($"{_.GdbArchiveOid,13}, {_.GlobalId,36}, {_.ParentGuid,36}, {_.Name,20}"));
         }
 
+        public async Task StationInformationDetails(
+            ProgressCallback progressCallback = null)
+        {
+        }
+
         public async Task ExportData(
             string fileName,
             bool excludeSupercededRows,

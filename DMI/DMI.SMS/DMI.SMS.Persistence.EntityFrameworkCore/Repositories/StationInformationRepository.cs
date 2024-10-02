@@ -8,7 +8,10 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Repositories;
 
 public class StationInformationRepository : Repository<StationInformation>, IStationInformationRepository
 {
-    public StationInformationRepository(DbContext context) : base(context)
+    private SMSDbContextBase SMSDbContext => Context as SMSDbContextBase;
+
+    public StationInformationRepository(
+        DbContext context) : base(context)
     {
     }
 
@@ -21,7 +24,6 @@ public class StationInformationRepository : Repository<StationInformation>, ISta
         return stationInformation;
     }
 
-
     public override void Clear()
     {
         var context = Context as SMSDbContextBase;
@@ -30,14 +32,16 @@ public class StationInformationRepository : Repository<StationInformation>, ISta
         context.SaveChanges();
     }
 
-    public override void Update(StationInformation stationInformation)
+    public override void Update(
+        StationInformation stationInformation)
     {
         var sRepo = Get(stationInformation.GdbArchiveOid);
 
         sRepo.CopyAttributes(stationInformation);
     }
 
-    public override void UpdateRange(IEnumerable<StationInformation> stationInformations)
+    public override void UpdateRange(
+        IEnumerable<StationInformation> stationInformations)
     {
         var ids = stationInformations.Select(p => p.GdbArchiveOid);
         var stationInformationsFromRepository = Find(s => ids.Contains(s.GdbArchiveOid));
@@ -50,17 +54,23 @@ public class StationInformationRepository : Repository<StationInformation>, ISta
         });
     }
 
-    public void RemoveLogically(StationInformation entity, DateTime transactionTime)
+    public void RemoveLogically(
+        StationInformation entity, 
+        DateTime transactionTime)
     {
         throw new NotImplementedException();
     }
 
-    public void Supersede(StationInformation entity, DateTime transactionTime, string user)
+    public void Supersede(
+        StationInformation entity, 
+        DateTime transactionTime, 
+        string user)
     {
         throw new NotImplementedException();
     }
 
-    public StationInformation Get(int gdbArchiveOId)
+    public StationInformation Get(
+        int gdbArchiveOId)
     {
         var stationInformation = (Context as SMSDbContextBase).StationInformations
             .Single(_ => _.GdbArchiveOid == gdbArchiveOId);
@@ -68,9 +78,12 @@ public class StationInformationRepository : Repository<StationInformation>, ISta
         return stationInformation;
     }
 
-    public StationInformation GetStationInformationWithContactPersons(int id)
+    public StationInformation GetStationInformationWithContactPersons(
+        int gdbArchiveOId)
     {
-        throw new NotImplementedException();
+        return SMSDbContext.StationInformations
+            .Include(_ => _.ContactPersons)
+            .SingleOrDefault(_ => _.GdbArchiveOid == gdbArchiveOId) ?? throw new InvalidOperationException();
     }
 
     public int GenerateUniqueObjectId()

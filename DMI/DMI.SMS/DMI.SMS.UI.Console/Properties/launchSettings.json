@@ -2,7 +2,7 @@
   "profiles": {
     "DMI.SMS.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "listContactPersons"
+      "commandLineArgs": "stationInformationDetails --si 222"
     }
   }
 }

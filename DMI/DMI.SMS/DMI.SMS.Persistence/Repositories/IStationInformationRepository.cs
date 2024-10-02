@@ -8,11 +8,14 @@ namespace DMI.SMS.Persistence.Repositories
         StationInformation GetByGlobalId(
             string globalId);
 
-        StationInformation Get(int id);
+        StationInformation Get(
+            int id);
 
-        StationInformation GetStationInformationWithContactPersons(int id);
+        StationInformation GetStationInformationWithContactPersons(
+            int id);
 
         int GenerateUniqueObjectId();
+
         string GenerateUniqueGlobalId();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DMI.SMS.Domain.Entities
 {
@@ -256,5 +257,7 @@ namespace DMI.SMS.Domain.Entities
             get { return _shape; }
             set { _shape = value; }
         }
+
+        public virtual ICollection<ContactPerson>? ContactPersons { get; set; }
     }
 }

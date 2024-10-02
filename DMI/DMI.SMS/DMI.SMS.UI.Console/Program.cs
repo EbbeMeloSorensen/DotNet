@@ -30,6 +30,7 @@ namespace DMI.SMS.UI.Console
                     Import,
                     Verbs.StationInformation.Create,
                     Verbs.StationInformation.List,
+                    Verbs.StationInformation.Details,
                     Verbs.SensorLocation.Create,
                     Verbs.SensorLocation.List,
                     Verbs.ElevationAngles.Create,
@@ -42,6 +43,7 @@ namespace DMI.SMS.UI.Console
                     (Import options) => Import(options),
                     (Verbs.StationInformation.Create options) => CreateStationInformation(options),
                     (Verbs.StationInformation.List options) => ListStationInformations(options),
+                    (Verbs.StationInformation.Details options) => StationInformationDetails(options),
                     (Verbs.SensorLocation.Create options) => CreateSensorLocation(options),
                     (Verbs.SensorLocation.List options) => ListSensorLocations(options),
                     (Verbs.ElevationAngles.Create options) => CreateElevationAngles(options),
@@ -247,6 +249,21 @@ namespace DMI.SMS.UI.Console
                 System.Console.Write($"{progress:F2} %");
                 return false;
             });
+
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task StationInformationDetails(
+            Verbs.StationInformation.Details options)
+        {
+            System.Console.Write("Station information details...\nProgress: ");
+
+            //await GetApplication().ListContactPersons((progress, nameOfSubtask) =>
+            //{
+            //    System.Console.SetCursorPosition(10, System.Console.CursorTop);
+            //    System.Console.Write($"{progress:F2} %");
+            //    return false;
+            //});
 
             System.Console.WriteLine("\nDone");
         }
