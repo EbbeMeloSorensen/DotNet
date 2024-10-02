@@ -120,7 +120,7 @@ namespace DMI.SMS.Persistence.Memory.Repositories
             _nextId = _stationInformations.Count == 0 ? 1 : _stationInformations.Max(si => si.GdbArchiveOid) + 1;
         }
 
-        public StationInformation GetStationInformationWithContactPersons(int id)
+        public StationInformation GetWithContactPersons(int id)
         {
             throw new NotImplementedException();
         }

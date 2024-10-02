@@ -332,8 +332,37 @@ namespace DMI.SMS.Application
         }
 
         public async Task StationInformationDetails(
+            string globalId,
             ProgressCallback progressCallback = null)
         {
+            StationInformation stationInformation = null;
+
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving station informations..");
+                progressCallback?.Invoke(0.0, "Retrieving station informations");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    var @object = unitOfWork.StationInformations.GetByGlobalId(globalId);
+
+                    stationInformation = unitOfWork.StationInformations.GetWithContactPersons(@object.GdbArchiveOid);
+
+                    // Bemærk, at på denne måde vil du kun få de child rækker, der tilhører SENESTE version af station information objektet
+                    // Du vil således ikke få child rækker, der tilhører TIDLIGERE versioner. Derudover kan der meget vel gælde, at de child
+                    // rækker, som man får fat i, er blevet supercedede.
+                }
+
+                progressCallback?.Invoke(100, "");
+            });
+
+            Console.WriteLine();
+            Console.WriteLine($"Station: {stationInformation.StationName}");
+            Console.WriteLine("Contact Persons:");
+            stationInformation.ContactPersons.ToList().ForEach(_ =>
+            {
+                Console.WriteLine($"  {_.Name}");
+            });
         }
 
         public async Task ExportData(

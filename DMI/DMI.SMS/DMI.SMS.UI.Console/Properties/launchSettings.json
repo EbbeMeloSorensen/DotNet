@@ -2,7 +2,7 @@
   "profiles": {
     "DMI.SMS.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "stationInformationDetails --si 222"
+      "commandLineArgs": "stationInformationDetails --si bce3d933-064a-4439-b6f5-3326471a8351"
     }
   }
 }

@@ -143,19 +143,43 @@ public static class Seeding
 
         var contactPerson2 = new ContactPerson
         {
-            ObjectId = 1,
+            ObjectId = 2,
             GlobalId = "bce3d933-064a-4439-b6f5-3326471a8359",
+            GdbFromDate = now,
+            GdbToDate = maxDate,
+            ParentGuid = stationInformation1.GlobalId,
+            StationInformation = stationInformation1,
+            Name = "Joachim von And"
+        };
+
+        var contactPerson3 = new ContactPerson
+        {
+            ObjectId = 3,
+            GlobalId = "bce3d933-064a-4439-b6f5-3326471a8360",
             GdbFromDate = now,
             GdbToDate = maxDate,
             ParentGuid = stationInformation2.GlobalId,
             StationInformation = stationInformation2,
-            Name = "Joachim von And"
+            Name = "Mickey Mouse"
+        };
+
+        var contactPerson4 = new ContactPerson
+        {
+            ObjectId = 4,
+            GlobalId = "bce3d933-064a-4439-b6f5-3326471a8361",
+            GdbFromDate = now,
+            GdbToDate = maxDate,
+            ParentGuid = stationInformation2.GlobalId,
+            StationInformation = stationInformation2,
+            Name = "Fedtmule"
         };
 
         var contactPersons = new List<ContactPerson>
         {
             contactPerson1,
-            contactPerson2
+            contactPerson2,
+            contactPerson3,
+            contactPerson4
         };
 
         context.StationInformations.AddRange(stationInformations);

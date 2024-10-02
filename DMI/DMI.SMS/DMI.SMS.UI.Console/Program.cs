@@ -258,12 +258,12 @@ namespace DMI.SMS.UI.Console
         {
             System.Console.Write("Station information details...\nProgress: ");
 
-            //await GetApplication().ListContactPersons((progress, nameOfSubtask) =>
-            //{
-            //    System.Console.SetCursorPosition(10, System.Console.CursorTop);
-            //    System.Console.Write($"{progress:F2} %");
-            //    return false;
-            //});
+            await GetApplication().StationInformationDetails(options.GlobalId, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
 
             System.Console.WriteLine("\nDone");
         }

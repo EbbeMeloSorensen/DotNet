@@ -78,7 +78,7 @@ public class StationInformationRepository : Repository<StationInformation>, ISta
         return stationInformation;
     }
 
-    public StationInformation GetStationInformationWithContactPersons(
+    public StationInformation GetWithContactPersons(
         int gdbArchiveOId)
     {
         return SMSDbContext.StationInformations

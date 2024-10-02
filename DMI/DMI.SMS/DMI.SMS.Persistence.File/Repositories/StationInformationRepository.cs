@@ -146,7 +146,7 @@ namespace DMI.SMS.Persistence.File.Repositories
             UpdateRepositoryFile();
         }
 
-        public StationInformation GetStationInformationWithContactPersons(int id)
+        public StationInformation GetWithContactPersons(int id)
         {
             throw new NotImplementedException();
         }

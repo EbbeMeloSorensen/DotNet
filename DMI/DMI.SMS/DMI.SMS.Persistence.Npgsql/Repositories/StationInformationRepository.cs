@@ -389,7 +389,7 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public StationInformation GetStationInformationWithContactPersons(
+        public StationInformation GetWithContactPersons(
             int id)
         {
             throw new NotImplementedException();

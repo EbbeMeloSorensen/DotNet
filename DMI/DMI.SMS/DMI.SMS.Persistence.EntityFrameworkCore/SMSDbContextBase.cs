@@ -27,12 +27,17 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore
             modelBuilder.ApplyConfiguration(new SensorLocationConfiguration());
             modelBuilder.ApplyConfiguration(new ElevationAnglesConfiguration());
 
+            //modelBuilder.Entity<ContactPerson>()
+            //    .HasOne(_ => _.StationInformation)
+            //    .WithMany()
+            //    .HasForeignKey(_ => _.ParentGdbArchiveOid)
+            //    .IsRequired(false)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<ContactPerson>()
                 .HasOne(_ => _.StationInformation)
-                .WithMany()
-                .HasForeignKey(_ => _.ParentGdbArchiveOid)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(_ => _.ContactPersons)
+                .HasForeignKey(_ => _.ParentGdbArchiveOid);
 
             modelBuilder.Entity<ServiceVisitReport>()
                 .HasOne(_ => _.StationInformation)

@@ -11,7 +11,7 @@ namespace DMI.SMS.Persistence.Repositories
         StationInformation Get(
             int id);
 
-        StationInformation GetStationInformationWithContactPersons(
+        StationInformation GetWithContactPersons(
             int id);
 
         int GenerateUniqueObjectId();
