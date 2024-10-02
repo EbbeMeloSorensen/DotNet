@@ -34,7 +34,8 @@ namespace DMI.SMS.UI.Console
                     Verbs.SensorLocation.List,
                     Verbs.ElevationAngles.Create,
                     Verbs.ElevationAngles.List,
-                    Verbs.ServiceVisitReport.Create>(args)
+                    Verbs.ServiceVisitReport.Create,
+                    Verbs.ContactPerson.List>(args)
                 .MapResult(
                     (Lunch options) => MakeLunch(options),
                     (Export options) => Export(options),
@@ -46,6 +47,7 @@ namespace DMI.SMS.UI.Console
                     (Verbs.ElevationAngles.Create options) => CreateElevationAngles(options),
                     (Verbs.ElevationAngles.List options) => ListElevationAngles(options),
                     (Verbs.ServiceVisitReport.Create options) => CreateServiceVisitReport(options),
+                    (Verbs.ContactPerson.List options) => ListContactPersons(options),
                     errs => Task.FromResult(0));
         }
 
@@ -225,6 +227,21 @@ namespace DMI.SMS.UI.Console
             };
 
             await GetApplication().CreateServiceVisitReport(serviceVisitReport, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+            System.Console.WriteLine("\nDone");
+        }
+
+        private static async Task ListContactPersons(
+            Verbs.ContactPerson.List options)
+        {
+            System.Console.Write("List contact persons...\nProgress: ");
+
+            await GetApplication().ListContactPersons((progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");

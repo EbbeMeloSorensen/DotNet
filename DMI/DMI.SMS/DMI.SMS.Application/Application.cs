@@ -308,6 +308,29 @@ namespace DMI.SMS.Application
             elevationAngles?.ToList().ForEach(_ => Console.WriteLine($"{_.GdbArchiveOid,13}, {_.GlobalId,36}, {_.ParentGuid,36}, {_.Angle_N,5}, {_.Angle_NE,5}"));
         }
 
+        public async Task ListContactPersons(
+            ProgressCallback progressCallback = null)
+        {
+            IList<ContactPerson>? contactPersons = null;
+
+            await Task.Run(() =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving contact persons..");
+                progressCallback?.Invoke(0.0, "Retrieving contact persons");
+
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    contactPersons = unitOfWork.ContactPersons.GetAll().ToList();
+                }
+
+                progressCallback?.Invoke(100, "");
+            });
+
+            Console.WriteLine();
+            Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"ParentId",36}, {"Name",20}");
+            contactPersons?.ToList().ForEach(_ => Console.WriteLine($"{_.GdbArchiveOid,13}, {_.GlobalId,36}, {_.ParentGuid,36}, {_.Name,20}"));
+        }
+
         public async Task ExportData(
             string fileName,
             bool excludeSupercededRows,

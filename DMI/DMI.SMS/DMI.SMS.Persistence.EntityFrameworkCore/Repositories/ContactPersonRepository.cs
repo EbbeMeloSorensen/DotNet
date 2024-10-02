@@ -5,9 +5,9 @@ using DMI.SMS.Persistence.Repositories;
 
 namespace DMI.SMS.Persistence.EntityFrameworkCore.Repositories
 {
-    public class ServiceVisitReportRepository : Repository<ServiceVisitReport>, IServiceVisitReportRepository
+    public class ContactPersonRepository : Repository<ContactPerson>, IContactPersonRepository
     {
-        public ServiceVisitReportRepository(
+        public ContactPersonRepository(
             DbContext context) : base(context)
         {
         }
@@ -17,12 +17,14 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Repositories
             throw new NotImplementedException();
         }
 
-        public override void Update(ServiceVisitReport entity)
+        public override void Update(
+            ContactPerson entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<ServiceVisitReport> entities)
+        public override void UpdateRange(
+            IEnumerable<ContactPerson> entities)
         {
             throw new NotImplementedException();
         }

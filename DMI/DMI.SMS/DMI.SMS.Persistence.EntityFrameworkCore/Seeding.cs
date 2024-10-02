@@ -130,10 +130,39 @@ public static class Seeding
             serviceVisitReport2
         };
 
+        var contactPerson1 = new ContactPerson
+        {
+            ObjectId = 1,
+            GlobalId = "bce3d933-064a-4439-b6f5-3326471a8358",
+            GdbFromDate = now,
+            GdbToDate = maxDate,
+            ParentGuid = stationInformation1.GlobalId,
+            StationInformation = stationInformation1,
+            Name = "Anders And"
+        };
+
+        var contactPerson2 = new ContactPerson
+        {
+            ObjectId = 1,
+            GlobalId = "bce3d933-064a-4439-b6f5-3326471a8359",
+            GdbFromDate = now,
+            GdbToDate = maxDate,
+            ParentGuid = stationInformation2.GlobalId,
+            StationInformation = stationInformation2,
+            Name = "Joachim von And"
+        };
+
+        var contactPersons = new List<ContactPerson>
+        {
+            contactPerson1,
+            contactPerson2
+        };
+
         context.StationInformations.AddRange(stationInformations);
         context.SensorLocations.AddRange(sensorLocations);
         context.ElevationAngles.AddRange(elevationAngles);
         context.ServiceVisitReports.AddRange(serviceVisitReports);
+        context.ContactPersons.AddRange(contactPersons);
         context.SaveChanges();
     }
 }

@@ -16,13 +16,15 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore
         public IElevationAnglesRepository ElevationAnglesRepository { get; }
         public IServiceVisitReportRepository ServiceVisitReportRepository { get; }
 
-        public UnitOfWork(SMSDbContextBase context)
+        public UnitOfWork(
+            SMSDbContextBase context)
         {
             _context = context;
             StationInformations = new StationInformationRepository(_context);
+            ContactPersons = new ContactPersonRepository(_context);
+            ServiceVisitReportRepository = new ServiceVisitReportRepository(_context);
             SensorLocations = new SensorLocationRepository(_context);
             ElevationAnglesRepository = new ElevationAnglesRepository(_context);
-            ServiceVisitReportRepository = new ServiceVisitReportRepository(_context);
         }
 
         public int Complete()
