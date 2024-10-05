@@ -1,5 +1,5 @@
-﻿using WIGOS.Domain.Entities.WIGOS.GeospatialLocations;
-using Craft.Persistence;
+﻿using Craft.Persistence;
+using WIGOS.Domain.Entities.WIGOS.GeospatialLocations;
 
 namespace WIGOS.Persistence.Repositories.WIGOS
 {

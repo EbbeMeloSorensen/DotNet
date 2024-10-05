@@ -1,7 +1,7 @@
-﻿using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
-using WIGOS.Domain.Entities.WIGOS.GeospatialLocations;
+﻿using System.Linq.Expressions;
 using Craft.Persistence;
-using System.Linq.Expressions;
+using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using WIGOS.Domain.Entities.WIGOS.GeospatialLocations;
 
 namespace WIGOS.Persistence.Repositories.WIGOS
 {
