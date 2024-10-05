@@ -300,7 +300,7 @@ public class MainWindowViewModel : ViewModelBase
 
                 // Highlight the position of the time of interest in the historical time view
                 HistoricalTimeViewModel.StaticXValue =
-                    (_historicalTimeOfInterest.Object.Value - HistoricalTimeViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+                    (_historicalTimeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
             }
             else
             {
@@ -699,7 +699,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private void InitializeLogViewModel(ILogger logger)
     {
-        LogViewModel = new LogViewModel();
+        LogViewModel = new LogViewModel(100);
         _logger = new ViewModelLogger(logger, LogViewModel);
     }
 
@@ -833,7 +833,7 @@ public class MainWindowViewModel : ViewModelBase
             0,
             40,
             1,
-            timeAtOrigo,
+            XAxisMode.Cartesian,
             _logger)
         {
             LockWorldWindowOnDynamicXValue = true,
@@ -864,7 +864,7 @@ public class MainWindowViewModel : ViewModelBase
         HistoricalTimeViewModel.GeometryEditorViewModel.UpdateModelCallBack = () =>
         {
             // Update the x value of interest (set it to current time)
-            var nowAsScalar = (DateTime.UtcNow - HistoricalTimeViewModel.TimeAtOrigo).TotalDays;
+            var nowAsScalar = (DateTime.UtcNow - TimeSeriesViewModel.TimeAtOrigo).TotalDays;
             HistoricalTimeViewModel.DynamicXValue = nowAsScalar;
         };
 
@@ -905,7 +905,7 @@ public class MainWindowViewModel : ViewModelBase
             0,
             40,
             1,
-            timeAtOrigo,
+            XAxisMode.Cartesian,
             _logger)
         {
             LockWorldWindowOnDynamicXValue = true,
@@ -937,7 +937,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             // Update the x value of interest (set it to current time)
             // Dette udvirker, at World Window følger med current time
-            var nowAsScalar = (DateTime.UtcNow - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays;
+            var nowAsScalar = (DateTime.UtcNow - TimeSeriesViewModel.TimeAtOrigo).TotalDays;
             DatabaseWriteTimesViewModel.DynamicXValue = nowAsScalar;
         };
 
@@ -952,7 +952,7 @@ public class MainWindowViewModel : ViewModelBase
 
             // Highlight the position of the time of interest
             DatabaseWriteTimesViewModel.StaticXValue = 
-                (_databaseTimeOfInterest.Object.Value - DatabaseWriteTimesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+                (_databaseTimeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
 
             // Der skal altid gælde, at historisk tid er ældre end eller lig med databasetid
             if (!_historicalTimeOfInterest.Object.HasValue ||
@@ -968,8 +968,8 @@ public class MainWindowViewModel : ViewModelBase
 
             // Identify the database write time that is to the left of the current focus
 
-            var currentTimeInFocus = DatabaseWriteTimesViewModel.TimeAtOrigo +
-                TimeSpan.FromDays(DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.X);
+            var currentTimeInFocus = TimeSeriesViewModel.TimeAtOrigo +
+                                     TimeSpan.FromDays(DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.X);
 
             // Af hensyn til afrundingsfejl, så vi sikrer, at den faktisk stepper tilbage i tid
             currentTimeInFocus -= TimeSpan.FromMilliseconds(10);
@@ -982,7 +982,7 @@ public class MainWindowViewModel : ViewModelBase
             }
 
             var newTimeInFocus = earlierDatabaseWriteTimes.Max();
-            var xValueInFocus = (newTimeInFocus - DatabaseWriteTimesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+            var xValueInFocus = (newTimeInFocus - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
 
             DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus = new Point(
                 xValueInFocus,
@@ -993,7 +993,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             // Identify the database write time that is to the right of the current focus
 
-            var currentTimeInFocus = DatabaseWriteTimesViewModel.TimeAtOrigo +
+            var currentTimeInFocus = TimeSeriesViewModel.TimeAtOrigo +
                                      TimeSpan.FromDays(DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus.X);
 
             // Af hensyn til afrundingsfejl, så vi sikrer, at den faktisk stepper frem i tid
@@ -1008,7 +1008,7 @@ public class MainWindowViewModel : ViewModelBase
             }
 
             var newTimeInFocus = laterDatabaseWriteTimes.Min();
-            var xValueInFocus = (newTimeInFocus - DatabaseWriteTimesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+            var xValueInFocus = (newTimeInFocus - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
 
             DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowFocus = new Point(
                 xValueInFocus,
@@ -1036,7 +1036,7 @@ public class MainWindowViewModel : ViewModelBase
 
         // Calculate y coordinate of the principal axis (so we can make the lines stop there)
         var y2 = HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
-                 HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowSize.Height * HistoricalTimeViewModel.GeometryEditorViewModel.MarginBottomOffset /
+                 HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowSize.Height * HistoricalTimeViewModel.MarginBottomOffset /
                  HistoricalTimeViewModel.GeometryEditorViewModel.ViewPortSize.Height;
 
         // Clear lines
@@ -1045,7 +1045,7 @@ public class MainWindowViewModel : ViewModelBase
         var lineThickness = 1.5;
 
         var lineViewModels = _historicalChangeTimes
-            .Select(_ => (_ - HistoricalTimeViewModel.TimeAtOrigo).TotalDays)
+            .Select(_ => (_ - TimeSeriesViewModel.TimeAtOrigo).TotalDays)
             .Where(_ => _ > x0 && _ < x1)
             .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y2), lineThickness, _timeStampBrush))
             .ToList();
@@ -1077,7 +1077,7 @@ public class MainWindowViewModel : ViewModelBase
 
         // Calculate y coordinate of the principal axis (so we can make the lines stop there)
         var y2 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
-             DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * DatabaseWriteTimesViewModel.GeometryEditorViewModel.MarginBottomOffset /
+             DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * DatabaseWriteTimesViewModel.MarginBottomOffset /
              DatabaseWriteTimesViewModel.GeometryEditorViewModel.ViewPortSize.Height;
 
         // Clear lines
@@ -1086,7 +1086,7 @@ public class MainWindowViewModel : ViewModelBase
         var lineThickness = 1.5;
 
         var lineViewModels = _databaseWriteTimes
-            .Select(_ => (_ - DatabaseWriteTimesViewModel.TimeAtOrigo).TotalDays)
+            .Select(_ => (_ - TimeSeriesViewModel.TimeAtOrigo).TotalDays)
             .Where(_ => _ > x0 && _ < x1)
             .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y2), lineThickness, _timeStampBrush))
             .ToList();
