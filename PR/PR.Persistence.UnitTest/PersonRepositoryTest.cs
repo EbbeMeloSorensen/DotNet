@@ -5,16 +5,16 @@ using WIGOS.Persistence.UnitTest;
 
 namespace PR.Persistence.UnitTest
 {
-    public class UnitTest1
+    public class PersonRepositoryTest
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public UnitTest1()
+        public PersonRepositoryTest()
         {
             var container = Container.For<InstanceScanner>();
 
             _unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
-            
+            _unitOfWorkFactory.Reset();
         }
 
         [Fact]
