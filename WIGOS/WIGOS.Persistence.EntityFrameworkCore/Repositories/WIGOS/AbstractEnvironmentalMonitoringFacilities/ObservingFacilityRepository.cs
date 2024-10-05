@@ -97,6 +97,11 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.WIGOS.AbstractEnvir
                 of => of,
                 of =>
                 {
+                    if (!geospatialLocationGroups.Any())
+                    {
+                        return new List<GeospatialLocation>();
+                    }
+
                     return geospatialLocationGroups
                         .Single(glg => glg.Key == of.ObjectId)
                         .ToList();

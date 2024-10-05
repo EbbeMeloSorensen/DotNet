@@ -1,10 +1,11 @@
-﻿using WIGOS.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using WIGOS.Domain.Entities;
 using WIGOS.Domain.Entities.Geometry;
 using WIGOS.Domain.Entities.Geometry.CoordinateSystems;
 using WIGOS.Domain.Entities.Geometry.Locations.Line;
 using WIGOS.Domain.Entities.Geometry.Locations.Points;
 using WIGOS.Domain.Entities.Geometry.Locations.Surfaces;
-using Microsoft.EntityFrameworkCore;
+using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 
 namespace WIGOS.Persistence.EntityFrameworkCore
 {
@@ -19,10 +20,17 @@ namespace WIGOS.Persistence.EntityFrameworkCore
         }
 
         public static void SeedDatabase(
-            DbContext context)
+            WIGOSDbContextBase context)
         {
+            if (context.ObservingFacilities.Any() ||
+                context.Locations.Any())
+            {
+                return;
+            }
+
             SeedLocations(context);
             SeedPeople(context);
+            SeedObservingFacilities(context);
         }
 
         public static IEnumerable<Person> GenerateListOfPeople()
@@ -778,6 +786,29 @@ namespace WIGOS.Persistence.EntityFrameworkCore
             context.Add(polygonArea1);
             context.Add(fanArea1);
             context.AddRange(pointReferences);
+            context.SaveChanges();
+        }
+
+        private static void SeedObservingFacilities(
+            DbContext context)
+        {
+            var observingFacility1 = new ObservingFacility(Guid.NewGuid(), NextCreatedTime())
+            {
+                Name = "Livgardens Kaserne"
+            };
+
+            var observingFacility2 = new ObservingFacility(Guid.NewGuid(), NextCreatedTime())
+            {
+                Name = "Uggerby"
+            };
+
+            var observingFacilities = new List<ObservingFacility>
+            {
+                observingFacility1,
+                observingFacility2
+            };
+
+            context.AddRange(observingFacilities);
             context.SaveChanges();
         }
 

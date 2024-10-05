@@ -8,20 +8,16 @@
 
             try
             {
-                if (true)
-                {
-                    context.Database.EnsureCreated();
+                context.Database.EnsureCreated();
 
-                    if (context.Locations.Any()) return;
-
-                    Seeding.SeedDatabase(context);
-                }
+                Seeding.SeedDatabase(context);
             }
             catch (Npgsql.NpgsqlException ex)
             {
                 // Just swallow it for now
                 // Todo: Write it in the log
                 var a = ex.Message;
+                throw ex;
             }
         }
 

@@ -64,7 +64,7 @@ namespace WIGOS.UI.Console
             }
         }
 
-        private static Application.Application GetApplication()
+        private static Application.Application GetApplication() 
         {
             var container = Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();

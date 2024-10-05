@@ -1,3 +1,4 @@
 Todo:
 * Der skal være noget test af, at man kan hive et tidligere datagrundlag
   - Det kan passende være en unit test for Wigos.Persistence, hvor man så injecter en dependency
+* Der skal gerne være et repository, som bare ser ud som om at det er almindeligt uden noget underliggende

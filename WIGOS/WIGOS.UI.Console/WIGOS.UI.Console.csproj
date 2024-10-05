@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\WIGOS.Application\WIGOS.Application.csproj" />
-    <ProjectReference Include="..\WIGOS.Persistence.EntityFrameworkCore.PostgreSQL\WIGOS.Persistence.EntityFrameworkCore.PostgreSQL.csproj" />
+    <ProjectReference Include="..\WIGOS.Persistence.EntityFrameworkCore.Sqlite\WIGOS.Persistence.EntityFrameworkCore.Sqlite.csproj" />
   </ItemGroup>
 
   <ItemGroup>
