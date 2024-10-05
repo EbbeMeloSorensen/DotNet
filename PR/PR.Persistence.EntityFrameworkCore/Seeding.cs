@@ -6,10 +6,12 @@ namespace PR.Persistence.EntityFrameworkCore
     public static class Seeding
     {
         public static void SeedDatabase(
-            DbContext context)
+            PRDbContextBase context)
         {
             // Star Wars
             // https://cdn.shopify.com/s/files/1/1835/6621/files/star-wars-family-tree-episde-9.png?v=1578255836
+
+            if (context.People.Any()) return;
 
             var now = DateTime.UtcNow;
             var delay = 0;

@@ -64,7 +64,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO", "..\Craft\Craft.DataStructures.IO\Craft.DataStructures.IO.csproj", "{7BB6054B-772C-4BC6-A915-817F73109E99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.EntityFrameworkCore", "PR.Persistence.EntityFrameworkCore\PR.Persistence.EntityFrameworkCore.csproj", "{FEC609BA-D7D6-406A-AA69-429F36C64203}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore", "PR.Persistence.EntityFrameworkCore\PR.Persistence.EntityFrameworkCore.csproj", "{FEC609BA-D7D6-406A-AA69-429F36C64203}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.UnitTest", "PR.Persistence.UnitTest\PR.Persistence.UnitTest.csproj", "{0B6E3950-D10B-4609-84DD-6596C0875F8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -188,6 +190,10 @@ Global
 		{FEC609BA-D7D6-406A-AA69-429F36C64203}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEC609BA-D7D6-406A-AA69-429F36C64203}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEC609BA-D7D6-406A-AA69-429F36C64203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6E3950-D10B-4609-84DD-6596C0875F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6E3950-D10B-4609-84DD-6596C0875F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B6E3950-D10B-4609-84DD-6596C0875F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6E3950-D10B-4609-84DD-6596C0875F8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
