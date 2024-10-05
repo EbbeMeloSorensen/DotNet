@@ -60,7 +60,7 @@ namespace Craft.Persistence.EntityFrameworkCore
             return Context.Set<TEntity>().SingleOrDefault(predicate);
         }
 
-        public void Add(
+        public virtual void Add(
             TEntity entity)
         {
             Context.Set<TEntity>().Add(entity);

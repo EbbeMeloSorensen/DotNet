@@ -1,6 +1,7 @@
 using StructureMap;
 using Xunit;
 using FluentAssertions;
+using PR.Domain.Entities;
 using WIGOS.Persistence.UnitTest;
 
 namespace PR.Persistence.UnitTest
@@ -14,27 +15,40 @@ namespace PR.Persistence.UnitTest
             var container = Container.For<InstanceScanner>();
 
             _unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
-            _unitOfWorkFactory.Reset();
+            _unitOfWorkFactory.Reseed();
         }
 
         [Fact]
-        public void Test1_Get_All_People()
+        public void Test1_Create_Person_Minimal()
         {
-            // Act
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            // Arrange
+            var person = new Person
             {
-                var people = unitOfWork.People.GetAll();
-                people.Count().Should().Be(66);
-            }
+                FirstName = "Bamse"
+            };
+
+            // Act
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+            unitOfWork1.People.Add(person);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var people = unitOfWork2.People.GetAll();
+            people.Count().Should().Be(67);
         }
 
         [Fact]
-        public void Test2_Create_Person()
+        public void Test2_Get_All_People()
         {
+            // Arrange
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
             // Act
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-            {
-            }
+            var people = unitOfWork.People.GetAll();
+
+            // Assert
+            people.Count().Should().Be(66);
         }
     }
 }

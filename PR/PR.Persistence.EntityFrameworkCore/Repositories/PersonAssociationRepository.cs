@@ -22,7 +22,8 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
 
         public override void Clear()
         {
-            throw new NotImplementedException();
+            Context.RemoveRange(PrDbContext.PersonAssociations);
+            Context.SaveChanges();
         }
 
         public override void Update(

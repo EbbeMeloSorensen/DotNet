@@ -15,6 +15,13 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
         }
 
+        public override void Add(
+            Person person)
+        {
+            person.Created = DateTime.Now;
+            base.Add(person);
+        }
+
         public override void Update(
             Person person)
         {
@@ -71,7 +78,8 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
 
         public override void Clear()
         {
-            throw new NotImplementedException();
+            Context.RemoveRange(PrDbContext.People);
+            Context.SaveChanges();
         }
     }
 }
