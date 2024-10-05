@@ -320,6 +320,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.Data.Studio.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite", "..\DMI.StatDB\DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite\DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite.csproj", "{E82F81F5-638C-4B7C-97F8-F539DBDA84E5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMI.SMS.Persistence.EntityFrameworkCore", "..\DMI.SMS\DMI.SMS.Persistence.EntityFrameworkCore\DMI.SMS.Persistence.EntityFrameworkCore.csproj", "{C0D8FBB0-8227-4593-BAB3-E5CC062D0CE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -514,6 +516,10 @@ Global
 		{E82F81F5-638C-4B7C-97F8-F539DBDA84E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E82F81F5-638C-4B7C-97F8-F539DBDA84E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E82F81F5-638C-4B7C-97F8-F539DBDA84E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0D8FBB0-8227-4593-BAB3-E5CC062D0CE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0D8FBB0-8227-4593-BAB3-E5CC062D0CE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0D8FBB0-8227-4593-BAB3-E5CC062D0CE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0D8FBB0-8227-4593-BAB3-E5CC062D0CE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
