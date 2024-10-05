@@ -1,7 +1,6 @@
-﻿using System;
-using System.Configuration;
-using PR.ViewModel;
+﻿using System.Configuration;
 using StructureMap;
+using PR.ViewModel;
 
 namespace PR.UI.WPF
 {
@@ -19,7 +18,7 @@ namespace PR.UI.WPF
                 }
                 catch (ConfigurationErrorsException)
                 {
-                    Console.WriteLine("Error reading app settings");
+                    System.Console.WriteLine("Error reading app settings");
                     throw;
                 }
             }
