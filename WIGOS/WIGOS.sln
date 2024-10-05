@@ -41,19 +41,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.UI.Console", "WIGOS.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Persistence.EntityFrameworkCore.PostgreSQL", "WIGOS.Persistence.EntityFrameworkCore.PostgreSQL\WIGOS.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{83851564-8127-448B-9F54-98C5AE771D65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence.EntityFrameworkCore.Sqlite", "WIGOS.Persistence.EntityFrameworkCore.Sqlite\WIGOS.Persistence.EntityFrameworkCore.Sqlite.csproj", "{58C70262-6B0E-46B1-B92E-6B4653CC5410}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Persistence.EntityFrameworkCore.Sqlite", "WIGOS.Persistence.EntityFrameworkCore.Sqlite\WIGOS.Persistence.EntityFrameworkCore.Sqlite.csproj", "{58C70262-6B0E-46B1-B92E-6B4653CC5410}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence.EntityFrameworkCore.SqlServer", "WIGOS.Persistence.EntityFrameworkCore.SqlServer\WIGOS.Persistence.EntityFrameworkCore.SqlServer.csproj", "{E6ABF6A0-B462-4E43-9C47-BC003A0E5A13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Persistence.EntityFrameworkCore.SqlServer", "WIGOS.Persistence.EntityFrameworkCore.SqlServer\WIGOS.Persistence.EntityFrameworkCore.SqlServer.csproj", "{E6ABF6A0-B462-4E43-9C47-BC003A0E5A13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.UI.WPF", "WIGOS.UI.WPF\WIGOS.UI.WPF.csproj", "{B9DBFA22-13E9-4765-80F3-016286417753}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.UI.WPF", "WIGOS.UI.WPF\WIGOS.UI.WPF.csproj", "{B9DBFA22-13E9-4765-80F3-016286417753}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Web.Persistence", "WIGOS.Web.Persistence\WIGOS.Web.Persistence.csproj", "{5C294415-C3C2-4A9E-B926-5B237E375745}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Web.Persistence", "WIGOS.Web.Persistence\WIGOS.Web.Persistence.csproj", "{5C294415-C3C2-4A9E-B926-5B237E375745}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Web.Application", "WIGOS.Web.Application\WIGOS.Web.Application.csproj", "{BFBBF8D0-A19F-4BC9-895E-2139C8786AB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Web.Application", "WIGOS.Web.Application\WIGOS.Web.Application.csproj", "{BFBBF8D0-A19F-4BC9-895E-2139C8786AB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Web.Infrastructure", "WIGOS.Web.Infrastructure\WIGOS.Web.Infrastructure.csproj", "{6927D868-E0A4-42A2-A0EC-A8B38928004A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Web.Infrastructure", "WIGOS.Web.Infrastructure\WIGOS.Web.Infrastructure.csproj", "{6927D868-E0A4-42A2-A0EC-A8B38928004A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Web.API", "WIGOS.Web.API\WIGOS.Web.API.csproj", "{A4172E30-D4AF-456E-B1B2-16190ED11462}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Web.API", "WIGOS.Web.API\WIGOS.Web.API.csproj", "{A4172E30-D4AF-456E-B1B2-16190ED11462}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D5798DFD-910E-4F54-8574-E64121BDD3FB}"
+	ProjectSection(SolutionItems) = preProject
+		Backlog.txt = Backlog.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WIGOS.Persistence.UnitTest", "WIGOS.Persistence.UnitTest\WIGOS.Persistence.UnitTest.csproj", "{0580E5C4-2390-41B2-95EA-FDB5B48D1523}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -165,6 +172,10 @@ Global
 		{A4172E30-D4AF-456E-B1B2-16190ED11462}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4172E30-D4AF-456E-B1B2-16190ED11462}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4172E30-D4AF-456E-B1B2-16190ED11462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0580E5C4-2390-41B2-95EA-FDB5B48D1523}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0580E5C4-2390-41B2-95EA-FDB5B48D1523}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0580E5C4-2390-41B2-95EA-FDB5B48D1523}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0580E5C4-2390-41B2-95EA-FDB5B48D1523}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
