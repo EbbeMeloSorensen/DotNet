@@ -54,49 +54,6 @@ namespace WIGOS.Application
             }
 
             return predicates.Aggregate((c, n) => c.And(n));
-
-            // Old
-            if (historicalTimeOfInterest.HasValue &&
-                databaseTimeOfInterest.HasValue)
-            {
-                predicates.Add(_ => _.Created <= databaseTimeOfInterest.Value);   // Kun rækker skrevet før pågældende tidspunkt
-                predicates.Add(_ => _.Superseded > databaseTimeOfInterest.Value); // Kun rækker, der er "gældende" (eller var gældende på pågældende tidspunkt)
-                predicates.Add(_ => _.DateEstablished <= historicalTimeOfInterest.Value);
-                predicates.Add(_ => _.DateClosed > historicalTimeOfInterest.Value);
-                predicates.Add(_ => _.Name.ToUpper().Contains(nameFilterInUppercase));
-
-                return predicates.Aggregate((c, n) => c.And(n));
-            }
-
-            if (databaseTimeOfInterest.HasValue)
-            {
-                return _ =>
-                    _.Created <= databaseTimeOfInterest.Value && // Kun rækker skrevet før pågældende tidspunkt
-                    _.Superseded >
-                    databaseTimeOfInterest
-                        .Value && // Kun rækker, der er "gældende" (eller var gældende på pågældende tidspunkt)
-                    _.DateClosed >
-                    databaseTimeOfInterest
-                        .Value && // Kun rækker, hvis virkningstidsinterval skærer database time of interest, dvs stationer, der var aktive pågældende tidspunkt
-                    _.Name.ToUpper().Contains(nameFilterInUppercase);
-            }
-
-            if (historicalTimeOfInterest.HasValue)
-            {
-                return _ =>
-                    _.Superseded == DateTime.MaxValue && // Kun rækker, der er gældende
-                    _.DateEstablished <= historicalTimeOfInterest.Value && // ->
-                    _.DateClosed >
-                    historicalTimeOfInterest
-                        .Value && // Kun rækker, hvis virkningstidsinterval skærer historical time of interest
-                    _.Name.ToUpper().Contains(nameFilterInUppercase);
-            }
-
-            predicates.Add(_ => _.Superseded == DateTime.MaxValue); // Kun rækker, der er gældende
-            predicates.Add(_ => _.DateClosed == DateTime.MaxValue);
-            predicates.Add(_ => _.Name.ToUpper().Contains(nameFilterInUppercase));
-
-            return predicates.Aggregate((c, n) => c.And(n));
         }
 
         public static Expression<Func<GeospatialLocation, bool>> GeospatialLocationFilterAsExpression(
