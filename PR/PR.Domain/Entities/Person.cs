@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PR.Domain.Entities
 {
-    public class Person
+    public class Person : VersionedObject
     {
         // Notice that we're using a guid here rather than an int.
         // Usually I have always used int, but then I came across the Udemy course "Complete guide to
@@ -32,8 +32,6 @@ namespace PR.Domain.Entities
         public string? Description { get; set; }
 
         public bool? Dead { get; set; }
-
-        public DateTime Created { get; set; }
 
         public virtual ICollection<PersonAssociation>? ObjectPeople { get; set; }
         public virtual ICollection<PersonAssociation>? SubjectPeople { get; set; }

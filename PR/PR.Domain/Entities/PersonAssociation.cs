@@ -2,7 +2,7 @@
 
 namespace PR.Domain.Entities
 {
-    public class PersonAssociation
+    public class PersonAssociation : VersionedObject
     {
         public Guid Id { get; set; }
 
@@ -15,7 +15,5 @@ namespace PR.Domain.Entities
         public Person ObjectPerson { get; set; }
 
         public string? Description { get; set; }
-
-        public DateTime Created { get; set; }
     }
 }

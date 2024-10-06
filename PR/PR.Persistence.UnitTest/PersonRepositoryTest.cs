@@ -35,7 +35,7 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
             var people = unitOfWork2.People.GetAll();
-            people.Count().Should().Be(67);
+            people.Count().Should().Be(5);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace PR.Persistence.UnitTest
             var people = unitOfWork.People.GetAll();
 
             // Assert
-            people.Count().Should().Be(66);
+            people.Count().Should().Be(4);
         }
     }
 }
