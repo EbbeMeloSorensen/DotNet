@@ -24,7 +24,9 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = baseTime + new TimeSpan(delay++),
                 Superseded = supersedingTime1,
                 FirstName = "Anakin",
-                Surname = "Skywalker"
+                Surname = "Skywalker",
+                Nickname = "Ani",
+                Address = "Tatooine"
             };
 
             var luke_0 = new Person
@@ -54,10 +56,10 @@ namespace PR.Persistence.EntityFrameworkCore
                 ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
                 Created = supersedingTime1,
                 Superseded = maxDate,
-                FirstName = "Anakin",
-                Surname = "Skywalker",
-                Nickname = "Darth Vader",
-                Category = "Jedi, Sith"
+                FirstName = "Darth",
+                Surname = "Vader",
+                Category = "Jedi, Sith",
+                Address = "Mustafar"
             };
 
             //var obiWan = new Person

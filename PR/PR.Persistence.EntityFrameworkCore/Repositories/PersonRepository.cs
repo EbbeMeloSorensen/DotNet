@@ -52,9 +52,10 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
             });
         }
 
-        public Person Get(Guid id)
+        public Person Get(
+            Guid id)
         {
-            throw new NotImplementedException();
+            return PrDbContext.People.Single(_ => _.Id == id);
         }
 
         public Person GetPersonIncludingAssociations(
@@ -74,6 +75,20 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
                 .Include(p => p.SubjectPeople).ThenInclude(pa => pa.SubjectPerson)
                 .Where(predicate)
                 .ToList();
+        }
+
+        public Person GetObject(
+            Guid objectId, 
+            DateTime? databaseTime)
+        {
+            if (databaseTime.HasValue)
+            {
+                return Find(p => p.ObjectId == objectId &&
+                                 p.Created <= databaseTime &&
+                                 p.Superseded > databaseTime).Single();
+            }
+            
+            return Find(p => p.ObjectId == objectId && p.Superseded.Year == 9999).Single();
         }
 
         public override void Clear()

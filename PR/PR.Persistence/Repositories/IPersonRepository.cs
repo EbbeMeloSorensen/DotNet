@@ -8,6 +8,7 @@ namespace PR.Persistence.Repositories
 {
     public interface IPersonRepository : IRepository<Person>
     {
+        // Dette er en almindelig Get, der trækker en række med et givet primary key id
         Person Get(
             Guid id);
 
@@ -16,5 +17,9 @@ namespace PR.Persistence.Repositories
 
         IList<Person> GetPeopleIncludingAssociations(
             Expression<Func<Person, bool>> predicate);
+
+        Person GetObject(
+            Guid objectId,
+            DateTime? databaseTime = null);
     }
 }
