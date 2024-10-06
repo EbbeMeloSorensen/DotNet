@@ -124,14 +124,7 @@ namespace PR.Persistence.UnitTest
 
             person.ObjectPeople.Count().Should().Be(1);
             person.ObjectPeople.Single().Description.Should().Be("is a parent of");
-            person.SubjectPeople.Count().Should().Be(1);
-            person.SubjectPeople.Single().Description.Should().Be("is a parent of");
-
-            // Det her går galt, da den her person (Darth Vader) jo er blevet slettet,
-            // så enten skal man køre cascade delete, og ellers skal man bare smide en exception,
-            // når man prøver at slette noget uden at have slettet dets children
-            //var subjectPersonObjectId = person.SubjectPeople.Single().SubjectPersonObjectId;
-            //var subjectPerson = unitOfWork.People.GetObject(subjectPersonObjectId);
+            person.SubjectPeople.Count().Should().Be(0);
         }
 
         [Fact]
@@ -148,6 +141,27 @@ namespace PR.Persistence.UnitTest
             // Assert
             person.FirstName.Should().Be("Anakin");
             person.Nickname.Should().Be("Ani");
+        }
+
+        [Fact]
+        public void Get_Earlier_Version_Of_Person_Object_Including_Associations()
+        {
+            // Arrange
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var person = unitOfWork.People.GetObjectIncludingPersonAssociations(
+                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03"),
+                new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+
+            // Assert
+            person.FirstName.Should().Be("Leia");
+            person.Surname.Should().Be("Organa");
+
+            person.ObjectPeople.Count().Should().Be(1);
+            person.ObjectPeople.Single().Description.Should().Be("is a parent of");
+            person.SubjectPeople.Count().Should().Be(1);
+            person.ObjectPeople.Single().Description.Should().Be("is a parent of");
         }
 
         [Fact]

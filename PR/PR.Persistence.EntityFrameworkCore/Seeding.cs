@@ -618,7 +618,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ObjectId = new Guid("11223344-5566-7788-99AA-BB0000000000"),
                 Created = baseTime + new TimeSpan(delay++),
-                Superseded = maxDate,
+                Superseded = darthVaderDies,
                 SubjectPerson = anakin_0,
                 SubjectPersonObjectId = anakin_0.ObjectId,
                 Description = "is a parent of",
@@ -630,7 +630,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ObjectId = new Guid("11223344-5566-7788-99AA-BB0000000001"),
                 Created = baseTime + new TimeSpan(delay++),
-                Superseded = maxDate,
+                Superseded = darthVaderDies,
                 SubjectPerson = anakin_0,
                 SubjectPersonObjectId = anakin_0.ObjectId,
                 Description = "is a parent of",
@@ -642,7 +642,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ObjectId = new Guid("11223344-5566-7788-99AA-BB0000000002"),
                 Created = baseTime + new TimeSpan(delay++),
-                Superseded = maxDate,
+                Superseded = hanSoloDies,
                 SubjectPerson = hanSolo_0,
                 SubjectPersonObjectId = hanSolo_0.ObjectId,
                 Description = "is a parent of",
