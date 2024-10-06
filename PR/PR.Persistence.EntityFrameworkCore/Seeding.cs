@@ -14,7 +14,11 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var baseTime = new DateTime(2011, 4, 3, 7, 9, 13, DateTimeKind.Utc);
             var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
-            var supersedingTime1 = new DateTime(2014, 5, 20, 3, 6, 9, DateTimeKind.Utc);
+            var anakinBecomesDarthVader = new DateTime(2014, 5, 20, 3, 6, 9, DateTimeKind.Utc);
+            var darthVaderDies = new DateTime(2016, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var benSoloBecomesKyloRen = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var hanSoloDies = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var lukeSkywalkerDies = new DateTime(2022, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
             var delay = 0;
 
@@ -22,18 +26,39 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
                 Created = baseTime + new TimeSpan(delay++),
-                Superseded = supersedingTime1,
+                Superseded = anakinBecomesDarthVader,
                 FirstName = "Anakin",
                 Surname = "Skywalker",
                 Nickname = "Ani",
                 Address = "Tatooine"
             };
 
-            var luke_0 = new Person
+            var anakin_1 = new Person
+            {
+                ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
+                Created = anakinBecomesDarthVader,
+                Superseded = darthVaderDies,
+                FirstName = "Darth",
+                Surname = "Vader",
+                Category = "Jedi, Sith",
+                Address = "Mustafar"
+            };
+
+            var hanSolo_0 = new Person
             {
                 ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF01"),
                 Created = baseTime + new TimeSpan(delay++),
-                Superseded = maxDate,
+                Superseded = hanSoloDies,
+                FirstName = "Han",
+                Surname = "Solo",
+                Description = "Smuggler"
+            };
+
+            var luke_0 = new Person
+            {
+                ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF02"),
+                Created = baseTime + new TimeSpan(delay++),
+                Superseded = lukeSkywalkerDies,
                 FirstName = "Luke",
                 Surname = "Skywalker",
                 Category = "Jedi",
@@ -42,7 +67,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var leia_0 = new Person
             {
-                ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF02"),
+                ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03"),
                 Created = baseTime + new TimeSpan(delay++),
                 Superseded = maxDate,
                 FirstName = "Leia",
@@ -51,15 +76,22 @@ namespace PR.Persistence.EntityFrameworkCore
                 Address = "Alderaan"
             };
 
-            var anakin_1 = new Person
+            var benSolo_0 = new Person
             {
-                ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
-                Created = supersedingTime1,
+                ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF04"),
+                Created = baseTime + new TimeSpan(delay++),
+                Superseded = benSoloBecomesKyloRen,
+                FirstName = "Ben",
+                Surname = "Solo"
+            };
+
+            var benSolo_1 = new Person
+            {
+                ObjectId = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF04"),
+                Created = benSoloBecomesKyloRen,
                 Superseded = maxDate,
-                FirstName = "Darth",
-                Surname = "Vader",
-                Category = "Jedi, Sith",
-                Address = "Mustafar"
+                FirstName = "Kylo",
+                Surname = "Ren"
             };
 
             //var obiWan = new Person
@@ -76,23 +108,6 @@ namespace PR.Persistence.EntityFrameworkCore
             //    Surname = "Amidala",
             //    Address = "Naboo",
             //    Description = "Princess",
-            //    Created = now + new TimeSpan(delay++),
-            //};
-
-            //var benSolo = new Person
-            //{
-            //    FirstName = "Ben",
-            //    Surname = "Solo",
-            //    Nickname = "Kylo Ren",
-            //    Category = "Jedi/Sith",
-            //    Created = now + new TimeSpan(delay++),
-            //};
-
-            //var hanSolo = new Person
-            //{
-            //    FirstName = "Han",
-            //    Surname = "Solo",
-            //    Description = "Smuggler",
             //    Created = now + new TimeSpan(delay++),
             //};
 
@@ -530,13 +545,14 @@ namespace PR.Persistence.EntityFrameworkCore
             var people = new List<Person>
             {
                 anakin_0,
+                anakin_1,
+                hanSolo_0,
                 luke_0,
                 leia_0,
-                anakin_1,
+                benSolo_0,
+                benSolo_1
                 //obiWan,
                 //padme,
-                //benSolo,
-                //hanSolo,
                 //quiGon,
                 //countDooku,
                 //palpatine,
@@ -604,8 +620,10 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = baseTime + new TimeSpan(delay++),
                 Superseded = maxDate,
                 SubjectPerson = anakin_0,
+                SubjectPersonObjectId = anakin_0.ObjectId,
                 Description = "is a parent of",
                 ObjectPerson = luke_0,
+                ObjectPersonObjectId = luke_0.ObjectId
             };
 
             var personAssociation2 = new PersonAssociation
@@ -614,14 +632,42 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = baseTime + new TimeSpan(delay++),
                 Superseded = maxDate,
                 SubjectPerson = anakin_0,
+                SubjectPersonObjectId = anakin_0.ObjectId,
                 Description = "is a parent of",
                 ObjectPerson = leia_0,
+                ObjectPersonObjectId = leia_0.ObjectId
+            };
+
+            var personAssociation3 = new PersonAssociation
+            {
+                ObjectId = new Guid("11223344-5566-7788-99AA-BB0000000002"),
+                Created = baseTime + new TimeSpan(delay++),
+                Superseded = maxDate,
+                SubjectPerson = hanSolo_0,
+                SubjectPersonObjectId = hanSolo_0.ObjectId,
+                Description = "is a parent of",
+                ObjectPerson = benSolo_0,
+                ObjectPersonObjectId = benSolo_0.ObjectId
+            };
+
+            var personAssociation4 = new PersonAssociation
+            {
+                ObjectId = new Guid("11223344-5566-7788-99AA-BB0000000003"),
+                Created = baseTime + new TimeSpan(delay++),
+                Superseded = maxDate,
+                SubjectPerson = leia_0,
+                SubjectPersonObjectId = leia_0.ObjectId,
+                Description = "is a parent of",
+                ObjectPerson = benSolo_0,
+                ObjectPersonObjectId = benSolo_0.ObjectId
             };
 
             var personAssociations = new List<PersonAssociation>
             {
                 personAssociation1,
                 personAssociation2,
+                personAssociation3,
+                personAssociation4,
                 //new()
                 //{
                 //    SubjectPerson = anakin,

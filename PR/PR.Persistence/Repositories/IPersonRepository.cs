@@ -21,5 +21,12 @@ namespace PR.Persistence.Repositories
         Person GetObject(
             Guid objectId,
             DateTime? databaseTime = null);
+
+        IEnumerable<Person> GetAllObjects(
+            DateTime? databaseTime = null);
+
+        Person GetObjectIncludingPersonAssociations(
+            Guid objectId,
+            DateTime? databaseTime = null);
     }
 }
