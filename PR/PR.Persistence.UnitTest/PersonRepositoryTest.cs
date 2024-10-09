@@ -93,20 +93,6 @@ namespace PR.Persistence.UnitTest
 
         // Herfra checker vi ting, der skal være tilgængelige for brugeren
 
-        [Fact]
-        public void Get_Latest_Version_Of_Person_Object()
-        {
-            // Arrange
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-            
-            // Act
-            var person = unitOfWork.People.GetObject(new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03"));
-
-            // Assert
-            person.FirstName.Should().Be("Leia");
-            person.Surname.Should().Be("Organa");
-            person.Nickname.Should().Be(null);
-        }
 
         [Fact]
         public void Get_Latest_Version_Of_Person_Object_Including_Associations()
@@ -128,22 +114,6 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public void Get_Earlier_Version_Of_Person_Object()
-        {
-            // Arrange
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-            // Act
-            var person = unitOfWork.People.GetObject(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
-                new DateTime(2013, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-
-            // Assert
-            person.FirstName.Should().Be("Anakin");
-            person.Nickname.Should().Be("Ani");
-        }
-
-        [Fact]
         public void Get_Earlier_Version_Of_Person_Object_Including_Associations()
         {
             // Arrange
@@ -162,37 +132,6 @@ namespace PR.Persistence.UnitTest
             person.ObjectPeople.Single().Description.Should().Be("is a parent of");
             person.SubjectPeople.Count().Should().Be(1);
             person.ObjectPeople.Single().Description.Should().Be("is a parent of");
-        }
-
-        [Fact]
-        public void Get_Earlier_Version_Of_Person_Object_Before_Person_Was_Created_Throws()
-        {
-            // Arrange
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-            // Act
-            var act = () => unitOfWork.People.GetObject(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
-                new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-
-            // Assert
-            var exception = Assert.Throws<InvalidOperationException>(act);
-            exception.Message.Should().Be("Tried retrieving person that did not exist at the given time");
-        }
-
-        [Fact]
-        public void Get_Latest_Version_Of_Person_Object_After_Person_Was_Deleted_Throws()
-        {
-            // Arrange
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-            // Act
-            var act = () => unitOfWork.People.GetObject(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"));
-
-            // Assert
-            var exception = Assert.Throws<InvalidOperationException>(act);
-            exception.Message.Should().Be("Tried retrieving person that did not exist at the given time");
         }
 
         [Fact]

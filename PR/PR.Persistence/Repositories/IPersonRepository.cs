@@ -18,9 +18,9 @@ namespace PR.Persistence.Repositories
         IList<Person> GetPeopleIncludingAssociations(
             Expression<Func<Person, bool>> predicate);
 
-        Person GetObject(
-            Guid objectId,
-            DateTime? databaseTime = null);
+        //Person GetObject(
+        //    Guid objectId,
+        //    DateTime? databaseTime = null);
 
         IEnumerable<Person> GetAllObjects(
             DateTime? databaseTime = null);
