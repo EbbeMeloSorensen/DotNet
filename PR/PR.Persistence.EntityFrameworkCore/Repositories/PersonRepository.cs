@@ -15,13 +15,6 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
         }
 
-        public override void Add(
-            Person person)
-        {
-            person.Created = DateTime.Now;
-            base.Add(person);
-        }
-
         public Person Get(
             Guid id)
         {
@@ -91,18 +84,6 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
             person.SubjectPeople = personAssociationsWherePersonOfInterestIsObject.ToList();
 
             return person;
-        }
-
-        public IEnumerable<Person> GetAllObjects(
-            DateTime? databaseTime)
-        {
-            if (databaseTime.HasValue)
-            {
-                return Find(p => p.Created <= databaseTime &&
-                                 p.Superseded > databaseTime);
-            }
-
-            return Find(p => p.Superseded.Year == 9999);
         }
 
         public override void Update(

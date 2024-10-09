@@ -15,7 +15,12 @@ namespace PR.Persistence
         {
             _unitOfWork = unitOfWork;
 
-            People = new PersonRepositoryFacade(_unitOfWork.People);
+            People = new PersonRepositoryFacade(_unitOfWork);
+        }
+
+        public void Complete()
+        {
+            _unitOfWork.Complete();
         }
 
         public void Dispose()
