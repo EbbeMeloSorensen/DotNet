@@ -29,9 +29,10 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
 
             if (databaseTime.HasValue)
             {
-                people = Find(p => p.ObjectId == objectId &&
-                                                       p.Created <= databaseTime &&
-                                                       p.Superseded > databaseTime);
+                people = Find(p =>
+                    p.ObjectId == objectId &&
+                    p.Created <= databaseTime &&
+                    p.Superseded > databaseTime);
             }
             else
             {

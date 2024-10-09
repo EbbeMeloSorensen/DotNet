@@ -15,7 +15,7 @@ namespace PR.ViewModel
 {
     public class PersonListViewModel : ViewModelBase
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly UnitOfWorkFactoryFacade _unitOfWorkFactoryFacade;
         private readonly IDialogService _applicationDialogService;
         private IList<Person> _people;
         private Sorting _sorting;
@@ -51,10 +51,10 @@ namespace PR.ViewModel
         }
 
         public PersonListViewModel(
-            IUnitOfWorkFactory unitOfWorkFactory,
+            UnitOfWorkFactoryFacade unitOfWorkFactoryFacade,
             IDialogService applicationDialogService)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
+            _unitOfWorkFactoryFacade = unitOfWorkFactoryFacade;
             _applicationDialogService = applicationDialogService;
             _sorting = Sorting.Name;
 
@@ -130,7 +130,7 @@ namespace PR.ViewModel
 
         private void RetrievePeopleMatchingFilterFromRepository()
         {
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
                 _people = unitOfWork.People.Find(FindPeopleViewModel.FilterAsExpression()).ToList();
             }
@@ -138,7 +138,7 @@ namespace PR.ViewModel
 
         private int CountPeopleMatchingFilterFromRepository()
         {
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
                 return unitOfWork.People.Count(FindPeopleViewModel.FilterAsExpression());
             }

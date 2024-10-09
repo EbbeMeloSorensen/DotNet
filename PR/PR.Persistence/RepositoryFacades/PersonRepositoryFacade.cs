@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using PR.Domain.Entities;
 
 namespace PR.Persistence.RepositoryFacades
@@ -22,6 +23,52 @@ namespace PR.Persistence.RepositoryFacades
         {
             _unitOfWork = unitOfWorkFacade.UnitOfWork;
             _databaseTime = unitOfWorkFacade.DatabaseTime;
+        }
+
+        public int CountAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count(
+            Expression<Func<Person, bool>> predicate)
+        {
+            var predicates = new List<Expression<Func<Person, bool>>>
+            {
+                predicate
+            };
+
+            if (_databaseTime.HasValue)
+            {
+                predicates.Add(p =>
+                    p.Created < _databaseTime &&
+                    p.Superseded > _databaseTime);
+            }
+            else
+            {
+                predicates.Add(p =>
+                    p.Superseded.Year == 9999);
+            }
+
+            return _unitOfWork.People.Count(predicates);
+        }
+
+        public int Count(
+            IList<Expression<Func<Person, bool>>> predicates)
+        {
+            if (_databaseTime.HasValue)
+            {
+                predicates.Add(p =>
+                    p.Created < _databaseTime &&
+                    p.Superseded > _databaseTime);
+            }
+            else
+            {
+                predicates.Add(p =>
+                    p.Superseded.Year == 9999);
+            }
+
+            return _unitOfWork.People.Count(predicates);
         }
 
         public void Add(
@@ -70,6 +117,35 @@ namespace PR.Persistence.RepositoryFacades
             }
 
             return _unitOfWork.People.Find(p => p.Superseded.Year == 9999);
+        }
+
+        public IEnumerable<Person> Find(
+            Expression<Func<Person, bool>> predicate)
+        {
+            var predicates = new List<Expression<Func<Person, bool>>>
+            {
+                predicate
+            };
+
+            if (_databaseTime.HasValue)
+            {
+                predicates.Add(p =>
+                    p.Created < _databaseTime &&
+                    p.Superseded > _databaseTime);
+            }
+            else
+            {
+                predicates.Add(p =>
+                    p.Superseded.Year == 9999);
+            }
+
+            return _unitOfWork.People.Find(predicates);
+        }
+
+        public IEnumerable<Person> Find(
+            IList<Expression<Func<Person, bool>>> predicates)
+        {
+            throw new NotImplementedException();
         }
 
         public Person GetIncludingPersonAssociations(

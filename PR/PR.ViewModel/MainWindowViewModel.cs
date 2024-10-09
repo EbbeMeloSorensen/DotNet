@@ -21,7 +21,8 @@ namespace PR.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly Application.Application _application;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        //private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly UnitOfWorkFactoryFacade _unitOfWorkFactoryFacade;
         private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
         private readonly ILogger _logger;
@@ -92,7 +93,7 @@ namespace PR.ViewModel
             IDialogService applicationDialogService,
             ILogger logger)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
+            _unitOfWorkFactoryFacade = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
             _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
 
@@ -105,7 +106,7 @@ namespace PR.ViewModel
             _logger = new ViewModelLogger(logger, LogViewModel);
             //_unitOfWorkFactory.Initialize(_logger);
 
-            PersonListViewModel = new PersonListViewModel(unitOfWorkFactory, applicationDialogService);
+            PersonListViewModel = new PersonListViewModel(_unitOfWorkFactoryFacade, applicationDialogService);
 
             PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
 
@@ -116,7 +117,7 @@ namespace PR.ViewModel
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
 
             PersonAssociationsViewModel = new PersonAssociationsViewModel(
-                unitOfWorkFactory,
+                _unitOfWorkFactoryFacade,
                 applicationDialogService,
                 PersonListViewModel.SelectedPeople);
 
@@ -169,7 +170,7 @@ namespace PR.ViewModel
                 Created = DateTime.UtcNow
             };
 
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
                 unitOfWork.People.Add(person);
                 unitOfWork.Complete();
@@ -185,11 +186,11 @@ namespace PR.ViewModel
 
         private void DeleteSelectedPeople()
         {
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
                 var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.Id).ToList();
 
-                var peopleForDeletion = unitOfWork.People
+                var peopleForDeletion = unitOfWork.UnitOfWork.People
                     .GetPeopleIncludingAssociations(p => ids.Contains(p.Id))
                     .ToList();
 
@@ -198,8 +199,8 @@ namespace PR.ViewModel
                     .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
                     .ToList();
 
-                unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
-                unitOfWork.People.RemoveRange(peopleForDeletion);
+                unitOfWork.UnitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
+                unitOfWork.UnitOfWork.People.RemoveRange(peopleForDeletion);
                 unitOfWork.Complete();
 
                 PersonListViewModel.RemovePeople(peopleForDeletion);
@@ -244,9 +245,9 @@ namespace PR.ViewModel
             predicates.Add(p => personIds.Contains(p.SubjectPersonId));
             predicates.Add(p => personIds.Contains(p.ObjectPersonId));
 
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
-                var personAssociations = unitOfWork.PersonAssociations
+                var personAssociations = unitOfWork.UnitOfWork.PersonAssociations
                     .Find(predicates)
                     .ToList();
 

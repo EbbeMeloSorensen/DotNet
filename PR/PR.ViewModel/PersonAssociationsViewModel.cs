@@ -14,7 +14,7 @@ namespace PR.ViewModel
 {
     public class PersonAssociationsViewModel : ViewModelBase
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly UnitOfWorkFactoryFacade _unitOfWorkFactoryFacade;
         private readonly IDialogService _applicationDialogService;
 
         private bool _isVisible;
@@ -81,11 +81,11 @@ namespace PR.ViewModel
         }
 
         public PersonAssociationsViewModel(
-            IUnitOfWorkFactory unitOfWorkFactory,
+            UnitOfWorkFactoryFacade unitOfWorkFactoryFacade,
             IDialogService applicationDialogService,
             ObjectCollection<Person> people)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
+            _unitOfWorkFactoryFacade = unitOfWorkFactoryFacade;
             _applicationDialogService = applicationDialogService;
             _people = people;
             SelectedPersonAssociations = new ObjectCollection<PersonAssociation>();
@@ -118,9 +118,9 @@ namespace PR.ViewModel
                 return;
             }
 
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
-                var person = unitOfWork.People.GetPersonIncludingAssociations(_activePerson.Id);
+                var person = unitOfWork.UnitOfWork.People.GetPersonIncludingAssociations(_activePerson.Id);
 
                 PersonAssociationViewModels = new ObservableCollection<PersonAssociationViewModel>(person.ObjectPeople
                     .Select(pa => new PersonAssociationViewModel
@@ -147,12 +147,12 @@ namespace PR.ViewModel
 
         public void DeleteSelectedPersonAssociations()
         {
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
                 var ids = SelectedPersonAssociations.Objects.Select(p => p.Id).ToList();
-                var forDeletion = unitOfWork.PersonAssociations.Find(pa => ids.Contains(pa.Id));
+                var forDeletion = unitOfWork.UnitOfWork.PersonAssociations.Find(pa => ids.Contains(pa.Id));
 
-                unitOfWork.PersonAssociations.RemoveRange(forDeletion);
+                unitOfWork.UnitOfWork.PersonAssociations.RemoveRange(forDeletion);
                 unitOfWork.Complete();
             }
 
@@ -168,7 +168,7 @@ namespace PR.ViewModel
         private void CreatePersonAssociation(object owner)
         {
             var dialogViewModel = new DefinePersonAssociationDialogViewModel(
-                _unitOfWorkFactory,
+                _unitOfWorkFactoryFacade,
                 _applicationDialogService,
                 _activePerson,
                 null,
@@ -181,9 +181,9 @@ namespace PR.ViewModel
 
             if (_activePerson != null)
             {
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
                 {
-                    unitOfWork.PersonAssociations.Add(new PersonAssociation
+                    unitOfWork.UnitOfWork.PersonAssociations.Add(new PersonAssociation
                     {
                         SubjectPersonId = dialogViewModel.SubjectPerson.Id,
                         ObjectPersonId = dialogViewModel.ObjectPerson.Id,
@@ -208,7 +208,7 @@ namespace PR.ViewModel
             var personAssociation = SelectedPersonAssociations.Objects.Single();
 
             var dialogViewModel = new DefinePersonAssociationDialogViewModel(
-                _unitOfWorkFactory,
+                _unitOfWorkFactoryFacade,
                 _applicationDialogService,
                 personAssociation.SubjectPerson,
                 personAssociation.ObjectPerson,
@@ -223,9 +223,9 @@ namespace PR.ViewModel
             personAssociation.SubjectPersonId = dialogViewModel.SubjectPerson.Id;
             personAssociation.ObjectPersonId = dialogViewModel.ObjectPerson.Id;
 
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
-                unitOfWork.PersonAssociations.Update(personAssociation);
+                unitOfWork.UnitOfWork.PersonAssociations.Update(personAssociation);
                 unitOfWork.Complete();
             }
 
