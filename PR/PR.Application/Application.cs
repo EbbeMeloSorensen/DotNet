@@ -16,7 +16,7 @@ namespace PR.Application
 
     public class Application
     {
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+        private UnitOfWorkFactoryFacade _unitOfWorkFactoryFacade;
         private IDataIOHandler _dataIOHandler;
         private ILogger _logger;
 
@@ -31,7 +31,7 @@ namespace PR.Application
             IDataIOHandler dataIOHandler,
             ILogger logger)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
+            _unitOfWorkFactoryFacade = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
             _dataIOHandler = dataIOHandler;
             _logger = logger;
         }
@@ -97,7 +97,7 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
                 progressCallback?.Invoke(0.0, "Creating Person");
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
                 {
                     unitOfWork.People.Add(person);
                     unitOfWork.Complete();
@@ -118,7 +118,7 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
                 progressCallback?.Invoke(0.0, "Retrieving people");
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
                 {
                     people = unitOfWork.People.GetAll().ToList();
                 }
@@ -135,122 +135,122 @@ namespace PR.Application
             string fileName,
             ProgressCallback progressCallback = null)
         {
-            await Task.Run(() =>
-            {
-                Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
-                progressCallback?.Invoke(0.0, "Exporting data");
+            //await Task.Run(() =>
+            //{
+            //    Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
+            //    progressCallback?.Invoke(0.0, "Exporting data");
 
-                _logger?.WriteLine(LogMessageCategory.Information, $"Exporting data..");
+            //    _logger?.WriteLine(LogMessageCategory.Information, $"Exporting data..");
 
-                var extension = Path.GetExtension(fileName)?.ToLower();
+            //    var extension = Path.GetExtension(fileName)?.ToLower();
 
-                if (extension == null)
-                {
-                    throw new ArgumentException();
-                }
+            //    if (extension == null)
+            //    {
+            //        throw new ArgumentException();
+            //    }
 
-                _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all person records from repository..", "general", true);
+            //    _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all person records from repository..", "general", true);
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    var people = unitOfWork.People
-                        .GetAll()
-                        .OrderBy(p => p.Created)
-                        .ToList();
+            //    using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
+            //    {
+            //        var people = unitOfWork.People
+            //            .GetAll()
+            //            .OrderBy(p => p.Created)
+            //            .ToList();
 
-                    var personAssociations = unitOfWork.PersonAssociations
-                        .GetAll()
-                        .OrderBy(pa => pa.Created)
-                        .ToList();
+            //        var personAssociations = unitOfWork.PersonAssociations
+            //            .GetAll()
+            //            .OrderBy(pa => pa.Created)
+            //            .ToList();
 
-                    _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {people.Count} person records");
+            //        _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {people.Count} person records");
 
-                    var prData = new PRData
-                    {
-                        People = people,
-                        PersonAssociations = personAssociations.OrderBy(pa => pa.Created).ToList()
-                    };
+            //        var prData = new PRData
+            //        {
+            //            People = people,
+            //            PersonAssociations = personAssociations.OrderBy(pa => pa.Created).ToList()
+            //        };
 
-                    _logger?.WriteLine(LogMessageCategory.Information, $"  Done..");
+            //        _logger?.WriteLine(LogMessageCategory.Information, $"  Done..");
 
-                    switch (extension)
-                    {
-                        case ".xml":
-                            {
-                                _logger?.WriteLine(LogMessageCategory.Information, $"  Exporting as xml..", "general", true);
-                                _dataIOHandler.ExportDataToXML(prData, fileName);
-                                _logger?.WriteLine(LogMessageCategory.Information,
-                                    $"  Exported {people.Count} person records and {personAssociations.Count} person association records to xml file");
-                                break;
-                            }
-                        case ".json":
-                            {
-                                _logger?.WriteLine(LogMessageCategory.Information, $"  Exporting as json..", "general", true);
-                                _dataIOHandler.ExportDataToJson(prData, fileName);
-                                _logger?.WriteLine(LogMessageCategory.Information,
-                                    $"  Exported {people.Count} person records and {personAssociations.Count} person association records to json file");
-                                break;
-                            }
-                        default:
-                            {
-                                throw new ArgumentException();
-                            }
-                    }
-                }
+            //        switch (extension)
+            //        {
+            //            case ".xml":
+            //                {
+            //                    _logger?.WriteLine(LogMessageCategory.Information, $"  Exporting as xml..", "general", true);
+            //                    _dataIOHandler.ExportDataToXML(prData, fileName);
+            //                    _logger?.WriteLine(LogMessageCategory.Information,
+            //                        $"  Exported {people.Count} person records and {personAssociations.Count} person association records to xml file");
+            //                    break;
+            //                }
+            //            case ".json":
+            //                {
+            //                    _logger?.WriteLine(LogMessageCategory.Information, $"  Exporting as json..", "general", true);
+            //                    _dataIOHandler.ExportDataToJson(prData, fileName);
+            //                    _logger?.WriteLine(LogMessageCategory.Information,
+            //                        $"  Exported {people.Count} person records and {personAssociations.Count} person association records to json file");
+            //                    break;
+            //                }
+            //            default:
+            //                {
+            //                    throw new ArgumentException();
+            //                }
+            //        }
+            //    }
 
-                progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
-            });
+            //    progressCallback?.Invoke(100, "");
+            //    Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
+            //});
         }
 
         public async Task ImportData(
             string fileName,
             ProgressCallback progressCallback = null)
         {
-            await Task.Run(() =>
-            {
-                Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
-                progressCallback?.Invoke(0.0, "Importing data");
+            //await Task.Run(() =>
+            //{
+            //    Logger?.WriteLine(LogMessageCategory.Information, "Importing data..");
+            //    progressCallback?.Invoke(0.0, "Importing data");
 
-                var extension = Path.GetExtension(fileName)?.ToLower();
+            //    var extension = Path.GetExtension(fileName)?.ToLower();
 
-                if (extension == null)
-                {
-                    throw new ArgumentException();
-                }
+            //    if (extension == null)
+            //    {
+            //        throw new ArgumentException();
+            //    }
 
-                var prData = new PRData();
+            //    var prData = new PRData();
 
-                switch (extension)
-                {
-                    case ".xml":
-                        {
-                            _dataIOHandler.ImportDataFromXML(
-                                fileName, out prData);
-                            break;
-                        }
-                    case ".json":
-                        {
-                            _dataIOHandler.ImportDataFromJson(
-                                fileName, out prData);
-                            break;
-                        }
-                    default:
-                        {
-                            throw new ArgumentException();
-                        }
-                }
+            //    switch (extension)
+            //    {
+            //        case ".xml":
+            //            {
+            //                _dataIOHandler.ImportDataFromXML(
+            //                    fileName, out prData);
+            //                break;
+            //            }
+            //        case ".json":
+            //            {
+            //                _dataIOHandler.ImportDataFromJson(
+            //                    fileName, out prData);
+            //                break;
+            //            }
+            //        default:
+            //            {
+            //                throw new ArgumentException();
+            //            }
+            //    }
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    unitOfWork.People.AddRange(prData.People);
-                    unitOfWork.PersonAssociations.AddRange(prData.PersonAssociations);
-                    unitOfWork.Complete();
-                }
+            //    using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            //    {
+            //        unitOfWork.People.AddRange(prData.People);
+            //        unitOfWork.PersonAssociations.AddRange(prData.PersonAssociations);
+            //        unitOfWork.Complete();
+            //    }
 
-                progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
-            });
+            //    progressCallback?.Invoke(100, "");
+            //    Logger?.WriteLine(LogMessageCategory.Information, "Completed exporting data");
+            //});
         }
     }
 }
