@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using PR.Domain.Entities;
-using PR.Persistence.Repositories;
 
 namespace PR.Persistence.RepositoryFacades
 {
@@ -16,11 +15,13 @@ namespace PR.Persistence.RepositoryFacades
         }
 
         private IUnitOfWork _unitOfWork;
+        private DateTime? _databaseTime;
 
         public PersonRepositoryFacade(
-            IUnitOfWork unitOfWork)
+            UnitOfWorkFacade unitOfWorkFacade)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWorkFacade.UnitOfWork;
+            _databaseTime = unitOfWorkFacade.DatabaseTime;
         }
 
         public void Add(
@@ -34,16 +35,15 @@ namespace PR.Persistence.RepositoryFacades
         }
 
         public Person Get(
-            Guid objectId,
-            DateTime? databaseTime = null)
+            Guid objectId)
         {
             IEnumerable<Person> people;
 
-            if (databaseTime.HasValue)
+            if (_databaseTime.HasValue)
             {
                 people = _unitOfWork.People.Find(p => p.ObjectId == objectId &&
-                                                    p.Created <= databaseTime &&
-                                                    p.Superseded > databaseTime);
+                                                    p.Created <= _databaseTime &&
+                                                    p.Superseded > _databaseTime);
             }
             else
             {
@@ -61,37 +61,35 @@ namespace PR.Persistence.RepositoryFacades
             return result;
         }
 
-        public IEnumerable<Person> GetAll(
-            DateTime? databaseTime = null)
+        public IEnumerable<Person> GetAll()
         {
-            if (databaseTime.HasValue)
+            if (_databaseTime.HasValue)
             {
-                return _unitOfWork.People.Find(p => p.Created <= databaseTime &&
-                                                    p.Superseded > databaseTime);
+                return _unitOfWork.People.Find(p => p.Created <= _databaseTime &&
+                                                    p.Superseded > _databaseTime);
             }
 
             return _unitOfWork.People.Find(p => p.Superseded.Year == 9999);
         }
 
         public Person GetIncludingPersonAssociations(
-            Guid objectId,
-            DateTime? databaseTime = null)
+            Guid objectId)
         {
-            var person = Get(objectId, databaseTime);
+            var person = Get(objectId);
             IEnumerable<PersonAssociation> personAssociationsWherePersonOfInterestIsSubject;
             IEnumerable<PersonAssociation> personAssociationsWherePersonOfInterestIsObject;
 
-            if (databaseTime.HasValue)
+            if (_databaseTime.HasValue)
             {
                 personAssociationsWherePersonOfInterestIsSubject = _unitOfWork.PersonAssociations.Find(
                     pa => pa.SubjectPersonObjectId == objectId &&
-                          pa.Created <= databaseTime &&
-                          pa.Superseded > databaseTime);
+                          pa.Created <= _databaseTime &&
+                          pa.Superseded > _databaseTime);
 
                 personAssociationsWherePersonOfInterestIsObject = _unitOfWork.PersonAssociations.Find(
                     pa => pa.ObjectPersonObjectId == objectId &&
-                          pa.Created <= databaseTime &&
-                          pa.Superseded > databaseTime);
+                          pa.Created <= _databaseTime &&
+                          pa.Superseded > _databaseTime);
             }
             else
             {

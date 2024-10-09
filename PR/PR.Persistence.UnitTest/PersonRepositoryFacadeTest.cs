@@ -18,6 +18,7 @@ namespace PR.Persistence.UnitTest
             unitOfWorkFactory.Reseed();
 
             _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
+            _unitOfWorkFactory.DatabaseTime = null;
         }
 
         [Fact]
@@ -87,12 +88,12 @@ namespace PR.Persistence.UnitTest
         public void GetEarlierVersionOfPersonIncludingAssociations()
         {
             // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
             var person = unitOfWork.People.GetIncludingPersonAssociations(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03"),
-                new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03"));
 
             // Assert
             person.FirstName.Should().Be("Leia");
@@ -108,12 +109,12 @@ namespace PR.Persistence.UnitTest
         public void GetLatestVersionOfPerson_AfterPersonWasDeleted_Throws()
         {
             // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
             var act = () => unitOfWork.People.Get(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
-                new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"));
 
             // Assert
             var exception = Assert.Throws<InvalidOperationException>(act);
@@ -124,12 +125,12 @@ namespace PR.Persistence.UnitTest
         public void GetEarlierVersionOfPerson_1()
         {
             // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
             var person = unitOfWork.People.Get(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
-                new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"));
 
             // Assert
             person.FirstName.Should().Be("Darth");
@@ -140,12 +141,12 @@ namespace PR.Persistence.UnitTest
         public void GetEarlierVersionOfPerson_2()
         {
             // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2013, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
             var person = unitOfWork.People.Get(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
-                new DateTime(2013, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"));
 
             // Assert
             person.FirstName.Should().Be("Anakin");
@@ -156,12 +157,12 @@ namespace PR.Persistence.UnitTest
         public void GetEarlierVersionOfPerson_BeforePersonWasCreated_Throws()
         {
             // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
             var act = () => unitOfWork.People.Get(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
-                new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"));
 
             // Assert
             var exception = Assert.Throws<InvalidOperationException>(act);
@@ -172,6 +173,7 @@ namespace PR.Persistence.UnitTest
         public void GetLatestVersionOfEntirePeopleCollection()
         {
             // Arrange
+            _unitOfWorkFactory.DatabaseTime = null;
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
@@ -188,11 +190,11 @@ namespace PR.Persistence.UnitTest
         public void GetEarlierVersionOfEntirePersonCollection_1()
         {
             // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2017, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
-            var people = unitOfWork.People.GetAll(
-                new DateTime(2017, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+            var people = unitOfWork.People.GetAll();
 
             // Assert
             people.Count().Should().Be(4);
@@ -206,11 +208,11 @@ namespace PR.Persistence.UnitTest
         public void GetEarlierVersionOfEntirePersonCollection_2()
         {
             // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
-            var people = unitOfWork.People.GetAll(
-                new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+            var people = unitOfWork.People.GetAll();
 
             // Assert
             people.Count().Should().Be(0);

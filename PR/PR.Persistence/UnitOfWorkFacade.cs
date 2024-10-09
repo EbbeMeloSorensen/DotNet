@@ -5,27 +5,30 @@ namespace PR.Persistence
 {
     public class UnitOfWorkFacade : IDisposable
     {
-        private readonly IUnitOfWork _unitOfWork;
+        public IUnitOfWork UnitOfWork { get; }
+        public DateTime? DatabaseTime { get; }
 
         public PersonRepositoryFacade People { get; }
         public PersonAssociationRepositoryFacade PersonAssociations { get; }
 
         public UnitOfWorkFacade(
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            DateTime? databaseTime)
         {
-            _unitOfWork = unitOfWork;
+            UnitOfWork = unitOfWork;
+            DatabaseTime = databaseTime;
 
-            People = new PersonRepositoryFacade(_unitOfWork);
+            People = new PersonRepositoryFacade(this);
         }
 
         public void Complete()
         {
-            _unitOfWork.Complete();
+            UnitOfWork.Complete();
         }
 
         public void Dispose()
         {
-            _unitOfWork.Dispose();
+            UnitOfWork.Dispose();
         }
     }
 }
