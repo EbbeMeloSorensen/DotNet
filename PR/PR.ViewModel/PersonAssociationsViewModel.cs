@@ -120,7 +120,7 @@ namespace PR.ViewModel
 
             using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
-                var person = unitOfWork.UnitOfWork.People.GetPersonIncludingAssociations(_activePerson.Id);
+                var person = unitOfWork.People.GetIncludingPersonAssociations(_activePerson.ObjectId);
 
                 PersonAssociationViewModels = new ObservableCollection<PersonAssociationViewModel>(person.ObjectPeople
                     .Select(pa => new PersonAssociationViewModel
