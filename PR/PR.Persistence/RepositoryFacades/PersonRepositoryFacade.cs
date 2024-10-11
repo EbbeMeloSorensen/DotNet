@@ -38,35 +38,15 @@ namespace PR.Persistence.RepositoryFacades
                 predicate
             };
 
-            if (_databaseTime.HasValue)
-            {
-                predicates.Add(p =>
-                    p.Created < _databaseTime &&
-                    p.Superseded > _databaseTime);
-            }
-            else
-            {
-                predicates.Add(p =>
-                    p.Superseded.Year == 9999);
-            }
-
+            AddVersionPredicates(predicates, _databaseTime);
+            
             return _unitOfWork.People.Count(predicates);
         }
 
         public int Count(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            if (_databaseTime.HasValue)
-            {
-                predicates.Add(p =>
-                    p.Created < _databaseTime &&
-                    p.Superseded > _databaseTime);
-            }
-            else
-            {
-                predicates.Add(p =>
-                    p.Superseded.Year == 9999);
-            }
+            AddVersionPredicates(predicates, _databaseTime);
 
             return _unitOfWork.People.Count(predicates);
         }
@@ -86,17 +66,14 @@ namespace PR.Persistence.RepositoryFacades
         {
             IEnumerable<Person> people;
 
-            if (_databaseTime.HasValue)
+            var predicates = new List<Expression<Func<Person, bool>>>
             {
-                people = _unitOfWork.People.Find(p => p.ObjectId == objectId &&
-                                                    p.Created <= _databaseTime &&
-                                                    p.Superseded > _databaseTime);
-            }
-            else
-            {
-                people = _unitOfWork.People.Find(p => p.ObjectId == objectId &&
-                                                      p.Superseded.Year == 9999);
-            }
+                p => p.ObjectId == objectId
+            };
+
+            AddVersionPredicates(predicates, _databaseTime);
+
+            people = _unitOfWork.People.Find(predicates);
 
             var result = people.SingleOrDefault();
 
@@ -110,13 +87,11 @@ namespace PR.Persistence.RepositoryFacades
 
         public IEnumerable<Person> GetAll()
         {
-            if (_databaseTime.HasValue)
-            {
-                return _unitOfWork.People.Find(p => p.Created <= _databaseTime &&
-                                                    p.Superseded > _databaseTime);
-            }
+            var predicates = new List<Expression<Func<Person, bool>>>();
 
-            return _unitOfWork.People.Find(p => p.Superseded.Year == 9999);
+            AddVersionPredicates(predicates, _databaseTime);
+
+            return _unitOfWork.People.Find(predicates);
         }
 
         public IEnumerable<Person> Find(
@@ -127,17 +102,7 @@ namespace PR.Persistence.RepositoryFacades
                 predicate
             };
 
-            if (_databaseTime.HasValue)
-            {
-                predicates.Add(p =>
-                    p.Created < _databaseTime &&
-                    p.Superseded > _databaseTime);
-            }
-            else
-            {
-                predicates.Add(p =>
-                    p.Superseded.Year == 9999);
-            }
+            AddVersionPredicates(predicates, _databaseTime);
 
             return _unitOfWork.People.Find(predicates);
         }

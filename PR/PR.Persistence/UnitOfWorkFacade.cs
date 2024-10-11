@@ -19,6 +19,7 @@ namespace PR.Persistence
             DatabaseTime = databaseTime;
 
             People = new PersonRepositoryFacade(this);
+            PersonAssociations = new PersonAssociationRepositoryFacade(this);
         }
 
         public void Complete()

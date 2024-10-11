@@ -149,10 +149,10 @@ namespace PR.ViewModel
         {
             using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
-                var ids = SelectedPersonAssociations.Objects.Select(p => p.Id).ToList();
-                var forDeletion = unitOfWork.UnitOfWork.PersonAssociations.Find(pa => ids.Contains(pa.Id));
+                var objectIds = SelectedPersonAssociations.Objects.Select(p => p.ObjectId).ToList();
+                var forDeletion = unitOfWork.PersonAssociations.Find(pa => objectIds.Contains(pa.ObjectId));
 
-                unitOfWork.UnitOfWork.PersonAssociations.RemoveRange(forDeletion);
+                unitOfWork.PersonAssociations.RemoveRange(forDeletion);
                 unitOfWork.Complete();
             }
 
