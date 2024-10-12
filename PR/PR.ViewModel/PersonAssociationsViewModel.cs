@@ -183,12 +183,13 @@ namespace PR.ViewModel
             {
                 using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
                 {
-                    unitOfWork.UnitOfWork.PersonAssociations.Add(new PersonAssociation
+                    unitOfWork.PersonAssociations.Add(new PersonAssociation
                     {
                         SubjectPersonId = dialogViewModel.SubjectPerson.Id,
+                        SubjectPersonObjectId = dialogViewModel.SubjectPerson.ObjectId,
                         ObjectPersonId = dialogViewModel.ObjectPerson.Id,
-                        Description = dialogViewModel.Description,
-                        Created = DateTime.UtcNow
+                        ObjectPersonObjectId = dialogViewModel.ObjectPerson.ObjectId,
+                        Description = dialogViewModel.Description
                     });
 
                     unitOfWork.Complete();

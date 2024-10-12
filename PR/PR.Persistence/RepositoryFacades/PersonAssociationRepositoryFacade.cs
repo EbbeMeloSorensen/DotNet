@@ -25,6 +25,20 @@ namespace PR.Persistence.RepositoryFacades
             _databaseTime = unitOfWorkFacade.DatabaseTime;
         }
 
+        public void Add(
+            PersonAssociation personAssociation)
+        {
+            personAssociation.ObjectId = Guid.NewGuid();
+            //personAssociation.SubjectPersonId = personAssociation.SubjectPerson.Id;
+            //personAssociation.SubjectPersonObjectId = personAssociation.SubjectPerson.ObjectId;
+            //personAssociation.ObjectPersonId = personAssociation.ObjectPerson.Id;
+            //personAssociation.ObjectPersonObjectId = personAssociation.ObjectPerson.ObjectId;
+            personAssociation.Created = DateTime.Now;
+            personAssociation.Superseded = _maxDate;
+
+            _unitOfWork.PersonAssociations.Add(personAssociation);
+        }
+
         public IEnumerable<PersonAssociation> Find(
             Expression<Func<PersonAssociation, bool>> predicate)
         {
