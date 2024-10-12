@@ -21,7 +21,6 @@ namespace PR.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly Application.Application _application;
-        //private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly UnitOfWorkFactoryFacade _unitOfWorkFactoryFacade;
         private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
@@ -104,14 +103,13 @@ namespace PR.ViewModel
 
             LogViewModel = new LogViewModel(200);
             _logger = new ViewModelLogger(logger, LogViewModel);
-            //_unitOfWorkFactory.Initialize(_logger);
 
             PersonListViewModel = new PersonListViewModel(_unitOfWorkFactoryFacade, applicationDialogService);
 
             PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
-                unitOfWorkFactory,
+                _unitOfWorkFactoryFacade,
                 PersonListViewModel.SelectedPeople);
 
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;

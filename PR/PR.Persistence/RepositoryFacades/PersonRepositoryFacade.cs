@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using PR.Domain;
 using PR.Domain.Entities;
 
 namespace PR.Persistence.RepositoryFacades
@@ -107,7 +108,9 @@ namespace PR.Persistence.RepositoryFacades
         public IEnumerable<Person> Find(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            throw new NotImplementedException();
+            AddVersionPredicates(predicates, _databaseTime);
+
+            return _unitOfWork.People.Find(predicates);
         }
 
         public Person GetIncludingPersonAssociations(
@@ -187,6 +190,32 @@ namespace PR.Persistence.RepositoryFacades
             person.SubjectPeople = personAssociationsWherePersonOfInterestIsObject;
 
             return person;
+        }
+
+        public void UpdateRange(
+            IEnumerable<Person> people)
+        {
+            var objectIds = people.Select(p => p.ObjectId).ToList();
+
+            var predicates = new List<Expression<Func<Person, bool>>>
+            {
+                p => objectIds.Contains(p.ObjectId)
+            };
+
+            var objectsFromRepository = Find(predicates);
+            var currentTime = DateTime.UtcNow;
+
+            var newObjects = objectsFromRepository.Select(p =>
+            {
+                var newObject = p.Clone();
+                newObject.Id = Guid.Empty;
+                newObject.Created = currentTime;
+
+                return newObject;
+            });
+
+            // HER!!
+            throw new NotImplementedException();
         }
 
         private void AddVersionPredicates(

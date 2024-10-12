@@ -79,11 +79,11 @@ namespace PR.Persistence.RepositoryFacades
         public void Update(
             PersonAssociation personAssociation)
         {
-            var objFromRepository = Get(personAssociation.ObjectId);
+            var objectFromRepository = Get(personAssociation.ObjectId);
             var newObj = personAssociation.Clone();
             var currentTime = DateTime.UtcNow;
 
-            objFromRepository.Superseded = currentTime;
+            objectFromRepository.Superseded = currentTime;
 
             newObj.Id = Guid.Empty;
             newObj.Created = currentTime;

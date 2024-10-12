@@ -19,7 +19,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private ObservableCollection<ValidationError> _validationMessages;
     private string _error = string.Empty;
 
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    private readonly UnitOfWorkFactoryFacade _unitOfWorkFactoryFacade;
     private ObjectCollection<Person> _people;
 
     private string _originalSharedFirstName;
@@ -163,12 +163,11 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     }
 
     public PeoplePropertiesViewModel(
-        IUnitOfWorkFactory unitOfWorkFactory,
+        UnitOfWorkFactoryFacade unitOfWorkFactoryFacade,
         ObjectCollection<Person> people)
     {
-        _unitOfWorkFactory = unitOfWorkFactory;
+        _unitOfWorkFactoryFacade = unitOfWorkFactoryFacade;
         _people = people;
-
         _people.PropertyChanged += Initialize;
     }
 
@@ -251,6 +250,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         var updatedPeople = _people.Objects.Select(p => new Person
         {
             Id = p.Id,
+            ObjectId = p.ObjectId,
             FirstName = SharedFirstName != _originalSharedFirstName ? SharedFirstName : p.FirstName,
             Surname = SharedSurname != _originalSharedSurname ? SharedSurname : p.Surname,
             Nickname = SharedNickname != _originalSharedNickname ? SharedNickname : p.Nickname,
@@ -269,7 +269,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             Created = p.Created
         }).ToList();
 
-        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+        using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
         {
             unitOfWork.People.UpdateRange(updatedPeople);
             unitOfWork.Complete();

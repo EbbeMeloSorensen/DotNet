@@ -18,6 +18,7 @@ namespace PR.Domain
             Person other)
         {
             person.Id = other.Id;
+            person.ObjectId = other.ObjectId;
             person.FirstName = other.FirstName;
             person.Surname = other.Surname;
             person.Nickname = other.Nickname;
@@ -29,6 +30,7 @@ namespace PR.Domain
             person.Description = other.Description;
             person.Dead = other.Dead;
             person.Created = other.Created;
+            person.Superseded = other.Superseded;
         }
     }
 }
