@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using PR.Domain;
 using PR.Domain.Entities;
 
 namespace PR.Persistence.RepositoryFacades
@@ -29,14 +30,31 @@ namespace PR.Persistence.RepositoryFacades
             PersonAssociation personAssociation)
         {
             personAssociation.ObjectId = Guid.NewGuid();
-            //personAssociation.SubjectPersonId = personAssociation.SubjectPerson.Id;
-            //personAssociation.SubjectPersonObjectId = personAssociation.SubjectPerson.ObjectId;
-            //personAssociation.ObjectPersonId = personAssociation.ObjectPerson.Id;
-            //personAssociation.ObjectPersonObjectId = personAssociation.ObjectPerson.ObjectId;
             personAssociation.Created = DateTime.Now;
             personAssociation.Superseded = _maxDate;
 
             _unitOfWork.PersonAssociations.Add(personAssociation);
+        }
+
+        public PersonAssociation Get(
+            Guid objectId)
+        {
+            var predicates = new List<Expression<Func<PersonAssociation, bool>>>
+            {
+                pa => pa.ObjectId == objectId
+            };
+
+            AddVersionPredicates(predicates, _databaseTime);
+
+            var personAssociations = _unitOfWork.PersonAssociations.Find(predicates);
+            var personAssociation = personAssociations.SingleOrDefault();
+
+            if (personAssociation == null)
+            {
+                throw new InvalidOperationException("Tried retrieving person association that did not exist at the given time");
+            }
+
+            return personAssociation;
         }
 
         public IEnumerable<PersonAssociation> Find(
@@ -56,6 +74,20 @@ namespace PR.Persistence.RepositoryFacades
             IList<Expression<Func<PersonAssociation, bool>>> predicates)
         {
             throw new NotImplementedException();
+        }
+
+        public void Update(
+            PersonAssociation personAssociation)
+        {
+            var objFromRepository = Get(personAssociation.ObjectId);
+            var newObj = personAssociation.Clone();
+            var currentTime = DateTime.UtcNow;
+
+            objFromRepository.Superseded = currentTime;
+
+            newObj.Id = Guid.Empty;
+            newObj.Created = currentTime;
+            _unitOfWork.PersonAssociations.Add(newObj);
         }
 
         public void RemoveRange(

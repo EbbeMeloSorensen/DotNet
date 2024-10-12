@@ -30,6 +30,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AB7D95F8-C937-4CEF-9D22-36D781426970}"
 	ProjectSection(SolutionItems) = preProject
 		BackLog.txt = BackLog.txt
+		Requirements.txt = Requirements.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.IO.UnitTest", "PR.IO.UnitTest\PR.IO.UnitTest.csproj", "{B173AC5F-42BD-4061-988A-365A6DE89F1D}"
@@ -68,7 +69,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFramew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.UnitTest", "PR.Persistence.UnitTest\PR.Persistence.UnitTest.csproj", "{0B6E3950-D10B-4609-84DD-6596C0875F8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistenec.EntityFrameworkCore.InMemory", "PR.Persistenec.EntityFrameworkCore.InMemory\PR.Persistenec.EntityFrameworkCore.InMemory.csproj", "{5C8E4EDD-669A-4A61-A071-A1CA5576BF10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistenec.EntityFrameworkCore.InMemory", "PR.Persistenec.EntityFrameworkCore.InMemory\PR.Persistenec.EntityFrameworkCore.InMemory.csproj", "{5C8E4EDD-669A-4A61-A071-A1CA5576BF10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

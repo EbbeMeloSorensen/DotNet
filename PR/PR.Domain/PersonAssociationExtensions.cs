@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using PR.Domain.Entities;
+﻿using PR.Domain.Entities;
 
 namespace PR.Domain
 {
@@ -12,10 +10,14 @@ namespace PR.Domain
             return new PersonAssociation
             {
                 Id = personAssociation.Id,
+                ObjectId = personAssociation.ObjectId,
                 SubjectPersonId = personAssociation.SubjectPersonId,
+                SubjectPersonObjectId = personAssociation.SubjectPersonObjectId,
                 ObjectPersonId = personAssociation.ObjectPersonId,
+                ObjectPersonObjectId = personAssociation.ObjectPersonObjectId,
                 Description = personAssociation.Description,
-                Created = personAssociation.Created
+                Created = personAssociation.Created,
+                Superseded = personAssociation.Superseded
             };
         }
     }

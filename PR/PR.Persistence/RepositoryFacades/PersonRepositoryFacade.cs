@@ -64,8 +64,6 @@ namespace PR.Persistence.RepositoryFacades
         public Person Get(
             Guid objectId)
         {
-            IEnumerable<Person> people;
-
             var predicates = new List<Expression<Func<Person, bool>>>
             {
                 p => p.ObjectId == objectId
@@ -73,16 +71,15 @@ namespace PR.Persistence.RepositoryFacades
 
             AddVersionPredicates(predicates, _databaseTime);
 
-            people = _unitOfWork.People.Find(predicates);
+            var people = _unitOfWork.People.Find(predicates);
+            var person = people.SingleOrDefault();
 
-            var result = people.SingleOrDefault();
-
-            if (result == null)
+            if (person == null)
             {
                 throw new InvalidOperationException("Tried retrieving person that did not exist at the given time");
             }
 
-            return result;
+            return person;
         }
 
         public IEnumerable<Person> GetAll()

@@ -36,7 +36,7 @@ namespace PR.ViewModel
             }
         }
 
-        public ObjectCollection<PersonAssociation> SelectedPersonAssociations { get; private set; }
+        public ObjectCollection<PersonAssociation> SelectedPersonAssociations { get; }
 
         public ObservableCollection<PersonAssociationViewModel> PersonAssociationViewModels
         {
@@ -165,7 +165,8 @@ namespace PR.ViewModel
                    SelectedPersonAssociations.Objects.Any();
         }
 
-        private void CreatePersonAssociation(object owner)
+        private void CreatePersonAssociation(
+            object owner)
         {
             var dialogViewModel = new DefinePersonAssociationDialogViewModel(
                 _unitOfWorkFactoryFacade,
@@ -199,12 +200,14 @@ namespace PR.ViewModel
             }
         }
 
-        private bool CanCreatePersonAssociation(object owner)
+        private bool CanCreatePersonAssociation(
+            object owner)
         {
             return true;
         }
 
-        private void UpdatePersonAssociation(object owner)
+        private void UpdatePersonAssociation(
+            object owner)
         {
             var personAssociation = SelectedPersonAssociations.Objects.Single();
 
@@ -226,14 +229,15 @@ namespace PR.ViewModel
 
             using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
-                unitOfWork.UnitOfWork.PersonAssociations.Update(personAssociation);
+                unitOfWork.PersonAssociations.Update(personAssociation);
                 unitOfWork.Complete();
             }
 
             Populate();
         }
 
-        private bool CanUpdatePersonAssociation(object owner)
+        private bool CanUpdatePersonAssociation(
+            object owner)
         {
             return SelectedPersonAssociations.Objects != null &&
                    SelectedPersonAssociations.Objects.Count() == 1;
