@@ -192,16 +192,12 @@ namespace PR.ViewModel
                     .FindIncludingPersonAssociations(pa => objectIds.Contains(pa.ObjectId))
                     .ToList();
 
-                if (false)
-                {
-                    var personAssociationsForDeletion = peopleForDeletion
-                        .SelectMany(p => p.ObjectPeople)
-                        .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
-                        .ToList();
+                var personAssociationsForDeletion = peopleForDeletion
+                    .SelectMany(p => p.ObjectPeople)
+                    .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
+                    .ToList();
 
-                    unitOfWork.UnitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
-                }
-
+                unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
                 unitOfWork.People.RemoveRange(peopleForDeletion);
                 unitOfWork.Complete();
 

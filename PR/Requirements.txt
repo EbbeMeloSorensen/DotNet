@@ -3,14 +3,14 @@
   - Update person (dækket af update people)
   * Update people (ok)
   - Delete person (dækket af delete people)
-  * Delete people 
+  * Delete people (ok)
 * Manage Person associations
-  * Create person association
-  * Update person association
+  * Create person association (ok)
+  * Update person association (ok)
   - Update person associations (man kan kun opdatere en ad gangen)
   - Delete person association (dækket af delete person associations)
-  * Delete person associations
+  * Delete person associations (ok)
   
 * Go back in database time and or historic time... (who was alive in a given episode?)
-* Change superseded rows PROHIBITED
+* Change superseded rows PROHIBITED (de er kun synlige )
 * Clear database

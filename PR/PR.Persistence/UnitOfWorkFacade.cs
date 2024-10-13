@@ -5,8 +5,12 @@ namespace PR.Persistence
 {
     public class UnitOfWorkFacade : IDisposable
     {
+        private DateTime? _transactionTime;
+
         public IUnitOfWork UnitOfWork { get; }
         public DateTime? DatabaseTime { get; }
+
+        internal DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;
 
         public PersonRepositoryFacade People { get; }
         public PersonAssociationRepositoryFacade PersonAssociations { get; }
@@ -25,6 +29,7 @@ namespace PR.Persistence
         public void Complete()
         {
             UnitOfWork.Complete();
+            _transactionTime = null;
         }
 
         public void Dispose()

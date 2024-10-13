@@ -16,14 +16,17 @@ namespace PR.Persistence.RepositoryFacades
             _maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
         }
 
-        private IUnitOfWork _unitOfWork;
-        private DateTime? _databaseTime;
+        private UnitOfWorkFacade _unitOfWorkFacade;
+
+        private IUnitOfWork UnitOfWork => _unitOfWorkFacade.UnitOfWork;
+        private DateTime? DatabaseTime => _unitOfWorkFacade.DatabaseTime;
+
+        private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
 
         public PersonAssociationRepositoryFacade(
             UnitOfWorkFacade unitOfWorkFacade)
         {
-            _unitOfWork = unitOfWorkFacade.UnitOfWork;
-            _databaseTime = unitOfWorkFacade.DatabaseTime;
+            _unitOfWorkFacade = unitOfWorkFacade;
         }
 
         public void Add(
@@ -33,7 +36,7 @@ namespace PR.Persistence.RepositoryFacades
             personAssociation.Created = DateTime.UtcNow;
             personAssociation.Superseded = _maxDate;
 
-            _unitOfWork.PersonAssociations.Add(personAssociation);
+            UnitOfWork.PersonAssociations.Add(personAssociation);
         }
 
         public PersonAssociation Get(
@@ -44,9 +47,9 @@ namespace PR.Persistence.RepositoryFacades
                 pa => pa.ObjectId == objectId
             };
 
-            AddVersionPredicates(predicates, _databaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
 
-            var personAssociations = _unitOfWork.PersonAssociations.Find(predicates);
+            var personAssociations = UnitOfWork.PersonAssociations.Find(predicates);
             var personAssociation = personAssociations.SingleOrDefault();
 
             if (personAssociation == null)
@@ -65,9 +68,9 @@ namespace PR.Persistence.RepositoryFacades
                 predicate
             };
 
-            AddVersionPredicates(predicates, _databaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
 
-            return _unitOfWork.PersonAssociations.Find(predicates);
+            return UnitOfWork.PersonAssociations.Find(predicates);
         }
 
         public IEnumerable<Person> Find(
@@ -81,20 +84,16 @@ namespace PR.Persistence.RepositoryFacades
         {
             var objectFromRepository = Get(personAssociation.ObjectId);
             var newObj = personAssociation.Clone();
-            var currentTime = DateTime.UtcNow;
-
-            objectFromRepository.Superseded = currentTime;
-
+            objectFromRepository.Superseded = CurrentTime;
             newObj.Id = Guid.Empty;
-            newObj.Created = currentTime;
-            _unitOfWork.PersonAssociations.Add(newObj);
+            newObj.Created = CurrentTime;
+            UnitOfWork.PersonAssociations.Add(newObj);
         }
 
         public void RemoveRange(
             IEnumerable<PersonAssociation> people)
         {
-            var currentTime = DateTime.UtcNow;
-            people.ToList().ForEach(p => p.Superseded = currentTime);
+            people.ToList().ForEach(p => p.Superseded = CurrentTime);
         }
 
         private void AddVersionPredicates(
@@ -104,8 +103,8 @@ namespace PR.Persistence.RepositoryFacades
             if (databaseTime.HasValue)
             {
                 predicates.Add(pa =>
-                    pa.Created <= _databaseTime &&
-                    pa.Superseded > _databaseTime);
+                    pa.Created <= DatabaseTime &&
+                    pa.Superseded > DatabaseTime);
             }
             else
             {

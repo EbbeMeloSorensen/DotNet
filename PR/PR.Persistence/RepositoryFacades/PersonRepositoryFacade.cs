@@ -16,14 +16,17 @@ namespace PR.Persistence.RepositoryFacades
             _maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
         }
 
-        private IUnitOfWork _unitOfWork;
-        private DateTime? _databaseTime;
+        private UnitOfWorkFacade _unitOfWorkFacade;
+
+        private IUnitOfWork UnitOfWork => _unitOfWorkFacade.UnitOfWork;
+        private DateTime? DatabaseTime => _unitOfWorkFacade.DatabaseTime;
+
+        private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
 
         public PersonRepositoryFacade(
             UnitOfWorkFacade unitOfWorkFacade)
         {
-            _unitOfWork = unitOfWorkFacade.UnitOfWork;
-            _databaseTime = unitOfWorkFacade.DatabaseTime;
+            _unitOfWorkFacade = unitOfWorkFacade;
         }
 
         public int CountAll()
@@ -39,17 +42,17 @@ namespace PR.Persistence.RepositoryFacades
                 predicate
             };
 
-            AddVersionPredicates(predicates, _databaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
             
-            return _unitOfWork.People.Count(predicates);
+            return UnitOfWork.People.Count(predicates);
         }
 
         public int Count(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            AddVersionPredicates(predicates, _databaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
 
-            return _unitOfWork.People.Count(predicates);
+            return UnitOfWork.People.Count(predicates);
         }
 
         public void Add(
@@ -59,7 +62,7 @@ namespace PR.Persistence.RepositoryFacades
             person.Created = DateTime.UtcNow;
             person.Superseded = _maxDate;
 
-            _unitOfWork.People.Add(person);
+            UnitOfWork.People.Add(person);
         }
 
         public Person Get(
@@ -70,9 +73,9 @@ namespace PR.Persistence.RepositoryFacades
                 p => p.ObjectId == objectId
             };
 
-            AddVersionPredicates(predicates, _databaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
 
-            var people = _unitOfWork.People.Find(predicates);
+            var people = UnitOfWork.People.Find(predicates);
             var person = people.SingleOrDefault();
 
             if (person == null)
@@ -98,16 +101,16 @@ namespace PR.Persistence.RepositoryFacades
                 pa => pa.ObjectPersonObjectId == objectId
             };
 
-            AddVersionPredicates(predicatesForAccociationsWherePersonIsSubject, _databaseTime);
-            AddVersionPredicates(predicatesForAccociationsWherePersonIsObject, _databaseTime);
+            AddVersionPredicates(predicatesForAccociationsWherePersonIsSubject,DatabaseTime);
+            AddVersionPredicates(predicatesForAccociationsWherePersonIsObject, DatabaseTime);
 
             var personAssociationsWherePersonIsSubject =
-                _unitOfWork.PersonAssociations
+                UnitOfWork.PersonAssociations
                     .Find(predicatesForAccociationsWherePersonIsSubject)
                     .ToList();
 
             var personAssociationsWherePersonIsObject =
-                _unitOfWork.PersonAssociations
+                UnitOfWork.PersonAssociations
                     .Find(predicatesForAccociationsWherePersonIsObject)
                     .ToList();
 
@@ -133,14 +136,14 @@ namespace PR.Persistence.RepositoryFacades
                 p => objectIdsOfSubjectPeople.Contains(p.ObjectId)
             };
 
-            AddVersionPredicates(predicatesForObjectPeople, _databaseTime);
-            AddVersionPredicates(predicatesForSubjectPeople, _databaseTime);
+            AddVersionPredicates(predicatesForObjectPeople, DatabaseTime);
+            AddVersionPredicates(predicatesForSubjectPeople, DatabaseTime);
 
-            var objectPeopleMap = _unitOfWork.People
+            var objectPeopleMap = UnitOfWork.People
                 .Find(predicatesForObjectPeople)
                 .ToDictionary(p => p.ObjectId, p => p);
 
-            var subjectPeopleMap = _unitOfWork.People
+            var subjectPeopleMap = UnitOfWork.People
                 .Find(predicatesForSubjectPeople)
                 .ToDictionary(p => p.ObjectId, p => p);
 
@@ -167,9 +170,9 @@ namespace PR.Persistence.RepositoryFacades
         {
             var predicates = new List<Expression<Func<Person, bool>>>();
 
-            AddVersionPredicates(predicates, _databaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
 
-            return _unitOfWork.People.Find(predicates);
+            return UnitOfWork.People.Find(predicates);
         }
 
         public IEnumerable<Person> Find(
@@ -186,9 +189,9 @@ namespace PR.Persistence.RepositoryFacades
         public IEnumerable<Person> Find(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            AddVersionPredicates(predicates, _databaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
 
-            return _unitOfWork.People.Find(predicates);
+            return UnitOfWork.People.Find(predicates);
         }
 
         public IList<Person> FindIncludingPersonAssociations(
@@ -205,7 +208,7 @@ namespace PR.Persistence.RepositoryFacades
         public IList<Person> FindIncludingPersonAssociations(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            AddVersionPredicates(predicates, _databaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
 
             var people = Find(predicates).ToList();
             var objectIds = people.Select(p => p.ObjectId).ToList();
@@ -220,16 +223,16 @@ namespace PR.Persistence.RepositoryFacades
                 pa => objectIds.Contains(pa.ObjectPersonObjectId)
             };
 
-            AddVersionPredicates(predicatesForAccociationsWherePeopleAreSubjects, _databaseTime);
-            AddVersionPredicates(predicatesForAccociationsWherePeopleAreObjects, _databaseTime);
+            AddVersionPredicates(predicatesForAccociationsWherePeopleAreSubjects, DatabaseTime);
+            AddVersionPredicates(predicatesForAccociationsWherePeopleAreObjects, DatabaseTime);
 
             var personAssociationsWherePeopleAreSubjects =
-                _unitOfWork.PersonAssociations
+                UnitOfWork.PersonAssociations
                     .Find(predicatesForAccociationsWherePeopleAreSubjects)
                     .ToList();
 
             var personAssociationsWherePeopleAreObjects =
-                _unitOfWork.PersonAssociations
+                UnitOfWork.PersonAssociations
                     .Find(predicatesForAccociationsWherePeopleAreObjects)
                     .ToList();
 
@@ -253,14 +256,14 @@ namespace PR.Persistence.RepositoryFacades
                 p => objectIdsOfSubjectPeople.Contains(p.ObjectId)
             };
 
-            AddVersionPredicates(predicatesForObjectPeople, _databaseTime);
-            AddVersionPredicates(predicatesForSubjectPeople, _databaseTime);
+            AddVersionPredicates(predicatesForObjectPeople, DatabaseTime);
+            AddVersionPredicates(predicatesForSubjectPeople, DatabaseTime);
 
-            var objectPeopleMap = _unitOfWork.People
+            var objectPeopleMap = UnitOfWork.People
                 .Find(predicatesForObjectPeople)
                 .ToDictionary(p => p.ObjectId, p => p);
 
-            var subjectPeopleMap = _unitOfWork.People
+            var subjectPeopleMap = UnitOfWork.People
                 .Find(predicatesForSubjectPeople)
                 .ToDictionary(p => p.ObjectId, p => p);
 
@@ -276,16 +279,32 @@ namespace PR.Persistence.RepositoryFacades
 
             personAssociationsWherePeopleAreObjects.ForEach(pa =>
             {
-                pa.SubjectPerson = subjectPeopleMap[pa.ObjectPersonObjectId];
-                pa.ObjectPerson = peopleMap[pa.SubjectPersonObjectId];
+                pa.SubjectPerson = subjectPeopleMap[pa.SubjectPersonObjectId];
+                pa.ObjectPerson = peopleMap[pa.ObjectPersonObjectId];
             });
 
-            //person.ObjectPeople = personAssociationsWherePersonIsSubject;
-            //person.SubjectPeople = personAssociationsWherePersonIsObject;
+            personAssociationsWherePeopleAreSubjects
+                .GroupBy(pa => pa.SubjectPersonObjectId)
+                .ToList()
+                .ForEach(pag =>
+                {
+                    var objectId = pag.Key;
+                    peopleMap[objectId].ObjectPeople = pag.ToList();
+                });
+
+            personAssociationsWherePeopleAreObjects
+                .GroupBy(pa => pa.ObjectPersonObjectId)
+                .ToList()
+                .ForEach(pag =>
+                {
+                    var objectId = pag.Key;
+                    peopleMap[objectId].SubjectPeople = pag.ToList();
+                });
 
             people.ForEach(p =>
             {
-                //p.ObjectPeople = 
+                p.SubjectPeople ??= new List<PersonAssociation>();
+                p.ObjectPeople ??= new List<PersonAssociation>();
             });
 
             return people;
@@ -303,21 +322,19 @@ namespace PR.Persistence.RepositoryFacades
 
             var objectsFromRepository = Find(predicates).ToList();
 
-            var currentTime = DateTime.UtcNow;
-
-            objectsFromRepository.ForEach(p => p.Superseded = currentTime);
+            objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
 
             var newObjects = people.Select(p =>
             {
                 var newObject = p.Clone();
                 newObject.Id = Guid.Empty;
-                newObject.Created = currentTime;
+                newObject.Created = CurrentTime;
                 newObject.Superseded = _maxDate;
 
                 return newObject;
             });
 
-            _unitOfWork.People.AddRange(newObjects);
+            UnitOfWork.People.AddRange(newObjects);
         }
 
         public void Remove(
@@ -338,9 +355,7 @@ namespace PR.Persistence.RepositoryFacades
 
             var objectsFromRepository = Find(predicates).ToList();
 
-            var currentTime = DateTime.UtcNow;
-
-            objectsFromRepository.ForEach(p => p.Superseded = currentTime);
+            objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
         }
 
         private void AddVersionPredicates(
@@ -350,8 +365,8 @@ namespace PR.Persistence.RepositoryFacades
             if (databaseTime.HasValue)
             {
                 predicates.Add(pa =>
-                    pa.Created <= _databaseTime &&
-                    pa.Superseded > _databaseTime);
+                    pa.Created <= DatabaseTime &&
+                    pa.Superseded > DatabaseTime);
             }
             else
             {
@@ -367,8 +382,8 @@ namespace PR.Persistence.RepositoryFacades
             if (databaseTime.HasValue)
             {
                 predicates.Add(pa =>
-                    pa.Created <= _databaseTime &&
-                    pa.Superseded > _databaseTime);
+                    pa.Created <= DatabaseTime &&
+                    pa.Superseded > DatabaseTime);
             }
             else
             {
