@@ -186,19 +186,23 @@ namespace PR.ViewModel
         {
             using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
             {
-                var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.Id).ToList();
+                var objectIds = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ObjectId).ToList();
 
-                var peopleForDeletion = unitOfWork.UnitOfWork.People
-                    .GetPeopleIncludingAssociations(p => ids.Contains(p.Id))
+                var peopleForDeletion = unitOfWork.People
+                    .FindIncludingPersonAssociations(pa => objectIds.Contains(pa.ObjectId))
                     .ToList();
 
-                var personAssociationsForDeletion = peopleForDeletion
-                    .SelectMany(p => p.ObjectPeople)
-                    .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
-                    .ToList();
+                if (false)
+                {
+                    var personAssociationsForDeletion = peopleForDeletion
+                        .SelectMany(p => p.ObjectPeople)
+                        .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
+                        .ToList();
 
-                unitOfWork.UnitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
-                unitOfWork.UnitOfWork.People.RemoveRange(peopleForDeletion);
+                    unitOfWork.UnitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
+                }
+
+                unitOfWork.People.RemoveRange(peopleForDeletion);
                 unitOfWork.Complete();
 
                 PersonListViewModel.RemovePeople(peopleForDeletion);

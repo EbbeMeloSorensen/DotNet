@@ -83,36 +83,6 @@ namespace PR.Persistence.RepositoryFacades
             return person;
         }
 
-        public IEnumerable<Person> GetAll()
-        {
-            var predicates = new List<Expression<Func<Person, bool>>>();
-
-            AddVersionPredicates(predicates, _databaseTime);
-
-            return _unitOfWork.People.Find(predicates);
-        }
-
-        public IEnumerable<Person> Find(
-            Expression<Func<Person, bool>> predicate)
-        {
-            var predicates = new List<Expression<Func<Person, bool>>>
-            {
-                predicate
-            };
-
-            AddVersionPredicates(predicates, _databaseTime);
-
-            return _unitOfWork.People.Find(predicates);
-        }
-
-        public IEnumerable<Person> Find(
-            IList<Expression<Func<Person, bool>>> predicates)
-        {
-            AddVersionPredicates(predicates, _databaseTime);
-
-            return _unitOfWork.People.Find(predicates);
-        }
-
         public Person GetIncludingPersonAssociations(
             Guid objectId)
         {
@@ -131,24 +101,25 @@ namespace PR.Persistence.RepositoryFacades
             AddVersionPredicates(predicatesForAccociationsWherePersonIsSubject, _databaseTime);
             AddVersionPredicates(predicatesForAccociationsWherePersonIsObject, _databaseTime);
 
-            var personAssociationsWherePersonOfInterestIsSubject =
+            var personAssociationsWherePersonIsSubject =
                 _unitOfWork.PersonAssociations
                     .Find(predicatesForAccociationsWherePersonIsSubject)
                     .ToList();
 
-            var personAssociationsWherePersonOfInterestIsObject=
+            var personAssociationsWherePersonIsObject =
                 _unitOfWork.PersonAssociations
                     .Find(predicatesForAccociationsWherePersonIsObject)
                     .ToList();
 
             // Now you have all the relevant person association objects
             // ..Then we want to retrieve all the people that are objects in those associations
+            // Det er spild af processorkraft, hvis ikke der er nogen associationer
 
-            var objectIdsOfObjectPeople = personAssociationsWherePersonOfInterestIsSubject
+            var objectIdsOfObjectPeople = personAssociationsWherePersonIsSubject
                 .Select(_ => _.ObjectPersonObjectId)
                 .ToList();
 
-            var objectIdsOfSubjectPeople = personAssociationsWherePersonOfInterestIsObject
+            var objectIdsOfSubjectPeople = personAssociationsWherePersonIsObject
                 .Select(_ => _.SubjectPersonObjectId)
                 .ToList();
 
@@ -174,22 +145,150 @@ namespace PR.Persistence.RepositoryFacades
                 .ToDictionary(p => p.ObjectId, p => p);
 
             // Styk det hele sammen
-            personAssociationsWherePersonOfInterestIsSubject.ForEach(pa =>
+            personAssociationsWherePersonIsSubject.ForEach(pa =>
             {
                 pa.SubjectPerson = person;
                 pa.ObjectPerson = objectPeopleMap[pa.ObjectPersonObjectId];
             });
 
-            personAssociationsWherePersonOfInterestIsObject.ForEach(pa =>
+            personAssociationsWherePersonIsObject.ForEach(pa =>
             {
                 pa.SubjectPerson = subjectPeopleMap[pa.SubjectPersonObjectId];
                 pa.ObjectPerson = person;
             });
 
-            person.ObjectPeople = personAssociationsWherePersonOfInterestIsSubject;
-            person.SubjectPeople = personAssociationsWherePersonOfInterestIsObject;
+            person.ObjectPeople = personAssociationsWherePersonIsSubject;
+            person.SubjectPeople = personAssociationsWherePersonIsObject;
 
             return person;
+        }
+
+        public IEnumerable<Person> GetAll()
+        {
+            var predicates = new List<Expression<Func<Person, bool>>>();
+
+            AddVersionPredicates(predicates, _databaseTime);
+
+            return _unitOfWork.People.Find(predicates);
+        }
+
+        public IEnumerable<Person> Find(
+            Expression<Func<Person, bool>> predicate)
+        {
+            var predicates = new List<Expression<Func<Person, bool>>>
+            {
+                predicate
+            };
+
+            return Find(predicates);
+        }
+
+        public IEnumerable<Person> Find(
+            IList<Expression<Func<Person, bool>>> predicates)
+        {
+            AddVersionPredicates(predicates, _databaseTime);
+
+            return _unitOfWork.People.Find(predicates);
+        }
+
+        public IList<Person> FindIncludingPersonAssociations(
+            Expression<Func<Person, bool>> predicate)
+        {
+            var predicates = new List<Expression<Func<Person, bool>>>
+            {
+                predicate
+            };
+
+            return FindIncludingPersonAssociations(predicates);
+        }
+
+        public IList<Person> FindIncludingPersonAssociations(
+            IList<Expression<Func<Person, bool>>> predicates)
+        {
+            AddVersionPredicates(predicates, _databaseTime);
+
+            var people = Find(predicates).ToList();
+            var objectIds = people.Select(p => p.ObjectId).ToList();
+
+            var predicatesForAccociationsWherePeopleAreSubjects = new List<Expression<Func<PersonAssociation, bool>>>
+            {
+                pa => objectIds.Contains(pa.SubjectPersonObjectId)
+            };
+
+            var predicatesForAccociationsWherePeopleAreObjects = new List<Expression<Func<PersonAssociation, bool>>>
+            {
+                pa => objectIds.Contains(pa.ObjectPersonObjectId)
+            };
+
+            AddVersionPredicates(predicatesForAccociationsWherePeopleAreSubjects, _databaseTime);
+            AddVersionPredicates(predicatesForAccociationsWherePeopleAreObjects, _databaseTime);
+
+            var personAssociationsWherePeopleAreSubjects =
+                _unitOfWork.PersonAssociations
+                    .Find(predicatesForAccociationsWherePeopleAreSubjects)
+                    .ToList();
+
+            var personAssociationsWherePeopleAreObjects =
+                _unitOfWork.PersonAssociations
+                    .Find(predicatesForAccociationsWherePeopleAreObjects)
+                    .ToList();
+
+            // Hvis der ikke blev fundet nogen associations, så er det nedenfor spild af processorkraft
+
+            var objectIdsOfObjectPeople = personAssociationsWherePeopleAreSubjects
+                .Select(_ => _.ObjectPersonObjectId)
+                .ToList();
+
+            var objectIdsOfSubjectPeople = personAssociationsWherePeopleAreObjects
+                .Select(_ => _.SubjectPersonObjectId)
+                .ToList();
+
+            var predicatesForObjectPeople = new List<Expression<Func<Person, bool>>>
+            {
+                p => objectIdsOfObjectPeople.Contains(p.ObjectId)
+            };
+
+            var predicatesForSubjectPeople = new List<Expression<Func<Person, bool>>>
+            {
+                p => objectIdsOfSubjectPeople.Contains(p.ObjectId)
+            };
+
+            AddVersionPredicates(predicatesForObjectPeople, _databaseTime);
+            AddVersionPredicates(predicatesForSubjectPeople, _databaseTime);
+
+            var objectPeopleMap = _unitOfWork.People
+                .Find(predicatesForObjectPeople)
+                .ToDictionary(p => p.ObjectId, p => p);
+
+            var subjectPeopleMap = _unitOfWork.People
+                .Find(predicatesForSubjectPeople)
+                .ToDictionary(p => p.ObjectId, p => p);
+
+            var peopleMap = people
+                .ToDictionary(p => p.ObjectId, p => p);
+
+            // Styk det hele sammen
+            personAssociationsWherePeopleAreSubjects.ForEach(pa =>
+            {
+                pa.SubjectPerson = peopleMap[pa.SubjectPersonObjectId];
+                pa.ObjectPerson = objectPeopleMap[pa.ObjectPersonObjectId];
+            });
+
+            personAssociationsWherePeopleAreObjects.ForEach(pa =>
+            {
+                pa.SubjectPerson = subjectPeopleMap[pa.ObjectPersonObjectId];
+                pa.ObjectPerson = peopleMap[pa.SubjectPersonObjectId];
+            });
+
+            //person.ObjectPeople = personAssociationsWherePersonIsSubject;
+            //person.SubjectPeople = personAssociationsWherePersonIsObject;
+
+            people.ForEach(p =>
+            {
+                //p.ObjectPeople = 
+            });
+
+            return people;
         }
 
         public void UpdateRange(
@@ -219,6 +318,29 @@ namespace PR.Persistence.RepositoryFacades
             });
 
             _unitOfWork.People.AddRange(newObjects);
+        }
+
+        public void Remove(
+            Person person)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRange(
+            IEnumerable<Person> people)
+        {
+            var objectIds = people.Select(p => p.ObjectId).ToList();
+
+            var predicates = new List<Expression<Func<Person, bool>>>
+            {
+                p => objectIds.Contains(p.ObjectId)
+            };
+
+            var objectsFromRepository = Find(predicates).ToList();
+
+            var currentTime = DateTime.UtcNow;
+
+            objectsFromRepository.ForEach(p => p.Superseded = currentTime);
         }
 
         private void AddVersionPredicates(
