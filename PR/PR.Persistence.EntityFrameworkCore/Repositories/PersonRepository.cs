@@ -45,16 +45,6 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
             });
         }
 
-        public IList<Person> GetPeopleIncludingAssociations(
-            Expression<Func<Person, bool>> predicate)
-        {
-            return PrDbContext.People
-                .Include(p => p.ObjectPeople).ThenInclude(pa => pa.ObjectPerson)
-                .Include(p => p.SubjectPeople).ThenInclude(pa => pa.SubjectPerson)
-                .Where(predicate)
-                .ToList();
-        }
-
         public override void Clear()
         {
             Context.RemoveRange(PrDbContext.People);
