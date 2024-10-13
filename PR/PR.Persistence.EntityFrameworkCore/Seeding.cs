@@ -7,6 +7,7 @@ namespace PR.Persistence.EntityFrameworkCore
         public static void SeedDatabase(
             PRDbContextBase context)
         {
+            return;
             // Star Wars
             // https://cdn.shopify.com/s/files/1/1835/6621/files/star-wars-family-tree-episde-9.png?v=1578255836
 

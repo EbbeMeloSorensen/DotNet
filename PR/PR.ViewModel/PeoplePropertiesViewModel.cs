@@ -265,8 +265,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
                     0, 0, 0, DateTimeKind.Utc) 
                 : p.Birthday,
             Category = SharedCategory != _originalSharedCategory ? SharedCategory : p.Category,
-            Description = SharedComments != _originalSharedComments ? SharedComments : p.Description,
-            Created = p.Created
+            Description = SharedComments != _originalSharedComments ? SharedComments : p.Description
         }).ToList();
 
         using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())

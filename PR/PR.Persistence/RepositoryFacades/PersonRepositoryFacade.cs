@@ -56,7 +56,7 @@ namespace PR.Persistence.RepositoryFacades
             Person person)
         {
             person.ObjectId = Guid.NewGuid();
-            person.Created = DateTime.Now;
+            person.Created = DateTime.UtcNow;
             person.Superseded = _maxDate;
 
             _unitOfWork.People.Add(person);
@@ -202,20 +202,23 @@ namespace PR.Persistence.RepositoryFacades
                 p => objectIds.Contains(p.ObjectId)
             };
 
-            var objectsFromRepository = Find(predicates);
+            var objectsFromRepository = Find(predicates).ToList();
+
             var currentTime = DateTime.UtcNow;
 
-            var newObjects = objectsFromRepository.Select(p =>
+            objectsFromRepository.ForEach(p => p.Superseded = currentTime);
+
+            var newObjects = people.Select(p =>
             {
                 var newObject = p.Clone();
                 newObject.Id = Guid.Empty;
                 newObject.Created = currentTime;
+                newObject.Superseded = _maxDate;
 
                 return newObject;
             });
 
-            // HER!!
-            throw new NotImplementedException();
+            _unitOfWork.People.AddRange(newObjects);
         }
 
         private void AddVersionPredicates(

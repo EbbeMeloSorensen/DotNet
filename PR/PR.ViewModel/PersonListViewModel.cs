@@ -92,11 +92,11 @@ namespace PR.ViewModel
         public void UpdatePeople(
             IEnumerable<Person> people)
         {
-            var idsOfUpdatedPeople = people.Select(_ => _.Id).ToList();
+            var objectIdsOfUpdatedPeople = people.Select(_ => _.ObjectId).ToList();
 
             foreach (var person in _people)
             {
-                if (idsOfUpdatedPeople.Contains(person.Id))
+                if (objectIdsOfUpdatedPeople.Contains(person.ObjectId))
                 {
                     person.CopyAttributes(people.Single(_ => _.Id == person.Id));
                 }
@@ -108,7 +108,7 @@ namespace PR.ViewModel
 
             foreach (var personViewModel in PersonViewModels)
             {
-                if (idsOfUpdatedPeople.Contains(personViewModel.Person.Id))
+                if (objectIdsOfUpdatedPeople.Contains(personViewModel.Person.ObjectId))
                 {
                     SelectedPersonViewModels.Add(personViewModel);
                 }

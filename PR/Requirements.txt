@@ -1,9 +1,9 @@
 * Manage People
-  * Create person
+  * Create person (ok)
   - Update person (dækket af update people)
-  * Update people
+  * Update people (ok)
   - Delete person (dækket af delete people)
-  * Delete people
+  * Delete people 
 * Manage Person associations
   * Create person association
   * Update person association
@@ -13,3 +13,4 @@
   
 * Go back in database time and or historic time... (who was alive in a given episode?)
 * Change superseded rows PROHIBITED
+* Clear database

@@ -30,7 +30,7 @@ namespace PR.Persistence.RepositoryFacades
             PersonAssociation personAssociation)
         {
             personAssociation.ObjectId = Guid.NewGuid();
-            personAssociation.Created = DateTime.Now;
+            personAssociation.Created = DateTime.UtcNow;
             personAssociation.Superseded = _maxDate;
 
             _unitOfWork.PersonAssociations.Add(personAssociation);
