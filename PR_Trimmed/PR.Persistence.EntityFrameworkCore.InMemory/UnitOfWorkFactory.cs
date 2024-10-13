@@ -1,7 +1,4 @@
-﻿using PR.Persistence;
-using PR.Persistence.EntityFrameworkCore;
-
-namespace PR.Persistenec.EntityFrameworkCore.InMemory
+﻿namespace PR.Persistence.EntityFrameworkCore.InMemory
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
