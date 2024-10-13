@@ -1,8 +1,8 @@
 ﻿using System;
 using PR.Persistence.Repositories;
-using PR.Persistence.RepositoryFacades;
+using PR.Persistence.Versioned.Repositories;
 
-namespace PR.Persistence
+namespace PR.Persistence.Versioned
 {
     public class UnitOfWorkFacade : IUnitOfWork
     {
