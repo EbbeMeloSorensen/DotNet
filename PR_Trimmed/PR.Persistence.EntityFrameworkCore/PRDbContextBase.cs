@@ -7,7 +7,6 @@ namespace PR.Persistence.EntityFrameworkCore
     public class PRDbContextBase : DbContext
     {
         public DbSet<Person> People { get; set; }
-        public DbSet<PersonAssociation> PersonAssociations { get; set; }
 
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
@@ -19,17 +18,6 @@ namespace PR.Persistence.EntityFrameworkCore
             ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new PersonConfiguration());
-            modelBuilder.ApplyConfiguration(new PersonAssociationConfiguration());
-
-            modelBuilder.Entity<PersonAssociation>()
-                .HasOne(p => p.SubjectPerson)
-                .WithMany(pa => pa.ObjectPeople)
-                .HasForeignKey(pa => pa.SubjectPersonId);
-
-            modelBuilder.Entity<PersonAssociation>()
-                .HasOne(p => p.ObjectPerson)
-                .WithMany(pa => pa.SubjectPeople)
-                .HasForeignKey(pa => pa.ObjectPersonId);
         }
     }
 }

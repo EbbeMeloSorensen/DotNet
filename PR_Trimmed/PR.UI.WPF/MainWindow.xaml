@@ -50,16 +50,7 @@
 
             <local:PersonListView Grid.Row="1" Grid.Column="0" DataContext="{Binding PersonListViewModel}"/>
 
-            <Grid Grid.Row="1" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <local:PeoplePropertiesView Grid.Row="0" DataContext="{Binding PeoplePropertiesViewModel}"/>
-
-                <local:PersonAssociationsView Grid.Row="1" DataContext="{Binding PersonAssociationsViewModel}"/>
-            </Grid>
+            <local:PeoplePropertiesView Grid.Row="1" Grid.Column="1" DataContext="{Binding PeoplePropertiesViewModel}"/>
 
             <Expander Header="Log" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ExpandDirection="Up" IsExpanded="True">
                 <logging:LogView Height="200" DataContext="{Binding LogViewModel}"/>

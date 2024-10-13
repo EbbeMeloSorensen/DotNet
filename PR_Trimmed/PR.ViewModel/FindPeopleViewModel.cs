@@ -38,9 +38,7 @@ namespace PR.ViewModel
         public Expression<Func<Person, bool>> FilterAsExpression()
         {
             return p => (p.FirstName.ToUpper().Contains(_nameFilterInUppercase) ||
-                         p.Surname != null && p.Surname.ToUpper().Contains(_nameFilterInUppercase)) &&
-                        (p.Category == null && _categoryFilterInUppercase == "" ||
-                         p.Category != null && p.Category.ToUpper().Contains(_categoryFilterInUppercase));
+                         p.Surname != null && p.Surname.ToUpper().Contains(_nameFilterInUppercase));
         }
 
         public bool PersonPassesFilter(Person person)
@@ -49,10 +47,7 @@ namespace PR.ViewModel
                          person.FirstName.ToUpper().Contains(NameFilter.ToUpper()) ||
                          person.Surname != null && person.Surname.ToUpper().Contains(NameFilter.ToUpper());
 
-            var categoryOK = string.IsNullOrEmpty(CategoryFilter) ||
-                             person.Category != null && person.Category.ToUpper().Contains(CategoryFilter.ToUpper());
-
-            return nameOK && categoryOK;
+            return nameOK;
         }
     }
 }

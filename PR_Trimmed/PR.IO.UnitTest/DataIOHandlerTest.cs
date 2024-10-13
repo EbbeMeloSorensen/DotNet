@@ -4,7 +4,6 @@ using System.Linq;
 using FluentAssertions;
 using Xunit;
 using Person = PR.Domain.Entities.Person;
-using PersonAssociation = PR.Domain.Entities.PersonAssociation;
 
 namespace PR.IO.UnitTest
 {
@@ -54,14 +53,6 @@ namespace PR.IO.UnitTest
                 Id = Guid.NewGuid(),
                 FirstName = "Ebbe",
                 Surname = "Melo Sørensen",
-                Nickname = "Bebsen",
-                Address = "Danshøjvej 33",
-                ZipCode = "2500",
-                City = "Valby",
-                Birthday = new DateTime(1980, 6, 13).ToUniversalTime(),
-                Category = "Familie",
-                Description = "Mig selv",
-                Dead = false,
                 Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()
             };
 
@@ -88,25 +79,6 @@ namespace PR.IO.UnitTest
                     ebbe,
                     ana,
                     uffe
-                },
-                PersonAssociations = new List<PersonAssociation>
-                {
-                    new()
-                    {
-                        Id = Guid.NewGuid(),
-                        Description = "is the brother of",
-                        Created = now,
-                        ObjectPersonId = ebbe.Id,
-                        SubjectPersonId = uffe.Id
-                    },
-                    new()
-                    {
-                        Id = Guid.NewGuid(),
-                        Description = "is married with",
-                        Created = now,
-                        ObjectPersonId = ana.Id,
-                        SubjectPersonId = ebbe.Id
-                    }
                 }
             };
         }

@@ -194,34 +194,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? firstPerson.Surname
             : null;
 
-        SharedNickname = temp.Objects.All(p => p.Nickname == firstPerson.Nickname)
-            ? firstPerson.Nickname
-            : null;
-
-        SharedAddress = temp.Objects.All(p => p.Address == firstPerson.Address)
-            ? firstPerson.Address
-            : null;
-
-        SharedZipCode = temp.Objects.All(p => p.ZipCode == firstPerson.ZipCode)
-            ? firstPerson.ZipCode
-            : null;
-
-        SharedCity = temp.Objects.All(p => p.City == firstPerson.City)
-            ? firstPerson.City
-            : null;
-
-        SharedBirthday = temp.Objects.All(p => p.Birthday == firstPerson.Birthday)
-            ? firstPerson.Birthday
-            : null;
-
-        SharedCategory = temp.Objects.All(p => p.Category == firstPerson.Category)
-            ? firstPerson.Category
-            : null;
-
-        SharedComments = temp.Objects.All(p => p.Description == firstPerson.Description)
-            ? firstPerson.Description
-            : null;
-
         _originalSharedFirstName = SharedFirstName;
         _originalSharedSurname = SharedSurname;
         _originalSharedNickname = SharedNickname;
@@ -253,19 +225,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ObjectId = p.ObjectId,
             FirstName = SharedFirstName != _originalSharedFirstName ? SharedFirstName : p.FirstName,
             Surname = SharedSurname != _originalSharedSurname ? SharedSurname : p.Surname,
-            Nickname = SharedNickname != _originalSharedNickname ? SharedNickname : p.Nickname,
-            Address = SharedAddress != _originalSharedAddress ? SharedAddress : p.Address,
-            ZipCode = SharedZipCode != _originalSharedZipCode ? SharedZipCode : p.ZipCode,
-            City = SharedCity != _originalSharedCity ? SharedCity : p.City,
-            Birthday = SharedBirthday != _originalSharedBirthday
-                ? new DateTime(
-                    SharedBirthday.Value.Year,
-                    SharedBirthday.Value.Month,
-                    SharedBirthday.Value.Day,
-                    0, 0, 0, DateTimeKind.Utc) 
-                : p.Birthday,
-            Category = SharedCategory != _originalSharedCategory ? SharedCategory : p.Category,
-            Description = SharedComments != _originalSharedComments ? SharedComments : p.Description
         }).ToList();
 
         using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())

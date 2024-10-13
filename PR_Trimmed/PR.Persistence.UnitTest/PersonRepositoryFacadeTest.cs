@@ -62,47 +62,6 @@ namespace PR.Persistence.UnitTest
             // Assert
             person.FirstName.Should().Be("Leia");
             person.Surname.Should().Be("Organa");
-            person.Nickname.Should().Be(null);
-        }
-
-        [Fact]
-        public void GetLatestVersionOfPersonIncludingAssociations()
-        {
-            // Arrange
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-            // Act
-            var person = unitOfWork.People.GetIncludingPersonAssociations(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03"));
-
-            // Assert
-            person.FirstName.Should().Be("Leia");
-            person.Surname.Should().Be("Organa");
-
-            person.ObjectPeople.Count().Should().Be(1);
-            person.ObjectPeople.Single().Description.Should().Be("is a parent of");
-            person.SubjectPeople.Count().Should().Be(0);
-        }
-
-        [Fact]
-        public void GetEarlierVersionOfPersonIncludingAssociations()
-        {
-            // Arrange
-            _unitOfWorkFactory.DatabaseTime = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-            // Act
-            var person = unitOfWork.People.GetIncludingPersonAssociations(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03"));
-
-            // Assert
-            person.FirstName.Should().Be("Leia");
-            person.Surname.Should().Be("Organa");
-
-            person.ObjectPeople.Count().Should().Be(1);
-            person.ObjectPeople.Single().Description.Should().Be("is a parent of");
-            person.SubjectPeople.Count().Should().Be(1);
-            person.ObjectPeople.Single().Description.Should().Be("is a parent of");
         }
 
         [Fact]

@@ -9,14 +9,11 @@ namespace PR.Persistence.EntityFrameworkCore
 
         public IPersonRepository People { get; }
 
-        public IPersonAssociationRepository PersonAssociations { get; }
-
         public UnitOfWork(
             PRDbContextBase context)
         {
             _context = context;
             People = new PersonRepository(_context);
-            PersonAssociations = new PersonAssociationRepository(_context);
         }
 
         public int Complete()

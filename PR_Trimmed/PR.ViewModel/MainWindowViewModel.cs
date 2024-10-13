@@ -39,7 +39,6 @@ namespace PR.ViewModel
 
         public PersonListViewModel PersonListViewModel { get; private set; }
         public PeoplePropertiesViewModel PeoplePropertiesViewModel { get; private set; }
-        public PersonAssociationsViewModel PersonAssociationsViewModel { get; private set; }
         public LogViewModel LogViewModel { get; private set; }
 
         private RelayCommand<object> _createPersonCommand;
@@ -114,11 +113,6 @@ namespace PR.ViewModel
 
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
 
-            PersonAssociationsViewModel = new PersonAssociationsViewModel(
-                _unitOfWorkFactoryFacade,
-                applicationDialogService,
-                PersonListViewModel.SelectedPeople);
-
             _logger.WriteLine(LogMessageCategory.Information, "Application started");
         }
 
@@ -158,13 +152,6 @@ namespace PR.ViewModel
             {
                 FirstName = dialogViewModel.FirstName,
                 Surname = dialogViewModel.Surname,
-                Nickname = dialogViewModel.Nickname,
-                Address = dialogViewModel.Address,
-                ZipCode = dialogViewModel.ZipCode,
-                City = dialogViewModel.City,
-                Birthday = birthday,
-                Category = dialogViewModel.Category,
-                Description = dialogViewModel.Comments,
                 Created = DateTime.UtcNow
             };
 
@@ -189,15 +176,9 @@ namespace PR.ViewModel
                 var objectIds = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ObjectId).ToList();
 
                 var peopleForDeletion = unitOfWork.People
-                    .FindIncludingPersonAssociations(pa => objectIds.Contains(pa.ObjectId))
+                    .Find(pa => objectIds.Contains(pa.ObjectId))
                     .ToList();
 
-                var personAssociationsForDeletion = peopleForDeletion
-                    .SelectMany(p => p.ObjectPeople)
-                    .Concat(peopleForDeletion.SelectMany(p => p.SubjectPeople))
-                    .ToList();
-
-                unitOfWork.PersonAssociations.RemoveRange(personAssociationsForDeletion);
                 unitOfWork.People.RemoveRange(peopleForDeletion);
                 unitOfWork.Complete();
 
@@ -239,26 +220,14 @@ namespace PR.ViewModel
                 .Select(p => p.Id)
                 .ToList();
 
-            var predicates = new List<Expression<Func<PersonAssociation, bool>>>();
-            predicates.Add(p => personIds.Contains(p.SubjectPersonId));
-            predicates.Add(p => personIds.Contains(p.ObjectPersonId));
-
-            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
+            var prData = new PRData
             {
-                var personAssociations = unitOfWork.UnitOfWork.PersonAssociations
-                    .Find(predicates)
-                    .ToList();
+                People = people,
+            };
 
-                var prData = new PRData
-                {
-                    People = people,
-                    PersonAssociations = personAssociations
-                };
-
-                _dataIOHandler.ExportDataToGraphML(
-                    prData,
-                    @"C:\Temp\People.graphml");
-            }
+            _dataIOHandler.ExportDataToGraphML(
+                prData,
+                @"C:\Temp\People.graphml");
         }
 
         private bool CanExportSelectionToGraphml()

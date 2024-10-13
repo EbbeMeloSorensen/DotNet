@@ -13,7 +13,6 @@ namespace PR.Persistence
         internal DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;
 
         public PersonRepositoryFacade People { get; }
-        public PersonAssociationRepositoryFacade PersonAssociations { get; }
 
         public UnitOfWorkFacade(
             IUnitOfWork unitOfWork,
@@ -23,7 +22,6 @@ namespace PR.Persistence
             DatabaseTime = databaseTime;
 
             People = new PersonRepositoryFacade(this);
-            PersonAssociations = new PersonAssociationRepositoryFacade(this);
         }
 
         public void Complete()

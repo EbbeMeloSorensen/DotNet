@@ -22,10 +22,6 @@ namespace PR.IO
 
                 var xOver = new XmlAttributeOverrides();
                 var attrs = new XmlAttributes { XmlIgnore = true };
-                xOver.Add(typeof(Person), "ObjectPeople", attrs);
-                xOver.Add(typeof(Person), "SubjectPeople", attrs);
-                xOver.Add(typeof(PersonAssociation), "SubjectPerson", attrs);
-                xOver.Add(typeof(PersonAssociation), "ObjectPerson", attrs);
                 _xmlSerializer = new XmlSerializer(typeof(PRData), xOver);
 
                 return _xmlSerializer;
@@ -49,8 +45,6 @@ namespace PR.IO
             var jsonResolver = new ContractResolver();
             jsonResolver.IgnoreProperty(typeof(Person), "ObjectPeople");
             jsonResolver.IgnoreProperty(typeof(Person), "SubjectPeople");
-            jsonResolver.IgnoreProperty(typeof(PersonAssociation), "SubjectPerson");
-            jsonResolver.IgnoreProperty(typeof(PersonAssociation), "ObjectPerson");
 
             var settings = new JsonSerializerSettings
             {
@@ -74,18 +68,6 @@ namespace PR.IO
         {
             var vertices = prData.People.Select(p => new LabelledVertex(p.FirstName));
             var graph = new GraphAdjacencyList<LabelledVertex, EmptyEdge>(vertices, true);
-
-            var vertexIndexMap = prData.People
-                .Select((p, i) => new { PersonID = p.Id, Index = i })
-                .ToDictionary(_ => _.PersonID, _ => _.Index);
-
-            foreach (var pa in prData.PersonAssociations)
-            {
-                graph.AddEdge(new LabelledEdge(
-                    vertexIndexMap[pa.SubjectPersonId], 
-                    vertexIndexMap[pa.ObjectPersonId], 
-                    pa.Description == null ? "" : pa.Description));
-            }
 
             graph.WriteToFile(fileName, Format.GraphML);
         }
