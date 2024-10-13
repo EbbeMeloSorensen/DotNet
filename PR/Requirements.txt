@@ -13,4 +13,4 @@
   
 * Go back in database time and or historic time... (who was alive in a given episode?)
 * Change superseded rows PROHIBITED (de er kun synlige )
-* Clear database
+* Clear database (Including superseded rows)
