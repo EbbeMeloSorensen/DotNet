@@ -7,6 +7,6 @@ namespace PR.Persistence
     {
         IPersonRepository People { get; }
 
-        int Complete();
+        void Complete();
     }
 }

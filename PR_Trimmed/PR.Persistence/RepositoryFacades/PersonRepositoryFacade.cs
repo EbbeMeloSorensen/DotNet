@@ -4,10 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using PR.Domain;
 using PR.Domain.Entities;
+using PR.Persistence.Repositories;
 
 namespace PR.Persistence.RepositoryFacades
 {
-    public class PersonRepositoryFacade
+    public class PersonRepositoryFacade : IPersonRepository
     {
         private static DateTime _maxDate;
 
@@ -65,6 +66,12 @@ namespace PR.Persistence.RepositoryFacades
             UnitOfWork.People.Add(person);
         }
 
+        public void AddRange(
+            IEnumerable<Person> person)
+        {
+            throw new NotImplementedException();
+        }
+
         public Person Get(
             Guid objectId)
         {
@@ -114,6 +121,18 @@ namespace PR.Persistence.RepositoryFacades
             return UnitOfWork.People.Find(predicates);
         }
 
+        public Person SingleOrDefault(
+            Expression<Func<Person, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(
+            Person person)
+        {
+            throw new NotImplementedException();
+        }
+
         public void UpdateRange(
             IEnumerable<Person> people)
         {
@@ -160,6 +179,17 @@ namespace PR.Persistence.RepositoryFacades
             var objectsFromRepository = Find(predicates).ToList();
 
             objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Load(
+            IEnumerable<Person> people)
+        {
+            throw new NotImplementedException();
         }
 
         private void AddVersionPredicates(

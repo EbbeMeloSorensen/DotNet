@@ -18,13 +18,6 @@ namespace PR.ViewModel
 
         private string _firstName;
         private string _surname;
-        private string _nickname;
-        private string _address;
-        private string _zipCode;
-        private string _city;
-        private DateTime? _birthday;
-        private string _category;
-        private string _comments;
 
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
@@ -45,76 +38,6 @@ namespace PR.ViewModel
             set
             {
                 _surname = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Nickname
-        {
-            get { return _nickname; }
-            set
-            {
-                _nickname = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Address
-        {
-            get { return _address; }
-            set
-            {
-                _address = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string ZipCode
-        {
-            get { return _zipCode; }
-            set
-            {
-                _zipCode = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string City
-        {
-            get { return _city; }
-            set
-            {
-                _city = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public DateTime? Birthday
-        {
-            get { return _birthday; }
-            set
-            {
-                _birthday = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Category
-        {
-            get { return _category; }
-            set
-            {
-                _category = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Comments
-        {
-            get { return _comments; }
-            set
-            {
-                _comments = value;
                 RaisePropertyChanged();
             }
         }
@@ -143,12 +66,6 @@ namespace PR.ViewModel
 
             FirstName = FirstName.NullifyIfEmpty();
             Surname = Surname.NullifyIfEmpty();
-            Nickname = Nickname.NullifyIfEmpty();
-            Address = Address.NullifyIfEmpty();
-            ZipCode = ZipCode.NullifyIfEmpty();
-            City = City.NullifyIfEmpty();
-            Category = Category.NullifyIfEmpty();
-            Comments = Comments.NullifyIfEmpty();
 
             CloseDialogWithResult(parameter as Window, DialogResult.OK);
         }
@@ -200,60 +117,6 @@ namespace PR.ViewModel
 
                                 break;
                             }
-                        case "Nickname":
-                            {
-                                if (Nickname != null && Nickname.Length > 127)
-                                {
-                                    errorMessage = "Nickname cannot exceed 127 characters";
-                                }
-
-                                break;
-                            }
-                        case "Address":
-                            {
-                                if (Address != null && Address.Length > 511)
-                                {
-                                    errorMessage = "Address cannot exceed 511 characters";
-                                }
-
-                                break;
-                            }
-                        case "ZipCode":
-                            {
-                                if (ZipCode != null && ZipCode.Length > 127)
-                                {
-                                    errorMessage = "Zip code cannot exceed 127 characters";
-                                }
-
-                                break;
-                            }
-                        case "City":
-                            {
-                                if (City != null && City.Length > 255)
-                                {
-                                    errorMessage = "City cannot exceed 255 characters";
-                                }
-
-                                break;
-                            }
-                        case "Category":
-                            {
-                                if (Category != null && Category.Length > 127)
-                                {
-                                    errorMessage = "Category cannot exceed 127 characters";
-                                }
-
-                                break;
-                            }
-                        case "Comments":
-                            {
-                                if (Comments != null && Comments.Length > 2047)
-                                {
-                                    errorMessage = "Comments cannot exceed 2047 characters";
-                                }
-
-                                break;
-                            }
                     }
                 }
 
@@ -274,13 +137,6 @@ namespace PR.ViewModel
                     {
                         new ValidationError {PropertyName = "FirstName"},
                         new ValidationError {PropertyName = "Surname"},
-                        new ValidationError {PropertyName = "Nickname"},
-                        new ValidationError {PropertyName = "Address"},
-                        new ValidationError {PropertyName = "ZipCode"},
-                        new ValidationError {PropertyName = "City"},
-                        new ValidationError {PropertyName = "Birthday"},
-                        new ValidationError {PropertyName = "Category"},
-                        new ValidationError {PropertyName = "Comments"}
                     };
                 }
 
@@ -302,13 +158,6 @@ namespace PR.ViewModel
         {
             RaisePropertyChanged("FirstName");
             RaisePropertyChanged("Surname");
-            RaisePropertyChanged("Nickname");
-            RaisePropertyChanged("Address");
-            RaisePropertyChanged("ZipCode");
-            RaisePropertyChanged("City");
-            RaisePropertyChanged("Birthday");
-            RaisePropertyChanged("Category");
-            RaisePropertyChanged("Comments");
         }
 
         private void UpdateState(StateOfView state)

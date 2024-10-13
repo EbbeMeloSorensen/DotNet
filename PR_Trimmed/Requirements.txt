@@ -4,6 +4,7 @@
   * Update people (ok)
   - Delete person (dækket af delete people)
   * Delete people (ok)
+    -> Delete a person that was updated
 * Manage Person associations
   * Create person association (ok)
   * Update person association (ok)

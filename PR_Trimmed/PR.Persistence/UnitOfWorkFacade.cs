@@ -1,9 +1,10 @@
 ﻿using System;
+using PR.Persistence.Repositories;
 using PR.Persistence.RepositoryFacades;
 
 namespace PR.Persistence
 {
-    public class UnitOfWorkFacade : IDisposable
+    public class UnitOfWorkFacade : IUnitOfWork
     {
         private DateTime? _transactionTime;
 
@@ -12,7 +13,7 @@ namespace PR.Persistence
 
         internal DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;
 
-        public PersonRepositoryFacade People { get; }
+        public IPersonRepository People { get; }
 
         public UnitOfWorkFacade(
             IUnitOfWork unitOfWork,

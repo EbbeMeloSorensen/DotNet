@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Craft.Persistence.EntityFrameworkCore;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
@@ -13,6 +12,11 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         public PersonRepository(
             DbContext context) : base(context)
         {
+        }
+
+        public Person Get(Guid objectId)
+        {
+            throw new NotImplementedException();
         }
 
         public override void Update(

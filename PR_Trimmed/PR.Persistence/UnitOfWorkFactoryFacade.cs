@@ -2,7 +2,7 @@
 
 namespace PR.Persistence
 {
-    public class UnitOfWorkFactoryFacade
+    public class UnitOfWorkFactoryFacade : IUnitOfWorkFactory
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
@@ -14,11 +14,16 @@ namespace PR.Persistence
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public UnitOfWorkFacade GenerateUnitOfWork()
+        public IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWorkFacade(
                 _unitOfWorkFactory.GenerateUnitOfWork(),
                 DatabaseTime);
+        }
+
+        public void Reseed()
+        {
+            throw new NotImplementedException();
         }
     }
 }

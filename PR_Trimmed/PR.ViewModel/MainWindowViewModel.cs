@@ -140,14 +140,6 @@ namespace PR.ViewModel
                 return;
             }
 
-            var birthday = dialogViewModel.Birthday.HasValue
-                ? new DateTime(
-                    dialogViewModel.Birthday.Value.Year,
-                    dialogViewModel.Birthday.Value.Month,
-                    dialogViewModel.Birthday.Value.Day,
-                    0, 0, 0, DateTimeKind.Utc)
-                : new DateTime?();
-
             var person = new Person
             {
                 FirstName = dialogViewModel.FirstName,

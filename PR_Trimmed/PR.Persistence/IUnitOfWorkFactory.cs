@@ -1,6 +1,6 @@
 ﻿namespace PR.Persistence
 {
-    public interface IUnitOfWorkFactory
+    public interface IUnitOfWorkFactory 
     {
         IUnitOfWork GenerateUnitOfWork();
 

@@ -16,9 +16,9 @@ namespace PR.Persistence.EntityFrameworkCore
             People = new PersonRepository(_context);
         }
 
-        public int Complete()
+        public void Complete()
         {
-            return _context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public void Dispose()
