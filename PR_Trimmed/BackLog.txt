@@ -18,3 +18,11 @@ Løst og fast:
  sit id, når det blev spurgt, men det er svært at gennemskue implikationerne
 
  Hvis man lavet sådan en lidt sofistikeret property, hvordan vil databasen så komme til at se ud?
+ -> Det lader til at være fint.. Den skal bare have en Property, der er rigtig
+
+ Hvilke komponenter skal tilgå ObjectId og hvornår?
+ - PersonRepositoryFacade (Den dealer kun i versionerede dbs, så den ved godt, at der både er et Id og et ObjectId)
+ - De forskellige ViewModeller, f.eks. MainWindowViewModel, PeoplePropertiesViewModel og PersonListViewModel
+
+ Kunne man så ikke sige, at viewmodellerne ALTID bare spørger efter ID, og så får de altså bare et ObjectID,
+ ude at de er skarpe på det? Facaden derimod, den må altså gerne spørge både efter Id og ObjectId...
