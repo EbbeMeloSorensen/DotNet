@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using PR.Domain.Entities;
+using PR.Persistence.Versioned;
 using StructureMap;
 using WIGOS.Persistence.UnitTest;
 using Xunit;

@@ -15,7 +15,7 @@ namespace PR.Application
 
     public class Application
     {
-        private UnitOfWorkFactoryFacade _unitOfWorkFactoryFacade;
+        private IUnitOfWorkFactory _unitOfWorkFactoryFacade;
         private IDataIOHandler _dataIOHandler;
         private ILogger _logger;
 
@@ -30,7 +30,7 @@ namespace PR.Application
             IDataIOHandler dataIOHandler,
             ILogger logger)
         {
-            _unitOfWorkFactoryFacade = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
+            _unitOfWorkFactoryFacade = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _logger = logger;
         }
