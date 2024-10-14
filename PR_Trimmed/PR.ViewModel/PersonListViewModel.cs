@@ -119,10 +119,10 @@ namespace PR.ViewModel
         public void RemovePeople(
             IEnumerable<Person> people)
         {
-            var idsOfDeletedPeople = people.Select(_ => _.Id);
+            var objectIdsOfDeletedPeople = people.Select(_ => _.ObjectId);
 
             _people = _people
-                .Where(_ => !idsOfDeletedPeople.Contains(_.Id))
+                .Where(_ => !objectIdsOfDeletedPeople.Contains(_.ObjectId))
                 .ToList();
 
             SelectedPersonViewModels.Clear();
