@@ -1,8 +1,6 @@
 using System;
 using System.ComponentModel;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Windows;
 using Craft.Logging;
@@ -21,7 +19,6 @@ namespace PR.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly Application.Application _application;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
         private readonly ILogger _logger;
@@ -34,6 +31,17 @@ namespace PR.ViewModel
             {
                 _mainWindowTitle = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public IUnitOfWorkFactory UnitOfWorkFactory
+        {
+            get => _application.UnitOfWorkFactory;
+            set
+            {
+                _application.UnitOfWorkFactory = value;
+                PersonListViewModel.UnitOfWorkFactory = value;
+                PeoplePropertiesViewModel.UnitOfWorkFactory = value;
             }
         }
 
@@ -91,24 +99,25 @@ namespace PR.ViewModel
             IDialogService applicationDialogService,
             ILogger logger)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _dataIOHandler = dataIOHandler;
-            _applicationDialogService = applicationDialogService;
-
             _application = new Application.Application(
                 unitOfWorkFactory, 
                 dataIOHandler, 
                 logger);
 
+            _application.UnitOfWorkFactory = unitOfWorkFactory;
+            _dataIOHandler = dataIOHandler;
+            _applicationDialogService = applicationDialogService;
+
+
             LogViewModel = new LogViewModel(200);
             _logger = new ViewModelLogger(logger, LogViewModel);
 
-            PersonListViewModel = new PersonListViewModel(_unitOfWorkFactory, applicationDialogService);
+            PersonListViewModel = new PersonListViewModel(unitOfWorkFactory, applicationDialogService);
 
             PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
-                _unitOfWorkFactory,
+                unitOfWorkFactory,
                 PersonListViewModel.SelectedPeople);
 
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
@@ -148,7 +157,7 @@ namespace PR.ViewModel
                 Created = DateTime.UtcNow
             };
 
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
             {
                 unitOfWork.People.Add(person);
                 unitOfWork.Complete();
@@ -165,7 +174,7 @@ namespace PR.ViewModel
 
         private void DeleteSelectedPeople()
         {
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
             {
                 var objectIds = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ObjectId).ToList();
 

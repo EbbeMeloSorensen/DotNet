@@ -1,4 +1,4 @@
-﻿namespace PR.Persistence.EntityFrameworkCore.InMemory
+﻿namespace PR.Persistence.EntityFrameworkCore.SqlServer
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {

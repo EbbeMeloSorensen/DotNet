@@ -16,6 +16,12 @@ namespace PR.Persistence.EntityFrameworkCore
             People = new PersonRepository(_context);
         }
 
+        public void Clear()
+        {
+            //PersonAssociations.Clear();
+            People.Clear();
+        }
+
         public void Complete()
         {
             _context.SaveChanges();

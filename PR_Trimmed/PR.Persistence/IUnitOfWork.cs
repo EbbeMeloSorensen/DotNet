@@ -7,6 +7,8 @@ namespace PR.Persistence
     {
         IPersonRepository People { get; }
 
+        void Clear();
+
         void Complete();
     }
 }

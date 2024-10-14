@@ -25,6 +25,11 @@ namespace PR.Persistence.Versioned
             People = new PersonRepositoryFacade(this);
         }
 
+        public void Clear()
+        {
+            UnitOfWork.Clear();
+        }
+
         public void Complete()
         {
             UnitOfWork.Complete();

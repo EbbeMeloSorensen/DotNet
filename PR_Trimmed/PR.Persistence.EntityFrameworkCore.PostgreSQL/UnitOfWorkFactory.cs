@@ -1,4 +1,4 @@
-﻿namespace PR.Persistence.EntityFrameworkCore.InMemory
+﻿namespace PR.Persistence.EntityFrameworkCore.PostgreSQL
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {

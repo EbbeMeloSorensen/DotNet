@@ -20,7 +20,7 @@
             context.Database.EnsureCreated();
 
             using var unitOfWork = GenerateUnitOfWork();
-            unitOfWork.People.Clear();
+            unitOfWork.Clear();
             Seeding.SeedDatabase(context);
             unitOfWork.Complete();
         }

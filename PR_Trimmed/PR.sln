@@ -59,6 +59,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFramew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.ViewModel", "PR.ViewModel\PR.ViewModel.csproj", "{4FEEF3B1-4F99-4D7D-9C74-69929AF0593B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.UI.WPF", "PR.UI.WPF\PR.UI.WPF.csproj", "{A397EE2C-3637-427E-A381-CAF9BD0C307F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.PostgreSQL", "PR.Persistence.EntityFrameworkCore.PostgreSQL\PR.Persistence.EntityFrameworkCore.PostgreSQL.csproj", "{9C38BEE1-2400-4010-A843-BD6B6ACE2908}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.SqlServer", "PR.Persistence.EntityFrameworkCore.SqlServer\PR.Persistence.EntityFrameworkCore.SqlServer.csproj", "{335FC47C-DE2E-46E0-A900-A523C3C061B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +171,18 @@ Global
 		{4FEEF3B1-4F99-4D7D-9C74-69929AF0593B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FEEF3B1-4F99-4D7D-9C74-69929AF0593B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FEEF3B1-4F99-4D7D-9C74-69929AF0593B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A397EE2C-3637-427E-A381-CAF9BD0C307F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A397EE2C-3637-427E-A381-CAF9BD0C307F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A397EE2C-3637-427E-A381-CAF9BD0C307F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A397EE2C-3637-427E-A381-CAF9BD0C307F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C38BEE1-2400-4010-A843-BD6B6ACE2908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C38BEE1-2400-4010-A843-BD6B6ACE2908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C38BEE1-2400-4010-A843-BD6B6ACE2908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C38BEE1-2400-4010-A843-BD6B6ACE2908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{335FC47C-DE2E-46E0-A900-A523C3C061B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{335FC47C-DE2E-46E0-A900-A523C3C061B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{335FC47C-DE2E-46E0-A900-A523C3C061B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{335FC47C-DE2E-46E0-A900-A523C3C061B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

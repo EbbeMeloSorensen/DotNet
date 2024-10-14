@@ -19,7 +19,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private ObservableCollection<ValidationError> _validationMessages;
     private string _error = string.Empty;
 
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     private ObjectCollection<Person> _people;
 
     private string _originalSharedFirstName;
@@ -47,6 +46,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private RelayCommand _applyChangesCommand;
 
     public event EventHandler<PeopleEventArgs> PeopleUpdated;
+
+    public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
     public string SharedFirstName
     {
@@ -166,7 +167,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         IUnitOfWorkFactory unitOfWorkFactory,
         ObjectCollection<Person> people)
     {
-        _unitOfWorkFactory = unitOfWorkFactory;
+        UnitOfWorkFactory = unitOfWorkFactory;
         _people = people;
         _people.PropertyChanged += Initialize;
     }
@@ -227,7 +228,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             Surname = SharedSurname != _originalSharedSurname ? SharedSurname : p.Surname,
         }).ToList();
 
-        using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+        using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
         {
             unitOfWork.People.UpdateRange(updatedPeople);
             unitOfWork.Complete();
