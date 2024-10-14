@@ -21,7 +21,7 @@ namespace PR.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly Application.Application _application;
-        private readonly UnitOfWorkFactoryFacade _unitOfWorkFactoryFacade;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
         private readonly ILogger _logger;
@@ -37,9 +37,9 @@ namespace PR.ViewModel
             }
         }
 
-        public PersonListViewModel PersonListViewModel { get; private set; }
-        public PeoplePropertiesViewModel PeoplePropertiesViewModel { get; private set; }
-        public LogViewModel LogViewModel { get; private set; }
+        public PersonListViewModel PersonListViewModel { get; }
+        public PeoplePropertiesViewModel PeoplePropertiesViewModel { get; }
+        public LogViewModel LogViewModel { get; }
 
         private RelayCommand<object> _createPersonCommand;
         private RelayCommand<object> _showOptionsDialogCommand;
@@ -91,7 +91,7 @@ namespace PR.ViewModel
             IDialogService applicationDialogService,
             ILogger logger)
         {
-            _unitOfWorkFactoryFacade = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
+            _unitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
 
@@ -103,12 +103,12 @@ namespace PR.ViewModel
             LogViewModel = new LogViewModel(200);
             _logger = new ViewModelLogger(logger, LogViewModel);
 
-            PersonListViewModel = new PersonListViewModel(_unitOfWorkFactoryFacade, applicationDialogService);
+            PersonListViewModel = new PersonListViewModel(_unitOfWorkFactory, applicationDialogService);
 
             PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
-                _unitOfWorkFactoryFacade,
+                _unitOfWorkFactory,
                 PersonListViewModel.SelectedPeople);
 
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
@@ -131,7 +131,8 @@ namespace PR.ViewModel
             ExportSelectionToGraphmlCommand.RaiseCanExecuteChanged();
         }
 
-        private void CreatePerson(object owner)
+        private void CreatePerson(
+            object owner)
         {
             var dialogViewModel = new CreatePersonDialogViewModel();
 
@@ -147,7 +148,7 @@ namespace PR.ViewModel
                 Created = DateTime.UtcNow
             };
 
-            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
                 unitOfWork.People.Add(person);
                 unitOfWork.Complete();
@@ -156,14 +157,15 @@ namespace PR.ViewModel
             PersonListViewModel.AddPerson(person);
         }
 
-        private bool CanCreatePerson(object owner)
+        private bool CanCreatePerson(
+            object owner)
         {
             return true;
         }
 
         private void DeleteSelectedPeople()
         {
-            using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var objectIds = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ObjectId).ToList();
 
@@ -258,13 +260,15 @@ namespace PR.ViewModel
             return true;
         }
 
-        private void ShowOptionsDialog(object owner)
+        private void ShowOptionsDialog(
+            object owner)
         {
             var dialogViewModel = new OptionsDialogViewModel();
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }
 
-        private bool CanShowOptionsDialog(object owner)
+        private bool CanShowOptionsDialog(
+            object owner)
         {
             return true;
         }
