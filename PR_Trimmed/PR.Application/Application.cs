@@ -15,7 +15,6 @@ namespace PR.Application
 
     public class Application
     {
-        private IUnitOfWorkFactory _unitOfWorkFactoryFacade;
         private IDataIOHandler _dataIOHandler;
         private ILogger _logger;
 
@@ -25,12 +24,14 @@ namespace PR.Application
             set => _logger = value;
         }
 
+        public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
+
         public Application(
             IUnitOfWorkFactory unitOfWorkFactory,
             IDataIOHandler dataIOHandler,
             ILogger logger)
         {
-            _unitOfWorkFactoryFacade = unitOfWorkFactory;
+            UnitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _logger = logger;
         }
@@ -96,7 +97,7 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
                 progressCallback?.Invoke(0.0, "Creating Person");
 
-                using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
                     unitOfWork.People.Add(person);
                     unitOfWork.Complete();
@@ -117,11 +118,10 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
                 progressCallback?.Invoke(0.0, "Retrieving people");
 
-                using (var unitOfWork = _unitOfWorkFactoryFacade.GenerateUnitOfWork())
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
                     people = unitOfWork.People.GetAll().ToList();
                 }
-
 
                 progressCallback?.Invoke(100, "");
             });
