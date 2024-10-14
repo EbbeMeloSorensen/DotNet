@@ -23,16 +23,6 @@ namespace PR.UI.Console
                 return false;
             });
             System.Console.WriteLine("\nDone");
-
-            //System.Console.WriteLine("Counting Person records...");
-            //System.Console.WriteLine($"Station Count: {application.UIDataProvider.GetAllPeople().Count}");
-
-            //await ExportData(application);
-            //await CreatePerson(new Person
-            //{
-            //    FirstName = "Sofus"
-            //}, application);
-            //await ListPeople(application);
         }
 
         public static async Task ListPeople(List options)
