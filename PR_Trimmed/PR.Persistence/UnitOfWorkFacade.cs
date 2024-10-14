@@ -8,10 +8,10 @@ namespace PR.Persistence
     {
         private DateTime? _transactionTime;
 
-        public IUnitOfWork UnitOfWork { get; }
-        public DateTime? DatabaseTime { get; }
+        internal IUnitOfWork UnitOfWork { get; }
+        internal DateTime? DatabaseTime { get; }
 
-        public DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;
+        internal DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;
 
         public IPersonRepository People { get; }
 
