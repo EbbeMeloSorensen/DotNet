@@ -177,5 +177,22 @@ namespace PR.Persistence.UnitTest
             // Assert
             people.Count().Should().Be(0);
         }
+
+        [Fact]
+        public void FindPersonUsingItsId()
+        {
+            // Arrange
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+            var objectIds = new List<Guid>
+            {
+                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03")    
+            };
+
+            // Act
+            var people = unitOfWork.People.Find(p => objectIds.Contains(p.ObjectId));
+
+            // Assert
+            people.Count().Should().Be(1);
+        }
     }
 }
