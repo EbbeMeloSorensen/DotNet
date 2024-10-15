@@ -18,8 +18,7 @@ namespace PR.UI.WPF
                     var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                     var settings = configFile.AppSettings.Settings;
                     var versioning = settings["Versioning"]?.Value;
-
-                    if (string.IsNullOrEmpty(versioning)) return mainWindowViewModel;
+                    var reseeding = settings["Reseeding"]?.Value;
 
                     if (versioning == "enabled")
                     {
@@ -31,6 +30,18 @@ namespace PR.UI.WPF
                     {
                         throw new ConfigurationException(
                             "Invalid value for versioning in config file (must be \"enabled\" or \"disabled\")");
+                    }
+                        
+                    mainWindowViewModel.UnitOfWorkFactory.Initialize(versioning == "enabled");
+
+                    if (reseeding == "enabled")
+                    {
+                        mainWindowViewModel.UnitOfWorkFactory.Reseed();
+                    }
+                    else if (reseeding != "disabled")
+                    {
+                        throw new ConfigurationException(
+                            "Invalid value for reseeding in config file (must be \"enabled\" or \"disabled\")");
                     }
 
                     return mainWindowViewModel;

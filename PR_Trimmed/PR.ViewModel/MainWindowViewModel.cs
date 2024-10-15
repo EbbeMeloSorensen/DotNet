@@ -13,6 +13,7 @@ using PR.Application;
 using PR.Domain.Entities;
 using PR.IO;
 using PR.Persistence;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PR.ViewModel
 {
@@ -108,7 +109,6 @@ namespace PR.ViewModel
             _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
 
-
             LogViewModel = new LogViewModel(200);
             _logger = new ViewModelLogger(logger, LogViewModel);
 
@@ -176,10 +176,10 @@ namespace PR.ViewModel
         {
             using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var objectIds = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ObjectId).ToList();
+                var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.Id).ToList();
 
                 var peopleForDeletion = unitOfWork.People
-                    .Find(pa => objectIds.Contains(pa.ObjectId))
+                    .Find(pa => ids.Contains(pa.Id))
                     .ToList();
 
                 unitOfWork.People.RemoveRange(peopleForDeletion);

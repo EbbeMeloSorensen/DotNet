@@ -29,7 +29,7 @@ namespace PR.Persistence.Versioned
 
         public void Reseed()
         {
-            throw new NotImplementedException();
+            _unitOfWorkFactory.Reseed();
         }
     }
 }

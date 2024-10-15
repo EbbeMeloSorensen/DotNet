@@ -61,6 +61,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFramew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.EntityFrameworkCore.SqlServer", "PR.Persistence.EntityFrameworkCore.SqlServer\PR.Persistence.EntityFrameworkCore.SqlServer.csproj", "{335FC47C-DE2E-46E0-A900-A523C3C061B2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.ViewModel", "PR.ViewModel\PR.ViewModel.csproj", "{EFF7D468-E426-4D28-A482-C4A094CA0A76}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.UI.WPF", "PR.UI.WPF\PR.UI.WPF.csproj", "{A1BC4E65-C71F-406E-886B-343CC1F13CFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +175,14 @@ Global
 		{335FC47C-DE2E-46E0-A900-A523C3C061B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{335FC47C-DE2E-46E0-A900-A523C3C061B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{335FC47C-DE2E-46E0-A900-A523C3C061B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFF7D468-E426-4D28-A482-C4A094CA0A76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFF7D468-E426-4D28-A482-C4A094CA0A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFF7D468-E426-4D28-A482-C4A094CA0A76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFF7D468-E426-4D28-A482-C4A094CA0A76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1BC4E65-C71F-406E-886B-343CC1F13CFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1BC4E65-C71F-406E-886B-343CC1F13CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1BC4E65-C71F-406E-886B-343CC1F13CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1BC4E65-C71F-406E-886B-343CC1F13CFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

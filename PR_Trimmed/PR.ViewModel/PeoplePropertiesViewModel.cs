@@ -222,8 +222,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         var updatedPeople = _people.Objects.Select(p => new Person
         {
+            //ArchiveId = p.ArchiveId,
             Id = p.Id,
-            ObjectId = p.ObjectId,
             FirstName = SharedFirstName != _originalSharedFirstName ? SharedFirstName : p.FirstName,
             Surname = SharedSurname != _originalSharedSurname ? SharedSurname : p.Surname,
         }).ToList();

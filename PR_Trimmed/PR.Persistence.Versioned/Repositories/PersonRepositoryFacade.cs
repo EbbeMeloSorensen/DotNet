@@ -150,7 +150,7 @@ namespace PR.Persistence.Versioned.Repositories
             var newObjects = people.Select(p =>
             {
                 var newObject = p.Clone();
-                newObject.Id = Guid.Empty;
+                //newObject.Id = Guid.Empty;
                 newObject.Created = CurrentTime;
                 newObject.Superseded = _maxDate;
 
