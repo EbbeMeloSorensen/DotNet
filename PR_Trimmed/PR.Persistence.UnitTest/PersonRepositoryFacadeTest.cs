@@ -1,14 +1,13 @@
-﻿using FluentAssertions;
-using StructureMap;
-using WIGOS.Persistence.UnitTest;
+﻿using StructureMap;
 using Xunit;
+using FluentAssertions;
 using PR.Persistence.Versioned;
 
 namespace PR.Persistence.UnitTest
 {
     public class PersonRepositoryFacadeTest
     {
-        private const bool _versionedDB = true;
+        private const bool _versionedDB = false;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         public PersonRepositoryFacadeTest()
@@ -16,13 +15,31 @@ namespace PR.Persistence.UnitTest
             var container = Container.For<InstanceScanner>();
 
             _unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
+            _unitOfWorkFactory.Initialize(_versionedDB);
             _unitOfWorkFactory.Reseed();
 
-            if (_versionedDB)
+            if (!_versionedDB) return;
+
+            _unitOfWorkFactory = new UnitOfWorkFactoryFacade(_unitOfWorkFactory);
+            (_unitOfWorkFactory as UnitOfWorkFactoryFacade)!.DatabaseTime = null;
+        }
+
+        [Fact]
+        public void FindPersonUsingItsId()
+        {
+            // Arrange
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+            var ids = new List<Guid>
             {
-                _unitOfWorkFactory = new UnitOfWorkFactoryFacade(_unitOfWorkFactory);
-                (_unitOfWorkFactory as UnitOfWorkFactoryFacade).DatabaseTime = null;
-            }
+                new Guid("12345678-0000-0000-0000-000000000001")
+            };
+
+            // Act
+            var people = unitOfWork.People.Find(p => ids.Contains(p.Id));
+
+            // Assert
+            people.Count().Should().Be(1);
+            people.Single().FirstName.Should().Be("Anakin");
         }
 
         /*
@@ -103,23 +120,5 @@ namespace PR.Persistence.UnitTest
             people.Count(p => p.FirstName == "Kylo").Should().Be(1);
         }
         */
-
-        [Fact]
-        public void FindPersonUsingItsId()
-        {
-            // Arrange
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-            var ids = new List<Guid>
-            {
-                new Guid("12345678-0000-0000-0000-000000000001")    
-            };
-
-            // Act
-            var people = unitOfWork.People.Find(p => ids.Contains(p.Id));
-
-            // Assert
-            people.Count().Should().Be(1);
-            people.Single().FirstName.Should().Be("Anakin");
-        }
     }
 }

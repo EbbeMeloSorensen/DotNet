@@ -6,10 +6,25 @@ namespace PR.Persistence.EntityFrameworkCore.EntityConfigurations
 {
     public class PersonConfiguration : IEntityTypeConfiguration<Person>
     {
-        public void Configure(EntityTypeBuilder<Person> builder)
+        private bool _versioned;
+
+        public PersonConfiguration(
+            bool versioned)
         {
-            //builder.HasKey(p => p.Id);
-            builder.HasKey(p => p.ArchiveId);
+            _versioned = versioned;
+        }
+
+        public void Configure(
+            EntityTypeBuilder<Person> builder)
+        {
+            if (_versioned)
+            {
+                builder.HasKey(p => p.ArchiveId);
+            }
+            else
+            {
+                builder.HasKey(p => p.Id);
+            }
         }
     }
 }

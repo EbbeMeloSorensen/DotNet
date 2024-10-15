@@ -9,6 +9,12 @@
             Seeding.SeedDatabase(context);
         }
 
+        public void Initialize(
+            bool versioned)
+        {
+            throw new NotImplementedException();
+        }
+
         public IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(new PRDbContext());

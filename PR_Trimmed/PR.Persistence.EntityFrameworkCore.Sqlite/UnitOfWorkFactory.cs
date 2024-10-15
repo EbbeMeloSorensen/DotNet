@@ -2,8 +2,10 @@
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
-        public UnitOfWorkFactory()
+        public void Initialize(
+            bool versioned)
         {
+            PRDbContextBase.Versioned = versioned;
             using var context = new PRDbContext();
             context.Database.EnsureCreated();
             Seeding.SeedDatabase(context);

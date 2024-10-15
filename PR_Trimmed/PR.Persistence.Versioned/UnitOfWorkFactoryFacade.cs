@@ -14,6 +14,12 @@ namespace PR.Persistence.Versioned
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
+        public void Initialize(
+            bool versioned)
+        {
+            _unitOfWorkFactory.Initialize(versioned);
+        }
+
         public IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWorkFacade(

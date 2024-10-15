@@ -1,6 +1,6 @@
 using StructureMap;
 
-namespace WIGOS.Persistence.UnitTest
+namespace PR.Persistence.UnitTest
 {
     internal class InstanceScanner : Registry
     {
