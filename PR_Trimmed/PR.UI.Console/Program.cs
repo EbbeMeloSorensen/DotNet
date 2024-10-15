@@ -132,8 +132,14 @@ namespace PR.UI.Console
             var container = Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();
 
-            // Decorate the unitOfWorkFactory, so we get versioning
-            application.UnitOfWorkFactory = new UnitOfWorkFactoryFacade(application.UnitOfWorkFactory);
+            var versioned = false;
+            application.UnitOfWorkFactory.Initialize(versioned);
+            application.UnitOfWorkFactory.Reseed();
+
+            if (versioned)
+            {
+                application.UnitOfWorkFactory = new UnitOfWorkFactoryFacade(application.UnitOfWorkFactory);
+            }
 
             return application;
         }
