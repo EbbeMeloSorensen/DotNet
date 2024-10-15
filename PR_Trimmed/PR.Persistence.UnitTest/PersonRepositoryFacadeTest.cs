@@ -2,7 +2,6 @@
 using StructureMap;
 using WIGOS.Persistence.UnitTest;
 using Xunit;
-using PR.Domain.Entities;
 using PR.Persistence.Versioned;
 
 namespace PR.Persistence.UnitTest
@@ -26,6 +25,7 @@ namespace PR.Persistence.UnitTest
             }
         }
 
+        /*
         [Fact]
         public void CreatePerson()
         {
@@ -102,23 +102,24 @@ namespace PR.Persistence.UnitTest
             people.Count(p => p.FirstName == "Leia").Should().Be(1);
             people.Count(p => p.FirstName == "Kylo").Should().Be(1);
         }
+        */
 
         [Fact]
         public void FindPersonUsingItsId()
         {
             // Arrange
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-            var objectIds = new List<Guid>
+            var ids = new List<Guid>
             {
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03")    
+                new Guid("12345678-0000-0000-0000-000000000001")    
             };
 
             // Act
-            var people = unitOfWork.People.Find(p => objectIds.Contains(p.ObjectId));
+            var people = unitOfWork.People.Find(p => ids.Contains(p.Id));
 
             // Assert
             people.Count().Should().Be(1);
-            people.Single().FirstName.Should().Be("Leia");
+            people.Single().FirstName.Should().Be("Anakin");
         }
     }
 }

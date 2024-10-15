@@ -59,7 +59,7 @@ namespace PR.Persistence.Versioned.Repositories
         public void Add(
             Person person)
         {
-            person.ObjectId = Guid.NewGuid();
+            person.Id = Guid.NewGuid();
             person.Created = DateTime.UtcNow;
             person.Superseded = _maxDate;
 
@@ -73,11 +73,11 @@ namespace PR.Persistence.Versioned.Repositories
         }
 
         public Person Get(
-            Guid objectId)
+            Guid id)
         {
             var predicates = new List<Expression<Func<Person, bool>>>
             {
-                p => p.ObjectId == objectId
+                p => p.Id == id
             };
 
             AddVersionPredicates(predicates, DatabaseTime);
@@ -136,11 +136,11 @@ namespace PR.Persistence.Versioned.Repositories
         public void UpdateRange(
             IEnumerable<Person> people)
         {
-            var objectIds = people.Select(p => p.ObjectId).ToList();
+            var ids = people.Select(p => p.Id).ToList();
 
             var predicates = new List<Expression<Func<Person, bool>>>
             {
-                p => objectIds.Contains(p.ObjectId)
+                p => ids.Contains(p.Id)
             };
 
             var objectsFromRepository = Find(predicates).ToList();
@@ -169,11 +169,11 @@ namespace PR.Persistence.Versioned.Repositories
         public void RemoveRange(
             IEnumerable<Person> people)
         {
-            var objectIds = people.Select(p => p.ObjectId).ToList();
+            var ids = people.Select(p => p.Id).ToList();
 
             var predicates = new List<Expression<Func<Person, bool>>>
             {
-                p => objectIds.Contains(p.ObjectId)
+                p => ids.Contains(p.Id)
             };
 
             var objectsFromRepository = Find(predicates).ToList();

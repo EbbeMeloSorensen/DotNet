@@ -8,7 +8,8 @@ namespace PR.Persistence.EntityFrameworkCore.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Person> builder)
         {
-            builder.HasKey(p => p.Id);
+            //builder.HasKey(p => p.Id);
+            builder.HasKey(p => p.ArchiveId);
         }
     }
 }

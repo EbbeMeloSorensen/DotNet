@@ -7,6 +7,6 @@ namespace PR.Persistence.Repositories
     public interface IPersonRepository : IRepository<Person>
     {
         Person Get(
-            Guid objectId);
+            Guid id);
     }
 }

@@ -4,7 +4,7 @@ namespace PR.Domain
 {
     public abstract class VersionedObject
     {
-        public Guid ObjectId { get; set; }
+        public Guid ArchiveId { get; set; }
         public DateTime Created { get; set; }
         public DateTime Superseded { get; set; }
     }

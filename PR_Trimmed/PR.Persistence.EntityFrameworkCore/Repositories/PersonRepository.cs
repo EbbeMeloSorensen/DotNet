@@ -14,7 +14,7 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
         }
 
-        public Person Get(Guid objectId)
+        public Person Get(Guid id)
         {
             throw new NotImplementedException();
         }
