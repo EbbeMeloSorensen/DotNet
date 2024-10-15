@@ -87,7 +87,7 @@ namespace PR.Persistence.Versioned.Repositories
 
             if (person == null)
             {
-                throw new InvalidOperationException("Tried retrieving person that did not exist at the given time");
+                throw new InvalidOperationException("Person does not exist");
             }
 
             return person;

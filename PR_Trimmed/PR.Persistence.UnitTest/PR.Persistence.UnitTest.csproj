@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PR.Persistence.EntityFrameworkCore.Sqlite\PR.Persistence.EntityFrameworkCore.Sqlite.csproj" />
+    <ProjectReference Include="..\PR.Persistence.EntityFrameworkCore.InMemory\PR.Persistence.EntityFrameworkCore.InMemory.csproj" />
     <ProjectReference Include="..\PR.Persistence.Versioned\PR.Persistence.Versioned.csproj" />
     <ProjectReference Include="..\PR.Persistence\PR.Persistence.csproj" />
   </ItemGroup>

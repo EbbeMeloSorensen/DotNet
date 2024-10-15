@@ -66,7 +66,7 @@ namespace PR.Persistence.UnitTest
 
             // Assert
             var exception = Assert.Throws<InvalidOperationException>(act);
-            exception.Message.Should().Be("Tried retrieving person that did not exist at the given time");
+            exception.Message.Should().Be("Person does not exist");
         }
 
         [Fact]

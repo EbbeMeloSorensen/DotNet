@@ -2,17 +2,13 @@
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
-        public UnitOfWorkFactory()
-        {
-            using var context = new PRDbContext();
-            context.Database.EnsureCreated();
-            Seeding.SeedDatabase(context);
-        }
-
         public void Initialize(
             bool versioned)
         {
-            throw new NotImplementedException();
+            PRDbContextBase.Versioned = versioned;
+            using var context = new PRDbContext();
+            context.Database.EnsureCreated();
+            Seeding.SeedDatabase(context);
         }
 
         public IUnitOfWork GenerateUnitOfWork()

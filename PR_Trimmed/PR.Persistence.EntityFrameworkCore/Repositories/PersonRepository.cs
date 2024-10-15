@@ -14,9 +14,17 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
         }
 
-        public Person Get(Guid id)
+        public Person Get(
+            Guid id)
         {
-            throw new NotImplementedException();
+            var person = PrDbContext.People.SingleOrDefault(p => p.Id == id);
+
+            if (person == null)
+            {
+                throw new InvalidOperationException("Person does not exist");
+            }
+
+            return person;
         }
 
         public override void Update(

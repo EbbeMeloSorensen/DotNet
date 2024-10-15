@@ -1,6 +1,7 @@
 ﻿using StructureMap;
 using Xunit;
 using FluentAssertions;
+using PR.Domain.Entities;
 using PR.Persistence.Versioned;
 
 namespace PR.Persistence.UnitTest
@@ -25,13 +26,13 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public void FindPersonUsingItsId()
+        public void GetPersonById()
         {
             // Arrange
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
             var ids = new List<Guid>
             {
-                new Guid("12345678-0000-0000-0000-000000000001")
+                new("12345678-0000-0000-0000-000000000001")
             };
 
             // Act
@@ -39,17 +40,16 @@ namespace PR.Persistence.UnitTest
 
             // Assert
             people.Count().Should().Be(1);
-            people.Single().FirstName.Should().Be("Anakin");
+            people.Single().FirstName.Should().Be("Rey");
         }
 
-        /*
         [Fact]
         public void CreatePerson()
         {
             // Arrange
             var person = new Person
             {
-                FirstName = "Bamse"
+                FirstName = "Wicket"
             };
 
             // Act
@@ -60,65 +60,39 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
             var people = unitOfWork2.People.GetAll();
-            people.Count().Should().Be(_versionedDB ? 3 : 8);
-
-            if (!_versionedDB) return;
-
-            var expected = new List<string>
-            {
-                "Bamse",
-                "Kylo",
-                "Leia"
-            };
-
-            people.Select(_ => _.FirstName).OrderBy(_ => _).SequenceEqual(expected).Should().BeTrue();
+            people.Count().Should().Be(5);
         }
 
         [Fact]
-        public void GetLatestVersionOfPerson()
-        {
-            // Arrange
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-            // Act
-            var person = unitOfWork.People.Get(new Guid("11223344-5566-7788-99AA-BBCCDDEEFF03"));
-
-            // Assert
-            person.FirstName.Should().Be("Leia");
-            person.Surname.Should().Be("Organa");
-        }
-
-        [Fact]
-        public void GetLatestVersionOfPerson_AfterPersonWasDeleted_Throws()
+        public void GetPerson_AfterPersonWasDeleted_Throws()
         {
             // Arrange
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
             var act = () => unitOfWork.People.Get(
-                new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"));
+                new Guid("12345678-0000-0000-0000-000000000005"));
 
             // Assert
             var exception = Assert.Throws<InvalidOperationException>(act);
-            exception.Message.Should().Be("Tried retrieving person that did not exist at the given time");
+            exception.Message.Should().Be("Person does not exist");
         }
 
-
         [Fact]
-        public void GetLatestVersionOfEntirePeopleCollection()
+        public void GetAllPeople()
         {
             // Arrange
-            //_unitOfWorkFactory.DatabaseTime = null;
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
             var people = unitOfWork.People.GetAll();
 
             // Assert
-            people.Count().Should().Be(2);
-            people.Count(p => p.FirstName == "Leia").Should().Be(1);
-            people.Count(p => p.FirstName == "Kylo").Should().Be(1);
+            people.Count().Should().Be(4);
+            people.Count(p => p.FirstName == "Rey").Should().Be(1);
+            people.Count(p => p.FirstName == "Finn").Should().Be(1);
+            people.Count(p => p.FirstName == "Poe").Should().Be(1);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
         }
-        */
     }
 }
