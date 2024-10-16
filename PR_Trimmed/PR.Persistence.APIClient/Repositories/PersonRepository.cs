@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
 
@@ -34,10 +36,29 @@ namespace PR.Persistence.APIClient.Repositories
         {
             return await Task.Run(async () =>
             {
-                var url = "https://api.sunrise-sunset.org/json?lat=55.661954&lng=12.49001&date=today";
+                var url = "https://api.sunrise-sunset.org/json?lat=55.661954&lng=12.49001&date=today"; // Sol op/nde for Danshøjvej 33
 
                 using (var response = await ApiHelper.ApiClient.GetAsync(url))
                 {
+                    response.EnsureSuccessStatusCode();
+                    var responseBody = await response.Content.ReadAsStringAsync();
+
+                    // When you know the structure of the json data
+                    var data = JsonConvert.DeserializeObject<SunResultModel>(responseBody);
+
+                    // Parse the JSON using JsonDocument (Suitable when you don't know the structure)
+                    using (var doc = JsonDocument.Parse(responseBody))
+                    {
+                        var root = doc.RootElement;
+
+                        // Navigate through JSON dynamically
+                        //var id = root.GetProperty("id").GetInt32();
+                        //var title = root.GetProperty("title").GetString();
+                        //var completed = root.GetProperty("completed").GetBoolean();
+
+                        //// Output the values
+                        //Console.WriteLine($"ID: {id}, Title: {title}, Completed: {completed}");
+                    }
                 }
 
                 return new List<Person>();
