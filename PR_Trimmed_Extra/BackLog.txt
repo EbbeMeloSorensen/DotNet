@@ -1,0 +1,28 @@
+Done:
+* Skræl solutionen ned, så den ikke beskæftiger sig med person associations
+* Skræl Person ned, så den kun har first name og surname
+
+Todo:
+
+
+Løst og fast:
+ Du er nået dertil, at man som bruger af en IUnitOfWorkFactory i vidt omfang kan abstrahere fra,
+ om det er en "almindelig" en af slagsen, eller om det er en "wrapper" af en almindelig en, der 
+ opererer på en database med versionshistorik.
+
+ MEN.. hvis man opererer med en wrapper, er man ikke desto mindre nødt til at spørge efter Object IDs
+ snarere end bare Ids. Det kunne være fedt, hvis man helt og aldeles kunne spørge efter Ids, og der
+ så bare gjaldt, at når man opererede med en wrapper, så spurgte den reelt efter ObjectIds.
+
+ Du var ude i en overvejelse om, om man kunne lade et VersionedObject returnere sit object id frem for 
+ sit id, når det blev spurgt, men det er svært at gennemskue implikationerne
+
+ Hvis man lavet sådan en lidt sofistikeret property, hvordan vil databasen så komme til at se ud?
+ -> Det lader til at være fint.. Den skal bare have en Property, der er rigtig
+
+ Hvilke komponenter skal tilgå ObjectId og hvornår?
+ - PersonRepositoryFacade (Den dealer kun i versionerede dbs, så den ved godt, at der både er et Id og et ObjectId)
+ - De forskellige ViewModeller, f.eks. MainWindowViewModel, PeoplePropertiesViewModel og PersonListViewModel
+
+ Kunne man så ikke sige, at viewmodellerne ALTID bare spørger efter ID, og så får de altså bare et ObjectID,
+ ude at de er skarpe på det? Facaden derimod, den må altså gerne spørge både efter Id og ObjectId...

@@ -1,0 +1,40 @@
+Requirements:
+
+* Manage People
+  * Create person (ok) (Wicket)
+  - Update person (dækket af update people)
+  * Update people (ok)
+  - Delete person (dækket af delete people)
+  * Delete people (ok)
+    -> Delete a single person that resided in the database during startup and was never updated (Chewbacca)
+         Expected in GUI:
+           - The person is removed from the master list
+           - The person selection is cleared
+           - The Detail view is hidden
+         Expected in DB: Superseded field of the row representing the person is filled with current time
+    -> Delete a single person that resided in the database during startup and that was updated during its lifetime (Rey)
+         Expected in GUI:
+           - The person is removed from the master list
+           - The person selection is cleared
+           - The Detail view is hidden
+         Expected in DB:
+           - Superseded field of the row representing the latest version of the person is filled with current time
+    -> Delete a single person that resided in the database during startup and was never updated, but who was then updated after startup (Change Chewbacca and then try to delete him)
+         Expected in GUI:
+           - The person is removed from the master list
+           - The person selection is cleared
+           - The Detail view is hidden
+         Expected in DB:
+           - Superseded field of the row representing the latest version of the person is filled with current time
+    -> Delete multiple people that resided in the database during startup and were never updated (Chewbacca and Finn)
+         Expected: Superseded fields of the rows representing the people are filled with current time
+* Manage Person associations
+  * Create person association (ok))
+  * Update person association (ok)
+  - Update person associations (man kan kun opdatere en ad gangen)
+  - Delete person association (dækket af delete person associations)
+  * Delete person associations (ok)
+  
+* Go back in database time and or historic time... (who was alive in a given episode?)
+* Change superseded rows PROHIBITED (de er kun synlige )
+* Clear database (Including superseded rows)
