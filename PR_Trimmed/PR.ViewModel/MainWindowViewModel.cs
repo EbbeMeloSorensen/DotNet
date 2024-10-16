@@ -13,7 +13,6 @@ using PR.Application;
 using PR.Domain.Entities;
 using PR.IO;
 using PR.Persistence;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PR.ViewModel
 {
@@ -52,15 +51,15 @@ namespace PR.ViewModel
 
         private RelayCommand<object> _createPersonCommand;
         private RelayCommand<object> _showOptionsDialogCommand;
-        private RelayCommand _deleteSelectedPeopleCommand;
+        private AsyncCommand _deleteSelectedPeopleCommand;
         private AsyncCommand _exportPeopleCommand;
         private RelayCommand _exportSelectionToGraphmlCommand;
         private AsyncCommand _importPeopleCommand;
         private RelayCommand _exitCommand;
 
-        public RelayCommand DeleteSelectedPeopleCommand
+        public AsyncCommand DeleteSelectedPeopleCommand
         {
-            get { return _deleteSelectedPeopleCommand ?? (_deleteSelectedPeopleCommand = new RelayCommand(DeleteSelectedPeople, CanDeleteSelectedPeople)); }
+            get { return _deleteSelectedPeopleCommand ?? (_deleteSelectedPeopleCommand = new AsyncCommand(DeleteSelectedPeople, CanDeleteSelectedPeople)); }
         }
 
         public RelayCommand<object> CreatePersonCommand
@@ -172,21 +171,24 @@ namespace PR.ViewModel
             return true;
         }
 
-        private void DeleteSelectedPeople()
+        private async Task DeleteSelectedPeople()
         {
-            using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
+            await Task.Run(async () => 
             {
-                var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.Id).ToList();
+                using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.Id).ToList();
 
-                var peopleForDeletion = unitOfWork.People
-                    .Find(pa => ids.Contains(pa.Id))
-                    .ToList();
+                    var peopleForDeletion = (await unitOfWork.People
+                        .Find(pa => ids.Contains(pa.Id)))
+                        .ToList();
 
-                unitOfWork.People.RemoveRange(peopleForDeletion);
-                unitOfWork.Complete();
+                    unitOfWork.People.RemoveRange(peopleForDeletion);
+                    unitOfWork.Complete();
 
-                PersonListViewModel.RemovePeople(peopleForDeletion);
-            }
+                    PersonListViewModel.RemovePeople(peopleForDeletion);
+                }
+            });
         }
 
         private bool CanDeleteSelectedPeople()

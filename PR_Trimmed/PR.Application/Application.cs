@@ -113,9 +113,9 @@ namespace PR.Application
             DateTime? databaseTime,
             ProgressCallback progressCallback = null)
         {
-            IList<Person>? people = null;
+            List<Person>? people = null;
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
                 progressCallback?.Invoke(0.0, "Retrieving people");
@@ -127,20 +127,20 @@ namespace PR.Application
 
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
-                    people = unitOfWork.People.GetAll().ToList();
+                    people = (await unitOfWork.People.GetAll()).ToList();
                 }
 
                 progressCallback?.Invoke(100, "");
+
+                Console.WriteLine();
+
+                if (databaseTime.HasValue)
+                {
+                    Console.WriteLine($"Database Time: {databaseTime}");
+                }
+
+                people?.ToList().ForEach(p => Console.WriteLine($"  {p.FirstName}"));
             });
-
-            Console.WriteLine();
-
-            if (databaseTime.HasValue)
-            {
-                Console.WriteLine($"Database Time: {databaseTime}");
-            }
-
-            people?.ToList().ForEach(p => Console.WriteLine($"  {p.FirstName}"));
         }
 
         public async Task ExportData(

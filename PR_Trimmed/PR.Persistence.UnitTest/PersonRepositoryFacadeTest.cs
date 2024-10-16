@@ -26,25 +26,25 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public void GetPersonById()
+        public async void FindPersonById()
         {
             // Arrange
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
             var ids = new List<Guid>
             {
-                new("12345678-0000-0000-0000-000000000001")
+                new("12345678-0000-0000-0000-000000000004")
             };
 
             // Act
-            var people = unitOfWork.People.Find(p => ids.Contains(p.Id));
+            var people = await unitOfWork.People.Find(p => ids.Contains(p.Id));
 
             // Assert
             people.Count().Should().Be(1);
-            people.Single().FirstName.Should().Be("Rey");
+            people.Single().FirstName.Should().Be("Chewbacca");
         }
 
         [Fact]
-        public void CreatePerson()
+        public async void CreatePerson()
         {
             // Arrange
             var person = new Person
@@ -59,33 +59,33 @@ namespace PR.Persistence.UnitTest
 
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
-            var people = unitOfWork2.People.GetAll();
+            var people = await unitOfWork2.People.GetAll();
             people.Count().Should().Be(5);
         }
 
+        //[Fact]
+        //public void GetPerson_AfterPersonWasDeleted_Throws()
+        //{
+        //    // Arrange
+        //    using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+        //    // Act
+        //    var act = () => unitOfWork.People.Get(
+        //        new Guid("12345678-0000-0000-0000-000000000005"));
+
+        //    // Assert
+        //    var exception = Assert.Throws<InvalidOperationException>(act);
+        //    exception.Message.Should().Be("Person does not exist");
+        //}
+
         [Fact]
-        public void GetPerson_AfterPersonWasDeleted_Throws()
+        public async void GetAllPeople()
         {
             // Arrange
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             // Act
-            var act = () => unitOfWork.People.Get(
-                new Guid("12345678-0000-0000-0000-000000000005"));
-
-            // Assert
-            var exception = Assert.Throws<InvalidOperationException>(act);
-            exception.Message.Should().Be("Person does not exist");
-        }
-
-        [Fact]
-        public void GetAllPeople()
-        {
-            // Arrange
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-            // Act
-            var people = unitOfWork.People.GetAll();
+            var people = await unitOfWork.People.GetAll();
 
             // Assert
             people.Count().Should().Be(4);

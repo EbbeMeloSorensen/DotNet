@@ -14,17 +14,20 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
         }
 
-        public Person Get(
+        public async Task<Person> Get(
             Guid id)
         {
-            var person = PrDbContext.People.SingleOrDefault(p => p.Id == id);
-
-            if (person == null)
+            return await Task.Run(() =>
             {
-                throw new InvalidOperationException("Person does not exist");
-            }
+                var person = PrDbContext.People.SingleOrDefault(p => p.Id == id);
 
-            return person;
+                if (person == null)
+                {
+                    throw new InvalidOperationException("Person does not exist");
+                }
+
+                return person;
+            });
         }
 
         public override void Update(
@@ -33,20 +36,23 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(
+        public override async Task UpdateRange(
             IEnumerable<Person> people)
         {
-            var updatedPeople = people.ToList();
-            var ids = updatedPeople.Select(p => p.Id);
-            var peopleFromRepository = Find(p => ids.Contains(p.Id)).ToList();
-
-            peopleFromRepository.ForEach(pRepo =>
+            await Task.Run(async () =>
             {
-                var updatedPerson = updatedPeople.Single(pUpd => pUpd.Id == pRepo.Id);
+                var updatedPeople = people.ToList();
+                var ids = updatedPeople.Select(p => p.Id);
+                var peopleFromRepository = (await Find(p => ids.Contains(p.Id))).ToList();
 
-                pRepo.FirstName = updatedPerson.FirstName;
-                pRepo.Surname = updatedPerson.Surname;
-                pRepo.Created = updatedPerson.Created;
+                peopleFromRepository.ForEach(pRepo =>
+                {
+                    var updatedPerson = updatedPeople.Single(pUpd => pUpd.Id == pRepo.Id);
+
+                    pRepo.FirstName = updatedPerson.FirstName;
+                    pRepo.Surname = updatedPerson.Surname;
+                    pRepo.Created = updatedPerson.Created;
+                });
             });
         }
 

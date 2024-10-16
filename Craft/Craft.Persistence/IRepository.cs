@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Craft.Persistence
 {
@@ -10,9 +11,9 @@ namespace Craft.Persistence
         int Count(Expression<Func<TEntity, bool>> predicate);
         int Count(IList<Expression<Func<TEntity, bool>>> predicates);
 
-        IEnumerable<TEntity> GetAll();
-        IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
-        IEnumerable<TEntity> Find(IList<Expression<Func<TEntity, bool>>> predicates);
+        Task<IEnumerable<TEntity>> GetAll();
+        Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> Find(IList<Expression<Func<TEntity, bool>>> predicates);
 
         // This method was not in the videos, but I thought it would be useful to add.
         TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
@@ -21,10 +22,10 @@ namespace Craft.Persistence
         void AddRange(IEnumerable<TEntity> entities);
 
         void Update(TEntity entity);
-        void UpdateRange(IEnumerable<TEntity> entities);
+        Task UpdateRange(IEnumerable<TEntity> entities);
 
         void Remove(TEntity entity);
-        void RemoveRange(IEnumerable<TEntity> entities);
+        Task RemoveRange(IEnumerable<TEntity> entities);
         void Clear();
 
         // This is not part of the original pattern, but I made it in order to support bulk insert,

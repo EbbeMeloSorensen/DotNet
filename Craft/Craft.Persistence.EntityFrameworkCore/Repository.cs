@@ -31,27 +31,36 @@ namespace Craft.Persistence.EntityFrameworkCore
             return Context.Set<TEntity>().Count(predicate);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return Context.Set<TEntity>().ToList();
+            return await Task.Run(() =>
+            {
+                return Context.Set<TEntity>().ToList();
+            });
         }
 
-        public IEnumerable<TEntity> Find(
+        public async Task<IEnumerable<TEntity>> Find(
             Expression<Func<TEntity, bool>> predicate)
         {
-            return Context.Set<TEntity>().Where(predicate);
+            return await Task.Run(() =>
+            {
+                return Context.Set<TEntity>().Where(predicate);
+            });
         }
 
-        public IEnumerable<TEntity> Find(
+        public async Task<IEnumerable<TEntity>> Find(
             IList<Expression<Func<TEntity, bool>>> predicates)
         {
-            if (!predicates.Any())
+            return await Task.Run(async () =>
             {
-                return GetAll();
-            }
+                if (!predicates.Any())
+                {
+                    return await GetAll();
+                }
 
-            var predicate = predicates.Aggregate((c, n) => c.And(n));
-            return Context.Set<TEntity>().Where(predicate);
+                var predicate = predicates.Aggregate((c, n) => c.And(n));
+                return Context.Set<TEntity>().Where(predicate);
+            });
         }
 
         public TEntity SingleOrDefault(
@@ -83,13 +92,16 @@ namespace Craft.Persistence.EntityFrameworkCore
         public abstract void Update(
             TEntity entity);
 
-        public abstract void UpdateRange(
+        public abstract Task UpdateRange(
             IEnumerable<TEntity> entities);
 
-        public void RemoveRange(
+        public async Task RemoveRange(
             IEnumerable<TEntity> entities)
         {
-            Context.Set<TEntity>().RemoveRange(entities);
+            await Task.Run(() =>
+            {
+                Context.Set<TEntity>().RemoveRange(entities);
+            });
         }
 
         public void Load(

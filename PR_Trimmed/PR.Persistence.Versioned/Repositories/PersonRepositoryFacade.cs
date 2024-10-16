@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
+using System.Threading.Tasks;
 using PR.Domain;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
@@ -72,53 +73,65 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
-        public Person Get(
+        public async Task<Person> Get(
             Guid id)
         {
-            var predicates = new List<Expression<Func<Person, bool>>>
+            return await Task.Run(async () =>
             {
-                p => p.Id == id
-            };
+                var predicates = new List<Expression<Func<Person, bool>>>
+                {
+                    p => p.Id == id
+                };
 
-            AddVersionPredicates(predicates, DatabaseTime);
+                AddVersionPredicates(predicates, DatabaseTime);
 
-            var people = UnitOfWork.People.Find(predicates);
-            var person = people.SingleOrDefault();
+                var people = await UnitOfWork.People.Find(predicates);
+                var person = people.SingleOrDefault();
 
-            if (person == null)
-            {
-                throw new InvalidOperationException("Person does not exist");
-            }
+                if (person == null)
+                {
+                    throw new InvalidOperationException("Person does not exist");
+                }
 
-            return person;
+                return person;
+            });
         }
 
-        public IEnumerable<Person> GetAll()
+        public async Task<IEnumerable<Person>> GetAll()
         {
-            var predicates = new List<Expression<Func<Person, bool>>>();
+            return await Task.Run(() =>
+            {
+                var predicates = new List<Expression<Func<Person, bool>>>();
 
-            AddVersionPredicates(predicates, DatabaseTime);
+                AddVersionPredicates(predicates, DatabaseTime);
 
-            return UnitOfWork.People.Find(predicates);
+                return UnitOfWork.People.Find(predicates);
+            });
         }
 
-        public IEnumerable<Person> Find(
+        public async Task<IEnumerable<Person>> Find(
             Expression<Func<Person, bool>> predicate)
         {
-            var predicates = new List<Expression<Func<Person, bool>>>
+            return await Task.Run(() =>
             {
-                predicate
-            };
+                var predicates = new List<Expression<Func<Person, bool>>>
+                {
+                    predicate
+                };
 
-            return Find(predicates);
+                return Find(predicates);
+            });
         }
 
-        public IEnumerable<Person> Find(
+        public async Task<IEnumerable<Person>> Find(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            AddVersionPredicates(predicates, DatabaseTime);
+            return await Task.Run(async () =>
+            {
+                AddVersionPredicates(predicates, DatabaseTime);
 
-            return UnitOfWork.People.Find(predicates);
+                return await UnitOfWork.People.Find(predicates);
+            });
         }
 
         public Person SingleOrDefault(
@@ -133,7 +146,7 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
-        public void UpdateRange(
+        public async Task UpdateRange(
             IEnumerable<Person> people)
         {
             var ids = people.Select(p => p.Id).ToList();
@@ -143,7 +156,7 @@ namespace PR.Persistence.Versioned.Repositories
                 p => ids.Contains(p.Id)
             };
 
-            var objectsFromRepository = Find(predicates).ToList();
+            var objectsFromRepository = (await Find(predicates)).ToList();
 
             objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
 
@@ -166,19 +179,22 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(
+        public async Task RemoveRange(
             IEnumerable<Person> people)
         {
-            var ids = people.Select(p => p.Id).ToList();
-
-            var predicates = new List<Expression<Func<Person, bool>>>
+            await Task.Run(async () => 
             {
-                p => ids.Contains(p.Id)
-            };
+                var ids = people.Select(p => p.Id).ToList();
 
-            var objectsFromRepository = Find(predicates).ToList();
+                var predicates = new List<Expression<Func<Person, bool>>>
+                {
+                    p => ids.Contains(p.Id)
+                };
 
-            objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
+                var objectsFromRepository = (await Find(predicates)).ToList();
+
+                objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
+            });
         }
 
         public void Clear()
