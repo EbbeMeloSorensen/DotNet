@@ -3,12 +3,15 @@ using StructureMap;
 using PR.Domain.Entities;
 using PR.Persistence.Versioned;
 using PR.UI.Console.Verbs;
+using System.Configuration;
+using Craft.Utils;
 
 namespace PR.UI.Console
 {
     class Program
     {
-        public static async Task CreatePerson(Create options)
+        public static async Task CreatePerson(
+            Create options)
         {
             System.Console.Write("Creating Person...\nProgress: ");
 
@@ -26,9 +29,20 @@ namespace PR.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        public static async Task ListPeople(List options)
+        public static async Task ListPeople(
+            List options)
         {
-            await GetApplication().ListPeople((progress, nameOfSubtask) =>
+            DateTime? databaseTime = null;
+
+            if (!string.IsNullOrEmpty(options.DatabaseTime))
+            {
+                if (options.DatabaseTime.TryParsingAsDateTime(out var temp))
+                {
+                    databaseTime = temp;
+                }
+            }
+
+            await GetApplication().ListPeople(databaseTime, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
@@ -36,13 +50,15 @@ namespace PR.UI.Console
             });
         }
 
-        public static async Task CountPeople(Count options)
+        public static async Task CountPeople(
+            Count options)
         {
             System.Console.WriteLine("Coming soon: CountPeople");
             await Task.Delay(200);
         }
 
-        public static async Task ExportPeople(Export options)
+        public static async Task ExportPeople(
+            Export options)
         {
             System.Console.Write("Exporting data...\nProgress: ");
             var dateTime = DateTime.Now;
@@ -55,7 +71,8 @@ namespace PR.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        public static async Task ImportPeople(Import options)
+        public static async Task ImportPeople(
+            Import options)
         {
             System.Console.Write("Importing data...\nProgress: ");
             await GetApplication().ImportData(
@@ -68,19 +85,22 @@ namespace PR.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        public static async Task UpdatePerson(Update options)
+        public static async Task UpdatePerson(
+            Update options)
         {
             System.Console.WriteLine("Coming soon: UpdatePerson");
             await Task.Delay(200);
         }
 
-        public static async Task DeletePerson(Delete options)
+        public static async Task DeletePerson(
+            Delete options)
         {
             System.Console.WriteLine("Coming soon: DeletePerson");
             await Task.Delay(200);
         }
 
-        public static async Task MakeBreakfast(Breakfast options)
+        public static async Task MakeBreakfast(
+            Breakfast options)
         {
             System.Console.Write("Making breakfast...\nProgress: ");
             await GetApplication().MakeBreakfast((progress, nameOfSubtask) =>
@@ -92,7 +112,8 @@ namespace PR.UI.Console
             System.Console.WriteLine("\nDone");
         }
 
-        static async Task Main(string[] args)
+        static async Task Main(
+            string[] args)
         {
             //args = "breakfast".Split();
             //args = "create --host localhost --user postgres --password L1on8Zebra --firstname Egon".Split();
@@ -129,17 +150,41 @@ namespace PR.UI.Console
         // Helper
         private static Application.Application GetApplication()
         {
+            // Denne blok bør du nok lave generel, så det er den samme, der bruges i WPF-applikationen
+
             var container = Container.For<InstanceScanner>();
             var application = container.GetInstance<Application.Application>();
 
-            var versioned = false;
-            application.UnitOfWorkFactory.Initialize(versioned);
-            application.UnitOfWorkFactory.Reseed();
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+            var versioning = settings["Versioning"]?.Value;
+            var reseeding = settings["Reseeding"]?.Value;
 
-            if (versioned)
+            if (versioning == "enabled")
             {
-                application.UnitOfWorkFactory = new UnitOfWorkFactoryFacade(application.UnitOfWorkFactory);
+                // Wrap the UnitOfWorkFactory, so we get versioning
+                application.UnitOfWorkFactory =
+                    new UnitOfWorkFactoryFacade(application.UnitOfWorkFactory);
             }
+            else if (versioning != "disabled")
+            {
+                throw new ConfigurationException(
+                    "Invalid value for versioning in config file (must be \"enabled\" or \"disabled\")");
+            }
+
+            application.UnitOfWorkFactory.Initialize(versioning == "enabled");
+
+            if (reseeding == "enabled")
+            {
+                application.UnitOfWorkFactory.Reseed();
+            }
+            else if (reseeding != "disabled")
+            {
+                throw new ConfigurationException(
+                    "Invalid value for reseeding in config file (must be \"enabled\" or \"disabled\")");
+            }
+
+            application.UnitOfWorkFactory.Reseed();
 
             return application;
         }

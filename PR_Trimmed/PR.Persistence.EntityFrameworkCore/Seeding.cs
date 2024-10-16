@@ -27,7 +27,50 @@ namespace PR.Persistence.EntityFrameworkCore
         {
             var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 1, 0, 0, 0, DateTimeKind.Utc);
-            var darthVaderDies = new DateTime(2006, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            var padme = new Person
+            {
+                Id = new Guid("12345678-0000-0000-0000-000000000006"),
+                Created = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Superseded = new DateTime(2003, 11, 3, 0, 0, 0, DateTimeKind.Utc),
+                FirstName = "Padme",
+                Surname = "Amidala",
+            };
+
+            var obiWan = new Person
+            {
+                Id = new Guid("12345678-0000-0000-0000-000000000007"),
+                Created = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Superseded = new DateTime(2004, 10, 1, 0, 0, 0, DateTimeKind.Utc),
+                FirstName = "Obi-Wan",
+                Surname = "Kenobi",
+            };
+
+            var quiGon = new Person
+            {
+                Id = new Guid("12345678-0000-0000-0000-000000000008"),
+                Created = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Superseded = new DateTime(2001, 10, 1, 0, 0, 0, DateTimeKind.Utc),
+                FirstName = "Qui-Gon",
+                Surname = "Jinn"
+            };
+
+            var palpatine = new Person
+            {
+                Id = new Guid("12345678-0000-0000-0000-000000000009"),
+                Created = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Superseded = new DateTime(2009, 10, 1, 0, 0, 0, DateTimeKind.Utc),
+                FirstName = "Palpatine",
+            };
+
+            var jarjar = new Person
+            {
+                Id = new Guid("12345678-0000-0000-0000-000000000010"),
+                Created = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Superseded = maxDate,
+                FirstName = "Jar Jar",
+                Surname = "Binks",
+            };
 
             var anakin_0 = new Person
             {
@@ -42,9 +85,27 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 Id = new Guid("12345678-0000-0000-0000-000000000005"),
                 Created = anakinBecomesDarthVader,
-                Superseded = darthVaderDies,
+                Superseded = new DateTime(2006, 10, 1, 0, 0, 0, DateTimeKind.Utc),
                 FirstName = "Darth",
                 Surname = "Vader"
+            };
+
+            var luke = new Person
+            {
+                Id = new Guid("12345678-0000-0000-0000-000000000011"),
+                Created = new DateTime(2003, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                Superseded = new DateTime(2008, 10, 1, 0, 0, 0, DateTimeKind.Utc),
+                FirstName = "Luke",
+                Surname = "Skywalker"
+            };
+
+            var leia = new Person
+            {
+                Id = new Guid("12345678-0000-0000-0000-000000000012"),
+                Created = new DateTime(2003, 11, 2, 0, 0, 0, DateTimeKind.Utc),
+                Superseded = new DateTime(2008, 10, 1, 0, 0, 0, DateTimeKind.Utc),
+                FirstName = "Leia",
+                Surname = "Organa"
             };
 
             var chewbacca = new Person
@@ -83,8 +144,15 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var people = new List<Person>
             {
+                padme,
+                obiWan,
+                quiGon,
+                palpatine,
+                jarjar,
                 anakin_0,
                 anakin_1,
+                luke,
+                leia,
                 chewbacca,
                 rey,
                 finn,

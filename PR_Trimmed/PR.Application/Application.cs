@@ -6,6 +6,7 @@ using Craft.Logging;
 using PR.Domain.Entities;
 using PR.IO;
 using PR.Persistence;
+using PR.Persistence.Versioned;
 
 namespace PR.Application
 {
@@ -109,6 +110,7 @@ namespace PR.Application
         }
 
         public async Task ListPeople(
+            DateTime? databaseTime,
             ProgressCallback progressCallback = null)
         {
             IList<Person>? people = null;
@@ -117,6 +119,11 @@ namespace PR.Application
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
                 progressCallback?.Invoke(0.0, "Retrieving people");
+
+                if (databaseTime.HasValue && UnitOfWorkFactory is UnitOfWorkFactoryFacade facade)
+                {
+                    facade.DatabaseTime = databaseTime.Value;
+                }
 
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
@@ -127,6 +134,12 @@ namespace PR.Application
             });
 
             Console.WriteLine();
+
+            if (databaseTime.HasValue)
+            {
+                Console.WriteLine($"Database Time: {databaseTime}");
+            }
+
             people?.ToList().ForEach(p => Console.WriteLine($"  {p.FirstName}"));
         }
 
