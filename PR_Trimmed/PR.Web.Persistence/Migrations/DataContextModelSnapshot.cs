@@ -17,7 +17,7 @@ namespace PR.Web.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -160,70 +160,25 @@ namespace PR.Web.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("Birthday")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Category")
-                        .HasColumnType("text");
-
-                    b.Property<string>("City")
-                        .HasColumnType("text");
+                    b.Property<Guid>("ArchiveId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool?>("Dead")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Nickname")
-                        .HasColumnType("text");
+                    b.Property<DateTime>("Superseded")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Surname")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ZipCode")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("People");
-                });
-
-            modelBuilder.Entity("PR.Domain.Entities.PersonAssociation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ObjectPersonId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SubjectPersonId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ObjectPersonId");
-
-                    b.HasIndex("SubjectPersonId");
-
-                    b.ToTable("PersonAssociations");
                 });
 
             modelBuilder.Entity("PR.Web.Persistence.AppUser", b =>
@@ -343,32 +298,6 @@ namespace PR.Web.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("PR.Domain.Entities.PersonAssociation", b =>
-                {
-                    b.HasOne("PR.Domain.Entities.Person", "ObjectPerson")
-                        .WithMany("SubjectPeople")
-                        .HasForeignKey("ObjectPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PR.Domain.Entities.Person", "SubjectPerson")
-                        .WithMany("ObjectPeople")
-                        .HasForeignKey("SubjectPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ObjectPerson");
-
-                    b.Navigation("SubjectPerson");
-                });
-
-            modelBuilder.Entity("PR.Domain.Entities.Person", b =>
-                {
-                    b.Navigation("ObjectPeople");
-
-                    b.Navigation("SubjectPeople");
                 });
 #pragma warning restore 612, 618
         }
