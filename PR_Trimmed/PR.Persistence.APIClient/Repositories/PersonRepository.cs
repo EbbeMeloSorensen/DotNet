@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -34,9 +37,29 @@ namespace PR.Persistence.APIClient.Repositories
 
         public async Task<IEnumerable<Person>> GetAll()
         {
+            // First we log in
+            var url = "http://localhost:5000/api/account/login";
+            string token;
+
+            var content = new StringContent("{\"email\":\"bob@test.com\",\"password\":\"Pa$$w0rd\"}", Encoding.UTF8,
+                "application/json");
+            using (var response = await ApiHelper.ApiClient.PostAsync(url, content))
+            {
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                // When you know the structure of the json data
+                var result = JsonConvert.DeserializeObject<LoginResult>(responseBody);
+                token = result.token;
+            }
+
             return await Task.Run(async () =>
             {
-                var url = "https://api.sunrise-sunset.org/json?lat=55.661954&lng=12.49001&date=today"; // Sol op/nde for Danshøjvej 33
+                // The we call the API using the token - here we want all people (and we are not using pagination here)
+                var url = "http://localhost:5000/api/people";
+
+                ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
 
                 using (var response = await ApiHelper.ApiClient.GetAsync(url))
                 {
@@ -44,24 +67,8 @@ namespace PR.Persistence.APIClient.Repositories
                     var responseBody = await response.Content.ReadAsStringAsync();
 
                     // When you know the structure of the json data
-                    var data = JsonConvert.DeserializeObject<SunResultModel>(responseBody);
-
-                    // Parse the JSON using JsonDocument (Suitable when you don't know the structure)
-                    using (var doc = JsonDocument.Parse(responseBody))
-                    {
-                        var root = doc.RootElement;
-
-                        // Navigate through JSON dynamically
-                        //var id = root.GetProperty("id").GetInt32();
-                        //var title = root.GetProperty("title").GetString();
-                        //var completed = root.GetProperty("completed").GetBoolean();
-
-                        //// Output the values
-                        //Console.WriteLine($"ID: {id}, Title: {title}, Completed: {completed}");
-                    }
+                    return JsonConvert.DeserializeObject<List<Person>>(responseBody);
                 }
-
-                return new List<Person>();
             });
         }
 
