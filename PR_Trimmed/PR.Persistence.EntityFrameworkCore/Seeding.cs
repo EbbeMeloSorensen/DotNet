@@ -12,18 +12,28 @@ namespace PR.Persistence.EntityFrameworkCore
         {
             if (context.People.Any()) return;
 
-            if (PRDbContextBase.Versioned)
+            CreateDataForSeeding(PRDbContextBase.Versioned, out var people);
+
+            context.People.AddRange(people);
+            context.SaveChanges();
+        }
+
+        public static void CreateDataForSeeding(
+            bool versioned,
+            out List<Person> people)
+        {
+            if (versioned)
             {
-                SeedVersionedDatabase(context);
+                CreateVersionedDataForSeeding(out people);
             }
             else
             {
-                SeedNonversionedDatabase(context);
+                CreateNonversionedDataForSeeding(out people);
             }
         }
 
-        private static void SeedVersionedDatabase(
-            PRDbContextBase context)
+        private static void CreateVersionedDataForSeeding(
+            out List<Person> people)
         {
             var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -142,7 +152,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Surname = "Dameron"
             };
 
-            var people = new List<Person>
+            people = new List<Person>
             {
                 padme,
                 obiWan,
@@ -158,18 +168,11 @@ namespace PR.Persistence.EntityFrameworkCore
                 finn,
                 poeDameron
             };
-
-            context.People.AddRange(people);
-            context.SaveChanges();
         }
 
-        private static void SeedNonversionedDatabase(
-            PRDbContextBase context)
+        private static void CreateNonversionedDataForSeeding(
+            out List<Person> people)
         {
-            var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
-
-            var delay = 0;
-
             var rey = new Person
             {
                 Id = new Guid("12345678-0000-0000-0000-000000000001"),
@@ -196,16 +199,13 @@ namespace PR.Persistence.EntityFrameworkCore
                 FirstName = "Chewbacca"
             };
 
-            var people = new List<Person>
+            people = new List<Person>
             {
                 rey,
                 finn,
                 poeDameron,
                 chewbacca
             };
-
-            context.People.AddRange(people);
-            context.SaveChanges();
         }
     }
 }
