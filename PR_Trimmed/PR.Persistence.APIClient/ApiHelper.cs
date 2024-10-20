@@ -7,7 +7,7 @@ namespace PR.Persistence.APIClient
     {
         public static HttpClient ApiClient { get; set; }
 
-        public static void InitializeClient()
+        static ApiHelper()
         {
             ApiClient = new HttpClient();
             ApiClient.DefaultRequestHeaders.Accept.Clear();

@@ -162,9 +162,12 @@ namespace PR.UI.Console
 
             if (versioning == "enabled")
             {
-                // Wrap the UnitOfWorkFactory, so we get versioning
-                application.UnitOfWorkFactory =
-                    new UnitOfWorkFactoryFacade(application.UnitOfWorkFactory);
+                if (application.UnitOfWorkFactory is not Persistence.APIClient.UnitOfWorkFactory)
+                {
+                    // Wrap the UnitOfWorkFactory, so we get versioning
+                    application.UnitOfWorkFactory =
+                        new UnitOfWorkFactoryFacade(application.UnitOfWorkFactory);
+                }
             }
             else if (versioning != "disabled")
             {

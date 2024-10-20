@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\PR.Application\PR.Application.csproj" />
-    <ProjectReference Include="..\PR.Persistence.EntityFrameworkCore.Sqlite\PR.Persistence.EntityFrameworkCore.Sqlite.csproj" />
+    <ProjectReference Include="..\PR.Persistence.APIClient\PR.Persistence.APIClient.csproj" />
     <ProjectReference Include="..\PR.Persistence.Versioned\PR.Persistence.Versioned.csproj" />
   </ItemGroup>
 

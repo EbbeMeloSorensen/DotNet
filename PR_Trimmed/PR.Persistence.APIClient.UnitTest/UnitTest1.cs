@@ -10,8 +10,6 @@ namespace PR.Persistence.APIClient.UnitTest
         [Fact]
         public async void CallSimpleWebAPIAndDeserializeResult()
         {
-            ApiHelper.InitializeClient();
-
             var url = "https://api.sunrise-sunset.org/json?lat=55.661954&lng=12.49001&date=today"; // Sun up/down for Danshøjvej 33
 
             using var response = await ApiHelper.ApiClient.GetAsync(url);
@@ -27,8 +25,6 @@ namespace PR.Persistence.APIClient.UnitTest
         [Fact]
         public async void CallSimpleWebAPIAndObtainResultWithoutKnowingStructure()
         {
-            ApiHelper.InitializeClient();
-
             var url = "https://api.sunrise-sunset.org/json?lat=55.661954&lng=12.49001&date=today"; // Sun up/down for Danshøjvej 33
 
             using (var response = await ApiHelper.ApiClient.GetAsync(url))
@@ -52,8 +48,6 @@ namespace PR.Persistence.APIClient.UnitTest
         [Fact]
         public async void GetAllPeople()
         {
-            ApiHelper.InitializeClient();
-
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
