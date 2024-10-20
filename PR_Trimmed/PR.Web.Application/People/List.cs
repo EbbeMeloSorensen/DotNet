@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using PR.Persistence;
+using PR.Persistence.Versioned;
 using PR.Web.Persistence;
 using PR.Web.Application.Core;
 using PR.Web.Application.Interfaces;
@@ -19,16 +21,37 @@ public class List
         private readonly DataContext _context;
         private readonly IMapper _mapper;
         private readonly IUserAccessor _userAccessor;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+        public Handler(
+            DataContext context, 
+            IMapper mapper, 
+            IUserAccessor userAccessor,
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             _context = context;
             _mapper = mapper;
             _userAccessor = userAccessor;
+            _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
         }
 
         public async Task<Result<PagedList<PersonDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
+            (_unitOfWorkFactory as UnitOfWorkFactoryFacade)!.DatabaseTime =
+                new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var people = await unitOfWork.People.GetAll();
+                var result = _mapper.Map<IEnumerable<PersonDto>>(people);
+
+                return Result<PagedList<PersonDto>>.Success(
+                    await PagedList<PersonDto>.Create(result, request.Params.PageNumber,
+                        request.Params.PageSize)
+                );
+            }
+
+            // Old
             IQueryable<PersonDto> query;
 
             switch (request.Params.Sorting)

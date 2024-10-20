@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using PR.Persistence;
 using PR.Web.Application.Core;
 using PR.Web.Application.Interfaces;
 using PR.Web.Application.People;
 using PR.Web.Infrastructure.Security;
 using PR.Web.Persistence;
+using PR.Persistence;
+using PR.Persistence.EntityFrameworkCore.Sqlite;
 
 namespace PR.Web.API.Extensions;
 
@@ -83,6 +84,7 @@ public static class ApplicationServiceExtensions
         services.AddMediatR(assemblies: typeof(List.Handler).Assembly);
         services.AddAutoMapper(assemblies: typeof(MappingProfiles).Assembly);
         services.AddScoped<IUserAccessor, UserAccessor>();
+        services.AddScoped<IUnitOfWorkFactory, UnitOfWorkFactory>();
 
         return services;
     }

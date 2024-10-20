@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PR.Persistence.Versioned\PR.Persistence.Versioned.csproj" />
     <ProjectReference Include="..\PR.Web.Persistence\PR.Web.Persistence.csproj" />
   </ItemGroup>
 
