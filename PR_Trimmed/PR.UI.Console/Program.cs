@@ -184,8 +184,6 @@ namespace PR.UI.Console
                     "Invalid value for reseeding in config file (must be \"enabled\" or \"disabled\")");
             }
 
-            application.UnitOfWorkFactory.Reseed();
-
             return application;
         }
     }

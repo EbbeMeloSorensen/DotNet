@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities;
@@ -139,7 +140,17 @@ namespace PR.Application
                     Console.WriteLine($"Database Time: {databaseTime}");
                 }
 
-                people?.ToList().ForEach(p => Console.WriteLine($"  {p.FirstName}"));
+                people?.ToList().ForEach(p =>
+                {
+                    var sb = new StringBuilder($"  {p.Id}: {p.FirstName}");
+
+                    if (!string.IsNullOrEmpty(p.Surname))
+                    {
+                        sb.Append($" {p.Surname}");
+                    }
+
+                    Console.WriteLine(sb.ToString());
+                });
             });
         }
 
