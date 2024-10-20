@@ -53,6 +53,10 @@ public class List
                     throw new InvalidOperationException();
             }
 
+            // Dette har vi lige skudt ind for at få den til at opføre sig bitemporalt - i første omgang med en hardcoded parameter
+            var databaseTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            query = query.Where(x => x.Created < databaseTime && x.Superseded >= databaseTime);
+
             if (!string.IsNullOrEmpty(request.Params.Dead))
             {
                 var filterAsListOfStrings = new List<string>(request.Params.Dead.Split("|"));
