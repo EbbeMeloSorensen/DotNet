@@ -8,6 +8,7 @@ public class PersonParams : PagingParams
     public string? Category { get; set; }
     public string? Dead { get; set; }
     public string Sorting { get; set; }
+    public string? DatabaseTime { get; set; }
 
     public PersonParams()
     {

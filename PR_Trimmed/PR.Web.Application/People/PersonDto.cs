@@ -13,6 +13,6 @@ public class PersonDto
     public string? Category { get; set; }
     public string? Description { get; set; }
     public bool? Dead { get; set; }
-    public DateTime? Created { get; set; }
-    public DateTime? Superseded { get; set; }
+    public DateTime Created { get; set; }
+    public DateTime Superseded { get; set; }
 }

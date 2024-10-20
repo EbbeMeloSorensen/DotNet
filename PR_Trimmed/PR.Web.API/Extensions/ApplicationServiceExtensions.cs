@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using PR.Persistence;
 using PR.Web.Application.Core;
 using PR.Web.Application.Interfaces;
 using PR.Web.Application.People;
