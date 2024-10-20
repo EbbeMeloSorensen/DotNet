@@ -17,6 +17,7 @@ namespace PR.Web.Persistence
         protected override void OnModelCreating(
             ModelBuilder builder)
         {
+            PRDbContextBase.Versioned = true;
             PRDbContextBase.Configure(builder);
 
             base.OnModelCreating(builder);
