@@ -1,9 +1,11 @@
 ﻿namespace PR.Web.Application.Core;
 
-public class PagingParams
+public abstract class PagingParams
 {
     private const int MaxPageSize = 50;
     public int PageNumber { get; set; } = 1;
+
+    public string? DatabaseTime { get; set; } = null;
 
     private int _pageSize = 25;
     public int PageSize

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Globalization;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using PR.Persistence;
@@ -37,8 +38,20 @@ public class List
 
         public async Task<Result<PagedList<PersonDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            (_unitOfWorkFactory as UnitOfWorkFactoryFacade)!.DatabaseTime =
-                new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            if (!string.IsNullOrEmpty(request.Params.DatabaseTime))
+            {
+                try
+                {
+                    var dbTime = DateTime.ParseExact(request.Params.DatabaseTime, "yyyy-MM-ddTHH:mm:ssZ",
+                        CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+
+                    (_unitOfWorkFactory as UnitOfWorkFactoryFacade)!.DatabaseTime = dbTime;
+                }
+                catch (Exception e)
+                {
+                    return Result<PagedList<PersonDto>>.Failure("Invalid time format passed to API");
+                }
+            }
 
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
