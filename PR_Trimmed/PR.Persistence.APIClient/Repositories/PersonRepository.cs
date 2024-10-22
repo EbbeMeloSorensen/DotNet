@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PR.Domain.Entities;
@@ -14,6 +13,14 @@ namespace PR.Persistence.APIClient.Repositories
 {
     public class PersonRepository : IPersonRepository
     {
+        private DateTime? _databaseTime;
+
+        public PersonRepository(
+            DateTime? databaseTime)
+        {
+            _databaseTime = databaseTime;
+        }
+
         public int CountAll()
         {
             throw new NotImplementedException();

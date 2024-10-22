@@ -1,7 +1,11 @@
-﻿namespace PR.Persistence.APIClient
+﻿using System;
+
+namespace PR.Persistence.APIClient
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
+        public DateTime? DatabaseTime { get; set; }
+
         public void Initialize(
             bool versioned)
         {
@@ -13,7 +17,7 @@
 
         public IUnitOfWork GenerateUnitOfWork()
         {
-            return new UnitOfWork();
+            return new UnitOfWork(DatabaseTime);
         }
 
         public void Reseed()

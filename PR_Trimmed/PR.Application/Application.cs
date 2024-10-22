@@ -121,9 +121,13 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
                 progressCallback?.Invoke(0.0, "Retrieving people");
 
-                if (databaseTime.HasValue && UnitOfWorkFactory is UnitOfWorkFactoryFacade facade)
+                if (databaseTime.HasValue)
                 {
-                    facade.DatabaseTime = databaseTime.Value;
+                    if (UnitOfWorkFactory is UnitOfWorkFactoryFacade facade)
+                    {
+                        facade.DatabaseTime = databaseTime.Value;
+                    }
+                    //else if { UnitOfWorkFactory is }
                 }
 
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
