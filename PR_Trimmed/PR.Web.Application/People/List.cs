@@ -36,7 +36,9 @@ public class List
             _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
         }
 
-        public async Task<Result<PagedList<PersonDto>>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<PagedList<PersonDto>>> Handle(
+            Query request, 
+            CancellationToken cancellationToken)
         {
             if (!string.IsNullOrEmpty(request.Params.DatabaseTime))
             {
@@ -132,7 +134,8 @@ public class List
             );
         }
 
-        private List<bool> ConvertToBoolList(IEnumerable<string> items)
+        private List<bool> ConvertToBoolList(
+            IEnumerable<string> items)
         {
             var result = new List<bool>();
 

@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PR.Domain.Entities;
+using PR.Persistence;
+using PR.Persistence.Versioned;
 using PR.Web.Application.Core;
 using PR.Web.Application.Interfaces;
 using PR.Web.Persistence;
@@ -27,17 +29,33 @@ public class Create
     {
         private readonly DataContext _context;
         private readonly IUserAccessor _userAccessor;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public Handler(DataContext context, IUserAccessor userAccessor)
+        public Handler(
+            DataContext context, 
+            IUserAccessor userAccessor,
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             _context = context;
             _userAccessor = userAccessor;
+            _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
         }
 
-        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(
+            Command request, 
+            CancellationToken cancellationToken)
         {
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                unitOfWork.People.Add(request.Person);
+                unitOfWork.Complete();
+            }
+
+            return Result<Unit>.Success(Unit.Value);
+
+            // Old
             var user = await _context.Users.FirstOrDefaultAsync(
-                x => x.UserName == _userAccessor.GetUsername());
+            x => x.UserName == _userAccessor.GetUsername());
 
             _context.People.Add(request.Person);
 
