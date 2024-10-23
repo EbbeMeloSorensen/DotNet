@@ -23,6 +23,7 @@ namespace PR.Persistence.APIClient.UnitTest
     public class Properties
     {
         public string ObjectType { get; set; }
+        public Dictionary<string, ObservingFacility> Details { get; set; }
         public List<Identifier> Identifiers { get; set; }
     }
 
