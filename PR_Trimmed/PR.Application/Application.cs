@@ -93,14 +93,14 @@ namespace PR.Application
             Person person,
             ProgressCallback progressCallback = null)
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
                 progressCallback?.Invoke(0.0, "Creating Person");
 
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
-                    unitOfWork.People.Add(person);
+                    await unitOfWork.People.Add(person);
                     unitOfWork.Complete();
                 }
 

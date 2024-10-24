@@ -14,6 +14,7 @@ namespace PR.Persistence.APIClient.Repositories
 {
     public class PersonRepository : IPersonRepository
     {
+        private string _token;
         private DateTime? _databaseTime;
 
         public PersonRepository(
@@ -45,21 +46,7 @@ namespace PR.Persistence.APIClient.Repositories
 
         public async Task<IEnumerable<Person>> GetAll()
         {
-            // First we log in
-            var url = "http://localhost:5000/api/account/login";
-            string token;
-
-            var content = new StringContent("{\"email\":\"bob@test.com\",\"password\":\"Pa$$w0rd\"}", Encoding.UTF8,
-                "application/json");
-            using (var response = await ApiHelper.ApiClient.PostAsync(url, content))
-            {
-                response.EnsureSuccessStatusCode();
-                var responseBody = await response.Content.ReadAsStringAsync();
-
-                // When you know the structure of the json data
-                var result = JsonConvert.DeserializeObject<LoginResult>(responseBody);
-                token = result.token;
-            }
+            await Login();
 
             return await Task.Run(async () =>
             {
@@ -73,7 +60,7 @@ namespace PR.Persistence.APIClient.Repositories
                 }
 
                 ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
+                    new AuthenticationHeaderValue("Bearer", _token);
 
                 using (var response = await ApiHelper.ApiClient.GetAsync(url))
                 {
@@ -101,9 +88,23 @@ namespace PR.Persistence.APIClient.Repositories
             throw new NotImplementedException();
         }
 
-        public void Add(Person entity)
+        public async Task Add(
+            Person person)
         {
-            throw new NotImplementedException();
+            await Login();
+
+            var url = "http://localhost:5000/api/people";
+
+            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _token);
+
+            var content = new StringContent($"{{\"id\":\"{Guid.NewGuid()}\",\"firstName\":\"Bamse\"}}", Encoding.UTF8,
+                "application/json");
+
+            using (var response = await ApiHelper.ApiClient.PostAsync(url, content))
+            {
+                response.EnsureSuccessStatusCode();
+            }
         }
 
         public void AddRange(IEnumerable<Person> entities)
@@ -139,6 +140,24 @@ namespace PR.Persistence.APIClient.Repositories
         public void Load(IEnumerable<Person> entities)
         {
             throw new NotImplementedException();
+        }
+
+        private async Task Login()
+        {
+            var url = "http://localhost:5000/api/account/login";
+
+            var content = new StringContent("{\"email\":\"bob@test.com\",\"password\":\"Pa$$w0rd\"}", Encoding.UTF8,
+                "application/json");
+
+            using (var response = await ApiHelper.ApiClient.PostAsync(url, content))
+            {
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                // When you know the structure of the json data
+                var result = JsonConvert.DeserializeObject<LoginResult>(responseBody);
+                _token = result.token;
+            }
         }
     }
 }

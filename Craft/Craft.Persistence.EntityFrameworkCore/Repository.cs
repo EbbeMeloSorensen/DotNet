@@ -69,10 +69,13 @@ namespace Craft.Persistence.EntityFrameworkCore
             return Context.Set<TEntity>().SingleOrDefault(predicate);
         }
 
-        public virtual void Add(
+        public virtual async Task Add(
             TEntity entity)
         {
-            Context.Set<TEntity>().Add(entity);
+            await Task.Run(() =>
+            {
+                Context.Set<TEntity>().Add(entity);
+            });
         }
 
         public void AddRange(

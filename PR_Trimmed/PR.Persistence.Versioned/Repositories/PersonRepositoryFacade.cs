@@ -57,14 +57,14 @@ namespace PR.Persistence.Versioned.Repositories
             return UnitOfWork.People.Count(predicates);
         }
 
-        public void Add(
+        public async Task Add(
             Person person)
         {
             person.Id = Guid.NewGuid();
             person.Created = DateTime.UtcNow;
             person.Superseded = _maxDate;
 
-            UnitOfWork.People.Add(person);
+            await UnitOfWork.People.Add(person);
         }
 
         public void AddRange(

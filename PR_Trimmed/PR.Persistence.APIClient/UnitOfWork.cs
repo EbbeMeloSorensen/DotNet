@@ -21,7 +21,6 @@ namespace PR.Persistence.APIClient
 
         public void Complete()
         {
-            throw new NotImplementedException();
         }
 
         public void Dispose()
