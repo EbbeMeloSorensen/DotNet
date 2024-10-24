@@ -2,7 +2,7 @@
 
 namespace PR.Persistence.Versioned
 {
-    public class UnitOfWorkFactoryFacade : IUnitOfWorkFactory
+    public class UnitOfWorkFactoryFacade : IUnitOfWorkFactoryVersioned
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 

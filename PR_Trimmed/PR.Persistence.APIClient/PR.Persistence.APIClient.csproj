@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Craft\Craft.Utils\Craft.Utils.csproj" />
     <ProjectReference Include="..\PR.Persistence\PR.Persistence.csproj" />
   </ItemGroup>
 

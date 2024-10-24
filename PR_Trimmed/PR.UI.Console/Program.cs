@@ -5,6 +5,7 @@ using PR.Persistence.Versioned;
 using PR.UI.Console.Verbs;
 using System.Configuration;
 using Craft.Utils;
+using PR.Persistence;
 
 namespace PR.UI.Console
 {
@@ -162,7 +163,7 @@ namespace PR.UI.Console
 
             if (versioning == "enabled")
             {
-                if (application.UnitOfWorkFactory is not Persistence.APIClient.UnitOfWorkFactory)
+                if (application.UnitOfWorkFactory is not IUnitOfWorkFactoryVersioned)
                 {
                     // Wrap the UnitOfWorkFactory, so we get versioning
                     application.UnitOfWorkFactory =

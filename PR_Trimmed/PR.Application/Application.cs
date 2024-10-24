@@ -7,7 +7,6 @@ using Craft.Logging;
 using PR.Domain.Entities;
 using PR.IO;
 using PR.Persistence;
-using PR.Persistence.Versioned;
 
 namespace PR.Application
 {
@@ -121,13 +120,9 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
                 progressCallback?.Invoke(0.0, "Retrieving people");
 
-                if (databaseTime.HasValue)
+                if (databaseTime.HasValue && UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
                 {
-                    if (UnitOfWorkFactory is UnitOfWorkFactoryFacade facade)
-                    {
-                        facade.DatabaseTime = databaseTime.Value;
-                    }
-                    //else if { UnitOfWorkFactory is }
+                    unitOfWorkFactoryVersioned.DatabaseTime = databaseTime.Value;
                 }
 
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())

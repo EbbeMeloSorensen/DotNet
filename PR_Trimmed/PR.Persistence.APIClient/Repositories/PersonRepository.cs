@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Craft.Utils;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
 
@@ -64,6 +65,12 @@ namespace PR.Persistence.APIClient.Repositories
             {
                 // The we call the API using the token - here we want all people (and we are not using pagination here)
                 var url = "http://localhost:5000/api/people";
+
+                if (_databaseTime.HasValue)
+                {
+                    //url = "http://localhost:5000/api/people?DatabaseTime=2002-01-01T00:00:00Z";
+                    url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}"; 
+                }
 
                 ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", token);

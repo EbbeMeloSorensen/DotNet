@@ -2,7 +2,7 @@
 
 namespace PR.Persistence.APIClient
 {
-    public class UnitOfWorkFactory : IUnitOfWorkFactory
+    public class UnitOfWorkFactory : IUnitOfWorkFactoryVersioned
     {
         public DateTime? DatabaseTime { get; set; }
 

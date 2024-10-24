@@ -9,7 +9,6 @@
     <ProjectReference Include="..\..\Craft\Craft.Logging\Craft.Logging.csproj" />
     <ProjectReference Include="..\PR.Domain\PR.Domain.csproj" />
     <ProjectReference Include="..\PR.IO\PR.IO.csproj" />
-    <ProjectReference Include="..\PR.Persistence.Versioned\PR.Persistence.Versioned.csproj" />
     <ProjectReference Include="..\PR.Persistence\PR.Persistence.csproj" />
   </ItemGroup>
 
