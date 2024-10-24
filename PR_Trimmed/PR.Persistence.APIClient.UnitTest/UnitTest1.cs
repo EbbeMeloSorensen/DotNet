@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Text.Json;
 using Newtonsoft.Json;
 using FluentAssertions;
@@ -75,8 +74,8 @@ namespace PR.Persistence.APIClient.UnitTest
             var observingFacilities = new List<ObservingFacility>();
 
             // Act
-            //var url = "http://dfos-api-prod.dmi.dk/collections/observing_facility/items";
-            var url = "http://dfos-api-dev.dmi.dk/collections/observing_facility/items?limit=100&datetime=../..";
+            var url = "http://dfos-api-prod.dmi.dk/collections/observing_facility/items";
+            //var url = "http://dfos-api-dev.dmi.dk/collections/observing_facility/items?limit=100&datetime=../..";
 
             using var response = await ApiHelper.ApiClient.GetAsync(url);
             response.EnsureSuccessStatusCode();

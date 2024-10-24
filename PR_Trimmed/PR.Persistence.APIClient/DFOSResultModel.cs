@@ -1,4 +1,7 @@
-namespace PR.Persistence.APIClient.UnitTest
+using System;
+using System.Collections.Generic;
+
+namespace PR.Persistence.APIClient
 {
     public class DFOSResultModel
     {
@@ -18,8 +21,7 @@ namespace PR.Persistence.APIClient.UnitTest
     {
         public string Type { get; set; }
         public List<double> Coordinates { get; set; }
-     }
-
+    }    
     public class Properties
     {
         public string ObjectType { get; set; }
