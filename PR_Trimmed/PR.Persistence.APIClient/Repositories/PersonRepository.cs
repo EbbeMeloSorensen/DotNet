@@ -98,8 +98,9 @@ namespace PR.Persistence.APIClient.Repositories
             ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", _token);
 
-            var content = new StringContent($"{{\"id\":\"{Guid.NewGuid()}\",\"firstName\":\"Bamse\"}}", Encoding.UTF8,
-                "application/json");
+            var body = $"{{\"id\":\"{Guid.NewGuid()}\",\"firstName\":\"{person.FirstName}\"}}";
+
+            var content = new StringContent(body, Encoding.UTF8, "application/json");
 
             using (var response = await ApiHelper.ApiClient.PostAsync(url, content))
             {

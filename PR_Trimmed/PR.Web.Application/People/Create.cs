@@ -47,7 +47,8 @@ public class Create
         {
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.People.Add(request.Person);
+                // HUSK AWAIT HER, ELLERS VIRKER DET IKKE!!
+                await unitOfWork.People.Add(request.Person);
                 unitOfWork.Complete();
             }
 
