@@ -101,6 +101,7 @@ namespace PR.Persistence.APIClient.Repositories
 
                     var people = data.Features.Select(_ => {
                         return new Person {
+                            Id = _.Id,
                             FirstName = _.Properties.Details.First().Value.FacilityName,
                         } ;
                     });
