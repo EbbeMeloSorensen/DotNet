@@ -28,11 +28,6 @@ export default observer(function PeopleFilters() {
                 <input value={nameFilter} onChange={e => setNameFilter(e.target.value)}
             />
 
-            <Header>Category</Header>
-            <Label>Category contains</Label>
-                <input value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)}
-            />
-
             <Header>Dead</Header>
             <Form>
                 <Form.Field>
