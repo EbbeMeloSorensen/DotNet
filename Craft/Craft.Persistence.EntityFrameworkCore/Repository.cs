@@ -78,13 +78,13 @@ namespace Craft.Persistence.EntityFrameworkCore
             });
         }
 
-        public void AddRange(
+        public async Task AddRange(
             IEnumerable<TEntity> entities)
         {
             Context.Set<TEntity>().AddRange(entities);
         }
 
-        public void Remove(
+        public async Task Remove(
             TEntity entity)
         {
             Context.Set<TEntity>().Remove(entity);
@@ -92,7 +92,7 @@ namespace Craft.Persistence.EntityFrameworkCore
 
         public abstract void Clear();
 
-        public abstract void Update(
+        public abstract Task Update(
             TEntity entity);
 
         public abstract Task UpdateRange(

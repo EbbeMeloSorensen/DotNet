@@ -33,15 +33,7 @@ namespace PR.UI.Console
         public static async Task ListPeople(
             List options)
         {
-            DateTime? databaseTime = null;
-
-            if (!string.IsNullOrEmpty(options.DatabaseTime))
-            {
-                if (options.DatabaseTime.TryParsingAsDateTime(out var temp))
-                {
-                    databaseTime = temp;
-                }
-            }
+            options.DatabaseTime.TryParsingAsDateTime(out var databaseTime);
 
             await GetApplication().ListPeople(databaseTime, (progress, nameOfSubtask) =>
             {
@@ -50,6 +42,24 @@ namespace PR.UI.Console
                 return false;
             });
         }
+
+        public static async Task GetPersonDetails(
+            Details options)
+        {
+            System.Console.Write("Getting person details...\nProgress: ");
+
+            var id = new Guid(options.ID);
+            options.DatabaseTime.TryParsingAsDateTime(out var databaseTime);
+
+            await GetApplication().GetPersonDetails(id, databaseTime, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
+        }
+
 
         public static async Task CountPeople(
             Count options)
@@ -96,8 +106,17 @@ namespace PR.UI.Console
         public static async Task DeletePerson(
             Delete options)
         {
-            System.Console.WriteLine("Coming soon: DeletePerson");
-            await Task.Delay(200);
+            System.Console.Write("Deleting...\nProgress: ");
+
+            var id = new Guid(options.ID);
+
+            await GetApplication().DeletePerson(id, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+            System.Console.WriteLine("\nDone");
         }
 
         public static async Task MakeBreakfast(
@@ -131,6 +150,7 @@ namespace PR.UI.Console
                     Create,
                     Count,
                     List,
+                    Details,
                     Export,
                     Import,
                     Update, 
@@ -140,6 +160,7 @@ namespace PR.UI.Console
                     (Create options) => CreatePerson(options),
                     (Count options) => CountPeople(options),
                     (List options) => ListPeople(options),
+                    (Details options) => GetPersonDetails(options),
                     (Export options) => ExportPeople(options),
                     (Import options) => ImportPeople(options),
                     (Update options) => UpdatePerson(options),
@@ -148,7 +169,7 @@ namespace PR.UI.Console
                     errs => Task.FromResult(0));
         }
 
-        // Helper
+        // Helpers
         private static Application.Application GetApplication()
         {
             // Denne blok bør du nok lave generel, så det er den samme, der bruges i WPF-applikationen

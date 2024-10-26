@@ -31,12 +31,14 @@ namespace PR.Persistence.APIClient.Repositories
             throw new NotImplementedException();
         }
 
-        public int Count(Expression<Func<Person, bool>> predicate)
+        public int Count(
+            Expression<Func<Person, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public int Count(IList<Expression<Func<Person, bool>>> predicates)
+        public int Count(
+            IList<Expression<Func<Person, bool>>> predicates)
         {
             throw new NotImplementedException();
         }
@@ -44,40 +46,38 @@ namespace PR.Persistence.APIClient.Repositories
         public async Task<Person> Get(
             Guid id)
         {
+            await Login();
+
+            return await Task.Run(async () =>
+            {
+                // We call the API using the token - here we want all people (and we are not using pagination here)
+                var url = $"http://localhost:5000/api/people/{id}";
+
+                if (_databaseTime.HasValue)
+                {
+                    //url = "http://localhost:5000/api/people?DatabaseTime=2002-01-01T00:00:00Z";
+                    url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}";
+                }
+
+                ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", _token);
+
+                using (var response = await ApiHelper.ApiClient.GetAsync(url))
+                {
+                    response.EnsureSuccessStatusCode();
+                    var responseBody = await response.Content.ReadAsStringAsync();
+
+                    var person = JsonConvert.DeserializeObject<Person>(responseBody);
+                    return person;
+                }
+            });
+
             throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Person>> GetAll()
         {
-            if (!_readFromDFOSInstead)
-            {
-                await Login();
-
-                return await Task.Run(async () =>
-                {
-                    // The we call the API using the token - here we want all people (and we are not using pagination here)
-                    var url = "http://localhost:5000/api/people";
-
-                    if (_databaseTime.HasValue)
-                    {
-                        //url = "http://localhost:5000/api/people?DatabaseTime=2002-01-01T00:00:00Z";
-                        url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}"; 
-                    }
-
-                    ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
-                        new AuthenticationHeaderValue("Bearer", _token);
-
-                    using (var response = await ApiHelper.ApiClient.GetAsync(url))
-                    {
-                        response.EnsureSuccessStatusCode();
-                        var responseBody = await response.Content.ReadAsStringAsync();
-
-                        // When you know the structure of the json data
-                        return JsonConvert.DeserializeObject<List<Person>>(responseBody);
-                    }
-                });
-            }
-            else
+            if (_readFromDFOSInstead)
             {
                 return await Task.Run(async () =>
                 {
@@ -100,28 +100,58 @@ namespace PR.Persistence.APIClient.Repositories
                     var data = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
 
                     var people = data.Features.Select(_ => {
-                        return new Person {
+                        return new Person
+                        {
                             Id = _.Id,
                             FirstName = _.Properties.Details.First().Value.FacilityName,
-                        } ;
+                        };
                     });
 
                     return people;
                 });
             }
+
+            await Login();
+
+            return await Task.Run(async () =>
+            {
+                // We call the API using the token - here we want all people (and we are not using pagination here)
+                var url = "http://localhost:5000/api/people";
+
+                if (_databaseTime.HasValue)
+                {
+                    //url = "http://localhost:5000/api/people?DatabaseTime=2002-01-01T00:00:00Z";
+                    url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}";
+                }
+
+                ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", _token);
+
+                using (var response = await ApiHelper.ApiClient.GetAsync(url))
+                {
+                    response.EnsureSuccessStatusCode();
+                    var responseBody = await response.Content.ReadAsStringAsync();
+
+                    // When you know the structure of the json data
+                    return JsonConvert.DeserializeObject<List<Person>>(responseBody);
+                }
+            });
         }
 
-        public async Task<IEnumerable<Person>> Find(Expression<Func<Person, bool>> predicate)
+        public async Task<IEnumerable<Person>> Find(
+            Expression<Func<Person, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Person>> Find(IList<Expression<Func<Person, bool>>> predicates)
+        public async Task<IEnumerable<Person>> Find(
+            IList<Expression<Func<Person, bool>>> predicates)
         {
             throw new NotImplementedException();
         }
 
-        public Person SingleOrDefault(Expression<Func<Person, bool>> predicate)
+        public Person SingleOrDefault(
+            Expression<Func<Person, bool>> predicate)
         {
             throw new NotImplementedException();
         }
@@ -146,27 +176,32 @@ namespace PR.Persistence.APIClient.Repositories
             }
         }
 
-        public void AddRange(IEnumerable<Person> entities)
+        public async Task AddRange(
+            IEnumerable<Person> people)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Person entity)
+        public async Task Update(
+            Person person)
         {
             throw new NotImplementedException();
         }
 
-        public async Task UpdateRange(IEnumerable<Person> entities)
+        public async Task UpdateRange(
+            IEnumerable<Person> people)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(Person entity)
+        public async Task Remove(
+            Person person)
         {
             throw new NotImplementedException();
         }
 
-        public async Task RemoveRange(IEnumerable<Person> entities)
+        public async Task RemoveRange(
+            IEnumerable<Person> people)
         {
             throw new NotImplementedException();
         }
@@ -176,7 +211,8 @@ namespace PR.Persistence.APIClient.Repositories
             throw new NotImplementedException();
         }
 
-        public void Load(IEnumerable<Person> entities)
+        public void Load(
+            IEnumerable<Person> people)
         {
             throw new NotImplementedException();
         }

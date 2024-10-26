@@ -50,15 +50,17 @@ namespace Craft.Utils
 
         public static bool TryParsingAsDateTime(
             this string s,
-            out DateTime dateTime)
+            out DateTime? dateTime)
         {
             var success = 
-                DateTime.TryParseExact(s, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime) ||
-                DateTime.TryParseExact(s, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime) ||
-                DateTime.TryParseExact(s, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime);
+                DateTime.TryParseExact(s, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var temp) ||
+                DateTime.TryParseExact(s, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out temp) ||
+                DateTime.TryParseExact(s, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out temp);
 
-            dateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute,
-                dateTime.Second, dateTime.Millisecond, DateTimeKind.Utc);
+            dateTime = success
+                ? new DateTime(temp.Year, temp.Month, temp.Day, temp.Hour, temp.Minute, temp.Second,
+                    temp.Millisecond, DateTimeKind.Utc)
+                : new DateTime?();
 
             return success;
         }

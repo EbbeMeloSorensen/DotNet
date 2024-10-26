@@ -67,7 +67,7 @@ namespace PR.Persistence.Versioned.Repositories
             await UnitOfWork.People.Add(person);
         }
 
-        public void AddRange(
+        public async Task AddRange(
             IEnumerable<Person> person)
         {
             throw new NotImplementedException();
@@ -140,7 +140,7 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(
+        public async Task Update(
             Person person)
         {
             throw new NotImplementedException();
@@ -173,7 +173,7 @@ namespace PR.Persistence.Versioned.Repositories
             UnitOfWork.People.AddRange(newObjects);
         }
 
-        public void Remove(
+        public async Task Remove(
             Person person)
         {
             throw new NotImplementedException();

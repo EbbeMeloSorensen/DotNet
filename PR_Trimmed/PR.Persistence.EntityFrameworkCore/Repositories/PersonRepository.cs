@@ -30,7 +30,7 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
             });
         }
 
-        public override void Update(
+        public override async Task Update(
             Person person)
         {
             throw new NotImplementedException();

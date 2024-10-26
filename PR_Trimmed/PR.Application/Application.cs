@@ -109,12 +109,67 @@ namespace PR.Application
             });
         }
 
+        public async Task GetPersonDetails(
+            Guid id,
+            DateTime? databaseTime,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(async () =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Getting Person details..");
+                progressCallback?.Invoke(0.0, "Getting Person details");
+
+                Person person = null;
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    person = await unitOfWork.People.Get(id);
+                }
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
+
+                Console.WriteLine();
+
+                if (databaseTime.HasValue)
+                {
+                    Console.WriteLine($"Database Time: {databaseTime}");
+                }
+
+                var surname = string.IsNullOrEmpty(person.Surname) ? person.Surname : "-";
+
+                Console.WriteLine();
+                Console.WriteLine("Person Details:");
+                Console.WriteLine($"  ID:         {person.Id}");
+                Console.WriteLine($"  First Name: {person.FirstName}");
+                Console.WriteLine($"  Surname:    {surname}");
+            });
+        }
+
+        public async Task DeletePerson(
+            Guid id,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(async () =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Deleting Person..");
+                progressCallback?.Invoke(0.0, "Deleting Person");
+
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    var person = await unitOfWork.People.Get(id);
+                    await unitOfWork.People.Remove(person);
+                    unitOfWork.Complete();
+                }
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed deleting Person");
+            });
+        }
+
         public async Task ListPeople(
             DateTime? databaseTime,
             ProgressCallback progressCallback = null)
         {
-            List<Person>? people = null;
-
             await Task.Run(async () =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
@@ -124,6 +179,8 @@ namespace PR.Application
                 {
                     unitOfWorkFactoryVersioned.DatabaseTime = databaseTime.Value;
                 }
+
+                List<Person>? people = null;
 
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
