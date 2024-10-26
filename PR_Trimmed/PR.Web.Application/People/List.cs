@@ -51,7 +51,7 @@ public class List
                 }
                 catch (Exception e)
                 {
-                    return Result<PagedList<PersonDto>>.Failure("Invalid time format passed to API");
+                    return Result<PagedList<PersonDto>>.Failure("Invalid time format");
                 }
             }
 
@@ -66,6 +66,7 @@ public class List
                 );
             }
 
+            /*
             // Old
             IQueryable<PersonDto> query;
 
@@ -132,6 +133,7 @@ public class List
                 await PagedList<PersonDto>.CreateAsync(query, request.Params.PageNumber,
                     request.Params.PageSize)
             );
+            */
         }
 
         private List<bool> ConvertToBoolList(

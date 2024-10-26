@@ -37,6 +37,7 @@ namespace PR.Persistence.EntityFrameworkCore
         {
             var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+            var reyTakesSurnameSkywalker = new DateTime(2009, 10, 1, 0, 0, 0, DateTimeKind.Utc);
 
             var padme = new Person
             {
@@ -126,10 +127,18 @@ namespace PR.Persistence.EntityFrameworkCore
                 FirstName = "Chewbacca"
             };
 
-            var rey = new Person
+            var rey_0 = new Person
             {
                 Id = new Guid("12345678-0000-0000-0000-000000000001"),
                 Created = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Superseded = reyTakesSurnameSkywalker,
+                FirstName = "Rey"
+            };
+
+            var rey_1 = new Person
+            {
+                Id = new Guid("12345678-0000-0000-0000-000000000001"),
+                Created = reyTakesSurnameSkywalker,
                 Superseded = maxDate,
                 FirstName = "Rey",
                 Surname = "Skywalker"
@@ -164,7 +173,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 luke,
                 leia,
                 chewbacca,
-                rey,
+                rey_0,
+                rey_1,
                 finn,
                 poeDameron
             };
