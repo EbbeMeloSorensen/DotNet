@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
+using PR.Domain;
 using PR.Domain.Entities;
+using PR.Persistence;
+using PR.Persistence.Versioned;
 using PR.Web.Application.Core;
 using PR.Web.Persistence;
 
@@ -26,25 +29,27 @@ public class Edit
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public Handler(DataContext context, IMapper mapper)
+        public Handler(
+            DataContext context, 
+            IMapper mapper,
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             _context = context;
             _mapper = mapper;
+            _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
         }
 
-        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(
+            Command request, 
+            CancellationToken cancellationToken)
         {
-            var person = await _context.People.FindAsync(request.Person.Id);
-
-            if (person == null) return null;
-
-            // This is a smart way of mapping, so we avoid having to maintain our own mappers
-            _mapper.Map(request.Person, person);
-
-            var result = await _context.SaveChangesAsync() > 0;
-
-            if (!result) return Result<Unit>.Failure("Failed to update person");
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                await unitOfWork.People.Update(request.Person);
+                unitOfWork.Complete();
+            }
 
             return Result<Unit>.Success(Unit.Value);
         }

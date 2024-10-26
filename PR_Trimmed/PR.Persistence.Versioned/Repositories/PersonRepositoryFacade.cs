@@ -143,12 +143,18 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Update(
             Person person)
         {
-            throw new NotImplementedException();
+            var objectFromRepository = await Get(person.Id);
+            objectFromRepository.Superseded = CurrentTime;
+
+            person.Created = CurrentTime;
+            person.Superseded = _maxDate;
+            await UnitOfWork.People.Add(person);
         }
 
         public async Task UpdateRange(
             IEnumerable<Person> people)
         {
+            // I guess this doesn't quite work yet - check it out
             var ids = people.Select(p => p.Id).ToList();
 
             var predicates = new List<Expression<Func<Person, bool>>>
@@ -169,7 +175,7 @@ namespace PR.Persistence.Versioned.Repositories
                 return newObject;
             });
 
-            UnitOfWork.People.AddRange(newObjects);
+            await UnitOfWork.People.AddRange(newObjects);
         }
 
         public async Task Remove(
