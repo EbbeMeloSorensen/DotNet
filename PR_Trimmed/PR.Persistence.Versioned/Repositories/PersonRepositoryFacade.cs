@@ -163,7 +163,6 @@ namespace PR.Persistence.Versioned.Repositories
             var newObjects = people.Select(p =>
             {
                 var newObject = p.Clone();
-                //newObject.Id = Guid.Empty;
                 newObject.Created = CurrentTime;
                 newObject.Superseded = _maxDate;
 
@@ -176,7 +175,8 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Remove(
             Person person)
         {
-            throw new NotImplementedException();
+            var objectFromRepository = await Get(person.Id);
+            objectFromRepository.Superseded = CurrentTime;
         }
 
         public async Task RemoveRange(

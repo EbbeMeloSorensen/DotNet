@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PR.Persistence;
+using PR.Persistence.Versioned;
 using PR.Web.Application.Core;
 using PR.Web.Persistence;
 
@@ -23,6 +24,7 @@ public class Delete
         {
             _context = context;
             _unitOfWorkFactory = unitOfWorkFactory;
+            _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
         }
 
         public async Task<Result<Unit>> Handle(
