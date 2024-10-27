@@ -3,7 +3,7 @@ Done:
 * Skræl Person ned, så den kun har first name og surname
 
 Todo:
-* Sikr, at timestamp kommer med
+* Reparer Glossary, C2IEDM og WIGOS
 
 Løst og fast:
  Du er nået dertil, at man som bruger af en IUnitOfWorkFactory i vidt omfang kan abstrahere fra,

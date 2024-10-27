@@ -71,8 +71,6 @@ namespace PR.Persistence.APIClient.Repositories
                     return person;
                 }
             });
-
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Person>> GetAll()
@@ -167,7 +165,6 @@ namespace PR.Persistence.APIClient.Repositories
                 new AuthenticationHeaderValue("Bearer", _token);
 
             var body = $"{{\"id\":\"{Guid.NewGuid()}\",\"firstName\":\"{person.FirstName}\"}}";
-
             var content = new StringContent(body, Encoding.UTF8, "application/json");
 
             using (var response = await ApiHelper.ApiClient.PostAsync(url, content))
@@ -185,7 +182,21 @@ namespace PR.Persistence.APIClient.Repositories
         public async Task Update(
             Person person)
         {
-            throw new NotImplementedException();
+            await Login();
+
+            await Task.Run(async () =>
+            {
+                var url = $"http://localhost:5000/api/people/{person.Id}";
+
+                ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", _token);
+
+                var body = $"{{\"firstName\":\"{person.FirstName}\"}}";
+                var content = new StringContent(body, Encoding.UTF8, "application/json");
+
+                using var response = await ApiHelper.ApiClient.PutAsync(url, content);
+                response.EnsureSuccessStatusCode();
+            });
         }
 
         public async Task UpdateRange(
@@ -197,7 +208,18 @@ namespace PR.Persistence.APIClient.Repositories
         public async Task Remove(
             Person person)
         {
-            throw new NotImplementedException();
+            await Login();
+
+            await Task.Run(async () =>
+            {
+                var url = $"http://localhost:5000/api/people/{person.Id}";
+
+                ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", _token);
+
+                using var response = await ApiHelper.ApiClient.DeleteAsync(url);
+                response.EnsureSuccessStatusCode();
+            });
         }
 
         public async Task RemoveRange(

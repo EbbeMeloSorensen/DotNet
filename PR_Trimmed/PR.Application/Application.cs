@@ -126,7 +126,7 @@ namespace PR.Application
                 }
 
                 progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed getting Person details");
 
                 Console.WriteLine();
 
@@ -142,6 +142,26 @@ namespace PR.Application
                 Console.WriteLine($"  ID:         {person.Id}");
                 Console.WriteLine($"  First Name: {person.FirstName}");
                 Console.WriteLine($"  Surname:    {surname}");
+            });
+        }
+
+        public async Task UpdatePerson(
+            Person person,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(async () =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Updating Person..");
+                progressCallback?.Invoke(0.0, "Updating Person");
+
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    await unitOfWork.People.Update(person);
+                    unitOfWork.Complete();
+                }
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed updating person");
             });
         }
 

@@ -1,5 +1,8 @@
 # Added by Ebbe
 .vscode
+*.db
+*.db-shm
+*.db-wal
 # launchSettings.json
 
 # Created by https://www.gitignore.io/api/visualstudio

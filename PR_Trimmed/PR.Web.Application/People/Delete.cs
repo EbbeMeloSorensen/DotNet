@@ -31,23 +31,19 @@ public class Delete
             Command request, 
             CancellationToken cancellationToken)
         {
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            try
             {
-                var person = await unitOfWork.People.Get(request.Id);
-                await unitOfWork.People.Remove(person);
-                unitOfWork.Complete();
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    var person = await unitOfWork.People.Get(request.Id);
+                    await unitOfWork.People.Remove(person);
+                    unitOfWork.Complete();
+                }
             }
-
-            return Result<Unit>.Success(Unit.Value);
-
-            // Old
-            var personOld = await _context.People.FindAsync(request.Id);
-
-            _context.Remove(personOld);
-
-            var result = await _context.SaveChangesAsync() > 0;
-
-            if (!result) return Result<Unit>.Failure("Failed to delete the person");
+            catch (Exception e)
+            {
+                return Result<Unit>.Failure($"Error deleting person: {e.Message}");
+            }
 
             return Result<Unit>.Success(Unit.Value);
         }

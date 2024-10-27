@@ -45,10 +45,15 @@ public class Edit
             Command request, 
             CancellationToken cancellationToken)
         {
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            try
             {
+                using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
                 await unitOfWork.People.Update(request.Person);
                 unitOfWork.Complete();
+            }
+            catch (Exception e)
+            {
+                return Result<Unit>.Failure($"Error editing person: {e.Message}");
             }
 
             return Result<Unit>.Success(Unit.Value);
