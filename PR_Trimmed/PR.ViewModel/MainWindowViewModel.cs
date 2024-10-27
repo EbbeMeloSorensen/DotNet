@@ -49,7 +49,7 @@ namespace PR.ViewModel
         public PeoplePropertiesViewModel PeoplePropertiesViewModel { get; }
         public LogViewModel LogViewModel { get; }
 
-        private RelayCommand<object> _createPersonCommand;
+        private AsyncCommand<object> _createPersonCommand;
         private RelayCommand<object> _showOptionsDialogCommand;
         private AsyncCommand _deleteSelectedPeopleCommand;
         private AsyncCommand _exportPeopleCommand;
@@ -62,9 +62,9 @@ namespace PR.ViewModel
             get { return _deleteSelectedPeopleCommand ?? (_deleteSelectedPeopleCommand = new AsyncCommand(DeleteSelectedPeople, CanDeleteSelectedPeople)); }
         }
 
-        public RelayCommand<object> CreatePersonCommand
+        public AsyncCommand<object> CreatePersonCommand
         {
-            get { return _createPersonCommand ?? (_createPersonCommand = new RelayCommand<object>(CreatePerson, CanCreatePerson)); }
+            get { return _createPersonCommand ?? (_createPersonCommand = new AsyncCommand<object>(CreatePerson, CanCreatePerson)); }
         }
 
         public RelayCommand<object> ShowOptionsDialogCommand
@@ -139,7 +139,7 @@ namespace PR.ViewModel
             ExportSelectionToGraphmlCommand.RaiseCanExecuteChanged();
         }
 
-        private void CreatePerson(
+        private async Task CreatePerson(
             object owner)
         {
             var dialogViewModel = new CreatePersonDialogViewModel();
@@ -153,12 +153,19 @@ namespace PR.ViewModel
             {
                 FirstName = dialogViewModel.FirstName,
                 Surname = dialogViewModel.Surname,
+                Nickname = dialogViewModel.Nickname,
+                Address = dialogViewModel.Address,
+                ZipCode = dialogViewModel.ZipCode,
+                City = dialogViewModel.City,
+                Birthday = dialogViewModel.Birthday,
+                Category = dialogViewModel.Category,
+                Description = dialogViewModel.Comments,
                 Created = DateTime.UtcNow
             };
 
             using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                unitOfWork.People.Add(person);
+                await unitOfWork.People.Add(person);
                 unitOfWork.Complete();
             }
 
