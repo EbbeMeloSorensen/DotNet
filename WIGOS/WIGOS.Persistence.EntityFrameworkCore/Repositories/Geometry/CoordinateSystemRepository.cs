@@ -16,12 +16,12 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.Geometry
             throw new NotImplementedException();
         }
 
-        public override void Update(CoordinateSystem entity)
+        public override Task Update(CoordinateSystem entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<CoordinateSystem> entities)
+        public override Task UpdateRange(IEnumerable<CoordinateSystem> entities)
         {
             throw new NotImplementedException();
         }

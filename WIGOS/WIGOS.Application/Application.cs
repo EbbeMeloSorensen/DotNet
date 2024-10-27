@@ -88,19 +88,16 @@ namespace WIGOS.Application
         {
             IList<Location>? locations = null;
 
-            await Task.Run(() =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Retrieving locations..");
+            progressCallback?.Invoke(0.0, "Retrieving locations");
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving locations..");
-                progressCallback?.Invoke(0.0, "Retrieving locations");
+                // Todo: Denne hiver alle rækker med, inkl de superseedede - den skal kun tage de gældende rækker med
+                locations = (await unitOfWork.Locations.GetAll()).ToList();
+            }
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    // Todo: Denne hiver alle rækker med, inkl de superseedede - den skal kun tage de gældende rækker med
-                    locations = unitOfWork.Locations.GetAll().ToList();
-                }
-
-                progressCallback?.Invoke(100, "");
-            });
+            progressCallback?.Invoke(100, "");
 
             Console.WriteLine();
             locations?.ToList().ForEach(_ => Console.WriteLine($"  {_}"));

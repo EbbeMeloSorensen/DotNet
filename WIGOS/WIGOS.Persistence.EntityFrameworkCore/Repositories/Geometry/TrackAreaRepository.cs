@@ -16,12 +16,12 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.Geometry
             throw new NotImplementedException();
         }
 
-        public override void Update(TrackArea entity)
+        public override Task Update(TrackArea entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<TrackArea> entities)
+        public override Task UpdateRange(IEnumerable<TrackArea> entities)
         {
             throw new NotImplementedException();
         }

@@ -16,12 +16,12 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.Geometry
             throw new NotImplementedException();
         }
 
-        public override void Update(AbsolutePoint entity)
+        public override Task Update(AbsolutePoint entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<AbsolutePoint> entities)
+        public override Task UpdateRange(IEnumerable<AbsolutePoint> entities)
         {
             throw new NotImplementedException();
         }

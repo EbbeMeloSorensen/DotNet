@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Media;
@@ -68,7 +69,7 @@ namespace WIGOS.ViewModel
         private Timer _timer;
 
         private RelayCommand<object> _createObservingFacilityCommand;
-        private RelayCommand<object> _deleteSelectedObservingFacilitiesCommand;
+        private AsyncCommand<object> _deleteSelectedObservingFacilitiesCommand;
         private RelayCommand<object> _clearRepositoryCommand;
         private RelayCommand<object> _importSMSDataSetCommand;
         private RelayCommand _escapeCommand;
@@ -235,12 +236,12 @@ namespace WIGOS.ViewModel
             get { return _createObservingFacilityCommand ?? (_createObservingFacilityCommand = new RelayCommand<object>(CreateObservingFacility, CanCreateObservingFacility)); }
         }
 
-        public RelayCommand<object> DeleteSelectedObservingFacilitiesCommand
+        public AsyncCommand<object> DeleteSelectedObservingFacilitiesCommand
         {
             get
             {
                 return _deleteSelectedObservingFacilitiesCommand ?? (_deleteSelectedObservingFacilitiesCommand =
-                    new RelayCommand<object>(DeleteSelectedObservingFacilities, CanDeleteSelectedObservingFacilities));
+                    new AsyncCommand<object>(DeleteSelectedObservingFacilities, CanDeleteSelectedObservingFacilities));
             }
         }
 
@@ -279,6 +280,9 @@ namespace WIGOS.ViewModel
             _application = new Application.Application(
                 unitOfWorkFactory,
                 _logger);
+
+            _historicalChangeTimes = new List<DateTime>();
+            _databaseWriteTimes = new List<DateTime>();
 
             _historicalTimeOfInterest = new ObservableObject<DateTime?>
             {
@@ -475,7 +479,7 @@ namespace WIGOS.ViewModel
             return !_databaseTimeOfInterest.Object.HasValue;
         }
 
-        private void DeleteSelectedObservingFacilities(
+        private async Task DeleteSelectedObservingFacilities(
             object owner)
         {
             var nSelectedObservingFacilities = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Count();
@@ -499,8 +503,8 @@ namespace WIGOS.ViewModel
             {
                 // Todo: Remember to also delete orphaned children
 
-                var observingFacilitiesForDeletion = unitOfWork.ObservingFacilities
-                    .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId))
+                var observingFacilitiesForDeletion = (await unitOfWork.ObservingFacilities
+                    .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId)))
                     .ToList();
 
                 var now = DateTime.UtcNow;
@@ -1364,7 +1368,7 @@ namespace WIGOS.ViewModel
             }
         }
 
-        private void CreateNewGeospatialLocation()
+        private async Task CreateNewGeospatialLocation()
         {
             var mousePositionInMap = MapViewModel.MousePositionWorld.Object.Value;
 
@@ -1424,7 +1428,7 @@ namespace WIGOS.ViewModel
                 if (point.From < selectedObservingFacility.DateEstablished ||
                     point.To > selectedObservingFacility.DateClosed)
                 {
-                    var observingFacilityFromRepo = unitOfWork.ObservingFacilities.Get(selectedObservingFacility.Id);
+                    var observingFacilityFromRepo = await unitOfWork.ObservingFacilities.Get(selectedObservingFacility.Id);
 
                     observingFacilityFromRepo.Superseded = now;
                     unitOfWork.ObservingFacilities.Update(observingFacilityFromRepo);
@@ -1459,7 +1463,7 @@ namespace WIGOS.ViewModel
             RefreshDatabaseTimeSeriesView();
         }
 
-        private void InitializeTimestampsOfInterest()
+        private async Task InitializeTimestampsOfInterest()
         {
             try
             {
@@ -1467,13 +1471,13 @@ namespace WIGOS.ViewModel
                 {
                     _databaseWriteTimes = new List<DateTime>();
 
-                    var observingFacilities = unitOfWork.ObservingFacilities.GetAll().ToList();
+                    var observingFacilities = (await unitOfWork.ObservingFacilities.GetAll()).ToList();
                     var timeStampsForObservingFacilities = observingFacilities.Select(_ => _.Created).ToList();
                     timeStampsForObservingFacilities.AddRange(observingFacilities.Select(_ => _.Superseded));
                     timeStampsForObservingFacilities = timeStampsForObservingFacilities.Where(_ => _ < DateTime.MaxValue).ToList();
                     _databaseWriteTimes.AddRange(timeStampsForObservingFacilities.Distinct());
 
-                    var geospatialLocations = unitOfWork.GeospatialLocations.GetAll().ToList();
+                    var geospatialLocations = (await unitOfWork.GeospatialLocations.GetAll()).ToList();
                     var timeStampsForGeospatialLocations = geospatialLocations.Select(_ => _.Created).ToList();
                     timeStampsForGeospatialLocations.AddRange(geospatialLocations.Select(_ => _.Superseded));
                     timeStampsForGeospatialLocations = timeStampsForGeospatialLocations.Where(_ => _ < DateTime.MaxValue).ToList();
@@ -1481,8 +1485,8 @@ namespace WIGOS.ViewModel
 
                     _databaseWriteTimes = _databaseWriteTimes.Distinct().ToList();
 
-                    geospatialLocations = unitOfWork.GeospatialLocations
-                        .Find(_ => _.Superseded == DateTime.MaxValue)
+                    geospatialLocations = (await unitOfWork.GeospatialLocations
+                        .Find(_ => _.Superseded == DateTime.MaxValue))
                         .ToList();
 
                     var historicalChangeTimeStamps = geospatialLocations.Select(_ => _.From).ToList();

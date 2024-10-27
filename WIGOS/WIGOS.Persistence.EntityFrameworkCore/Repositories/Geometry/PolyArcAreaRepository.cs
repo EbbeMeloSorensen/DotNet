@@ -16,12 +16,12 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.Geometry
             throw new NotImplementedException();
         }
 
-        public override void Update(PolyArcArea entity)
+        public override Task Update(PolyArcArea entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<PolyArcArea> entities)
+        public override Task UpdateRange(IEnumerable<PolyArcArea> entities)
         {
             throw new NotImplementedException();
         }

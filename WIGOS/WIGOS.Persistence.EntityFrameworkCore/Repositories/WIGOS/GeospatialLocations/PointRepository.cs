@@ -16,12 +16,12 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.WIGOS.GeospatialLoc
             throw new NotImplementedException();
         }
 
-        public override void Update(Point entity)
+        public override Task Update(Point entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(
+        public override Task UpdateRange(
             IEnumerable<Point> points)
         {
             throw new NotImplementedException();

@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
+using Craft.ViewModel.Utils;
+using StateOfView = Craft.UI.Utils.StateOfView;
 
 namespace WIGOS.ViewModel
 {
@@ -41,7 +44,7 @@ namespace WIGOS.ViewModel
         private bool _isVisible;
         private bool _isReadOnly;
 
-        private RelayCommand _applyChangesCommand;
+        private AsyncCommand _applyChangesCommand;
 
         public event EventHandler<ObservingFacilitiesEventArgs> ObservingFacilitiesUpdated;
 
@@ -170,9 +173,9 @@ namespace WIGOS.ViewModel
 
         public GeospatialLocationsViewModel GeospatialLocationsViewModel { get; }
 
-        public RelayCommand ApplyChangesCommand
+        public AsyncCommand ApplyChangesCommand
         {
-            get { return _applyChangesCommand ?? (_applyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges)); }
+            get { return _applyChangesCommand ?? (_applyChangesCommand = new AsyncCommand(ApplyChanges, CanApplyChanges)); }
         }
 
         public ObservingFacilitiesDetailsViewModel(
@@ -249,7 +252,7 @@ namespace WIGOS.ViewModel
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
 
-        private void ApplyChanges()
+        private async Task ApplyChanges()
         {
             UpdateState(StateOfView.Updated);
 
@@ -265,8 +268,8 @@ namespace WIGOS.ViewModel
             {
                 var objectIds = _observingFacilities.Objects.Select(_ => _.ObjectId).ToList();
 
-                var observingFacilitiesForUpdating = unitOfWork.ObservingFacilities
-                    .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId))
+                var observingFacilitiesForUpdating = (await unitOfWork.ObservingFacilities
+                    .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId)))
                     .ToList();
 
                 var now = DateTime.UtcNow;

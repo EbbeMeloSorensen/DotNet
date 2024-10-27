@@ -7,10 +7,10 @@ namespace WIGOS.Persistence.Repositories.WIGOS
 {
     public interface IObservingFacilityRepository : IRepository<ObservingFacility>
     {
-        ObservingFacility Get(
+        Task<ObservingFacility> Get(
             Guid id);
 
-        Tuple<ObservingFacility, List<GeospatialLocation>> GetIncludingGeospatialLocations(
+        Task<Tuple<ObservingFacility, List<GeospatialLocation>>> GetIncludingGeospatialLocations(
             Guid id,
             IList<Expression<Func<GeospatialLocation, bool>>> geospatialLocationPredicates);
 

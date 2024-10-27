@@ -21,17 +21,20 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.WIGOS.AbstractEnvir
             throw new NotImplementedException();
         }
 
-        public ObservingFacility Get(
+        public async Task<ObservingFacility> Get(
             Guid id)
         {
-            return DbContext.ObservingFacilities.SingleOrDefault(_ => _.Id == id) ?? throw new InvalidOperationException();
+            return await Task.Run(() =>
+            {
+                return DbContext.ObservingFacilities.SingleOrDefault(_ => _.Id == id) ?? throw new InvalidOperationException("Observing Facility does not exist");
+            });
         }
 
-        public Tuple<ObservingFacility, List<GeospatialLocation>> GetIncludingGeospatialLocations(
+        public async Task<Tuple<ObservingFacility, List<GeospatialLocation>>> GetIncludingGeospatialLocations(
             Guid id,
             IList<Expression<Func<GeospatialLocation, bool>>> geospatialLocationPredicates)
         {
-            var observingFacility = Get(id);
+            var observingFacility = await Get(id);
 
             geospatialLocationPredicates.Add(_ => _.AbstractEnvironmentalMonitoringFacilityObjectId == observingFacility.ObjectId);
 
@@ -110,23 +113,22 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.WIGOS.AbstractEnvir
             return result;
         }
 
-        public override void Update(
+        public override async Task Update(
             ObservingFacility observingFacility)
         {
-            // Todo: Test this
-            var observingFacilityFromRepository = Get(observingFacility.Id);
+            var observingFacilityFromRepository = await Get(observingFacility.Id);
 
             observingFacilityFromRepository.Name = observingFacility.Name;
             observingFacilityFromRepository.DateEstablished = observingFacility.DateEstablished;
             observingFacilityFromRepository.DateClosed = observingFacility.DateClosed;
         }
 
-        public override void UpdateRange(
+        public override async Task UpdateRange(
             IEnumerable<ObservingFacility> observingFacilities)
         {
             var updatedObservingFacilities = observingFacilities.ToList();
             var ids = updatedObservingFacilities.Select(p => p.Id);
-            var observingFacilitiesFromRepository = Find(p => ids.Contains(p.Id)).ToList();
+            var observingFacilitiesFromRepository = (await Find(p => ids.Contains(p.Id))).ToList();
 
             observingFacilitiesFromRepository.ForEach(ofRepo =>
             {

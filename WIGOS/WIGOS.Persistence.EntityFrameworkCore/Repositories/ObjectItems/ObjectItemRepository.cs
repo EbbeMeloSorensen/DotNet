@@ -16,12 +16,12 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.ObjectItems
             throw new NotImplementedException();
         }
 
-        public override void Update(ObjectItem entity)
+        public override Task Update(ObjectItem entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<ObjectItem> entities)
+        public override Task UpdateRange(IEnumerable<ObjectItem> entities)
         {
             throw new NotImplementedException();
         }

@@ -15,18 +15,18 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories
         {
         }
 
-        public override void Update(
+        public override Task Update(
             Person person)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(
+        public override async Task UpdateRange(
             IEnumerable<Person> people)
         {
             var updatedPeople = people.ToList();
             var ids = updatedPeople.Select(p => p.Id);
-            var peopleFromRepository = Find(p => ids.Contains(p.Id)).ToList();
+            var peopleFromRepository = (await Find(p => ids.Contains(p.Id))).ToList();
 
             peopleFromRepository.ForEach(pRepo =>
             {

@@ -19,12 +19,12 @@ namespace WIGOS.Persistence.EntityFrameworkCore.Repositories.WIGOS.AbstractEnvir
             context.SaveChanges();
         }
 
-        public override void Update(AbstractEnvironmentalMonitoringFacility entity)
+        public override Task Update(AbstractEnvironmentalMonitoringFacility entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<AbstractEnvironmentalMonitoringFacility> entities)
+        public override Task UpdateRange(IEnumerable<AbstractEnvironmentalMonitoringFacility> entities)
         {
             throw new NotImplementedException();
         }

@@ -13,7 +13,9 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Windows;
+using Craft.ViewModel.Utils;
 using Point = WIGOS.Domain.Entities.WIGOS.GeospatialLocations.Point;
 
 namespace WIGOS.ViewModel
@@ -28,9 +30,9 @@ namespace WIGOS.ViewModel
         private ObservingFacility _selectedObservingFacility;
         private ObservableCollection<GeospatialLocationListItemViewModel> _geospatialLocationListItemViewModels;
         private RelayCommand<object> _selectionChangedCommand;
-        private RelayCommand<object> _deleteSelectedGeospatialLocationsCommand;
+        private AsyncCommand<object> _deleteSelectedGeospatialLocationsCommand;
         private RelayCommand<object> _createGeospatialLocationCommand;
-        private RelayCommand<object> _updateSelectedGeospatialLocationCommand;
+        private AsyncCommand<object> _updateSelectedGeospatialLocationCommand;
 
         public ObjectCollection<GeospatialLocation> SelectedGeospatialLocations { get; private set; }
 
@@ -49,12 +51,12 @@ namespace WIGOS.ViewModel
             }
         }
 
-        public RelayCommand<object> DeleteSelectedGeospatialLocationsCommand
+        public AsyncCommand<object> DeleteSelectedGeospatialLocationsCommand
         {
             get
             {
                 return _deleteSelectedGeospatialLocationsCommand ?? (
-                    _deleteSelectedGeospatialLocationsCommand = new RelayCommand<object>(DeleteSelectedGeospatialLocations, CanDeleteSelectedGeospatialLocations));
+                    _deleteSelectedGeospatialLocationsCommand = new AsyncCommand<object>(DeleteSelectedGeospatialLocations, CanDeleteSelectedGeospatialLocations));
             }
         }
 
@@ -67,12 +69,12 @@ namespace WIGOS.ViewModel
             }
         }
 
-        public RelayCommand<object> UpdateSelectedGeospatialLocationCommand
+        public AsyncCommand<object> UpdateSelectedGeospatialLocationCommand
         {
             get
             {
                 return _updateSelectedGeospatialLocationCommand ?? (
-                    _updateSelectedGeospatialLocationCommand = new RelayCommand<object>(UpdateSelectedGeospatialLocation, CanUpdateSelectedGeospatialLocation));
+                    _updateSelectedGeospatialLocationCommand = new AsyncCommand<object>(UpdateSelectedGeospatialLocation, CanUpdateSelectedGeospatialLocation));
             }
         }
 
@@ -122,7 +124,7 @@ namespace WIGOS.ViewModel
             }
         }
 
-        public void Populate()
+        public async Task Populate()
         {
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
@@ -132,7 +134,7 @@ namespace WIGOS.ViewModel
                 };
 
                 var observingFacility =
-                    unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(
+                    await unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(
                         _selectedObservingFacility.Id,
                         geospatialLocationPredicates);
 
@@ -155,7 +157,7 @@ namespace WIGOS.ViewModel
             return !_databaseTimeOfInterest.Object.HasValue;
         }
 
-        private void DeleteSelectedGeospatialLocations(
+        private async Task DeleteSelectedGeospatialLocations(
             object owner)
         {
             var nSelectedGeospatialLocations = SelectedGeospatialLocations.Objects.Count();
@@ -187,8 +189,8 @@ namespace WIGOS.ViewModel
 
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var geospatialLocationsForDeletion = unitOfWork.GeospatialLocations
-                    .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId))
+                var geospatialLocationsForDeletion = (await unitOfWork.GeospatialLocations
+                    .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId)))
                     .ToList();
 
                 geospatialLocationsForDeletion.ForEach(_ => _.Superseded = now);
@@ -197,10 +199,10 @@ namespace WIGOS.ViewModel
                     dateClosedAfter < _selectedObservingFacility.DateClosed)
                 {
                     // Update active period of observing facility
-                    var observingFacilityFromRepo = unitOfWork.ObservingFacilities.Get(_selectedObservingFacility.Id);
+                    var observingFacilityFromRepo = await unitOfWork.ObservingFacilities.Get(_selectedObservingFacility.Id);
 
                     observingFacilityFromRepo.Superseded = now;
-                    unitOfWork.ObservingFacilities.Update(observingFacilityFromRepo);
+                    await unitOfWork.ObservingFacilities.Update(observingFacilityFromRepo);
 
                     var newObservingFacility = new ObservingFacility(Guid.NewGuid(), now)
                     {
@@ -214,10 +216,10 @@ namespace WIGOS.ViewModel
                             : observingFacilityFromRepo.DateClosed
                     };
 
-                    unitOfWork.ObservingFacilities.Add(newObservingFacility);
+                    await unitOfWork.ObservingFacilities.Add(newObservingFacility);
                 }
 
-                unitOfWork.GeospatialLocations.UpdateRange(geospatialLocationsForDeletion);
+                await unitOfWork.GeospatialLocations.UpdateRange(geospatialLocationsForDeletion);
                 unitOfWork.Complete();
             }
 
@@ -233,7 +235,7 @@ namespace WIGOS.ViewModel
                    SelectedGeospatialLocations.Objects.Count() != _geospatialLocationListItemViewModels.Count;
         }
 
-        private void UpdateSelectedGeospatialLocation(
+        private async Task UpdateSelectedGeospatialLocation(
             object owner)
         {
             var point = SelectedGeospatialLocations.Objects.Single() as Point;
@@ -282,7 +284,7 @@ namespace WIGOS.ViewModel
                 var geospatialLocation = unitOfWork.GeospatialLocations.Get(point.Id);
                 geospatialLocation.Superseded = now;
 
-                unitOfWork.GeospatialLocations.Update(geospatialLocation);
+                await unitOfWork.GeospatialLocations.Update(geospatialLocation);
 
                 var newPoint = new Point(Guid.NewGuid(), now)
                 {
@@ -296,7 +298,7 @@ namespace WIGOS.ViewModel
                     CoordinateSystem = "WGS_84",
                 };
 
-                unitOfWork.GeospatialLocations.Add(newPoint);
+                await unitOfWork.GeospatialLocations.Add(newPoint);
 
                 // Determine if we should change the DateEstablished/DateClosed range of the observing facility
                 var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>
@@ -306,9 +308,9 @@ namespace WIGOS.ViewModel
                 };
 
                 var otherGeospatialLocations =
-                    unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(
+                    (await unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(
                         _selectedObservingFacility.Id,
-                        geospatialLocationPredicates).Item2;
+                        geospatialLocationPredicates)).Item2;
 
                 var minFromDate = otherGeospatialLocations
                     .Select(_ => _.From)
@@ -323,10 +325,10 @@ namespace WIGOS.ViewModel
                 if (minFromDate != _selectedObservingFacility.DateEstablished ||
                     maxToDate != _selectedObservingFacility.DateClosed)
                 {
-                    var observingFacilityFromRepo = unitOfWork.ObservingFacilities.Get(_selectedObservingFacility.Id);
+                    var observingFacilityFromRepo = await unitOfWork.ObservingFacilities.Get(_selectedObservingFacility.Id);
                     observingFacilityFromRepo.Superseded = now;
 
-                    unitOfWork.ObservingFacilities.Update(observingFacilityFromRepo);
+                    await unitOfWork.ObservingFacilities.Update(observingFacilityFromRepo);
 
                     var newObservingFacility = new ObservingFacility(Guid.NewGuid(), now)
                     {
@@ -336,7 +338,7 @@ namespace WIGOS.ViewModel
                         DateClosed = maxToDate
                     };
 
-                    unitOfWork.ObservingFacilities.Add(newObservingFacility);
+                    await unitOfWork.ObservingFacilities.Add(newObservingFacility);
                 }
 
                 unitOfWork.Complete();
