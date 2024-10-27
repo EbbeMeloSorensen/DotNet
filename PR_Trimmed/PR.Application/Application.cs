@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Craft.Logging;
+using Craft.Utils;
 using PR.Domain.Entities;
 using PR.IO;
 using PR.Persistence;
@@ -119,6 +120,11 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Getting Person details..");
                 progressCallback?.Invoke(0.0, "Getting Person details");
 
+                if (databaseTime.HasValue && UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
+                {
+                    unitOfWorkFactoryVersioned.DatabaseTime = databaseTime.Value;
+                }
+
                 Person person = null;
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
@@ -135,13 +141,29 @@ namespace PR.Application
                     Console.WriteLine($"Database Time: {databaseTime}");
                 }
 
-                var surname = string.IsNullOrEmpty(person.Surname) ? person.Surname : "-";
+                var surname = string.IsNullOrEmpty(person.Surname) ? "-" : person.Surname;
+                var nickname = string.IsNullOrEmpty(person.Nickname) ? "-" :person.Nickname;
+                var address = string.IsNullOrEmpty(person.Address) ? "-" : person.Address;
+                var zipCode = string.IsNullOrEmpty(person.ZipCode) ? "-" : person.ZipCode;
+                var city = string.IsNullOrEmpty(person.City) ? "-" : person.City;
+                var birthday = person.Birthday.HasValue ? person.Birthday.Value.AsDateTimeString(false) : "-";
+                var category = string.IsNullOrEmpty(person.Category) ? "-" : person.Category;
+                var description = string.IsNullOrEmpty(person.Description) ? "-" : person.Description;
+                var dead = person.Dead.HasValue ? (person.Dead.Value ? "yes" : "no") : "-";
 
                 Console.WriteLine();
                 Console.WriteLine("Person Details:");
-                Console.WriteLine($"  ID:         {person.Id}");
-                Console.WriteLine($"  First Name: {person.FirstName}");
-                Console.WriteLine($"  Surname:    {surname}");
+                Console.WriteLine($"  ID:          {person.Id}");
+                Console.WriteLine($"  First Name:  {person.FirstName}");
+                Console.WriteLine($"  Surname:     {surname}");
+                Console.WriteLine($"  Nickname:    {nickname}");
+                Console.WriteLine($"  Address:     {address}");
+                Console.WriteLine($"  ZipCode:     {zipCode}");
+                Console.WriteLine($"  City:        {city}");
+                Console.WriteLine($"  Birthday:    {birthday}");
+                Console.WriteLine($"  Category:    {category}");
+                Console.WriteLine($"  Description: {description}");
+                Console.WriteLine($"  Dead:        {dead}");
             });
         }
 
@@ -223,6 +245,11 @@ namespace PR.Application
                     if (!string.IsNullOrEmpty(p.Surname))
                     {
                         sb.Append($" {p.Surname}");
+                    }
+
+                    if (p.Dead is true)
+                    {
+                        sb.Append(" (Dead)");
                     }
 
                     Console.WriteLine(sb.ToString());

@@ -2,7 +2,7 @@
   "profiles": {
     "PR.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "update -i 12345678-0000-0000-0000-000000000001 -f \"Grey\""
+      "commandLineArgs": "details -i \"12345678-0000-0000-0000-000000000010\" -d \"2006-01-01\""
     }
   }
 }

@@ -51,13 +51,22 @@ namespace PR.UI.Console
             var id = new Guid(options.ID);
             options.DatabaseTime.TryParsingAsDateTime(out var databaseTime);
 
-            await GetApplication().GetPersonDetails(id, databaseTime, (progress, nameOfSubtask) =>
+            try
             {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-            System.Console.WriteLine("\nDone");
+                await GetApplication().GetPersonDetails(id, databaseTime, (progress, nameOfSubtask) =>
+                {
+                    System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                    System.Console.Write($"{progress:F2} %");
+                    return false;
+                });
+
+                System.Console.WriteLine("\nDone");
+
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine($"\nError getting person details: {e.Message}");
+            }
         }
 
         public static async Task CountPeople(
