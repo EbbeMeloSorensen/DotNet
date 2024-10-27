@@ -195,6 +195,34 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? firstPerson.Surname
             : null;
 
+        SharedNickname = temp.Objects.All(p => p.Nickname == firstPerson.Nickname)
+            ? firstPerson.Nickname
+            : null;
+
+        SharedAddress = temp.Objects.All(p => p.Address == firstPerson.Address)
+            ? firstPerson.Address
+            : null;
+
+        SharedZipCode = temp.Objects.All(p => p.ZipCode == firstPerson.ZipCode)
+            ? firstPerson.ZipCode
+            : null;
+
+        SharedCity = temp.Objects.All(p => p.City == firstPerson.City)
+            ? firstPerson.City
+            : null;
+
+        SharedBirthday = temp.Objects.All(p => p.Birthday == firstPerson.Birthday)
+            ? firstPerson.Birthday
+            : null;
+
+        SharedCategory = temp.Objects.All(p => p.Category == firstPerson.Category)
+            ? firstPerson.Category
+            : null;
+
+        SharedComments = temp.Objects.All(p => p.Description == firstPerson.Description)
+            ? firstPerson.Description
+            : null;
+
         _originalSharedFirstName = SharedFirstName;
         _originalSharedSurname = SharedSurname;
         _originalSharedNickname = SharedNickname;
