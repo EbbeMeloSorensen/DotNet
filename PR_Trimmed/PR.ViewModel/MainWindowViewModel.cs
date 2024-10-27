@@ -173,21 +173,19 @@ namespace PR.ViewModel
 
         private async Task DeleteSelectedPeople()
         {
-            await Task.Run(async () => 
+            await Task.Run(async () =>
             {
-                using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.Id).ToList();
+                using var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork();
+                var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.Id).ToList();
 
-                    var peopleForDeletion = (await unitOfWork.People
+                var peopleForDeletion = (await unitOfWork.People
                         .Find(pa => ids.Contains(pa.Id)))
-                        .ToList();
+                    .ToList();
 
-                    unitOfWork.People.RemoveRange(peopleForDeletion);
-                    unitOfWork.Complete();
+                await unitOfWork.People.RemoveRange(peopleForDeletion);
+                unitOfWork.Complete();
 
-                    PersonListViewModel.RemovePeople(peopleForDeletion);
-                }
+                PersonListViewModel.RemovePeople(peopleForDeletion);
             });
         }
 
@@ -274,8 +272,20 @@ namespace PR.ViewModel
         private void ShowOptionsDialog(
             object owner)
         {
-            var dialogViewModel = new OptionsDialogViewModel();
+            DateTime? databaseTime = null;
+
+            if (UnitOfWorkFactory is IUnitOfWorkFactoryVersioned)
+            {
+                databaseTime = (UnitOfWorkFactory as IUnitOfWorkFactoryVersioned).DatabaseTime;
+            }
+
+            var dialogViewModel = new OptionsDialogViewModel(databaseTime);
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+
+            if (UnitOfWorkFactory is IUnitOfWorkFactoryVersioned)
+            {
+                (UnitOfWorkFactory as IUnitOfWorkFactoryVersioned).DatabaseTime = dialogViewModel.DatabaseTime;
+            }
         }
 
         private bool CanShowOptionsDialog(
