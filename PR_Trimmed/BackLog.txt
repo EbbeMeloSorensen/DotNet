@@ -7,6 +7,14 @@ Todo:
   - Det skal nok være helt generelt, lige som det jo er for versioned object, så det hurtigt kan skrælles af, hvis man ikke
     er interesseret i virkningstid
   - Bemærk, at det, du jo har indtil videre har fået lavet med star wars karaktererne det essentielt er  et current situation system
+  - Når du laver systemet om, så skal det vel være sådan, at der er flere objekter i spil, som alle er gældende, og som repræsenterer
+    samme objekt. F.eks. skal der være ét objekt, der repræsenterer Anakin i perioden før han blev Sith og et andet objekt, som 
+    repræsenterer ham i perioden efter, hvor han i øvrigt hed Darth Vader. Det er jo altså ikke sådan helt lige til, for Person er jo 
+    altså en UAFHÆNGIG entitet, så hvordan skal man som bruger afklare, om 2 objekter med forskelligt ID repræsenterer samme person?
+    Er man ikke reelt nødt til at have et parent objekt, der nærmest er tomt?.. Og er det ikke lige præcis det, der er tale om i WIGOS,
+    hvor den entitet, der hedder AbstractEnvironmentalMonitoringFacility snart sagt ingen informationer har. For Person kunne man måske
+    operere med en AbstractPerson. I DFOS gør de vel egentlig det samme, hvor de effektivt opererer med, at en Observing Facility sådan
+    set bare er en samling af Details...
 * Reparer Glossary, C2IEDM og WIGOS
   -> Glossary er sgu lidt død i det - nok bedre at indlemme den som sit eget domæne i PR
   -> Wigos er repareret men nok en smule vingeskudt og det samme gælder formentlig for C2IEDM for

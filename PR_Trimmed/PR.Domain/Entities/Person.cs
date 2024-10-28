@@ -2,8 +2,12 @@
 
 namespace PR.Domain.Entities
 {
-    public class Person : VersionedObject
+    public class Person : IVersionedObject
     {
+        public Guid ArchiveId { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Superseded { get; set; }
+
         public Guid Id { get; set; }
 
         public string FirstName { get; set; }
