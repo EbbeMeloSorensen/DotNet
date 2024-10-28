@@ -3,7 +3,13 @@ Done:
 * Skræl Person ned, så den kun har first name og surname
 
 Todo:
+* Du bør have VIRKNINGSTID med for personer, så man ikke skal spole tilbage i tid for at se, hvad de f.eks. har heddet før.
+  - Det skal nok være helt generelt, lige som det jo er for versioned object, så det hurtigt kan skrælles af, hvis man ikke
+    er interesseret i virkningstid
+  - Bemærk, at det, du jo har indtil videre har fået lavet med star wars karaktererne det essentielt er  et current situation system
 * Reparer Glossary, C2IEDM og WIGOS
+  -> Glossary er sgu lidt død i det - nok bedre at indlemme den som sit eget domæne i PR
+  -> Wigos er repareret men nok en smule vingeskudt og det samme gælder formentlig for C2IEDM for
 
 Løst og fast:
  Du er nået dertil, at man som bruger af en IUnitOfWorkFactory i vidt omfang kan abstrahere fra,
