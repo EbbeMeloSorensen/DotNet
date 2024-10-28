@@ -34,7 +34,7 @@ public class PeopleController : BaseApiController
         Guid id,
         Person person)
     {
-        person.Id = id;
+        person.ID = id;
         return HandleResult(await Mediator.Send(new Edit.Command { Person = person }));
     }
 

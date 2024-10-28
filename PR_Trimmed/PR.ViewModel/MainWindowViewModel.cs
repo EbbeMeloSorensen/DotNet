@@ -183,10 +183,10 @@ namespace PR.ViewModel
             await Task.Run(async () =>
             {
                 using var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork();
-                var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.Id).ToList();
+                var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ID).ToList();
 
                 var peopleForDeletion = (await unitOfWork.People
-                        .Find(pa => ids.Contains(pa.Id)))
+                        .Find(pa => ids.Contains(pa.ID)))
                     .ToList();
 
                 await unitOfWork.People.RemoveRange(peopleForDeletion);
@@ -227,7 +227,7 @@ namespace PR.ViewModel
             var people = PersonListViewModel.SelectedPeople.Objects.ToList();
 
             var personIds = people
-                .Select(p => p.Id)
+                .Select(p => p.ID)
                 .ToList();
 
             var prData = new PRData

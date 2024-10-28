@@ -2,13 +2,17 @@
 
 namespace PR.Domain.Entities
 {
-    public class Person : IVersionedObject
+    public class Person : IObjectWithValidTime, IVersionedObject
     {
-        public Guid ArchiveId { get; set; }
+        public Guid IntervalID { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+
+        public Guid ArchiveID { get; set; }
         public DateTime Created { get; set; }
         public DateTime Superseded { get; set; }
 
-        public Guid Id { get; set; }
+        public Guid ID { get; set; }
 
         public string FirstName { get; set; }
 

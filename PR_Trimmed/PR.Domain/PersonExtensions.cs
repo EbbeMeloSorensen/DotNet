@@ -17,8 +17,8 @@ namespace PR.Domain
             this Person person,
             Person other)
         {
-            person.ArchiveId = other.ArchiveId;
-            person.Id = other.Id;
+            person.ArchiveID = other.ArchiveID;
+            person.ID = other.ID;
             person.FirstName = other.FirstName;
             person.Surname = other.Surname;
             person.Nickname = other.Nickname;

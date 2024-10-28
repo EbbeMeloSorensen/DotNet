@@ -50,7 +50,7 @@ namespace PR.IO.UnitTest
 
             var ebbe = new Person
             {
-                Id = Guid.NewGuid(),
+                ID = Guid.NewGuid(),
                 FirstName = "Ebbe",
                 Surname = "Melo Sørensen",
                 Created = new DateTime(2022, 1, 1, 3, 3, 6).ToUniversalTime()
@@ -58,7 +58,7 @@ namespace PR.IO.UnitTest
 
             var ana = new Person
             {
-                Id = Guid.NewGuid(),
+                ID = Guid.NewGuid(),
                 FirstName = "Ana Tayze",
                 Surname = "Melo Sørensen",
                 Created = now
@@ -66,7 +66,7 @@ namespace PR.IO.UnitTest
 
             var uffe = new Person
             {
-                Id = Guid.NewGuid(),
+                ID = Guid.NewGuid(),
                 FirstName = "Uffe",
                 Surname = "Sørensen",
                 Created = now

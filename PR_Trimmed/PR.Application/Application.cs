@@ -153,7 +153,7 @@ namespace PR.Application
 
                 Console.WriteLine();
                 Console.WriteLine("Person Details:");
-                Console.WriteLine($"  ID:          {person.Id}");
+                Console.WriteLine($"  ID:          {person.ID}");
                 Console.WriteLine($"  First Name:  {person.FirstName}");
                 Console.WriteLine($"  Surname:     {surname}");
                 Console.WriteLine($"  Nickname:    {nickname}");
@@ -240,7 +240,7 @@ namespace PR.Application
 
                 people?.ToList().ForEach(p =>
                 {
-                    var sb = new StringBuilder($"  {p.Id}: {p.FirstName}");
+                    var sb = new StringBuilder($"  {p.ID}: {p.FirstName}");
 
                     if (!string.IsNullOrEmpty(p.Surname))
                     {

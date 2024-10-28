@@ -100,7 +100,7 @@ namespace PR.Persistence.APIClient.Repositories
                     var people = data.Features.Select(_ => {
                         return new Person
                         {
-                            Id = _.Id,
+                            ID = _.Id,
                             FirstName = _.Properties.Details.First().Value.FacilityName,
                         };
                     });
@@ -186,7 +186,7 @@ namespace PR.Persistence.APIClient.Repositories
 
             await Task.Run(async () =>
             {
-                var url = $"http://localhost:5000/api/people/{person.Id}";
+                var url = $"http://localhost:5000/api/people/{person.ID}";
 
                 ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", _token);
@@ -212,7 +212,7 @@ namespace PR.Persistence.APIClient.Repositories
 
             await Task.Run(async () =>
             {
-                var url = $"http://localhost:5000/api/people/{person.Id}";
+                var url = $"http://localhost:5000/api/people/{person.ID}";
 
                 ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", _token);

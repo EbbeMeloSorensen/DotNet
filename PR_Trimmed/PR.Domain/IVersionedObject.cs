@@ -4,7 +4,7 @@ namespace PR.Domain
 {
     public interface IVersionedObject
     {
-        Guid ArchiveId { get; set; }
+        Guid ArchiveID { get; set; }
         DateTime Created { get; set; }
         DateTime Superseded { get; set; }
     }

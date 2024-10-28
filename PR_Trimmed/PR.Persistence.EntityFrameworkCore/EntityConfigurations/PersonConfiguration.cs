@@ -19,11 +19,11 @@ namespace PR.Persistence.EntityFrameworkCore.EntityConfigurations
         {
             if (_versioned)
             {
-                builder.HasKey(p => p.ArchiveId);
+                builder.HasKey(p => p.ArchiveID);
             }
             else
             {
-                builder.HasKey(p => p.Id);
+                builder.HasKey(p => p.ID);
             }
         }
     }

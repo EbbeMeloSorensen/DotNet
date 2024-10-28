@@ -85,7 +85,7 @@ namespace PR.ViewModel
 
             foreach (var personViewModel in PersonViewModels)
             {
-                if (personViewModel.Person.Id != person.Id) continue;
+                if (personViewModel.Person.ID != person.ID) continue;
 
                 SelectedPersonViewModels.Add(personViewModel);
                 break;
@@ -95,13 +95,13 @@ namespace PR.ViewModel
         public void UpdatePeople(
             IEnumerable<Person> people)
         {
-            var idsOfUpdatedPeople = people.Select(_ => _.Id).ToList();
+            var idsOfUpdatedPeople = people.Select(_ => _.ID).ToList();
 
             foreach (var person in _people)
             {
-                if (idsOfUpdatedPeople.Contains(person.Id))
+                if (idsOfUpdatedPeople.Contains(person.ID))
                 {
-                    person.CopyAttributes(people.Single(_ => _.Id == person.Id));
+                    person.CopyAttributes(people.Single(_ => _.ID == person.ID));
                 }
             }
 
@@ -111,7 +111,7 @@ namespace PR.ViewModel
 
             foreach (var personViewModel in PersonViewModels)
             {
-                if (idsOfUpdatedPeople.Contains(personViewModel.Person.Id))
+                if (idsOfUpdatedPeople.Contains(personViewModel.Person.ID))
                 {
                     SelectedPersonViewModels.Add(personViewModel);
                 }
@@ -121,10 +121,10 @@ namespace PR.ViewModel
         public void RemovePeople(
             IEnumerable<Person> people)
         {
-            var idsOfDeletedPeople = people.Select(_ => _.Id);
+            var idsOfDeletedPeople = people.Select(_ => _.ID);
 
             _people = _people
-                .Where(_ => !idsOfDeletedPeople.Contains(_.Id))
+                .Where(_ => !idsOfDeletedPeople.Contains(_.ID))
                 .ToList();
 
             SelectedPersonViewModels.Clear();

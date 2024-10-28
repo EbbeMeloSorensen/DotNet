@@ -60,7 +60,7 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Add(
             Person person)
         {
-            person.Id = Guid.NewGuid();
+            person.ID = Guid.NewGuid();
             person.Created = DateTime.UtcNow;
             person.Superseded = _maxDate;
 
@@ -80,7 +80,7 @@ namespace PR.Persistence.Versioned.Repositories
             {
                 var predicates = new List<Expression<Func<Person, bool>>>
                 {
-                    p => p.Id == id
+                    p => p.ID == id
                 };
 
                 AddVersionPredicates(predicates, DatabaseTime);
@@ -143,7 +143,7 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Update(
             Person person)
         {
-            var objectFromRepository = await Get(person.Id);
+            var objectFromRepository = await Get(person.ID);
             objectFromRepository.Superseded = CurrentTime;
 
             person.Created = CurrentTime;
@@ -155,11 +155,11 @@ namespace PR.Persistence.Versioned.Repositories
             IEnumerable<Person> people)
         {
             // I guess this doesn't quite work yet - check it out
-            var ids = people.Select(p => p.Id).ToList();
+            var ids = people.Select(p => p.ID).ToList();
 
             var predicates = new List<Expression<Func<Person, bool>>>
             {
-                p => ids.Contains(p.Id)
+                p => ids.Contains(p.ID)
             };
 
             var objectsFromRepository = (await Find(predicates)).ToList();
@@ -181,7 +181,7 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Remove(
             Person person)
         {
-            var objectFromRepository = await Get(person.Id);
+            var objectFromRepository = await Get(person.ID);
             objectFromRepository.Superseded = CurrentTime;
         }
 
@@ -190,11 +190,11 @@ namespace PR.Persistence.Versioned.Repositories
         {
             await Task.Run(async () => 
             {
-                var ids = people.Select(p => p.Id).ToList();
+                var ids = people.Select(p => p.ID).ToList();
 
                 var predicates = new List<Expression<Func<Person, bool>>>
                 {
-                    p => ids.Contains(p.Id)
+                    p => ids.Contains(p.ID)
                 };
 
                 var objectsFromRepository = (await Find(predicates)).ToList();

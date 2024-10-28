@@ -111,7 +111,7 @@ namespace PR.UI.Console
 
             var person = new Person()
             {
-                Id = new Guid(options.ID),
+                ID = new Guid(options.ID),
                 FirstName = options.FirstName
             };
 

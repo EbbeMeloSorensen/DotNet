@@ -19,7 +19,7 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
             return await Task.Run(() =>
             {
-                var person = PrDbContext.People.SingleOrDefault(p => p.Id == id);
+                var person = PrDbContext.People.SingleOrDefault(p => p.ID == id);
 
                 if (person == null)
                 {
@@ -42,12 +42,12 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
             await Task.Run(async () =>
             {
                 var updatedPeople = people.ToList();
-                var ids = updatedPeople.Select(p => p.Id);
-                var peopleFromRepository = (await Find(p => ids.Contains(p.Id))).ToList();
+                var ids = updatedPeople.Select(p => p.ID);
+                var peopleFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
 
                 peopleFromRepository.ForEach(pRepo =>
                 {
-                    var updatedPerson = updatedPeople.Single(pUpd => pUpd.Id == pRepo.Id);
+                    var updatedPerson = updatedPeople.Single(pUpd => pUpd.ID == pRepo.ID);
 
                     pRepo.FirstName = updatedPerson.FirstName;
                     pRepo.Surname = updatedPerson.Surname;

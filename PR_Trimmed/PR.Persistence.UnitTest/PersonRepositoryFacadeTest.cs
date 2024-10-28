@@ -8,7 +8,7 @@ namespace PR.Persistence.UnitTest
 {
     public class PersonRepositoryFacadeTest
     {
-        private const bool _versionedDB = false;
+        private const bool _versionedDB = true;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         public PersonRepositoryFacadeTest()
@@ -36,7 +36,7 @@ namespace PR.Persistence.UnitTest
             };
 
             // Act
-            var people = await unitOfWork.People.Find(p => ids.Contains(p.Id));
+            var people = await unitOfWork.People.Find(p => ids.Contains(p.ID));
 
             // Assert
             people.Count().Should().Be(1);
@@ -44,7 +44,7 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async void CreatePerson()
+        public async Task CreatePerson()
         {
             // Arrange
             var person = new Person
@@ -54,7 +54,7 @@ namespace PR.Persistence.UnitTest
 
             // Act
             using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
-            unitOfWork1.People.Add(person);
+            await unitOfWork1.People.Add(person);
             unitOfWork1.Complete();
 
             // Assert
