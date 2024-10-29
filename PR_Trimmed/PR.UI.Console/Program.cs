@@ -33,9 +33,13 @@ namespace PR.UI.Console
         public static async Task ListPeople(
             List options)
         {
+            options.HistoricalTime.TryParsingAsDateTime(out var historicalTime);
             options.DatabaseTime.TryParsingAsDateTime(out var databaseTime);
 
-            await GetApplication().ListPeople(databaseTime, (progress, nameOfSubtask) =>
+            await GetApplication().ListPeople(
+                historicalTime, 
+                databaseTime,
+                (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
@@ -207,7 +211,7 @@ namespace PR.UI.Console
             {
                 if (application.UnitOfWorkFactory is not IUnitOfWorkFactoryVersioned)
                 {
-                    // Wrap the UnitOfWorkFactory, so we get versioning
+                    // Wrap the UnitOfWorkFactory, so we get versioning and history
                     application.UnitOfWorkFactory =
                         new UnitOfWorkFactoryFacade(application.UnitOfWorkFactory);
                 }

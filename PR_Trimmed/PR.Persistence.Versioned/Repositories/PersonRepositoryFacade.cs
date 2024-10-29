@@ -22,6 +22,7 @@ namespace PR.Persistence.Versioned.Repositories
 
         private IUnitOfWork UnitOfWork => _unitOfWorkFacade.UnitOfWork;
         private DateTime? DatabaseTime => _unitOfWorkFacade.DatabaseTime;
+        private DateTime? HistoricalTime => _unitOfWorkFacade.HistoricalTime;
 
         private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
 
@@ -99,14 +100,28 @@ namespace PR.Persistence.Versioned.Repositories
 
         public async Task<IEnumerable<Person>> GetAll()
         {
-            return await Task.Run(() =>
+            var predicates = new List<Expression<Func<Person, bool>>>();
+
+            AddVersionPredicates(predicates, DatabaseTime);
+
+            var people = await UnitOfWork.People.Find(predicates);
+
+            // Only take the latest...
+
+            var time = _maxDate;
+
+            if (HistoricalTime.HasValue)
             {
-                var predicates = new List<Expression<Func<Person, bool>>>();
+                time = HistoricalTime.Value;
+            }
 
-                AddVersionPredicates(predicates, DatabaseTime);
+            var grouped = people.GroupBy(p => p.ID).ToList();
 
-                return UnitOfWork.People.Find(predicates);
-            });
+            people = grouped
+                .Select(g => g.Where(p => p.Start <= time)
+                    .OrderBy(p => p.Start).Last());
+
+            return people;
         }
 
         public async Task<IEnumerable<Person>> Find(

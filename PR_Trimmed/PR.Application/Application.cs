@@ -209,6 +209,7 @@ namespace PR.Application
         }
 
         public async Task ListPeople(
+            DateTime? historicalTime,
             DateTime? databaseTime,
             ProgressCallback progressCallback = null)
         {
@@ -220,6 +221,11 @@ namespace PR.Application
                 if (databaseTime.HasValue && UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
                 {
                     unitOfWorkFactoryVersioned.DatabaseTime = databaseTime.Value;
+                }
+
+                if (historicalTime.HasValue && UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+                {
+                    unitOfWorkFactoryHistorical.HistoricalTime = historicalTime.Value;
                 }
 
                 List<Person>? people = null;

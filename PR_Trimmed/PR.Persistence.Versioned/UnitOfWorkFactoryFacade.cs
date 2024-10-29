@@ -2,11 +2,12 @@
 
 namespace PR.Persistence.Versioned
 {
-    public class UnitOfWorkFactoryFacade : IUnitOfWorkFactoryVersioned
+    public class UnitOfWorkFactoryFacade : IUnitOfWorkFactoryVersioned, IUnitOfWorkFactoryHistorical
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         public DateTime? DatabaseTime { get; set; }
+        public DateTime? HistoricalTime { get; set; }
 
         public UnitOfWorkFactoryFacade(
             IUnitOfWorkFactory unitOfWorkFactory)
@@ -24,6 +25,7 @@ namespace PR.Persistence.Versioned
         {
             return new UnitOfWorkFacade(
                 _unitOfWorkFactory.GenerateUnitOfWork(),
+                HistoricalTime,
                 DatabaseTime);
         }
 
