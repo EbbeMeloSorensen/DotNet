@@ -1,4 +1,5 @@
 ﻿using PR.Domain.Entities;
+using System;
 
 namespace PR.Persistence.EntityFrameworkCore
 {
@@ -24,12 +25,51 @@ namespace PR.Persistence.EntityFrameworkCore
         {
             if (versioned)
             {
-                CreateVersionedDataForSeeding(out people);
+                //CreateVersionedDataForSeeding(out people);
+                CreateBitemporalDataForSeeding(out people);
             }
             else
             {
                 CreateNonversionedDataForSeeding(out people);
             }
+        }
+
+        private static void CreateBitemporalDataForSeeding(
+            out List<Person> people)
+        {
+            var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+            var anakinBecomesDarthVader = new DateTime(2003, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+            var darthVaderDies = new DateTime(2006, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            var anakin_0 = new Person
+            {
+                ID = new Guid("12345678-0000-0000-0000-000000000005"),
+                Created = new DateTime(2024, 10, 29, 13, 0, 0, DateTimeKind.Utc),
+                Superseded = maxDate,
+                Start = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                End = anakinBecomesDarthVader,
+                FirstName = "Anakin",
+                Surname = "Skywalker",
+                Dead = false
+            };
+
+            var anakin_1 = new Person
+            {
+                ID = new Guid("12345678-0000-0000-0000-000000000005"),
+                Created = new DateTime(2024, 10, 29, 13, 2, 0, DateTimeKind.Utc),
+                Superseded = maxDate,
+                Start = anakinBecomesDarthVader,
+                End = darthVaderDies,
+                FirstName = "Darth",
+                Surname = "Vader",
+                Dead = false
+            };
+
+            people = new List<Person>
+            {
+                anakin_0,
+                anakin_1
+            };
         }
 
         private static void CreateVersionedDataForSeeding(
