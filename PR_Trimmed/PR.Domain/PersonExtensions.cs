@@ -18,6 +18,10 @@ namespace PR.Domain
             Person other)
         {
             person.ArchiveID = other.ArchiveID;
+            person.Created = other.Created;
+            person.Superseded = other.Superseded;
+            person.Start = other.Start;
+            person.End = other.End;
             person.ID = other.ID;
             person.FirstName = other.FirstName;
             person.Surname = other.Surname;
@@ -28,9 +32,6 @@ namespace PR.Domain
             person.Birthday = other.Birthday;
             person.Category = other.Category;
             person.Description = other.Description;
-            person.Dead = other.Dead;
-            person.Created = other.Created;
-            person.Superseded = other.Superseded;
         }
     }
 }

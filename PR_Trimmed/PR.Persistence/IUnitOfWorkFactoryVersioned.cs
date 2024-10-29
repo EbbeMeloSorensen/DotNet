@@ -6,9 +6,4 @@ namespace PR.Persistence
     {
         DateTime? DatabaseTime { get; set; }
     }
-
-    public interface IUnitOfWorkFactoryHistorical : IUnitOfWorkFactory
-    {
-        DateTime? HistoricalTime { get; set; }
-    }
 }

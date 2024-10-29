@@ -8,6 +8,7 @@ namespace PR.Persistence.Versioned
 
         public DateTime? DatabaseTime { get; set; }
         public DateTime? HistoricalTime { get; set; }
+        public bool IncludeHistoricalObjects { get; set; }
 
         public UnitOfWorkFactoryFacade(
             IUnitOfWorkFactory unitOfWorkFactory)
@@ -26,7 +27,8 @@ namespace PR.Persistence.Versioned
             return new UnitOfWorkFacade(
                 _unitOfWorkFactory.GenerateUnitOfWork(),
                 HistoricalTime,
-                DatabaseTime);
+                DatabaseTime,
+                IncludeHistoricalObjects);
         }
 
         public void Reseed()

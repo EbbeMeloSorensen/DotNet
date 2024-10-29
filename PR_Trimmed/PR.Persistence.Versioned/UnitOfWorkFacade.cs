@@ -11,6 +11,7 @@ namespace PR.Persistence.Versioned
         internal IUnitOfWork UnitOfWork { get; }
         internal DateTime? DatabaseTime { get; }
         internal DateTime? HistoricalTime { get; }
+        internal bool IncludeHistoricalObjects { get; }
 
         internal DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;
 
@@ -19,11 +20,13 @@ namespace PR.Persistence.Versioned
         public UnitOfWorkFacade(
             IUnitOfWork unitOfWork,
             DateTime? historicalTime,
-            DateTime? databaseTime)
+            DateTime? databaseTime,
+            bool includeHistoricalObjects)
         {
             UnitOfWork = unitOfWork;
             HistoricalTime = historicalTime;
             DatabaseTime = databaseTime;
+            IncludeHistoricalObjects = includeHistoricalObjects;
 
             People = new PersonRepositoryFacade(this);
         }

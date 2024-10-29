@@ -149,7 +149,6 @@ namespace PR.Application
                 var birthday = person.Birthday.HasValue ? person.Birthday.Value.AsDateTimeString(false) : "-";
                 var category = string.IsNullOrEmpty(person.Category) ? "-" : person.Category;
                 var description = string.IsNullOrEmpty(person.Description) ? "-" : person.Description;
-                var dead = person.Dead.HasValue ? (person.Dead.Value ? "yes" : "no") : "-";
 
                 Console.WriteLine();
                 Console.WriteLine("Person Details:");
@@ -163,7 +162,6 @@ namespace PR.Application
                 Console.WriteLine($"  Birthday:    {birthday}");
                 Console.WriteLine($"  Category:    {category}");
                 Console.WriteLine($"  Description: {description}");
-                Console.WriteLine($"  Dead:        {dead}");
             });
         }
 
@@ -209,8 +207,9 @@ namespace PR.Application
         }
 
         public async Task ListPeople(
-            DateTime? historicalTime,
+            DateTime? timeOfInterest,
             DateTime? databaseTime,
+            bool includeHistoricalPeople,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(async () =>
@@ -223,12 +222,14 @@ namespace PR.Application
                     unitOfWorkFactoryVersioned.DatabaseTime = databaseTime.Value;
                 }
 
-                if (historicalTime.HasValue && UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+                if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
                 {
-                    unitOfWorkFactoryHistorical.HistoricalTime = historicalTime.Value;
+                    unitOfWorkFactoryHistorical.IncludeHistoricalObjects = includeHistoricalPeople;
+                    timeOfInterest ??= DateTime.UtcNow;
+                    unitOfWorkFactoryHistorical.HistoricalTime = timeOfInterest;
                 }
 
-                List<Person>? people = null;
+                List<Person> people;
 
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
@@ -244,7 +245,7 @@ namespace PR.Application
                     Console.WriteLine($"Database Time: {databaseTime}");
                 }
 
-                people?.ToList().ForEach(p =>
+                people.ToList().ForEach(p =>
                 {
                     var sb = new StringBuilder($"  {p.ID}: {p.FirstName}");
 
@@ -253,7 +254,7 @@ namespace PR.Application
                         sb.Append($" {p.Surname}");
                     }
 
-                    if (p.Dead is true)
+                    if (timeOfInterest.HasValue && p.End < timeOfInterest)
                     {
                         sb.Append(" (Dead)");
                     }

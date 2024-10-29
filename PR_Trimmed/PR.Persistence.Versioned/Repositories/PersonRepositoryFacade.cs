@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using PR.Domain;
 using PR.Domain.Entities;
@@ -23,6 +23,7 @@ namespace PR.Persistence.Versioned.Repositories
         private IUnitOfWork UnitOfWork => _unitOfWorkFacade.UnitOfWork;
         private DateTime? DatabaseTime => _unitOfWorkFacade.DatabaseTime;
         private DateTime? HistoricalTime => _unitOfWorkFacade.HistoricalTime;
+        private bool IncludeHistoricalObjects => _unitOfWorkFacade.IncludeHistoricalObjects;
 
         private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
 
@@ -104,9 +105,7 @@ namespace PR.Persistence.Versioned.Repositories
 
             AddVersionPredicates(predicates, DatabaseTime);
 
-            var people = await UnitOfWork.People.Find(predicates);
-
-            // Only take the latest...
+            var people = (await UnitOfWork.People.Find(predicates)).ToList();
 
             var time = _maxDate;
 
@@ -115,13 +114,30 @@ namespace PR.Persistence.Versioned.Repositories
                 time = HistoricalTime.Value;
             }
 
-            var grouped = people.GroupBy(p => p.ID).ToList();
+            if (!people.Any())
+            {
+                return people;
+            }
 
-            people = grouped
-                .Select(g => g.Where(p => p.Start <= time)
-                    .OrderBy(p => p.Start).Last());
+            Func<Person, bool> predicate;
 
-            return people;
+            if (IncludeHistoricalObjects)
+            {
+                predicate = p => p.Start <= time;
+            }
+            else
+            {
+                predicate = p => p.Start <= time && p.End >= time;
+            }
+
+            return people
+                .GroupBy(p => p.ID)
+                .Select(g => g
+                    .Where(predicate)
+                    .OrderBy(p => p.Start)
+                    .LastOrDefault())
+                .Where(p => p != null)
+                .ToList();
         }
 
         public async Task<IEnumerable<Person>> Find(

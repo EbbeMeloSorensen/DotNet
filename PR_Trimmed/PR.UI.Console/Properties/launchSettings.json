@@ -2,7 +2,7 @@
   "profiles": {
     "PR.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "list -d \"2024-10-29 15:00:00\""
+      "commandLineArgs": "list -i"
     }
   }
 }

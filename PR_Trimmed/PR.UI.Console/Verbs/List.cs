@@ -10,5 +10,8 @@ namespace PR.UI.Console.Verbs
 
         [Option('d', "databasetime", Required = false, HelpText = "Database Time", Default = "")]
         public string DatabaseTime { get; set; }
+
+        [Option('i', "includehistoricalobjects", Required = false, HelpText = "Include Historical Objects", Default = false)]
+        public bool IncludeHistoricalObjects { get; set; }
     }
 }

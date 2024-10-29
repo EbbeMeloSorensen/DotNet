@@ -49,8 +49,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Start = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 End = anakinBecomesDarthVader,
                 FirstName = "Anakin",
-                Surname = "Skywalker",
-                Dead = false
+                Surname = "Skywalker"
             };
 
             var anakin_1 = new Person
@@ -61,8 +60,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Start = anakinBecomesDarthVader,
                 End = darthVaderDies,
                 FirstName = "Darth",
-                Surname = "Vader",
-                Dead = false
+                Surname = "Vader"
             };
 
             people = new List<Person>
@@ -96,8 +94,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 Superseded = padmeDies,
                 FirstName = "Padme",
-                Surname = "Amidala",
-                Dead = false
+                Surname = "Amidala"
             };
 
             var padme_1 = new Person
@@ -106,8 +103,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = padmeDies,
                 Superseded = new DateTime(2003, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 FirstName = "Padme",
-                Surname = "Amidala",
-                Dead = true
+                Surname = "Amidala"
             };
 
             var obiWan_0 = new Person
@@ -117,8 +113,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = obiWanDies,
                 FirstName = "Obi-Wan",
                 Surname = "Kenobi",
-                Nickname = "Ben",
-                Dead = false
+                Nickname = "Ben"
             };
 
             var obiWan_1 = new Person
@@ -128,8 +123,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = new DateTime(2004, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 FirstName = "Obi-Wan",
                 Surname = "Kenobi",
-                Nickname = "Ben",
-                Dead = true
+                Nickname = "Ben"
             };
 
             var quiGon_0 = new Person
@@ -138,8 +132,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 Superseded = quiGonDies,
                 FirstName = "Qui-Gon",
-                Surname = "Jinn",
-                Dead = false
+                Surname = "Jinn"
             };
 
             var quiGon_1 = new Person
@@ -148,8 +141,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = quiGonDies,
                 Superseded = new DateTime(2001, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 FirstName = "Qui-Gon",
-                Surname = "Jinn",
-                Dead = true
+                Surname = "Jinn"
             };
 
             var palpatine_0 = new Person
@@ -159,8 +151,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = palpatineDies,
                 FirstName = "Palpatine",
                 Address = "Coruscant",
-                ZipCode = "66",
-                Dead = false
+                ZipCode = "66"
             };
 
             var palpatine_1 = new Person
@@ -170,8 +161,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = new DateTime(2009, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 FirstName = "Palpatine",
                 Address = "Coruscant",
-                ZipCode = "66",
-                Dead = true
+                ZipCode = "66"
             };
 
             var anakin_0 = new Person
@@ -180,8 +170,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 Superseded = anakinBecomesDarthVader,
                 FirstName = "Anakin",
-                Surname = "Skywalker",
-                Dead = false
+                Surname = "Skywalker"
             };
 
             var anakin_1 = new Person
@@ -190,8 +179,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = anakinBecomesDarthVader,
                 Superseded = darthVaderDies,
                 FirstName = "Darth",
-                Surname = "Vader",
-                Dead = false
+                Surname = "Vader"
             };
 
             var anakin_2 = new Person
@@ -200,8 +188,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = darthVaderDies,
                 Superseded = new DateTime(2006, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 FirstName = "Darth",
-                Surname = "Vader",
-                Dead = true
+                Surname = "Vader"
             };
 
             var r2d2 = new Person
@@ -227,8 +214,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = lukeDies,
                 FirstName = "Luke",
                 Surname = "Skywalker",
-                Birthday = new DateTime(2003, 11, 1, 0, 0, 0, DateTimeKind.Utc),
-                Dead = false
+                Birthday = new DateTime(2003, 11, 1, 0, 0, 0, DateTimeKind.Utc)
             };
 
             var luke_1 = new Person
@@ -238,8 +224,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = new DateTime(2008, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 FirstName = "Luke",
                 Surname = "Skywalker",
-                Birthday = new DateTime(2003, 11, 1, 0, 0, 0, DateTimeKind.Utc),
-                Dead = true
+                Birthday = new DateTime(2003, 11, 1, 0, 0, 0, DateTimeKind.Utc)
             };
 
             var leia_0 = new Person
@@ -250,7 +235,6 @@ namespace PR.Persistence.EntityFrameworkCore
                 FirstName = "Leia",
                 Surname = "Organa",
                 Birthday = new DateTime(2003, 11, 2, 0, 0, 0, DateTimeKind.Utc),
-                Dead = false,
                 Description = "Princess"
             };
 
@@ -262,7 +246,6 @@ namespace PR.Persistence.EntityFrameworkCore
                 FirstName = "Leia",
                 Surname = "Organa",
                 Birthday = new DateTime(2003, 11, 2, 0, 0, 0, DateTimeKind.Utc),
-                Dead = true,
                 Description = "Princess"
             };
 
@@ -273,7 +256,6 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = hansSoloDies,
                 FirstName = "Han",
                 Surname = "Solo",
-                Dead = false,
                 Description = "Smuggler"
             };
 
@@ -284,7 +266,6 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = new DateTime(2007, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 FirstName = "Han",
                 Surname = "Solo",
-                Dead = true,
                 Description = "Smuggler"
             };
 
@@ -295,8 +276,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = maxDate,
                 FirstName = "Chewbacca",
                 Nickname = "Chewie",
-                Category = "Wookie",
-                Dead = false
+                Category = "Wookie"
             };
 
             var lando = new Person
@@ -307,8 +287,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 FirstName = "Lando",
                 Surname = "Calrissian",
                 Address = "Bespin",
-                City = "Cloud City",
-                Dead = false
+                City = "Cloud City"
             };
 
             var rey_0 = new Person
@@ -317,8 +296,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 Superseded = reyTakesSurnameSkywalker,
                 FirstName = "Rey",
-                Address = "Tatooine",
-                Dead = false
+                Address = "Tatooine"
             };
 
             var rey_1 = new Person
@@ -327,8 +305,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = reyTakesSurnameSkywalker,
                 Superseded = maxDate,
                 FirstName = "Rey",
-                Surname = "Skywalker",
-                Dead = false
+                Surname = "Skywalker"
             };
 
             var kylo_0 = new Person
@@ -337,8 +314,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 Superseded = kyloRenDies,
                 FirstName = "Kylo",
-                Surname = "Ren",
-                Dead = false
+                Surname = "Ren"
             };
 
             var kylo_1 = new Person
@@ -347,8 +323,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = kyloRenDies,
                 Superseded = new DateTime(2009, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 FirstName = "Kylo",
-                Surname = "Ren",
-                Dead = true
+                Surname = "Ren"
             };
 
             people = new List<Person>

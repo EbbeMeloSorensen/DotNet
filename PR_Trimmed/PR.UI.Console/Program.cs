@@ -1,11 +1,11 @@
-﻿using CommandLine;
+﻿using System.Configuration;
 using StructureMap;
+using CommandLine;
+using Craft.Utils;
 using PR.Domain.Entities;
+using PR.Persistence;
 using PR.Persistence.Versioned;
 using PR.UI.Console.Verbs;
-using System.Configuration;
-using Craft.Utils;
-using PR.Persistence;
 
 namespace PR.UI.Console
 {
@@ -39,6 +39,7 @@ namespace PR.UI.Console
             await GetApplication().ListPeople(
                 historicalTime, 
                 databaseTime,
+                options.IncludeHistoricalObjects,
                 (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);

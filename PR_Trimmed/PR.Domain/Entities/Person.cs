@@ -29,7 +29,5 @@ namespace PR.Domain.Entities
         public string? Category { get; set; }
 
         public string? Description { get; set; }
-
-        public bool? Dead { get; set; }
     }
 }
