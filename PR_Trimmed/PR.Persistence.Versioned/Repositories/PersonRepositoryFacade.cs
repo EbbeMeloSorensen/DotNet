@@ -104,7 +104,7 @@ namespace PR.Persistence.Versioned.Repositories
             var predicates = new List<Expression<Func<Person, bool>>>();
 
             AddVersionPredicates(predicates, DatabaseTime);
-            AddHistoryPredicates(predicates, HistoricalTime, IncludeHistoricalObjects);
+            AddHistoryPredicates(predicates, HistoricalTime);
 
             // Her hiver du ALLE gældende rækker op, uanset hvad deres virkningstidsinterval er.
             // Mon ikke det var smartere kun at hive dem op, der faktisk skærer time Of interest?
@@ -115,33 +115,14 @@ namespace PR.Persistence.Versioned.Repositories
 
             var people = (await UnitOfWork.People.Find(predicates)).ToList();
 
-            var time = _maxDate;
-
-            if (HistoricalTime.HasValue)
-            {
-                time = HistoricalTime.Value;
-            }
-
             if (!people.Any())
             {
                 return people;
             }
 
-            Func<Person, bool> predicate;
-
-            if (IncludeHistoricalObjects)
-            {
-                predicate = p => p.Start <= time;
-            }
-            else
-            {
-                predicate = p => p.Start <= time && p.End >= time;
-            }
-
             return people
                 .GroupBy(p => p.ID)
                 .Select(g => g
-                    .Where(predicate)
                     .OrderBy(p => p.Start)
                     .LastOrDefault())
                 .Where(p => p != null)
@@ -151,26 +132,21 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task<IEnumerable<Person>> Find(
             Expression<Func<Person, bool>> predicate)
         {
-            return await Task.Run(() =>
+            var predicates = new List<Expression<Func<Person, bool>>>
             {
-                var predicates = new List<Expression<Func<Person, bool>>>
-                {
-                    predicate
-                };
+                predicate
+            };
 
-                return Find(predicates);
-            });
+            return await Find(predicates);
         }
 
         public async Task<IEnumerable<Person>> Find(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            return await Task.Run(async () =>
-            {
-                AddVersionPredicates(predicates, DatabaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
+            AddHistoryPredicates(predicates, HistoricalTime);
 
-                return await UnitOfWork.People.Find(predicates);
-            });
+            return await UnitOfWork.People.Find(predicates);
         }
 
         public Person SingleOrDefault(
@@ -255,11 +231,13 @@ namespace PR.Persistence.Versioned.Repositories
 
         private void AddHistoryPredicates(
             ICollection<Expression<Func<Person, bool>>> predicates,
-            DateTime? historicalTime,
-            bool includeHistoricalObjects)
+            DateTime? historicalTime)
         {
+            historicalTime ??= DateTime.UtcNow;
+
             if (IncludeHistoricalObjects)
             {
+                // Bemærk, at vi med denne får alle de virkningstidsintervaller med, der var historiske på pågældende tidspunkt
                 predicates.Add(p => p.Start <= historicalTime);
             }
             else

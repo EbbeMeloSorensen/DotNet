@@ -18,7 +18,7 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Content="Time Of Interest:"/>
-        <DatePicker Grid.Row="0" Grid.Column="1" Margin="2" SelectedDate="{Binding DatabaseTime}"/>
+        <DatePicker Grid.Row="0" Grid.Column="1" Margin="2" SelectedDate="{Binding HistoricalTime}"/>
 
         <Label Grid.Row="1" Grid.Column="0" Content="Database Time:"/>
         <DatePicker Grid.Row="1" Grid.Column="1" Margin="2" SelectedDate="{Binding DatabaseTime}"/>
