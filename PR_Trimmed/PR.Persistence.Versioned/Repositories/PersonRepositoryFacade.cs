@@ -104,6 +104,14 @@ namespace PR.Persistence.Versioned.Repositories
             var predicates = new List<Expression<Func<Person, bool>>>();
 
             AddVersionPredicates(predicates, DatabaseTime);
+            AddHistoryPredicates(predicates, HistoricalTime, IncludeHistoricalObjects);
+
+            // Her hiver du ALLE gældende rækker op, uanset hvad deres virkningstidsinterval er.
+            // Mon ikke det var smartere kun at hive dem op, der faktisk skærer time Of interest?
+            // Ellers filtrerer du jo i memory, hvor det helst skal foregå i databasen.
+
+            // I første omgang får vi ALLE historiske objekter med, og eneste måde at fjerne de ældste er jo netop
+            // at gruppere dem efter id og så tage den seneste
 
             var people = (await UnitOfWork.People.Find(predicates)).ToList();
 
@@ -243,6 +251,21 @@ namespace PR.Persistence.Versioned.Repositories
             IEnumerable<Person> people)
         {
             throw new NotImplementedException();
+        }
+
+        private void AddHistoryPredicates(
+            ICollection<Expression<Func<Person, bool>>> predicates,
+            DateTime? historicalTime,
+            bool includeHistoricalObjects)
+        {
+            if (IncludeHistoricalObjects)
+            {
+                predicates.Add(p => p.Start <= historicalTime);
+            }
+            else
+            {
+                predicates.Add(p => p.Start <= historicalTime && p.End > historicalTime);
+            }
         }
 
         private void AddVersionPredicates(

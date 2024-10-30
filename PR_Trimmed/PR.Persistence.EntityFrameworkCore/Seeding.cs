@@ -63,10 +63,22 @@ namespace PR.Persistence.EntityFrameworkCore
                 Surname = "Vader"
             };
 
+            var chewbacca = new Person
+            {
+                ID = new Guid("12345678-0000-0000-0000-000000000011"),
+                Created = new DateTime(2024, 10, 29, 13, 4, 0, DateTimeKind.Utc),
+                Superseded = maxDate,
+                Start = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                End = maxDate,
+                FirstName = "Chewbacca",
+                Nickname = "Chewie"
+            };
+
             people = new List<Person>
             {
                 anakin_0,
-                anakin_1
+                anakin_1,
+                chewbacca
             };
         }
 

@@ -15,6 +15,11 @@ Todo:
     hvor den entitet, der hedder AbstractEnvironmentalMonitoringFacility snart sagt ingen informationer har. For Person kunne man måske
     operere med en AbstractPerson. I DFOS gør de vel egentlig det samme, hvor de effektivt opererer med, at en Observing Facility sådan
     set bare er en samling af Details...
+    ....De forskellige objekter har jo altså samme objekt id, dvs det er ikke unikt, men effektivt gælder der, at det i kombination
+    med et virkningstidsinterval ikke må overlappe med andre virkningstidsintervaller for samme objekt
+* Hvorfor får vi kun en person op med konsolapplikationen men 2 med WPF'en?
+  -> Den funktionalitet, hvor du plukker det ene objekt, der svarer til time of interest, det ligger indtil videre kun i
+     metoden PersonRepositoryFacade.GetAll. Du skal nok gøre den konstruktion generelt anvendelig, så du også kan bruge den i Find
 * Reparer Glossary, C2IEDM og WIGOS
   -> Glossary er sgu lidt død i det - nok bedre at indlemme den som sit eget domæne i PR
   -> Wigos er repareret men nok en smule vingeskudt og det samme gælder formentlig for C2IEDM for

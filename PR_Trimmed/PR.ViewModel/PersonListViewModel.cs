@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;

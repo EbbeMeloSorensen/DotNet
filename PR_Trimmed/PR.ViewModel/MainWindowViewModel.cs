@@ -279,19 +279,33 @@ namespace PR.ViewModel
         private void ShowOptionsDialog(
             object owner)
         {
+            DateTime? historicalTime = null;
             DateTime? databaseTime = null;
 
-            if (UnitOfWorkFactory is IUnitOfWorkFactoryVersioned)
+            if (UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
             {
-                databaseTime = (UnitOfWorkFactory as IUnitOfWorkFactoryVersioned).DatabaseTime;
+                databaseTime = unitOfWorkFactoryVersioned.DatabaseTime;
             }
 
-            var dialogViewModel = new OptionsDialogViewModel(databaseTime);
+            if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+            {
+                historicalTime = unitOfWorkFactoryHistorical.HistoricalTime;
+            }
+
+            var dialogViewModel = new OptionsDialogViewModel(
+                historicalTime,
+                databaseTime);
+
             _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
 
-            if (UnitOfWorkFactory is IUnitOfWorkFactoryVersioned)
+            if (UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned2)
             {
-                (UnitOfWorkFactory as IUnitOfWorkFactoryVersioned).DatabaseTime = dialogViewModel.DatabaseTime;
+                unitOfWorkFactoryVersioned2.DatabaseTime = dialogViewModel.DatabaseTime;
+            }
+
+            if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical2)
+            {
+                unitOfWorkFactoryHistorical2.HistoricalTime = dialogViewModel.HistoricalTime;
             }
         }
 
