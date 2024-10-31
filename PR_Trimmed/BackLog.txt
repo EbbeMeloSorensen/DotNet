@@ -13,6 +13,8 @@ Todo:
   mnjaaah du kunne altså godt til en start udvide Person med at have lat long koordinater... selv om det lidt er noget svineri
   Til en start burde du altså lige hive din kort-applikation ind, skrælle den, og erstatte med "personer".
   PT så dealer den jo i en hel masse, hvor der også er child entiteter med... det skal skrælles ud
+  Refaktorer den der API-plugin så det er mindre skrald-agtigt - rent faktisk bør du jo nok lave en ekstra, som ikke trækker på
+  det sædvanlige API men derimod på DFOS
 
 * Du bør have VIRKNINGSTID med for personer, så man ikke skal spole tilbage i tid for at se, hvad de f.eks. har heddet før.
   - Det skal nok være helt generelt, lige som det jo er for versioned object, så det hurtigt kan skrælles af, hvis man ikke
