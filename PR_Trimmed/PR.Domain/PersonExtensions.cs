@@ -32,6 +32,8 @@ namespace PR.Domain
             person.Birthday = other.Birthday;
             person.Category = other.Category;
             person.Description = other.Description;
+            person.Latitude = other.Latitude;
+            person.Longitude = other.Longitude;
         }
     }
 }

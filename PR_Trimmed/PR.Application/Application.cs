@@ -149,6 +149,8 @@ namespace PR.Application
                 var birthday = person.Birthday.HasValue ? person.Birthday.Value.AsDateTimeString(false) : "-";
                 var category = string.IsNullOrEmpty(person.Category) ? "-" : person.Category;
                 var description = string.IsNullOrEmpty(person.Description) ? "-" : person.Description;
+                var latitude = person.Latitude.HasValue ? $"{person.Latitude.Value}" : "-";
+                var longitude = person.Longitude.HasValue ? $"{person.Longitude.Value}" : "-";
 
                 Console.WriteLine();
                 Console.WriteLine("Person Details:");
@@ -162,6 +164,8 @@ namespace PR.Application
                 Console.WriteLine($"  Birthday:    {birthday}");
                 Console.WriteLine($"  Category:    {category}");
                 Console.WriteLine($"  Description: {description}");
+                Console.WriteLine($"  Latitude:    {latitude}");
+                Console.WriteLine($"  Longitude:   {longitude}");
             });
         }
 
@@ -252,6 +256,11 @@ namespace PR.Application
                     if (!string.IsNullOrEmpty(p.Surname))
                     {
                         sb.Append($" {p.Surname}");
+                    }
+
+                    if (p.Latitude.HasValue && p.Longitude.HasValue)
+                    {
+                        sb.Append($" ({p.Latitude}, {p.Longitude})");
                     }
 
                     if (timeOfInterest.HasValue && p.End < timeOfInterest)

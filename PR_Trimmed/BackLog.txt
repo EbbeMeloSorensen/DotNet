@@ -3,6 +3,17 @@ Done:
 * Skræl Person ned, så den kun har first name og surname
 
 Todo:
+* Lav det sådan, at man fra konsol-applikationen kan trække for real på DFOS-APIet, så man ikke tilsyneladende hiver personer
+  men derimod observing facilities. De skal jo i øvrigt have et navn. Eller også kunne du bare lave noget mapping, der er lidt
+  mere clever - du kunne jo f.eks. trække en observing facility fra DFOS og så mappe den ind i et ANTAL Person objekter, hvor
+  der jo så gerne skulle være en pr detail...
+  Udviklingsarbejdet kan passende foregå på Linux'en for konsol-applikationen, men når det så virker, kan du passende køre det 
+  over på WPF-applikationen og installere den på DOIT-maskinen.
+  Frem for at mappe det over i Person kunne du jo altså også sætte en observing facility i søen..
+  mnjaaah du kunne altså godt til en start udvide Person med at have lat long koordinater... selv om det lidt er noget svineri
+  Til en start burde du altså lige hive din kort-applikation ind, skrælle den, og erstatte med "personer".
+  PT så dealer den jo i en hel masse, hvor der også er child entiteter med... det skal skrælles ud
+
 * Du bør have VIRKNINGSTID med for personer, så man ikke skal spole tilbage i tid for at se, hvad de f.eks. har heddet før.
   - Det skal nok være helt generelt, lige som det jo er for versioned object, så det hurtigt kan skrælles af, hvis man ikke
     er interesseret i virkningstid

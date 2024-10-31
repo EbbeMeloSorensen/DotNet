@@ -30,6 +30,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private DateTime? _originalSharedBirthday;
     private string _originalSharedCategory;
     private string _originalSharedComments;
+    private double? _originalSharedLatitude;
+    private double? _originalSharedLongitude;
 
     private string _sharedFirstName;
     private string _sharedSurname;
@@ -40,6 +42,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private DateTime? _sharedBirthday;
     private string _sharedCategory;
     private string _sharedComments;
+    private double? _sharedLatitude;
+    private double? _sharedLongitude;
 
     private bool _isVisible;
 
@@ -148,6 +152,28 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
+    public double? SharedLatitude
+    {
+        get { return _sharedLatitude; }
+        set
+        {
+            _sharedLatitude = value;
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
+    public double? SharedLongitude
+    {
+        get { return _sharedLongitude; }
+        set
+        {
+            _sharedLongitude = value;
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
     public bool IsVisible
     {
         get { return _isVisible; }
@@ -223,6 +249,14 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? firstPerson.Description
             : null;
 
+        SharedLatitude = temp.Objects.All(p => p.Latitude == firstPerson.Latitude)
+            ? firstPerson.Latitude
+            : null;
+
+        SharedLongitude = temp.Objects.All(p => p.Longitude == firstPerson.Longitude)
+            ? firstPerson.Longitude
+            : null;
+
         _originalSharedFirstName = SharedFirstName;
         _originalSharedSurname = SharedSurname;
         _originalSharedNickname = SharedNickname;
@@ -232,12 +266,16 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         _originalSharedBirthday = SharedBirthday;
         _originalSharedCategory = SharedCategory;
         _originalSharedComments = SharedComments;
+        _originalSharedLatitude = SharedLatitude;
+        _originalSharedLongitude = SharedLongitude;
 
         ApplyChangesCommand.RaiseCanExecuteChanged();
     }
 
     private void ApplyChanges()
     {
+        throw new NotImplementedException();
+
         UpdateState(StateOfView.Updated);
 
         Error = string.Join("",
@@ -276,7 +314,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             SharedCity != _originalSharedCity ||
             SharedBirthday != _originalSharedBirthday ||
             SharedCategory != _originalSharedCategory ||
-            SharedComments != _originalSharedComments;
+            SharedComments != _originalSharedComments ||
+            SharedLatitude != _originalSharedLatitude ||
+            SharedLongitude != _originalSharedLongitude;
     }
 
     public ObservableCollection<ValidationError> ValidationMessages
@@ -295,7 +335,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
                     new ValidationError {PropertyName = "SharedCity"},
                     new ValidationError {PropertyName = "SharedBirthday"},
                     new ValidationError {PropertyName = "SharedCategory"},
-                    new ValidationError {PropertyName = "SharedComments"}
+                    new ValidationError {PropertyName = "SharedComments"},
+                    new ValidationError {PropertyName = "SharedLatitude"},
+                    new ValidationError {PropertyName = "SharedLongitude"},
                 };
             }
 
@@ -423,6 +465,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         RaisePropertyChanged("SharedBirthday");
         RaisePropertyChanged("SharedCategory");
         RaisePropertyChanged("SharedComments");
+        RaisePropertyChanged("SharedLatitude");
+        RaisePropertyChanged("SharedLongitude");
     }
 
     private void UpdateState(StateOfView state)
