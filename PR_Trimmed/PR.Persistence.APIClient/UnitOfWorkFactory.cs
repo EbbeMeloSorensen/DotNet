@@ -2,8 +2,10 @@
 
 namespace PR.Persistence.APIClient
 {
-    public class UnitOfWorkFactory : IUnitOfWorkFactoryVersioned
+    public class UnitOfWorkFactory : IUnitOfWorkFactoryVersioned, IUnitOfWorkFactoryHistorical
     {
+        public DateTime? HistoricalTime { get; set; }
+        public bool IncludeHistoricalObjects { get; set; }
         public DateTime? DatabaseTime { get; set; }
 
         public void Initialize(

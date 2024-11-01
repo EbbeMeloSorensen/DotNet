@@ -11,7 +11,7 @@ using PR.Web.Persistence;
 namespace PR.Web.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241020162751_InitialMigration")]
+    [Migration("20241031100605_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -150,18 +150,48 @@ namespace PR.Web.Persistence.Migrations
 
             modelBuilder.Entity("PR.Domain.Entities.Person", b =>
                 {
-                    b.Property<Guid>("ArchiveId")
+                    b.Property<Guid>("ArchiveID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Birthday")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Category")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("End")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Nickname")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Start")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Superseded")
@@ -170,7 +200,10 @@ namespace PR.Web.Persistence.Migrations
                     b.Property<string>("Surname")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ArchiveId");
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ArchiveID");
 
                     b.ToTable("People");
                 });

@@ -5,6 +5,7 @@ public abstract class PagingParams
     private const int MaxPageSize = 50;
     public int PageNumber { get; set; } = 1;
 
+    public string? HistoricalTime { get; set; } = null;
     public string? DatabaseTime { get; set; } = null;
 
     private int _pageSize = 25;

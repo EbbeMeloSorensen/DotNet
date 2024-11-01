@@ -40,6 +40,21 @@ public class List
             Query request, 
             CancellationToken cancellationToken)
         {
+            if (!string.IsNullOrEmpty(request.Params.HistoricalTime))
+            {
+                try
+                {
+                    var dbTime = DateTime.ParseExact(request.Params.HistoricalTime, "yyyy-MM-ddTHH:mm:ssZ",
+                        CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+
+                    (_unitOfWorkFactory as UnitOfWorkFactoryFacade)!.HistoricalTime = dbTime;
+                }
+                catch (Exception e)
+                {
+                    return Result<PagedList<PersonDto>>.Failure("Invalid time format");
+                }
+            }
+
             if (!string.IsNullOrEmpty(request.Params.DatabaseTime))
             {
                 try

@@ -15,14 +15,15 @@ namespace PR.Persistence.APIClient.Repositories
 {
     public class PersonRepository : IPersonRepository
     {
-        private bool _readFromDFOSInstead = false;
-
         private string _token;
+        private DateTime? _historicalTime;
         private DateTime? _databaseTime;
 
         public PersonRepository(
+            DateTime? historicalTime,
             DateTime? databaseTime)
         {
+            _historicalTime = historicalTime;
             _databaseTime = databaseTime;
         }
 
@@ -75,65 +76,27 @@ namespace PR.Persistence.APIClient.Repositories
 
         public async Task<IEnumerable<Person>> GetAll()
         {
-            if (_readFromDFOSInstead)
-            {
-                return await Task.Run(async () =>
-                {
-                    // The we call the API using the token - here we want all people (and we are not using pagination here)
-                    var url = "http://dfos-api-prod.dmi.dk/collections/observing_facility/items";
-
-                    // if (_databaseTime.HasValue)
-                    // {
-                    //     //url = "http://localhost:5000/api/people?DatabaseTime=2002-01-01T00:00:00Z";
-                    //     url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}"; 
-                    // }
-
-                    // ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
-                    //     new AuthenticationHeaderValue("Bearer", _token);
-
-                    using var response = await ApiHelper.ApiClient.GetAsync(url);
-                    response.EnsureSuccessStatusCode();
-                    var responseBody = await response.Content.ReadAsStringAsync();
-
-                    var data = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
-
-                    var people = data.Features.Select(_ => {
-                        return new Person
-                        {
-                            ID = _.Id,
-                            FirstName = _.Properties.Details.First().Value.FacilityName,
-                        };
-                    });
-
-                    return people;
-                });
-            }
-
             await Login();
 
-            return await Task.Run(async () =>
+            // We call the API using the token - here we want all people (and we are not using pagination here)
+            var url = "http://localhost:5000/api/people";
+
+            if (_databaseTime.HasValue)
             {
-                // We call the API using the token - here we want all people (and we are not using pagination here)
-                var url = "http://localhost:5000/api/people";
+                url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}";
+            }
 
-                if (_databaseTime.HasValue)
-                {
-                    //url = "http://localhost:5000/api/people?DatabaseTime=2002-01-01T00:00:00Z";
-                    url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}";
-                }
+            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _token);
 
-                ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", _token);
+            using var response = await ApiHelper.ApiClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
 
-                using (var response = await ApiHelper.ApiClient.GetAsync(url))
-                {
-                    response.EnsureSuccessStatusCode();
-                    var responseBody = await response.Content.ReadAsStringAsync();
+            var people = JsonConvert.DeserializeObject<List<Person>>(responseBody);
 
-                    // When you know the structure of the json data
-                    return JsonConvert.DeserializeObject<List<Person>>(responseBody);
-                }
-            });
+            // When you know the structure of the json data
+            return people;
         }
 
         public async Task<IEnumerable<Person>> Find(
