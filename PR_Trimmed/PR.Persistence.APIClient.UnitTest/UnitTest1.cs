@@ -67,72 +67,72 @@ namespace PR.Persistence.APIClient.UnitTest
             }
         }
 
-        [Fact]
-        public async void DFOSAPI_RetrieveAllObservingFacilities()
-        {
-            // Arrange
-            var observingFacilities = new List<ObservingFacility>();
+        //[Fact]
+        //public async void DFOSAPI_RetrieveAllObservingFacilities()
+        //{
+        //    // Arrange
+        //    var observingFacilities = new List<ObservingFacility>();
 
-            // Act
-            var url = "http://dfos-api-prod.dmi.dk/collections/observing_facility/items";
-            //var url = "http://dfos-api-dev.dmi.dk/collections/observing_facility/items?limit=100&datetime=../..";
+        //    // Act
+        //    var url = "http://dfos-api-prod.dmi.dk/collections/observing_facility/items";
+        //    //var url = "http://dfos-api-dev.dmi.dk/collections/observing_facility/items?limit=100&datetime=../..";
 
-            using var response = await ApiHelper.ApiClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
+        //    using var response = await ApiHelper.ApiClient.GetAsync(url);
+        //    response.EnsureSuccessStatusCode();
+        //    var responseBody = await response.Content.ReadAsStringAsync();
 
-            // Some of the json data is fully structured, so we can deserialize the response
-            var data = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
-            data.Should().NotBeNull();
-            data.Type.Should().Be("FeatureCollection");
+        //    // Some of the json data is fully structured, so we can deserialize the response
+        //    var data = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
+        //    data.Should().NotBeNull();
+        //    data.Type.Should().Be("FeatureCollection");
            
-            // The "properties" element of a feature has a "details" element, where the only property
-            // has a property name that is a time interval. We cannot deserialize this, so instead
-            // we read the response into a JsonDocument that we then navigate through
-            using (var doc = JsonDocument.Parse(responseBody))
-            {
-                var root = doc.RootElement;
+        //    // The "properties" element of a feature has a "details" element, where the only property
+        //    // has a property name that is a time interval. We cannot deserialize this, so instead
+        //    // we read the response into a JsonDocument that we then navigate through
+        //    using (var doc = JsonDocument.Parse(responseBody))
+        //    {
+        //        var root = doc.RootElement;
 
-                // Navigate through JSON dynamically
-                var type = root.GetProperty("type");
-                var features = root.GetProperty("features");
+        //        // Navigate through JSON dynamically
+        //        var type = root.GetProperty("type");
+        //        var features = root.GetProperty("features");
 
-                if (features.ValueKind == JsonValueKind.Array)
-                {
-                    foreach (JsonElement element in features.EnumerateArray())
-                    {
-                        var temp1 = element.GetProperty("properties");
-                        var temp2 = temp1.GetProperty("details");
+        //        if (features.ValueKind == JsonValueKind.Array)
+        //        {
+        //            foreach (JsonElement element in features.EnumerateArray())
+        //            {
+        //                var temp1 = element.GetProperty("properties");
+        //                var temp2 = temp1.GetProperty("details");
 
-                        foreach (var property in temp2.EnumerateObject())
-                        {
-                            var propertyName = property.Name;
-                            var propertyValue = property.Value;
-                            var DetailsAsRawText = propertyValue.GetRawText();
-                            var observingFacility = JsonConvert.DeserializeObject<ObservingFacility>(DetailsAsRawText);
-                            observingFacilities.Add(observingFacility);
-                        }
-                    }                    
-                }
-            }
+        //                foreach (var property in temp2.EnumerateObject())
+        //                {
+        //                    var propertyName = property.Name;
+        //                    var propertyValue = property.Value;
+        //                    var DetailsAsRawText = propertyValue.GetRawText();
+        //                    var observingFacility = JsonConvert.DeserializeObject<ObservingFacility>(DetailsAsRawText);
+        //                    observingFacilities.Add(observingFacility);
+        //                }
+        //            }                    
+        //        }
+        //    }
 
-            // Assert
-            var facilityNamesReceived = observingFacilities
-                .Select(o => o.FacilityName)
-                .OrderBy(n => n);
+        //    // Assert
+        //    var facilityNamesReceived = observingFacilities
+        //        .Select(o => o.FacilityName)
+        //        .OrderBy(n => n);
 
-            var expectedFacilityNames = new List<string>
-            {
-                "Andeby Havn Opdateret (Test)",
-                "Karup Vest (Test)",
-                "Nørre Lyngby N",
-                "Uggerby"
-            };
+        //    var expectedFacilityNames = new List<string>
+        //    {
+        //        "Andeby Havn Opdateret (Test)",
+        //        "Karup Vest (Test)",
+        //        "Nørre Lyngby N",
+        //        "Uggerby"
+        //    };
 
-            Enumerable.SequenceEqual(
-                facilityNamesReceived,
-                expectedFacilityNames).Should().BeTrue();
-        }
+        //    Enumerable.SequenceEqual(
+        //        facilityNamesReceived,
+        //        expectedFacilityNames).Should().BeTrue();
+        //}
 
         [Fact]
         public async void GetAllPeople()

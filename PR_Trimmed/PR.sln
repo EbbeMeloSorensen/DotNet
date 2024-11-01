@@ -77,8 +77,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.APIClient.Un
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.APIClient", "PR.Persistence.APIClient\PR.Persistence.APIClient.csproj", "{31B4DA78-219D-4C01-A005-0D7EEF1A1564}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Persistence.APIClient.DFOS", "PR.Persistence.APIClient.DFOS\PR.Persistence.APIClient.DFOS.csproj", "{39F67079-6DF8-4B52-948A-FDFD01C8968A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -221,10 +219,6 @@ Global
 		{31B4DA78-219D-4C01-A005-0D7EEF1A1564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31B4DA78-219D-4C01-A005-0D7EEF1A1564}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31B4DA78-219D-4C01-A005-0D7EEF1A1564}.Release|Any CPU.Build.0 = Release|Any CPU
-		{39F67079-6DF8-4B52-948A-FDFD01C8968A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{39F67079-6DF8-4B52-948A-FDFD01C8968A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{39F67079-6DF8-4B52-948A-FDFD01C8968A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{39F67079-6DF8-4B52-948A-FDFD01C8968A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
