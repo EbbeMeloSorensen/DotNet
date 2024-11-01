@@ -276,7 +276,7 @@ namespace PR.ViewModel.GIS
             _applicationDialogService = applicationDialogService;
             _logger = logger;
 
-            throw new NotImplementedException("Block removed for refactoring");
+            // Block commented out for refactoring
             //_application = new Application.Application(
             //    unitOfWorkFactory,
             //    _logger);
@@ -751,7 +751,7 @@ namespace PR.ViewModel.GIS
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService)
         {
-            throw new NotImplementedException("Block removed for refactoring");
+            // Block commented out for refactoring
 
             //ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
             //    unitOfWorkFactory,
@@ -1133,7 +1133,7 @@ namespace PR.ViewModel.GIS
 
         private void UpdateMapPoints()
         {
-            throw new NotImplementedException("Block removed for refactoring");
+            // Block commented out for refactoring
 
             //MapViewModel.PointViewModels.Clear();
 

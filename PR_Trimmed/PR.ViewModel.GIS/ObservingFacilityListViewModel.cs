@@ -205,7 +205,8 @@ namespace PR.ViewModel.GIS
 
         private void RetrieveObservingFacilitiesMatchingFilterFromRepository()
         {
-            throw new NotImplementedException("Block removed for refactoring");
+            // Block commented out for refactoring
+
             //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             //{
             //    var observingFacilityDictionary = unitOfWork.ObservingFacilities
