@@ -1,4 +1,5 @@
-﻿using Craft.Utils;
+﻿using System.Globalization;
+using Craft.Utils;
 using Newtonsoft.Json;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
@@ -9,12 +10,20 @@ using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PR.Persistence.APIClient.DFOS.Repositories
 {
     public class PersonRepository : IPersonRepository
     {
+        private static DateTime _maxDate;
+
+        static PersonRepository()
+        {
+            _maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+        }
+
         private string _token;
         private DateTime? _historicalTime;
         private DateTime? _databaseTime;
@@ -47,8 +56,6 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         public async Task<Person> Get(
             Guid id)
         {
-            await Login();
-
             return await Task.Run(async () =>
             {
                 // We call the API using the token - here we want all people (and we are not using pagination here)
@@ -76,11 +83,10 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
 
         public async Task<IEnumerable<Person>> GetAll()
         {
-            await Login();
+            var observingFacilities = new List<ObservingFacility>();
 
-            // We call the API using the token - here we want all people (and we are not using pagination here)
-            var urlBuilder = new UriBuilder(); // Spændende - mon ikke man kan noget smart med den?
-            var url = "http://localhost:5000/api/people";
+            var environment = "dev";
+            var url = $"http://dfos-api-{environment}.dmi.dk/collections/observing_facility/items";
 
             var arguments = new List<string>();
 
@@ -94,22 +100,77 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
                 arguments.Add($"DatabaseTime={_databaseTime.Value.AsRFC3339(false)}");
             }
 
-            if (arguments.Any())
+            if (arguments.Any() && false)
             {
                 url += "?";
                 url += arguments.Aggregate((c, n) => $"{c}&{n}");
             }
 
-            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", _token);
-
             using var response = await ApiHelper.ApiClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            var people = JsonConvert.DeserializeObject<List<Person>>(responseBody);
+            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _token);
 
-            // When you know the structure of the json data
+            var dfosResult = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
+            
+            // Vi skal mappe det til personer, sådan at vi trawler alle features igennem,
+            // og for hver af dem trawler vi dens details igennem
+
+            var people = new List<Person>();
+
+            foreach (var feature in dfosResult.Features)
+            {
+                string nameBefore = null;
+                double latitudeBefore = double.NaN;
+                double longitudeBefore = double.NaN;
+
+                foreach (var kvp in feature.Properties.Details)
+                {
+                    var pattern = @"(\s+|\(|\)|\[|\])";
+                    var startTimeAsText = kvp.Key.Split(",")[0];
+                    var endTimeAsText = kvp.Key.Split(",")[1];
+                    startTimeAsText = Regex.Replace(startTimeAsText, pattern, "");
+                    endTimeAsText = Regex.Replace(endTimeAsText, pattern, "");
+
+                    var startTime = DateTime.ParseExact(startTimeAsText, "yyyy-MM-ddTHH:mm:ssZ",
+                        CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+
+                    var endTime = string.IsNullOrEmpty(endTimeAsText)
+                        ? new DateTime(9999, 12, 31, 23, 59, 59)
+                        : DateTime.ParseExact(endTimeAsText, "yyyy-MM-ddTHH:mm:ssZ",
+                            CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+
+                    var name = kvp.Value.FacilityName;
+                    var latitude = kvp.Value.GeoLocation.Coordinates[0];
+                    var longitude = kvp.Value.GeoLocation.Coordinates[1];
+
+                    if (double.IsNaN(latitudeBefore) ||
+                        double.IsNaN(longitudeBefore) ||
+                        latitude != latitudeBefore ||
+                        longitude != longitudeBefore ||
+                        name != nameBefore)
+                    {
+                        people.Add(new Person
+                        {
+                            ID = feature.Id,
+                            Created = new DateTime(2000, 1, 1),
+                            Superseded = _maxDate,
+                            Start = startTime,
+                            End = endTime,
+                            FirstName = name,
+                            Latitude = latitude,
+                            Longitude = longitude
+                        });
+                    }
+
+                    latitudeBefore = latitude;
+                    longitudeBefore = longitude;
+                    nameBefore = name;
+                }
+            }
+
             return people;
         }
 
@@ -134,8 +195,6 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         public async Task Add(
             Person person)
         {
-            await Login();
-
             var url = "http://localhost:5000/api/people";
 
             ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
@@ -159,8 +218,6 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         public async Task Update(
             Person person)
         {
-            await Login();
-
             await Task.Run(async () =>
             {
                 var url = $"http://localhost:5000/api/people/{person.ID}";
@@ -185,8 +242,6 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         public async Task Remove(
             Person person)
         {
-            await Login();
-
             await Task.Run(async () =>
             {
                 var url = $"http://localhost:5000/api/people/{person.ID}";
@@ -214,24 +269,6 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             IEnumerable<Person> people)
         {
             throw new NotImplementedException();
-        }
-
-        private async Task Login()
-        {
-            var url = "http://localhost:5000/api/account/login";
-
-            var content = new StringContent("{\"email\":\"bob@test.com\",\"password\":\"Pa$$w0rd\"}", Encoding.UTF8,
-                "application/json");
-
-            using (var response = await ApiHelper.ApiClient.PostAsync(url, content))
-            {
-                response.EnsureSuccessStatusCode();
-                var responseBody = await response.Content.ReadAsStringAsync();
-
-                // When you know the structure of the json data
-                var result = JsonConvert.DeserializeObject<LoginResult>(responseBody);
-                _token = result.token;
-            }
         }
     }
 }
