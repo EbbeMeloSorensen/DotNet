@@ -19,7 +19,9 @@ namespace PR.Persistence.APIClient
 
         public IUnitOfWork GenerateUnitOfWork()
         {
-            return new UnitOfWork(DatabaseTime);
+            return new UnitOfWork(
+                HistoricalTime,
+                DatabaseTime);
         }
 
         public void Reseed()

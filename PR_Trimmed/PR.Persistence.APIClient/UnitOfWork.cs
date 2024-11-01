@@ -9,9 +9,12 @@ namespace PR.Persistence.APIClient
         public IPersonRepository People { get; }
 
         public UnitOfWork(
+            DateTime? historicalTime,
             DateTime? databaseTime)
         {
-            People = new PersonRepository(databaseTime);
+            People = new PersonRepository(
+                historicalTime, 
+                databaseTime);
         }
 
         public void Clear()

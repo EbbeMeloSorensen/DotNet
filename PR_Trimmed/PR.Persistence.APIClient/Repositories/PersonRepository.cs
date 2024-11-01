@@ -79,11 +79,25 @@ namespace PR.Persistence.APIClient.Repositories
             await Login();
 
             // We call the API using the token - here we want all people (and we are not using pagination here)
+            var urlBuilder = new UriBuilder(); // Spændende - mon ikke man kan noget smart med den?
             var url = "http://localhost:5000/api/people";
+
+            var arguments = new List<string>();
+
+            if (_historicalTime.HasValue)
+            {
+                arguments.Add($"HistoricalTime={_historicalTime.Value.AsRFC3339(false)}");
+            }
 
             if (_databaseTime.HasValue)
             {
-                url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}";
+                arguments.Add($"DatabaseTime={_databaseTime.Value.AsRFC3339(false)}");
+            }
+
+            if (arguments.Any())
+            {
+                url += "?";
+                url += arguments.Aggregate((c, n) => $"{c}&{n}");
             }
 
             ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
