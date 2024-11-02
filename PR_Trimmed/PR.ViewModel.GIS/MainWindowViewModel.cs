@@ -751,14 +751,13 @@ namespace PR.ViewModel.GIS
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService)
         {
+            ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
+                unitOfWorkFactory,
+                applicationDialogService,
+                _databaseTimeOfInterest,
+                ObservingFacilityListViewModel.SelectedObservingFacilities);
+
             // Block commented out for refactoring
-
-            //ObservingFacilitiesDetailsViewModel = new ObservingFacilitiesDetailsViewModel(
-            //    unitOfWorkFactory,
-            //    applicationDialogService,
-            //    _databaseTimeOfInterest,
-            //    ObservingFacilityListViewModel.SelectedObservingFacilities);
-
             //ObservingFacilitiesDetailsViewModel.ObservingFacilitiesUpdated += (s, e) =>
             //{
             //    ObservingFacilityListViewModel.UpdateObservingFacilities(e.ObservingFacilities);
