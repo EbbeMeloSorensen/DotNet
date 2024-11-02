@@ -21,7 +21,6 @@ namespace PR.ViewModel.GIS
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
 
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private ObjectCollection<ObservingFacility> _observingFacilities;
 
         private string _originalSharedName;
@@ -170,6 +169,8 @@ namespace PR.ViewModel.GIS
             }
         }
 
+        public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
+
         public GeospatialLocationsViewModel GeospatialLocationsViewModel { get; }
 
         public AsyncCommand ApplyChangesCommand
@@ -183,7 +184,7 @@ namespace PR.ViewModel.GIS
             ObservableObject<DateTime?> databaseTimeOfInterest,
             ObjectCollection<ObservingFacility> observingFacilities)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
+            UnitOfWorkFactory = unitOfWorkFactory;
             _observingFacilities = observingFacilities;
 
             _observingFacilities.PropertyChanged += Initialize;

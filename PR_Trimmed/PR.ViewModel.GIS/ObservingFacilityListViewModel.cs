@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using Craft.ViewModel.Utils;
 using PR.Persistence;
 using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using WIGOS.Domain.Entities.WIGOS.GeospatialLocations;
@@ -17,7 +19,6 @@ namespace PR.ViewModel.GIS
     public class ObservingFacilityListViewModel : ViewModelBase
     {
         private readonly ILogger _logger;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
         private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
@@ -25,7 +26,9 @@ namespace PR.ViewModel.GIS
         private Sorting _sorting;
         private bool _displayFindButton;
 
-        private RelayCommand<object> _findObservingFacilitiesCommand;
+        private AsyncCommand<object> _findObservingFacilitiesCommand;
+
+        public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
         public bool DisplayFindButton
         {
@@ -66,11 +69,11 @@ namespace PR.ViewModel.GIS
             }
         }
 
-        public RelayCommand<object> FindObservingFacilitiesCommand
+        public AsyncCommand<object> FindObservingFacilitiesCommand
         {
             get
             {
-                return _findObservingFacilitiesCommand ?? (_findObservingFacilitiesCommand = new RelayCommand<object>(FindObservingFacilities));
+                return _findObservingFacilitiesCommand ?? (_findObservingFacilitiesCommand = new AsyncCommand<object>(FindObservingFacilities));
             }
         }
 
@@ -89,11 +92,12 @@ namespace PR.ViewModel.GIS
             ObservableObject<bool> displayDatabaseTimeControls)
         {
             _logger = logger;
-            _unitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _historicalTimeOfInterest = historicalTimeOfInterest;
             _databaseTimeOfInterest = databaseTimeOfInterest;
             _sorting = Sorting.Name;
+
+            UnitOfWorkFactory = unitOfWorkFactory;
 
             ObservingFacilityFilterViewModel = new ObservingFacilityFilterViewModel(
                 historicalTimeOfInterest,
@@ -203,9 +207,44 @@ namespace PR.ViewModel.GIS
             UpdateObservingFacilityListItemViewModels();
         }
 
-        private void RetrieveObservingFacilitiesMatchingFilterFromRepository()
+        private async Task RetrieveObservingFacilitiesMatchingFilterFromRepository()
         {
-            // Block commented out for refactoring
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            var people = (await unitOfWork.People.GetAll()).ToList();
+
+            var observingFacilityDataExtracts = new List<ObservingFacilityDataExtract>();
+
+            foreach (var grouping in people.GroupBy(p => p.ID))
+            {
+                var ordered = grouping.OrderBy(p => p.Start).ToList();
+                var name = ordered.Last().FirstName;
+                var dateEstablished = ordered.First().Start;
+                var dateClosed = ordered.Last().End;
+
+                var geospatialLocations = ordered
+                    .Select(person => new WIGOS.Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.Empty, DateTime.UtcNow)
+                    {
+                        Coordinate1 = person.Latitude!.Value, 
+                        Coordinate2 = person.Longitude!.Value
+                    }).Cast<GeospatialLocation>().ToList();
+
+                var observingFacilityDataExtract = new ObservingFacilityDataExtract
+                {
+                    ObservingFacility = new ObservingFacility(Guid.Empty, DateTime.Today)
+                    {
+                        DateEstablished = dateEstablished,
+                        DateClosed = dateClosed,
+                        Name = name
+                    },
+                    GeospatialLocations = geospatialLocations
+                };
+
+                observingFacilityDataExtracts.Add(observingFacilityDataExtract);
+            }
+
+            ObservingFacilityDataExtracts.Objects = observingFacilityDataExtracts;
+
+            // Old
 
             //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             //{
@@ -295,7 +334,7 @@ namespace PR.ViewModel.GIS
             });
         }
 
-        private void FindObservingFacilities(
+        private async Task FindObservingFacilities(
             object owner)
         {
             if (owner != null)
@@ -319,7 +358,7 @@ namespace PR.ViewModel.GIS
                 }
             }
 
-            RetrieveObservingFacilitiesMatchingFilterFromRepository();
+            await RetrieveObservingFacilitiesMatchingFilterFromRepository();
             UpdateObservingFacilityListItemViewModels();
         }
     }

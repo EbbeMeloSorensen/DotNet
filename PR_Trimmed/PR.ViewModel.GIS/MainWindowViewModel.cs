@@ -17,6 +17,8 @@ using System.Windows.Media;
 using PR.Persistence;
 using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using DataIOHandler = Craft.DataStructures.IO.DataIOHandler;
+using PR.IO;
+using Craft.DataStructures.IO;
 
 namespace PR.ViewModel.GIS
 {
@@ -31,7 +33,7 @@ namespace PR.ViewModel.GIS
 
         private ILogger _logger;
         private readonly Application.Application _application;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
         private List<DateTime> _databaseWriteTimes;
         private List<DateTime> _historicalChangeTimes;
@@ -223,6 +225,17 @@ namespace PR.ViewModel.GIS
             }
         }
 
+        public IUnitOfWorkFactory UnitOfWorkFactory
+        {
+            get => _application.UnitOfWorkFactory;
+            set
+            {
+                _application.UnitOfWorkFactory = value;
+                ObservingFacilityListViewModel.UnitOfWorkFactory = value;
+                ObservingFacilitiesDetailsViewModel.UnitOfWorkFactory = value;
+            }
+        }
+
         public LogViewModel LogViewModel { get; private set; }
         public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; private set; }
         public ObservingFacilitiesDetailsViewModel ObservingFacilitiesDetailsViewModel { get; private set; }
@@ -269,17 +282,21 @@ namespace PR.ViewModel.GIS
 
         public MainWindowViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
+            IDataIOHandler dataIOHandler,
             IDialogService applicationDialogService,
             ILogger logger)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _applicationDialogService = applicationDialogService;
-            _logger = logger;
+            _application = new Application.Application(
+                unitOfWorkFactory,
+                dataIOHandler,
+                logger);
 
-            // Block commented out for refactoring
-            //_application = new Application.Application(
-            //    unitOfWorkFactory,
-            //    _logger);
+            _application.UnitOfWorkFactory = unitOfWorkFactory;
+            _dataIOHandler = dataIOHandler;
+            _applicationDialogService = applicationDialogService;
+
+            LogViewModel = new LogViewModel(200);
+            _logger = new ViewModelLogger(logger, LogViewModel);
 
             _historicalChangeTimes = new List<DateTime>();
             _databaseWriteTimes = new List<DateTime>();
@@ -388,25 +405,25 @@ namespace PR.ViewModel.GIS
             _displayDatabaseTimeControls.PropertyChanged += (s, e) =>
                 UpdateRetrospectionControls();
 
-            _showActiveStations.PropertyChanged += (s, e) =>
+            _showActiveStations.PropertyChanged += async (s, e) =>
             {
                 if (_autoRefresh.Object)
                 {
-                    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                    await ObservingFacilityListViewModel!.FindObservingFacilitiesCommand.ExecuteAsync(null);
                 }
             };
 
-            _showClosedStations.PropertyChanged += (s, e) =>
+            _showClosedStations.PropertyChanged += async (s, e) =>
             {
                 if (_autoRefresh.Object)
                 {
-                    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                    await ObservingFacilityListViewModel!.FindObservingFacilitiesCommand.ExecuteAsync(null);
                 }
             };
 
             InitializeLogViewModel(_logger);
-            InitializeObservingFacilityListViewModel(_logger, _unitOfWorkFactory, _applicationDialogService);
-            InitializeObservingFacilitiesDetailsViewModel(_unitOfWorkFactory, _applicationDialogService);
+            InitializeObservingFacilityListViewModel(_logger, UnitOfWorkFactory, _applicationDialogService);
+            InitializeObservingFacilitiesDetailsViewModel(UnitOfWorkFactory, _applicationDialogService);
             InitializeMapViewModel();
             InitializeDatabaseWriteTimesViewModel();
             InitializeHistoricalTimeViewModel();
@@ -419,11 +436,12 @@ namespace PR.ViewModel.GIS
             UpdateControlBackground();
             UpdateStatusBar();
 
-            if (_autoRefresh.Object)
-            {
-                //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (1)");
-                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
-            }
+            // Det her kan man vist ikke rigtigt fra constructoren...
+            //if (_autoRefresh.Object)
+            //{
+            //    //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (1)");
+            //    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
+            //}
 
             _historicalTimeOfInterest.PropertyChanged += (s, e) =>
             {
@@ -556,7 +574,7 @@ namespace PR.ViewModel.GIS
             RefreshDatabaseTimeSeriesView();
 
             //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (2)");
-            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
 
             var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was cleared", false);
 
@@ -1170,7 +1188,7 @@ namespace PR.ViewModel.GIS
             //}
         }
 
-        private void UpdateMapColoring()
+        private async Task UpdateMapColoring()
         {
             TimeTextColor = _historicalTimeOfInterest.Object.HasValue ? "Black" : "White";
 
@@ -1197,7 +1215,7 @@ namespace PR.ViewModel.GIS
             if (_autoRefresh.Object)
             {
                 //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (3)");
-                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                await ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
             }
         }
 
