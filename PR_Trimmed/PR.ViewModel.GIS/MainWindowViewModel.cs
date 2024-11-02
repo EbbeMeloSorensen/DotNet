@@ -1150,42 +1150,40 @@ namespace PR.ViewModel.GIS
 
         private void UpdateMapPoints()
         {
-            // Block commented out for refactoring
+            MapViewModel.PointViewModels.Clear();
 
-            //MapViewModel.PointViewModels.Clear();
+            foreach (var observingFacilityDataExtract in ObservingFacilityListViewModel.ObservingFacilityDataExtracts.Objects)
+            {
+                var relevantGeospatialLocations = _historicalTimeOfInterest.Object.HasValue
+                    ? observingFacilityDataExtract.GeospatialLocations
+                        .Where(_ => _.From < _historicalTimeOfInterest.Object.Value)
+                    : observingFacilityDataExtract.GeospatialLocations;
 
-            //foreach (var observingFacilityDataExtract in ObservingFacilityListViewModel.ObservingFacilityDataExtracts.Objects)
-            //{
-            //    var relevantGeospatialLocations = _historicalTimeOfInterest.Object.HasValue
-            //        ? observingFacilityDataExtract.GeospatialLocations
-            //            .Where(_ => _.From < _historicalTimeOfInterest.Object.Value)
-            //        : observingFacilityDataExtract.GeospatialLocations;
+                var latestGeospatialLocationAmongRelevantOnes = relevantGeospatialLocations
+                    .OrderByDescending(_ => _.From)
+                    .First() as WIGOS.Domain.Entities.WIGOS.GeospatialLocations.Point;
 
-            //    var latestGeospatialLocationAmongRelevantOnes = relevantGeospatialLocations
-            //        .OrderByDescending(_ => _.From)
-            //        .First() as Domain.Entities.WIGOS.GeospatialLocations.Point;
+                var brush = _activeObservingFacilityBrush;
 
-            //    var brush = _activeObservingFacilityBrush;
+                if (_historicalTimeOfInterest.Object.HasValue)
+                {
+                    if (_historicalTimeOfInterest.Object.Value > latestGeospatialLocationAmongRelevantOnes.To)
+                    {
+                        brush = _closedObservingFacilityBrush;
+                    }
+                }
+                else if (latestGeospatialLocationAmongRelevantOnes.To < DateTime.MaxValue)
+                {
+                    brush = _closedObservingFacilityBrush;
+                }
 
-            //    if (_historicalTimeOfInterest.Object.HasValue)
-            //    {
-            //        if (_historicalTimeOfInterest.Object.Value > latestGeospatialLocationAmongRelevantOnes.To)
-            //        {
-            //            brush = _closedObservingFacilityBrush;
-            //        }
-            //    }
-            //    else if (latestGeospatialLocationAmongRelevantOnes.To < DateTime.MaxValue)
-            //    {
-            //        brush = _closedObservingFacilityBrush;
-            //    }
-
-            //    MapViewModel.PointViewModels.Add(new PointViewModel(
-            //        new PointD(
-            //            latestGeospatialLocationAmongRelevantOnes.Coordinate1,
-            //            -latestGeospatialLocationAmongRelevantOnes.Coordinate2),
-            //        10,
-            //        brush));
-            //}
+                MapViewModel.PointViewModels.Add(new PointViewModel(
+                    new PointD(
+                        latestGeospatialLocationAmongRelevantOnes.Coordinate1,
+                        -latestGeospatialLocationAmongRelevantOnes.Coordinate2),
+                    10,
+                    brush));
+            }
         }
 
         private async Task UpdateMapColoring()
@@ -1212,6 +1210,7 @@ namespace PR.ViewModel.GIS
                 }
             }
 
+            // DET HER GÅR GALT; HVIS DEN OGSÅ SKAL LAVE DATABASEN
             if (_autoRefresh.Object)
             {
                 //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (3)");

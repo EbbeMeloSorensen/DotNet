@@ -50,8 +50,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 End = anakinBecomesDarthVader,
                 FirstName = "Anakin",
                 Surname = "Skywalker",
-                Latitude = 1,
-                Longitude = 1
+                Latitude = 10,
+                Longitude = 56
             };
 
             var anakin_1 = new Person
@@ -63,8 +63,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 End = darthVaderDies,
                 FirstName = "Darth",
                 Surname = "Vader",
-                Latitude = 2,
-                Longitude = 2
+                Latitude = 11,
+                Longitude = 56
             };
 
             var chewbacca = new Person
@@ -76,8 +76,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 End = maxDate,
                 FirstName = "Chewbacca",
                 Nickname = "Chewie",
-                Latitude = 3,
-                Longitude = 3
+                Latitude = 10,
+                Longitude = 55
             };
 
             people = new List<Person>
