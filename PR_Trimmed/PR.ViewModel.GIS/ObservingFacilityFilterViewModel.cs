@@ -139,6 +139,7 @@ namespace PR.ViewModel.GIS
             set
             {
                 _historicalTime = value;
+                _historicalTimeOfInterest.Object = value;
                 RaisePropertyChanged();
             }
         }
@@ -149,6 +150,7 @@ namespace PR.ViewModel.GIS
             set
             {
                 _databaseTime = value;
+                _databaseTimeOfInterest.Object = value;
                 RaisePropertyChanged();
             }
         }
@@ -176,7 +178,8 @@ namespace PR.ViewModel.GIS
 
             _historicalTimeOfInterest.PropertyChanged += (s, e) =>
             {
-                HistoricalTime = _historicalTimeOfInterest.Object;
+                // Udkommenteret, fordi det giver Stack overflow
+                //HistoricalTime = _historicalTimeOfInterest.Object;
             };
 
             _databaseTimeOfInterest.PropertyChanged += (s, e) =>
