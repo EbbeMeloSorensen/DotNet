@@ -2,7 +2,6 @@
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -130,6 +129,8 @@ namespace PR.ViewModel.GIS
             {
                 DisplayFindButton = !autoRefresh.Object;
             };
+
+            DisplayFindButton = !autoRefresh.Object;
         }
 
         public void AddObservingFacility(
@@ -225,7 +226,9 @@ namespace PR.ViewModel.GIS
                     .Select(person => new WIGOS.Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.Empty, DateTime.UtcNow)
                     {
                         Coordinate1 = person.Latitude!.Value, 
-                        Coordinate2 = person.Longitude!.Value
+                        Coordinate2 = person.Longitude!.Value,
+                        From = person.Start,
+                        To = person.End,
                     }).Cast<GeospatialLocation>().ToList();
 
                 var observingFacilityDataExtract = new ObservingFacilityDataExtract
@@ -337,26 +340,27 @@ namespace PR.ViewModel.GIS
         private async Task FindObservingFacilities(
             object owner)
         {
-            if (owner != null)
-            {
-                var limit = 100;
-                var count = CountObservingFacilitiesMatchingFilterFromRepository();
+            // Commented out while working on other things
+            //if (owner != null)
+            //{
+            //    var limit = 100;
+            //    var count = CountObservingFacilitiesMatchingFilterFromRepository();
 
-                if (count == 0)
-                {
-                    var dialogViewModel = new MessageBoxDialogViewModel("No observing facilities the search criteria", false);
-                    _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
-                }
+            //    if (count == 0)
+            //    {
+            //        var dialogViewModel = new MessageBoxDialogViewModel("No observing facilities the search criteria", false);
+            //        _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            //    }
 
-                if (count > limit)
-                {
-                    var dialogViewModel = new MessageBoxDialogViewModel($"{count} observing facilities match the search criteria.\nDo you want to retrieve them all from the repository?", true);
-                    if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
-                    {
-                        return;
-                    }
-                }
-            }
+            //    if (count > limit)
+            //    {
+            //        var dialogViewModel = new MessageBoxDialogViewModel($"{count} observing facilities match the search criteria.\nDo you want to retrieve them all from the repository?", true);
+            //        if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
+            //        {
+            //            return;
+            //        }
+            //    }
+            //}
 
             await RetrieveObservingFacilitiesMatchingFilterFromRepository();
             UpdateObservingFacilityListItemViewModels();

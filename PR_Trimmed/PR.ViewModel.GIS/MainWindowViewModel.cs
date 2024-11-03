@@ -19,6 +19,7 @@ using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
 using DataIOHandler = Craft.DataStructures.IO.DataIOHandler;
 using PR.IO;
 using Craft.DataStructures.IO;
+using System.Threading;
 
 namespace PR.ViewModel.GIS
 {
@@ -52,8 +53,8 @@ namespace PR.ViewModel.GIS
         private readonly Brush _mapBrushLandCurrent = new SolidColorBrush(new Color { R = 100, G = 200, B = 100, A = 255 });
         private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
         private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
-        private readonly Brush _activeObservingFacilityBrush = new SolidColorBrush(Colors.Black);
-        private readonly Brush _closedObservingFacilityBrush = new SolidColorBrush(Colors.DarkRed);
+        private readonly Brush _activeObservingFacilityBrush = new SolidColorBrush(Colors.GreenYellow);
+        private readonly Brush _closedObservingFacilityBrush = new SolidColorBrush(Colors.Red);
         private readonly Brush _controlBackgroundBrushCurrent = new SolidColorBrush(Colors.WhiteSmoke);
         private readonly Brush _controlBackgroundBrushHistoric = new SolidColorBrush(Colors.BurlyWood);
         private Brush _controlBackgroundBrush;
@@ -67,7 +68,7 @@ namespace PR.ViewModel.GIS
         private int _selectedTabIndexForRetrospectionTimeLines;
         private Window _owner;
         private MapOperation _mapOperation;
-        private Timer _timer;
+        private System.Timers.Timer _timer;
 
         private RelayCommand<object> _createObservingFacilityCommand;
         private AsyncCommand<object> _deleteSelectedObservingFacilitiesCommand;
@@ -289,9 +290,11 @@ namespace PR.ViewModel.GIS
             _application = new Application.Application(
                 unitOfWorkFactory,
                 dataIOHandler,
-                logger);
+                logger)
+            {
+                UnitOfWorkFactory = unitOfWorkFactory
+            };
 
-            _application.UnitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
 
@@ -325,6 +328,11 @@ namespace PR.ViewModel.GIS
                     // Highlight the position of the time of interest in the historical time view
                     HistoricalTimeViewModel.StaticXValue =
                         (_historicalTimeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
+
+                    if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+                    {
+                        unitOfWorkFactoryHistorical.HistoricalTime = time;
+                    }
                 }
                 else
                 {
@@ -335,6 +343,11 @@ namespace PR.ViewModel.GIS
 
                     // Vi vil gerne se situationen, som den gør sig gældende nu. Derfor opererer vi også essentielt med seneste version af databasen
                     _databaseTimeOfInterest.Object = null;
+
+                    if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+                    {
+                        unitOfWorkFactoryHistorical.HistoricalTime = null;
+                    }
                 }
 
                 UpdateMapColoring();
@@ -358,7 +371,7 @@ namespace PR.ViewModel.GIS
 
             _autoRefresh = new ObservableObject<bool>
             {
-                Object = true
+                Object = false
             };
 
             _displayNameFilter = new ObservableObject<bool>
@@ -368,8 +381,7 @@ namespace PR.ViewModel.GIS
 
             _displayStatusFilter = new ObservableObject<bool>
             {
-                //Object = true
-                Object = false
+                Object = true
             };
 
             _showActiveStations = new ObservableObject<bool>
@@ -382,21 +394,20 @@ namespace PR.ViewModel.GIS
                 Object = false
             };
 
-            _displayRetrospectionControls = new ObservableObject<bool>
-            {
-                Object = false
-            };
-
             _displayHistoricalTimeControls = new ObservableObject<bool>
             {
-                Object = false
-                //Object = true
+                Object = true
             };
 
             _displayDatabaseTimeControls = new ObservableObject<bool>
             {
                 Object = false
-                //Object = true
+            };
+
+            _displayRetrospectionControls = new ObservableObject<bool>
+            {
+                Object = _displayHistoricalTimeControls.Object ||
+                         _displayDatabaseTimeControls.Object
             };
 
             _displayHistoricalTimeControls.PropertyChanged += (s, e) =>
@@ -418,6 +429,11 @@ namespace PR.ViewModel.GIS
                 if (_autoRefresh.Object)
                 {
                     await ObservingFacilityListViewModel!.FindObservingFacilitiesCommand.ExecuteAsync(null);
+                }
+
+                if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+                {
+                    unitOfWorkFactoryHistorical.IncludeHistoricalObjects = _showClosedStations.Object;
                 }
             };
 
@@ -453,10 +469,11 @@ namespace PR.ViewModel.GIS
                 }
             };
 
-            SelectedTabIndexForRetrospectionTimeLines = 1;
+            // What is this good for?
+            //SelectedTabIndexForRetrospectionTimeLines = 1;
 
             _timeTextColor = "White";
-            _timer = new Timer(1000);
+            _timer = new System.Timers.Timer(1000);
 
             _timer.Elapsed += (s, e) =>
             {
@@ -852,7 +869,7 @@ namespace PR.ViewModel.GIS
 
         private void InitializeHistoricalTimeViewModel()
         {
-            var timeSpan = TimeSpan.FromDays(40);
+            var timeSpan = TimeSpan.FromDays(25 * 365.25);
             var utcNow = DateTime.UtcNow;
             var timeAtOrigo = utcNow.Date;
             var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromDays(2);
@@ -1154,33 +1171,22 @@ namespace PR.ViewModel.GIS
 
             foreach (var observingFacilityDataExtract in ObservingFacilityListViewModel.ObservingFacilityDataExtracts.Objects)
             {
-                var relevantGeospatialLocations = _historicalTimeOfInterest.Object.HasValue
-                    ? observingFacilityDataExtract.GeospatialLocations
-                        .Where(_ => _.From < _historicalTimeOfInterest.Object.Value)
-                    : observingFacilityDataExtract.GeospatialLocations;
+                var timeOfInterest = _historicalTimeOfInterest.Object.HasValue
+                    ? _historicalTimeOfInterest.Object.Value
+                    : DateTime.UtcNow;
 
-                var latestGeospatialLocationAmongRelevantOnes = relevantGeospatialLocations
-                    .OrderByDescending(_ => _.From)
-                    .First() as WIGOS.Domain.Entities.WIGOS.GeospatialLocations.Point;
+                var point = observingFacilityDataExtract.GeospatialLocations
+                    .Where(p => p.From < timeOfInterest)
+                    .Last() as WIGOS.Domain.Entities.WIGOS.GeospatialLocations.Point;
 
-                var brush = _activeObservingFacilityBrush;
-
-                if (_historicalTimeOfInterest.Object.HasValue)
-                {
-                    if (_historicalTimeOfInterest.Object.Value > latestGeospatialLocationAmongRelevantOnes.To)
-                    {
-                        brush = _closedObservingFacilityBrush;
-                    }
-                }
-                else if (latestGeospatialLocationAmongRelevantOnes.To < DateTime.MaxValue)
-                {
-                    brush = _closedObservingFacilityBrush;
-                }
+                var brush = point.To > timeOfInterest
+                    ? _activeObservingFacilityBrush
+                    : _closedObservingFacilityBrush;
 
                 MapViewModel.PointViewModels.Add(new PointViewModel(
                     new PointD(
-                        latestGeospatialLocationAmongRelevantOnes.Coordinate1,
-                        -latestGeospatialLocationAmongRelevantOnes.Coordinate2),
+                        point.Coordinate1,
+                        -point.Coordinate2),
                     10,
                     brush));
             }

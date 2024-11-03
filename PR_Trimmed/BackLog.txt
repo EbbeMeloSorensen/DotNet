@@ -3,6 +3,10 @@ Done:
 * Skræl Person ned, så den kun har first name og surname
 
 Todo:
+* Hvorfor vises Anakin, endda med rød, når han jo har dateclosed i fortiden? Han vises i øvrigt også i listen, hvilket han 
+  heller ikke burde.
+  -> Du sender jo ikke noget historisk tidspunkt ned, så hvorfor kommer han overhovedet med op? Den går helt ned på det nederste
+     repo, dvs den er ikke wrappet af en versioned
 * Lav det sådan, at man fra konsol-applikationen kan trække for real på DFOS-APIet, så man ikke tilsyneladende hiver personer
   men derimod observing facilities. De skal jo i øvrigt have et navn. Eller også kunne du bare lave noget mapping, der er lidt
   mere clever - du kunne jo f.eks. trække en observing facility fra DFOS og så mappe den ind i et ANTAL Person objekter, hvor
