@@ -5,21 +5,14 @@ using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Media;
 using PR.Persistence;
-using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
-using DataIOHandler = Craft.DataStructures.IO.DataIOHandler;
 using PR.IO;
-using Craft.DataStructures.IO;
-using System.Threading;
 
 namespace PR.ViewModel.GIS
 {
@@ -452,13 +445,6 @@ namespace PR.ViewModel.GIS
             UpdateControlBackground();
             UpdateStatusBar();
 
-            // Det her kan man vist ikke rigtigt fra constructoren...
-            //if (_autoRefresh.Object)
-            //{
-            //    //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (1)");
-            //    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
-            //}
-
             _historicalTimeOfInterest.PropertyChanged += (s, e) =>
             {
                 if (!_historicalTimeOfInterest.Object.HasValue)
@@ -468,9 +454,6 @@ namespace PR.ViewModel.GIS
                     DatabaseWriteTimesViewModel.StaticXValue = null;
                 }
             };
-
-            // What is this good for?
-            //SelectedTabIndexForRetrospectionTimeLines = 1;
 
             _timeTextColor = "White";
             _timer = new System.Timers.Timer(1000);
@@ -1153,7 +1136,7 @@ namespace PR.ViewModel.GIS
             // Load GML file of Denmark
             var fileName = @".\Data\Denmark.gml";
             //var fileName = @".\Data\DenmarkAndGreenland.gml";
-            DataIOHandler.ExtractGeometricPrimitivesFromGMLFile(fileName, out var polygons);
+            Craft.DataStructures.IO.DataIOHandler.ExtractGeometricPrimitivesFromGMLFile(fileName, out var polygons);
 
             // Add the regions of Denmark to the map as polygons
             var lineThickness = 0.005;

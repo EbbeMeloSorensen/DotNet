@@ -26,11 +26,8 @@ namespace PR.ViewModel.GIS
         private bool _displayRetrospectionControlSection;
         private bool _displayHistoricalTimeField;
         private bool _displayDatabaseTimeField;
-        private string _historicalTimeOfInterestAsString;
-        private string _databaseTimeOfInterestAsString;
-
-        private RelayCommand _clearHistoricalTimeCommand;
-        private RelayCommand _clearDatabaseTimeCommand;
+        private DateTime? _historicalTime;
+        private DateTime? _databaseTime;
 
         public bool DisplayNameFilterField
         {
@@ -136,41 +133,23 @@ namespace PR.ViewModel.GIS
             }
         }
 
-        public string HistoricalTimeOfInterestAsString
+        public DateTime? HistoricalTime
         {
-            get => _historicalTimeOfInterestAsString;
+            get { return _historicalTime; }
             set
             {
-                _historicalTimeOfInterestAsString = value;
+                _historicalTime = value;
                 RaisePropertyChanged();
             }
         }
 
-        public string DatabaseTimeOfInterestAsString
+        public DateTime? DatabaseTime
         {
-            get => _databaseTimeOfInterestAsString;
+            get { return _databaseTime; }
             set
             {
-                _databaseTimeOfInterestAsString = value;
+                _databaseTime = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        public RelayCommand ClearHistoricalTimeCommand
-        {
-            get
-            {
-                return _clearHistoricalTimeCommand ?? (_clearHistoricalTimeCommand =
-                    new RelayCommand(ClearHistoricalTime, CanClearHistoricalTime));
-            }
-        }
-
-        public RelayCommand ClearDatabaseTimeCommand
-        {
-            get
-            {
-                return _clearDatabaseTimeCommand ??
-                       (_clearDatabaseTimeCommand = new RelayCommand(ClearDatabaseTime, CanClearDatabaseTime));
             }
         }
 
@@ -195,35 +174,14 @@ namespace PR.ViewModel.GIS
             _showActiveObservingFacilities = _showActiveStations.Object;
             _showClosedObservingFacilities = _showClosedStations.Object;
 
-            _historicalTimeOfInterestAsString = "Now";
-            _databaseTimeOfInterestAsString = "Latest";
-
             _historicalTimeOfInterest.PropertyChanged += (s, e) =>
             {
-                if (_historicalTimeOfInterest.Object.HasValue)
-                {
-                    HistoricalTimeOfInterestAsString = _historicalTimeOfInterest.Object.Value.AsDateTimeString(false);
-                }
-                else
-                {
-                    HistoricalTimeOfInterestAsString = "Now";
-                }
-
-                ClearHistoricalTimeCommand.RaiseCanExecuteChanged();
+                HistoricalTime = _historicalTimeOfInterest.Object;
             };
 
             _databaseTimeOfInterest.PropertyChanged += (s, e) =>
             {
-                if (_databaseTimeOfInterest.Object.HasValue)
-                {
-                    DatabaseTimeOfInterestAsString = _databaseTimeOfInterest.Object.Value.AsDateTimeString(false);
-                }
-                else
-                {
-                    DatabaseTimeOfInterestAsString = "Latest";
-                }
-
-                ClearDatabaseTimeCommand.RaiseCanExecuteChanged();
+                DatabaseTime = _databaseTimeOfInterest.Object;
             };
 
             _displayNameFilter.PropertyChanged += (s, e) => UpdateControls();
