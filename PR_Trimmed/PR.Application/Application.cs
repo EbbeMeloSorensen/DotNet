@@ -265,7 +265,7 @@ namespace PR.Application
 
                     if (timeOfInterest.HasValue && p.End < timeOfInterest)
                     {
-                        sb.Append(" (Dead)");
+                        sb.Append(" (historical)");
                     }
 
                     Console.WriteLine(sb.ToString());

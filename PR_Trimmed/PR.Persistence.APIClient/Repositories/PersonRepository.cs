@@ -89,17 +89,17 @@ namespace PR.Persistence.APIClient.Repositories
 
             if (_historicalTime.HasValue)
             {
-                arguments.Add($"HistoricalTime={_historicalTime.Value.AsRFC3339(false)}");
+                arguments.Add($"historicaltime={_historicalTime.Value.AsRFC3339(false)}");
             }
 
             if (_includeHistoricalObjects)
             {
-                arguments.Add($"IncludeHistoricalObjects=True");
+                arguments.Add($"includehistoricalobjects=true");
             }
 
             if (_databaseTime.HasValue)
             {
-                arguments.Add($"DatabaseTime={_databaseTime.Value.AsRFC3339(false)}");
+                arguments.Add($"databasetime={_databaseTime.Value.AsRFC3339(false)}");
             }
 
             if (arguments.Any())
