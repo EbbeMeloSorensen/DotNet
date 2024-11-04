@@ -341,7 +341,7 @@ namespace WIGOS.ViewModel
 
             _autoRefresh = new ObservableObject<bool>
             {
-                Object = true
+                Object = false
             };
 
             _displayNameFilter = new ObservableObject<bool>
@@ -392,7 +392,8 @@ namespace WIGOS.ViewModel
             {
                 if (_autoRefresh.Object)
                 {
-                    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                    throw new NotImplementedException();
+                    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
                 }
             };
 
@@ -400,7 +401,8 @@ namespace WIGOS.ViewModel
             {
                 if (_autoRefresh.Object)
                 {
-                    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                    throw new NotImplementedException();
+                    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
                 }
             };
 
@@ -422,7 +424,8 @@ namespace WIGOS.ViewModel
             if (_autoRefresh.Object)
             {
                 //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (1)");
-                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                throw new NotImplementedException();
+                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
             }
 
             _historicalTimeOfInterest.PropertyChanged += (s, e) =>
@@ -554,7 +557,8 @@ namespace WIGOS.ViewModel
             RefreshDatabaseTimeSeriesView();
 
             //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (2)");
-            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+            throw new NotImplementedException();
+            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
 
             var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was cleared", false);
 
@@ -691,7 +695,8 @@ namespace WIGOS.ViewModel
 
             if (_autoRefresh.Object)
             {
-                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                throw new NotImplementedException();
+                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
             }
         }
 
@@ -769,7 +774,8 @@ namespace WIGOS.ViewModel
             {
                 // Todo: consider placing this in a general helper method
                 _databaseWriteTimes.Add(e.DateTime);
-                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                throw new NotImplementedException();
+                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
                 if (ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any())
                 {
                     ObservingFacilitiesDetailsViewModel.GeospatialLocationsViewModel.Populate();
@@ -1190,7 +1196,8 @@ namespace WIGOS.ViewModel
             if (_autoRefresh.Object)
             {
                 //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (3)");
-                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                throw new NotImplementedException();
+                ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
             }
         }
 
@@ -1357,7 +1364,8 @@ namespace WIGOS.ViewModel
 
                 if (_autoRefresh.Object)
                 {
-                    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+                    throw new NotImplementedException();
+                    ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
                 }
 
                 _logger?.WriteLine(LogMessageCategory.Debug, "Done creating new observing facility");
@@ -1452,7 +1460,8 @@ namespace WIGOS.ViewModel
             }
 
             _databaseWriteTimes.Add(now);
-            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
+            throw new NotImplementedException();
+            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
 
             if (ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any())
             {

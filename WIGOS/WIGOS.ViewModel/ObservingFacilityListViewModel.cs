@@ -4,12 +4,14 @@ using WIGOS.Persistence;
 using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
+using Craft.ViewModel.Utils;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace WIGOS.ViewModel
@@ -25,7 +27,7 @@ namespace WIGOS.ViewModel
         private Sorting _sorting;
         private bool _displayFindButton;
 
-        private RelayCommand<object> _findObservingFacilitiesCommand;
+        AsyncCommand<object> _findObservingFacilitiesCommand;
 
         public bool DisplayFindButton
         {
@@ -66,11 +68,11 @@ namespace WIGOS.ViewModel
             }
         }
 
-        public RelayCommand<object> FindObservingFacilitiesCommand
+        public AsyncCommand<object> FindObservingFacilitiesCommand
         {
             get
             {
-                return _findObservingFacilitiesCommand ?? (_findObservingFacilitiesCommand = new RelayCommand<object>(FindObservingFacilities));
+                return _findObservingFacilitiesCommand ?? (_findObservingFacilitiesCommand = new AsyncCommand<object>(FindObservingFacilities));
             }
         }
 
@@ -126,6 +128,8 @@ namespace WIGOS.ViewModel
             {
                 DisplayFindButton = !autoRefresh.Object;
             };
+
+            DisplayFindButton = !autoRefresh.Object;
         }
 
         public void AddObservingFacility(
@@ -203,8 +207,13 @@ namespace WIGOS.ViewModel
             UpdateObservingFacilityListItemViewModels();
         }
 
-        private void RetrieveObservingFacilitiesMatchingFilterFromRepository()
+        private async Task RetrieveObservingFacilitiesMatchingFilterFromRepository()
         {
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                var people = await unitOfWork.ObservingFacilities.GetAll();
+            }
+
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
                 var observingFacilityDictionary = unitOfWork.ObservingFacilities
@@ -291,7 +300,7 @@ namespace WIGOS.ViewModel
             });
         }
 
-        private void FindObservingFacilities(
+        private async Task FindObservingFacilities(
             object owner)
         {
             if (owner != null)
@@ -315,7 +324,7 @@ namespace WIGOS.ViewModel
                 }
             }
 
-            RetrieveObservingFacilitiesMatchingFilterFromRepository();
+            await RetrieveObservingFacilitiesMatchingFilterFromRepository();
             UpdateObservingFacilityListItemViewModels();
         }
     }

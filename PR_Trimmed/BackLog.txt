@@ -2,10 +2,29 @@ Done:
 * Skræl solutionen ned, så den ikke beskæftiger sig med person associations
 * Skræl Person ned, så den kun har first name og surname
 
+Todo: Få det fucking lort til at virke på din SIA maskine. Den har åbenbart ikke DotNet 7 og derfor virker de ting ikke,
+      der ellers virker derhjemme! Men hvordan fanden kan det egentlig være? Du har jo for helvede kørt den SjovMedWigos
+      fra din SIA maskine adskillige gange????!!! Er det pga KOMBINATIONEN af DotNet6 og Dotnet7????
+
 Todo: Få det helt på plads med VIEWING af historik. Editering kan vente
 * Når man indtaster tidspunkt i DatePicker-feltet så går den i uendelig løkke. Det må skyldes, at den både ændres ved bruger
   input og når man klikker nede på linealen. Løs det gerne i samme stil som dengang du havde problemet med DMI.Data.Studio,
   hvor du kun laver en opdatering, hvis den faktisk er forskellig. Måske er det nok med en guard i selve propertyen..
+  Du bør jo nok få repareret SjovMedWigos, og i den forbindelse skal du have refaktoreret den, så der tages højde for det med
+  at mange af persistence-funktionerne er gjort asynkrone.....
+  Well den kompilerer, og kører.. kom du omkring det?
+  Kan man lave objekter med den? nopes..
+  Hvad sker der, når man kalder RetrieveObjects - den kører igennem, men der er åbenbart ikke nogen. Bliver der ikke seedet?
+  Jo, der bliver seedet, men går det så galt, når du retriever dem?
+  Det er jo desvære svært at se i fucking databasen fra en sia maskine!!
+
+  ........Tag lige 2 steps tilbage, tag en dyb indånding, og se, hvor du er.
+  Du er ved at bygge frontends af forskellig art til DFOS APIet. Du har bygget en konsol-applikation, som virker fint.
+  Der var i øvrigt en del arbejde i at lave methods i Craft.Persistence asynkrone, så det både virkede, når det wrappede
+  EF Core og også et API...
+  Efterfølgende satte du dig for at lave en WPF baseret gui, der kunne gøre det samme. Først fik du den gode gamle
+  PR-ting i spil, og derefter satte du dig for at tilpasse SjovMedWigos...
+
 
 
 
