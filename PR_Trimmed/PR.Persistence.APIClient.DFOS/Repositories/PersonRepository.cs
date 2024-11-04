@@ -18,6 +18,7 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
     public class PersonRepository : IPersonRepository
     {
         private static DateTime _maxDate;
+        private string _baseURL;
 
         static PersonRepository()
         {
@@ -29,9 +30,11 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         private DateTime? _databaseTime;
 
         public PersonRepository(
+            string baseURL,
             DateTime? historicalTime,
             DateTime? databaseTime)
         {
+            _baseURL = baseURL;
             _historicalTime = historicalTime;
             _databaseTime = databaseTime;
         }
@@ -86,8 +89,8 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             var observingFacilities = new List<ObservingFacility>();
 
             var environment = "dev";
-            var url = $"http://dfos-api-{environment}.dmi.dk/collections/observing_facility/items";
-
+            var url = $"{_baseURL}/collections/observing_facility/items";
+            
             var arguments = new List<string>();
 
             if (_historicalTime.HasValue)

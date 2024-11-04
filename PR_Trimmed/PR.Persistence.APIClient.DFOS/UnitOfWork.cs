@@ -9,10 +9,12 @@ namespace PR.Persistence.APIClient.DFOS
         public IPersonRepository People { get; }
 
         public UnitOfWork(
+            string baseURL,
             DateTime? historicalTime,
             DateTime? databaseTime)
         {
             People = new PersonRepository(
+                baseURL,
                 historicalTime,
                 databaseTime);
         }
