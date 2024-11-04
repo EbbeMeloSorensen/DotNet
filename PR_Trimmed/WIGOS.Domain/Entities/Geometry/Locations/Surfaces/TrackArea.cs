@@ -1,0 +1,22 @@
+using WIGOS.Domain.Entities.Geometry.Locations.Points;
+
+namespace WIGOS.Domain.Entities.Geometry.Locations.Surfaces
+{
+    public class TrackArea : Surface
+    {
+        public Guid BeginPointId { get; set; }
+        public Point BeginPoint { get; set; } = null!;
+
+        public Guid EndPointId { get; set; }
+        public Point EndPoint { get; set; } = null!;
+
+        public double LeftWidthDimension { get; set; }
+        public double RightWidthDimension { get; set; }
+
+        public TrackArea(
+            Guid objectId,
+            DateTime created) : base(objectId, created)
+        {
+        }
+    }
+}
