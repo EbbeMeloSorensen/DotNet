@@ -10,10 +10,12 @@ namespace PR.Persistence.APIClient
 
         public UnitOfWork(
             DateTime? historicalTime,
+            bool includeHistoricalObjects,
             DateTime? databaseTime)
         {
             People = new PersonRepository(
-                historicalTime, 
+                historicalTime,
+                includeHistoricalObjects,
                 databaseTime);
         }
 

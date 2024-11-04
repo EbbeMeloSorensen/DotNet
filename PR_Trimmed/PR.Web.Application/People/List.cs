@@ -7,6 +7,7 @@ using PR.Persistence.Versioned;
 using PR.Web.Persistence;
 using PR.Web.Application.Core;
 using PR.Web.Application.Interfaces;
+using System.Data;
 
 namespace PR.Web.Application.People;
 
@@ -53,6 +54,11 @@ public class List
                 {
                     return Result<PagedList<PersonDto>>.Failure("Invalid time format");
                 }
+            }
+
+            if (request.Params.IncludeHistoricalObjects.HasValue)
+            {
+                (_unitOfWorkFactory as UnitOfWorkFactoryFacade)!.IncludeHistoricalObjects = request.Params.IncludeHistoricalObjects.Value;
             }
 
             if (!string.IsNullOrEmpty(request.Params.DatabaseTime))

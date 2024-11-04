@@ -21,6 +21,7 @@ namespace PR.Persistence.APIClient
         {
             return new UnitOfWork(
                 HistoricalTime,
+                IncludeHistoricalObjects,
                 DatabaseTime);
         }
 

@@ -17,13 +17,16 @@ namespace PR.Persistence.APIClient.Repositories
     {
         private string _token;
         private DateTime? _historicalTime;
+        private bool _includeHistoricalObjects;
         private DateTime? _databaseTime;
 
         public PersonRepository(
             DateTime? historicalTime,
+            bool includeHistoricalObjects,
             DateTime? databaseTime)
         {
             _historicalTime = historicalTime;
+            _includeHistoricalObjects = includeHistoricalObjects;
             _databaseTime = databaseTime;
         }
 
@@ -87,6 +90,11 @@ namespace PR.Persistence.APIClient.Repositories
             if (_historicalTime.HasValue)
             {
                 arguments.Add($"HistoricalTime={_historicalTime.Value.AsRFC3339(false)}");
+            }
+
+            if (_includeHistoricalObjects)
+            {
+                arguments.Add($"IncludeHistoricalObjects=True");
             }
 
             if (_databaseTime.HasValue)

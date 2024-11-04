@@ -3,11 +3,23 @@ Done:
 * Skræl Person ned, så den kun har first name og surname
 
 Todo:
-* Hvorfor kommer Darth ikke med op? Sammenhold gerne med konsol-applikationen
-  Den plugin, der repræsenterer et API ER vel ikke en facade-ting... så den SKAL vel for helvede ikke wrappes.
-  Hvordan virker det for konsol-applikationen?
-  
+* Find skal virke for disse cases (der skal være ækvivalens mellem repo og API):
+  A) Arguments:
+     - historical time: null 
+     - include historical objects: no
+     Expected: kun Chewbacca vises
 
+  B) Arguments:
+     - historical time: 01-01-2004 
+     - include historical objects: no
+     Expected: Chewbacca og Darth Vader vises
+  
+  C) Arguments:
+     - historical time: null
+     - include historical objects: yes
+     Expected: Chewbacca og Darth Vader vises. Darth vader vises på kortet som rød
+  
+Kan du sige til dit eget API, at du vil have historiske personer med op?
 
 
 Todo: Få det helt på plads med VIEWING af historik. Editering kan vente
