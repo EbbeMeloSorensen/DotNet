@@ -79,12 +79,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.APIClient", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Persistence.APIClient.DFOS", "PR.Persistence.APIClient.DFOS\PR.Persistence.APIClient.DFOS.csproj", "{2EF78FF9-FEB6-4989-BED5-E3BD5A763EC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.ViewModel.GIS", "PR.ViewModel.GIS\PR.ViewModel.GIS.csproj", "{ECD4BB77-3381-4B59-AB60-07EA168E29B6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WIGOS.Domain", "WIGOS.Domain\WIGOS.Domain.csproj", "{E8D9D184-2911-48EB-B9C5-42A010FF5B4E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.UI.WPF.GIS", "PR.UI.WPF.GIS\PR.UI.WPF.GIS.csproj", "{B52E3052-9BFD-4E59-9B82-A68817D04FF6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -231,18 +225,6 @@ Global
 		{2EF78FF9-FEB6-4989-BED5-E3BD5A763EC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EF78FF9-FEB6-4989-BED5-E3BD5A763EC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EF78FF9-FEB6-4989-BED5-E3BD5A763EC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ECD4BB77-3381-4B59-AB60-07EA168E29B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ECD4BB77-3381-4B59-AB60-07EA168E29B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ECD4BB77-3381-4B59-AB60-07EA168E29B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ECD4BB77-3381-4B59-AB60-07EA168E29B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8D9D184-2911-48EB-B9C5-42A010FF5B4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8D9D184-2911-48EB-B9C5-42A010FF5B4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8D9D184-2911-48EB-B9C5-42A010FF5B4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8D9D184-2911-48EB-B9C5-42A010FF5B4E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B52E3052-9BFD-4E59-9B82-A68817D04FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B52E3052-9BFD-4E59-9B82-A68817D04FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B52E3052-9BFD-4E59-9B82-A68817D04FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B52E3052-9BFD-4E59-9B82-A68817D04FF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
