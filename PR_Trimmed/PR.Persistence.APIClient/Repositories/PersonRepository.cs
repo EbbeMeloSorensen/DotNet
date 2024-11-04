@@ -122,7 +122,39 @@ namespace PR.Persistence.APIClient.Repositories
         public async Task<IEnumerable<Person>> Find(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            throw new NotImplementedException();
+            await Login();
+
+            var url = "http://localhost:5000/api/people";
+
+            var arguments = new List<string>();
+
+            if (_historicalTime.HasValue)
+            {
+                arguments.Add($"HistoricalTime={_historicalTime.Value.AsRFC3339(false)}");
+            }
+
+            if (_databaseTime.HasValue)
+            {
+                arguments.Add($"DatabaseTime={_databaseTime.Value.AsRFC3339(false)}");
+            }
+
+            if (arguments.Any())
+            {
+                url += "?";
+                url += arguments.Aggregate((c, n) => $"{c}&{n}");
+            }
+
+            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _token);
+
+            using var response = await ApiHelper.ApiClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var people = JsonConvert.DeserializeObject<List<Person>>(responseBody);
+
+            // When you know the structure of the json data
+            return people;
         }
 
         public Person SingleOrDefault(

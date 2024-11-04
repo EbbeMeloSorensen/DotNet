@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using PR.Persistence.Versioned;
 using PR.ViewModel.GIS;
+using PR.Persistence;
 
 namespace PR.UI.WPF.GIS
 {
@@ -23,8 +24,13 @@ namespace PR.UI.WPF.GIS
 
                     if (versioning == "enabled")
                     {
-                        mainWindowViewModel.UnitOfWorkFactory =
-                            new UnitOfWorkFactoryFacade(mainWindowViewModel.UnitOfWorkFactory);
+                        // Den skal ikke wrappes, hvis det er en af dem, der repræsenterer et API
+                        if (mainWindowViewModel.UnitOfWorkFactory is not IUnitOfWorkFactoryVersioned)
+                        {
+                            // Wrap the UnitOfWorkFactory, so we get versioning and history
+                            mainWindowViewModel.UnitOfWorkFactory =
+                                new UnitOfWorkFactoryFacade(mainWindowViewModel.UnitOfWorkFactory);
+                        }
                     }
                     else if (versioning != "disabled")
                     {

@@ -210,6 +210,7 @@ namespace PR.UI.Console
 
             if (versioning == "enabled")
             {
+                // Den skal ikke wrappes, hvis det er en af dem, der repræsenterer et API
                 if (application.UnitOfWorkFactory is not IUnitOfWorkFactoryVersioned)
                 {
                     // Wrap the UnitOfWorkFactory, so we get versioning and history

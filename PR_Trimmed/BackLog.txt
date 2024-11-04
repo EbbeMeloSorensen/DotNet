@@ -2,9 +2,13 @@ Done:
 * Skræl solutionen ned, så den ikke beskæftiger sig med person associations
 * Skræl Person ned, så den kun har first name og surname
 
-Todo: Få det fucking lort til at virke på din SIA maskine. Den har åbenbart ikke DotNet 7 og derfor virker de ting ikke,
-      der ellers virker derhjemme! Men hvordan fanden kan det egentlig være? Du har jo for helvede kørt den SjovMedWigos
-      fra din SIA maskine adskillige gange????!!! Er det pga KOMBINATIONEN af DotNet6 og Dotnet7????
+Todo:
+* Hvorfor kommer Darth ikke med op? Sammenhold gerne med konsol-applikationen
+  Den plugin, der repræsenterer et API ER vel ikke en facade-ting... så den SKAL vel for helvede ikke wrappes.
+  Hvordan virker det for konsol-applikationen?
+  
+
+
 
 Todo: Få det helt på plads med VIEWING af historik. Editering kan vente
 * Når man indtaster tidspunkt i DatePicker-feltet så går den i uendelig løkke. Det må skyldes, at den både ændres ved bruger
