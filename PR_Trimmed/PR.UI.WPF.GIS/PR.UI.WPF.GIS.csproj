@@ -14,7 +14,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
+    <ProjectReference Include="..\PR.Persistence.APIClient.DFOS\PR.Persistence.APIClient.DFOS.csproj" />
     <ProjectReference Include="..\PR.Persistence.APIClient\PR.Persistence.APIClient.csproj" />
+    <ProjectReference Include="..\PR.Persistence.EntityFrameworkCore.InMemory\PR.Persistence.EntityFrameworkCore.InMemory.csproj" />
+    <ProjectReference Include="..\PR.Persistence.EntityFrameworkCore.PostgreSQL\PR.Persistence.EntityFrameworkCore.PostgreSQL.csproj" />
+    <ProjectReference Include="..\PR.Persistence.EntityFrameworkCore.Sqlite\PR.Persistence.EntityFrameworkCore.Sqlite.csproj" />
+    <ProjectReference Include="..\PR.Persistence.EntityFrameworkCore.SqlServer\PR.Persistence.EntityFrameworkCore.SqlServer.csproj" />
     <ProjectReference Include="..\PR.Persistence.Versioned\PR.Persistence.Versioned.csproj" />
     <ProjectReference Include="..\PR.ViewModel.GIS\PR.ViewModel.GIS.csproj" />
   </ItemGroup>
