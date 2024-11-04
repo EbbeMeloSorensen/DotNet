@@ -92,15 +92,15 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
 
             if (_historicalTime.HasValue)
             {
-                arguments.Add($"HistoricalTime={_historicalTime.Value.AsRFC3339(false)}");
+                arguments.Add($"datetime={_historicalTime.Value.AsRFC3339(false)}");
             }
 
             if (_databaseTime.HasValue)
             {
-                arguments.Add($"DatabaseTime={_databaseTime.Value.AsRFC3339(false)}");
+                throw new NotImplementedException("");
             }
 
-            if (arguments.Any() && false)
+            if (arguments.Any())
             {
                 url += "?";
                 url += arguments.Aggregate((c, n) => $"{c}&{n}");
