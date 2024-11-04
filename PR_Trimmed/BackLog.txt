@@ -2,6 +2,13 @@ Done:
 * Skræl solutionen ned, så den ikke beskæftiger sig med person associations
 * Skræl Person ned, så den kun har first name og surname
 
+Todo: Få det helt på plads med VIEWING af historik. Editering kan vente
+* Når man indtaster tidspunkt i DatePicker-feltet så går den i uendelig løkke. Det må skyldes, at den både ændres ved bruger
+  input og når man klikker nede på linealen. Løs det gerne i samme stil som dengang du havde problemet med DMI.Data.Studio,
+  hvor du kun laver en opdatering, hvis den faktisk er forskellig. Måske er det nok med en guard i selve propertyen..
+
+
+
 Todo:
 * Hvorfor vises Anakin, endda med rød, når han jo har dateclosed i fortiden? Han vises i øvrigt også i listen, hvilket han 
   heller ikke burde.
