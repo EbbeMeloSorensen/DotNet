@@ -25,6 +25,10 @@ Todo: Få det helt på plads med VIEWING af historik. Editering kan vente
   Efterfølgende satte du dig for at lave en WPF baseret gui, der kunne gøre det samme. Først fik du den gode gamle
   PR-ting i spil, og derefter satte du dig for at tilpasse SjovMedWigos... Det sad du så med fredag aften på arbejdet
   og oplevede, at du ikke kunne lave en template for projektet
+  Så gik du hjem og brugte en del tid i weekenden på det og kom også relativt langt, men så oplever du fandengaleme,
+  at du ikke kan bygge det på din SIA-maskine, og endda, at den bare staller, når du prøver!!!
+  Du have lige en hypotese om at det var fordi det var noget DotNet7, men det er SjovMEdWigos jo altså OGSÅ!
+
 
 
 
