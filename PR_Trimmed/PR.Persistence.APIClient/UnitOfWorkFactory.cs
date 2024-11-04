@@ -1,12 +1,22 @@
 ﻿using System;
+using System.Configuration;
 
 namespace PR.Persistence.APIClient
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactoryVersioned, IUnitOfWorkFactoryHistorical
     {
+        private static string _baseURL;
+
         public DateTime? HistoricalTime { get; set; }
         public bool IncludeHistoricalObjects { get; set; }
         public DateTime? DatabaseTime { get; set; }
+
+        static UnitOfWorkFactory()
+        {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+            _baseURL = settings["BaseURL"]?.Value;
+        }
 
         public void Initialize(
             bool versioned)
@@ -20,6 +30,7 @@ namespace PR.Persistence.APIClient
         public IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(
+                _baseURL,
                 HistoricalTime,
                 IncludeHistoricalObjects,
                 DatabaseTime);

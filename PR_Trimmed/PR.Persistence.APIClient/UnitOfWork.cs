@@ -9,11 +9,13 @@ namespace PR.Persistence.APIClient
         public IPersonRepository People { get; }
 
         public UnitOfWork(
+            string baseURL,
             DateTime? historicalTime,
             bool includeHistoricalObjects,
             DateTime? databaseTime)
         {
             People = new PersonRepository(
+                baseURL,
                 historicalTime,
                 includeHistoricalObjects,
                 databaseTime);

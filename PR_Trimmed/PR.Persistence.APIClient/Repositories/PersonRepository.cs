@@ -15,16 +15,19 @@ namespace PR.Persistence.APIClient.Repositories
 {
     public class PersonRepository : IPersonRepository
     {
+        private string _baseURL;
         private string _token;
         private DateTime? _historicalTime;
         private bool _includeHistoricalObjects;
         private DateTime? _databaseTime;
 
         public PersonRepository(
+            string baseURL,
             DateTime? historicalTime,
             bool includeHistoricalObjects,
             DateTime? databaseTime)
         {
+            _baseURL = baseURL;
             _historicalTime = historicalTime;
             _includeHistoricalObjects = includeHistoricalObjects;
             _databaseTime = databaseTime;
@@ -83,7 +86,7 @@ namespace PR.Persistence.APIClient.Repositories
 
             // We call the API using the token - here we want all people (and we are not using pagination here)
             var urlBuilder = new UriBuilder(); // Spændende - mon ikke man kan noget smart med den?
-            var url = "http://localhost:5000/api/people";
+            var url = $"{_baseURL}/people";
 
             var arguments = new List<string>();
 

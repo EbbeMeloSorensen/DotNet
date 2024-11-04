@@ -3,6 +3,9 @@ Done:
 * Skræl Person ned, så den kun har first name og surname
 
 Todo:
+* Man skal kune cleare historical time feltet for at komme tilbage til now..
+
+Todo:
 * Find skal virke for disse cases (der skal være ækvivalens mellem repo og API):
   A) Arguments:
      - historical time: null 
