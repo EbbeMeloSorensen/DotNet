@@ -23,7 +23,8 @@ Todo: Få det helt på plads med VIEWING af historik. Editering kan vente
   Der var i øvrigt en del arbejde i at lave methods i Craft.Persistence asynkrone, så det både virkede, når det wrappede
   EF Core og også et API...
   Efterfølgende satte du dig for at lave en WPF baseret gui, der kunne gøre det samme. Først fik du den gode gamle
-  PR-ting i spil, og derefter satte du dig for at tilpasse SjovMedWigos...
+  PR-ting i spil, og derefter satte du dig for at tilpasse SjovMedWigos... Det sad du så med fredag aften på arbejdet
+  og oplevede, at du ikke kunne lave en template for projektet
 
 
 
