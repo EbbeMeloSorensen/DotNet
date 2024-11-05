@@ -1,3 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
@@ -5,12 +13,6 @@ using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
 using PR.Persistence;
 using PR.IO;
 
@@ -42,9 +44,11 @@ namespace PR.ViewModel.GIS
         private readonly ObservableObject<bool> _displayHistoricalTimeControls;
         private readonly ObservableObject<bool> _displayDatabaseTimeControls;
         private readonly Brush _mapBrushSeaCurrent = new SolidColorBrush(new Color { R = 200, G = 200, B = 255, A = 255 });
-        private readonly Brush _mapBrushSeaHistoric = new SolidColorBrush(new Color { R = 239, G = 228, B = 176, A = 255 });
+        private readonly Brush _mapBrushSeaHistoric = new SolidColorBrush(new Color { R = 200, G = 200, B = 200, A = 255 });
+        private readonly Brush _mapBrushSeaOutdated = new SolidColorBrush(new Color { R = 239, G = 228, B = 176, A = 255 });
         private readonly Brush _mapBrushLandCurrent = new SolidColorBrush(new Color { R = 100, G = 200, B = 100, A = 255 });
-        private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
+        private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 100, G = 100, B = 100, A = 255 });
+        private readonly Brush _mapBrushLandOutdated = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
         private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
         private readonly Brush _activeObservingFacilityBrush = new SolidColorBrush(Colors.GreenYellow);
         private readonly Brush _closedObservingFacilityBrush = new SolidColorBrush(Colors.Red);
@@ -312,11 +316,26 @@ namespace PR.ViewModel.GIS
 
             _historicalTimeOfInterest.PropertyChanged += (s, e) =>
             {
+                // Possibly adjust database time if it doesn't exceed historical time
                 if (_historicalTimeOfInterest.Object.HasValue)
                 {
-                    // Vis den historiske tid i uret
+                    if (_databaseTimeOfInterest.Object.HasValue &&
+                        _databaseTimeOfInterest.Object.Value < _historicalTimeOfInterest.Object.Value)
+                    {
+                        _databaseTimeOfInterest.Object = _historicalTimeOfInterest.Object.Value;
+                    }
+                }
+                else
+                {
+                    if (_databaseTimeOfInterest.Object.HasValue)
+                    {
+                        _databaseTimeOfInterest.Object = null;
+                    }
+                }
+
+                if (_historicalTimeOfInterest.Object.HasValue)
+                {
                     var time = _historicalTimeOfInterest.Object.Value;
-                    TimeText = $"{time.ToString("D")} {time.ToString("T")}";
 
                     // Highlight the position of the time of interest in the historical time view
                     HistoricalTimeViewModel.StaticXValue =
@@ -329,9 +348,6 @@ namespace PR.ViewModel.GIS
                 }
                 else
                 {
-                    var now = DateTime.UtcNow;
-                    TimeText = $"{now.ToString("D")} {now.ToString("T")}";
-
                     HistoricalTimeViewModel.StaticXValue = null;
 
                     // Vi vil gerne se situationen, som den gør sig gældende nu. Derfor opererer vi også essentielt med seneste version af databasen
@@ -347,19 +363,27 @@ namespace PR.ViewModel.GIS
                 RefreshHistoricalTimeSeriesView(false);
                 UpdateControlBackground();
                 UpdateStatusBar();
+                UpdateTimeText();
             };
 
             _databaseTimeOfInterest.PropertyChanged += (s, e) =>
             {
-                DatabaseTimeText = _databaseTimeOfInterest.Object.HasValue
-                    ? $"(database as of {_databaseTimeOfInterest.Object.Value.AsDateTimeString(false)})"
-                    : "";
+                // Possibly adjust historical time so its doesn't exceed database time
+                if (_databaseTimeOfInterest.Object.HasValue)
+                {
+                    if (!_historicalTimeOfInterest.Object.HasValue ||
+                        _historicalTimeOfInterest.Object.Value > _databaseTimeOfInterest.Object.Value)
+                    {
+                        _historicalTimeOfInterest.Object = _databaseTimeOfInterest.Object.Value;
+                    }
+                }
 
                 UpdateMapColoring();
                 RefreshDatabaseTimeSeriesView();
                 UpdateControlBackground();
                 UpdateStatusBar();
                 UpdateCommands();
+                UpdateTimeText();
             };
 
             _autoRefresh = new ObservableObject<bool>
@@ -394,7 +418,7 @@ namespace PR.ViewModel.GIS
 
             _displayDatabaseTimeControls = new ObservableObject<bool>
             {
-                Object = false
+                Object = true
             };
 
             _displayRetrospectionControls = new ObservableObject<bool>
@@ -460,12 +484,7 @@ namespace PR.ViewModel.GIS
 
             _timer.Elapsed += (s, e) =>
             {
-                if (!_historicalTimeOfInterest.Object.HasValue)
-                {
-                    var now = DateTime.UtcNow;
-
-                    TimeText = $"{now.ToString("D")} {now.ToString("T")}";
-                }
+                UpdateTimeText();
             };
 
             _timer.Start();
@@ -1175,12 +1194,20 @@ namespace PR.ViewModel.GIS
             }
         }
 
-        private async Task UpdateMapColoring()
+        private void UpdateMapColoring()
         {
             TimeTextColor = _historicalTimeOfInterest.Object.HasValue ? "Black" : "White";
 
-            if (_historicalTimeOfInterest.Object.HasValue ||
-                _databaseTimeOfInterest.Object.HasValue)
+            if (!_historicalTimeOfInterest.Object.HasValue)
+            {
+                MapViewModel.BackgroundBrush = _mapBrushSeaCurrent;
+
+                foreach (var polygonViewModel in MapViewModel.PolygonViewModels)
+                {
+                    polygonViewModel.Brush = _mapBrushLandCurrent;
+                }
+            }
+            else if (!_databaseTimeOfInterest.Object.HasValue)
             {
                 MapViewModel.BackgroundBrush = _mapBrushSeaHistoric;
 
@@ -1191,19 +1218,12 @@ namespace PR.ViewModel.GIS
             }
             else
             {
-                MapViewModel.BackgroundBrush = _mapBrushSeaCurrent;
+                MapViewModel.BackgroundBrush = _mapBrushSeaOutdated;
 
                 foreach (var polygonViewModel in MapViewModel.PolygonViewModels)
                 {
-                    polygonViewModel.Brush = _mapBrushLandCurrent;
+                    polygonViewModel.Brush = _mapBrushLandOutdated;
                 }
-            }
-
-            // DET HER GÅR GALT; HVIS DEN OGSÅ SKAL LAVE DATABASEN
-            if (_autoRefresh.Object)
-            {
-                //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (3)");
-                await ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
             }
         }
 
@@ -1522,6 +1542,46 @@ namespace PR.ViewModel.GIS
                 _databaseWriteTimes = new List<DateTime>();
                 _historicalChangeTimes = new List<DateTime>();
             }
+        }
+
+        private void UpdateTimeText()
+        {
+            var time = _historicalTimeOfInterest.Object.HasValue 
+                ? _historicalTimeOfInterest.Object.Value 
+                : DateTime.UtcNow;
+
+            TimeText = TimeAsText(time, _historicalTimeOfInterest.Object.HasValue);
+
+            var databaseTimeText = "";
+
+            if (_databaseTimeOfInterest.Object.HasValue)
+            {
+                if (_historicalTimeOfInterest.Object.HasValue &&
+                    _historicalTimeOfInterest.Object.Value == _databaseTimeOfInterest.Object.Value)
+                {
+                    databaseTimeText = "(database as of that date)";
+                }
+                else
+                {
+                    databaseTimeText = $"(database as of {TimeAsText(_databaseTimeOfInterest.Object.Value, true)})";
+                }
+            }
+
+            DatabaseTimeText = databaseTimeText;
+        }
+
+        private string TimeAsText(
+            DateTime time,
+            bool omitClockIfZero)
+        {
+            var sb = new StringBuilder($"{time.ToString("D", CultureInfo.InvariantCulture)}");
+
+            if (time.Hour != 0 && time.Minute != 0 && time.Second != 0 || !omitClockIfZero)
+            {
+                sb.Append($" {time.ToString("T", CultureInfo.InvariantCulture)}");
+            }
+
+            return sb.ToString();
         }
     }
 }

@@ -29,6 +29,9 @@ namespace PR.ViewModel.GIS
         private DateTime? _historicalTime;
         private DateTime? _databaseTime;
 
+        private RelayCommand _clearHistoricalTimeCommand;
+        private RelayCommand _clearDatabaseTimeCommand;
+
         public bool DisplayNameFilterField
         {
             get => _displayNameFilterField;
@@ -135,26 +138,45 @@ namespace PR.ViewModel.GIS
 
         public DateTime? HistoricalTime
         {
-            get { return _historicalTime; }
+            get => _historicalTime;
             set
             {
-                if (_historicalTime != value)
-                {
-                    _historicalTime = value;
-                    _historicalTimeOfInterest.Object = value;
-                    RaisePropertyChanged();
-                }
+                if (_historicalTime == value) return;
+
+                _historicalTime = value;
+                _historicalTimeOfInterest.Object = value;
+                RaisePropertyChanged();
             }
         }
 
         public DateTime? DatabaseTime
         {
-            get { return _databaseTime; }
+            get => _databaseTime;
             set
             {
+                if (_databaseTime == value) return;
+
                 _databaseTime = value;
                 _databaseTimeOfInterest.Object = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public RelayCommand ClearHistoricalTimeCommand
+        {
+            get
+            {
+                return _clearHistoricalTimeCommand ?? (_clearHistoricalTimeCommand =
+                    new RelayCommand(ClearHistoricalTime, CanClearHistoricalTime));
+            }
+        }
+
+        public RelayCommand ClearDatabaseTimeCommand
+        {
+            get
+            {
+                return _clearDatabaseTimeCommand ??
+                       (_clearDatabaseTimeCommand = new RelayCommand(ClearDatabaseTime, CanClearDatabaseTime));
             }
         }
 
@@ -182,11 +204,13 @@ namespace PR.ViewModel.GIS
             _historicalTimeOfInterest.PropertyChanged += (s, e) =>
             {
                 HistoricalTime = _historicalTimeOfInterest.Object;
+                ClearHistoricalTimeCommand.RaiseCanExecuteChanged();
             };
 
             _databaseTimeOfInterest.PropertyChanged += (s, e) =>
             {
                 DatabaseTime = _databaseTimeOfInterest.Object;
+                ClearDatabaseTimeCommand.RaiseCanExecuteChanged();
             };
 
             _displayNameFilter.PropertyChanged += (s, e) => UpdateControls();

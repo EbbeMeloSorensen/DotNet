@@ -106,11 +106,17 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Historical Time:" Margin="1, 5, 5, 1"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Database as of:" Margin="1, 5, 5, 1"/>
                 <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding HistoricalTime}"/>
                 <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding DatabaseTime}"/>
+                <Button Grid.Row="0" Grid.Column="2" Margin="2, 1, 1, 1" Width="40" Content="Now"
+                        Command="{Binding ClearHistoricalTimeCommand}"/>
+                <Button Grid.Row="1" Grid.Column="2" Margin="2, 3, 1, 1" Width="40" Content="Latest"
+                        Command="{Binding ClearDatabaseTimeCommand}"/>
+
             </Grid>
         </GroupBox>
     </Grid>

@@ -4,8 +4,17 @@ Done:
 
 Todo:
 * Man skal kune cleare historical time feltet for at komme tilbage til now..
+* Hvis tidspunktet er midnat skal den ikke vise klokkeslæt, hverken for titlen eller parantesen nedenunder
+* For dine egne 2 plugins skal man kunne gå tilbage i databasetid
+* For alle 3 plugins skal man kunne se detaljer i detaljeviewet
+* Man skal kunne se linier i historical view over hvor der er sket noget
+* Genaktiver AutoRefresh, hvor det giver mening
+  - Når man ændrer på historical time
+  - Når man ændrer på database time
+* Bug: Der er noget galt med tidsaksen, når der kun vises år..
 
-Todo:
+
+Løst of fast:
 * Find skal virke for disse cases (der skal være ækvivalens mellem repo og API):
   A) Arguments:
      - historical time: null 
