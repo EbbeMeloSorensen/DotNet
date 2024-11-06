@@ -44,10 +44,10 @@ namespace PR.ViewModel.GIS
         private readonly ObservableObject<bool> _displayHistoricalTimeControls;
         private readonly ObservableObject<bool> _displayDatabaseTimeControls;
         private readonly Brush _mapBrushSeaCurrent = new SolidColorBrush(new Color { R = 200, G = 200, B = 255, A = 255 });
-        private readonly Brush _mapBrushSeaHistoric = new SolidColorBrush(new Color { R = 200, G = 200, B = 200, A = 255 });
+        private readonly Brush _mapBrushSeaHistoric = new SolidColorBrush(new Color { R = 200, G = 200, B = 225, A = 255 });
         private readonly Brush _mapBrushSeaOutdated = new SolidColorBrush(new Color { R = 239, G = 228, B = 176, A = 255 });
         private readonly Brush _mapBrushLandCurrent = new SolidColorBrush(new Color { R = 100, G = 200, B = 100, A = 255 });
-        private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 100, G = 100, B = 100, A = 255 });
+        private readonly Brush _mapBrushLandHistoric = new SolidColorBrush(new Color { R = 100, G = 130, B = 100, A = 255 });
         private readonly Brush _mapBrushLandOutdated = new SolidColorBrush(new Color { R = 185, G = 122, B = 87, A = 255 });
         private readonly Brush _timeStampBrush = new SolidColorBrush(Colors.DarkSlateBlue);
         private readonly Brush _activeObservingFacilityBrush = new SolidColorBrush(Colors.GreenYellow);
@@ -334,36 +334,21 @@ namespace PR.ViewModel.GIS
                     }
                 }
 
-                if (_historicalTimeOfInterest.Object.HasValue)
+                // Mark historical time of interest in the historical time control
+                HistoricalTimeViewModel!.StaticXValue = _historicalTimeOfInterest.Object.HasValue
+                    ? (_historicalTimeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1)
+                    : null;
+
+                // Set the historical time of interest for the unit of work factory
+                if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
                 {
-                    var time = _historicalTimeOfInterest.Object.Value;
-
-                    // Highlight the position of the time of interest in the historical time view
-                    HistoricalTimeViewModel.StaticXValue =
-                        (_historicalTimeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1);
-
-                    if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
-                    {
-                        unitOfWorkFactoryHistorical.HistoricalTime = time;
-                    }
-                }
-                else
-                {
-                    HistoricalTimeViewModel.StaticXValue = null;
-
-                    // Vi vil gerne se situationen, som den gør sig gældende nu. Derfor opererer vi også essentielt med seneste version af databasen
-                    _databaseTimeOfInterest.Object = null;
-
-                    if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
-                    {
-                        unitOfWorkFactoryHistorical.HistoricalTime = null;
-                    }
+                    unitOfWorkFactoryHistorical.HistoricalTime = _historicalTimeOfInterest.Object;
                 }
 
                 UpdateControlStyle();
-                RefreshHistoricalTimeSeriesView(false);
                 UpdateStatusBar();
                 UpdateTimeText();
+                UpdateHistoricalTimeSeriesView(false);
             };
 
             _databaseTimeOfInterest.PropertyChanged += (s, e) =>
@@ -378,11 +363,22 @@ namespace PR.ViewModel.GIS
                     }
                 }
 
-                UpdateControlStyle();
-                RefreshDatabaseTimeSeriesView();
-                UpdateStatusBar();
+                // Mark database time of interest in the database time control
+                DatabaseWriteTimesViewModel!.StaticXValue = _databaseTimeOfInterest.Object.HasValue
+                    ? (_databaseTimeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1)
+                    : null;
+
+                // Set the database time of interest for the unit of work factory
+                if (UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
+                {
+                    unitOfWorkFactoryVersioned.DatabaseTime = _databaseTimeOfInterest.Object;
+                }
+
                 UpdateCommands();
+                UpdateControlStyle();
+                UpdateStatusBar();
                 UpdateTimeText();
+                UpdateDatabaseTimeSeriesView();
             };
 
             _autoRefresh = new ObservableObject<bool>
@@ -585,10 +581,10 @@ namespace PR.ViewModel.GIS
             //}
 
             _historicalChangeTimes.Clear();
-            RefreshHistoricalTimeSeriesView(false);
+            UpdateHistoricalTimeSeriesView(false);
 
             _databaseWriteTimes.Clear();
-            RefreshDatabaseTimeSeriesView();
+            UpdateDatabaseTimeSeriesView();
 
             //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (2)");
             ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
@@ -907,7 +903,7 @@ namespace PR.ViewModel.GIS
 
             HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
-                RefreshHistoricalTimeSeriesView(false);
+                UpdateHistoricalTimeSeriesView(false);
             };
 
             HistoricalTimeViewModel.GeometryEditorViewModel.UpdateModelCallBack = () =>
@@ -979,7 +975,7 @@ namespace PR.ViewModel.GIS
 
             DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowMajorUpdateOccured += (s, e) =>
             {
-                RefreshDatabaseTimeSeriesView();
+                UpdateDatabaseTimeSeriesView();
             };
 
             DatabaseWriteTimesViewModel.GeometryEditorViewModel.UpdateModelCallBack = () =>
@@ -1065,7 +1061,7 @@ namespace PR.ViewModel.GIS
             };
         }
 
-        private void RefreshHistoricalTimeSeriesView(
+        private void UpdateHistoricalTimeSeriesView(
             bool recalculate)
         {
             // Called:
@@ -1107,7 +1103,7 @@ namespace PR.ViewModel.GIS
             }
         }
 
-        private void RefreshDatabaseTimeSeriesView()
+        private void UpdateDatabaseTimeSeriesView()
         {
             // Called:
             //   - During upstart
