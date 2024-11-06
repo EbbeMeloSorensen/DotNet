@@ -53,7 +53,8 @@ namespace PR.ViewModel.GIS
         private readonly Brush _activeObservingFacilityBrush = new SolidColorBrush(Colors.GreenYellow);
         private readonly Brush _closedObservingFacilityBrush = new SolidColorBrush(Colors.Red);
         private readonly Brush _controlBackgroundBrushCurrent = new SolidColorBrush(Colors.WhiteSmoke);
-        private readonly Brush _controlBackgroundBrushHistoric = new SolidColorBrush(Colors.BurlyWood);
+        private readonly Brush _controlBackgroundBrushHistoric = new SolidColorBrush(Colors.DarkGray);
+        private readonly Brush _controlBackgroundBrushOutdated = new SolidColorBrush(Colors.BurlyWood);
         private Brush _controlBackgroundBrush;
         private string _messageInMap;
         private string _statusBarText;
@@ -359,9 +360,8 @@ namespace PR.ViewModel.GIS
                     }
                 }
 
-                UpdateMapColoring();
+                UpdateControlStyle();
                 RefreshHistoricalTimeSeriesView(false);
-                UpdateControlBackground();
                 UpdateStatusBar();
                 UpdateTimeText();
             };
@@ -378,9 +378,8 @@ namespace PR.ViewModel.GIS
                     }
                 }
 
-                UpdateMapColoring();
+                UpdateControlStyle();
                 RefreshDatabaseTimeSeriesView();
-                UpdateControlBackground();
                 UpdateStatusBar();
                 UpdateCommands();
                 UpdateTimeText();
@@ -466,7 +465,6 @@ namespace PR.ViewModel.GIS
             InitializeTimestampsOfInterest();
 
             UpdateRetrospectionControls();
-            UpdateControlBackground();
             UpdateStatusBar();
 
             _historicalTimeOfInterest.PropertyChanged += (s, e) =>
@@ -866,7 +864,7 @@ namespace PR.ViewModel.GIS
                 }
             };
 
-            UpdateMapColoring();
+            UpdateControlStyle();
         }
 
         private void InitializeHistoricalTimeViewModel()
@@ -1194,13 +1192,14 @@ namespace PR.ViewModel.GIS
             }
         }
 
-        private void UpdateMapColoring()
+        private void UpdateControlStyle()
         {
             TimeTextColor = _historicalTimeOfInterest.Object.HasValue ? "Black" : "White";
 
             if (!_historicalTimeOfInterest.Object.HasValue)
             {
                 MapViewModel.BackgroundBrush = _mapBrushSeaCurrent;
+                ControlBackgroundBrush = _controlBackgroundBrushCurrent;
 
                 foreach (var polygonViewModel in MapViewModel.PolygonViewModels)
                 {
@@ -1210,6 +1209,7 @@ namespace PR.ViewModel.GIS
             else if (!_databaseTimeOfInterest.Object.HasValue)
             {
                 MapViewModel.BackgroundBrush = _mapBrushSeaHistoric;
+                ControlBackgroundBrush = _controlBackgroundBrushHistoric;
 
                 foreach (var polygonViewModel in MapViewModel.PolygonViewModels)
                 {
@@ -1219,6 +1219,7 @@ namespace PR.ViewModel.GIS
             else
             {
                 MapViewModel.BackgroundBrush = _mapBrushSeaOutdated;
+                ControlBackgroundBrush = _controlBackgroundBrushOutdated;
 
                 foreach (var polygonViewModel in MapViewModel.PolygonViewModels)
                 {
@@ -1243,13 +1244,6 @@ namespace PR.ViewModel.GIS
             DisplayRetrospectionControls =
                 _displayHistoricalTimeControls.Object ||
                 _displayDatabaseTimeControls.Object;
-        }
-
-        private void UpdateControlBackground()
-        {
-            ControlBackgroundBrush = _historicalTimeOfInterest.Object.HasValue
-                ? _controlBackgroundBrushHistoric
-                : _controlBackgroundBrushCurrent;
         }
 
         private void UpdateStatusBar()
