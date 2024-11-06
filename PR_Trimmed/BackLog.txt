@@ -1,10 +1,10 @@
 Done:
 * Skræl solutionen ned, så den ikke beskæftiger sig med person associations
 * Skræl Person ned, så den kun har first name og surname
+* Man skal kune cleare historical time feltet for at komme tilbage til now..
+* Hvis tidspunktet er midnat skal den ikke vise klokkeslæt i headeren, hverken for titlen eller parantesen nedenunder
 
 Todo:
-* Man skal kune cleare historical time feltet for at komme tilbage til now..
-* Hvis tidspunktet er midnat skal den ikke vise klokkeslæt, hverken for titlen eller parantesen nedenunder
 * For dine egne 2 plugins skal man kunne gå tilbage i databasetid
 * For alle 3 plugins skal man kunne se detaljer i detaljeviewet
 * Man skal kunne se linier i historical view over hvor der er sket noget
