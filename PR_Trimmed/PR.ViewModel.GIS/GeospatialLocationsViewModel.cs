@@ -126,7 +126,7 @@ namespace PR.ViewModel.GIS
         {
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                throw new NotImplementedException("Need to have an object with the proper ID");
+                //throw new NotImplementedException("Need to have an object with the proper ID");
                 var people = await unitOfWork.People.Find(_ => _.ID == _selectedObservingFacility.Id);
 
                 //var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>
@@ -161,35 +161,36 @@ namespace PR.ViewModel.GIS
         private async Task DeleteSelectedGeospatialLocations(
             object owner)
         {
-            var nSelectedGeospatialLocations = SelectedGeospatialLocations.Objects.Count();
-
-            var message = nSelectedGeospatialLocations == 1
-                ? "Delete location?"
-                : $"Delete {nSelectedGeospatialLocations} locations?";
-
-            var dialogViewModel = new MessageBoxDialogViewModel(message, true);
-
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
-            {
-                return;
-            }
-
-            var objectIds = SelectedGeospatialLocations.Objects
-                .Select(_ => _.ObjectId)
-                .ToList();
-
-            var geospatialLocationsRemaining = GeospatialLocationListItemViewModels
-                .Select(_ => _.GeospatialLocation)
-                .Where(_ => !objectIds.Contains(_.ObjectId))
-                .ToList();
-
-            var dateEstablishedAfter = geospatialLocationsRemaining.Min(_ => _.From);
-            var dateClosedAfter = geospatialLocationsRemaining.Max(_ => _.To);
-
-            var now = DateTime.UtcNow;
-
-
             throw new NotImplementedException("Block removed for refactoring");
+            //var nSelectedGeospatialLocations = SelectedGeospatialLocations.Objects.Count();
+
+            //var message = nSelectedGeospatialLocations == 1
+            //    ? "Delete location?"
+            //    : $"Delete {nSelectedGeospatialLocations} locations?";
+
+            //var dialogViewModel = new MessageBoxDialogViewModel(message, true);
+
+            //if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
+            //{
+            //    return;
+            //}
+
+            //var objectIds = SelectedGeospatialLocations.Objects
+            //    .Select(_ => _.ObjectId)
+            //    .ToList();
+
+            //var geospatialLocationsRemaining = GeospatialLocationListItemViewModels
+            //    .Select(_ => _.GeospatialLocation)
+            //    .Where(_ => !objectIds.Contains(_.ObjectId))
+            //    .ToList();
+
+            //var dateEstablishedAfter = geospatialLocationsRemaining.Min(_ => _.From);
+            //var dateClosedAfter = geospatialLocationsRemaining.Max(_ => _.To);
+
+            //var now = DateTime.UtcNow;
+
+
+            //throw new NotImplementedException("Block removed for refactoring");
             //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             //{
             //    var geospatialLocationsForDeletion = (await unitOfWork.GeospatialLocations
@@ -226,7 +227,7 @@ namespace PR.ViewModel.GIS
             //    unitOfWork.Complete();
             //}
 
-            OnGeospatialLocationsUpdatedOrDeleted(now);
+            //OnGeospatialLocationsUpdatedOrDeleted(now);
         }
 
         private bool CanDeleteSelectedGeospatialLocations(

@@ -164,46 +164,50 @@ namespace PR.ViewModel.GIS
         public void UpdateObservingFacilities(
             IEnumerable<ObservingFacility> observingFacilities)
         {
-            var objectIdsOfUpdatedObservingFacilities = observingFacilities.Select(_ => _.ObjectId).ToList();
+            throw new NotImplementedException("Block removed for refactoring");
 
-            foreach (var observingFacility in ObservingFacilityDataExtracts.Objects)
-            {
-                if (objectIdsOfUpdatedObservingFacilities.Contains(observingFacility.ObservingFacility.ObjectId))
-                {
-                    var temp = observingFacilities.Single(_ => _.ObjectId == observingFacility.ObservingFacility.ObjectId);
+            //var objectIdsOfUpdatedObservingFacilities = observingFacilities.Select(_ => _.ObjectId).ToList();
 
-                    observingFacility.ObservingFacility.Name = temp.Name;
-                    observingFacility.ObservingFacility.DateEstablished = temp.DateEstablished;
-                    observingFacility.ObservingFacility.DateClosed = temp.DateClosed;
-                }
-            }
+            //foreach (var observingFacility in ObservingFacilityDataExtracts.Objects)
+            //{
+            //    if (objectIdsOfUpdatedObservingFacilities.Contains(observingFacility.ObservingFacility.ObjectId))
+            //    {
+            //        var temp = observingFacilities.Single(_ => _.ObjectId == observingFacility.ObservingFacility.ObjectId);
 
-            ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(
-                ObservingFacilityDataExtracts.Objects.Select(
-                    _ => new ObservingFacilityListItemViewModel { ObservingFacility = _.ObservingFacility }));
+            //        observingFacility.ObservingFacility.Name = temp.Name;
+            //        observingFacility.ObservingFacility.DateEstablished = temp.DateEstablished;
+            //        observingFacility.ObservingFacility.DateClosed = temp.DateClosed;
+            //    }
+            //}
 
-            SelectedObservingFacilityListItemViewModels.Clear();
+            //ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(
+            //    ObservingFacilityDataExtracts.Objects.Select(
+            //        _ => new ObservingFacilityListItemViewModel { ObservingFacility = _.ObservingFacility }));
 
-            foreach (var observingFacilityListItemViewModel in ObservingFacilityListItemViewModels)
-            {
-                if (objectIdsOfUpdatedObservingFacilities.Contains(observingFacilityListItemViewModel.ObservingFacility.ObjectId))
-                {
-                    SelectedObservingFacilityListItemViewModels.Add(observingFacilityListItemViewModel);
-                }
-            }
+            //SelectedObservingFacilityListItemViewModels.Clear();
+
+            //foreach (var observingFacilityListItemViewModel in ObservingFacilityListItemViewModels)
+            //{
+            //    if (objectIdsOfUpdatedObservingFacilities.Contains(observingFacilityListItemViewModel.ObservingFacility.ObjectId))
+            //    {
+            //        SelectedObservingFacilityListItemViewModels.Add(observingFacilityListItemViewModel);
+            //    }
+            //}
         }
 
         public void RemoveObservingFacilities(
             IEnumerable<ObservingFacility> observingFacilities)
         {
-            var objectIdsOfDeletedObservingFacilities = observingFacilities.Select(_ => _.ObjectId);
+            throw new NotImplementedException("Block removed for refactoring");
 
-            ObservingFacilityDataExtracts.Objects = ObservingFacilityDataExtracts.Objects
-                .Where(_ => !objectIdsOfDeletedObservingFacilities.Contains(_.ObservingFacility.ObjectId))
-                .ToList();
+            //var objectIdsOfDeletedObservingFacilities = observingFacilities.Select(_ => _.ObjectId);
 
-            SelectedObservingFacilityListItemViewModels.Clear();
-            UpdateObservingFacilityListItemViewModels();
+            //ObservingFacilityDataExtracts.Objects = ObservingFacilityDataExtracts.Objects
+            //    .Where(_ => !objectIdsOfDeletedObservingFacilities.Contains(_.ObservingFacility.ObjectId))
+            //    .ToList();
+
+            //SelectedObservingFacilityListItemViewModels.Clear();
+            //UpdateObservingFacilityListItemViewModels();
         }
 
         private async Task RetrieveObservingFacilitiesMatchingFilterFromRepository()
@@ -221,7 +225,7 @@ namespace PR.ViewModel.GIS
                 var dateClosed = ordered.Last().End;
 
                 var geospatialLocations = ordered
-                    .Select(person => new Point(Guid.Empty, DateTime.UtcNow)
+                    .Select(person => new Point
                     {
                         Coordinate1 = person.Latitude!.Value, 
                         Coordinate2 = person.Longitude!.Value,
@@ -231,7 +235,7 @@ namespace PR.ViewModel.GIS
 
                 var observingFacilityDataExtract = new ObservingFacilityDataExtract
                 {
-                    ObservingFacility = new ObservingFacility(Guid.Empty, DateTime.Today)
+                    ObservingFacility = new ObservingFacility
                     {
                         DateEstablished = dateEstablished,
                         DateClosed = dateClosed,
@@ -312,7 +316,7 @@ namespace PR.ViewModel.GIS
         {
             // Identify the ones that are selected
             var objectIdsOfSelectedObservingFacilities = SelectedObservingFacilities.Objects
-                .Select(_ => _.ObjectId)
+                .Select(_ => _.Id)
                 .ToList();
 
             UpdateSorting();
@@ -328,7 +332,7 @@ namespace PR.ViewModel.GIS
 
             ObservingFacilityListItemViewModels.ToList().ForEach(_ =>
             {
-                if (objectIdsOfSelectedObservingFacilities.Contains(_.ObservingFacility.ObjectId))
+                if (objectIdsOfSelectedObservingFacilities.Contains(_.ObservingFacility.Id))
                 {
                     SelectedObservingFacilityListItemViewModels.Add(_);
                 }

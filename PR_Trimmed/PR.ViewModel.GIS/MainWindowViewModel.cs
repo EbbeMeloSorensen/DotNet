@@ -513,24 +513,24 @@ namespace PR.ViewModel.GIS
         private async Task DeleteSelectedObservingFacilities(
             object owner)
         {
-            var nSelectedObservingFacilities = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Count();
-
-            var message = nSelectedObservingFacilities == 1
-                ? "Delete Observing Facility?"
-                : $"Delete {nSelectedObservingFacilities} Observing Facilities?";
-
-            var dialogViewModel = new MessageBoxDialogViewModel(message, true);
-
-            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
-            {
-                return;
-            }
-
-            var objectIds = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects
-                .Select(_ => _.ObjectId)
-                .ToList();
-
             throw new NotImplementedException("Block removed for refactoring");
+            //var nSelectedObservingFacilities = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Count();
+
+            //var message = nSelectedObservingFacilities == 1
+            //    ? "Delete Observing Facility?"
+            //    : $"Delete {nSelectedObservingFacilities} Observing Facilities?";
+
+            //var dialogViewModel = new MessageBoxDialogViewModel(message, true);
+
+            //if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
+            //{
+            //    return;
+            //}
+
+            //var objectIds = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects
+            //    .Select(_ => _.ObjectId)
+            //    .ToList();
+
             //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             //{
             //    // Todo: Remember to also delete orphaned children
