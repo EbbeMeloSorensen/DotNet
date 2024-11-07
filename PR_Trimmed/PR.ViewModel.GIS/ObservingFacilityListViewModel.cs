@@ -1,13 +1,13 @@
-﻿using Craft.Logging;
-using Craft.Utils;
-using Craft.ViewModels.Dialogs;
-using GalaSoft.MvvmLight;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
+using Craft.Logging;
+using Craft.Utils;
 using Craft.ViewModel.Utils;
+using Craft.ViewModels.Dialogs;
 using PR.Persistence;
 using PR.ViewModel.GIS.Domain;
 
@@ -237,6 +237,7 @@ namespace PR.ViewModel.GIS
                 {
                     ObservingFacility = new ObservingFacility
                     {
+                        Id = grouping.Key,
                         DateEstablished = dateEstablished,
                         DateClosed = dateClosed,
                         Name = name

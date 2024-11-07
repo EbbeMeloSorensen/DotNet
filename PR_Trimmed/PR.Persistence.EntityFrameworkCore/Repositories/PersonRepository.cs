@@ -30,6 +30,11 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
             });
         }
 
+        public Task<IEnumerable<Person>> GetAllVariants(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public override async Task Update(
             Person person)
         {

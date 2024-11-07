@@ -80,6 +80,11 @@ namespace PR.Persistence.APIClient.Repositories
             });
         }
 
+        public Task<IEnumerable<Person>> GetAllVariants(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Person>> GetAll()
         {
             await Login();

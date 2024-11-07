@@ -84,6 +84,11 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             });
         }
 
+        public Task<IEnumerable<Person>> GetAllVariants(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Person>> GetAll()
         {
             var observingFacilities = new List<ObservingFacility>();

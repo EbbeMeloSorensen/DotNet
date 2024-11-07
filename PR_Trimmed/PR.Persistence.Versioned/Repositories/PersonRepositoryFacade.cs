@@ -78,25 +78,35 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task<Person> Get(
             Guid id)
         {
-            return await Task.Run(async () =>
+            var predicates = new List<Expression<Func<Person, bool>>>
             {
-                var predicates = new List<Expression<Func<Person, bool>>>
-                {
-                    p => p.ID == id
-                };
+                p => p.ID == id
+            };
 
-                AddVersionPredicates(predicates, DatabaseTime);
+            AddVersionPredicates(predicates, DatabaseTime);
 
-                var people = await UnitOfWork.People.Find(predicates);
-                var person = people.SingleOrDefault();
+            var people = await UnitOfWork.People.Find(predicates);
+            var person = people.SingleOrDefault();
 
-                if (person == null)
-                {
-                    throw new InvalidOperationException("Person does not exist");
-                }
+            if (person == null)
+            {
+                throw new InvalidOperationException("Person does not exist");
+            }
 
-                return person;
-            });
+            return person;
+        }
+
+        public async Task<IEnumerable<Person>> GetAllVariants(
+            Guid id)
+        {
+            var predicates = new List<Expression<Func<Person, bool>>>
+            {
+                p => p.ID == id
+            };
+
+            AddVersionPredicates(predicates, DatabaseTime);
+
+            return await UnitOfWork.People.Find(predicates);
         }
 
         public async Task<IEnumerable<Person>> GetAll()

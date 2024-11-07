@@ -19,7 +19,6 @@ namespace PR.ViewModel.GIS
 {
     public class GeospatialLocationsViewModel : ViewModelBase
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IDialogService _applicationDialogService;
         private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
 
@@ -30,6 +29,8 @@ namespace PR.ViewModel.GIS
         private AsyncCommand<object> _deleteSelectedGeospatialLocationsCommand;
         private RelayCommand<object> _createGeospatialLocationCommand;
         private AsyncCommand<object> _updateSelectedGeospatialLocationCommand;
+
+        public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
         public ObjectCollection<GeospatialLocation> SelectedGeospatialLocations { get; private set; }
 
@@ -84,7 +85,7 @@ namespace PR.ViewModel.GIS
             ObservableObject<DateTime?> databaseTimeOfInterest,
             ObjectCollection<ObservingFacility> observingFacilities)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
+            UnitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _observingFacilities = observingFacilities;
             _databaseTimeOfInterest = databaseTimeOfInterest;
@@ -124,25 +125,24 @@ namespace PR.ViewModel.GIS
 
         public async Task Populate()
         {
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                //throw new NotImplementedException("Need to have an object with the proper ID");
-                var people = await unitOfWork.People.Find(_ => _.ID == _selectedObservingFacility.Id);
+                // Denne finder altså kun den ene, der svarer til historisk tid..
+                //var people = await unitOfWork.People.Find(_ => _.ID == _selectedObservingFacility.Id);
 
-                //var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>
-                //{
-                //    Application.Helpers.GeospatialLocationFilterAsExpression(_databaseTimeOfInterest.Object)
-                //};
+                var personVariants = await unitOfWork.People.GetAllVariants(_selectedObservingFacility.Id);
 
-                //var observingFacility =
-                //    await unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(
-                //        _selectedObservingFacility.Id,
-                //        geospatialLocationPredicates);
+                var temp = personVariants.Select(_ => new PR.ViewModel.GIS.Domain.Point
+                {
+                    From = _.Start,
+                    To = _.End,
+                    Coordinate1 = _.Latitude!.Value,
+                    Coordinate2 = _.Longitude!.Value
+                });
 
-                //GeospatialLocationListItemViewModels = new ObservableCollection<GeospatialLocationListItemViewModel>(
-                //    observingFacility.Item2
-                //        .Select(_ => new GeospatialLocationListItemViewModel(_))
-                //        .OrderBy(_ => _.From));
+                GeospatialLocationListItemViewModels = new ObservableCollection<GeospatialLocationListItemViewModel>(
+                    temp.Select(_ => new GeospatialLocationListItemViewModel(_))
+                        .OrderBy(_ => _.From));
             }
         }
 

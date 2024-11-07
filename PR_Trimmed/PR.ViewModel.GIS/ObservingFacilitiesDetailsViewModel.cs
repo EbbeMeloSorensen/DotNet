@@ -169,7 +169,17 @@ namespace PR.ViewModel.GIS
             }
         }
 
-        public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
+        private IUnitOfWorkFactory _unitOfWorkFactory;
+
+        public IUnitOfWorkFactory UnitOfWorkFactory
+        {
+            get => _unitOfWorkFactory;
+            set
+            {
+                _unitOfWorkFactory = value;
+                GeospatialLocationsViewModel.UnitOfWorkFactory = value;
+            }
+        }
 
         public GeospatialLocationsViewModel GeospatialLocationsViewModel { get; }
 
@@ -184,7 +194,7 @@ namespace PR.ViewModel.GIS
             ObservableObject<DateTime?> databaseTimeOfInterest,
             ObjectCollection<ObservingFacility> observingFacilities)
         {
-            UnitOfWorkFactory = unitOfWorkFactory;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _observingFacilities = observingFacilities;
 
             _observingFacilities.PropertyChanged += Initialize;
