@@ -4,9 +4,21 @@ Done:
 * Man skal kune cleare historical time feltet for at komme tilbage til now..
 * Hvis tidspunktet er midnat skal den ikke vise klokkeslæt i headeren, hverken for titlen eller parantesen nedenunder
 
+In progress:
+* For alle 3 plugins skal man kunne se detaljer i detaljeviewet
+  - Man skal kunne se de 2 lokationer for Darth Vader, når man trykker på detalje
+  ... Pt er det sådan at detaljeviewet subscriber til listen af selectede observing facilities,
+      og når den så ændrer sig, så populeres detaljeviewet - indtil videre kun med name, da man jo som udgangspunkt 
+      ikke har hevet detaljerne med op. Ideen er, at detaljeviewet i sig selv har en UnitOfWorkFactory, så den kan hive
+      detalje med op.
+
+
+
+
 Todo:
 * For dine egne 2 plugins skal man kunne gå tilbage i databasetid
-* For alle 3 plugins skal man kunne se detaljer i detaljeviewet
+  - Sqlite (ok)
+  - Eget API
 * Man skal kunne se linier i historical view over hvor der er sket noget
 * Genaktiver AutoRefresh, hvor det giver mening
   - Når man ændrer på historical time

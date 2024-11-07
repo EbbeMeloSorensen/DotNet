@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using Craft.ViewModel.Utils;
 using PR.Persistence;
 using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;

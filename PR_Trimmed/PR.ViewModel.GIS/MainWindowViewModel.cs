@@ -403,7 +403,7 @@ namespace PR.ViewModel.GIS
 
             _showClosedStations = new ObservableObject<bool>
             {
-                Object = false
+                Object = true
             };
 
             _displayHistoricalTimeControls = new ObservableObject<bool>

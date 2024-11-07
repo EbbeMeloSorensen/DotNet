@@ -96,7 +96,10 @@ namespace PR.ViewModel.GIS
                 Objects = new List<GeospatialLocation>()
             };
 
-            _observingFacilities.PropertyChanged += Initialize;
+            _observingFacilities.PropertyChanged += async (s, e) =>
+            {
+                await Initialize(s, e);
+            };
 
             _databaseTimeOfInterest.PropertyChanged += (s, e) =>
             {
@@ -106,43 +109,43 @@ namespace PR.ViewModel.GIS
             };
         }
 
-        private void Initialize(object sender, PropertyChangedEventArgs e)
+        private async Task Initialize(object sender, PropertyChangedEventArgs e)
         {
             var temp = sender as ObjectCollection<ObservingFacility>;
 
             if (temp != null && temp.Objects != null && temp.Objects.Count() == 1)
             {
                 _selectedObservingFacility = temp.Objects.Single();
-                Populate();
-                //IsVisible = true;
+                await Populate();
             }
             else
             {
                 _selectedObservingFacility = null;
-                //IsVisible = false;
             }
         }
 
         public async Task Populate()
         {
-            throw new NotImplementedException("Block removed for refactoring");
-            //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-            //{
-            //    var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>
-            //    {
-            //        Application.Helpers.GeospatialLocationFilterAsExpression(_databaseTimeOfInterest.Object)
-            //    };
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                throw new NotImplementedException("Need to have an object with the proper ID");
+                var people = await unitOfWork.People.Find(_ => _.ID == _selectedObservingFacility.Id);
 
-            //    var observingFacility =
-            //        await unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(
-            //            _selectedObservingFacility.Id,
-            //            geospatialLocationPredicates);
+                //var geospatialLocationPredicates = new List<Expression<Func<GeospatialLocation, bool>>>
+                //{
+                //    Application.Helpers.GeospatialLocationFilterAsExpression(_databaseTimeOfInterest.Object)
+                //};
 
-            //    GeospatialLocationListItemViewModels = new ObservableCollection<GeospatialLocationListItemViewModel>(
-            //        observingFacility.Item2
-            //            .Select(_ => new GeospatialLocationListItemViewModel(_))
-            //            .OrderBy(_ => _.From));
-            //}
+                //var observingFacility =
+                //    await unitOfWork.ObservingFacilities.GetIncludingGeospatialLocations(
+                //        _selectedObservingFacility.Id,
+                //        geospatialLocationPredicates);
+
+                //GeospatialLocationListItemViewModels = new ObservableCollection<GeospatialLocationListItemViewModel>(
+                //    observingFacility.Item2
+                //        .Select(_ => new GeospatialLocationListItemViewModel(_))
+                //        .OrderBy(_ => _.From));
+            }
         }
 
         private void CreateGeospatialLocation(
