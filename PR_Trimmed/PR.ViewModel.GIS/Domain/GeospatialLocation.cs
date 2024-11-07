@@ -1,6 +1,6 @@
-﻿using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+﻿using System;
 
-namespace WIGOS.Domain.Entities.WIGOS.GeospatialLocations
+namespace PR.ViewModel.GIS.Domain
 {
     public abstract class GeospatialLocation : VersionedObject
     {

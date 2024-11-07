@@ -1,4 +1,6 @@
-﻿namespace WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities
+﻿using System;
+
+namespace PR.ViewModel.GIS.Domain
 {
     public abstract class AbstractEnvironmentalMonitoringFacility : VersionedObject
     {

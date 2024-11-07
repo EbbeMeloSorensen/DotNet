@@ -13,9 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using PR.Persistence;
-using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
-using WIGOS.Domain.Entities.WIGOS.GeospatialLocations;
-using Point = WIGOS.Domain.Entities.WIGOS.GeospatialLocations.Point;
+using PR.ViewModel.GIS.Domain;
 
 namespace PR.ViewModel.GIS
 {
@@ -243,7 +241,7 @@ namespace PR.ViewModel.GIS
         private async Task UpdateSelectedGeospatialLocation(
             object owner)
         {
-            var point = SelectedGeospatialLocations.Objects.Single() as Point;
+            var point = SelectedGeospatialLocations.Objects.Single() as Domain.Point;
 
             var dialogViewModel = new DefineGeospatialLocationDialogViewModel(
                 DefineGeospatialLocationMode.Update,

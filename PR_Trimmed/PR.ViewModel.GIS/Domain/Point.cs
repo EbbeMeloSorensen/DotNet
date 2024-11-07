@@ -1,4 +1,6 @@
-﻿namespace WIGOS.Domain.Entities.WIGOS.GeospatialLocations
+﻿using System;
+
+namespace PR.ViewModel.GIS.Domain
 {
     public class Point : GeospatialLocation
     {

@@ -1173,7 +1173,7 @@ namespace PR.ViewModel.GIS
 
                 var point = observingFacilityDataExtract.GeospatialLocations
                     .Where(p => p.From < timeOfInterest)
-                    .Last() as WIGOS.Domain.Entities.WIGOS.GeospatialLocations.Point;
+                    .Last() as PR.ViewModel.GIS.Domain.Point;
 
                 var brush = point.To > timeOfInterest
                     ? _activeObservingFacilityBrush

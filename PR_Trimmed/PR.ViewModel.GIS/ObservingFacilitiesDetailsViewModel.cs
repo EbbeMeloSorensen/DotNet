@@ -10,7 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using PR.Persistence;
-using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using PR.ViewModel.GIS.Domain;
 using StateOfView = Craft.UI.Utils.StateOfView;
 
 namespace PR.ViewModel.GIS

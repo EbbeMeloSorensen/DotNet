@@ -1,6 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using WIGOS.Domain.Entities;
-using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
+using PR.ViewModel.GIS.Domain;
 
 namespace PR.ViewModel.GIS
 {

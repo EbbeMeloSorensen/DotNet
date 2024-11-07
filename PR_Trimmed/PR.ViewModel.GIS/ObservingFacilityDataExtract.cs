@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
-using WIGOS.Domain.Entities.WIGOS.GeospatialLocations;
+using PR.ViewModel.GIS.Domain;
 
 namespace PR.ViewModel.GIS
 {

@@ -1,4 +1,6 @@
-﻿namespace WIGOS.Domain.Entities
+﻿using System;
+
+namespace PR.ViewModel.GIS.Domain
 {
     public abstract class VersionedObject
     {

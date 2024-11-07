@@ -9,8 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Craft.ViewModel.Utils;
 using PR.Persistence;
-using WIGOS.Domain.Entities.WIGOS.AbstractEnvironmentalMonitoringFacilities;
-using WIGOS.Domain.Entities.WIGOS.GeospatialLocations;
+using PR.ViewModel.GIS.Domain;
 
 namespace PR.ViewModel.GIS
 {
@@ -222,7 +221,7 @@ namespace PR.ViewModel.GIS
                 var dateClosed = ordered.Last().End;
 
                 var geospatialLocations = ordered
-                    .Select(person => new WIGOS.Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.Empty, DateTime.UtcNow)
+                    .Select(person => new Point(Guid.Empty, DateTime.UtcNow)
                     {
                         Coordinate1 = person.Latitude!.Value, 
                         Coordinate2 = person.Longitude!.Value,
