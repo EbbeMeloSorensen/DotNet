@@ -4,19 +4,15 @@ Done:
 * Man skal kune cleare historical time feltet for at komme tilbage til now..
 * Hvis tidspunktet er midnat skal den ikke vise klokkeslæt i headeren, hverken for titlen eller parantesen nedenunder
 * Lav det lige om med seeding, så du bare skriver det fulde navn i FirstName i stedet for at bruge Surname
+* Navn skal tilføjes til detalje viewet
 
 In progress:
-* Navn skal tilføjes til detalje viewet
 * For alle 3 plugins skal man kunne se detaljer i detaljeviewet
   - Man skal kunne se de 2 lokationer for Darth Vader, når man trykker på detalje
-  ... Pt er det sådan at detaljeviewet subscriber til listen af selectede observing facilities,
-      og når den så ændrer sig, så populeres detaljeviewet - indtil videre kun med name, da man jo som udgangspunkt 
-      ikke har hevet detaljerne med op. Ideen er, at detaljeviewet i sig selv har en UnitOfWorkFactory, så den kan hive
-      detalje med op.
-
-
 
 Todo:
+* Det skal highlights i kortet, hvilke observing facilities, der er selected
+* Man skal også kunne selecte observing facilities i kortet
 * For dine egne 2 plugins skal man kunne gå tilbage i databasetid
   - Sqlite (ok)
   - Eget API
