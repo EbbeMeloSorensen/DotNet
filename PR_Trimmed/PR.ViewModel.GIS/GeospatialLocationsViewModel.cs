@@ -132,10 +132,11 @@ namespace PR.ViewModel.GIS
 
                 var personVariants = await unitOfWork.People.GetAllVariants(_selectedObservingFacility.Id);
 
-                var temp = personVariants.Select(_ => new PR.ViewModel.GIS.Domain.Point
+                var temp = personVariants.Select(_ => new Domain.Point
                 {
                     From = _.Start,
                     To = _.End,
+                    Name = _.FirstName,
                     Coordinate1 = _.Latitude!.Value,
                     Coordinate2 = _.Longitude!.Value
                 });

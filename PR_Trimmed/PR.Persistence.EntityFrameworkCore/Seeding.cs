@@ -50,8 +50,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = maxDate,
                 Start = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 End = anakinBecomesDarthVader,
-                FirstName = "Anakin",
-                Surname = "Skywalker",
+                FirstName = "Anakin Skywalker",
                 Latitude = 10,
                 Longitude = 56
             };
@@ -63,8 +62,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = maxDate,
                 Start = anakinBecomesDarthVader,
                 End = darthVaderDies,
-                FirstName = "Darth",
-                Surname = "Vader",
+                FirstName = "Darth Vader",
                 Latitude = 11,
                 Longitude = 56
             };
@@ -89,7 +87,6 @@ namespace PR.Persistence.EntityFrameworkCore
                 Start = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 End = maxDate,
                 FirstName = "Chewbacca",
-                Nickname = "Chewie",
                 Latitude = 10,
                 Longitude = 55
             };
@@ -113,8 +110,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = maxDate,
                 Start = reyBecomesReySkywalker,
                 End = maxDate,
-                FirstName = "Rey",
-                Surname = "Skywalker",
+                FirstName = "Rey Skywalker",
                 Latitude = 12,
                 Longitude = 56
             };

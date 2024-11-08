@@ -20,6 +20,7 @@ namespace PR.ViewModel.GIS
             }
         }
 
+        public string Name { get; }
         public string Latitude { get; }
         public string Longitude { get; }
         public string From { get; }
@@ -29,6 +30,7 @@ namespace PR.ViewModel.GIS
             GeospatialLocation geospatialLocation)
         {
             GeospatialLocation = geospatialLocation;
+            Name = (geospatialLocation as Point).Name;
             Latitude = (geospatialLocation as Point).Coordinate1.ToString(CultureInfo.InvariantCulture);
             Longitude = (geospatialLocation as Point).Coordinate2.ToString(CultureInfo.InvariantCulture);
             From = geospatialLocation.From.AsDateString();

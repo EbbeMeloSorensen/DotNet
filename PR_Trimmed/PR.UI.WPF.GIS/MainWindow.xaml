@@ -8,8 +8,8 @@
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:logging="clr-namespace:Craft.UIElements.Logging;assembly=Craft.UIElements"
         mc:Ignorable="d"
-        Title="Wigos based SMS prototype" Height="450" Width="800"
-        WindowState="Maximized"
+        Title="Wigos based SMS prototype" Height="500" Width="800"
+        WindowState="Normal"
         DataContext="{Binding Path=MainWindowViewModel, Source={StaticResource BootStrapper}}">
 
     <Window.Resources>
