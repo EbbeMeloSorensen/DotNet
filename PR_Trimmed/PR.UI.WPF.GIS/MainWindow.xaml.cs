@@ -36,7 +36,9 @@ namespace PR.UI.WPF.GIS
             object sender, 
             RoutedEventArgs e)
         {
-            //Task.Run(async () => await ViewModel.AutoFindIfEnabled());
+            // Læg lige mærke til dette kald, hvor der bruges en Dispatcher - det er nødvendigt, når man
+            // "opdaterer UI elementer fra en anden tråd end main tråd"
+            Dispatcher.Invoke(() => ViewModel.AutoFindIfEnabled());
         }
     }
 }
