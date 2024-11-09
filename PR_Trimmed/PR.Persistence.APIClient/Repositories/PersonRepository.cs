@@ -253,7 +253,7 @@ namespace PR.Persistence.APIClient.Repositories
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public async Task Clear()
         {
             throw new NotImplementedException();
         }

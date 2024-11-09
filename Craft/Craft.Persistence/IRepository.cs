@@ -43,7 +43,7 @@ namespace Craft.Persistence
         Task RemoveRange(
             IEnumerable<TEntity> entities);
 
-        void Clear();
+        Task Clear();
 
         // This is not part of the original pattern, but I made it in order to support bulk insert,
         // where we (rather than the database) dictate the ids

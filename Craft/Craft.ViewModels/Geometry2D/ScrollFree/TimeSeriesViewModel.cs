@@ -515,7 +515,7 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                 }
             }
 
-            _logger?.WriteLine(LogMessageCategory.Information, $"TimeSeriesViewModel: Added {labelCount} labels");
+            //_logger?.WriteLine(LogMessageCategory.Information, $"TimeSeriesViewModel: Added {labelCount} labels");
 
             GenerateOverallDateLabels(x0, x1);
         }

@@ -22,6 +22,7 @@ namespace PR.ViewModel.GIS
         private ObservableCollection<ObservingFacilityListItemViewModel> _observingFacilityListItemViewModels;
         private Sorting _sorting;
         private bool _displayFindButton;
+        private bool _displayFindButtonNoMatterIfAutoRefreshIsEnabled = true;
 
         private AsyncCommand<object> _findObservingFacilitiesCommand;
 
@@ -123,12 +124,20 @@ namespace PR.ViewModel.GIS
                 SelectedObservingFacilities.Objects = SelectedObservingFacilityListItemViewModels.Select(_ => _.ObservingFacility);
             };
 
-            autoRefresh.PropertyChanged += (s, e) =>
+            // Indtil videre er den bare synlig hele tiden - skal lige have fixet 
+            if (_displayFindButtonNoMatterIfAutoRefreshIsEnabled)
             {
-                DisplayFindButton = !autoRefresh.Object;
-            };
+                DisplayFindButton = true;
+            }
+            else
+            {
+                autoRefresh.PropertyChanged += (s, e) =>
+                {
+                    DisplayFindButton = !autoRefresh.Object;
+                };
 
-            DisplayFindButton = !autoRefresh.Object;
+                DisplayFindButton = !autoRefresh.Object;
+            }
         }
 
         public void AddObservingFacility(

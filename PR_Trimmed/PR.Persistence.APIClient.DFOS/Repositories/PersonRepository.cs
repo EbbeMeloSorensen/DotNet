@@ -268,7 +268,7 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public async Task Clear()
         {
             throw new NotImplementedException();
         }

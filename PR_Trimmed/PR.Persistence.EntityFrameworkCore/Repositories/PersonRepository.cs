@@ -61,10 +61,10 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
             });
         }
 
-        public override void Clear()
+        public override async Task Clear()
         {
             Context.RemoveRange(PrDbContext.People);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
     }
 }

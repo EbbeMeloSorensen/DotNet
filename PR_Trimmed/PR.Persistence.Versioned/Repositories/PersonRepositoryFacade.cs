@@ -228,9 +228,9 @@ namespace PR.Persistence.Versioned.Repositories
             });
         }
 
-        public void Clear()
+        public async Task Clear()
         {
-            throw new NotImplementedException();
+            await UnitOfWork.People.Clear();
         }
 
         public void Load(

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Craft.ViewModels.Geometry2D.Scrolling;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PR.ViewModel.GIS;
 
 namespace PR.UI.WPF.GIS
 {
@@ -20,9 +22,21 @@ namespace PR.UI.WPF.GIS
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainWindowViewModel ViewModel
+        {
+            get { return DataContext as MainWindowViewModel; }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void MainWindow_OnLoaded(
+            object sender, 
+            RoutedEventArgs e)
+        {
+            //Task.Run(async () => await ViewModel.AutoFindIfEnabled());
         }
     }
 }

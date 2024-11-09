@@ -13,6 +13,7 @@ using Craft.ViewModels.Dialogs;
 using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using PR.Domain.Entities;
 using PR.Persistence;
 using PR.IO;
 
@@ -70,7 +71,7 @@ namespace PR.ViewModel.GIS
 
         private RelayCommand<object> _createObservingFacilityCommand;
         private AsyncCommand<object> _deleteSelectedObservingFacilitiesCommand;
-        private RelayCommand<object> _clearRepositoryCommand;
+        private AsyncCommand<object> _clearRepositoryCommand;
         private RelayCommand<object> _importSMSDataSetCommand;
         private RelayCommand _escapeCommand;
 
@@ -256,12 +257,12 @@ namespace PR.ViewModel.GIS
             }
         }
 
-        public RelayCommand<object> ClearRepositoryCommand
+        public AsyncCommand<object> ClearRepositoryCommand
         {
             get
             {
                 return _clearRepositoryCommand ?? (_clearRepositoryCommand =
-                    new RelayCommand<object>(ClearRepository, CanClearRepository));
+                    new AsyncCommand<object>(ClearRepository, CanClearRepository));
             }
         }
 
@@ -312,7 +313,7 @@ namespace PR.ViewModel.GIS
                 Object = null
             };
 
-            DisplayLog = false;
+            DisplayLog = true;
             //DisplayLog = true; // Set to true when diagnosing application behaviour
 
             _historicalTimeOfInterest.PropertyChanged += (s, e) =>
@@ -383,7 +384,7 @@ namespace PR.ViewModel.GIS
 
             _autoRefresh = new ObservableObject<bool>
             {
-                Object = false
+                Object = true
             };
 
             _displayNameFilter = new ObservableObject<bool>
@@ -430,18 +431,12 @@ namespace PR.ViewModel.GIS
 
             _showActiveStations.PropertyChanged += async (s, e) =>
             {
-                if (_autoRefresh.Object)
-                {
-                    await ObservingFacilityListViewModel!.FindObservingFacilitiesCommand.ExecuteAsync(null);
-                }
+                await AutoFindIfEnabled();
             };
 
             _showClosedStations.PropertyChanged += async (s, e) =>
             {
-                if (_autoRefresh.Object)
-                {
-                    await ObservingFacilityListViewModel!.FindObservingFacilitiesCommand.ExecuteAsync(null);
-                }
+                await AutoFindIfEnabled();
 
                 if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
                 {
@@ -562,7 +557,7 @@ namespace PR.ViewModel.GIS
                    ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Any();
         }
 
-        private void ClearRepository(
+        private async Task ClearRepository(
             object owner)
         {
             var dialogViewModel1 = new MessageBoxDialogViewModel("Clear repository?", true);
@@ -572,13 +567,11 @@ namespace PR.ViewModel.GIS
                 return;
             }
 
-            throw new NotImplementedException("Block removed for refactoring");
-            //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-            //{
-            //    unitOfWork.GeospatialLocations.Clear();
-            //    unitOfWork.AbstractEnvironmentalMonitoringFacilities.Clear();
-            //    unitOfWork.Complete();
-            //}
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                await unitOfWork.People.Clear();
+                unitOfWork.Complete();
+            }
 
             _historicalChangeTimes.Clear();
             UpdateHistoricalTimeSeriesView(false);
@@ -586,8 +579,7 @@ namespace PR.ViewModel.GIS
             _databaseWriteTimes.Clear();
             UpdateDatabaseTimeSeriesView();
 
-            //_logger.WriteLine(LogMessageCategory.Information, "Emulating click on Find button (2)");
-            ObservingFacilityListViewModel.FindObservingFacilitiesCommand.ExecuteAsync(null);
+            await AutoFindIfEnabled();
 
             var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was cleared", false);
 
@@ -836,7 +828,7 @@ namespace PR.ViewModel.GIS
 
             MapViewModel.InitializeWorldWindow(worldWindowFocus, worldWindowSize, false);
 
-            MapViewModel.MouseClickOccured += (s, e) =>
+            MapViewModel.MouseClickOccured += async (s, e) =>
             {
                 if (!DisplayMessageInMap || !MapViewModel.MousePositionWorld.Object.HasValue)
                 {
@@ -849,11 +841,12 @@ namespace PR.ViewModel.GIS
                 {
                     case MapOperation.CreateObservingFacility:
                         {
-                            CreateNewObservingFacility();
+                            await CreateNewObservingFacility();
                             break;
                         }
                     case MapOperation.CreateGeospatialLocation:
                         {
+                            throw new NotImplementedException();
                             CreateNewGeospatialLocation();
                             break;
                         }
@@ -1269,128 +1262,131 @@ namespace PR.ViewModel.GIS
             ObservingFacilitiesDetailsViewModel.IsReadOnly = _databaseTimeOfInterest.Object.HasValue;
         }
 
-        private void CreateNewObservingFacility()
+        private async Task CreateNewObservingFacility()
         {
-            throw new NotImplementedException("Block removed for refactoring");
+            try
+            {
+                _logger?.WriteLine(LogMessageCategory.Debug, "Opening dialog for creating new observing facility");
 
-            //try
-            //{
-            //    _logger?.WriteLine(LogMessageCategory.Debug, "Opening dialog for creating new observing facility");
+                var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
 
-            //    var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
+                if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
+                {
+                    return;
+                }
 
-            //    if (_applicationDialogService.ShowDialog(dialogViewModel, _owner) != DialogResult.OK)
-            //    {
-            //        return;
-            //    }
+                _logger?.WriteLine(LogMessageCategory.Debug, "Collecting input from dialog");
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, "Collecting input from dialog");
+                var from = new DateTime(
+                    dialogViewModel.From.Year,
+                    dialogViewModel.From.Month,
+                    dialogViewModel.From.Day,
+                    dialogViewModel.From.Hour,
+                    dialogViewModel.From.Minute,
+                    dialogViewModel.From.Second,
+                    DateTimeKind.Utc);
 
-            //    var from = new DateTime(
-            //        dialogViewModel.From.Year,
-            //        dialogViewModel.From.Month,
-            //        dialogViewModel.From.Day,
-            //        dialogViewModel.From.Hour,
-            //        dialogViewModel.From.Minute,
-            //        dialogViewModel.From.Second,
-            //        DateTimeKind.Utc);
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    From: {from}");
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, $"    From: {from}");
+                var to = dialogViewModel.To.HasValue
+                    ? dialogViewModel.To == DateTime.MaxValue
+                        ? DateTime.MaxValue
+                        : new DateTime(
+                            dialogViewModel.To.Value.Year,
+                            dialogViewModel.To.Value.Month,
+                            dialogViewModel.To.Value.Day,
+                            dialogViewModel.To.Value.Hour,
+                            dialogViewModel.To.Value.Minute,
+                            dialogViewModel.To.Value.Second,
+                            DateTimeKind.Utc)
+                    : DateTime.MaxValue;
 
-            //    var to = dialogViewModel.To.HasValue
-            //        ? dialogViewModel.To == DateTime.MaxValue
-            //            ? DateTime.MaxValue
-            //            : new DateTime(
-            //                dialogViewModel.To.Value.Year,
-            //                dialogViewModel.To.Value.Month,
-            //                dialogViewModel.To.Value.Day,
-            //                dialogViewModel.To.Value.Hour,
-            //                dialogViewModel.To.Value.Minute,
-            //                dialogViewModel.To.Value.Second,
-            //                DateTimeKind.Utc)
-            //        : DateTime.MaxValue;
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    From: {to}");
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, $"    From: {to}");
+                var latitude = dialogViewModel.Latitude;
+                var longitude = dialogViewModel.Longitude;
 
-            //    var latitude = dialogViewModel.Latitude;
-            //    var longitude = dialogViewModel.Longitude;
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    Latitude: {latitude}");
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    Longitude: {longitude}");
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, $"    Latitude: {latitude}");
-            //    _logger?.WriteLine(LogMessageCategory.Debug, $"    Longitude: {longitude}");
+                var now = DateTime.UtcNow;
 
-            //    var now = DateTime.UtcNow;
+                _logger?.WriteLine(LogMessageCategory.Debug, $"    now: {now}");
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, $"    now: {now}");
+                _logger?.WriteLine(LogMessageCategory.Debug, "Instantiating new Observing Facility");
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, "Instantiating new ObservingFacility");
+                //// Bemærk, at vi sætter DateEstablished og DateClosed svarende til From og To for den ene lokation, som
+                //// den pågældende observing facility laves med
+                //var observingFacility = new ObservingFacility(
+                //    Guid.NewGuid(),
+                //    now)
+                //{
+                //    Name = dialogViewModel.Name,
+                //    DateEstablished = from,
+                //    DateClosed = to
+                //};
 
-            //    // Bemærk, at vi sætter DateEstablished og DateClosed svarende til From og To for den ene lokation, som
-            //    // den pågældende observing facility laves med
-            //    var observingFacility = new ObservingFacility(
-            //        Guid.NewGuid(),
-            //        now)
-            //    {
-            //        Name = dialogViewModel.Name,
-            //        DateEstablished = from,
-            //        DateClosed = to
-            //    };
+                //_logger?.WriteLine(LogMessageCategory.Debug, "Instantiating new Point");
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, "Instantiating new Point");
+                //var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
+                //{
+                //    AbstractEnvironmentalMonitoringFacility = observingFacility,
+                //    AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
+                //    From = from,
+                //    To = to,
+                //    Coordinate1 = latitude,
+                //    Coordinate2 = longitude,
+                //    CoordinateSystem = "WGS_84"
+                //};
 
-            //    var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
-            //    {
-            //        AbstractEnvironmentalMonitoringFacility = observingFacility,
-            //        AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
-            //        From = from,
-            //        To = to,
-            //        Coordinate1 = latitude,
-            //        Coordinate2 = longitude,
-            //        CoordinateSystem = "WGS_84"
-            //    };
+                var person = new Person
+                {
+                    //ID = new Guid("12345678-0000-0000-0000-000000000005"),
+                    //Created = DateTime.UtcNow,
+                    //Superseded = maxDate,
+                    Start = from,
+                    End = to,
+                    FirstName = dialogViewModel.Name,
+                    Latitude = latitude,
+                    Longitude = longitude
+                };
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, "Trying to write to repository..");
+                _logger?.WriteLine(LogMessageCategory.Debug, "Trying to write to repository..");
 
-            //    using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-            //    {
-            //        _logger?.WriteLine(LogMessageCategory.Debug, "Writing ObservingFacility..");
-            //        unitOfWork.ObservingFacilities.Add(observingFacility);
-            //        _logger?.WriteLine(LogMessageCategory.Debug, "Writing Point..");
-            //        unitOfWork.Points_Wigos.Add(point);
-            //        _logger?.WriteLine(LogMessageCategory.Debug, "Completing transaction..");
-            //        unitOfWork.Complete();
-            //    }
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    await unitOfWork.People.Add(person);
+                    unitOfWork.Complete();
+                }
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, "Done writing to repository..");
+                _logger?.WriteLine(LogMessageCategory.Debug, "Done writing to repository..");
 
-            //    if (!_historicalChangeTimes.Contains(observingFacility.DateEstablished))
-            //    {
-            //        _historicalChangeTimes.Add(observingFacility.DateEstablished);
-            //    }
+                if (!_historicalChangeTimes.Contains(person.Start))
+                {
+                    _historicalChangeTimes.Add(person.Start);
+                }
 
-            //    if (observingFacility.DateClosed < DateTime.MaxValue)
-            //    {
-            //        if (!_historicalChangeTimes.Contains(observingFacility.DateClosed))
-            //        {
-            //            _historicalChangeTimes.Add(observingFacility.DateClosed);
-            //        }
-            //    }
+                if (person.End < DateTime.MaxValue)
+                {
+                    if (!_historicalChangeTimes.Contains(person.End))
+                    {
+                        _historicalChangeTimes.Add(person.End);
+                    }
+                }
 
-            //    RefreshHistoricalTimeSeriesView(false);
+                await AutoFindIfEnabled();
 
-            //    _databaseWriteTimes.Add(now);
-            //    RefreshDatabaseTimeSeriesView();
+                //RefreshHistoricalTimeSeriesView(false);
 
-            //    if (_autoRefresh.Object)
-            //    {
-            //        ObservingFacilityListViewModel.FindObservingFacilitiesCommand.Execute(null);
-            //    }
+                //_databaseWriteTimes.Add(now);
+                //RefreshDatabaseTimeSeriesView();
 
-            //    _logger?.WriteLine(LogMessageCategory.Debug, "Done creating new observing facility");
-            //}
-            //catch (Exception e)
-            //{
-            //    _logger?.WriteLine(LogMessageCategory.Error, $"Exception caught, Message: \"{e.Message}\"");
-            //}
+                _logger?.WriteLine(LogMessageCategory.Debug, "Done creating new observing facility");
+            }
+            catch (Exception e)
+            {
+                _logger?.WriteLine(LogMessageCategory.Error, $"Exception caught, Message: \"{e.Message}\"");
+            }
         }
 
         private async Task CreateNewGeospatialLocation()
@@ -1494,37 +1490,20 @@ namespace PR.ViewModel.GIS
         {
             try
             {
-                throw new NotImplementedException("Block removed for refactoring");
-                //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                //{
-                //    _databaseWriteTimes = new List<DateTime>();
+                //using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+                //var people = (await unitOfWork.People.GetAll()).ToList();
+                //var timeStampsForPeople = people.Select(_ => _.Created).ToList();
+                //timeStampsForPeople.AddRange(people.Select(_ => _.Superseded));
+                //timeStampsForPeople = timeStampsForPeople.Where(_ => _ < DateTime.MaxValue).ToList();
+                //_databaseWriteTimes = timeStampsForPeople.Distinct().ToList();
 
-                //    var observingFacilities = (await unitOfWork.ObservingFacilities.GetAll()).ToList();
-                //    var timeStampsForObservingFacilities = observingFacilities.Select(_ => _.Created).ToList();
-                //    timeStampsForObservingFacilities.AddRange(observingFacilities.Select(_ => _.Superseded));
-                //    timeStampsForObservingFacilities = timeStampsForObservingFacilities.Where(_ => _ < DateTime.MaxValue).ToList();
-                //    _databaseWriteTimes.AddRange(timeStampsForObservingFacilities.Distinct());
+                //var historicalChangeTimeStamps = geospatialLocations.Select(_ => _.From).ToList();
+                //historicalChangeTimeStamps.AddRange(geospatialLocations.Select(_ => _.To));
 
-                //    var geospatialLocations = (await unitOfWork.GeospatialLocations.GetAll()).ToList();
-                //    var timeStampsForGeospatialLocations = geospatialLocations.Select(_ => _.Created).ToList();
-                //    timeStampsForGeospatialLocations.AddRange(geospatialLocations.Select(_ => _.Superseded));
-                //    timeStampsForGeospatialLocations = timeStampsForGeospatialLocations.Where(_ => _ < DateTime.MaxValue).ToList();
-                //    _databaseWriteTimes.AddRange(timeStampsForGeospatialLocations.Distinct());
-
-                //    _databaseWriteTimes = _databaseWriteTimes.Distinct().ToList();
-
-                //    geospatialLocations = (await unitOfWork.GeospatialLocations
-                //        .Find(_ => _.Superseded == DateTime.MaxValue))
-                //        .ToList();
-
-                //    var historicalChangeTimeStamps = geospatialLocations.Select(_ => _.From).ToList();
-                //    historicalChangeTimeStamps.AddRange(geospatialLocations.Select(_ => _.To));
-
-                //    _historicalChangeTimes = historicalChangeTimeStamps
-                //        .Where(_ => _ < DateTime.MaxValue)
-                //        .Distinct()
-                //        .ToList();
-                //}
+                //_historicalChangeTimes = historicalChangeTimeStamps
+                //    .Where(_ => _ < DateTime.MaxValue)
+                //    .Distinct()
+                //    .ToList();
             }
             catch (InvalidOperationException ex)
             {
@@ -1572,6 +1551,14 @@ namespace PR.ViewModel.GIS
             }
 
             return sb.ToString();
+        }
+
+        public async Task AutoFindIfEnabled()
+        {
+            if (_autoRefresh.Object)
+            {
+                await ObservingFacilityListViewModel!.FindObservingFacilitiesCommand.ExecuteAsync(null);
+            }
         }
     }
 }
