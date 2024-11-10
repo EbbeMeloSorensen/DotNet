@@ -316,7 +316,7 @@ namespace PR.ViewModel.GIS
             DisplayLog = true;
             //DisplayLog = true; // Set to true when diagnosing application behaviour
 
-            _historicalTimeOfInterest.PropertyChanged += (s, e) =>
+            _historicalTimeOfInterest.PropertyChanged += async (s, e) =>
             {
                 // Possibly adjust database time if it doesn't exceed historical time
                 if (_historicalTimeOfInterest.Object.HasValue)
@@ -350,6 +350,7 @@ namespace PR.ViewModel.GIS
                 UpdateStatusBar();
                 UpdateTimeText();
                 UpdateHistoricalTimeSeriesView(false);
+                await AutoFindIfEnabled();
             };
 
             _databaseTimeOfInterest.PropertyChanged += (s, e) =>

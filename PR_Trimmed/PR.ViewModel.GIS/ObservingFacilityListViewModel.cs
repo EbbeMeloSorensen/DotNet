@@ -22,7 +22,7 @@ namespace PR.ViewModel.GIS
         private ObservableCollection<ObservingFacilityListItemViewModel> _observingFacilityListItemViewModels;
         private Sorting _sorting;
         private bool _displayFindButton;
-        private bool _displayFindButtonNoMatterIfAutoRefreshIsEnabled = true;
+        private bool _displayFindButtonNoMatterIfAutoRefreshIsEnabled = false;
 
         private AsyncCommand<object> _findObservingFacilitiesCommand;
 
