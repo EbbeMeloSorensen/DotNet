@@ -7,6 +7,15 @@ Done:
 * Navn skal tilføjes til detalje viewet
 
 In progress:
+* Du har en fejl, når du kører med dette scenarie:
+  1) Start med en tom database
+  2) Lav en ny "person"
+  3) Sæt databasetid til et tidspunkt før personen blev lavet
+  => Den forsvinder ikke fra listen
+  Find kaldes hurtigere end du lige tror. Det skyldes, at den historiske tid justeres, da den jo ikke må være nyere end database-tiden
+  Måske burde man operere med, at man IKKE skal kalde Find, hvis et tidspunkt justeres pga det andet tidspunkt.
+  Måske skulle man lade selve PARRET af tidspunkter være det, der ændrede sig, og som der kan abonneres på...
+
 * For alle 3 plugins skal man kunne se detaljer i detaljeviewet
   - Man skal kunne se de 2 lokationer for Darth Vader, når man trykker på detalje
 
