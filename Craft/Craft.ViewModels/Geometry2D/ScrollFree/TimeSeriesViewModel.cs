@@ -331,7 +331,8 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
             {
                 // Her opererer vi med at grid lines og labels knytter sig til ÅR
 
-                var t = TimeAtOrigo + TimeSpan.FromDays(x);
+                var timeCorrespondingToX = TimeAtOrigo + TimeSpan.FromDays(x);
+                var t = new DateTime(timeCorrespondingToX.Year, 1, 1);
                 var t1 = TimeAtOrigo + TimeSpan.FromDays(x1ext);
 
                 while (t < t1)
@@ -340,10 +341,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
 
                     var year = t.Date.Year;
 
-                    var label = $"{year}";
-
                     if (year % modulo == 0)
                     {
+                        var label = $"{year}";
                         var point = new PointD(x, y0 + dy);
 
                         var labelViewModel = new LabelViewModel
@@ -359,9 +359,9 @@ namespace Craft.ViewModels.Geometry2D.ScrollFree
                         };
 
                         XAxisTickLabelViewModels.Add(labelViewModel);
-
-                        labelCount++;
                     }
+
+                    labelCount++;
 
                     t = t.AddYears(1);
                 }

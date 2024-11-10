@@ -320,6 +320,9 @@ namespace Craft.UIElements.GuiTest.Tab3
                 now,
                 now - TimeSpan.FromMinutes(30),
                 now - TimeSpan.FromMinutes(45),
+                new (2014, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                new (2015, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                new (2016, 1, 1, 0, 0, 0, DateTimeKind.Utc)
             };
 
             _stopwatch = new Stopwatch();
@@ -944,8 +947,10 @@ namespace Craft.UIElements.GuiTest.Tab3
 
         private void InitializeTimeSeriesViewModel2()
         {
-            var timeSpan = TimeSpan.FromMinutes(1); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
-            var tFocus = DateTime.UtcNow + timeSpan / 2; // Specificer, hvilken x-værdi vi skal fokusere på. Bemærk, at dette er i fremtiden, da vi gerne vil vise en streg for current time
+            //var timeSpan = TimeSpan.FromMinutes(1); // Specificer, hvor langt et tidsinterval, den synlige del af x-aksen skal strække sig over
+            var timeSpan = TimeSpan.FromDays(15 * 365.25); 
+            //var tFocus = DateTime.UtcNow + timeSpan / 2; // Specificer, hvilken x-værdi vi skal fokusere på. Bemærk, at dette er i fremtiden, da vi gerne vil vise en streg for current time
+            var tFocus = DateTime.UtcNow - timeSpan / 2;
             var xFocus = TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
 
             var thirtySecondsFromNowAsScalar = TimeSeriesViewModel.ConvertDateTimeToXValue(
@@ -965,7 +970,7 @@ namespace Craft.UIElements.GuiTest.Tab3
                 StaticXValue = thirtySecondsFromNowAsScalar,
                 ShowXAxisLabels = true,
                 ShowYAxisLabels = false,
-                ShowVerticalGridLines = false,
+                ShowVerticalGridLines = true,
                 ShowHorizontalGridLines = false,
                 ShowVerticalAxis = false,
                 Fraction = 0.9,

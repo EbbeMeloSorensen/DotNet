@@ -16,7 +16,7 @@ using GalaSoft.MvvmLight.Command;
 using PR.Domain.Entities;
 using PR.Persistence;
 using PR.IO;
-
+ 
 namespace PR.ViewModel.GIS
 {
     public class MainWindowViewModel : ViewModelBase
@@ -453,7 +453,7 @@ namespace PR.ViewModel.GIS
 
             DrawMapOfDenmark();
 
-            InitializeTimestampsOfInterest();
+            //InitializeTimestampsOfInterest();
 
             UpdateRetrospectionControls();
             UpdateStatusBar();
@@ -859,10 +859,8 @@ namespace PR.ViewModel.GIS
         private void InitializeHistoricalTimeViewModel()
         {
             var timeSpan = TimeSpan.FromDays(25 * 365.25);
-            var utcNow = DateTime.UtcNow;
-            var timeAtOrigo = utcNow.Date;
-            var tFocus = utcNow - timeSpan / 2 + TimeSpan.FromDays(2);
-            var xFocus = (tFocus - timeAtOrigo) / TimeSpan.FromDays(1.0);
+            var tFocus = DateTime.UtcNow - timeSpan / 2;
+            var xFocus = TimeSeriesViewModel.ConvertDateTimeToXValue(tFocus);
 
             HistoricalTimeViewModel = new TimeSeriesViewModel(
                 new Point(xFocus, 0),
@@ -1376,10 +1374,10 @@ namespace PR.ViewModel.GIS
 
                 await AutoFindIfEnabled();
 
-                //RefreshHistoricalTimeSeriesView(false);
+                RefreshHistoricalTimeSeriesView();
 
-                //_databaseWriteTimes.Add(now);
-                //RefreshDatabaseTimeSeriesView();
+                _databaseWriteTimes.Add(now);
+                RefreshDatabaseTimeSeriesView();
 
                 _logger?.WriteLine(LogMessageCategory.Debug, "Done creating new observing facility");
             }
@@ -1486,24 +1484,22 @@ namespace PR.ViewModel.GIS
             //RefreshDatabaseTimeSeriesView();
         }
 
-        private async Task InitializeTimestampsOfInterest()
+        public async Task InitializeTimestampsOfInterest()
         {
             try
             {
-                //using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-                //var people = (await unitOfWork.People.GetAll()).ToList();
-                //var timeStampsForPeople = people.Select(_ => _.Created).ToList();
-                //timeStampsForPeople.AddRange(people.Select(_ => _.Superseded));
-                //timeStampsForPeople = timeStampsForPeople.Where(_ => _ < DateTime.MaxValue).ToList();
-                //_databaseWriteTimes = timeStampsForPeople.Distinct().ToList();
+                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+                var people = (await unitOfWork.People.GetAll()).ToList();
+                
+                var timeStampsForPeople = people.Select(_ => _.Created).ToList();
+                timeStampsForPeople.AddRange(people.Select(_ => _.Superseded).Where(_ => _.Year < 9999));
+                _databaseWriteTimes = timeStampsForPeople.Distinct().ToList();
 
-                //var historicalChangeTimeStamps = geospatialLocations.Select(_ => _.From).ToList();
-                //historicalChangeTimeStamps.AddRange(geospatialLocations.Select(_ => _.To));
+                var historicalChangeTimeStamps = people.Select(_ => _.Start).ToList();
+                historicalChangeTimeStamps.AddRange(people.Select(_ => _.End).Where(_ => _.Year < 9999));
+                _historicalChangeTimes = historicalChangeTimeStamps.Distinct().ToList();
 
-                //_historicalChangeTimes = historicalChangeTimeStamps
-                //    .Where(_ => _ < DateTime.MaxValue)
-                //    .Distinct()
-                //    .ToList();
+                RefreshHistoricalTimeSeriesView();
             }
             catch (InvalidOperationException ex)
             {
@@ -1537,6 +1533,79 @@ namespace PR.ViewModel.GIS
             }
 
             DatabaseTimeText = databaseTimeText;
+        }
+
+        private void RefreshHistoricalTimeSeriesView()
+        {
+            // Called:
+            //   - During upstart (ok)
+            //   - When a major world window update occurs (such as after a drag) (ok)
+            //   - When the user changes the historical time of interest by clicking in the view (ok)
+
+            //   - When a new observing facility is created
+            //   - When selected observing facilities are deleted
+            //   - When the user resets the historical time of interest by clicking the Now button
+
+            // Calculate position of world window
+            var x0 = HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
+            var x1 = HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
+            var y0 = -HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y - HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowSize.Height;
+            var y1 = -HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y;
+
+            // Calculate y coordinate of the principal axis (so we can make the lines stop there)
+            var y2 = HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
+                     HistoricalTimeViewModel.GeometryEditorViewModel.WorldWindowSize.Height * HistoricalTimeViewModel.MarginBottomOffset /
+                     HistoricalTimeViewModel.GeometryEditorViewModel.ViewPortSize.Height;
+
+            // Clear lines
+            HistoricalTimeViewModel.GeometryEditorViewModel.ClearLines();
+
+            var lineThickness = 1.5;
+
+            var lineViewModels = _historicalChangeTimes
+                .Select(_ => (_ - TimeSeriesViewModel.TimeAtOrigo).TotalDays)
+                .Where(_ => _ > x0 && _ < x1)
+                .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y2), lineThickness, _timeStampBrush))
+                .ToList();
+
+            lineViewModels.ForEach(_ => HistoricalTimeViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
+
+            if (!_historicalTimeOfInterest.Object.HasValue)
+            {
+                HistoricalTimeViewModel.StaticXValue = null;
+            }
+        }
+
+        private void RefreshDatabaseTimeSeriesView()
+        {
+            // Calculate position of world window
+            var x0 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X;
+            var x1 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.X + DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Width;
+            var y0 = -DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y - DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height;
+            var y1 = -DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y;
+
+            // Calculate y coordinate of the principal axis (so we can make the lines stop there)
+            var y2 = DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowUpperLeft.Y +
+                 DatabaseWriteTimesViewModel.GeometryEditorViewModel.WorldWindowSize.Height * DatabaseWriteTimesViewModel.MarginBottomOffset /
+                 DatabaseWriteTimesViewModel.GeometryEditorViewModel.ViewPortSize.Height;
+
+            // Clear lines
+            DatabaseWriteTimesViewModel.GeometryEditorViewModel.ClearLines();
+
+            var lineThickness = 1.5;
+
+            var lineViewModels = _databaseWriteTimes
+                .Select(_ => (_ - TimeSeriesViewModel.TimeAtOrigo).TotalDays)
+                .Where(_ => _ > x0 && _ < x1)
+                .Select(_ => new LineViewModel(new PointD(_, y0), new PointD(_, y2), lineThickness, _timeStampBrush))
+                .ToList();
+
+            lineViewModels.ForEach(_ => DatabaseWriteTimesViewModel.GeometryEditorViewModel.LineViewModels.Add(_));
+
+            if (!_databaseTimeOfInterest.Object.HasValue)
+            {
+                DatabaseWriteTimesViewModel.StaticXValue = null;
+            }
         }
 
         private string TimeAsText(

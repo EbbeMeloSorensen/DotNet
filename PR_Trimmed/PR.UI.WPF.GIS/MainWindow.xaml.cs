@@ -38,7 +38,11 @@ namespace PR.UI.WPF.GIS
         {
             // Læg lige mærke til dette kald, hvor der bruges en Dispatcher - det er nødvendigt, når man
             // "opdaterer UI elementer fra en anden tråd end main tråd"
-            Dispatcher.Invoke(() => ViewModel.AutoFindIfEnabled());
+            Dispatcher.Invoke(async () =>
+            {
+                await ViewModel.InitializeTimestampsOfInterest();
+                await ViewModel.AutoFindIfEnabled();
+            });
         }
     }
 }
