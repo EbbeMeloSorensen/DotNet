@@ -13,5 +13,7 @@ namespace PR.Persistence.Repositories
 
         Task<IEnumerable<Person>> GetAllVariants(
             Guid id);
+
+        Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes();
     }
 }

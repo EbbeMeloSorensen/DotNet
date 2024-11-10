@@ -55,32 +55,31 @@ namespace PR.Persistence.APIClient.Repositories
         {
             await Login();
 
-            return await Task.Run(async () =>
+            // We call the API using the token - here we want all people (and we are not using pagination here)
+            var url = $"http://localhost:5000/api/people/{id}";
+
+            if (_databaseTime.HasValue)
             {
-                // We call the API using the token - here we want all people (and we are not using pagination here)
-                var url = $"http://localhost:5000/api/people/{id}";
+                //url = "http://localhost:5000/api/people?DatabaseTime=2002-01-01T00:00:00Z";
+                url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}";
+            }
 
-                if (_databaseTime.HasValue)
-                {
-                    //url = "http://localhost:5000/api/people?DatabaseTime=2002-01-01T00:00:00Z";
-                    url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}";
-                }
+            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _token);
 
-                ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", _token);
-
-                using (var response = await ApiHelper.ApiClient.GetAsync(url))
-                {
-                    response.EnsureSuccessStatusCode();
-                    var responseBody = await response.Content.ReadAsStringAsync();
-
-                    var person = JsonConvert.DeserializeObject<Person>(responseBody);
-                    return person;
-                }
-            });
+            using var response = await ApiHelper.ApiClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var person = JsonConvert.DeserializeObject<Person>(responseBody);
+            return person;
         }
 
         public Task<IEnumerable<Person>> GetAllVariants(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
         {
             throw new NotImplementedException();
         }

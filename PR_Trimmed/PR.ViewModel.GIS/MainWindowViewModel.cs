@@ -353,7 +353,7 @@ namespace PR.ViewModel.GIS
                 await AutoFindIfEnabled();
             };
 
-            _databaseTimeOfInterest.PropertyChanged += (s, e) =>
+            _databaseTimeOfInterest.PropertyChanged += async (s, e) =>
             {
                 // Possibly adjust historical time so its doesn't exceed database time
                 if (_databaseTimeOfInterest.Object.HasValue)
@@ -381,6 +381,7 @@ namespace PR.ViewModel.GIS
                 UpdateStatusBar();
                 UpdateTimeText();
                 UpdateDatabaseTimeSeriesView();
+                await AutoFindIfEnabled();
             };
 
             _autoRefresh = new ObservableObject<bool>
@@ -509,45 +510,38 @@ namespace PR.ViewModel.GIS
         private async Task DeleteSelectedObservingFacilities(
             object owner)
         {
-            throw new NotImplementedException("Block removed for refactoring");
-            //var nSelectedObservingFacilities = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Count();
+            var nSelectedObservingFacilities = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects.Count();
 
-            //var message = nSelectedObservingFacilities == 1
-            //    ? "Delete Observing Facility?"
-            //    : $"Delete {nSelectedObservingFacilities} Observing Facilities?";
+            var message = nSelectedObservingFacilities == 1
+                ? "Delete Observing Facility?"
+                : $"Delete {nSelectedObservingFacilities} Observing Facilities?";
 
-            //var dialogViewModel = new MessageBoxDialogViewModel(message, true);
+            var dialogViewModel = new MessageBoxDialogViewModel(message, true);
 
-            //if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
-            //{
-            //    return;
-            //}
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
+            {
+                return;
+            }
 
-            //var objectIds = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects
-            //    .Select(_ => _.ObjectId)
-            //    .ToList();
+            var ids = ObservingFacilityListViewModel.SelectedObservingFacilities.Objects
+                .Select(_ => _.Id)
+                .ToList();
 
-            //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-            //{
-            //    // Todo: Remember to also delete orphaned children
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
 
-            //    var observingFacilitiesForDeletion = (await unitOfWork.ObservingFacilities
-            //        .Find(_ => _.Superseded == DateTime.MaxValue && objectIds.Contains(_.ObjectId)))
-            //        .ToList();
+            var peopleForDeletion = (await unitOfWork.People.Find(_ => ids.Contains(_.ID)))
+                .ToList();
 
-            //    var now = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
+                
+            await unitOfWork.People.RemoveRange(peopleForDeletion);
+            unitOfWork.Complete();
 
-            //    observingFacilitiesForDeletion.ForEach(_ => _.Superseded = now);
+            ObservingFacilityListViewModel.RemoveObservingFacilities(peopleForDeletion);
 
-            //    unitOfWork.ObservingFacilities.UpdateRange(observingFacilitiesForDeletion);
-            //    unitOfWork.Complete();
-
-            //    ObservingFacilityListViewModel.RemoveObservingFacilities(observingFacilitiesForDeletion);
-
-            //    _databaseWriteTimes.Add(now);
-            //    RefreshDatabaseTimeSeriesView();
-            //    RefreshHistoricalTimeSeriesView(true);
-            //}
+            _databaseWriteTimes.Add(now);
+            RefreshDatabaseTimeSeriesView();
+            RefreshHistoricalTimeSeriesView();
         }
 
         private bool CanDeleteSelectedObservingFacilities(
@@ -1491,16 +1485,14 @@ namespace PR.ViewModel.GIS
             {
                 using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
                 var people = (await unitOfWork.People.GetAll()).ToList();
-                
-                var timeStampsForPeople = people.Select(_ => _.Created).ToList();
-                timeStampsForPeople.AddRange(people.Select(_ => _.Superseded).Where(_ => _.Year < 9999));
-                _databaseWriteTimes = timeStampsForPeople.Distinct().ToList();
 
                 var historicalChangeTimeStamps = people.Select(_ => _.Start).ToList();
                 historicalChangeTimeStamps.AddRange(people.Select(_ => _.End).Where(_ => _.Year < 9999));
                 _historicalChangeTimes = historicalChangeTimeStamps.Distinct().ToList();
-
                 RefreshHistoricalTimeSeriesView();
+
+                _databaseWriteTimes = (await unitOfWork.People.GetAllDatabaseWriteTimes()).ToList();
+                RefreshDatabaseTimeSeriesView();
             }
             catch (InvalidOperationException ex)
             {

@@ -8,6 +8,7 @@ using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
+using PR.Domain.Entities;
 using PR.Persistence;
 using PR.ViewModel.GIS.Domain;
 
@@ -205,18 +206,16 @@ namespace PR.ViewModel.GIS
         }
 
         public void RemoveObservingFacilities(
-            IEnumerable<ObservingFacility> observingFacilities)
+            IEnumerable<Person> people)
         {
-            throw new NotImplementedException("Block removed for refactoring");
+            var idsOfDeletedPeople= people.Select(_ => _.ID);
 
-            //var objectIdsOfDeletedObservingFacilities = observingFacilities.Select(_ => _.ObjectId);
+            ObservingFacilityDataExtracts.Objects = ObservingFacilityDataExtracts.Objects
+                .Where(_ => !idsOfDeletedPeople.Contains(_.ObservingFacility.Id))
+                .ToList();
 
-            //ObservingFacilityDataExtracts.Objects = ObservingFacilityDataExtracts.Objects
-            //    .Where(_ => !objectIdsOfDeletedObservingFacilities.Contains(_.ObservingFacility.ObjectId))
-            //    .ToList();
-
-            //SelectedObservingFacilityListItemViewModels.Clear();
-            //UpdateObservingFacilityListItemViewModels();
+            SelectedObservingFacilityListItemViewModels.Clear();
+            UpdateObservingFacilityListItemViewModels();
         }
 
         private async Task RetrieveObservingFacilitiesMatchingFilterFromRepository()

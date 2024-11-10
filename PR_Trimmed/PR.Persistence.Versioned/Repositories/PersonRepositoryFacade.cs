@@ -109,6 +109,21 @@ namespace PR.Persistence.Versioned.Repositories
             return await UnitOfWork.People.Find(predicates);
         }
 
+        public async Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
+        {
+            var timeStamps = (await UnitOfWork.People.GetAll())
+                .SelectMany(_ => new[]{_.Created, _.Superseded})
+                .Distinct()
+                .ToList();
+
+            if (timeStamps.Any() && timeStamps.Last().Year == 9999)
+            {
+                return timeStamps.SkipLast(1);
+            }
+
+            return timeStamps;
+        }
+
         public async Task<IEnumerable<Person>> GetAll()
         {
             var predicates = new List<Expression<Func<Person, bool>>>();
@@ -213,19 +228,16 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task RemoveRange(
             IEnumerable<Person> people)
         {
-            await Task.Run(async () => 
+            var ids = people.Select(p => p.ID).ToList();
+
+            var predicates = new List<Expression<Func<Person, bool>>>
             {
-                var ids = people.Select(p => p.ID).ToList();
+                p => ids.Contains(p.ID)
+            };
 
-                var predicates = new List<Expression<Func<Person, bool>>>
-                {
-                    p => ids.Contains(p.ID)
-                };
+            var objectsFromRepository = (await Find(predicates)).ToList();
 
-                var objectsFromRepository = (await Find(predicates)).ToList();
-
-                objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
-            });
+            objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
         }
 
         public async Task Clear()
