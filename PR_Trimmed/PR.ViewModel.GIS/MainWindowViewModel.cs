@@ -36,6 +36,7 @@ namespace PR.ViewModel.GIS
         private List<DateTime> _historicalChangeTimes;
         private readonly ObservableObject<DateTime?> _historicalTimeOfInterest;
         private readonly ObservableObject<DateTime?> _databaseTimeOfInterest;
+        private readonly ObservableObject<Tuple<DateTime?, DateTime?>> _bitemporalTimesOfInterest;
         private readonly ObservableObject<bool> _autoRefresh;
         private readonly ObservableObject<bool> _displayNameFilter;
         private readonly ObservableObject<bool> _displayStatusFilter;
@@ -313,11 +314,28 @@ namespace PR.ViewModel.GIS
                 Object = null
             };
 
+            // Når denne ændres, skal man kalde Find - ikke i forbindelse med at de 2 tidspunkter ændres hver især
+            _bitemporalTimesOfInterest = new ObservableObject<Tuple<DateTime?, DateTime?>>
+            {
+                Object = new Tuple<DateTime?, DateTime?>(null, null)
+            };
+
             DisplayLog = true;
             //DisplayLog = true; // Set to true when diagnosing application behaviour
 
             _historicalTimeOfInterest.PropertyChanged += async (s, e) =>
             {
+                // Mark historical time of interest in the historical time control
+                HistoricalTimeViewModel!.StaticXValue = _historicalTimeOfInterest.Object.HasValue
+                    ? (_historicalTimeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1)
+                    : null;
+
+                // Set the historical time of interest for the unit of work factory
+                if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+                {
+                    unitOfWorkFactoryHistorical.HistoricalTime = _historicalTimeOfInterest.Object;
+                }
+
                 // Possibly adjust database time if it doesn't exceed historical time
                 if (_historicalTimeOfInterest.Object.HasValue)
                 {
@@ -335,36 +353,12 @@ namespace PR.ViewModel.GIS
                     }
                 }
 
-                // Mark historical time of interest in the historical time control
-                HistoricalTimeViewModel!.StaticXValue = _historicalTimeOfInterest.Object.HasValue
-                    ? (_historicalTimeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1)
-                    : null;
-
-                // Set the historical time of interest for the unit of work factory
-                if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
-                {
-                    unitOfWorkFactoryHistorical.HistoricalTime = _historicalTimeOfInterest.Object;
-                }
-
-                UpdateControlStyle();
-                UpdateStatusBar();
-                UpdateTimeText();
-                UpdateHistoricalTimeSeriesView(false);
-                await AutoFindIfEnabled();
+                // Set the bitemporal pair to trigger a database query 
+                UpdateBitemporalTimePair();
             };
 
             _databaseTimeOfInterest.PropertyChanged += async (s, e) =>
             {
-                // Possibly adjust historical time so its doesn't exceed database time
-                if (_databaseTimeOfInterest.Object.HasValue)
-                {
-                    if (!_historicalTimeOfInterest.Object.HasValue ||
-                        _historicalTimeOfInterest.Object.Value > _databaseTimeOfInterest.Object.Value)
-                    {
-                        _historicalTimeOfInterest.Object = _databaseTimeOfInterest.Object.Value;
-                    }
-                }
-
                 // Mark database time of interest in the database time control
                 DatabaseWriteTimesViewModel!.StaticXValue = _databaseTimeOfInterest.Object.HasValue
                     ? (_databaseTimeOfInterest.Object.Value - TimeSeriesViewModel.TimeAtOrigo) / TimeSpan.FromDays(1)
@@ -376,6 +370,22 @@ namespace PR.ViewModel.GIS
                     unitOfWorkFactoryVersioned.DatabaseTime = _databaseTimeOfInterest.Object;
                 }
 
+                // Possibly adjust historical time so its doesn't exceed database time
+                if (_databaseTimeOfInterest.Object.HasValue)
+                {
+                    if (!_historicalTimeOfInterest.Object.HasValue ||
+                        _historicalTimeOfInterest.Object.Value > _databaseTimeOfInterest.Object.Value)
+                    {
+                        _historicalTimeOfInterest.Object = _databaseTimeOfInterest.Object.Value;
+                    }
+                }
+
+                // Set the bitemporal pair to trigger a database query 
+                UpdateBitemporalTimePair();
+            };
+
+            _bitemporalTimesOfInterest.PropertyChanged += async (s, e) =>
+            {
                 UpdateCommands();
                 UpdateControlStyle();
                 UpdateStatusBar();
@@ -1245,6 +1255,17 @@ namespace PR.ViewModel.GIS
             else
             {
                 StatusBarText = $"Historical situation of {_historicalTimeOfInterest.Object.Value.AsDateString()} as depicted by the database as of {_databaseTimeOfInterest.Object.Value.AsDateTimeString(false)}";
+            }
+        }
+
+        private void UpdateBitemporalTimePair()
+        {
+            if (_bitemporalTimesOfInterest.Object.Item1 != _historicalTimeOfInterest.Object ||
+                _bitemporalTimesOfInterest.Object.Item2 != _databaseTimeOfInterest.Object)
+            {
+                _bitemporalTimesOfInterest.Object = new Tuple<DateTime?, DateTime?>(
+                    _historicalTimeOfInterest.Object,
+                    _databaseTimeOfInterest.Object);
             }
         }
 
