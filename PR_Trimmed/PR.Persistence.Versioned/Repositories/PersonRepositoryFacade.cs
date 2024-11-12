@@ -109,6 +109,26 @@ namespace PR.Persistence.Versioned.Repositories
             return await UnitOfWork.People.Find(predicates);
         }
 
+        public async Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
+        {
+            var predicates = new List<Expression<Func<Person, bool>>>();
+
+            AddVersionPredicates(predicates, DatabaseTime);
+
+            var timeStamps = (await UnitOfWork.People.Find(predicates))
+                .SelectMany(_ => new[] { _.Start, _.End})
+                .Distinct()
+                .OrderBy(_ => _)
+                .ToList();
+
+            if (timeStamps.Any() && timeStamps.Last().Year == 9999)
+            {
+                return timeStamps.SkipLast(1);
+            }
+
+            return timeStamps;
+        }
+
         public async Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
         {
             var timeStamps = (await UnitOfWork.People.GetAll())

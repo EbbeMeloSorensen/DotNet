@@ -79,6 +79,11 @@ namespace PR.Persistence.APIClient.Repositories
             throw new NotImplementedException();
         }
 
+        public Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
         {
             throw new NotImplementedException();

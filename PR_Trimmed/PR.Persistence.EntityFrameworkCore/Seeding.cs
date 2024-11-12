@@ -13,10 +13,10 @@ namespace PR.Persistence.EntityFrameworkCore
         {
             if (context.People.Any()) return;
 
-            //CreateDataForSeeding(PRDbContextBase.Versioned, out var people);
+            CreateDataForSeeding(PRDbContextBase.Versioned, out var people);
 
-            //context.People.AddRange(people);
-            //context.SaveChanges();
+            context.People.AddRange(people);
+            context.SaveChanges();
         }
 
         public static void CreateDataForSeeding(

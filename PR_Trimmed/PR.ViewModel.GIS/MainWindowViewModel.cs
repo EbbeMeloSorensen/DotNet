@@ -1505,11 +1505,8 @@ namespace PR.ViewModel.GIS
             try
             {
                 using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-                var people = (await unitOfWork.People.GetAll()).ToList();
 
-                var historicalChangeTimeStamps = people.Select(_ => _.Start).ToList();
-                historicalChangeTimeStamps.AddRange(people.Select(_ => _.End).Where(_ => _.Year < 9999));
-                _historicalChangeTimes = historicalChangeTimeStamps.Distinct().ToList();
+                _historicalChangeTimes = (await unitOfWork.People.GetAllValidTimeIntervalExtrema()).ToList(); ;
                 RefreshHistoricalTimeSeriesView();
 
                 _databaseWriteTimes = (await unitOfWork.People.GetAllDatabaseWriteTimes()).ToList();

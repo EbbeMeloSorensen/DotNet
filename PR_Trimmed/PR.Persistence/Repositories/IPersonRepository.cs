@@ -14,6 +14,8 @@ namespace PR.Persistence.Repositories
         Task<IEnumerable<Person>> GetAllVariants(
             Guid id);
 
+        Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema();
+
         Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes();
     }
 }
