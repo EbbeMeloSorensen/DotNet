@@ -83,21 +83,28 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
+        public async Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                // Just return an empty list for now. Later add it to the API
+                return new List<DateTime>();
+            });
         }
 
-        public Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
+        public async Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                // Just return an empty list for now. Later add it to the API
+                return new List<DateTime>();
+            });
         }
 
         public async Task<IEnumerable<Person>> GetAll()
         {
             var observingFacilities = new List<ObservingFacility>();
 
-            var environment = "dev";
             var url = $"{_baseURL}/collections/observing_facility/items";
             
             var arguments = new List<string>();
@@ -109,7 +116,7 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
 
             if (_databaseTime.HasValue)
             {
-                throw new NotImplementedException("");
+                arguments.Add($"revision-time={_databaseTime.Value.AsRFC3339(false)}");
             }
 
             if (arguments.Any())

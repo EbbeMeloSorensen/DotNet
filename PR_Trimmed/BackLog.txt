@@ -5,8 +5,6 @@ Done:
 * Hvis tidspunktet er midnat skal den ikke vise klokkeslæt i headeren, hverken for titlen eller parantesen nedenunder
 * Lav det lige om med seeding, så du bare skriver det fulde navn i FirstName i stedet for at bruge Surname
 * Navn skal tilføjes til detalje viewet
-
-In progress:
 * Du har en fejl, når du kører med dette scenarie:
   1) Start med en tom database
   2) Lav en ny "person"
@@ -15,6 +13,10 @@ In progress:
   Find kaldes hurtigere end du lige tror. Det skyldes, at den historiske tid justeres, da den jo ikke må være nyere end database-tiden
   Måske burde man operere med, at man IKKE skal kalde Find, hvis et tidspunkt justeres pga det andet tidspunkt.
   Måske skulle man lade selve PARRET af tidspunkter være det, der ændrede sig, og som der kan abonneres på...
+* Gør det sådan at man kan gå tilbage i historisk tid og databasetid for dit eget plugin, som repræsenterer dit eget lokale API
+
+In progress:
+* Gør det sådan at man kan gå tilbage i historisk tid og databasetid for dfos pluginet
 
 * For alle 3 plugins skal man kunne se detaljer i detaljeviewet
   - Man skal kunne se de 2 lokationer for Darth Vader, når man trykker på detalje

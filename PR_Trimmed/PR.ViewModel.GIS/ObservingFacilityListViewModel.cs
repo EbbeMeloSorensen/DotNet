@@ -220,12 +220,17 @@ namespace PR.ViewModel.GIS
 
         private async Task RetrieveObservingFacilitiesMatchingFilterFromRepository()
         {
+            _logger?.WriteLine(LogMessageCategory.Information, "Retrieving objects from repository..");
+
             using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
             var people = (await unitOfWork.People.GetAll()).ToList();
+            var groups = people.GroupBy(p => p.ID);
+
+            _logger?.WriteLine(LogMessageCategory.Information, $"Retrieved {groups.Count()} objects");
 
             var observingFacilityDataExtracts = new List<ObservingFacilityDataExtract>();
 
-            foreach (var grouping in people.GroupBy(p => p.ID))
+            foreach (var grouping in groups)
             {
                 var ordered = grouping.OrderBy(p => p.Start).ToList();
                 var name = ordered.Last().FirstName;

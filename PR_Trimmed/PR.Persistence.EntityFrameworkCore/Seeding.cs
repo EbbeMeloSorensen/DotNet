@@ -41,8 +41,8 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 
-            var chewbaccaIsEnteredIncorrectly = now - TimeSpan.FromMinutes(3);
-            var chewbaccaIsCorrected = now - TimeSpan.FromMinutes(2);
+            var chewbaccaIsEnteredIncorrectly = now.Date.AddDays(-1);
+            var chewbaccaIsCorrected = chewbaccaIsEnteredIncorrectly.AddDays(1) - TimeSpan.FromHours(1);
 
             var anakinIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 1, 0, 0, 0, DateTimeKind.Utc);

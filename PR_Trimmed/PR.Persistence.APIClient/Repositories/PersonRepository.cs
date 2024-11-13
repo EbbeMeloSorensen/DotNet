@@ -79,14 +79,22 @@ namespace PR.Persistence.APIClient.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
+        public async Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                // Just return an empty list for now. Later add it to the API
+                return new List<DateTime>();
+            });
         }
 
-        public Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
+        public async Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                // Just return an empty list for now. Later add it to the API
+                return new List<DateTime>();
+            });
         }
 
         public async Task<IEnumerable<Person>> GetAll()
