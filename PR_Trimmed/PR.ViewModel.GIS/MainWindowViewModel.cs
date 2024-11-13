@@ -380,6 +380,8 @@ namespace PR.ViewModel.GIS
                     }
                 }
 
+                await InitializeHistoricalTimestampsOfInterest();
+
                 // Set the bitemporal pair to trigger a database query 
                 UpdateBitemporalTimePair();
             };
@@ -464,8 +466,6 @@ namespace PR.ViewModel.GIS
             InitializeHistoricalTimeViewModel();
 
             DrawMapOfDenmark();
-
-            //InitializeTimestampsOfInterest();
 
             UpdateRetrospectionControls();
             UpdateStatusBar();
@@ -1500,14 +1500,11 @@ namespace PR.ViewModel.GIS
             //RefreshDatabaseTimeSeriesView();
         }
 
-        public async Task InitializeTimestampsOfInterest()
+        public async Task InitializeDatabaseTimestampsOfInterest()
         {
             try
             {
                 using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-
-                _historicalChangeTimes = (await unitOfWork.People.GetAllValidTimeIntervalExtrema()).ToList(); ;
-                RefreshHistoricalTimeSeriesView();
 
                 _databaseWriteTimes = (await unitOfWork.People.GetAllDatabaseWriteTimes()).ToList();
                 RefreshDatabaseTimeSeriesView();
@@ -1516,6 +1513,21 @@ namespace PR.ViewModel.GIS
             {
                 // Just swallow it for now - write it to the log later
                 _databaseWriteTimes = new List<DateTime>();
+            }
+        }
+
+        public async Task InitializeHistoricalTimestampsOfInterest()
+        {
+            try
+            {
+                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+
+                _historicalChangeTimes = (await unitOfWork.People.GetAllValidTimeIntervalExtrema()).ToList(); ;
+                RefreshHistoricalTimeSeriesView();
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Just swallow it for now - write it to the log later
                 _historicalChangeTimes = new List<DateTime>();
             }
         }

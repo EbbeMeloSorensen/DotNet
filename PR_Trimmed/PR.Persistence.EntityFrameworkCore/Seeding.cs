@@ -37,18 +37,26 @@ namespace PR.Persistence.EntityFrameworkCore
         private static void CreateBitemporalDataForSeeding(
             out List<Person> people)
         {
+            var now = DateTime.UtcNow;
+
             var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+            var chewbaccaIsEnteredIncorrectly = now - TimeSpan.FromMinutes(3);
+            var chewbaccaIsCorrected = now - TimeSpan.FromMinutes(2);
+
+            var anakinIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+            var chewbaccaIsIntroduced = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var darthVaderDies = new DateTime(2006, 10, 1, 0, 0, 0, DateTimeKind.Utc);
-            var chewbaccaIsCorrected = new DateTime(2024, 11, 6, 20, 40, 0, DateTimeKind.Utc);
+            var reyIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyBecomesReySkywalker = new DateTime(2009, 10, 1, 0, 0, 0, DateTimeKind.Utc);
 
             var anakin_0_0 = new Person
             {
                 ID = new Guid("12345678-0000-0000-0000-000000000005"),
-                Created = new DateTime(2024, 10, 29, 13, 0, 0, DateTimeKind.Utc),
+                Created = now,
                 Superseded = maxDate,
-                Start = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Start = anakinIsIntroduced,
                 End = anakinBecomesDarthVader,
                 FirstName = "Anakin Skywalker",
                 Latitude = 10,
@@ -58,7 +66,7 @@ namespace PR.Persistence.EntityFrameworkCore
             var anakin_1_0 = new Person
             {
                 ID = new Guid("12345678-0000-0000-0000-000000000005"),
-                Created = new DateTime(2024, 10, 29, 13, 2, 0, DateTimeKind.Utc),
+                Created = now,
                 Superseded = maxDate,
                 Start = anakinBecomesDarthVader,
                 End = darthVaderDies,
@@ -70,9 +78,9 @@ namespace PR.Persistence.EntityFrameworkCore
             var chewbacca_0_0 = new Person
             {
                 ID = new Guid("12345678-0000-0000-0000-000000000011"),
-                Created = new DateTime(2024, 10, 29, 13, 4, 0, DateTimeKind.Utc),
+                Created = chewbaccaIsEnteredIncorrectly,
                 Superseded = chewbaccaIsCorrected,
-                Start = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Start = chewbaccaIsIntroduced,
                 End = maxDate,
                 FirstName = "Chewie",
                 Latitude = 10,
@@ -84,7 +92,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 ID = new Guid("12345678-0000-0000-0000-000000000011"),
                 Created = chewbaccaIsCorrected,
                 Superseded = maxDate,
-                Start = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Start = chewbaccaIsIntroduced,
                 End = maxDate,
                 FirstName = "Chewbacca",
                 Latitude = 10,
@@ -94,9 +102,9 @@ namespace PR.Persistence.EntityFrameworkCore
             var rey_0_0 = new Person
             {
                 ID = new Guid("12345678-0000-0000-0000-000000000013"),
-                Created = new DateTime(2024, 10, 29, 13, 6, 0, DateTimeKind.Utc),
+                Created = now,
                 Superseded = maxDate,
-                Start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Start = reyIsIntroduced,
                 End = reyBecomesReySkywalker,
                 FirstName = "Rey",
                 Latitude = 12,
@@ -106,7 +114,7 @@ namespace PR.Persistence.EntityFrameworkCore
             var rey_1_0 = new Person
             {
                 ID = new Guid("12345678-0000-0000-0000-000000000013"),
-                Created = new DateTime(2024, 10, 29, 13, 8, 0, DateTimeKind.Utc),
+                Created = now,
                 Superseded = maxDate,
                 Start = reyBecomesReySkywalker,
                 End = maxDate,
