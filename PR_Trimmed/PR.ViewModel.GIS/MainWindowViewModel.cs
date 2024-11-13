@@ -418,7 +418,7 @@ namespace PR.ViewModel.GIS
 
             _showClosedStations = new ObservableObject<bool>
             {
-                Object = true
+                Object = false
             };
 
             _displayHistoricalTimeControls = new ObservableObject<bool>
@@ -450,12 +450,12 @@ namespace PR.ViewModel.GIS
 
             _showClosedStations.PropertyChanged += async (s, e) =>
             {
-                await AutoFindIfEnabled();
-
                 if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
                 {
                     unitOfWorkFactoryHistorical.IncludeHistoricalObjects = _showClosedStations.Object;
                 }
+
+                await AutoFindIfEnabled();
             };
 
             InitializeLogViewModel(_logger);
@@ -491,6 +491,23 @@ namespace PR.ViewModel.GIS
             _timer.Start();
 
             _logger?.WriteLine(LogMessageCategory.Information, "Done constructing MainWindowViewModel");
+        }
+
+        public void Initialize(
+            bool versioned,
+            bool reseeding)
+        {
+            UnitOfWorkFactory.Initialize(versioned);
+
+            if (reseeding)
+            {
+                UnitOfWorkFactory.Reseed();
+            }
+
+            if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+            {
+                unitOfWorkFactoryHistorical.IncludeHistoricalObjects = _showClosedStations.Object;
+            }
         }
 
         private void CreateObservingFacility(

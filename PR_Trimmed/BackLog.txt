@@ -13,25 +13,24 @@ Done:
   Find kaldes hurtigere end du lige tror. Det skyldes, at den historiske tid justeres, da den jo ikke må være nyere end database-tiden
   Måske burde man operere med, at man IKKE skal kalde Find, hvis et tidspunkt justeres pga det andet tidspunkt.
   Måske skulle man lade selve PARRET af tidspunkter være det, der ændrede sig, og som der kan abonneres på...
+* Gør det sådan at man kan gå tilbage i historisk tid og databasetid for dit eget plugin, som repræsenterer den lokale database
 * Gør det sådan at man kan gå tilbage i historisk tid og databasetid for dit eget plugin, som repræsenterer dit eget lokale API
+* Gør det sådan at man kan gå tilbage i historisk tid og databasetid for dfos pluginet
+* Bug: Der er noget galt med tidsaksen, når der kun vises år..
+* Genaktiver AutoRefresh, hvor det giver mening
+  - Når man ændrer på historical time
+  - Når man ændrer på database time
 
 In progress:
-* Gør det sådan at man kan gå tilbage i historisk tid og databasetid for dfos pluginet
-
+* Der er lidt rod med mht hvordan statusfilteret virker
+* Lidt flere karakterer på banen
 * For alle 3 plugins skal man kunne se detaljer i detaljeviewet
   - Man skal kunne se de 2 lokationer for Darth Vader, når man trykker på detalje
 
 Todo:
 * Det skal highlights i kortet, hvilke observing facilities, der er selected
 * Man skal også kunne selecte observing facilities i kortet
-* For dine egne 2 plugins skal man kunne gå tilbage i databasetid
-  - Sqlite (ok)
-  - Eget API
 * Man skal kunne se linier i historical view over hvor der er sket noget
-* Genaktiver AutoRefresh, hvor det giver mening
-  - Når man ændrer på historical time
-  - Når man ændrer på database time
-* Bug: Der er noget galt med tidsaksen, når der kun vises år..
 
 
 Løst of fast:
