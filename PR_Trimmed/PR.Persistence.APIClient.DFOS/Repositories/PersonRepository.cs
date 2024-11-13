@@ -94,11 +94,52 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
 
         public async Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
         {
-            return await Task.Run(() =>
+            var url = $"{_baseURL}/collections/observing_facility/items?datetime=..%2F..";
+
+            using var response = await ApiHelper.ApiClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _token);
+
+            var dfosResult = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
+
+
+
+            var timeStamps = new List<DateTime>();
+
+            foreach (var feature in dfosResult.Features)
             {
-                // Just return an empty list for now. Later add it to the API
-                return new List<DateTime>();
-            });
+                foreach (var kvp in feature.Properties.Details)
+                {
+                    var pattern = @"(\s+|\(|\)|\[|\])";
+                    var startTimeAsText = kvp.Key.Split(",")[0];
+                    var endTimeAsText = kvp.Key.Split(",")[1];
+                    startTimeAsText = Regex.Replace(startTimeAsText, pattern, "");
+                    endTimeAsText = Regex.Replace(endTimeAsText, pattern, "");
+
+                    var startTime = DateTime.ParseExact(startTimeAsText, "yyyy-MM-ddTHH:mm:ssZ",
+                        CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+
+                    var endTime = string.IsNullOrEmpty(endTimeAsText)
+                        ? DateTime.MaxValue
+                        : DateTime.ParseExact(endTimeAsText, "yyyy-MM-ddTHH:mm:ssZ",
+                            CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+
+                    timeStamps.Add(startTime);
+                    timeStamps.Add(endTime);
+                }
+            }
+
+            timeStamps = timeStamps.Distinct().ToList();
+
+            if (timeStamps.Any() && timeStamps.Last().Year == 9999)
+            {
+                return timeStamps.SkipLast(1);
+            }
+
+            return timeStamps;
         }
 
         public async Task<IEnumerable<Person>> GetAll()
