@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -85,54 +86,67 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
 
         public async Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
         {
-            return await Task.Run(() =>
+            string responseBody;
+
+            if (false)
             {
-                // Just return an empty list for now. Later add it to the API
-                return new List<DateTime>();
-            });
-        }
+                var fileName = @".\Data\mock_response.json";
+                responseBody = File.ReadAllText(fileName, Encoding.UTF8);
+            }
+            else
+            {
+                var url = $"{_baseURL}/collections/observing_facility/items?datetime=..%2F..";
 
-        public async Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
-        {
-            var url = $"{_baseURL}/collections/observing_facility/items?datetime=..%2F..";
+                using var response = await ApiHelper.ApiClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                responseBody = await response.Content.ReadAsStringAsync();
 
-            using var response = await ApiHelper.ApiClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", _token);
+                ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", _token);
+            }
 
             var dfosResult = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
 
-
-
             var timeStamps = new List<DateTime>();
 
-            foreach (var feature in dfosResult.Features)
+            try
             {
-                foreach (var kvp in feature.Properties.Details)
+                foreach (var feature in dfosResult.Features)
                 {
-                    var pattern = @"(\s+|\(|\)|\[|\])";
-                    var startTimeAsText = kvp.Key.Split(",")[0];
-                    var endTimeAsText = kvp.Key.Split(",")[1];
-                    startTimeAsText = Regex.Replace(startTimeAsText, pattern, "");
-                    endTimeAsText = Regex.Replace(endTimeAsText, pattern, "");
+                    foreach (var kvp in feature.Properties.Details)
+                    {
+                        var pattern = @"(\s+|\(|\)|\[|\])";
+                        var startTimeAsText = kvp.Key.Split(",")[0];
+                        var endTimeAsText = kvp.Key.Split(",")[1];
+                        startTimeAsText = Regex.Replace(startTimeAsText, pattern, "");
+                        endTimeAsText = Regex.Replace(endTimeAsText, pattern, "");
 
-                    var startTime = DateTime.ParseExact(startTimeAsText, "yyyy-MM-ddTHH:mm:ssZ",
-                        CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+                        string[] formats =
+                        {
+                            "yyyy-MM-ddTHH:mm:ssZ",
+                            "yyyy-MM-ddTHH:mm:ss.fffZ",
+                            "yyyy-MM-ddTHH:mm:ss.ffZ"
+                        };
 
-                    var endTime = string.IsNullOrEmpty(endTimeAsText)
-                        ? DateTime.MaxValue
-                        : DateTime.ParseExact(endTimeAsText, "yyyy-MM-ddTHH:mm:ssZ",
+                        var startTime = DateTime.ParseExact(startTimeAsText, formats,
                             CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
 
-                    timeStamps.Add(startTime);
-                    timeStamps.Add(endTime);
+                        var endTime = string.IsNullOrEmpty(endTimeAsText)
+                            ? DateTime.MaxValue
+                            : DateTime.ParseExact(endTimeAsText, formats,
+                                CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+
+                        timeStamps.Add(startTime);
+                        timeStamps.Add(endTime);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                var a = 0;
+            }
 
-            timeStamps = timeStamps.Distinct().ToList();
+            timeStamps = timeStamps.Distinct().OrderBy(_ => _).ToList();
 
             if (timeStamps.Any() && timeStamps.Last().Year == 9999)
             {
@@ -140,6 +154,15 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             }
 
             return timeStamps;
+        }
+
+        public async Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
+        {
+            return await Task.Run(() =>
+            {
+                // Just return an empty list for now. Later add it to the API
+                return new List<DateTime>();
+            });
         }
 
         public async Task<IEnumerable<Person>> GetAll()
