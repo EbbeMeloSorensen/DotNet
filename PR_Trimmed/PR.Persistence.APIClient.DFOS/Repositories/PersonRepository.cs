@@ -174,7 +174,7 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
 
             var people = new List<Person>();
 
-            int? pageSize = 2;
+            int? pageSize = 5;
             var morePages = true;
             Guid? offset = null;
 

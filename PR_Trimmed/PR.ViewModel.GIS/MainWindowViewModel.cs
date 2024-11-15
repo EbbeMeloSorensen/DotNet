@@ -1521,10 +1521,10 @@ namespace PR.ViewModel.GIS
         {
             try
             {
-                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+                //using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
 
-                _databaseWriteTimes = (await unitOfWork.People.GetAllDatabaseWriteTimes()).ToList();
-                RefreshDatabaseTimeSeriesView();
+                //_databaseWriteTimes = (await unitOfWork.People.GetAllDatabaseWriteTimes()).ToList();
+                //RefreshDatabaseTimeSeriesView();
             }
             catch (InvalidOperationException ex)
             {
@@ -1537,10 +1537,10 @@ namespace PR.ViewModel.GIS
         {
             try
             {
-                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+                //using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
 
-                _historicalChangeTimes = (await unitOfWork.People.GetAllValidTimeIntervalExtrema()).ToList(); ;
-                RefreshHistoricalTimeSeriesView();
+                //_historicalChangeTimes = (await unitOfWork.People.GetAllValidTimeIntervalExtrema()).ToList(); ;
+                //RefreshHistoricalTimeSeriesView();
             }
             catch (InvalidOperationException ex)
             {
