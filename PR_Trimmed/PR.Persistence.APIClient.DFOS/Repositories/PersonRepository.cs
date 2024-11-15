@@ -170,90 +170,124 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         {
             var observingFacilities = new List<ObservingFacility>();
 
-            var url = $"{_baseURL}/collections/observing_facility/items";
-            
-            var arguments = new List<string>();
-
-            if (_historicalTime.HasValue)
-            {
-                arguments.Add($"datetime={_historicalTime.Value.AsRFC3339(false)}");
-            }
-
-            if (_databaseTime.HasValue)
-            {
-                arguments.Add($"revision-time={_databaseTime.Value.AsRFC3339(false)}");
-            }
-
-            if (arguments.Any())
-            {
-                url += "?";
-                url += arguments.Aggregate((c, n) => $"{c}&{n}");
-            }
-
-            using var response = await ApiHelper.ApiClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", _token);
-
-            var dfosResult = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
-            
-            // Vi skal mappe det til personer, sådan at vi trawler alle features igennem,
-            // og for hver af dem trawler vi dens details igennem
+            var startOfURL = $"{_baseURL}/collections/observing_facility/items";
 
             var people = new List<Person>();
 
-            foreach (var feature in dfosResult.Features)
+            int? pageSize = 2;
+            var morePages = true;
+            Guid? offset = null;
+
+            do
             {
-                string nameBefore = null;
-                double latitudeBefore = double.NaN;
-                double longitudeBefore = double.NaN;
+                var arguments = new List<string>();
 
-                foreach (var kvp in feature.Properties.Details)
+                if (_historicalTime.HasValue)
                 {
-                    var pattern = @"(\s+|\(|\)|\[|\])";
-                    var startTimeAsText = kvp.Key.Split(",")[0];
-                    var endTimeAsText = kvp.Key.Split(",")[1];
-                    startTimeAsText = Regex.Replace(startTimeAsText, pattern, "");
-                    endTimeAsText = Regex.Replace(endTimeAsText, pattern, "");
+                    arguments.Add($"datetime={_historicalTime.Value.AsRFC3339(false)}");
+                }
 
-                    var startTime = DateTime.ParseExact(startTimeAsText, "yyyy-MM-ddTHH:mm:ssZ",
-                        CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+                if (_databaseTime.HasValue)
+                {
+                    arguments.Add($"revision-time={_databaseTime.Value.AsRFC3339(false)}");
+                }
 
-                    var endTime = string.IsNullOrEmpty(endTimeAsText)
-                        ? new DateTime(9999, 12, 31, 23, 59, 59)
-                        : DateTime.ParseExact(endTimeAsText, "yyyy-MM-ddTHH:mm:ssZ",
+                if (pageSize.HasValue)
+                {
+                    arguments.Add($"limit={pageSize.Value}");
+                }
+
+                if (offset.HasValue)
+                {
+                    arguments.Add($"offset={offset.Value.ToString()}");
+                }
+
+                var url = startOfURL;
+
+                if (arguments.Any())
+                {
+                    url += "?";
+                    url += arguments.Aggregate((c, n) => $"{c}&{n}");
+                }
+
+                using var response = await ApiHelper.ApiClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                var dfosResult = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
+
+                foreach (var feature in dfosResult.Features)
+                {
+                    string nameBefore = null;
+                    double latitudeBefore = double.NaN;
+                    double longitudeBefore = double.NaN;
+
+                    foreach (var kvp in feature.Properties.Details)
+                    {
+                        var pattern = @"(\s+|\(|\)|\[|\])";
+                        var startTimeAsText = kvp.Key.Split(",")[0];
+                        var endTimeAsText = kvp.Key.Split(",")[1];
+                        startTimeAsText = Regex.Replace(startTimeAsText, pattern, "");
+                        endTimeAsText = Regex.Replace(endTimeAsText, pattern, "");
+
+                        string[] formats =
+                        {
+                            "yyyy-MM-ddTHH:mm:ssZ",
+                            "yyyy-MM-ddTHH:mm:ss.fffZ",
+                            "yyyy-MM-ddTHH:mm:ss.ffZ"
+                        };
+
+                        var startTime = DateTime.ParseExact(startTimeAsText, formats,
                             CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
 
-                    var name = kvp.Value.FacilityName;
-                    var latitude = kvp.Value.GeoLocation.Coordinates[0];
-                    var longitude = kvp.Value.GeoLocation.Coordinates[1];
+                        var endTime = string.IsNullOrEmpty(endTimeAsText)
+                            ? new DateTime(9999, 12, 31, 23, 59, 59)
+                            : DateTime.ParseExact(endTimeAsText, formats,
+                                CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
 
-                    if (double.IsNaN(latitudeBefore) ||
-                        double.IsNaN(longitudeBefore) ||
-                        latitude != latitudeBefore ||
-                        longitude != longitudeBefore ||
-                        name != nameBefore)
-                    {
-                        people.Add(new Person
+                        var name = kvp.Value.FacilityName;
+                        var latitude = kvp.Value.GeoLocation.Coordinates[0];
+                        var longitude = kvp.Value.GeoLocation.Coordinates[1];
+
+                        if (double.IsNaN(latitudeBefore) ||
+                            double.IsNaN(longitudeBefore) ||
+                            latitude != latitudeBefore ||
+                            longitude != longitudeBefore ||
+                            name != nameBefore)
                         {
-                            ID = feature.Id,
-                            Created = new DateTime(2000, 1, 1),
-                            Superseded = _maxDate,
-                            Start = startTime,
-                            End = endTime,
-                            FirstName = name,
-                            Latitude = latitude,
-                            Longitude = longitude
-                        });
-                    }
+                            people.Add(new Person
+                            {
+                                ID = feature.Id,
+                                Created = new DateTime(2000, 1, 1),
+                                Superseded = _maxDate,
+                                Start = startTime,
+                                End = endTime,
+                                FirstName = name,
+                                Latitude = latitude,
+                                Longitude = longitude
+                            });
+                        }
 
-                    latitudeBefore = latitude;
-                    longitudeBefore = longitude;
-                    nameBefore = name;
+                        latitudeBefore = latitude;
+                        longitudeBefore = longitude;
+                        nameBefore = name;
+                    }
+                }
+
+                var nextLink = dfosResult.Links.SingleOrDefault(_ => _.Rel == "next");
+
+                if (nextLink != null)
+                {
+                    var href = nextLink.HRef; // Vi behøver ikke bruge denne
+
+                    offset = dfosResult.Features.Max(_ => _.Id);
+                }
+                else
+                {
+                    morePages = false;
                 }
             }
+            while (morePages);
 
             return people;
         }
