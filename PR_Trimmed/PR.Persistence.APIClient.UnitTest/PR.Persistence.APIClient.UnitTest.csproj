@@ -26,4 +26,16 @@
     <ProjectReference Include="..\PR.Persistence.APIClient\PR.Persistence.APIClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\mock_response.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\observing_facilities_23102024.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\observing_facility_minimal.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

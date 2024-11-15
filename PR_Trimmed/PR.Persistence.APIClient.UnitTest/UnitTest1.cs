@@ -1,7 +1,9 @@
+using System.Text;
 using System.Text.Json;
 using Newtonsoft.Json;
-using FluentAssertions;
 using Xunit;
+using FluentAssertions;
+using PR.Domain.DFOS;
 
 namespace PR.Persistence.APIClient.UnitTest
 {
@@ -46,6 +48,24 @@ namespace PR.Persistence.APIClient.UnitTest
         }
 
         [Fact]
+        public async void DeserializeDFOSJsonData()
+        {
+            var fileName = @".\Data\mock_response.json";
+            var responseBody = File.ReadAllText(fileName, Encoding.UTF8);
+
+            var data = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
+            data.Should().NotBeNull();
+            data.Type.Should().Be("FeatureCollection");
+            data.Features.Count().Should().Be(13);
+            var details = data.Features.First().Properties.Details;
+            details.Count().Should().Be(1);
+            var key = "[2024-10-11T11:30:00Z,)";
+            details.ContainsKey(key).Should().BeTrue();
+            var observingFacility = details[key];
+            observingFacility.FacilityName.Should().Be("Andeby Havn - PI1 Demo (Test)");
+        }
+
+        [Fact]
         public async void CallDFOSAPIAndObtainResultWithoutKnowingStructure()
         {
             var url = "http://dfos-api-prod.dmi.dk/collections/observing_facility/items";
@@ -67,72 +87,71 @@ namespace PR.Persistence.APIClient.UnitTest
             }
         }
 
-        //[Fact]
-        //public async void DFOSAPI_RetrieveAllObservingFacilities()
-        //{
-        //    // Arrange
-        //    var observingFacilities = new List<ObservingFacility>();
+        [Fact]
+        public async void DFOSAPI_RetrieveAllObservingFacilities()
+        {
+            // Arrange
+            var observingFacilities = new List<ObservingFacility>();
 
-        //    // Act
-        //    var url = "http://dfos-api-prod.dmi.dk/collections/observing_facility/items";
-        //    //var url = "http://dfos-api-dev.dmi.dk/collections/observing_facility/items?limit=100&datetime=../..";
+            // Act
+            var url = "http://dfos-api-prod.dmi.dk/collections/observing_facility/items";
+            //var url = "http://dfos-api-dev.dmi.dk/collections/observing_facility/items?limit=100&datetime=../..";
 
-        //    using var response = await ApiHelper.ApiClient.GetAsync(url);
-        //    response.EnsureSuccessStatusCode();
-        //    var responseBody = await response.Content.ReadAsStringAsync();
+            using var response = await ApiHelper.ApiClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
 
-        //    // Some of the json data is fully structured, so we can deserialize the response
-        //    var data = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
-        //    data.Should().NotBeNull();
-        //    data.Type.Should().Be("FeatureCollection");
-           
-        //    // The "properties" element of a feature has a "details" element, where the only property
-        //    // has a property name that is a time interval. We cannot deserialize this, so instead
-        //    // we read the response into a JsonDocument that we then navigate through
-        //    using (var doc = JsonDocument.Parse(responseBody))
-        //    {
-        //        var root = doc.RootElement;
+            var data = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
+            data.Should().NotBeNull();
+            data.Type.Should().Be("FeatureCollection");
 
-        //        // Navigate through JSON dynamically
-        //        var type = root.GetProperty("type");
-        //        var features = root.GetProperty("features");
+            // The "properties" element of a feature has a "details" element, where the only property
+            // has a property name that is a time interval. We cannot deserialize this, so instead
+            // we read the response into a JsonDocument that we then navigate through
+            using (var doc = JsonDocument.Parse(responseBody))
+            {
+                var root = doc.RootElement;
 
-        //        if (features.ValueKind == JsonValueKind.Array)
-        //        {
-        //            foreach (JsonElement element in features.EnumerateArray())
-        //            {
-        //                var temp1 = element.GetProperty("properties");
-        //                var temp2 = temp1.GetProperty("details");
+                // Navigate through JSON dynamically
+                var type = root.GetProperty("type");
+                var features = root.GetProperty("features");
 
-        //                foreach (var property in temp2.EnumerateObject())
-        //                {
-        //                    var propertyName = property.Name;
-        //                    var propertyValue = property.Value;
-        //                    var DetailsAsRawText = propertyValue.GetRawText();
-        //                    var observingFacility = JsonConvert.DeserializeObject<ObservingFacility>(DetailsAsRawText);
-        //                    observingFacilities.Add(observingFacility);
-        //                }
-        //            }                    
-        //        }
-        //    }
+                if (features.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (JsonElement element in features.EnumerateArray())
+                    {
+                        var temp1 = element.GetProperty("properties");
+                        var temp2 = temp1.GetProperty("details");
 
-        //    // Assert
-        //    var facilityNamesReceived = observingFacilities
-        //        .Select(o => o.FacilityName)
-        //        .OrderBy(n => n);
+                        foreach (var property in temp2.EnumerateObject())
+                        {
+                            var propertyName = property.Name;
+                            var propertyValue = property.Value;
+                            var DetailsAsRawText = propertyValue.GetRawText();
+                            var observingFacility = JsonConvert.DeserializeObject<ObservingFacility>(DetailsAsRawText);
+                            observingFacilities.Add(observingFacility);
+                        }
+                    }
+                }
+            }
 
-        //    var expectedFacilityNames = new List<string>
-        //    {
-        //        "Andeby Havn Opdateret (Test)",
-        //        "Karup Vest (Test)",
-        //        "Nørre Lyngby N",
-        //        "Uggerby"
-        //    };
+            // Assert
+            var facilityNamesReceived = observingFacilities
+                .Select(o => o.FacilityName)
+                .OrderBy(n => n);
 
-        //    Enumerable.SequenceEqual(
-        //        facilityNamesReceived,
-        //        expectedFacilityNames).Should().BeTrue();
-        //}
+            var expectedFacilityNames = new List<string>
+            {
+                "Andeby Havn Opdateret (Test)",
+                "Karup Vest (Test)",
+                "Nørre Lyngby N",
+                "Uggerby"
+            };
+
+            Enumerable.SequenceEqual(
+                facilityNamesReceived,
+                expectedFacilityNames).Should().BeTrue();
+        }
 
         [Fact]
         public async void GetAllPeople()

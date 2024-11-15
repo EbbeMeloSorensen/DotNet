@@ -1,8 +1,6 @@
 ﻿using System.Globalization;
 using Craft.Utils;
 using Newtonsoft.Json;
-using PR.Domain.Entities;
-using PR.Persistence.Repositories;
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -13,6 +11,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using PR.Domain.Entities;
+using PR.Domain.DFOS;
+using PR.Persistence.Repositories;
 
 namespace PR.Persistence.APIClient.DFOS.Repositories
 {
