@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Craft.Logging;
+using Microsoft.EntityFrameworkCore;
 using Craft.Persistence.EntityFrameworkCore;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
@@ -13,6 +14,8 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
             DbContext context) : base(context)
         {
         }
+
+        public ILogger Logger { get; }
 
         public async Task<Person> Get(
             Guid id)

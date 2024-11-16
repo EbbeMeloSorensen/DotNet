@@ -23,7 +23,11 @@ namespace PR.Application
         public ILogger Logger
         {
             get => _logger;
-            set => _logger = value;
+            set
+            {
+                _logger = value;
+                UnitOfWorkFactory.Logger = value;
+            }
         }
 
         public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using Craft.Logging;
 
 namespace PR.Persistence.APIClient.DFOS
 {
@@ -18,6 +19,8 @@ namespace PR.Persistence.APIClient.DFOS
             _baseURL = settings["BaseURL"]?.Value;
         }
 
+        public ILogger Logger { get; set; }
+
         public void Initialize(
             bool versioned)
         {
@@ -30,6 +33,7 @@ namespace PR.Persistence.APIClient.DFOS
         public IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(
+                Logger,
                 _baseURL,
                 HistoricalTime,
                 DatabaseTime);

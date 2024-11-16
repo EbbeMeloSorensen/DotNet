@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using Craft.Logging;
 
 namespace PR.Persistence.APIClient
 {
@@ -10,6 +11,8 @@ namespace PR.Persistence.APIClient
         public DateTime? HistoricalTime { get; set; }
         public bool IncludeHistoricalObjects { get; set; }
         public DateTime? DatabaseTime { get; set; }
+
+        public ILogger Logger { get; set; }
 
         static UnitOfWorkFactory()
         {

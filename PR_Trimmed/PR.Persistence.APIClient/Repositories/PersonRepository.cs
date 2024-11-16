@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Craft.Logging;
 using Newtonsoft.Json;
 using Craft.Utils;
 using PR.Domain.Entities;
@@ -49,6 +50,8 @@ namespace PR.Persistence.APIClient.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public ILogger Logger { get; }
 
         public async Task<Person> Get(
             Guid id)

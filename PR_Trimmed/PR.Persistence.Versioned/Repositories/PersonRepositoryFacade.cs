@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Craft.Logging;
 using PR.Domain;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
@@ -28,8 +29,10 @@ namespace PR.Persistence.Versioned.Repositories
         private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
 
         public PersonRepositoryFacade(
+            ILogger logger,
             UnitOfWorkFacade unitOfWorkFacade)
         {
+            Logger = logger;
             _unitOfWorkFacade = unitOfWorkFacade;
         }
 
@@ -74,6 +77,8 @@ namespace PR.Persistence.Versioned.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public ILogger Logger { get; }
 
         public async Task<Person> Get(
             Guid id)
@@ -160,18 +165,24 @@ namespace PR.Persistence.Versioned.Repositories
 
             var people = (await UnitOfWork.People.Find(predicates)).ToList();
 
+            Logger?.WriteLine(LogMessageCategory.Information, $"PersonRepositoryFacade: Retrieved {people.Count} rows");
+
             if (!people.Any())
             {
                 return people;
             }
 
-            return people
+            var result = people
                 .GroupBy(p => p.ID)
                 .Select(g => g
                     .OrderBy(p => p.Start)
                     .LastOrDefault())
                 .Where(p => p != null)
                 .ToList();
+
+            Logger?.WriteLine(LogMessageCategory.Information, $"PersonRepositoryFacade: Retrieved {people.Count} objects");
+
+            return result;
         }
 
         public async Task<IEnumerable<Person>> Find(

@@ -1,7 +1,11 @@
-﻿namespace PR.Persistence.EntityFrameworkCore.InMemory
+﻿using Craft.Logging;
+
+namespace PR.Persistence.EntityFrameworkCore.InMemory
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
+        public ILogger Logger { get; set; }
+
         public void Initialize(
             bool versioned)
         {

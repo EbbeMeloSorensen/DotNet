@@ -1,4 +1,5 @@
 ﻿using System;
+using Craft.Logging;
 using PR.Persistence.Repositories;
 using PR.Persistence.Versioned.Repositories;
 
@@ -18,6 +19,7 @@ namespace PR.Persistence.Versioned
         public IPersonRepository People { get; }
 
         public UnitOfWorkFacade(
+            ILogger logger,
             IUnitOfWork unitOfWork,
             DateTime? historicalTime,
             DateTime? databaseTime,
@@ -28,7 +30,7 @@ namespace PR.Persistence.Versioned
             DatabaseTime = databaseTime;
             IncludeHistoricalObjects = includeHistoricalObjects;
 
-            People = new PersonRepositoryFacade(this);
+            People = new PersonRepositoryFacade(logger, this);
         }
 
         public void Clear()

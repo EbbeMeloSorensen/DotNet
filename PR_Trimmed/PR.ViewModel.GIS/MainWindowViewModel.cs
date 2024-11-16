@@ -28,7 +28,6 @@ namespace PR.ViewModel.GIS
             CreateGeospatialLocation
         }
 
-        private ILogger _logger;
         private readonly Application.Application _application;
         private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
@@ -237,6 +236,15 @@ namespace PR.ViewModel.GIS
             }
         }
 
+        public ILogger Logger
+        {
+            get => _application.Logger;
+            set
+            {
+                _application.Logger = value;
+            }
+        }
+
         public LogViewModel LogViewModel { get; private set; }
         public ObservingFacilityListViewModel ObservingFacilityListViewModel { get; private set; }
         public ObservingFacilitiesDetailsViewModel ObservingFacilitiesDetailsViewModel { get; private set; }
@@ -299,7 +307,7 @@ namespace PR.ViewModel.GIS
             _applicationDialogService = applicationDialogService;
 
             LogViewModel = new LogViewModel(200);
-            _logger = new ViewModelLogger(logger, LogViewModel);
+            Logger = new ViewModelLogger(logger, LogViewModel);
 
             _historicalChangeTimes = new List<DateTime>();
             _databaseWriteTimes = new List<DateTime>();
@@ -458,8 +466,8 @@ namespace PR.ViewModel.GIS
                 await AutoFindIfEnabled();
             };
 
-            InitializeLogViewModel(_logger);
-            InitializeObservingFacilityListViewModel(_logger, UnitOfWorkFactory, _applicationDialogService);
+            InitializeLogViewModel();
+            InitializeObservingFacilityListViewModel(UnitOfWorkFactory, _applicationDialogService);
             InitializeObservingFacilitiesDetailsViewModel(UnitOfWorkFactory, _applicationDialogService);
             InitializeMapViewModel();
             InitializeDatabaseWriteTimesViewModel();
@@ -490,7 +498,7 @@ namespace PR.ViewModel.GIS
 
             _timer.Start();
 
-            _logger?.WriteLine(LogMessageCategory.Information, "Done constructing MainWindowViewModel");
+            Logger?.WriteLine(LogMessageCategory.Information, "View Models: Startup complete");
         }
 
         public void Initialize(
@@ -755,19 +763,18 @@ namespace PR.ViewModel.GIS
             DisplayMessageInMap = false;
         }
 
-        private void InitializeLogViewModel(ILogger logger)
+        private void InitializeLogViewModel()
         {
             LogViewModel = new LogViewModel(200);
-            _logger = new ViewModelLogger(logger, LogViewModel);
+            Logger = new ViewModelLogger(Logger, LogViewModel);
         }
 
         private void InitializeObservingFacilityListViewModel(
-            ILogger logger,
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService)
         {
             ObservingFacilityListViewModel = new ObservingFacilityListViewModel(
-                logger,
+                Logger,
                 unitOfWorkFactory,
                 applicationDialogService,
                 _historicalTimeOfInterest,
@@ -892,7 +899,7 @@ namespace PR.ViewModel.GIS
                 40,
                 1,
                 XAxisMode.Cartesian,
-                _logger)
+                Logger)
             {
                 LockWorldWindowOnDynamicXValue = true,
                 ShowHorizontalGridLines = false,
@@ -964,7 +971,7 @@ namespace PR.ViewModel.GIS
                 40,
                 1,
                 XAxisMode.Cartesian,
-                _logger)
+                Logger)
             {
                 LockWorldWindowOnDynamicXValue = true,
                 ShowHorizontalGridLines = false,
@@ -1297,7 +1304,7 @@ namespace PR.ViewModel.GIS
         {
             try
             {
-                _logger?.WriteLine(LogMessageCategory.Debug, "Opening dialog for creating new observing facility");
+                Logger?.WriteLine(LogMessageCategory.Debug, "Opening dialog for creating new observing facility");
 
                 var dialogViewModel = new CreateObservingFacilityDialogViewModel(MapViewModel.MousePositionWorld.Object.Value);
 
@@ -1306,7 +1313,7 @@ namespace PR.ViewModel.GIS
                     return;
                 }
 
-                _logger?.WriteLine(LogMessageCategory.Debug, "Collecting input from dialog");
+                Logger?.WriteLine(LogMessageCategory.Debug, "Collecting input from dialog");
 
                 var from = new DateTime(
                     dialogViewModel.From.Year,
@@ -1317,7 +1324,7 @@ namespace PR.ViewModel.GIS
                     dialogViewModel.From.Second,
                     DateTimeKind.Utc);
 
-                _logger?.WriteLine(LogMessageCategory.Debug, $"    From: {from}");
+                Logger?.WriteLine(LogMessageCategory.Debug, $"    From: {from}");
 
                 var to = dialogViewModel.To.HasValue
                     ? dialogViewModel.To == DateTime.MaxValue
@@ -1332,49 +1339,14 @@ namespace PR.ViewModel.GIS
                             DateTimeKind.Utc)
                     : DateTime.MaxValue;
 
-                _logger?.WriteLine(LogMessageCategory.Debug, $"    From: {to}");
+                Logger?.WriteLine(LogMessageCategory.Debug, $"    From: {to}");
 
                 var latitude = dialogViewModel.Latitude;
                 var longitude = dialogViewModel.Longitude;
-
-                _logger?.WriteLine(LogMessageCategory.Debug, $"    Latitude: {latitude}");
-                _logger?.WriteLine(LogMessageCategory.Debug, $"    Longitude: {longitude}");
-
                 var now = DateTime.UtcNow;
-
-                _logger?.WriteLine(LogMessageCategory.Debug, $"    now: {now}");
-
-                _logger?.WriteLine(LogMessageCategory.Debug, "Instantiating new Observing Facility");
-
-                //// Bemærk, at vi sætter DateEstablished og DateClosed svarende til From og To for den ene lokation, som
-                //// den pågældende observing facility laves med
-                //var observingFacility = new ObservingFacility(
-                //    Guid.NewGuid(),
-                //    now)
-                //{
-                //    Name = dialogViewModel.Name,
-                //    DateEstablished = from,
-                //    DateClosed = to
-                //};
-
-                //_logger?.WriteLine(LogMessageCategory.Debug, "Instantiating new Point");
-
-                //var point = new Domain.Entities.WIGOS.GeospatialLocations.Point(Guid.NewGuid(), now)
-                //{
-                //    AbstractEnvironmentalMonitoringFacility = observingFacility,
-                //    AbstractEnvironmentalMonitoringFacilityObjectId = observingFacility.ObjectId,
-                //    From = from,
-                //    To = to,
-                //    Coordinate1 = latitude,
-                //    Coordinate2 = longitude,
-                //    CoordinateSystem = "WGS_84"
-                //};
 
                 var person = new Person
                 {
-                    //ID = new Guid("12345678-0000-0000-0000-000000000005"),
-                    //Created = DateTime.UtcNow,
-                    //Superseded = maxDate,
                     Start = from,
                     End = to,
                     FirstName = dialogViewModel.Name,
@@ -1382,15 +1354,13 @@ namespace PR.ViewModel.GIS
                     Longitude = longitude
                 };
 
-                _logger?.WriteLine(LogMessageCategory.Debug, "Trying to write to repository..");
-
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
                     await unitOfWork.People.Add(person);
                     unitOfWork.Complete();
                 }
 
-                _logger?.WriteLine(LogMessageCategory.Debug, "Done writing to repository..");
+                Logger?.WriteLine(LogMessageCategory.Debug, "Creating new Object");
 
                 if (!_historicalChangeTimes.Contains(person.Start))
                 {
@@ -1412,11 +1382,11 @@ namespace PR.ViewModel.GIS
                 _databaseWriteTimes.Add(now);
                 RefreshDatabaseTimeSeriesView();
 
-                _logger?.WriteLine(LogMessageCategory.Debug, "Done creating new observing facility");
+                Logger?.WriteLine(LogMessageCategory.Debug, "Created new object");
             }
             catch (Exception e)
             {
-                _logger?.WriteLine(LogMessageCategory.Error, $"Exception caught, Message: \"{e.Message}\"");
+                Logger?.WriteLine(LogMessageCategory.Error, $"Exception caught, Message: \"{e.Message}\"");
             }
         }
 

@@ -1,7 +1,11 @@
-﻿namespace PR.Persistence.EntityFrameworkCore.SqlServer
+﻿using Craft.Logging;
+
+namespace PR.Persistence.EntityFrameworkCore.SqlServer
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
+        public ILogger Logger { get; set; }
+
         public void Initialize(
             bool versioned)
         {

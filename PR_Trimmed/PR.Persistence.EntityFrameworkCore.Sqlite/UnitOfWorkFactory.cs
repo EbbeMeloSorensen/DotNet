@@ -1,7 +1,11 @@
-﻿namespace PR.Persistence.EntityFrameworkCore.Sqlite
+﻿using Craft.Logging;
+
+namespace PR.Persistence.EntityFrameworkCore.Sqlite
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
+        public ILogger Logger { get; set; }
+
         public void Initialize(
             bool versioned)
         {

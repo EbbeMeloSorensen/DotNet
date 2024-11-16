@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Craft.Logging;
 using PR.Domain.Entities;
 using PR.Domain.DFOS;
 using PR.Persistence.Repositories;
@@ -20,22 +21,25 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
     public class PersonRepository : IPersonRepository
     {
         private static DateTime _maxDate;
-        private string _baseURL;
 
         static PersonRepository()
         {
             _maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
         }
 
-        private string _token;
+        private string _baseURL;
+        private string _token; // Den her burde kunne undværes for DFOS APIet, som jo indtil videre kører uden authentification
         private DateTime? _historicalTime;
         private DateTime? _databaseTime;
+        private ILogger _logger;
 
         public PersonRepository(
+            ILogger logger,
             string baseURL,
             DateTime? historicalTime,
             DateTime? databaseTime)
         {
+            _logger = logger;
             _baseURL = baseURL;
             _historicalTime = historicalTime;
             _databaseTime = databaseTime;
@@ -57,6 +61,8 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public ILogger Logger { get; }
 
         public async Task<Person> Get(
             Guid id)
