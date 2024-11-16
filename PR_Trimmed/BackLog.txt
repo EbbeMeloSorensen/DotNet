@@ -23,6 +23,7 @@ Done:
 
 In progress:
 * Der er lidt rod med mht hvordan statusfilteret virker
+* I DFOS API'et skal der være mulighed for at ignorere dem, hvor status er "nedlagt"
 * Lidt flere karakterer på banen
 * For alle 3 plugins skal man kunne se detaljer i detaljeviewet
   - Man skal kunne se de 2 lokationer for Darth Vader, når man trykker på detalje
