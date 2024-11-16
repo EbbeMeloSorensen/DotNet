@@ -31,7 +31,6 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         private string _token; // Den her burde kunne undværes for DFOS APIet, som jo indtil videre kører uden authentification
         private DateTime? _historicalTime;
         private DateTime? _databaseTime;
-        private ILogger _logger;
 
         public PersonRepository(
             ILogger logger,
@@ -39,7 +38,7 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             DateTime? historicalTime,
             DateTime? databaseTime)
         {
-            _logger = logger;
+            Logger = logger;
             _baseURL = baseURL;
             _historicalTime = historicalTime;
             _databaseTime = databaseTime;
@@ -215,6 +214,8 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
                     url += "?";
                     url += arguments.Aggregate((c, n) => $"{c}&{n}");
                 }
+
+                Logger?.WriteLine(LogMessageCategory.Information, url);
 
                 using var response = await ApiHelper.ApiClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();

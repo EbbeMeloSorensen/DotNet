@@ -6,6 +6,7 @@ using PR.Domain.Entities;
 using PR.Persistence;
 using PR.Persistence.Versioned;
 using PR.UI.Console.Verbs;
+using System;
 
 namespace PR.UI.Console
 {
@@ -36,16 +37,23 @@ namespace PR.UI.Console
             options.HistoricalTime.TryParsingAsDateTime(out var historicalTime);
             options.DatabaseTime.TryParsingAsDateTime(out var databaseTime);
 
-            await GetApplication().ListPeople(
-                historicalTime, 
-                databaseTime,
-                options.IncludeHistoricalObjects,
-                (progress, nameOfSubtask) =>
+            try
             {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
+                await GetApplication().ListPeople(
+                    historicalTime,
+                    databaseTime,
+                    options.IncludeHistoricalObjects,
+                    (progress, nameOfSubtask) =>
+                    {
+                        System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                        System.Console.Write($"{progress:F2} %");
+                        return false;
+                    });
+            }
+            catch (HttpRequestException exception)
+            {
+                System.Console.Write($"\nError occured: \"{exception.Message}\"\n");
+            }
         }
 
         public static async Task GetPersonDetails(

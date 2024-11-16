@@ -40,6 +40,7 @@ namespace PR.Application
             UnitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _logger = logger;
+            UnitOfWorkFactory.Logger = logger;
         }
 
         public async Task MakeBreakfast(
@@ -222,8 +223,8 @@ namespace PR.Application
         {
             await Task.Run(async () =>
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving people..");
-                progressCallback?.Invoke(0.0, "Retrieving people");
+                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving objects..");
+                progressCallback?.Invoke(0.0, "Retrieving objects");
 
                 if (databaseTime.HasValue && UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
                 {
