@@ -13,5 +13,8 @@ namespace PR.UI.Console.Verbs
 
         [Option('i', "includehistoricalobjects", Required = false, HelpText = "Include Historical Objects", Default = false)]
         public bool IncludeHistoricalObjects { get; set; }
+
+        [Option('f', "writetofile", Required = false, HelpText = "Write to file instead of console", Default = false)]
+        public bool WriteToFile { get; set; }
     }
 }

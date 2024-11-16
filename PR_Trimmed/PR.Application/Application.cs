@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -219,12 +220,30 @@ namespace PR.Application
             DateTime? timeOfInterest,
             DateTime? databaseTime,
             bool includeHistoricalPeople,
+            bool writeToFile,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(async () =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Retrieving objects..");
                 progressCallback?.Invoke(0.0, "Retrieving objects");
+
+                var lines = new List<string>();
+
+                if (!writeToFile)
+                {
+                    lines.Add("");
+                }
+
+                if (timeOfInterest.HasValue)
+                {
+                    lines.Add($" Historical Time: {timeOfInterest}");
+                }
+
+                if (databaseTime.HasValue)
+                {
+                    lines.Add($"   Database Time: {databaseTime}");
+                }
 
                 if (databaseTime.HasValue && UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
                 {
@@ -247,16 +266,9 @@ namespace PR.Application
 
                 progressCallback?.Invoke(100, "");
 
-                Console.WriteLine();
-
-                if (databaseTime.HasValue)
+                lines.AddRange(people.Select(p =>
                 {
-                    Console.WriteLine($"Database Time: {databaseTime}");
-                }
-
-                people.ToList().ForEach(p =>
-                {
-                    var sb = new StringBuilder($"  {p.ID}: {p.FirstName}");
+                    var sb = new StringBuilder($"{p.ID}: {p.FirstName}");
 
                     if (!string.IsNullOrEmpty(p.Surname))
                     {
@@ -265,7 +277,7 @@ namespace PR.Application
 
                     if (p.Latitude.HasValue && p.Longitude.HasValue)
                     {
-                        sb.Append($" ({p.Latitude}, {p.Longitude})");
+                        //sb.Append($" ({p.Latitude}, {p.Longitude})");
                     }
 
                     if (timeOfInterest.HasValue && p.End < timeOfInterest)
@@ -273,8 +285,22 @@ namespace PR.Application
                         sb.Append(" (historical)");
                     }
 
-                    Console.WriteLine(sb.ToString());
-                });
+                    return sb.ToString();
+                }).ToList());
+
+                if (writeToFile)
+                {
+                    File.WriteAllLines("output.txt", lines);
+                }
+                else
+                {
+                    Console.WriteLine();
+
+                    foreach (var line in lines)
+                    {
+                        Console.WriteLine(line);
+                    }
+                }
             });
         }
 

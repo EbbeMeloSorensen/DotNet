@@ -43,6 +43,7 @@ namespace PR.UI.Console
                     historicalTime,
                     databaseTime,
                     options.IncludeHistoricalObjects,
+                    options.WriteToFile,
                     (progress, nameOfSubtask) =>
                     {
                         System.Console.SetCursorPosition(10, System.Console.CursorTop);
