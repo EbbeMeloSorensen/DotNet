@@ -9,6 +9,7 @@ namespace PR.Persistence.APIClient.DFOS
         private static string _baseURL;
 
         public DateTime? HistoricalTime { get; set; }
+        public bool IncludeCurrentObjects { get; set; }
         public bool IncludeHistoricalObjects { get; set; }
         public DateTime? DatabaseTime { get; set; }
 

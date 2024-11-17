@@ -453,6 +453,11 @@ namespace PR.ViewModel.GIS
 
             _showActiveStations.PropertyChanged += async (s, e) =>
             {
+                if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+                {
+                    unitOfWorkFactoryHistorical.IncludeCurrentObjects = _showActiveStations.Object;
+                }
+
                 await AutoFindIfEnabled();
             };
 

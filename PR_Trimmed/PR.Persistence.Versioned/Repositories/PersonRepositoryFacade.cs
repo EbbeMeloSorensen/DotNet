@@ -24,6 +24,7 @@ namespace PR.Persistence.Versioned.Repositories
         private IUnitOfWork UnitOfWork => _unitOfWorkFacade.UnitOfWork;
         private DateTime? DatabaseTime => _unitOfWorkFacade.DatabaseTime;
         private DateTime? HistoricalTime => _unitOfWorkFacade.HistoricalTime;
+        private bool IncludeCurrentObjects => _unitOfWorkFacade.IncludeCurrentObjects;
         private bool IncludeHistoricalObjects => _unitOfWorkFacade.IncludeHistoricalObjects;
 
         private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
@@ -290,11 +291,20 @@ namespace PR.Persistence.Versioned.Repositories
 
             if (IncludeHistoricalObjects)
             {
-                // Bemærk, at vi med denne får alle de virkningstidsintervaller med, der var historiske på pågældende tidspunkt
-                predicates.Add(p => p.Start <= historicalTime);
+                if (IncludeCurrentObjects)
+                {
+                    // Historical AND current objects
+                    predicates.Add(p => p.Start <= historicalTime);
+                }
+                else
+                {
+                    // ONLY historical objects
+                    predicates.Add(p => p.End <= historicalTime);
+                }
             }
             else
             {
+                // ONLY current objects
                 predicates.Add(p => p.Start <= historicalTime && p.End > historicalTime);
             }
         }

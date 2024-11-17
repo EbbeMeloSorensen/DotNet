@@ -12,6 +12,7 @@ namespace PR.Persistence.Versioned
         internal IUnitOfWork UnitOfWork { get; }
         internal DateTime? DatabaseTime { get; }
         internal DateTime? HistoricalTime { get; }
+        internal bool IncludeCurrentObjects { get; }
         internal bool IncludeHistoricalObjects { get; }
 
         internal DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;

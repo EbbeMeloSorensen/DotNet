@@ -9,6 +9,7 @@ namespace PR.Persistence.Versioned
 
         public DateTime? DatabaseTime { get; set; }
         public DateTime? HistoricalTime { get; set; }
+        public bool IncludeCurrentObjects { get; set; }
         public bool IncludeHistoricalObjects { get; set; }
 
         public ILogger Logger { get; set; }

@@ -22,7 +22,7 @@ Done:
   - Når man ændrer på database time
 
 In progress:
-* Der er lidt rod med mht hvordan statusfilteret virker
+* Der er lidt rod med mht hvordan statusfilteret virker - man skal f.eks. gerne kunne nøjes med de nedlagte
 * I DFOS API'et skal der være mulighed for at ignorere dem, hvor status er "nedlagt"
 * Lidt flere karakterer på banen
 * For alle 3 plugins skal man kunne se detaljer i detaljeviewet
