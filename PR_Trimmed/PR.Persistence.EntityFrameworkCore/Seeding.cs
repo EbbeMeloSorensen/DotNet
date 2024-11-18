@@ -125,8 +125,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 Start = chewbaccaIsIntroduced,
                 End = maxDate,
                 FirstName = "Chewie",
-                Latitude = 10,
-                Longitude = 55
+                Latitude = 9,
+                Longitude = 56
             };
 
             var chewbacca_0_1 = new Person
@@ -137,8 +137,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 Start = chewbaccaIsIntroduced,
                 End = maxDate,
                 FirstName = "Chewbacca",
-                Latitude = 10,
-                Longitude = 55
+                Latitude = 9,
+                Longitude = 56
             };
 
             var rey_0_0 = new Person
@@ -149,7 +149,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Start = reyIsIntroduced,
                 End = reyBecomesReySkywalker,
                 FirstName = "Rey",
-                Latitude = 12,
+                Latitude = 10,
                 Longitude = 56
             };
 
@@ -161,7 +161,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Start = reyBecomesReySkywalker,
                 End = maxDate,
                 FirstName = "Rey Skywalker",
-                Latitude = 12,
+                Latitude = 10,
                 Longitude = 56
             };
 

@@ -328,7 +328,7 @@ namespace PR.ViewModel.GIS
                 Object = new Tuple<DateTime?, DateTime?>(null, null)
             };
 
-            DisplayLog = true;
+            DisplayLog = false;
             //DisplayLog = true; // Set to true when diagnosing application behaviour
 
             _historicalTimeOfInterest.PropertyChanged += async (s, e) =>
@@ -421,12 +421,12 @@ namespace PR.ViewModel.GIS
 
             _showActiveStations = new ObservableObject<bool>
             {
-                Object = false
+                Object = true
             };
 
             _showClosedStations = new ObservableObject<bool>
             {
-                Object = true
+                Object = false
             };
 
             _displayHistoricalTimeControls = new ObservableObject<bool>
