@@ -167,6 +167,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             people = new List<Person>
             {
+                padme_0_0,
                 quigon_0_0,
                 obiWan_0_0,
                 anakin_0_0,

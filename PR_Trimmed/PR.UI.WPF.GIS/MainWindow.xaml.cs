@@ -40,8 +40,7 @@ namespace PR.UI.WPF.GIS
             // "opdaterer UI elementer fra en anden tråd end main tråd"
             Dispatcher.Invoke(async () =>
             {
-                await ViewModel.InitializeDatabaseTimestampsOfInterest();
-                await ViewModel.InitializeHistoricalTimestampsOfInterest();
+                await ViewModel.Initialize();
                 await ViewModel.AutoFindIfEnabled();
             });
         }

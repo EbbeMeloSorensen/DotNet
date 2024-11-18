@@ -335,11 +335,13 @@ namespace PR.ViewModel.GIS
 
             UpdateSorting();
 
+            var time = _historicalTimeOfInterest.Object.HasValue
+                ? _historicalTimeOfInterest.Object.Value
+                : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
             ObservingFacilityListItemViewModels = new ObservableCollection<ObservingFacilityListItemViewModel>(
-                ObservingFacilityDataExtracts.Objects.Select(_ => new ObservingFacilityListItemViewModel()
-                {
-                    ObservingFacility = _.ObservingFacility
-                }));
+                ObservingFacilityDataExtracts.Objects.Select(
+                    _ => new ObservingFacilityListItemViewModel(_.ObservingFacility, _.ObservingFacility.DateClosed < time)));
 
             // Make sure the ones that were selected before are selected again
             SelectedObservingFacilityListItemViewModels.Clear();

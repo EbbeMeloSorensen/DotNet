@@ -23,6 +23,11 @@ Done:
 
 In progress:
 * Der er lidt rod med mht hvordan statusfilteret virker - man skal f.eks. gerne kunne nøjes med de nedlagte
+  - der er f.eks. en bug deri at Rey (altså ikke Rey Skywalker) kommer med, når man beder om de døde. Rey er jo altså ikke død -
+    hun har blot ændret navn til Rey Skywalker.. Hvorfor sker det?
+    -> Du siger, at du KUN vil have historiske objekter med, og det gør så, at du som de "historiske" predicates anfører,
+       at du kun vil have varianter (bjælker), hvor End ligger før historisk tid. Det gælder for Rey, men jo altså ikke for Rey Skywalker.
+    Mon ikke løsningen er, at de skal have alle 
 * I DFOS API'et skal der være mulighed for at ignorere dem, hvor status er "nedlagt"
 * Lidt flere karakterer på banen
 * For alle 3 plugins skal man kunne se detaljer i detaljeviewet

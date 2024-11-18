@@ -421,12 +421,12 @@ namespace PR.ViewModel.GIS
 
             _showActiveStations = new ObservableObject<bool>
             {
-                Object = true
+                Object = false
             };
 
             _showClosedStations = new ObservableObject<bool>
             {
-                Object = false
+                Object = true
             };
 
             _displayHistoricalTimeControls = new ObservableObject<bool>
@@ -519,6 +519,7 @@ namespace PR.ViewModel.GIS
 
             if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
             {
+                unitOfWorkFactoryHistorical.IncludeCurrentObjects = _showActiveStations.Object;
                 unitOfWorkFactoryHistorical.IncludeHistoricalObjects = _showClosedStations.Object;
             }
         }
@@ -1492,14 +1493,20 @@ namespace PR.ViewModel.GIS
             //RefreshDatabaseTimeSeriesView();
         }
 
-        public async Task InitializeDatabaseTimestampsOfInterest()
+        public async Task Initialize()
+        {
+            await InitializeDatabaseTimestampsOfInterest();
+            await InitializeHistoricalTimestampsOfInterest();
+        }
+
+        private async Task InitializeDatabaseTimestampsOfInterest()
         {
             try
             {
-                //using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
 
-                //_databaseWriteTimes = (await unitOfWork.People.GetAllDatabaseWriteTimes()).ToList();
-                //RefreshDatabaseTimeSeriesView();
+                _databaseWriteTimes = (await unitOfWork.People.GetAllDatabaseWriteTimes()).ToList();
+                RefreshDatabaseTimeSeriesView();
             }
             catch (InvalidOperationException ex)
             {
@@ -1508,14 +1515,14 @@ namespace PR.ViewModel.GIS
             }
         }
 
-        public async Task InitializeHistoricalTimestampsOfInterest()
+        private async Task InitializeHistoricalTimestampsOfInterest()
         {
             try
             {
-                //using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
 
-                //_historicalChangeTimes = (await unitOfWork.People.GetAllValidTimeIntervalExtrema()).ToList(); ;
-                //RefreshHistoricalTimeSeriesView();
+                _historicalChangeTimes = (await unitOfWork.People.GetAllValidTimeIntervalExtrema()).ToList(); ;
+                RefreshHistoricalTimeSeriesView();
             }
             catch (InvalidOperationException ex)
             {

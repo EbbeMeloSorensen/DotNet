@@ -24,11 +24,13 @@ namespace PR.Persistence.Versioned
             IUnitOfWork unitOfWork,
             DateTime? historicalTime,
             DateTime? databaseTime,
+            bool includeCurrentObjects,
             bool includeHistoricalObjects)
         {
             UnitOfWork = unitOfWork;
             HistoricalTime = historicalTime;
             DatabaseTime = databaseTime;
+            IncludeCurrentObjects = includeCurrentObjects;
             IncludeHistoricalObjects = includeHistoricalObjects;
 
             People = new PersonRepositoryFacade(logger, this);

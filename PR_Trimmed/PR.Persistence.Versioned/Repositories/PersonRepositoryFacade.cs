@@ -173,6 +173,9 @@ namespace PR.Persistence.Versioned.Repositories
                 return people;
             }
 
+            // Med denne forsvinder Rey og Anakin, dvs tidligere varianter.
+            // Det er fint, men hvis nu vi har sat filteret til at vi kun skal have levende eller kun døde,
+            // så skal vi altså filtrere det endnu en gang
             var result = people
                 .GroupBy(p => p.ID)
                 .Select(g => g
@@ -180,6 +183,15 @@ namespace PR.Persistence.Versioned.Repositories
                     .LastOrDefault())
                 .Where(p => p != null)
                 .ToList();
+
+            var historicalTime = HistoricalTime.HasValue
+                ? HistoricalTime.Value
+                : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+            if (!IncludeCurrentObjects)
+            {
+                result = result.Where(_ => _.End < historicalTime).ToList();
+            }
 
             Logger?.WriteLine(LogMessageCategory.Information, $"PersonRepositoryFacade: Retrieved {people.Count} objects");
 
@@ -291,21 +303,28 @@ namespace PR.Persistence.Versioned.Repositories
 
             if (IncludeHistoricalObjects)
             {
-                if (IncludeCurrentObjects)
-                {
-                    // Historical AND current objects
-                    predicates.Add(p => p.Start <= historicalTime);
-                }
-                else
-                {
-                    // ONLY historical objects
-                    predicates.Add(p => p.End <= historicalTime);
-                }
+                predicates.Add(p => p.Start <= historicalTime);
+
+                // Doesn't work
+                //if (IncludeCurrentObjects)
+                //{
+                //    // Historical AND current objects
+                //    predicates.Add(p => p.Start <= historicalTime);
+                //}
+                //else
+                //{
+                //    // ONLY historical objects
+                //    predicates.Add(p => p.End <= historicalTime);
+                //}
             }
-            else
+            else if (IncludeCurrentObjects)
             {
                 // ONLY current objects
                 predicates.Add(p => p.Start <= historicalTime && p.End > historicalTime);
+            }
+            else
+            {
+                throw new InvalidOperationException("Either Include current or include historical should be true");
             }
         }
 

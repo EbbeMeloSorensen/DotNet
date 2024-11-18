@@ -34,6 +34,7 @@ namespace PR.Persistence.Versioned
                 _unitOfWorkFactory.GenerateUnitOfWork(),
                 HistoricalTime,
                 DatabaseTime,
+                IncludeCurrentObjects,
                 IncludeHistoricalObjects);
         }
 
