@@ -179,40 +179,50 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
 
             var people = new List<Person>();
 
+            var useHRefFromResponse = false;
             int? pageSize = 5;
             var morePages = true;
             Guid? offset = null;
+            string href = null;
+            string url = null;
 
             do
             {
-                var arguments = new List<string>();
-
-                if (_historicalTime.HasValue)
+                if (useHRefFromResponse && !string.IsNullOrEmpty(href))
                 {
-                    arguments.Add($"datetime={_historicalTime.Value.AsRFC3339(false)}");
+                    url = href;
                 }
-
-                if (_databaseTime.HasValue)
+                else
                 {
-                    arguments.Add($"revision-time={_databaseTime.Value.AsRFC3339(false)}");
-                }
+                    var arguments = new List<string>();
 
-                if (pageSize.HasValue)
-                {
-                    arguments.Add($"limit={pageSize.Value}");
-                }
+                    if (_historicalTime.HasValue)
+                    {
+                        arguments.Add($"datetime={_historicalTime.Value.AsRFC3339(false)}");
+                    }
 
-                if (offset.HasValue)
-                {
-                    arguments.Add($"offset={offset.Value.ToString()}");
-                }
+                    if (_databaseTime.HasValue)
+                    {
+                        arguments.Add($"revision-time={_databaseTime.Value.AsRFC3339(false)}");
+                    }
 
-                var url = startOfURL;
+                    if (pageSize.HasValue)
+                    {
+                        arguments.Add($"limit={pageSize.Value}");
+                    }
 
-                if (arguments.Any())
-                {
-                    url += "?";
-                    url += arguments.Aggregate((c, n) => $"{c}&{n}");
+                    if (offset.HasValue)
+                    {
+                        arguments.Add($"offset={offset.Value.ToString()}");
+                    }
+
+                    url = startOfURL;
+
+                    if (arguments.Any())
+                    {
+                        url += "?";
+                        url += arguments.Aggregate((c, n) => $"{c}&{n}");
+                    }
                 }
 
                 Logger?.WriteLine(LogMessageCategory.Information, url);
@@ -285,9 +295,10 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
 
                 if (nextLink != null)
                 {
-                    var href = nextLink.HRef; // Vi behøver ikke bruge denne
+                    href = nextLink.HRef; // Ifølge Lars behøver vi ikke bruge denne
 
-                    offset = dfosResult.Features.Max(_ => _.Id);
+                    //offset = dfosResult.Features.Max(_ => _.Id); // Dette er Lars' anbefalede metode
+                    offset = dfosResult.Features.Last().Id; // Dette svarer til at bruge HRef
                 }
                 else
                 {

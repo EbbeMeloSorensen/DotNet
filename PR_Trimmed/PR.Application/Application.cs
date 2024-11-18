@@ -266,6 +266,8 @@ namespace PR.Application
 
                 progressCallback?.Invoke(100, "");
 
+                lines.Add($"{people.Count} objects retrieved");
+
                 lines.AddRange(people.Select(p =>
                 {
                     var sb = new StringBuilder($"{p.ID}: {p.FirstName}");
