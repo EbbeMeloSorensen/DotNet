@@ -219,6 +219,7 @@ namespace PR.Application
         public async Task ListPeople(
             DateTime? timeOfInterest,
             DateTime? databaseTime,
+            bool excludeCurrentPeople,
             bool includeHistoricalPeople,
             bool writeToFile,
             ProgressCallback progressCallback = null)
@@ -252,6 +253,7 @@ namespace PR.Application
 
                 if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
                 {
+                    unitOfWorkFactoryHistorical.IncludeCurrentObjects = !excludeCurrentPeople;
                     unitOfWorkFactoryHistorical.IncludeHistoricalObjects = includeHistoricalPeople;
                     timeOfInterest ??= DateTime.UtcNow;
                     unitOfWorkFactoryHistorical.HistoricalTime = timeOfInterest;

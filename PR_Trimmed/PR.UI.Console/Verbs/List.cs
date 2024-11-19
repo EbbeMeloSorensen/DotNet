@@ -11,6 +11,9 @@ namespace PR.UI.Console.Verbs
         [Option('d', "databasetime", Required = false, HelpText = "Database Time", Default = "")]
         public string DatabaseTime { get; set; }
 
+        [Option('x', "excludecurrentobjects", Required = false, HelpText = "Exclude Current Objects", Default = false)]
+        public bool ExcludeCurrentObjects { get; set; }
+
         [Option('i', "includehistoricalobjects", Required = false, HelpText = "Include Historical Objects", Default = false)]
         public bool IncludeHistoricalObjects { get; set; }
 

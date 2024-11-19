@@ -42,6 +42,7 @@ namespace PR.UI.Console
                 await GetApplication().ListPeople(
                     historicalTime,
                     databaseTime,
+                    options.ExcludeCurrentObjects,
                     options.IncludeHistoricalObjects,
                     options.WriteToFile,
                     (progress, nameOfSubtask) =>
