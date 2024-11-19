@@ -10,5 +10,8 @@ namespace PR.UI.Console.Verbs
 
         [Option('d', "databasetime", Required = false, HelpText = "Database Time", Default = "")]
         public string DatabaseTime { get; set; }
+
+        [Option('f', "writetofile", Required = false, HelpText = "Write to file instead of console", Default = false)]
+        public bool WriteToFile { get; set; }
     }
 }

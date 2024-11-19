@@ -68,7 +68,11 @@ namespace PR.UI.Console
 
             try
             {
-                await GetApplication().GetPersonDetails(id, databaseTime, (progress, nameOfSubtask) =>
+                await GetApplication().GetPersonDetails(
+                    id, 
+                    databaseTime,
+                    options.WriteToFile,
+                    (progress, nameOfSubtask) =>
                 {
                     System.Console.SetCursorPosition(10, System.Console.CursorTop);
                     System.Console.Write($"{progress:F2} %");

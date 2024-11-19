@@ -112,7 +112,7 @@ namespace PR.Persistence.Versioned.Repositories
 
             AddVersionPredicates(predicates, DatabaseTime);
 
-            return await UnitOfWork.People.Find(predicates);
+            return (await UnitOfWork.People.Find(predicates)).OrderBy(_ => _.Start);
         }
 
         public async Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()

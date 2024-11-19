@@ -119,6 +119,7 @@ namespace PR.Application
         public async Task GetPersonDetails(
             Guid id,
             DateTime? databaseTime,
+            bool writeToFile,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(async () =>
@@ -131,22 +132,55 @@ namespace PR.Application
                     unitOfWorkFactoryVersioned.DatabaseTime = databaseTime.Value;
                 }
 
-                Person person = null;
+                List<Person> personVariants = null;
+
                 using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
                 {
-                    person = await unitOfWork.People.Get(id);
+                    //person = await unitOfWork.People.Get(id);
+                    personVariants = (await unitOfWork.People.GetAllVariants(id)).ToList();
                 }
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed getting Person details");
 
-                Console.WriteLine();
+                var lines = new List<string>();
+
+                if (!writeToFile)
+                {
+                    lines.Add("");
+                }
 
                 if (databaseTime.HasValue)
                 {
-                    Console.WriteLine($"Database Time: {databaseTime}");
+                    lines.Add($"   Database Time: {databaseTime}");
                 }
 
+                lines.Add($"History of person with ID={id}:");
+                lines.Add("");
+
+                lines.AddRange(personVariants.Select(_ => 
+                {
+                    var sb = new StringBuilder($"{_.Start.AsDateString()}->");
+                    sb.Append($"{_.End.AsDateString()}: ");
+                    sb.Append(_.FirstName);
+                    return sb.ToString();
+                }));
+
+                if (writeToFile)
+                {
+                    File.WriteAllLines("output.txt", lines);
+                }
+                else
+                {
+                    Console.WriteLine();
+
+                    foreach (var line in lines)
+                    {
+                        Console.WriteLine(line);
+                    }
+                }
+
+                /*
                 var surname = string.IsNullOrEmpty(person.Surname) ? "-" : person.Surname;
                 var nickname = string.IsNullOrEmpty(person.Nickname) ? "-" :person.Nickname;
                 var address = string.IsNullOrEmpty(person.Address) ? "-" : person.Address;
@@ -172,6 +206,7 @@ namespace PR.Application
                 Console.WriteLine($"  Description: {description}");
                 Console.WriteLine($"  Latitude:    {latitude}");
                 Console.WriteLine($"  Longitude:   {longitude}");
+                */
             });
         }
 
