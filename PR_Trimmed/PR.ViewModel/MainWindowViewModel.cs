@@ -124,6 +124,25 @@ namespace PR.ViewModel
             _logger.WriteLine(LogMessageCategory.Information, "Application started");
         }
 
+        public void Initialize(
+            bool versioned,
+            bool reseeding)
+        {
+            UnitOfWorkFactory.Initialize(versioned);
+
+            if (reseeding)
+            {
+                UnitOfWorkFactory.Reseed();
+            }
+
+            if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+            {
+                unitOfWorkFactoryHistorical.IncludeCurrentObjects = true;
+                unitOfWorkFactoryHistorical.IncludeHistoricalObjects = false;
+            }
+        }
+
+
         private void PeoplePropertiesViewModel_PeopleUpdated(
             object? sender, 
             PeopleEventArgs e)

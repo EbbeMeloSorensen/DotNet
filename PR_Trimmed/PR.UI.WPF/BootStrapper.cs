@@ -2,6 +2,7 @@
 using PR.Persistence.Versioned;
 using StructureMap;
 using PR.ViewModel;
+using PR.Persistence;
 
 namespace PR.UI.WPF
 {
@@ -22,27 +23,18 @@ namespace PR.UI.WPF
 
                     if (versioning == "enabled")
                     {
-                        // Wrap the UnitOfWorkFactory, so we get versioning
-                        mainWindowViewModel.UnitOfWorkFactory =
-                            new UnitOfWorkFactoryFacade(mainWindowViewModel.UnitOfWorkFactory);
+                        // Den skal ikke wrappes, hvis det er en af dem, der repræsenterer et API
+                        if (mainWindowViewModel.UnitOfWorkFactory is not IUnitOfWorkFactoryVersioned)
+                        {
+                            // Wrap the UnitOfWorkFactory, so we get versioning and history
+                            mainWindowViewModel.UnitOfWorkFactory =
+                                new UnitOfWorkFactoryFacade(mainWindowViewModel.UnitOfWorkFactory);
+                        }
                     }
-                    else if (versioning != "disabled")
-                    {
-                        throw new ConfigurationException(
-                            "Invalid value for versioning in config file (must be \"enabled\" or \"disabled\")");
-                    }
-                        
-                    mainWindowViewModel.UnitOfWorkFactory.Initialize(versioning == "enabled");
 
-                    if (reseeding == "enabled")
-                    {
-                        mainWindowViewModel.UnitOfWorkFactory.Reseed();
-                    }
-                    else if (reseeding != "disabled")
-                    {
-                        throw new ConfigurationException(
-                            "Invalid value for reseeding in config file (must be \"enabled\" or \"disabled\")");
-                    }
+                    mainWindowViewModel.Initialize(
+                        versioning == "enabled",
+                        reseeding == "enabled");
 
                     return mainWindowViewModel;
                 }

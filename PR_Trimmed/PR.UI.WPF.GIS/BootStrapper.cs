@@ -13,6 +13,7 @@ namespace PR.UI.WPF.GIS
         {
             get
             {
+                // Det her burde man kunne genbruge - det er det samme som i bootstrapperen for det andet WPF proj
                 try
                 {
                     var mainWindowViewModel = Container.For<MainWindowViewModelRegistry>().GetInstance<MainWindowViewModel>();

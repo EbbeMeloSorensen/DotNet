@@ -237,6 +237,8 @@ namespace PR.Persistence.Versioned.Repositories
             AddVersionPredicates(predicates, DatabaseTime);
             AddHistoryPredicates(predicates, HistoricalTime);
 
+            var temp = (await UnitOfWork.People.Find(predicates)).ToList();
+
             return await UnitOfWork.People.Find(predicates);
         }
 
