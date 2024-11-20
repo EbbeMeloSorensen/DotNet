@@ -27,6 +27,7 @@ Done:
        at du kun vil have varianter (bjælker), hvor End ligger før historisk tid. Det gælder for Rey, men jo altså ikke for Rey Skywalker.
 
 In progress:
+* Få lige de historieks linier på plads igen. Knap så mange denne gang måske.
 * I DFOS API'et skal der være mulighed for at ignorere dem, hvor status er "nedlagt"
 * Lidt flere karakterer på banen
   - Leia Organa
@@ -40,6 +41,15 @@ Todo:
 * Man skal også kunne selecte observing facilities i kortet
 * Man skal kunne se linier i historical view over hvor der er sket noget
 
+Løst of fast:
+Hold lige fast i, at det, du har gjort indtil videre, det er at lave et specielt plugin for dit PERSON repo,
+så det altså bare er "personer", som man henter op. I den GUI, som du har pløffet on top, der opereres godt nok
+med observing facilities, men det er sådan set bare fordi du transformerer det til det for at kunne genbruge nogle
+af de gamle user controls.
+Det er stadig meningsfyldt, fordi du har haft lejlighed til at massere de dele af DFOS APIet, som vedrører retrospektion,
+men hvad er vejen frem? Det bør vel i vidt omfang være at lave version 2 af din prebsi-applikation. Det andet er i vidt 
+omfang mission accomplished... men det kunne altså være fint, hvis du havde mulighed for at inspicere de ændringer,
+der foretages pt...
 
 Løst of fast:
 * Find skal virke for disse cases (der skal være ækvivalens mellem repo og API):
