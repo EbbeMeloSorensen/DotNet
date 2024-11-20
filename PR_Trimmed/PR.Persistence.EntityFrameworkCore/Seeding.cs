@@ -113,7 +113,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Start = anakinBecomesDarthVader,
                 End = darthVaderDies,
                 FirstName = "Darth Vader",
-                Latitude = 11,
+                Latitude = 10.2,
                 Longitude = 56
             };
 
@@ -161,7 +161,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Start = reyBecomesReySkywalker,
                 End = maxDate,
                 FirstName = "Rey Skywalker",
-                Latitude = 10,
+                Latitude = 10.2,
                 Longitude = 56
             };
 

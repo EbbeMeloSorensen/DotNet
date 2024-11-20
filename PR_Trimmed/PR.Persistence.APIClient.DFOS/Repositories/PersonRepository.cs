@@ -119,11 +119,14 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             {
                 foreach (var feature in dfosResult.Features)
                 {
-                    foreach (var kvp in feature.Properties.Details)
+                    var timeStampsForFeature = new List<DateTime>();
+
+                    foreach (var detail in feature.Properties.Details)
                     {
+                        var startTimeAsText = detail.Key.Split(",")[0];
+                        var endTimeAsText = detail.Key.Split(",")[1];
+
                         var pattern = @"(\s+|\(|\)|\[|\])";
-                        var startTimeAsText = kvp.Key.Split(",")[0];
-                        var endTimeAsText = kvp.Key.Split(",")[1];
                         startTimeAsText = Regex.Replace(startTimeAsText, pattern, "");
                         endTimeAsText = Regex.Replace(endTimeAsText, pattern, "");
 
@@ -142,8 +145,18 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
                             : DateTime.ParseExact(endTimeAsText, formats,
                                 CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
 
-                        timeStamps.Add(startTime);
-                        timeStamps.Add(endTime);
+                        timeStampsForFeature.Add(startTime);
+                        timeStampsForFeature.Add(endTime);
+
+                        timeStampsForFeature = timeStampsForFeature.Distinct().OrderBy(_ => _).ToList();
+
+                        if (timeStampsForFeature.Last().Year == 9999)
+                        {
+                            timeStampsForFeature = timeStampsForFeature.SkipLast(1).ToList();
+                        }
+
+                        timeStamps.Add(timeStampsForFeature.First());
+                        timeStamps.Add(timeStampsForFeature.Last());
                     }
                 }
             }
@@ -154,10 +167,6 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
 
             timeStamps = timeStamps.Distinct().OrderBy(_ => _).ToList();
 
-            if (timeStamps.Any() && timeStamps.Last().Year == 9999)
-            {
-                return timeStamps.SkipLast(1);
-            }
 
             return timeStamps;
         }

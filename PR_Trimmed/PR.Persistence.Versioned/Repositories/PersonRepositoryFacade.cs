@@ -121,15 +121,37 @@ namespace PR.Persistence.Versioned.Repositories
 
             AddVersionPredicates(predicates, DatabaseTime);
 
-            var timeStamps = (await UnitOfWork.People.Find(predicates))
-                .SelectMany(_ => new[] { _.Start, _.End})
-                .Distinct()
-                .OrderBy(_ => _)
-                .ToList();
+            List<DateTime> timeStamps = null;
 
-            if (timeStamps.Any() && timeStamps.Last().Year == 9999)
+            if (true)
             {
-                return timeStamps.SkipLast(1);
+                timeStamps = (await UnitOfWork.People.Find(predicates))
+                    .GroupBy(_ => _.ID)
+                    .SelectMany(g =>
+                    {
+                        var timeStampsForFeature = g
+                            .SelectMany(_ => new[] { _.Start, _.End })
+                            .OrderBy(_ => _);
+
+                        if (timeStampsForFeature.Last().Year == 9999)
+                        {
+                            return new[] { timeStampsForFeature.First() };
+                        }
+
+                        return new[] { timeStampsForFeature.First(), timeStampsForFeature.Last() };
+                    })
+                    .Distinct()
+                    .OrderBy(_ => _)
+                    .ToList();
+            }
+            else
+            {
+                timeStamps = (await UnitOfWork.People.Find(predicates))
+                    .SelectMany(_ => new[] { _.Start, _.End })
+                    .Where(_ => _.Year < 9999)
+                    .Distinct()
+                    .OrderBy(_ => _)
+                    .ToList();
             }
 
             return timeStamps;
