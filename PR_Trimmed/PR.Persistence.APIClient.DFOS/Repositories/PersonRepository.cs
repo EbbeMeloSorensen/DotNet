@@ -1,8 +1,6 @@
-﻿using System.Globalization;
-using Craft.Utils;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,11 +9,12 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Craft.Utils;
 using Craft.Logging;
 using PR.Domain.Entities;
 using PR.Domain.DFOS;
 using PR.Persistence.Repositories;
-using System.Threading;
 
 namespace PR.Persistence.APIClient.DFOS.Repositories
 {
@@ -67,26 +66,11 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         public async Task<Person> Get(
             Guid id)
         {
-            // We call the API using the token - here we want all people (and we are not using pagination here)
-            var url = $"http://localhost:5000/api/people/{id}";
-
-            if (_databaseTime.HasValue)
-            {
-                //url = "http://localhost:5000/api/people?DatabaseTime=2002-01-01T00:00:00Z";
-                url += $"?DatabaseTime={_databaseTime.Value.AsRFC3339(false)}";
-            }
-
-            ApiHelper.ApiClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", _token);
-
-            using var response = await ApiHelper.ApiClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-            var person = JsonConvert.DeserializeObject<Person>(responseBody);
-            return person;
+            throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Person>> GetAllVariants(Guid id)
+        public async Task<IEnumerable<Person>> GetAllVariants(
+            Guid id)
         {
             throw new NotImplementedException();
         }
@@ -106,18 +90,20 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
                 responseBody = await response.Content.ReadAsStringAsync();
 
             }
-            catch (TaskCanceledException e)
-            {
-                var fileName = @".\Data\mock_response.json";
-                Logger?.WriteLine(LogMessageCategory.Information, $"TaskCanceledException caught: \"{e.Message}\"");
-                Logger?.WriteLine(LogMessageCategory.Information, $"Mocking a response instead ({fileName})..");
-                responseBody = File.ReadAllText(fileName, Encoding.UTF8);
-            }
             catch (Exception e)
             {
-                Logger?.WriteLine(LogMessageCategory.Information, $"Unknown exception caught: \"{e.Message}\"");
-                Logger?.WriteLine(LogMessageCategory.Information, $"Returning an empty list of timestamps for the historical timeline view");
-                return new List<DateTime>();
+                if (e is TaskCanceledException || e is HttpRequestException)
+                {
+                    Logger?.WriteLine(LogMessageCategory.Information, $"Can't reach the API: \"{e.Message}\"");
+                    var fileName = @".\Data\mock_response.json";
+                    Logger?.WriteLine(LogMessageCategory.Information, $"Mocking a response instead ({fileName})..");
+                    responseBody = File.ReadAllText(fileName, Encoding.UTF8);
+                }
+                else
+                {
+                    Logger?.WriteLine(LogMessageCategory.Information, $"Unknown exception caught: \"{e.Message}\"");
+                    throw;
+                }
             }
 
             var dfosResult = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
@@ -188,7 +174,8 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             try
             {
                 var timeout = 2;
-                Logger?.WriteLine(LogMessageCategory.Information, $"Sending Http request to API (timeout: {timeout} seconds)");
+                Logger?.WriteLine(LogMessageCategory.Information,
+                    $"Sending Http request to API (timeout: {timeout} seconds)");
 
                 var startOfURL = $"{_baseURL}/collections/observing_facility/items";
                 var useHRefFromResponse = false;
@@ -258,20 +245,27 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
                     {
                         morePages = false;
                     }
-                }
-                while (morePages);
+                } while (morePages);
 
                 return people;
             }
-            catch (TaskCanceledException e)
+            catch (Exception e)
             {
-                Logger?.WriteLine(LogMessageCategory.Information, $"TaskCanceledException caught: \"{e.Message}\"");
-                var fileName = @".\Data\mock_response.json";
-                Logger?.WriteLine(LogMessageCategory.Information, $"Mocking a response instead ({fileName})..");
-                var responseBody = File.ReadAllText(fileName, Encoding.UTF8);
-                var dfosResult = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
+                if (e is TaskCanceledException || e is HttpRequestException)
+                {
+                    Logger?.WriteLine(LogMessageCategory.Information, $"Can't reach the API: \"{e.Message}\"");
+                    var fileName = @".\Data\mock_response.json";
+                    Logger?.WriteLine(LogMessageCategory.Information, $"Mocking a response instead ({fileName})..");
+                    var responseBody = File.ReadAllText(fileName, Encoding.UTF8);
+                    var dfosResult = JsonConvert.DeserializeObject<DFOSResultModel>(responseBody);
 
-                people = ParseDFOSResult(dfosResult);
+                    people = ParseDFOSResult(dfosResult);
+                }
+                else
+                {
+                    Logger?.WriteLine(LogMessageCategory.Information, $"Unknown exception caught: \"{e.Message}\"");
+                    throw;
+                }
             }
 
             return people;
