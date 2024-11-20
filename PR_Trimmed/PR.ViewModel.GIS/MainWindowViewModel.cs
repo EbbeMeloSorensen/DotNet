@@ -328,7 +328,7 @@ namespace PR.ViewModel.GIS
                 Object = new Tuple<DateTime?, DateTime?>(null, null)
             };
 
-            DisplayLog = false;
+            DisplayLog = true;
             //DisplayLog = true; // Set to true when diagnosing application behaviour
 
             _historicalTimeOfInterest.PropertyChanged += async (s, e) =>
@@ -1199,18 +1199,21 @@ namespace PR.ViewModel.GIS
 
                 var point = observingFacilityDataExtract.GeospatialLocations
                     .Where(p => p.From < timeOfInterest)
-                    .Last() as PR.ViewModel.GIS.Domain.Point;
+                    .LastOrDefault() as Domain.Point;
 
-                var brush = point.To > timeOfInterest
-                    ? _activeObservingFacilityBrush
-                    : _closedObservingFacilityBrush;
+                if (point != null)
+                {
+                    var brush = point.To > timeOfInterest
+                        ? _activeObservingFacilityBrush
+                        : _closedObservingFacilityBrush;
 
-                MapViewModel.PointViewModels.Add(new PointViewModel(
-                    new PointD(
-                        point.Coordinate1,
-                        -point.Coordinate2),
-                    10,
-                    brush));
+                    MapViewModel.PointViewModels.Add(new PointViewModel(
+                        new PointD(
+                            point.Coordinate1,
+                            -point.Coordinate2),
+                        10,
+                        brush));
+                }
             }
         }
 
