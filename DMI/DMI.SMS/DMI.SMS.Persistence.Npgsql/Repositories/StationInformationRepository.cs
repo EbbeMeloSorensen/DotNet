@@ -153,32 +153,37 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<StationInformation> GetAll()
+        public async Task<IEnumerable<StationInformation>> GetAll()
         {
-            return GetStationInformations(null);
+            return await Task.Run(() => GetStationInformations(null));
         }
 
-        public IEnumerable<StationInformation> Find(
+        public async Task<IEnumerable<StationInformation>> Find(
             Expression<Func<StationInformation, bool>> predicate)
         {
-            return GetStationInformations($" WHERE {predicate.ToMSSqlString()}");
+            return await Task.Run(() => GetStationInformations($" WHERE {predicate.ToMSSqlString()}"));
         }
 
-        public IEnumerable<StationInformation> Find(
+        public async Task<IEnumerable<StationInformation>> Find(
             IList<Expression<Func<StationInformation, bool>>> predicates)
         {
-            var whereClauseBuilder = new StringBuilder();
-
-            if (predicates.Count > 0)
+            return await Task.Run(() =>
             {
+                var whereClauseBuilder = new StringBuilder();
+
+                if (predicates.Count <= 0)
+                {
+                    return GetStationInformations(whereClauseBuilder.ToString());
+                }
+
                 whereClauseBuilder.Append(" WHERE ");
 
                 whereClauseBuilder.Append(predicates
                     .Select(p => $"({p.ToMSSqlString()})")
                     .Aggregate((c, n) => $"{c} AND {n}"));
-            }
 
-            return GetStationInformations(whereClauseBuilder.ToString());
+                return GetStationInformations(whereClauseBuilder.ToString());
+            });
         }
 
         public StationInformation SingleOrDefault(
@@ -187,136 +192,136 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public void Add(
+        public async Task Add(
             StationInformation entity)
         {
-            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            await Task.Run(() =>
             {
+                using var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString());
                 conn.Open();
                 conn.EnlistTransaction(Transaction.Current);
 
                 // Todo: Man skal også kunne indsætte alle mulige andre
-                using (var cmd = new NpgsqlCommand())
-                {
-                    // We do it this way because we get an error about having to type cast if we use the AddWithValue instruction
-                    var shapeString = string.IsNullOrEmpty(entity.Shape) ? "null" : $"'{entity.Shape}'";
+                using var cmd = new NpgsqlCommand();
+                // We do it this way because we get an error about having to type cast if we use the AddWithValue instruction
+                var shapeString = string.IsNullOrEmpty(entity.Shape) ? "null" : $"'{entity.Shape}'";
 
-                    cmd.Connection = conn;
-                    cmd.CommandText = $"INSERT INTO {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{_tableName}\"(" +
-                        "\"shape\", " +
-                        "\"wgs_long\", " +
-                        "\"wgs_lat\", " +
-                        "\"wmorbsnradio\", " +
-                        "\"wmorbcn\", " +
-                        "\"wmorbsn\", " +
-                        "\"hhp\", " +
-                        "\"hha\", " +
-                        "\"serviceinterval\", " +
-                        "\"si_geo_long\", " +
-                        "\"si_geo_lat\", " +
-                        "\"si_easting\", " +
-                        "\"si_northing\", " +
-                        "\"si_utm\", " +
-                        "\"wmocountrycode\", " +
-                        "\"wigosid\", " +
-                        "\"regionid\", " +
-                        "\"wmostationid\", " +
-                        "\"altstationid\", " +
-                        "\"facilityid\", " +
-                        "\"referencetomaintenanceagreement\", " +
-                        "\"stationid_icao\", " +
-                        "\"comment\", " +
-                        "\"lastvisitdate\", " +
-                        "\"addworkforcedate\", " +
-                        "\"nextservicedate\", " +
-                        "\"lastservicedate\", " +
-                        "\"dateto\", " +
-                        "\"datefrom\", " +
-                        "\"stationowner\", " +
-                        "\"status\", " +
-                        "\"country\", " +
-                        "\"stationtype\", " +
-                        "\"accessaddress\", " +
-                        "\"stationid_dmi\", " +
-                        "\"objectid\", " + 
-                        "\"globalid\", " + 
-                        "\"stationname\", " +
-                        "\"gdb_from_date\", " +
-                        "\"gdb_to_date\", " +
-                        "\"created_user\", " +
-                        "\"created_date\", " +
-                        "\"last_edited_user\", " +
-                        "\"last_edited_date\") " +
-                        $"VALUES({shapeString}, @wgslong, @wgslat, @wmorbsnradio, @wmorbcn, @wmorbsn, @hhp, @hha, @serviceinterval, @sigeolong, @sigeolat, @sieasting, @sinorthing, @siutm, @wmocountrycode, @wigosid, @regionid, @wmostationid, @altstationid, @facilityid, @referencetomaintenanceagreement, @stationidicao, @comment, @lastvisitdate, @addworkforcedate, @nextservicedate, @lastservicedate, @dateto, @datefrom, @stationowner, @status, @country, @stationtype, @accessaddress, @stationiddmi, @objectid, @globalid, @stationname, @gdbfromdate, @gdbtodate, @createduser, @createddate, @lastediteduser, @lastediteddate)";
+                cmd.Connection = conn;
+                cmd.CommandText = $"INSERT INTO {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{_tableName}\"(" +
+                                  "\"shape\", " +
+                                  "\"wgs_long\", " +
+                                  "\"wgs_lat\", " +
+                                  "\"wmorbsnradio\", " +
+                                  "\"wmorbcn\", " +
+                                  "\"wmorbsn\", " +
+                                  "\"hhp\", " +
+                                  "\"hha\", " +
+                                  "\"serviceinterval\", " +
+                                  "\"si_geo_long\", " +
+                                  "\"si_geo_lat\", " +
+                                  "\"si_easting\", " +
+                                  "\"si_northing\", " +
+                                  "\"si_utm\", " +
+                                  "\"wmocountrycode\", " +
+                                  "\"wigosid\", " +
+                                  "\"regionid\", " +
+                                  "\"wmostationid\", " +
+                                  "\"altstationid\", " +
+                                  "\"facilityid\", " +
+                                  "\"referencetomaintenanceagreement\", " +
+                                  "\"stationid_icao\", " +
+                                  "\"comment\", " +
+                                  "\"lastvisitdate\", " +
+                                  "\"addworkforcedate\", " +
+                                  "\"nextservicedate\", " +
+                                  "\"lastservicedate\", " +
+                                  "\"dateto\", " +
+                                  "\"datefrom\", " +
+                                  "\"stationowner\", " +
+                                  "\"status\", " +
+                                  "\"country\", " +
+                                  "\"stationtype\", " +
+                                  "\"accessaddress\", " +
+                                  "\"stationid_dmi\", " +
+                                  "\"objectid\", " +
+                                  "\"globalid\", " +
+                                  "\"stationname\", " +
+                                  "\"gdb_from_date\", " +
+                                  "\"gdb_to_date\", " +
+                                  "\"created_user\", " +
+                                  "\"created_date\", " +
+                                  "\"last_edited_user\", " +
+                                  "\"last_edited_date\") " +
+                                  $"VALUES({shapeString}, @wgslong, @wgslat, @wmorbsnradio, @wmorbcn, @wmorbsn, @hhp, @hha, @serviceinterval, @sigeolong, @sigeolat, @sieasting, @sinorthing, @siutm, @wmocountrycode, @wigosid, @regionid, @wmostationid, @altstationid, @facilityid, @referencetomaintenanceagreement, @stationidicao, @comment, @lastvisitdate, @addworkforcedate, @nextservicedate, @lastservicedate, @dateto, @datefrom, @stationowner, @status, @country, @stationtype, @accessaddress, @stationiddmi, @objectid, @globalid, @stationname, @gdbfromdate, @gdbtodate, @createduser, @createddate, @lastediteduser, @lastediteddate)";
 
-                    cmd.Parameters.AddWithValue("wgslong", entity.Wgs_long.HasValue ? (object)entity.Wgs_long.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("wgslat", entity.Wgs_lat.HasValue ? (object)entity.Wgs_lat.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("wmorbsnradio", entity.Wmorbsnradio.HasValue ? (object)entity.Wmorbsnradio.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("wmorbcn", entity.Wmorbcn.HasValue ? (object)entity.Wmorbcn.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("wmorbsn", entity.Wmorbsn.HasValue ? (object)entity.Wmorbsn.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("hhp", entity.Hhp.HasValue ? (object)entity.Hhp.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("hha", entity.Hha.HasValue ? (object)entity.Hha.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("serviceinterval", entity.Serviceinterval.HasValue ? (object)entity.Serviceinterval.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("sigeolong", entity.Si_geo_long.HasValue ? (object)entity.Si_geo_long.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("sigeolat", entity.Si_geo_lat.HasValue ? (object)entity.Si_geo_lat.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("sieasting", entity.Si_easting.HasValue ? (object)entity.Si_easting.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("sinorthing", entity.Si_northing.HasValue ? (object)entity.Si_northing.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("siutm", entity.Si_utm.HasValue ? (object)entity.Si_utm.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("wmocountrycode", !string.IsNullOrEmpty(entity.Wmocountrycode) ? (object)entity.Wmocountrycode : DBNull.Value);
-                    cmd.Parameters.AddWithValue("wigosid", !string.IsNullOrEmpty(entity.Wigosid) ? (object)entity.Wigosid : DBNull.Value);
-                    cmd.Parameters.AddWithValue("regionid", !string.IsNullOrEmpty(entity.Regionid) ? (object)entity.Regionid : DBNull.Value);
-                    cmd.Parameters.AddWithValue("wmostationid", !string.IsNullOrEmpty(entity.Wmostationid) ? (object)entity.Wmostationid : DBNull.Value);
-                    cmd.Parameters.AddWithValue("altstationid", !string.IsNullOrEmpty(entity.Altstationid) ? (object)entity.Altstationid : DBNull.Value);
-                    cmd.Parameters.AddWithValue("facilityid", !string.IsNullOrEmpty(entity.Facilityid) ? (object)entity.Facilityid : DBNull.Value);
-                    cmd.Parameters.AddWithValue("referencetomaintenanceagreement", !string.IsNullOrEmpty(entity.Stationid_icao) ? (object)entity.Stationid_icao : DBNull.Value);
-                    cmd.Parameters.AddWithValue("stationidicao", !string.IsNullOrEmpty(entity.Stationid_icao) ? (object)entity.Stationid_icao : DBNull.Value);
-                    cmd.Parameters.AddWithValue("comment", !string.IsNullOrEmpty(entity.Comment) ? (object)entity.Comment : DBNull.Value);
-                    cmd.Parameters.AddWithValue("lastvisitdate", entity.Lastvisitdate.HasValue ? (object)entity.Lastvisitdate.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("addworkforcedate", entity.Addworkforcedate.HasValue ? (object)entity.Addworkforcedate.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("nextservicedate", entity.Nextservicedate.HasValue ? (object)entity.Nextservicedate.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("lastservicedate", entity.Lastservicedate.HasValue ? (object)entity.Lastservicedate.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("dateto", entity.DateTo.HasValue ? (object)entity.DateTo.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("datefrom", entity.DateFrom.HasValue ? (object)entity.DateFrom.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("stationowner", entity.StationOwner.HasValue ? (object)_stationOwnerCodeMap[entity.StationOwner.Value] : DBNull.Value);
-                    cmd.Parameters.AddWithValue("status", entity.Status.HasValue ? (object)_statusCodeMap[entity.Status.Value] : DBNull.Value);
-                    cmd.Parameters.AddWithValue("country", entity.Country.HasValue ? (object)_countryCodeMap[entity.Country.Value] : DBNull.Value);
-                    cmd.Parameters.AddWithValue("stationtype", entity.Stationtype.HasValue ? (object)_stationTypeCodeMap[entity.Stationtype.Value] : DBNull.Value);
-                    cmd.Parameters.AddWithValue("accessaddress", !string.IsNullOrEmpty(entity.AccessAddress) ? (object)entity.AccessAddress : DBNull.Value);
-                    cmd.Parameters.AddWithValue("stationiddmi", entity.StationIDDMI.HasValue ? (object) entity.StationIDDMI.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("objectid", entity.ObjectId);
-                    cmd.Parameters.AddWithValue("globalid", entity.GlobalId);
-                    cmd.Parameters.AddWithValue("stationname", !string.IsNullOrEmpty(entity.StationName) ? (object)entity.StationName : DBNull.Value);
-                    cmd.Parameters.AddWithValue("gdbfromdate", entity.GdbFromDate);
-                    cmd.Parameters.AddWithValue("gdbtodate", entity.GdbToDate);
-                    cmd.Parameters.AddWithValue("createduser", !string.IsNullOrEmpty(entity.CreatedUser) ? (object)entity.CreatedUser : DBNull.Value);
-                    cmd.Parameters.AddWithValue("createddate", entity.CreatedDate.HasValue ? (object)entity.CreatedDate.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("lastediteduser", !string.IsNullOrEmpty(entity.LastEditedUser) ? (object)entity.LastEditedUser : DBNull.Value);
-                    cmd.Parameters.AddWithValue("lastediteddate", entity.LastEditedDate.HasValue ? (object)entity.LastEditedDate.Value : DBNull.Value);
-                    cmd.ExecuteNonQuery();
+                cmd.Parameters.AddWithValue("wgslong", entity.Wgs_long.HasValue ? (object)entity.Wgs_long.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("wgslat", entity.Wgs_lat.HasValue ? (object)entity.Wgs_lat.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("wmorbsnradio", entity.Wmorbsnradio.HasValue ? (object)entity.Wmorbsnradio.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("wmorbcn", entity.Wmorbcn.HasValue ? (object)entity.Wmorbcn.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("wmorbsn", entity.Wmorbsn.HasValue ? (object)entity.Wmorbsn.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("hhp", entity.Hhp.HasValue ? (object)entity.Hhp.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("hha", entity.Hha.HasValue ? (object)entity.Hha.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("serviceinterval", entity.Serviceinterval.HasValue ? (object)entity.Serviceinterval.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("sigeolong", entity.Si_geo_long.HasValue ? (object)entity.Si_geo_long.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("sigeolat", entity.Si_geo_lat.HasValue ? (object)entity.Si_geo_lat.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("sieasting", entity.Si_easting.HasValue ? (object)entity.Si_easting.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("sinorthing", entity.Si_northing.HasValue ? (object)entity.Si_northing.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("siutm", entity.Si_utm.HasValue ? (object)entity.Si_utm.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("wmocountrycode", !string.IsNullOrEmpty(entity.Wmocountrycode) ? (object)entity.Wmocountrycode : DBNull.Value);
+                cmd.Parameters.AddWithValue("wigosid", !string.IsNullOrEmpty(entity.Wigosid) ? (object)entity.Wigosid : DBNull.Value);
+                cmd.Parameters.AddWithValue("regionid", !string.IsNullOrEmpty(entity.Regionid) ? (object)entity.Regionid : DBNull.Value);
+                cmd.Parameters.AddWithValue("wmostationid", !string.IsNullOrEmpty(entity.Wmostationid) ? (object)entity.Wmostationid : DBNull.Value);
+                cmd.Parameters.AddWithValue("altstationid", !string.IsNullOrEmpty(entity.Altstationid) ? (object)entity.Altstationid : DBNull.Value);
+                cmd.Parameters.AddWithValue("facilityid", !string.IsNullOrEmpty(entity.Facilityid) ? (object)entity.Facilityid : DBNull.Value);
+                cmd.Parameters.AddWithValue("referencetomaintenanceagreement", !string.IsNullOrEmpty(entity.Stationid_icao) ? (object)entity.Stationid_icao : DBNull.Value);
+                cmd.Parameters.AddWithValue("stationidicao", !string.IsNullOrEmpty(entity.Stationid_icao) ? (object)entity.Stationid_icao : DBNull.Value);
+                cmd.Parameters.AddWithValue("comment", !string.IsNullOrEmpty(entity.Comment) ? (object)entity.Comment : DBNull.Value);
+                cmd.Parameters.AddWithValue("lastvisitdate", entity.Lastvisitdate.HasValue ? (object)entity.Lastvisitdate.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("addworkforcedate", entity.Addworkforcedate.HasValue ? (object)entity.Addworkforcedate.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("nextservicedate", entity.Nextservicedate.HasValue ? (object)entity.Nextservicedate.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("lastservicedate", entity.Lastservicedate.HasValue ? (object)entity.Lastservicedate.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("dateto", entity.DateTo.HasValue ? (object)entity.DateTo.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("datefrom", entity.DateFrom.HasValue ? (object)entity.DateFrom.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("stationowner", entity.StationOwner.HasValue ? (object)_stationOwnerCodeMap[entity.StationOwner.Value] : DBNull.Value);
+                cmd.Parameters.AddWithValue("status", entity.Status.HasValue ? (object)_statusCodeMap[entity.Status.Value] : DBNull.Value);
+                cmd.Parameters.AddWithValue("country", entity.Country.HasValue ? (object)_countryCodeMap[entity.Country.Value] : DBNull.Value);
+                cmd.Parameters.AddWithValue("stationtype", entity.Stationtype.HasValue ? (object)_stationTypeCodeMap[entity.Stationtype.Value] : DBNull.Value);
+                cmd.Parameters.AddWithValue("accessaddress", !string.IsNullOrEmpty(entity.AccessAddress) ? (object)entity.AccessAddress : DBNull.Value);
+                cmd.Parameters.AddWithValue("stationiddmi", entity.StationIDDMI.HasValue ? (object)entity.StationIDDMI.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("objectid", entity.ObjectId);
+                cmd.Parameters.AddWithValue("globalid", entity.GlobalId);
+                cmd.Parameters.AddWithValue("stationname", !string.IsNullOrEmpty(entity.StationName) ? (object)entity.StationName : DBNull.Value);
+                cmd.Parameters.AddWithValue("gdbfromdate", entity.GdbFromDate);
+                cmd.Parameters.AddWithValue("gdbtodate", entity.GdbToDate);
+                cmd.Parameters.AddWithValue("createduser", !string.IsNullOrEmpty(entity.CreatedUser) ? (object)entity.CreatedUser : DBNull.Value);
+                cmd.Parameters.AddWithValue("createddate", entity.CreatedDate.HasValue ? (object)entity.CreatedDate.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("lastediteduser", !string.IsNullOrEmpty(entity.LastEditedUser) ? (object)entity.LastEditedUser : DBNull.Value);
+                cmd.Parameters.AddWithValue("lastediteddate", entity.LastEditedDate.HasValue ? (object)entity.LastEditedDate.Value : DBNull.Value);
+                cmd.ExecuteNonQuery();
 
-                    // We need to assign the id to the object and pass it back,
-                    // because the id will be needed for deleting it, etc
-                    cmd.CommandText = $"SELECT currval(pg_get_serial_sequence('sde.{_tableName}', 'gdb_archive_oid'))";
-                    var assignedGdbArchiveOid = cmd.ExecuteScalar();
-                    entity.GdbArchiveOid = Convert.ToInt32(assignedGdbArchiveOid);
-                }
-            }
+                // We need to assign the id to the object and pass it back,
+                // because the id will be needed for deleting it, etc
+                cmd.CommandText = $"SELECT currval(pg_get_serial_sequence('sde.{_tableName}', 'gdb_archive_oid'))";
+                var assignedGdbArchiveOid = cmd.ExecuteScalar();
+                entity.GdbArchiveOid = Convert.ToInt32(assignedGdbArchiveOid);
+            });
         }
 
-        public void AddRange(
+        public Task AddRange(
             IEnumerable<StationInformation> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(
+        public async Task Update(
             StationInformation entity)
         {
-            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            await Task.Run(() =>
             {
+                using var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString());
                 conn.Open();
                 conn.EnlistTransaction(Transaction.Current);
-                
+
                 var stationNameString = !string.IsNullOrEmpty(entity.StationName)
                     ? $"\'{entity.StationName}\'"
                     : "null";
@@ -333,52 +338,49 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
                     ? $"{_stationOwnerCodeMap[entity.StationOwner.Value]}"
                     : "null";
 
-                var query = 
-                    $"UPDATE {ConnectionStringProvider.GetPostgreSqlSchema()}.{_tableName} SET " + 
+                var query =
+                    $"UPDATE {ConnectionStringProvider.GetPostgreSqlSchema()}.{_tableName} SET " +
                     $"stationname={stationNameString}, " +
                     $"stationtype={stationTypeString}, " +
                     $"country={countryString}, " +
                     $"stationowner={stationOwnerString}, " +
-                    $"gdb_to_date='{entity.GdbToDate.AsDateTimeString(true, true)}'" + 
+                    $"gdb_to_date='{entity.GdbToDate.AsDateTimeString(true, true)}'" +
                     $" WHERE \"gdb_archive_oid\" = {entity.GdbArchiveOid}";
 
-                using (var cmd = new NpgsqlCommand(query, conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
-            }
+                using var cmd = new NpgsqlCommand(query, conn);
+                cmd.ExecuteNonQuery();
+            });
         }
 
-        public void UpdateRange(
+        public Task UpdateRange(
             IEnumerable<StationInformation> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(
+        public async Task Remove(
             StationInformation entity)
         {
-            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            await Task.Run(() =>
             {
+                using var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString());
                 conn.Open();
                 conn.EnlistTransaction(Transaction.Current);
 
                 var query = $"DELETE FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{_tableName}\" WHERE \"gdb_archive_oid\" = {entity.GdbArchiveOid}";
 
-                using (var cmd = new NpgsqlCommand(query, conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
-            }
+                using var cmd = new NpgsqlCommand(query, conn);
+                cmd.ExecuteNonQuery();
+            });
         }
 
-        public void RemoveRange(
+        public Task RemoveRange(
             IEnumerable<StationInformation> entities)
         {
-            entities.ToList().ForEach(cp => Remove(cp));
+            throw new NotImplementedException();
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }

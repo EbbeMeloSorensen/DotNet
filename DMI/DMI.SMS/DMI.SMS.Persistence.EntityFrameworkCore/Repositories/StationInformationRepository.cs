@@ -24,15 +24,18 @@ public class StationInformationRepository : Repository<StationInformation>, ISta
         return stationInformation;
     }
 
-    public override void Clear()
+    public override async Task Clear()
     {
-        var context = Context as SMSDbContextBase;
+        await Task.Run(() =>
+        {
+            var context = Context as SMSDbContextBase;
 
-        context.RemoveRange(context.StationInformations);
-        context.SaveChanges();
+            context!.RemoveRange(context.StationInformations);
+            context.SaveChanges();
+        });
     }
 
-    public override void Update(
+    public override async Task Update(
         StationInformation stationInformation)
     {
         var sRepo = Get(stationInformation.GdbArchiveOid);
@@ -40,11 +43,11 @@ public class StationInformationRepository : Repository<StationInformation>, ISta
         sRepo.CopyAttributes(stationInformation);
     }
 
-    public override void UpdateRange(
+    public override async Task UpdateRange(
         IEnumerable<StationInformation> stationInformations)
     {
         var ids = stationInformations.Select(p => p.GdbArchiveOid);
-        var stationInformationsFromRepository = Find(s => ids.Contains(s.GdbArchiveOid));
+        var stationInformationsFromRepository = await Find(s => ids.Contains(s.GdbArchiveOid));
 
         stationInformationsFromRepository.ToList().ForEach(sRepo =>
         {

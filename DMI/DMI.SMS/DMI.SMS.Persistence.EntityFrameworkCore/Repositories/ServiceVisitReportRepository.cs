@@ -12,17 +12,17 @@ namespace DMI.SMS.Persistence.EntityFrameworkCore.Repositories
         {
         }
 
-        public override void Clear()
+        public override Task Clear()
         {
             throw new NotImplementedException();
         }
 
-        public override void Update(ServiceVisitReport entity)
+        public override Task Update(ServiceVisitReport entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<ServiceVisitReport> entities)
+        public override Task UpdateRange(IEnumerable<ServiceVisitReport> entities)
         {
             throw new NotImplementedException();
         }

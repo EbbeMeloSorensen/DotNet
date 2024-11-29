@@ -32,18 +32,18 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<StationKeeper> GetAll()
+        public Task<IEnumerable<StationKeeper>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<StationKeeper> Find(
+        public Task<IEnumerable<StationKeeper>> Find(
             Expression<Func<StationKeeper, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<StationKeeper> Find(
+        public Task<IEnumerable<StationKeeper>> Find(
             IList<Expression<Func<StationKeeper, bool>>> predicates)
         {
             throw new NotImplementedException();

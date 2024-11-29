@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Persistence.Repositories;
 
@@ -23,7 +24,8 @@ namespace DMI.SMS.Persistence.Memory.Repositories
             throw new NotImplementedException();
         }
 
-        public StationInformation Get(int id)
+        public StationInformation Get(
+            int id)
         {
             throw new NotImplementedException();
         }
@@ -33,12 +35,14 @@ namespace DMI.SMS.Persistence.Memory.Repositories
             return _stationInformations.Count();
         }
 
-        public int Count(Expression<Func<StationInformation, bool>> predicate)
+        public int Count(
+            Expression<Func<StationInformation, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public int Count(IList<Expression<Func<StationInformation, bool>>> predicates)
+        public int Count(
+            IList<Expression<Func<StationInformation, bool>>> predicates)
         {
             var temp = _stationInformations;
 
@@ -50,66 +54,75 @@ namespace DMI.SMS.Persistence.Memory.Repositories
             return temp.Count();
         }
 
-        public IEnumerable<StationInformation> GetAll()
+        public async Task<IEnumerable<StationInformation>> GetAll()
         {
-            return _stationInformations;
+            return await Task.Run(() => _stationInformations);
         }
 
-        public IEnumerable<StationInformation> Find(Expression<Func<StationInformation, bool>> predicate)
+        public Task<IEnumerable<StationInformation>> Find(
+            Expression<Func<StationInformation, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<StationInformation> Find(IList<Expression<Func<StationInformation, bool>>> predicates)
+        public async Task<IEnumerable<StationInformation>> Find(
+            IList<Expression<Func<StationInformation, bool>>> predicates)
         {
-            var temp = _stationInformations;
-
-            foreach (var predicate in predicates)
+            return await Task.Run(() =>
             {
-                temp = temp.Where(predicate.Compile()).ToList();
-            }
+                var temp = _stationInformations;
 
-            return temp;
+                foreach (var predicate in predicates)
+                {
+                    temp = temp.Where(predicate.Compile()).ToList();
+                }
+
+                return temp;
+            });
         }
 
-        public StationInformation SingleOrDefault(Expression<Func<StationInformation, bool>> predicate)
+        public StationInformation SingleOrDefault(
+            Expression<Func<StationInformation, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public void Add(StationInformation stationInformation)
+        public async Task Add(StationInformation stationInformation)
         {
-            stationInformation.GdbArchiveOid = _nextId++;
+            await Task.Run(() =>
+            {
+                stationInformation.GdbArchiveOid = _nextId++;
 
-            _stationInformations.Add(stationInformation);
+                _stationInformations.Add(stationInformation);
+            });
         }
 
-        public void AddRange(IEnumerable<StationInformation> stationInformations)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(StationInformation entity)
+        public Task AddRange(IEnumerable<StationInformation> stationInformations)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRange(IEnumerable<StationInformation> entities)
+        public Task Update(StationInformation entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(StationInformation entity)
+        public Task UpdateRange(IEnumerable<StationInformation> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(IEnumerable<StationInformation> entities)
+        public Task Remove(StationInformation entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public Task RemoveRange(IEnumerable<StationInformation> entities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Clear()
         {
             throw new NotImplementedException();
         }

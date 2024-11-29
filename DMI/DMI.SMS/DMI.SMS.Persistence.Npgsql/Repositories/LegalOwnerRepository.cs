@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Text;
 using System.Linq.Expressions;
 using System.Transactions;
 using Npgsql;
@@ -38,32 +35,37 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<LegalOwner> GetAll()
+        public async Task<IEnumerable<LegalOwner>> GetAll()
         {
-            return GetLegalOwners(null);
+            return await Task.Run(() => GetLegalOwners(null));
         }
 
-        public IEnumerable<LegalOwner> Find(
+        public async Task<IEnumerable<LegalOwner>> Find(
             Expression<Func<LegalOwner, bool>> predicate)
         {
-            return GetLegalOwners($" WHERE {predicate.ToMSSqlString()}");
+            return await Task.Run(() => GetLegalOwners($" WHERE {predicate.ToMSSqlString()}"));
         }
 
-        public IEnumerable<LegalOwner> Find(
+        public async Task<IEnumerable<LegalOwner>> Find(
             IList<Expression<Func<LegalOwner, bool>>> predicates)
         {
-            var whereClauseBuilder = new StringBuilder();
-
-            if (predicates.Count > 0)
+            return await Task.Run(() =>
             {
+                var whereClauseBuilder = new StringBuilder();
+
+                if (predicates.Count <= 0)
+                {
+                    return GetLegalOwners(whereClauseBuilder.ToString());
+                }
+
                 whereClauseBuilder.Append(" WHERE ");
 
                 whereClauseBuilder.Append(predicates
                     .Select(p => $"({p.ToMSSqlString()})")
                     .Aggregate((c, n) => $"{c} AND {n}"));
-            }
 
-            return GetLegalOwners(whereClauseBuilder.ToString());
+                return GetLegalOwners(whereClauseBuilder.ToString());
+            });
         }
 
         public LegalOwner SingleOrDefault(
@@ -73,71 +75,71 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
         }
 
         // Bemærk, at man kan indtaste lige hvad man vil i ParentGuid-feltet. Der er ikke nogen constraint, der afviser det.
-        public void Add(
+        public async Task Add(
             LegalOwner entity)
         {
-            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            await Task.Run(() =>
             {
+                using var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString());
                 conn.Open();
                 conn.EnlistTransaction(Transaction.Current);
 
                 // Todo: Man skal også kunne indsætte alle mulige andre
-                using (var cmd = new NpgsqlCommand())
-                {
-                    cmd.Connection = conn;
-                    cmd.CommandText = $"INSERT INTO {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{_tableName}\"(" +
-                        "\"name\", " +
-                        "\"phonenumber\", " +
-                        "\"email\", " +
-                        "\"date\", " +
-                        "\"description\", " +
-                        "\"objectid\", " +
-                        "\"globalid\", " +
-                        "\"parentguid\", " +
-                        "\"gdb_from_date\", " +
-                        "\"gdb_to_date\", " +
-                        "\"created_user\", " +
-                        "\"created_date\", " +
-                        "\"last_edited_user\", " +
-                        "\"last_edited_date\") " +
-                        $"VALUES(@name, @phonenumber, @email, @date, @description, @objectid, @globalid, @parentguid, @gdbfromdate, @gdbtodate, @createduser, @createddate, @lastediteduser, @lastediteddate)";
+                using var cmd = new NpgsqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = $"INSERT INTO {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{_tableName}\"(" +
+                                  "\"name\", " +
+                                  "\"phonenumber\", " +
+                                  "\"email\", " +
+                                  "\"date\", " +
+                                  "\"description\", " +
+                                  "\"objectid\", " +
+                                  "\"globalid\", " +
+                                  "\"parentguid\", " +
+                                  "\"gdb_from_date\", " +
+                                  "\"gdb_to_date\", " +
+                                  "\"created_user\", " +
+                                  "\"created_date\", " +
+                                  "\"last_edited_user\", " +
+                                  "\"last_edited_date\") " +
+                                  $"VALUES(@name, @phonenumber, @email, @date, @description, @objectid, @globalid, @parentguid, @gdbfromdate, @gdbtodate, @createduser, @createddate, @lastediteduser, @lastediteddate)";
 
-                    cmd.Parameters.AddWithValue("name", !string.IsNullOrEmpty(entity.Name) ? (object)entity.Name : DBNull.Value);
-                    cmd.Parameters.AddWithValue("phonenumber", !string.IsNullOrEmpty(entity.PhoneNumber) ? (object)entity.PhoneNumber : DBNull.Value);
-                    cmd.Parameters.AddWithValue("email", !string.IsNullOrEmpty(entity.Email) ? (object)entity.Email : DBNull.Value);
-                    cmd.Parameters.AddWithValue("date", entity.Date.HasValue ? (object)entity.Date.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("description", !string.IsNullOrEmpty(entity.Description) ? (object)entity.Description : DBNull.Value);
-                    cmd.Parameters.AddWithValue("objectid", entity.ObjectId);
-                    cmd.Parameters.AddWithValue("globalid", entity.GlobalId);
-                    cmd.Parameters.AddWithValue("parentguid", entity.ParentGuid);
-                    cmd.Parameters.AddWithValue("gdbfromdate", entity.GdbFromDate);
-                    cmd.Parameters.AddWithValue("gdbtodate", entity.GdbToDate);
-                    cmd.Parameters.AddWithValue("createduser", !string.IsNullOrEmpty(entity.CreatedUser) ? (object)entity.CreatedUser : DBNull.Value);
-                    cmd.Parameters.AddWithValue("createddate", entity.CreatedDate.HasValue ? (object)entity.CreatedDate.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("lastediteduser", !string.IsNullOrEmpty(entity.LastEditedUser) ? (object)entity.LastEditedUser : DBNull.Value);
-                    cmd.Parameters.AddWithValue("lastediteddate", entity.LastEditedDate.HasValue ? (object)entity.LastEditedDate.Value : DBNull.Value);
-                    cmd.ExecuteNonQuery();
+                cmd.Parameters.AddWithValue("name", !string.IsNullOrEmpty(entity.Name) ? (object)entity.Name : DBNull.Value);
+                cmd.Parameters.AddWithValue("phonenumber", !string.IsNullOrEmpty(entity.PhoneNumber) ? (object)entity.PhoneNumber : DBNull.Value);
+                cmd.Parameters.AddWithValue("email", !string.IsNullOrEmpty(entity.Email) ? (object)entity.Email : DBNull.Value);
+                cmd.Parameters.AddWithValue("date", entity.Date.HasValue ? (object)entity.Date.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("description", !string.IsNullOrEmpty(entity.Description) ? (object)entity.Description : DBNull.Value);
+                cmd.Parameters.AddWithValue("objectid", entity.ObjectId);
+                cmd.Parameters.AddWithValue("globalid", entity.GlobalId);
+                cmd.Parameters.AddWithValue("parentguid", entity.ParentGuid);
+                cmd.Parameters.AddWithValue("gdbfromdate", entity.GdbFromDate);
+                cmd.Parameters.AddWithValue("gdbtodate", entity.GdbToDate);
+                cmd.Parameters.AddWithValue("createduser", !string.IsNullOrEmpty(entity.CreatedUser) ? (object)entity.CreatedUser : DBNull.Value);
+                cmd.Parameters.AddWithValue("createddate", entity.CreatedDate.HasValue ? (object)entity.CreatedDate.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("lastediteduser", !string.IsNullOrEmpty(entity.LastEditedUser) ? (object)entity.LastEditedUser : DBNull.Value);
+                cmd.Parameters.AddWithValue("lastediteddate", entity.LastEditedDate.HasValue ? (object)entity.LastEditedDate.Value : DBNull.Value);
+                cmd.ExecuteNonQuery();
 
-                    // We need to assign the id to the object and pass it back,
-                    // because the id will be needed for deleting it, etc
-                    cmd.CommandText = $"SELECT currval(pg_get_serial_sequence('sde.{_tableName}', 'gdb_archive_oid'))";
-                    var assignedGdbArchiveOid = cmd.ExecuteScalar();
-                    entity.GdbArchiveOid = Convert.ToInt32(assignedGdbArchiveOid);
-                }
-            }
+                // We need to assign the id to the object and pass it back,
+                // because the id will be needed for deleting it, etc
+                cmd.CommandText = $"SELECT currval(pg_get_serial_sequence('sde.{_tableName}', 'gdb_archive_oid'))";
+                var assignedGdbArchiveOid = cmd.ExecuteScalar();
+                entity.GdbArchiveOid = Convert.ToInt32(assignedGdbArchiveOid);
+            });
         }
 
-        public void AddRange(
+        public Task AddRange(
             IEnumerable<LegalOwner> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(
+        public async Task Update(
             LegalOwner entity)
         {
-            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            await Task.Run(() =>
             {
+                using var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString());
                 conn.Open();
                 conn.EnlistTransaction(Transaction.Current);
 
@@ -169,34 +171,31 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
                     $"gdb_to_date='{entity.GdbToDate.AsDateTimeString(true, true)}'" +
                     $" WHERE \"gdb_archive_oid\" = {entity.GdbArchiveOid}";
 
-                using (var cmd = new NpgsqlCommand(query, conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
-            }
+                using var cmd = new NpgsqlCommand(query, conn);
+                cmd.ExecuteNonQuery();
+            });
         }
 
-        public void UpdateRange(
+        public Task UpdateRange(
             IEnumerable<LegalOwner> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(
+        public async Task Remove(
             LegalOwner entity)
         {
-            using (var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString()))
+            await Task.Run(() =>
             {
+                using var conn = new NpgsqlConnection(ConnectionStringProvider.GetConnectionString());
                 conn.Open();
                 conn.EnlistTransaction(Transaction.Current);
 
                 var query = $"DELETE FROM {ConnectionStringProvider.GetPostgreSqlSchema()}.\"{_tableName}\" WHERE \"gdb_archive_oid\" = {entity.GdbArchiveOid}";
 
-                using (var cmd = new NpgsqlCommand(query, conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
-            }
+                using var cmd = new NpgsqlCommand(query, conn);
+                cmd.ExecuteNonQuery();
+            });
         }
 
         public void RemoveLogically(
@@ -220,7 +219,7 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             }
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }
@@ -243,10 +242,13 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             Add(newLegalOwnerRecord);
         }
 
-        public void RemoveRange(
+        public async Task RemoveRange(
             IEnumerable<LegalOwner> entities)
         {
-            entities.ToList().ForEach(cp => Remove(cp));
+            await Task.Run(() =>
+            {
+                entities.ToList().ForEach(cp => Remove(cp));
+            });
         }
 
         public void Load(

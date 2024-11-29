@@ -11,17 +11,17 @@ public class ElevationAnglesRepository : Repository<ElevationAngles>, IElevation
     {
     }
 
-    public override void Clear()
+    public override Task Clear()
     {
         throw new NotImplementedException();
     }
 
-    public override void Update(ElevationAngles entity)
+    public override Task Update(ElevationAngles entity)
     {
         throw new NotImplementedException();
     }
 
-    public override void UpdateRange(IEnumerable<ElevationAngles> entities)
+    public override Task UpdateRange(IEnumerable<ElevationAngles> entities)
     {
         throw new NotImplementedException();
     }

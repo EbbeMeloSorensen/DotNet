@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Domain.EntityClassExtensions;
 using DMI.SMS.IO;
@@ -25,7 +26,8 @@ namespace DMI.SMS.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public StationInformation Get(int id)
+        public StationInformation Get(
+            int id)
         {
             return _stationInformations.Single(p => p.GdbArchiveOid == id);
         }
@@ -35,12 +37,14 @@ namespace DMI.SMS.Persistence.File.Repositories
             return _stationInformations.Count();
         }
 
-        public int Count(Expression<Func<StationInformation, bool>> predicate)
+        public int Count(
+            Expression<Func<StationInformation, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public int Count(IList<Expression<Func<StationInformation, bool>>> predicates)
+        public int Count(
+            IList<Expression<Func<StationInformation, bool>>> predicates)
         {
             var temp = _stationInformations;
 
@@ -52,59 +56,75 @@ namespace DMI.SMS.Persistence.File.Repositories
             return temp.Count();
         }
 
-        public IEnumerable<StationInformation> GetAll()
+        public async Task<IEnumerable<StationInformation>> GetAll()
         {
-            return _stationInformations;
+            return await Task.Run(() => _stationInformations);
         }
 
-        public IEnumerable<StationInformation> Find(Expression<Func<StationInformation, bool>> predicate)
+        public async Task<IEnumerable<StationInformation>> Find(
+            Expression<Func<StationInformation, bool>> predicate)
         {
-            return _stationInformations.Where(predicate.Compile());
+            return await Task.Run(() => _stationInformations.Where(predicate.Compile()));
         }
 
-        public IEnumerable<StationInformation> Find(IList<Expression<Func<StationInformation, bool>>> predicates)
+        public async Task<IEnumerable<StationInformation>> Find(
+            IList<Expression<Func<StationInformation, bool>>> predicates)
         {
-            IEnumerable<StationInformation> temp = _stationInformations;
-
-            foreach (var predicate in predicates)
+            return await Task.Run(() =>
             {
-                temp = temp.Where(predicate.Compile());
-            }
+                IEnumerable<StationInformation> temp = _stationInformations;
 
-            return temp;
+                foreach (var predicate in predicates)
+                {
+                    temp = temp.Where(predicate.Compile());
+                }
+
+                return temp;
+            });
         }
 
-        public StationInformation SingleOrDefault(Expression<Func<StationInformation, bool>> predicate)
+        public StationInformation SingleOrDefault(
+            Expression<Func<StationInformation, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public void Add(StationInformation stationInformation)
+        public async Task Add(
+            StationInformation stationInformation)
         {
-            stationInformation.GdbArchiveOid = _nextId++;
+            await Task.Run(() =>
+            {
+                stationInformation.GdbArchiveOid = _nextId++;
 
-            _stationInformations.Add(stationInformation);
+                _stationInformations.Add(stationInformation);
 
-            UpdateRepositoryFile();
+                UpdateRepositoryFile();
+            });
         }
 
-        public void AddRange(IEnumerable<StationInformation> stationInformations)
+        public Task AddRange(
+            IEnumerable<StationInformation> stationInformations)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(StationInformation stationInformation)
+        public async Task Update(
+            StationInformation stationInformation)
         {
-            var stationInformationFromRepository = Get(stationInformation.GdbArchiveOid);
-            stationInformationFromRepository.CopyAttributes(stationInformation);
+            await Task.Run(() =>
+            {
+                var stationInformationFromRepository = Get(stationInformation.GdbArchiveOid);
+                stationInformationFromRepository.CopyAttributes(stationInformation);
 
-            UpdateRepositoryFile();
+                UpdateRepositoryFile();
+            });
         }
 
-        public void UpdateRange(IEnumerable<StationInformation> stationInformations)
+        public async Task UpdateRange(
+            IEnumerable<StationInformation> stationInformations)
         {
             var ids = stationInformations.Select(p => p.GdbArchiveOid);
-            var stationInformationsFromRepository = Find(s => ids.Contains(s.GdbArchiveOid));
+            var stationInformationsFromRepository = await Find(s => ids.Contains(s.GdbArchiveOid));
 
             stationInformationsFromRepository.ToList().ForEach(sRepo =>
             {
@@ -116,23 +136,31 @@ namespace DMI.SMS.Persistence.File.Repositories
             UpdateRepositoryFile();
         }
 
-        public void Remove(StationInformation entity)
+        public async Task Remove(
+            StationInformation entity)
         {
-            _stationInformations = _stationInformations.Where(s => s.GdbArchiveOid != entity.GdbArchiveOid).ToList();
+            await Task.Run(() =>
+            {
+                _stationInformations = _stationInformations.Where(s => s.GdbArchiveOid != entity.GdbArchiveOid).ToList();
 
-            UpdateRepositoryFile();
+                UpdateRepositoryFile();
+            });
         }
 
-        public void RemoveRange(IEnumerable<StationInformation> entities)
+        public async Task RemoveRange(
+            IEnumerable<StationInformation> entities)
         {
-            var gdbArchiveOIds = entities.Select(s => s.GdbArchiveOid).ToList();
+            await Task.Run(() =>
+            {
+                var gdbArchiveOIds = entities.Select(s => s.GdbArchiveOid).ToList();
 
-            _stationInformations = _stationInformations.Where(s => !gdbArchiveOIds.Contains(s.GdbArchiveOid)).ToList();
+                _stationInformations = _stationInformations.Where(s => !gdbArchiveOIds.Contains(s.GdbArchiveOid)).ToList();
 
-            UpdateRepositoryFile();
+                UpdateRepositoryFile();
+            });
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }

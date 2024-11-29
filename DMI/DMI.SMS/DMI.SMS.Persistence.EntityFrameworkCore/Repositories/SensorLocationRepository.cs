@@ -29,17 +29,17 @@ public class SensorLocationRepository : Repository<SensorLocation>, ISensorLocat
         return sensorLocation;
     }
 
-    public override void Clear()
+    public override Task Clear()
     {
         throw new NotImplementedException();
     }
 
-    public override void Update(SensorLocation entity)
+    public override Task Update(SensorLocation entity)
     {
         throw new NotImplementedException();
     }
 
-    public override void UpdateRange(IEnumerable<SensorLocation> entities)
+    public override Task UpdateRange(IEnumerable<SensorLocation> entities)
     {
         throw new NotImplementedException();
     }
