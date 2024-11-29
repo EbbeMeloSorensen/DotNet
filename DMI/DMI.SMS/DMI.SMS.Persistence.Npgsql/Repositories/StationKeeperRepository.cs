@@ -55,43 +55,43 @@ namespace DMI.SMS.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public void Add(
+        public Task Add(
             StationKeeper entity)
         {
             throw new NotImplementedException();
         }
 
-        public void AddRange(
+        public Task AddRange(
             IEnumerable<StationKeeper> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(
+        public Task Update(
             StationKeeper entity)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRange(
+        public Task UpdateRange(
             IEnumerable<StationKeeper> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(
+        public Task Remove(
             StationKeeper entity)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(
+        public Task RemoveRange(
             IEnumerable<StationKeeper> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }

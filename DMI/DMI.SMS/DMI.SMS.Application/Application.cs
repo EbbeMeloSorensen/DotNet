@@ -244,18 +244,15 @@ namespace DMI.SMS.Application
         {
             IList<StationInformation>? stationInformations = null;
 
-            await Task.Run(() =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Retrieving station informations..");
+            progressCallback?.Invoke(0.0, "Retrieving station informations");
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving station informations..");
-                progressCallback?.Invoke(0.0, "Retrieving station informations");
+                stationInformations = (await unitOfWork.StationInformations.GetAll()).ToList();
+            }
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    stationInformations = unitOfWork.StationInformations.GetAll().ToList();
-                }
-
-                progressCallback?.Invoke(100, "");
-            });
+            progressCallback?.Invoke(100, "");
 
             Console.WriteLine();
             Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"StationidDMI",12}, {"StationName",20}");
@@ -267,18 +264,15 @@ namespace DMI.SMS.Application
         {
             IList<SensorLocation>? sensorLocations = null;
 
-            await Task.Run(() =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Retrieving sensor locations..");
+            progressCallback?.Invoke(0.0, "Retrieving sensor locations");
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving sensor locations..");
-                progressCallback?.Invoke(0.0, "Retrieving sensor locations");
+                sensorLocations = (await unitOfWork.SensorLocations.GetAll()).ToList();
+            }
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    sensorLocations = unitOfWork.SensorLocations.GetAll().ToList();
-                }
-
-                progressCallback?.Invoke(100, "");
-            });
+            progressCallback?.Invoke(100, "");
 
             Console.WriteLine();
             Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"StationidDMI",12}");
@@ -290,18 +284,15 @@ namespace DMI.SMS.Application
         {
             IList<ElevationAngles>? elevationAngles = null;
 
-            await Task.Run(() =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Retrieving elevation angles..");
+            progressCallback?.Invoke(0.0, "Retrieving elevation angles");
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving elevation angles..");
-                progressCallback?.Invoke(0.0, "Retrieving elevation angles");
+                elevationAngles = (await unitOfWork.ElevationAnglesRepository.GetAll()).ToList();
+            }
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    elevationAngles = unitOfWork.ElevationAnglesRepository.GetAll().ToList();
-                }
-
-                progressCallback?.Invoke(100, "");
-            });
+            progressCallback?.Invoke(100, "");
 
             Console.WriteLine();
             Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"ParentId",36}, {"N",5}, {"NE",5}");
@@ -313,18 +304,15 @@ namespace DMI.SMS.Application
         {
             IList<ContactPerson>? contactPersons = null;
 
-            await Task.Run(() =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Retrieving contact persons..");
+            progressCallback?.Invoke(0.0, "Retrieving contact persons");
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Retrieving contact persons..");
-                progressCallback?.Invoke(0.0, "Retrieving contact persons");
+                contactPersons = (await unitOfWork.ContactPersons.GetAll()).ToList();
+            }
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    contactPersons = unitOfWork.ContactPersons.GetAll().ToList();
-                }
-
-                progressCallback?.Invoke(100, "");
-            });
+            progressCallback?.Invoke(100, "");
 
             Console.WriteLine();
             Console.WriteLine($"{"GdbArchiveOId",13}, {"GlobalId",36}, {"ParentId",36}, {"Name",20}");
@@ -370,35 +358,32 @@ namespace DMI.SMS.Application
             bool excludeSupercededRows,
             ProgressCallback progressCallback = null)
         {
-            await Task.Run(() =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
+            progressCallback?.Invoke(2.0, "Exporting data");
+
+            IList<StationInformation> stationInformations;
+
+            List<Expression<Func<StationInformation, bool>>> predicates = null;
+
+            if (excludeSupercededRows)
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Exporting data..");
-                progressCallback?.Invoke(2.0, "Exporting data");
-
-                IList<StationInformation> stationInformations;
-
-                List<Expression<Func<StationInformation, bool>>> predicates = null;
-
-                if (excludeSupercededRows)
+                predicates = new List<Expression<Func<StationInformation, bool>>>()
                 {
-                    predicates = new List<Expression<Func<StationInformation, bool>>>()
-                    {
-                        _ => _.GdbToDate == new DateTime(9999, 12, 31, 23, 59, 59)
-                    };
-                }
+                    _ => _.GdbToDate == new DateTime(9999, 12, 31, 23, 59, 59)
+                };
+            }
 
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    stationInformations = predicates == null 
-                        ? unitOfWork.StationInformations.GetAll().ToList() 
-                        : unitOfWork.StationInformations.Find(predicates).ToList();
-                }
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                stationInformations = predicates == null 
+                    ? (await unitOfWork.StationInformations.GetAll()).ToList() 
+                    : (await unitOfWork.StationInformations.Find(predicates)).ToList();
+            }
 
-                _dataIOHandler.ExportData(stationInformations, fileName);
+            _dataIOHandler.ExportData(stationInformations, fileName);
 
-                progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, $"Completed exporting data to file: {fileName}");
-            });
+            progressCallback?.Invoke(100, "");
+            Logger?.WriteLine(LogMessageCategory.Information, $"Completed exporting data to file: {fileName}");
         }
 
         public async Task ImportData(

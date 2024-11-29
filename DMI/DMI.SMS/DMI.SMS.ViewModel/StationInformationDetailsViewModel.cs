@@ -5,15 +5,18 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using Craft.UI.Utils;
+using Craft.ViewModel.Utils;
 using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
 using DMI.SMS.Domain.EntityClassExtensions;
 using DMI.SMS.Persistence;
+using StateOfView = Craft.UI.Utils.StateOfView;
 
 namespace DMI.SMS.ViewModel
 {
@@ -94,7 +97,7 @@ namespace DMI.SMS.ViewModel
 
         private RelayCommand _discardChangesCommand; // Den her clearer bare formen, hvis man fortryder de ændringer, man har indtastet
         private RelayCommand<object> _manipulateCommand; // Her manipulerer vi bare hårdt
-        private RelayCommand<object> _eraseCommand; // Her bomber vi hårdt en række væk
+        private AsyncCommand<object> _eraseCommand; // Her bomber vi hårdt en række væk
         private RelayCommand _updateCommand; // Her superseder vi en eksisterende række, så man kan se, hvem der har ændret noget - svarende til, hvad man jo altså gør med det rigtige system. Den kan kun bruges for en current record
         private RelayCommand<object> _deleteCommand; // Her foretager vi en logisk delete
         private RelayCommand<object> _promoteCommand; // Den her kan bruges på rækker, der er supersedede, dvs outdated eller deleted - man fisker så at sige rækken op af papirkurven og gør den current
@@ -770,9 +773,9 @@ namespace DMI.SMS.ViewModel
             get { return _manipulateCommand ?? (_manipulateCommand = new RelayCommand<object>(Manipulate, CanManipulate)); }
         }
 
-        public RelayCommand<object> EraseCommand
+        public AsyncCommand<object> EraseCommand
         {
-            get { return _eraseCommand ?? (_eraseCommand = new RelayCommand<object>(Erase, CanErase)); }
+            get { return _eraseCommand ?? (_eraseCommand = new AsyncCommand<object>(Erase, CanErase)); }
         }
 
         public RelayCommand UpdateCommand
@@ -1199,7 +1202,7 @@ namespace DMI.SMS.ViewModel
                 DateTo != _originalDateTo;
         }
 
-        private void Erase(
+        private async Task Erase(
             object owner)
         {
             var message = _nRecordsSelected == 1
@@ -1217,10 +1220,10 @@ namespace DMI.SMS.ViewModel
 
             using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var stationInformationsForDeletion = unitOfWork.StationInformations
+                var stationInformationsForDeletion = await unitOfWork.StationInformations
                     .Find(s => gdbArchiveOIDs.Contains(s.GdbArchiveOid));
 
-                unitOfWork.StationInformations.RemoveRange(stationInformationsForDeletion);
+                await unitOfWork.StationInformations.RemoveRange(stationInformationsForDeletion);
                 unitOfWork.Complete();
             }
 

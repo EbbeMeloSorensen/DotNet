@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
+using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using DMI.SMS.Application;
 using DMI.SMS.Domain.Entities;
@@ -55,7 +57,7 @@ namespace DMI.SMS.ViewModel
         private Brush _backgroundBrush1 = new SolidColorBrush(Colors.White);
         private Brush _backgroundBrush2 = new SolidColorBrush(Colors.LightGray);
 
-        private RelayCommand<object> _findStationInformationsCommand;
+        private AsyncCommand<object> _findStationInformationsCommand;
         private RelayCommand _clearFiltersCommand;
 
         public FindStationInformationsViewModel FindStationInformationsViewModel { get; }
@@ -102,11 +104,11 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        public RelayCommand<object> FindStationInformationsCommand
+        public AsyncCommand<object> FindStationInformationsCommand
         {
             get
             {
-                return _findStationInformationsCommand ?? (_findStationInformationsCommand = new RelayCommand<object>(FindStationInformations));
+                return _findStationInformationsCommand ?? (_findStationInformationsCommand = new AsyncCommand<object>(FindStationInformations));
             }
         }
 
@@ -168,7 +170,7 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        private int CountStationInformationsMatchingFilterFromRepository(
+        private async Task<int> CountStationInformationsMatchingFilterFromRepository(
             bool avoidTwoCallsToTheDatabaseInCaseInMemoryConditionFilteringIsRequired = false)
         {
             if (FindStationInformationsViewModel.FilterInPlace)
@@ -182,7 +184,7 @@ namespace DMI.SMS.ViewModel
                     // so we have to pull the entire dataset into memory and do the counting there
                     using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                     {
-                        records = unitOfWork.StationInformations.GetAll().ToList();
+                        records = (await unitOfWork.StationInformations.GetAll()).ToList();
                     }
 
                     var localRowCharacteristicsMap = records.GenerateRowCharacteristicsMap();
@@ -205,8 +207,8 @@ namespace DMI.SMS.ViewModel
                     {
                         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                         {
-                            records = unitOfWork.StationInformations
-                                .Find(FindStationInformationsViewModel.FilterAsExpressionCollection())
+                            records = (await unitOfWork.StationInformations
+                                .Find(FindStationInformationsViewModel.FilterAsExpressionCollection()))
                                 .ToList();
                         }
                     }
@@ -236,7 +238,7 @@ namespace DMI.SMS.ViewModel
             }
         }
 
-        private IList<StationInformation> RetrieveStationInformationsMatchingFilterFromRepository(
+        private async Task<IList<StationInformation>> RetrieveStationInformationsMatchingFilterFromRepository(
             bool avoidTwoCallsToTheDatabaseInCaseInMemoryConditionFilteringIsRequired = false)
         {
             IList<StationInformation> result = null;
@@ -249,7 +251,7 @@ namespace DMI.SMS.ViewModel
                 {
                     using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                     {
-                        result = unitOfWork.StationInformations.GetAll().ToList();
+                        result = (await unitOfWork.StationInformations.GetAll()).ToList();
                     }
 
                     localRowCharacteristicsMap = result.GenerateRowCharacteristicsMap();
@@ -267,8 +269,8 @@ namespace DMI.SMS.ViewModel
                     {
                         using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                         {
-                            result = unitOfWork.StationInformations
-                                .Find(FindStationInformationsViewModel.FilterAsExpressionCollection())
+                            result = (await unitOfWork.StationInformations
+                                .Find(FindStationInformationsViewModel.FilterAsExpressionCollection()))
                                 .ToList();
                         }
                     }
@@ -283,8 +285,8 @@ namespace DMI.SMS.ViewModel
                 {
                     using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                     {
-                        result = unitOfWork.StationInformations
-                            .Find(FindStationInformationsViewModel.FilterAsExpressionCollection())
+                        result = (await unitOfWork.StationInformations
+                            .Find(FindStationInformationsViewModel.FilterAsExpressionCollection()))
                             .ToList();
                     }
 
@@ -295,7 +297,7 @@ namespace DMI.SMS.ViewModel
             {
                 using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                 {
-                    result = unitOfWork.StationInformations.GetAll().ToList();
+                    result = (await unitOfWork.StationInformations.GetAll()).ToList();
                 }
 
                 localRowCharacteristicsMap = result.GenerateRowCharacteristicsMap();
@@ -396,14 +398,14 @@ namespace DMI.SMS.ViewModel
             stationInformationViewModels.ForEach(_ => StationInformationViewModels.Add(_));
         }
 
-        private void FindStationInformations(
+        private async Task FindStationInformations(
             object owner)
         {
             try
             {
                 var limit = 100;
 
-                var count = CountStationInformationsMatchingFilterFromRepository();
+                var count = await CountStationInformationsMatchingFilterFromRepository();
 
                 if (count == 0)
                 {
@@ -443,9 +445,9 @@ namespace DMI.SMS.ViewModel
                 : $"{ItemCount} records";
         }
 
-        private void FetchStationInformationsFromRepository()
+        private async Task FetchStationInformationsFromRepository()
         {
-            _stationInformations = RetrieveStationInformationsMatchingFilterFromRepository();
+            _stationInformations = await RetrieveStationInformationsMatchingFilterFromRepository();
 
             // Optionally reduce the data set to records of interest
             if (FindStationInformationsViewModel.CurrentOption != Option.Option1)
