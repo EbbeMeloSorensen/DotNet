@@ -46,17 +46,17 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.Repositories
             throw new NotImplementedException();
         }
 
-        public override void Clear()
+        public override Task Clear()
         {
             throw new NotImplementedException();
         }
 
-        public override void Update(Station entity)
+        public override Task Update(Station entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<Station> entities)
+        public override Task UpdateRange(IEnumerable<Station> entities)
         {
             throw new NotImplementedException();
         }

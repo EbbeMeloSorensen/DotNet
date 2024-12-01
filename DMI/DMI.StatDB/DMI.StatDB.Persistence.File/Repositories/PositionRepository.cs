@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.IO;
 using DMI.StatDB.Persistence.Repositories;
@@ -39,17 +40,18 @@ namespace DMI.StatDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Position> GetAll()
+        public async Task<IEnumerable<Position>> GetAll()
         {
-            return _positions;
+            return await Task.Run(() => _positions);
         }
 
-        public IEnumerable<Position> Find(Expression<Func<Position, bool>> predicate)
+        public Task<IEnumerable<Position>> Find(
+            Expression<Func<Position, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Position> Find(IList<Expression<Func<Position, bool>>> predicates)
+        public Task<IEnumerable<Position>> Find(IList<Expression<Func<Position, bool>>> predicates)
         {
             throw new NotImplementedException();
         }
@@ -59,52 +61,55 @@ namespace DMI.StatDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public void Add(
+        public async Task Add(
             Position position)
         {
-            // Todo: Make sure you don't add a position with the same combination of station id and start date
-            var station = StationRepository.Get(position.StatID);
-
-            position.Station = station;
-
-            if (station.Positions == null)
+            await Task.Run(() =>
             {
-                station.Positions = new List<Position>();
-            }
+                // Todo: Make sure you don't add a position with the same combination of station id and start date
+                var station = StationRepository.Get(position.StatID);
 
-            station.Positions.Add(position);
+                position.Station = station;
 
-            _positions.Add(position);
+                if (station.Positions == null)
+                {
+                    station.Positions = new List<Position>();
+                }
 
-            UpdateRepositoryFile();
+                station.Positions.Add(position);
+
+                _positions.Add(position);
+
+                UpdateRepositoryFile();
+            });
         }
 
-        public void AddRange(IEnumerable<Position> entities)
+        public Task AddRange(IEnumerable<Position> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Position entity)
+        public Task Update(Position entity)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRange(IEnumerable<Position> entities)
+        public Task UpdateRange(IEnumerable<Position> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(Position entity)
+        public Task Remove(Position entity)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(IEnumerable<Position> entities)
+        public Task RemoveRange(IEnumerable<Position> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }
@@ -130,12 +135,12 @@ namespace DMI.StatDB.Persistence.File.Repositories
             UpdateRepositoryFile();
         }
 
-        private void UpdateRepositoryFile()
+        private async Task UpdateRepositoryFile()
         {
             var dataIOHandler = new DataIOHandler();
 
             dataIOHandler.ExportDataToJson(
-                StationRepository.GetAll().ToList(),
+                (await StationRepository.GetAll()).ToList(),
                 _positions,
                 @"StatDBFileRepository.json");
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Persistence.Repositories;
 using Npgsql;
@@ -29,17 +30,17 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Position> GetAll()
+        public async Task<IEnumerable<Position>> GetAll()
         {
-            return GetPositions(null);
+            return await Task.Run(() => GetPositions(null));
         }
 
-        public IEnumerable<Position> Find(Expression<Func<Position, bool>> predicate)
+        public Task<IEnumerable<Position>> Find(Expression<Func<Position, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Position> Find(IList<Expression<Func<Position, bool>>> predicates)
+        public Task<IEnumerable<Position>> Find(IList<Expression<Func<Position, bool>>> predicates)
         {
             throw new NotImplementedException();
         }
@@ -49,37 +50,37 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public void Add(Position entity)
+        public Task Add(Position entity)
         {
             throw new NotImplementedException();
         }
 
-        public void AddRange(IEnumerable<Position> entities)
+        public Task AddRange(IEnumerable<Position> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Position entity)
+        public Task Update(Position entity)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRange(IEnumerable<Position> entities)
+        public Task UpdateRange(IEnumerable<Position> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(Position entity)
+        public Task Remove(Position entity)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(IEnumerable<Position> entities)
+        public Task RemoveRange(IEnumerable<Position> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }

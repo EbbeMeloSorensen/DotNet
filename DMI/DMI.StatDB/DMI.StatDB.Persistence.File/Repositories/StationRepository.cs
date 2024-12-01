@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.IO;
 using DMI.StatDB.Persistence.Repositories;
@@ -50,26 +51,31 @@ namespace DMI.StatDB.Persistence.File.Repositories
             return temp.Count();
         }
 
-        public IEnumerable<Station> GetAll()
+        public async Task<IEnumerable<Station>> GetAll()
         {
-            return _stations;
+            return await Task.Run(() => _stations);
         }
 
-        public IEnumerable<Station> Find(Expression<Func<Station, bool>> predicate)
+        public async Task<IEnumerable<Station>> Find(
+            Expression<Func<Station, bool>> predicate)
         {
-            return _stations.Where(predicate.Compile());
+            return await Task.Run(() => _stations.Where(predicate.Compile()));
         }
 
-        public IEnumerable<Station> Find(IList<Expression<Func<Station, bool>>> predicates)
+        public async Task<IEnumerable<Station>> Find(
+            IList<Expression<Func<Station, bool>>> predicates)
         {
-            IEnumerable<Station> temp = _stations;
-
-            foreach (var predicate in predicates)
+            return await Task.Run(() =>
             {
-                temp = temp.Where(predicate.Compile());
-            }
+                IEnumerable<Station> temp = _stations;
 
-            return temp;
+                foreach (var predicate in predicates)
+                {
+                    temp = temp.Where(predicate.Compile());
+                }
+
+                return temp;
+            });
         }
 
         public Station SingleOrDefault(Expression<Func<Station, bool>> predicate)
@@ -77,9 +83,8 @@ namespace DMI.StatDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public void Add(Station station)
+        public async Task Add(Station station)
         {
-
             if (station.StatID == 0)
             {
                 // Generate an id for the record
@@ -99,26 +104,27 @@ namespace DMI.StatDB.Persistence.File.Repositories
 
             _stations.Add(station);
 
-            UpdateRepositoryFile();
-        }
+            await UpdateRepositoryFile();
+    }
 
-        public void AddRange(IEnumerable<Station> stations)
+        public Task AddRange(IEnumerable<Station> stations)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Station station)
+        public async Task Update(Station station)
         {
             var stationFromRepository = Get(station.StatID);
             stationFromRepository.CopyAttributes(station);
 
-            UpdateRepositoryFile();
+            await UpdateRepositoryFile();
         }
 
-        public void UpdateRange(IEnumerable<Station> stations)
+        public async Task UpdateRange(
+            IEnumerable<Station> stations)
         {
             var ids = stations.Select(p => p.StatID);
-            var stationsFromRepository = Find(s => ids.Contains(s.StatID));
+            var stationsFromRepository = await Find(s => ids.Contains(s.StatID));
 
             stationsFromRepository.ToList().ForEach(sRepo =>
             {
@@ -127,37 +133,37 @@ namespace DMI.StatDB.Persistence.File.Repositories
                 sRepo.CopyAttributes(updatedStation);
             });
 
-            UpdateRepositoryFile();
+            await UpdateRepositoryFile();
         }
 
-        public void Remove(Station entity)
+        public async Task Remove(Station entity)
         {
             _stations = _stations.Where(s => s.StatID != entity.StatID).ToList();
 
-            UpdateRepositoryFile();
+            await UpdateRepositoryFile();
         }
 
-        public void RemoveRange(IEnumerable<Station> entities)
+        public async Task RemoveRange(IEnumerable<Station> entities)
         {
             var gdbArchiveOIds = entities.Select(s => s.StatID).ToList();
 
             _stations = _stations.Where(s => !gdbArchiveOIds.Contains(s.StatID)).ToList();
 
-            UpdateRepositoryFile();
+            await UpdateRepositoryFile();
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }
 
-        public void Load(IEnumerable<Station> entities)
+        public async Task Load(IEnumerable<Station> entities)
         {
             _stations.Clear(); // In case we call load after having done so earlier. Might wanna clean this up..
             _stations.AddRange(entities);
             _nextId = _stations.Count == 0 ? 1 : _stations.Max(si => si.StatID) + 1;
 
-            UpdateRepositoryFile();
+            await UpdateRepositoryFile();
         }
 
         public Station GetWithPositions(int statid)
@@ -188,13 +194,13 @@ namespace DMI.StatDB.Persistence.File.Repositories
             return temp;
         }
 
-        private void UpdateRepositoryFile()
+        private async Task UpdateRepositoryFile()
         {
             var dataIOHandler = new DataIOHandler();
 
             dataIOHandler.ExportDataToJson(
                 _stations,
-                PositionRepository.GetAll().ToList(),
+                (await PositionRepository.GetAll()).ToList(),
                 @"StatDBFileRepository.json");
         }
     }

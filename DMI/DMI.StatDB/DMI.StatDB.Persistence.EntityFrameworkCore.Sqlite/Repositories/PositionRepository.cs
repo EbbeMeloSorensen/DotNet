@@ -1,7 +1,7 @@
-﻿using Craft.Persistence.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Craft.Persistence.EntityFrameworkCore;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Persistence.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
 {
@@ -11,17 +11,19 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
         }
 
-        public override void Clear()
+        public override Task Clear()
         {
             throw new NotImplementedException();
         }
 
-        public override void Update(Position entity)
+        public override Task Update(
+            Position entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<Position> entities)
+        public override Task UpdateRange(
+            IEnumerable<Position> entities)
         {
             throw new NotImplementedException();
         }

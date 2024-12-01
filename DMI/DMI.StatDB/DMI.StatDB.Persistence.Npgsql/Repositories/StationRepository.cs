@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Persistence.Repositories;
 using Npgsql;
@@ -112,43 +113,43 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public void Add(
+        public Task Add(
             Station entity)
         {
             throw new NotImplementedException();
         }
 
-        public void AddRange(
+        public Task AddRange(
             IEnumerable<Station> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(
+        public Task Update(
             Station entity)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRange(
+        public Task UpdateRange(
             IEnumerable<Station> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(
+        public Task Remove(
             Station entity)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(
+        public Task RemoveRange(
             IEnumerable<Station> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }

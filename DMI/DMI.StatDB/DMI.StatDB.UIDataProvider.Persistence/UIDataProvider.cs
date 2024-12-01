@@ -107,7 +107,7 @@ namespace DMI.StatDB.UIDataProvider.Persistence
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                var positionsFromRepository = unitOfWork.Positions.GetAll().ToList();
+                var positionsFromRepository = (await unitOfWork.Positions.GetAll()).ToList();
 
                 positionsFromRepository.ForEach(p =>
                 {

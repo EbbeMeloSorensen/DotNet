@@ -18,18 +18,18 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
         }
 
-        public override void Clear()
+        public override Task Clear()
         {
             throw new NotImplementedException();
         }
 
-        public override void Update(
+        public override Task Update(
             Station entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(
+        public override Task UpdateRange(
             IEnumerable<Station> entities)
         {
             throw new NotImplementedException();
