@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Craft.Persistence;
 using DMI.StatDB.Domain.Entities;
 
@@ -14,10 +15,10 @@ namespace DMI.StatDB.Persistence.Repositories
 
         IEnumerable<Station> GetAllStationsWithPositions();
 
-        IEnumerable<Station> FindStationsWithPositions(
+        Task<IEnumerable<Station>> FindStationsWithPositions(
             Expression<Func<Station, bool>> predicate);
 
-        IEnumerable<Station> FindStationsWithPositions(
+        Task<IEnumerable<Station>> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates);
     }
 }

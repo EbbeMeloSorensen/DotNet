@@ -21,20 +21,20 @@ namespace DMI.StatDB.Application
         int CountStations(
             IList<Expression<Func<Station, bool>>> predicates);
 
-        IList<Station> GetAllStations();
+        Task<IList<Station>> GetAllStations();
 
-        IList<Position> GetAllPositions();
+        Task<IList<Position>> GetAllPositions();
 
-        IList<Station> FindStations(
+        Task<IList<Station>> FindStations(
             IList<Expression<Func<Station, bool>>> predicates);
 
-        IList<Station> FindStationsWithPositions(
+        Task<IList<Station>> FindStationsWithPositions(
             Expression<Func<Station, bool>> predicate);
 
-        IList<Station> FindStationsWithPositions(
+        Task<IList<Station>> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates);
 
-        void ExportData(
+        Task ExportData(
             string fileName);
 
         void ImportData(

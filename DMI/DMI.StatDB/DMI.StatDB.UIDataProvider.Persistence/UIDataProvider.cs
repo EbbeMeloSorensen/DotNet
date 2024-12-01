@@ -83,105 +83,95 @@ namespace DMI.StatDB.UIDataProvider.Persistence
             }
         }
 
-        public override IList<Station> GetAllStations()
+        public override async Task<IList<Station>> GetAllStations()
         {
             var stations = new List<Station>();
 
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var stationsFromRepository = unitOfWork.Stations.GetAll().ToList();
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            var stationsFromRepository = (await unitOfWork.Stations.GetAll()).ToList();
 
-                stationsFromRepository.ForEach(s =>
-                {
-                    var cacheStation = IncludeInCache(s);
-                    stations.Add(cacheStation);
-                });
-            }
+            stationsFromRepository.ForEach(s =>
+            {
+                var cacheStation = IncludeInCache(s);
+                stations.Add(cacheStation);
+            });
 
             return stations;
         }
 
-        public override IList<Position> GetAllPositions()
+        public override async Task<IList<Position>> GetAllPositions()
         {
             var positions = new List<Position>();
 
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var positionsFromRepository = (await unitOfWork.Positions.GetAll()).ToList();
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            var positionsFromRepository = (await unitOfWork.Positions.GetAll()).ToList();
 
-                positionsFromRepository.ForEach(p =>
-                {
-                    var cachePosition = IncludeInCache(p);
-                    positions.Add(cachePosition);
-                });
-            }
+            positionsFromRepository.ForEach(p =>
+            {
+                var cachePosition = IncludeInCache(p);
+                positions.Add(cachePosition);
+            });
 
             return positions;
         }
 
-        public override IList<Station> FindStations(
+        public override async Task<IList<Station>> FindStations(
             IList<Expression<Func<Station, bool>>> predicates)
         {
             //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
 
             var stations = new List<Station>();
 
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var stationsFromRepository = unitOfWork.Stations.Find(predicates).ToList();
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            var stationsFromRepository = (await unitOfWork.Stations.Find(predicates)).ToList();
 
-                stationsFromRepository.ForEach(s =>
-                {
-                    var cacheStation = IncludeInCache(s);
-                    stations.Add(cacheStation);
-                });
-            }
+            stationsFromRepository.ForEach(s =>
+            {
+                var cacheStation = IncludeInCache(s);
+                stations.Add(cacheStation);
+            });
 
             //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
 
             return stations;
         }
 
-        public override IList<Station> FindStationsWithPositions(
+        public override async Task<IList<Station>> FindStationsWithPositions(
             Expression<Func<Station, bool>> predicate)
         {
             //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
 
             var stations = new List<Station>();
 
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var stationsFromRepository = unitOfWork.Stations.FindStationsWithPositions(predicate).ToList();
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            var stationsFromRepository = (await unitOfWork.Stations.FindStationsWithPositions(predicate)).ToList();
 
-                stationsFromRepository.ForEach(s =>
-                {
-                    var cacheStation = IncludeInCache(s);
-                    stations.Add(cacheStation);
-                });
-            }
+            stationsFromRepository.ForEach(s =>
+            {
+                var cacheStation = IncludeInCache(s);
+                stations.Add(cacheStation);
+            });
 
             //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
 
             return stations;
         }
 
-        public override IList<Station> FindStationsWithPositions(
+        public override async Task<IList<Station>> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates)
         {
             //_logger.WriteLineAndStartStopWatch("Retrieving people matching search criteria..");
 
             var stations = new List<Station>();
 
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var stationsFromRepository = unitOfWork.Stations.FindStationsWithPositions(predicates).ToList();
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            var stationsFromRepository = (await unitOfWork.Stations.FindStationsWithPositions(predicates)).ToList();
 
-                stationsFromRepository.ForEach(s =>
-                {
-                    var cacheStation = IncludeInCache(s);
-                    stations.Add(cacheStation);
-                });
-            }
+            stationsFromRepository.ForEach(s =>
+            {
+                var cacheStation = IncludeInCache(s);
+                stations.Add(cacheStation);
+            });
 
             //_logger.StopStopWatchAndWriteLine("Completed retrieving people");
 

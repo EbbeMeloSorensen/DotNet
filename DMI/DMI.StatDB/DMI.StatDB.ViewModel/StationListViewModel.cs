@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
+using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using DMI.StatDB.Domain.Entities;
 using DMI.StatDB.Application;
@@ -20,7 +22,7 @@ namespace DMI.StatDB.ViewModel
         private int _itemCount;
         private string _itemCountText;
 
-        private RelayCommand<object> _findStationsCommand;
+        private AsyncCommand<object> _findStationsCommand;
 
         public FindStationsViewModel FindStationsViewModel { get; }
 
@@ -53,11 +55,11 @@ namespace DMI.StatDB.ViewModel
         }
 
 
-        public RelayCommand<object> FindStationsCommand
+        public AsyncCommand<object> FindStationsCommand
         {
             get
             {
-                return _findStationsCommand ?? (_findStationsCommand = new RelayCommand<object>(FindStations));
+                return _findStationsCommand ?? (_findStationsCommand = new AsyncCommand<object>(FindStations));
             }
         }
 
@@ -80,7 +82,7 @@ namespace DMI.StatDB.ViewModel
             };
         }
 
-        private void FindStations(
+        private async Task FindStations(
             object owner)
         {
             try
@@ -109,7 +111,7 @@ namespace DMI.StatDB.ViewModel
                     }
                 }
 
-                var stationsMatchingFilter = RetrieveStationsMatchingFilterFromRepository();
+                var stationsMatchingFilter = await RetrieveStationsMatchingFilterFromRepository();
                 _stations = stationsMatchingFilter;
                 ItemCount = count;
 
@@ -134,17 +136,18 @@ namespace DMI.StatDB.ViewModel
             }
         }
 
-        private IList<Station> RetrieveStationsMatchingFilterFromRepository()
+        private async Task<IList<Station>> RetrieveStationsMatchingFilterFromRepository()
         {
             IList<Station> result;
 
             if (FindStationsViewModel.FilterInPlace)
             {
-                result = _dataProvider.FindStationsWithPositions(FindStationsViewModel.FilterAsExpressionCollection());
+                result = await _dataProvider.FindStationsWithPositions(
+                    FindStationsViewModel.FilterAsExpressionCollection());
             }
             else
             {
-                result = _dataProvider.GetAllStations();
+                result = await _dataProvider.GetAllStations();
             }
 
             return result;

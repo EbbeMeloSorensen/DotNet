@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj" />
     <ProjectReference Include="..\..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj" />
     <ProjectReference Include="..\DMI.StatDB.Application\DMI.StatDB.Application.csproj" />
   </ItemGroup>

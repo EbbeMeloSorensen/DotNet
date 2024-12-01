@@ -36,17 +36,17 @@ namespace DMI.StatDB.Application
         public abstract int CountStations(
             IList<Expression<Func<Station, bool>>> predicates);
 
-        public abstract IList<Station> GetAllStations();
+        public abstract Task<IList<Station>> GetAllStations();
 
-        public abstract IList<Position> GetAllPositions();
+        public abstract Task<IList<Position>> GetAllPositions();
 
-        public abstract IList<Station> FindStations(
+        public abstract Task<IList<Station>> FindStations(
             IList<Expression<Func<Station, bool>>> predicates);
 
-        public abstract IList<Station> FindStationsWithPositions(
+        public abstract Task<IList<Station>> FindStationsWithPositions(
             Expression<Func<Station, bool>> predicate);
 
-        public abstract IList<Station> FindStationsWithPositions(
+        public abstract Task<IList<Station>> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates);
 
         public void ImportData(
@@ -86,7 +86,7 @@ namespace DMI.StatDB.Application
             LoadPositions(positions);
         }
 
-        public void ExportData(string fileName)
+        public async Task ExportData(string fileName)
         {
             var extension = Path.GetExtension(fileName)?.ToLower();
 
@@ -96,11 +96,11 @@ namespace DMI.StatDB.Application
             }
 
             _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all station records from repository..");
-            var allStations = GetAllStations();
+            var allStations = await GetAllStations();
             _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {allStations.Count} station records");
 
             _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving all position records from repository..");
-            var allPositions = GetAllPositions();
+            var allPositions = await GetAllPositions();
             _logger?.WriteLine(LogMessageCategory.Information, $"  Retrieved {allPositions.Count} position records");
 
             switch (extension)

@@ -52,25 +52,28 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Station> FindStationsWithPositions(
+        public Task<IEnumerable<Station>> FindStationsWithPositions(
             Expression<Func<Station, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Station> FindStationsWithPositions(
+        public async Task<IEnumerable<Station>> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates)
         {
-            var stations = predicates.Any()
-                ? DBContext.Stations
-                    .Include(_ => _.Positions)
-                    .Where(predicates.Aggregate((c, n) => c.And(n)))
-                    .ToList()
-                : DBContext.Stations
-                    .Include(_ => _.Positions)
-                    .ToList();
+            return await Task.Run(() =>
+            {
+                var stations = predicates.Any()
+                    ? DBContext.Stations
+                        .Include(_ => _.Positions)
+                        .Where(predicates.Aggregate((c, n) => c.And(n)))
+                        .ToList()
+                    : DBContext.Stations
+                        .Include(_ => _.Positions)
+                        .ToList();
 
-            return stations;
+                return stations;
+            });
         }
     }
 }

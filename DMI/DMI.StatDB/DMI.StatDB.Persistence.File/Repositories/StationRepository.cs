@@ -136,14 +136,16 @@ namespace DMI.StatDB.Persistence.File.Repositories
             await UpdateRepositoryFile();
         }
 
-        public async Task Remove(Station entity)
+        public async Task Remove(
+            Station entity)
         {
             _stations = _stations.Where(s => s.StatID != entity.StatID).ToList();
 
             await UpdateRepositoryFile();
         }
 
-        public async Task RemoveRange(IEnumerable<Station> entities)
+        public async Task RemoveRange(
+            IEnumerable<Station> entities)
         {
             var gdbArchiveOIds = entities.Select(s => s.StatID).ToList();
 
@@ -157,13 +159,9 @@ namespace DMI.StatDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task Load(IEnumerable<Station> entities)
+        public void Load(IEnumerable<Station> entities)
         {
-            _stations.Clear(); // In case we call load after having done so earlier. Might wanna clean this up..
-            _stations.AddRange(entities);
-            _nextId = _stations.Count == 0 ? 1 : _stations.Max(si => si.StatID) + 1;
-
-            await UpdateRepositoryFile();
+            throw new NotImplementedException();
         }
 
         public Station GetWithPositions(int statid)
@@ -176,22 +174,25 @@ namespace DMI.StatDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Station> FindStationsWithPositions(Expression<Func<Station, bool>> predicate)
+        public Task<IEnumerable<Station>> FindStationsWithPositions(Expression<Func<Station, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Station> FindStationsWithPositions(
+        public async Task<IEnumerable<Station>> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates)
         {
-            IEnumerable<Station> temp = _stations;
-
-            foreach (var predicate in predicates)
+            return await Task.Run(() =>
             {
-                temp = temp.Where(predicate.Compile());
-            }
+                IEnumerable<Station> temp = _stations;
 
-            return temp;
+                foreach (var predicate in predicates)
+                {
+                    temp = temp.Where(predicate.Compile());
+                }
+
+                return temp;
+            });
         }
 
         private async Task UpdateRepositoryFile()

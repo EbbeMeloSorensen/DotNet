@@ -86,25 +86,28 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Station> GetAll()
+        public async Task<IEnumerable<Station>> GetAll()
         {
-            return GetStations(null);
+            return await Task.Run(() => GetStations(null));
         }
 
-        public IEnumerable<Station> Find(
+        public Task<IEnumerable<Station>> Find(
             Expression<Func<Station, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Station> Find(
+        public async Task<IEnumerable<Station>> Find(
             IList<Expression<Func<Station, bool>>> predicates)
         {
-            var whereClause = predicates
-                .Select(p => $"({p.ToMSSqlString()})")
-                .Aggregate((c, n) => $"{c} AND {n}");
+            return await Task.Run(() =>
+            {
+                var whereClause = predicates
+                    .Select(p => $"({p.ToMSSqlString()})")
+                    .Aggregate((c, n) => $"{c} AND {n}");
 
-            return GetStations(whereClause);
+                return GetStations(whereClause);
+            });
         }
 
         public Station SingleOrDefault(
@@ -170,22 +173,28 @@ namespace DMI.StatDB.Persistence.Npgsql.Repositories
             return GetStationsWithPositions(null);
         }
 
-        public IEnumerable<Station> FindStationsWithPositions(
+        public async Task<IEnumerable<Station>> FindStationsWithPositions(
             Expression<Func<Station, bool>> predicate)
         {
-            var whereClause = predicate.ToMSSqlString();
+            return await Task.Run(() =>
+            {
+                var whereClause = predicate.ToMSSqlString();
 
-            return GetStationsWithPositions(whereClause);
+                return GetStationsWithPositions(whereClause);
+            });
         }
 
-        public IEnumerable<Station> FindStationsWithPositions(
+        public async Task<IEnumerable<Station>> FindStationsWithPositions(
             IList<Expression<Func<Station, bool>>> predicates)
         {
-            var whereClause = predicates
-                .Select(p => $"({p.ToMSSqlString()})")
-                .Aggregate((c, n) => $"{c} AND {n}");
+            return await Task.Run(() =>
+            {
+                var whereClause = predicates
+                    .Select(p => $"({p.ToMSSqlString()})")
+                    .Aggregate((c, n) => $"{c} AND {n}");
 
-            return GetStationsWithPositions(whereClause);
+                return GetStationsWithPositions(whereClause);
+            });
         }
 
         private int CountStations(

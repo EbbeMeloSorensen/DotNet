@@ -36,12 +36,12 @@ namespace DMI.StatDB.Persistence.EntityFrameworkCore.SqlServer.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Station> FindStationsWithPositions(Expression<Func<Station, bool>> predicate)
+        public Task<IEnumerable<Station>> FindStationsWithPositions(Expression<Func<Station, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Station> FindStationsWithPositions(IList<Expression<Func<Station, bool>>> predicates)
+        public Task<IEnumerable<Station>> FindStationsWithPositions(IList<Expression<Func<Station, bool>>> predicates)
         {
             throw new NotImplementedException();
         }
