@@ -472,7 +472,7 @@ namespace DMI.Data.Studio.ViewModel
                 {
                     // Initialize filter for StatDB station list
                     StationListViewModel.FindStationsViewModel.StationIdFilter = $"{selectedStationInformationRow.StationIDDMI}";
-                    StationListViewModel.FindStationsCommand.Execute(null);
+                    StationListViewModel.FindStationsCommand.ExecuteAsync(null);
 
                     // Find ud af, hvilket id vi forventer i StatDB
                     var nanoqStationID = int.Parse(StationListViewModel.FindStationsViewModel.StationIdFilter.AsNanoqStationId());

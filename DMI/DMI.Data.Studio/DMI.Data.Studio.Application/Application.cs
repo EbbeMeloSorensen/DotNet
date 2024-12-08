@@ -398,7 +398,7 @@ namespace DMI.Data.Studio.Application
         public async Task<List<string>> ExtractStations(
             ProgressCallback progressCallback = null)
         {
-            return await Task.Run(() =>
+            return await Task.Run(async () =>
             {
                 var result = new List<string>();
 
@@ -406,7 +406,7 @@ namespace DMI.Data.Studio.Application
                 {
                     try
                     {
-                        var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+                        var observingFacilities = await unitOfWork.ObservingFacilities.GetAll();
 
                         result.AddRange(observingFacilities.Select(_ => $"{_.StatId}"));
                     }
@@ -468,7 +468,7 @@ namespace DMI.Data.Studio.Application
                 var outputOGCJsonFileName = "ogcoceanObs_station.json";
 
                 // Fetch all rows
-                var stationDataRaw = RetrieveAllRows(rollBackDate);
+                var stationDataRaw = await RetrieveAllRows(rollBackDate);
 
                 // Configure filters
                 var stationTypes = new List<StationType> { StationType.Vandstandsstation };
@@ -524,11 +524,11 @@ namespace DMI.Data.Studio.Application
                 {
                     using (var unitOfWork = _unitOfWorkFactorySmsDB.GenerateUnitOfWork())
                     {
-                        var smsStation = unitOfWork.StationInformations
+                        var smsStation = (await unitOfWork.StationInformations
                             .Find(
                                 s => s.StationIDDMI.HasValue &&
                                 s.StationIDDMI.Value == historicalTideGaugeStationId &&
-                                s.GdbToDate.Year == 9999)
+                                s.GdbToDate.Year == 9999))
                             .Single();
 
                         var frieDataStation = smsStation.ConvertToFrieDataStation(convertFromDMIStationIdToKDIStationId);
@@ -651,7 +651,7 @@ namespace DMI.Data.Studio.Application
             MeteorologicalStationListGenerationMode mode,
             ProgressCallback? progressCallback)
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 var timeNow = DateTime.UtcNow.AsEpochInMicroSeconds();
 
@@ -694,7 +694,7 @@ namespace DMI.Data.Studio.Application
 
                 // Fetch all rows
                 //var stationDataRaw = RetrieveAllRows(new DateTime(2021, 1, 24)); 
-                var stationDataRaw = RetrieveAllRows(rollbackDate);
+                var stationDataRaw = await RetrieveAllRows(rollbackDate);
 
                 // Configure filters
                 var stationTypes = new List<StationType>
@@ -932,14 +932,14 @@ namespace DMI.Data.Studio.Application
             });
         }
 
-        private IList<StationInformation> RetrieveAllRows(
+        private async Task<IList<StationInformation>> RetrieveAllRows(
             DateTime? rollBackDate)
         {
             IList<StationInformation> stationDataRaw;
 
             using (var unitOfWork = _unitOfWorkFactorySmsDB.GenerateUnitOfWork())
             {
-                stationDataRaw = unitOfWork.StationInformations.GetAll().ToList();
+                stationDataRaw = (await unitOfWork.StationInformations.GetAll()).ToList();
             }
 
             if (rollBackDate.HasValue)
@@ -1193,8 +1193,8 @@ namespace DMI.Data.Studio.Application
 
                     chunks.Enqueue(new Chunk
                     {
-                        StartTime = startTime,
-                        EndTime = endTime,
+                        StartTime = startTime!.Value,
+                        EndTime = endTime!.Value,
                         ObservationCount = observationCount
                     });
                 }

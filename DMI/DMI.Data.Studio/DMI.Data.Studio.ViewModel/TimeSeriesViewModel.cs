@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
-using DMI.SMS.Domain.Entities;
+using System.Threading.Tasks;
 using DMI.StatDB.Domain.Entities;
 using GalaSoft.MvvmLight;
 using Craft.Logging;
@@ -123,7 +123,7 @@ namespace DMI.Data.Studio.ViewModel
             UpdateCurve();
         }
 
-        private void UpdateCurve()
+        private async Task UpdateCurve()
         {
             if (!Active || _t1 <= _t0)
             {
@@ -143,8 +143,8 @@ namespace DMI.Data.Studio.ViewModel
 
                 //Logger?.WriteLine(LogMessageCategory.Information, $"  Retrieving station {_nanoqStationId}..", "general", true);
 
-                var observingFacility = unitOfWork.ObservingFacilities
-                    .Find(_ => _.StatId == statId)
+                var observingFacility = (await unitOfWork.ObservingFacilities
+                    .Find(_ => _.StatId == statId))
                     .SingleOrDefault();
 
                 //Logger?.WriteLine(LogMessageCategory.Information, "    done", "general", false);
