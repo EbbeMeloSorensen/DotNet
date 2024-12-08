@@ -92,7 +92,7 @@ namespace DMI.ObsDB.Application
             int? lastYear,
             ProgressCallback progressCallback = null)
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 var currentActivity = "Migrating..";
                 progressCallback?.Invoke(0, currentActivity);
@@ -130,7 +130,7 @@ namespace DMI.ObsDB.Application
                     Logger?.WriteLine(LogMessageCategory.Information,
                         "Reading all observing facilities..");
 
-                    observingFacilities = unitOfWorkSourceRepository.ObservingFacilities.GetAll()
+                    observingFacilities = (await unitOfWorkSourceRepository.ObservingFacilities.GetAll())
                          .Where(_ =>
                           //_.StatId == 601100 || 
                           _.StatId == 603000 //|| 

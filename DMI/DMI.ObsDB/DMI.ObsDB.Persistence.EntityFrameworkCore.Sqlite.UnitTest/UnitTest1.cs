@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using DMI.ObsDB.Domain.Entities;
@@ -10,43 +11,43 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
     public class UnitTest1
     {
         [Fact]
-        public void Test_Read_All_ObservingFacilities()
+        public async Task Test_Read_All_ObservingFacilities()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+                var observingFacilities = await unitOfWork.ObservingFacilities.GetAll();
                 observingFacilities.Count().Should().Be(5);
             }
         }
 
         [Fact]
-        public void Test_Read_All_TimeSeries()
+        public async Task Test_Read_All_TimeSeries()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var timeSeries = unitOfWork.TimeSeries.GetAll();
+                var timeSeries = await unitOfWork.TimeSeries.GetAll();
                 timeSeries.Count().Should().Be(5);
             }
         }
 
         [Fact]
-        public void Test_Read_All_Observations()
+        public async Task Test_Read_All_Observations()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var observations = unitOfWork.Observations.GetAll();
+                var observations = await unitOfWork.Observations.GetAll();
                 observations.Count().Should().Be(4598521);
             }
         }
 
         [Fact]
-        public void Test_Read_ObservingFacility_With_TimeSeries()
+        public async Task Test_Read_ObservingFacility_With_TimeSeries()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
@@ -54,7 +55,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+                observingFacilities = await unitOfWork.ObservingFacilities.GetAll();
                 observingFacilities.Count().Should().Be(5);
             }
 
@@ -70,7 +71,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
         }
 
         [Fact]
-        public void Test_Read_TimeSeries_With_Observations()
+        public async Task Test_Read_TimeSeries_With_Observations()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
@@ -78,7 +79,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                timeSeries = unitOfWork.TimeSeries.GetAll();
+                timeSeries = await unitOfWork.TimeSeries.GetAll();
                 timeSeries.Count().Should().Be(5);
             }
 
@@ -100,7 +101,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
         // Her undersøger vi, hvad der sker, når man bruger samme unit of work til at hente observationer fra samme repo.
         // Det er tilsyneladende ikke uden implikationer
         [Fact]
-        public void Test_Read_TimeSeries_With_Observations_2()
+        public async Task Test_Read_TimeSeries_With_Observations_2()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
@@ -108,7 +109,7 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.UnitTest
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                timeSeries = unitOfWork.TimeSeries.GetAll();
+                timeSeries = await unitOfWork.TimeSeries.GetAll();
                 timeSeries.Count().Should().Be(5);
             }
 

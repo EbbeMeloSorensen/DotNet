@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Npgsql;
 using DMI.ObsDB.Domain.Entities;
 using DMI.ObsDB.Persistence.Repositories;
@@ -10,17 +11,17 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
 {
     public class ObservingFacilityRepository : IObservingFacilityRepository
     {
-        public void Add(ObservingFacility entity)
+        public Task Add(ObservingFacility entity)
         {
             throw new NotImplementedException();
         }
 
-        public void AddRange(IEnumerable<ObservingFacility> entities)
+        public Task AddRange(IEnumerable<ObservingFacility> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }
@@ -40,12 +41,17 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ObservingFacility> Find(Expression<Func<ObservingFacility, bool>> predicate)
+        public async Task<IEnumerable<ObservingFacility>> Find(
+            Expression<Func<ObservingFacility, bool>> predicate)
         {
-            return GetObservingFacilities($" WHERE {predicate.ToMSSqlString()}");
+            return await Task.Run(() =>
+            {
+                return GetObservingFacilities($" WHERE {predicate.ToMSSqlString()}");
+            });
         }
 
-        public IEnumerable<ObservingFacility> Find(IList<Expression<Func<ObservingFacility, bool>>> predicates)
+        public Task<IEnumerable<ObservingFacility>> Find(
+            IList<Expression<Func<ObservingFacility, bool>>> predicates)
         {
             throw new NotImplementedException();
         }
@@ -89,9 +95,12 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
             return result;
         }
 
-        public IEnumerable<ObservingFacility> GetAll()
+        public async Task<IEnumerable<ObservingFacility>> GetAll()
         {
-            return GetObservingFacilities(null);
+            return await Task.Run(() =>
+            {
+                return GetObservingFacilities(null);
+            });
         }
 
         public ObservingFacility GetIncludingTimeSeries(int id)
@@ -150,27 +159,30 @@ namespace DMI.ObsDB.Persistence.PostgreSQL.Repositories
             throw new NotImplementedException();
         }
 
-        public void Remove(ObservingFacility entity)
+        public Task Remove(ObservingFacility entity)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(IEnumerable<ObservingFacility> entities)
+        public Task RemoveRange(
+            IEnumerable<ObservingFacility> entities)
         {
             throw new NotImplementedException();
         }
 
-        public ObservingFacility SingleOrDefault(Expression<Func<ObservingFacility, bool>> predicate)
+        public ObservingFacility SingleOrDefault(
+            Expression<Func<ObservingFacility, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(ObservingFacility entity)
+        public Task Update(ObservingFacility entity)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRange(IEnumerable<ObservingFacility> entities)
+        public Task UpdateRange(
+            IEnumerable<ObservingFacility> entities)
         {
             throw new NotImplementedException();
         }

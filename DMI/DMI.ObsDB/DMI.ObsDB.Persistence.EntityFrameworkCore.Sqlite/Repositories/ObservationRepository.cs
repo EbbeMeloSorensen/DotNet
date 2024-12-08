@@ -11,19 +11,22 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
         {
         }
 
-        public override void Clear()
+        public override async Task Clear()
         {
-            var context = Context as ObsDBContext;
+            await Task.Run(() =>
+            {
+                var context = Context as ObsDBContext;
 
-            context.RemoveRange(context.Observations);
+                context.RemoveRange(context.Observations);
+            });
         }
 
-        public override void Update(Observation entity)
+        public override Task Update(Observation entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<Observation> entities)
+        public override Task UpdateRange(IEnumerable<Observation> entities)
         {
             throw new NotImplementedException();
         }

@@ -55,19 +55,22 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.Sqlite.Repositories
                 .SingleOrDefault(t => t.Id == id) ?? throw new InvalidOperationException();
         }
 
-        public override void Clear()
+        public override async Task Clear()
         {
-            var context = Context as ObsDBContext;
+            await Task.Run(() =>
+            {
+                var context = Context as ObsDBContext;
 
-            context.RemoveRange(context.TimeSeries);
+                context.RemoveRange(context.TimeSeries);
+            });
         }
 
-        public override void Update(TimeSeries entity)
+        public override Task Update(TimeSeries entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<TimeSeries> entities)
+        public override Task UpdateRange(IEnumerable<TimeSeries> entities)
         {
             throw new NotImplementedException();
         }

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DMI.ObsDB.Domain.Entities;
 using DMI.ObsDB.Persistence.Repositories;
 
@@ -22,17 +23,17 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             _stationIdAndParamIdMap = new Dictionary<int, Tuple<int, string>>();
         }
 
-        public void Add(TimeSeries entity)
+        public Task Add(TimeSeries entity)
         {
             throw new NotImplementedException();
         }
 
-        public void AddRange(IEnumerable<TimeSeries> entities)
+        public Task AddRange(IEnumerable<TimeSeries> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }
@@ -52,12 +53,12 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TimeSeries> Find(Expression<Func<TimeSeries, bool>> predicate)
+        public Task<IEnumerable<TimeSeries>> Find(Expression<Func<TimeSeries, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TimeSeries> Find(IList<Expression<Func<TimeSeries, bool>>> predicates)
+        public Task<IEnumerable<TimeSeries>> Find(IList<Expression<Func<TimeSeries, bool>>> predicates)
         {
             throw new NotImplementedException();
         }
@@ -67,7 +68,7 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TimeSeries> GetAll()
+        public Task<IEnumerable<TimeSeries>> GetAll()
         {
             throw new NotImplementedException();
         }
@@ -232,12 +233,12 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public void Remove(TimeSeries entity)
+        public Task Remove(TimeSeries entity)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(IEnumerable<TimeSeries> entities)
+        public Task RemoveRange(IEnumerable<TimeSeries> entities)
         {
             throw new NotImplementedException();
         }
@@ -247,12 +248,12 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(TimeSeries entity)
+        public Task Update(TimeSeries entity)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRange(IEnumerable<TimeSeries> entities)
+        public Task UpdateRange(IEnumerable<TimeSeries> entities)
         {
             throw new NotImplementedException();
         }

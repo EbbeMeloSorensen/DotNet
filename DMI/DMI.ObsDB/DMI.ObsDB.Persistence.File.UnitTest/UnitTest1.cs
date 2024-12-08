@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using DMI.ObsDB.Domain.Entities;
@@ -35,7 +36,7 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
         }
 
         [Fact]
-        public void Test_MultiplePredicates_AnEntireTimeSeries()
+        public async Task Test_MultiplePredicates_AnEntireTimeSeries()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
@@ -49,27 +50,27 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
                 predicates.Add(o => o.Time >= t1);
                 predicates.Add(o => o.Time <= t2);
 
-                var observations = unitOfWork.Observations.Find(predicates);
+                var observations = await unitOfWork.Observations.Find(predicates);
                 observations.Count().Should().Be(392755);
                 observations.First().Time.Should().Be(new DateTime(1953, 1, 1, 6, 0, 0));
             }
         }
 
         [Fact]
-        public void Test_Read_All_ObservingFacilities()
+        public async Task Test_Read_All_ObservingFacilities()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+                var observingFacilities = await unitOfWork.ObservingFacilities.GetAll();
                 observingFacilities.Count().Should().Be(11177);
                 observingFacilities.First().Id.Should().Be(1);
             }
         }
 
         [Fact]
-        public void Test_Read_ObservingFacility_With_TimeSeries()
+        public async Task Test_Read_ObservingFacility_With_TimeSeries()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
@@ -77,7 +78,7 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                observingFacilities = unitOfWork.ObservingFacilities.GetAll();
+                observingFacilities = await unitOfWork.ObservingFacilities.GetAll();
                 observingFacilities.Count().Should().Be(11177);
             }
 
@@ -102,13 +103,13 @@ namespace DMI.ObsDB.Persistence.File.UnitTest
         }
 
         [Fact]
-        public void Test_FindObservingFacility_WithSpecific_StatId()
+        public async Task Test_FindObservingFacility_WithSpecific_StatId()
         {
             var unitOfWorkFactory = new UnitOfWorkFactory();
 
             using (var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork())
             {
-                var observingFacilities = unitOfWork.ObservingFacilities.Find(_ =>_.StatId == 601100);
+                var observingFacilities = await unitOfWork.ObservingFacilities.Find(_ =>_.StatId == 601100);
                 observingFacilities.Count().Should().Be(1);
                 observingFacilities.Single().StatId.Should().Be(601100);
             }

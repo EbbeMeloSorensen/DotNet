@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.IO;
+using System.Threading.Tasks;
 using DMI.ObsDB.Domain.Entities;
 using DMI.ObsDB.Persistence.Repositories;
 
@@ -24,17 +25,17 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             _stationIdMap = new Dictionary<int, int>();
         }
 
-        public void Add(ObservingFacility entity)
+        public Task Add(ObservingFacility entity)
         {
             throw new NotImplementedException();
         }
 
-        public void AddRange(IEnumerable<ObservingFacility> entities)
+        public Task AddRange(IEnumerable<ObservingFacility> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void Clear()
+        public Task Clear()
         {
             throw new NotImplementedException();
         }
@@ -54,45 +55,48 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ObservingFacility> Find(
+        public async Task<IEnumerable<ObservingFacility>> Find(
             Expression<Func<ObservingFacility, bool>> predicate)
         {
-            var temp = predicate.Analyze() as Predicate;
+            return await Task.Run(() => {
+                var temp = predicate.Analyze() as Predicate;
 
-            if (temp.Field == "StatId" &&
-                temp.Operator == Operator.Equal)
-            {
-                var statId = temp.Value.ToString();
-                var result = new List<ObservingFacility>();
-
-                var rootDirectory = new DirectoryInfo(_rootDirectory);
-
-                if (rootDirectory.Exists)
+                if (temp.Field == "StatId" &&
+                    temp.Operator == Operator.Equal)
                 {
-                    var yearDirectories = rootDirectory.GetDirectories();
+                    var statId = temp.Value.ToString();
+                    var result = new List<ObservingFacility>();
 
-                    foreach (var yearDirectory in yearDirectories)
+                    var rootDirectory = new DirectoryInfo(_rootDirectory);
+
+                    if (rootDirectory.Exists)
                     {
-                        var stationDirectories = yearDirectory.GetDirectories();
+                        var yearDirectories = rootDirectory.GetDirectories();
 
-                        if (stationDirectories
-                            .Select(_ => _.Name)
-                            .Contains(statId))
+                        foreach (var yearDirectory in yearDirectories)
                         {
-                            result.Add(GenerateObservingFacility(int.Parse(statId)));
-                            break;
+                            var stationDirectories = yearDirectory.GetDirectories();
+
+                            if (stationDirectories
+                                .Select(_ => _.Name)
+                                .Contains(statId))
+                            {
+                                result.Add(GenerateObservingFacility(int.Parse(statId)));
+                                break;
+                            }
                         }
                     }
+
+                    return result;
                 }
 
-                return result;
-            }
-
-            // Todo: Denne skal kunne bruges, hvis man bruger et bestemt predicate
-            throw new InvalidOperationException();
+                // Todo: Denne skal kunne bruges, hvis man bruger et bestemt predicate
+                throw new InvalidOperationException();
+            });
         }
 
-        public IEnumerable<ObservingFacility> Find(IList<Expression<Func<ObservingFacility, bool>>> predicates)
+        public Task<IEnumerable<ObservingFacility>> Find(
+            IList<Expression<Func<ObservingFacility, bool>>> predicates)
         {
             throw new NotImplementedException();
         }
@@ -102,7 +106,7 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ObservingFacility> GetAll()
+        public async Task<IEnumerable<ObservingFacility>> GetAll()
         {
             var rootDirectory = new DirectoryInfo(_rootDirectory);
             var stationIds = new HashSet<int>();
@@ -177,12 +181,12 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public void Remove(ObservingFacility entity)
+        public Task Remove(ObservingFacility entity)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(IEnumerable<ObservingFacility> entities)
+        public Task RemoveRange(IEnumerable<ObservingFacility> entities)
         {
             throw new NotImplementedException();
         }
@@ -192,12 +196,12 @@ namespace DMI.ObsDB.Persistence.File.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(ObservingFacility entity)
+        public Task Update(ObservingFacility entity)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRange(IEnumerable<ObservingFacility> entities)
+        public Task UpdateRange(IEnumerable<ObservingFacility> entities)
         {
             throw new NotImplementedException();
         }

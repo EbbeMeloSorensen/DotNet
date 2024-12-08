@@ -30,19 +30,22 @@ namespace DMI.ObsDB.Persistence.EntityFrameworkCore.PostgreSQL.Repositories
                 .SingleOrDefault(_ => _.Id == id) ?? throw new InvalidOperationException();
         }
 
-        public override void Clear()
+        public override async Task Clear()
         {
-            var context = Context as ObsDBContext;
+            await Task.Run(() =>
+            {
+                var context = Context as ObsDBContext;
 
-            context.RemoveRange(context.ObservingFacilities);
+                context.RemoveRange(context.ObservingFacilities);
+            });
         }
 
-        public override void Update(ObservingFacility entity)
+        public override Task Update(ObservingFacility entity)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateRange(IEnumerable<ObservingFacility> entities)
+        public override Task UpdateRange(IEnumerable<ObservingFacility> entities)
         {
             throw new NotImplementedException();
         }
