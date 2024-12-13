@@ -81,7 +81,10 @@ namespace Craft.Persistence.EntityFrameworkCore
         public async Task AddRange(
             IEnumerable<TEntity> entities)
         {
-            Context.Set<TEntity>().AddRange(entities);
+            await Task.Run(() =>
+            {
+                Context.Set<TEntity>().AddRange(entities);
+            });
         }
 
         public async Task Remove(

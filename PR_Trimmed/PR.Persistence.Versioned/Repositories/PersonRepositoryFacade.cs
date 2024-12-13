@@ -10,6 +10,7 @@ using PR.Persistence.Repositories;
 
 namespace PR.Persistence.Versioned.Repositories
 {
+    // Generelt når vi returnerer objekter herfra skal vi returnere kloner, da det ellers fucker, når man opdaterer
     public class PersonRepositoryFacade : IPersonRepository
     {
         private static DateTime _maxDate;
@@ -66,9 +67,21 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Add(
             Person person)
         {
+            var now = DateTime.UtcNow;
             person.ID = Guid.NewGuid();
-            person.Created = DateTime.UtcNow;
+            person.Created = now;
             person.Superseded = _maxDate;
+
+            // Todo: Check for initialization på en bedre måde
+            if (person.Start.Year == 1)
+            {
+                person.Start = now;
+            }
+
+            if (person.End.Year == 1)
+            {
+                person.End = _maxDate;
+            }
 
             await UnitOfWork.People.Add(person);
         }
@@ -90,16 +103,37 @@ namespace PR.Persistence.Versioned.Repositories
             };
 
             AddVersionPredicates(predicates, DatabaseTime);
+            AddHistoryPredicates(predicates, HistoricalTime);
 
-            var people = await UnitOfWork.People.Find(predicates);
-            var person = people.SingleOrDefault();
+            var peopleRows = (await UnitOfWork.People.Find(predicates)).ToList();
+
+            if (!peopleRows.Any())
+            {
+                throw new InvalidOperationException("Person doesn't exist");
+            }
+
+            var person = peopleRows
+                .OrderBy(_ => _.Start)
+                .LastOrDefault();
 
             if (person == null)
             {
-                throw new InvalidOperationException("Person does not exist");
+                throw new InvalidOperationException("Person doesn't exist");
             }
 
-            return person;
+            return person.Clone();
+
+
+            // Old
+            //var people = await UnitOfWork.People.Find(predicates);
+            //var person = people.SingleOrDefault();
+
+            //if (person == null)
+            //{
+            //    throw new InvalidOperationException("Person does not exist");
+            //}
+
+            //return person;
         }
 
         public async Task<IEnumerable<Person>> GetAllVariants(
@@ -186,19 +220,19 @@ namespace PR.Persistence.Versioned.Repositories
             // I første omgang får vi ALLE historiske objekter med, og eneste måde at fjerne de ældste er jo netop
             // at gruppere dem efter id og så tage den seneste
 
-            var people = (await UnitOfWork.People.Find(predicates)).ToList();
+            var peopleRows = (await UnitOfWork.People.Find(predicates)).ToList();
 
-            Logger?.WriteLine(LogMessageCategory.Information, $"PersonRepositoryFacade: Retrieved {people.Count} rows");
+            Logger?.WriteLine(LogMessageCategory.Information, $"PersonRepositoryFacade: Retrieved {peopleRows.Count} rows");
 
-            if (!people.Any())
+            if (!peopleRows.Any())
             {
-                return people;
+                return new List<Person>();
             }
 
             // Med denne forsvinder Rey og Anakin, dvs tidligere varianter.
             // Det er fint, men hvis nu vi har sat filteret til at vi kun skal have levende eller kun døde,
             // så skal vi altså filtrere det endnu en gang
-            var result = people
+            var people = peopleRows
                 .GroupBy(p => p.ID)
                 .Select(g => g
                     .OrderBy(p => p.Start)
@@ -212,12 +246,12 @@ namespace PR.Persistence.Versioned.Repositories
 
             if (!IncludeCurrentObjects)
             {
-                result = result.Where(_ => _.End < historicalTime).ToList();
+                people = people.Where(_ => _.End < historicalTime).ToList();
             }
 
             Logger?.WriteLine(LogMessageCategory.Information, $"PersonRepositoryFacade: Retrieved {people.Count} objects");
 
-            return result;
+            return people;
         }
 
         public async Task<IEnumerable<Person>> Find(
@@ -237,9 +271,9 @@ namespace PR.Persistence.Versioned.Repositories
             AddVersionPredicates(predicates, DatabaseTime);
             AddHistoryPredicates(predicates, HistoricalTime);
 
-            var temp = (await UnitOfWork.People.Find(predicates)).ToList();
-
-            return await UnitOfWork.People.Find(predicates);
+            return (await UnitOfWork.People.Find(predicates))
+                .Select(_ => _.Clone())
+                .ToList();
         }
 
         public Person SingleOrDefault(
@@ -253,7 +287,9 @@ namespace PR.Persistence.Versioned.Repositories
         {
             var objectFromRepository = await Get(person.ID);
             objectFromRepository.Superseded = CurrentTime;
+            await UnitOfWork.People.Update(objectFromRepository);
 
+            person.ArchiveID = Guid.NewGuid();
             person.Created = CurrentTime;
             person.Superseded = _maxDate;
             await UnitOfWork.People.Add(person);
@@ -272,18 +308,21 @@ namespace PR.Persistence.Versioned.Repositories
 
             var objectsFromRepository = (await Find(predicates)).ToList();
 
-            objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
+            //objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
 
-            var newObjects = people.Select(p =>
+            foreach (var obj in objectsFromRepository)
             {
-                var newObject = p.Clone();
-                newObject.Created = CurrentTime;
-                newObject.Superseded = _maxDate;
+                obj.Superseded = CurrentTime;
+            }
 
-                return newObject;
-            });
+            //people.ToList().ForEach(_ =>
+            //{
+            //    _.ArchiveID = Guid.NewGuid();
+            //    _.Created = CurrentTime;
+            //    _.Superseded = _maxDate;
+            //});
 
-            await UnitOfWork.People.AddRange(newObjects);
+            //await UnitOfWork.People.AddRange(people);
         }
 
         public async Task Remove(

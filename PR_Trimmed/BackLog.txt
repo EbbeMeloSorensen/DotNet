@@ -26,6 +26,24 @@ Done:
     -> Du siger, at du KUN vil have historiske objekter med, og det gør så, at du som de "historiske" predicates anfører,
        at du kun vil have varianter (bjælker), hvor End ligger før historisk tid. Det gælder for Rey, men jo altså ikke for Rey Skywalker.
 
+Mål: Tilbage på det spor, der hedder at lave "version 2" af pr-applikationen, som skal kunne det samme som den gamle pr, 
+     blot med bitemporalitet. Den kan også passende håndtere glossaries, så du kun skal deployere én applikation
+
+Todo:
+* Update.. du troede den virkede, men det gør den vist ikke.. Scenariet er således:
+  1) Hent en person fra repoet med Get
+  2) Ændr personens navn
+  3) Fodr den til repoet som en update
+  -> Så starter den med at hente den eksisterende for at ændre den, men den ER så allerede ændret.
+  -> Så må det vel være sådan, at det, den skal returnere, skal være en KLON af den fra repoet... 
+* Sikr, at use cases virker fra PR.UI.WPF
+  - Create og update virker tilsyneladende, men når man så starter applikationen op igen, er det der ikke.. reseeder den?
+* Lav PR.UI.WPF som PR.UI.Console - så plugin afhænger af en konfigurationsfil
+* KAN DU FOR HELVEDE IKKE INSPICERE EN DATABASE FRA SIA-MASKINEN??!!!
+* Få dine unit tests op i sving
+* Du er nødt til at dokumentere PR_Trimmed - ellers blive det et vedligeholdelsesmareridt
+
+
 In progress:
 * Få lige de historieks linier på plads igen. Knap så mange denne gang måske.
 * I DFOS API'et skal der være mulighed for at ignorere dem, hvor status er "nedlagt"

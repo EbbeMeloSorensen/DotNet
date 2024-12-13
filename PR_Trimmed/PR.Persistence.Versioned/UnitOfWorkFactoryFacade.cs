@@ -18,6 +18,7 @@ namespace PR.Persistence.Versioned
             IUnitOfWorkFactory unitOfWorkFactory)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
+            IncludeCurrentObjects = true;
             Logger = _unitOfWorkFactory.Logger;
         }
 

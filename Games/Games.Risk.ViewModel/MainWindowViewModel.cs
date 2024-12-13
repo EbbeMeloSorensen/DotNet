@@ -28,7 +28,7 @@ namespace Games.Risk.ViewModel
         private Dictionary<int, string> _territoryNameMap;
 
         private readonly IDialogService _applicationDialogService;
-        private const bool _pseudoRandomNumbers = true;
+        private const bool _pseudoRandomNumbers = false;
         private readonly Random _random;
         private int _playerCount;
         private int _humanPlayerCount;

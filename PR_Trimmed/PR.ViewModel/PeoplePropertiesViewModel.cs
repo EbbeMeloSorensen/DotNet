@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 using Craft.UI.Utils;
 using Craft.Utils;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using Craft.ViewModel.Utils;
 using PR.Application;
 using PR.Domain.Entities;
 using PR.Persistence;
@@ -47,7 +48,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private bool _isVisible;
 
-    private RelayCommand _applyChangesCommand;
+    private AsyncCommand _applyChangesCommand;
 
     public event EventHandler<PeopleEventArgs> PeopleUpdated;
 
@@ -184,9 +185,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    public RelayCommand ApplyChangesCommand
+    public AsyncCommand ApplyChangesCommand
     {
-        get { return _applyChangesCommand ?? (_applyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges)); }
+        get { return _applyChangesCommand ?? (_applyChangesCommand = new AsyncCommand(ApplyChanges, CanApplyChanges)); }
     }
 
     public PeoplePropertiesViewModel(
@@ -272,10 +273,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         ApplyChangesCommand.RaiseCanExecuteChanged();
     }
 
-    private void ApplyChanges()
+    private async Task ApplyChanges()
     {
-        throw new NotImplementedException();
-
         UpdateState(StateOfView.Updated);
 
         Error = string.Join("",
@@ -288,7 +287,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         var updatedPeople = _people.Objects.Select(p => new Person
         {
-            //ArchiveId = p.ArchiveId,
             ID = p.ID,
             FirstName = SharedFirstName != _originalSharedFirstName ? SharedFirstName : p.FirstName,
             Surname = SharedSurname != _originalSharedSurname ? SharedSurname : p.Surname,
@@ -296,7 +294,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
         {
-            unitOfWork.People.UpdateRange(updatedPeople);
+            await unitOfWork.People.UpdateRange(updatedPeople);
             unitOfWork.Complete();
         }
 
