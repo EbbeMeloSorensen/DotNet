@@ -51,12 +51,24 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         public override async Task Update(
             Person person)
         {
-            throw new NotImplementedException();
+            await Task.Run(async () =>
+            {
+                // Jeg er sgu ikke sikker på, at dette er nødvendigt...
+                // i hvert fald ikke, når det objekt, der sendes ned, er det trackede objekt - så er det nemlig det samme,
+                // som man får ved dette kald...
+                //var personFromRepository = await Get(person.ID);
+                //personFromRepository.FirstName = person.FirstName;
+                //personFromRepository.Surname = person.Surname;
+            });
         }
 
         public override async Task UpdateRange(
             IEnumerable<Person> people)
         {
+            // Hvad er ideen her?
+            // ..du unlader at gøre dig nogen antagelser om at de objekter, der sendes ned, er trackede.
+            // derfor trækker du dem fra repoet, og så ændrer du dem
+
             await Task.Run(async () =>
             {
                 var updatedPeople = people.ToList();

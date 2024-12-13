@@ -6,20 +6,21 @@ using PR.Persistence.Versioned;
 
 namespace PR.Persistence.UnitTest
 {
-    public class PersonRepositoryFacadeTest
+    // This test should work for an ordinary as well as a wrapped repository 
+    public class PersonRepositoryTest
     {
-        private const bool _versionedDB = true;
+        private const bool _bitemporalDB = true;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public PersonRepositoryFacadeTest()
+        public PersonRepositoryTest()
         {
             var container = Container.For<InstanceScanner>();
 
             _unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
-            _unitOfWorkFactory.Initialize(_versionedDB);
+            _unitOfWorkFactory.Initialize(_bitemporalDB);
             _unitOfWorkFactory.Reseed();
 
-            if (!_versionedDB) return;
+            if (!_bitemporalDB) return;
 
             _unitOfWorkFactory = new UnitOfWorkFactoryFacade(_unitOfWorkFactory);
             (_unitOfWorkFactory as UnitOfWorkFactoryFacade)!.DatabaseTime = null;
@@ -142,6 +143,8 @@ namespace PR.Persistence.UnitTest
             // en klon og efterfølgende.
             // Det med at du overhovedet kloner.... det var jo fordi du oplevede, at når du henter et objekt og så
             // ændrer det, så går det i fuck
+            //
+            // Øøøøh og nu virker det så tilsyneladende... uden at du er skarp på hvorfor...
 
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
