@@ -27,6 +27,44 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
+        public async Task CreatePerson()
+        {
+            // Arrange
+            var person = new Person
+            {
+                FirstName = "Wicket"
+            };
+
+            // Act
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+            await unitOfWork1.People.Add(person);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var people = await unitOfWork2.People.GetAll();
+            people.Count().Should().Be(3);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Wicket").Should().Be(1);
+        }
+
+        [Fact]
+        public async void GetAllPeople()
+        {
+            // Arrange
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var people = await unitOfWork.People.GetAll();
+
+            // Assert
+            people.Count().Should().Be(2);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+        }
+
+        [Fact]
         public async void GetPersonById()
         {
             // Arrange
@@ -60,42 +98,24 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async Task CreatePerson()
+        public async void FindPeopleByID()
         {
             // Arrange
-            var person = new Person
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
             {
-                FirstName = "Wicket"
+                new("12345678-0000-0000-0000-000000000005"),
+                new("12345678-0000-0000-0000-000000000006")
             };
 
             // Act
-            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
-            await unitOfWork1.People.Add(person);
-            unitOfWork1.Complete();
+            var people = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
 
-            // Assert
-            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
-            var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(3);
+            people.Count.Should().Be(2);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
-            people.Count(p => p.FirstName == "Wicket").Should().Be(1);
         }
-
-        //[Fact]
-        //public void GetPerson_AfterPersonWasDeleted_Throws()
-        //{
-        //    // Arrange
-        //    using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-        //    // Act
-        //    var act = () => unitOfWork.People.Get(
-        //        new Guid("12345678-0000-0000-0000-000000000005"));
-
-        //    // Assert
-        //    var exception = Assert.Throws<InvalidOperationException>(act);
-        //    exception.Message.Should().Be("Person does not exist");
-        //}
 
         [Fact]
         public async void UpdatePerson()
@@ -153,18 +173,60 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async void GetAllPeople()
+        public async void DeletePerson()
         {
             // Arrange
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("12345678-0000-0000-0000-000000000005");
+            var person = await unitOfWork1.People.Get(id);
 
             // Act
-            var people = await unitOfWork.People.GetAll();
+            await unitOfWork1.People.Remove(person);
+            unitOfWork1.Complete();
 
             // Assert
-            people.Count().Should().Be(2);
-            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
-            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var people = await unitOfWork2.People.GetAll();
+            people.Count().Should().Be(1);
         }
+
+        [Fact]
+        public async void DeletePeople()
+        {
+            // Arrange
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("12345678-0000-0000-0000-000000000005"),
+                new("12345678-0000-0000-0000-000000000006")
+            };
+
+            // Act
+            var people = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
+
+            await unitOfWork1.People.RemoveRange(people);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+            people = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
+            people.Count.Should().Be(0);
+        }
+
+        //[Fact]
+        //public void GetPerson_AfterPersonWasDeleted_Throws()
+        //{
+        //    // Arrange
+        //    using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+        //    // Act
+        //    var act = () => unitOfWork.People.Get(
+        //        new Guid("12345678-0000-0000-0000-000000000005"));
+
+        //    // Assert
+        //    var exception = Assert.Throws<InvalidOperationException>(act);
+        //    exception.Message.Should().Be("Person does not exist");
+        //}
     }
 }

@@ -71,18 +71,18 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
 
             await Task.Run(async () =>
             {
-                var updatedPeople = people.ToList();
-                var ids = updatedPeople.Select(p => p.ID);
-                var peopleFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
+                //var updatedPeople = people.ToList();
+                //var ids = updatedPeople.Select(p => p.ID);
+                //var peopleFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
 
-                peopleFromRepository.ForEach(pRepo =>
-                {
-                    var updatedPerson = updatedPeople.Single(pUpd => pUpd.ID == pRepo.ID);
+                //peopleFromRepository.ForEach(pRepo =>
+                //{
+                //    var updatedPerson = updatedPeople.Single(pUpd => pUpd.ID == pRepo.ID);
 
-                    pRepo.FirstName = updatedPerson.FirstName;
-                    pRepo.Surname = updatedPerson.Surname;
-                    pRepo.Created = updatedPerson.Created;
-                });
+                //    pRepo.FirstName = updatedPerson.FirstName;
+                //    pRepo.Surname = updatedPerson.Surname;
+                //    pRepo.Created = updatedPerson.Created;
+                //});
             });
         }
 

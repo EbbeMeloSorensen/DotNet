@@ -288,6 +288,10 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         var updatedPeople = _people.Objects.Select(p => new Person
         {
             ID = p.ID,
+            //Start = p.Start,
+            //End = p.End,
+            //Created = p.Created,
+            Superseded = p.Superseded,
             FirstName = SharedFirstName != _originalSharedFirstName ? SharedFirstName : p.FirstName,
             Surname = SharedSurname != _originalSharedSurname ? SharedSurname : p.Surname,
         }).ToList();

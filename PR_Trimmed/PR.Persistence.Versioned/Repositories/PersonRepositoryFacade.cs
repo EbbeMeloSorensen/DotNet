@@ -271,9 +271,7 @@ namespace PR.Persistence.Versioned.Repositories
             AddVersionPredicates(predicates, DatabaseTime);
             AddHistoryPredicates(predicates, HistoricalTime);
 
-            return (await UnitOfWork.People.Find(predicates))
-                .Select(_ => _.Clone())
-                .ToList();
+            return (await UnitOfWork.People.Find(predicates)).ToList();
         }
 
         public Person SingleOrDefault(
@@ -286,12 +284,14 @@ namespace PR.Persistence.Versioned.Repositories
             Person person)
         {
             var objectFromRepository = await Get(person.ID);
-            objectFromRepository.Superseded = CurrentTime;
+            objectFromRepository.End = CurrentTime;
             await UnitOfWork.People.Update(objectFromRepository);
 
             person.ArchiveID = Guid.NewGuid();
             person.Created = CurrentTime;
             person.Superseded = _maxDate;
+            person.Start = CurrentTime;
+            person.End = _maxDate;
             await UnitOfWork.People.Add(person);
         }
 
@@ -307,22 +307,23 @@ namespace PR.Persistence.Versioned.Repositories
             };
 
             var objectsFromRepository = (await Find(predicates)).ToList();
-
-            //objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
-
-            foreach (var obj in objectsFromRepository)
+            objectsFromRepository.ForEach(p =>
             {
-                obj.Superseded = CurrentTime;
-            }
+                p.End = CurrentTime;
+            });
 
-            //people.ToList().ForEach(_ =>
-            //{
-            //    _.ArchiveID = Guid.NewGuid();
-            //    _.Created = CurrentTime;
-            //    _.Superseded = _maxDate;
-            //});
+            await UnitOfWork.People.UpdateRange(objectsFromRepository);
 
-            //await UnitOfWork.People.AddRange(people);
+            people.ToList().ForEach(_ =>
+            {
+                _.ArchiveID = Guid.NewGuid();
+                _.Created = CurrentTime;
+                _.Superseded = _maxDate;
+                _.Start = CurrentTime;
+                _.End = _maxDate;
+            });
+
+            await UnitOfWork.People.AddRange(people);
         }
 
         public async Task Remove(
