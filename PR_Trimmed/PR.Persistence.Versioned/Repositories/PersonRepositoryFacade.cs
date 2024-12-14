@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
-using PR.Domain;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
 
@@ -121,19 +120,7 @@ namespace PR.Persistence.Versioned.Repositories
                 throw new InvalidOperationException("Person doesn't exist");
             }
 
-            return person.Clone();
-
-
-            // Old
-            //var people = await UnitOfWork.People.Find(predicates);
-            //var person = people.SingleOrDefault();
-
-            //if (person == null)
-            //{
-            //    throw new InvalidOperationException("Person does not exist");
-            //}
-
-            //return person;
+            return person;
         }
 
         public async Task<IEnumerable<Person>> GetAllVariants(
@@ -298,7 +285,6 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task UpdateRange(
             IEnumerable<Person> people)
         {
-            // I guess this doesn't quite work yet - check it out
             var ids = people.Select(p => p.ID).ToList();
 
             var predicates = new List<Expression<Func<Person, bool>>>
@@ -307,6 +293,7 @@ namespace PR.Persistence.Versioned.Repositories
             };
 
             var objectsFromRepository = (await Find(predicates)).ToList();
+
             objectsFromRepository.ForEach(p =>
             {
                 p.End = CurrentTime;
