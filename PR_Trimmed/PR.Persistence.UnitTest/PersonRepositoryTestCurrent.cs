@@ -115,18 +115,16 @@ namespace PR.Persistence.UnitTest
             var id = new Guid("12345678-0000-0000-0000-000000000006");
             var person1 = await unitOfWork1.People.Get(id);
 
-            var person2 = person1.Clone();
-            person2.CopyAttributes(person1);
-            person2.FirstName = "Riley";
+            person1.FirstName = "Riley";
 
             // Act
-            await unitOfWork1.People.Update(person2);
+            await unitOfWork1.People.Update(person1);
             unitOfWork1.Complete();
 
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
-            var person3 = await unitOfWork2.People.Get(id);
-            person3.FirstName.Should().Be("Riley");
+            var person2 = await unitOfWork2.People.Get(id);
+            person2.FirstName.Should().Be("Riley");
         }
 
         [Fact]
@@ -143,17 +141,15 @@ namespace PR.Persistence.UnitTest
             // Act
             var people1 = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
 
-            var people2 = people1.Select(_ => _.Clone()).ToList();
-
-            people2.ForEach(_ => _.FirstName = "Rudy");
-            await unitOfWork1.People.UpdateRange(people2);
+            people1.ForEach(_ => _.FirstName = "Rudy");
+            await unitOfWork1.People.UpdateRange(people1);
             unitOfWork1.Complete();
 
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
-            var people3 = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
-            people3.Count.Should().Be(1);
-            people3.Count(p => p.FirstName == "Rudy").Should().Be(1);
+            var people2 = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
+            people2.Count.Should().Be(1);
+            people2.Count(p => p.FirstName == "Rudy").Should().Be(1);
         }
 
         [Fact]

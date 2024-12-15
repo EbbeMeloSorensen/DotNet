@@ -54,8 +54,8 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
             await Task.Run(async () =>
             {
-                var personFromRepository = await Get(person.ID);
-                personFromRepository.CopyAttributes(person);
+                //var personFromRepository = await Get(person.ID);
+                //personFromRepository.CopyAttributes(person);
             });
         }
 
@@ -64,16 +64,16 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
             await Task.Run(async () =>
             {
-                var updatedPeople = people.ToList();
-                var ids = updatedPeople.Select(p => p.ID);
-                var peopleFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
+                //var updatedPeople = people.ToList();
+                //var ids = updatedPeople.Select(p => p.ID);
+                //var peopleFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
 
-                peopleFromRepository.ForEach(pRepo =>
-                {
-                    var updatedPerson = updatedPeople.Single(pUpd => pUpd.ID == pRepo.ID);
+                //peopleFromRepository.ForEach(pRepo =>
+                //{
+                //    var updatedPerson = updatedPeople.Single(pUpd => pUpd.ID == pRepo.ID);
 
-                    pRepo.CopyAttributes(updatedPerson);
-                });
+                //    pRepo.CopyAttributes(updatedPerson);
+                //});
             });
         }
 

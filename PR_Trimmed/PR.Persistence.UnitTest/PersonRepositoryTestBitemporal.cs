@@ -1,6 +1,7 @@
 ﻿using StructureMap;
 using Xunit;
 using FluentAssertions;
+using PR.Domain;
 using PR.Domain.Entities;
 using PR.Persistence.Versioned;
 
@@ -39,9 +40,8 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
             var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(3);
+            people.Count().Should().Be(2);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
-            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Wicket").Should().Be(1);
         }
 
@@ -55,9 +55,8 @@ namespace PR.Persistence.UnitTest
             var people = await unitOfWork.People.GetAll();
 
             // Assert
-            people.Count().Should().Be(2);
+            people.Count().Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
-            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
         }
 
         [Fact]
@@ -65,13 +64,13 @@ namespace PR.Persistence.UnitTest
         {
             // Arrange
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-            var id = new Guid("12345678-0000-0000-0000-000000000005");
+            var id = new Guid("12345678-0000-0000-0000-000000000006");
 
             // Act
             var person = await unitOfWork.People.Get(id);
 
             // Assert
-            person.FirstName.Should().Be("Chewbacca");
+            person.FirstName.Should().Be("Rey Skywalker");
         }
 
         [Fact]
@@ -82,7 +81,7 @@ namespace PR.Persistence.UnitTest
 
             var ids = new List<Guid>
             {
-                new("12345678-0000-0000-0000-000000000005")
+                new("12345678-0000-0000-0000-000000000006")
             };
 
             // Act
@@ -90,7 +89,7 @@ namespace PR.Persistence.UnitTest
 
             // Assert
             people.Count().Should().Be(1);
-            people.Single().FirstName.Should().Be("Chewbacca");
+            people.Single().FirstName.Should().Be("Rey Skywalker");
         }
 
         [Fact]
@@ -101,16 +100,14 @@ namespace PR.Persistence.UnitTest
 
             var ids = new List<Guid>
             {
-                new("12345678-0000-0000-0000-000000000005"),
                 new("12345678-0000-0000-0000-000000000006")
             };
 
             // Act
             var people = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
 
-            people.Count.Should().Be(2);
+            people.Count.Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
-            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
         }
 
         [Fact]
@@ -118,18 +115,19 @@ namespace PR.Persistence.UnitTest
         {
             // Arrange
             using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
-            var id = new Guid("12345678-0000-0000-0000-000000000005");
-            var person = await unitOfWork1.People.Get(id);
-            person.FirstName = "Monkey";
+            var id = new Guid("12345678-0000-0000-0000-000000000006");
+            var person1 = await unitOfWork1.People.Get(id);
+
+            person1.FirstName = "Riley";
 
             // Act
-            await unitOfWork1.People.Update(person);
+            await unitOfWork1.People.Update(person1);
             unitOfWork1.Complete();
 
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
             var person2 = await unitOfWork2.People.Get(id);
-            person2.FirstName.Should().Be("Monkey");
+            person2.FirstName.Should().Be("Riley");
         }
 
         [Fact]
@@ -162,7 +160,7 @@ namespace PR.Persistence.UnitTest
         {
             // Arrange
             using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
-            var id = new Guid("12345678-0000-0000-0000-000000000005");
+            var id = new Guid("12345678-0000-0000-0000-000000000006");
             var person = await unitOfWork1.People.Get(id);
 
             // Act
@@ -172,7 +170,7 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
             var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(1);
+            people.Count().Should().Be(0);
         }
 
         [Fact]
