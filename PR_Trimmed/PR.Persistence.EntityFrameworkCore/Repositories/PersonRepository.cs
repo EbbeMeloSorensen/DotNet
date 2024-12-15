@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Craft.Persistence.EntityFrameworkCore;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
+using PR.Domain;
 
 namespace PR.Persistence.EntityFrameworkCore.Repositories
 {
@@ -53,36 +54,26 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         {
             await Task.Run(async () =>
             {
-                // Jeg er sgu ikke sikker på, at dette er nødvendigt...
-                // i hvert fald ikke, når det objekt, der sendes ned, er det trackede objekt - så er det nemlig det samme,
-                // som man får ved dette kald...
-                //var personFromRepository = await Get(person.ID);
-                //personFromRepository.FirstName = person.FirstName;
-                //personFromRepository.Surname = person.Surname;
+                var personFromRepository = await Get(person.ID);
+                personFromRepository.CopyAttributes(person);
             });
         }
 
         public override async Task UpdateRange(
             IEnumerable<Person> people)
         {
-            // Hvad er ideen her?
-            // ..du unlader at gøre dig nogen antagelser om at de objekter, der sendes ned, er trackede.
-            // derfor trækker du dem fra repoet, og så ændrer du dem
-
             await Task.Run(async () =>
             {
-                //var updatedPeople = people.ToList();
-                //var ids = updatedPeople.Select(p => p.ID);
-                //var peopleFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
+                var updatedPeople = people.ToList();
+                var ids = updatedPeople.Select(p => p.ID);
+                var peopleFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
 
-                //peopleFromRepository.ForEach(pRepo =>
-                //{
-                //    var updatedPerson = updatedPeople.Single(pUpd => pUpd.ID == pRepo.ID);
+                peopleFromRepository.ForEach(pRepo =>
+                {
+                    var updatedPerson = updatedPeople.Single(pUpd => pUpd.ID == pRepo.ID);
 
-                //    pRepo.FirstName = updatedPerson.FirstName;
-                //    pRepo.Surname = updatedPerson.Surname;
-                //    pRepo.Created = updatedPerson.Created;
-                //});
+                    pRepo.CopyAttributes(updatedPerson);
+                });
             });
         }
 

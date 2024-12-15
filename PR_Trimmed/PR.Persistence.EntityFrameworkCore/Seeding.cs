@@ -202,7 +202,7 @@ namespace PR.Persistence.EntityFrameworkCore
             people = new List<Person>
             {
                 rey,
-                chewbacca
+                //chewbacca
             };
         }
     }
