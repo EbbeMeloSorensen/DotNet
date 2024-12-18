@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
+using PR.Domain;
 
 namespace PR.Persistence.Versioned.Repositories
 {
     // Generelt når vi returnerer objekter herfra skal vi returnere kloner, da det ellers fucker, når man opdaterer
     public class PersonRepositoryFacade : IPersonRepository
     {
+        private bool _returnClonesInsteadOfRepositoryObjects = true;
         private static DateTime _maxDate;
 
         static PersonRepositoryFacade()
@@ -258,7 +260,14 @@ namespace PR.Persistence.Versioned.Repositories
             AddVersionPredicates(predicates, DatabaseTime);
             AddHistoryPredicates(predicates, HistoricalTime);
 
-            return (await UnitOfWork.People.Find(predicates)).ToList();
+            var people = await UnitOfWork.People.Find(predicates);
+
+            if (_returnClonesInsteadOfRepositoryObjects)
+            {
+                return people.Select(_ => _.Clone()).ToList();
+            }
+
+            return people;
         }
 
         public Person SingleOrDefault(
@@ -292,16 +301,20 @@ namespace PR.Persistence.Versioned.Repositories
                 p => ids.Contains(p.ID)
             };
 
+            _returnClonesInsteadOfRepositoryObjects = false;
             var objectsFromRepository = (await Find(predicates)).ToList();
+            _returnClonesInsteadOfRepositoryObjects = true;
 
-            objectsFromRepository.ForEach(p =>
+            objectsFromRepository.ForEach(pRepo =>
             {
-                p.End = CurrentTime;
+                pRepo.End = CurrentTime;
             });
 
             await UnitOfWork.People.UpdateRange(objectsFromRepository);
 
-            people.ToList().ForEach(_ =>
+            var newRows = people.Select(_ => _.Clone()).ToList();
+
+            newRows.ForEach(_ =>
             {
                 _.ArchiveID = Guid.NewGuid();
                 _.Created = CurrentTime;
@@ -310,7 +323,7 @@ namespace PR.Persistence.Versioned.Repositories
                 _.End = _maxDate;
             });
 
-            await UnitOfWork.People.AddRange(people);
+            await UnitOfWork.People.AddRange(newRows);
         }
 
         public async Task Remove(
@@ -330,7 +343,9 @@ namespace PR.Persistence.Versioned.Repositories
                 p => ids.Contains(p.ID)
             };
 
+            _returnClonesInsteadOfRepositoryObjects = false;
             var objectsFromRepository = (await Find(predicates)).ToList();
+            _returnClonesInsteadOfRepositoryObjects = true;
 
             objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
         }

@@ -30,6 +30,21 @@ Mål: Tilbage på det spor, der hedder at lave "version 2" af pr-applikationen, so
      blot med bitemporalitet. Den kan også passende håndtere glossaries, så du kun skal deployere én applikation
 
 Todo:
+* For fuck mand... Hvis det her memento baserede shit virker, så er det vel fordi facaden returnerer kopier snarere end de trackede objekter,
+  og så er der ligesom ikke noget rationale for at gøre det på den måde.
+  Måske er humlen snarere det, du fik lavet ved lidt af en tilfældighed med at facaden pr default returnerer kloner, men den kan vælge
+  i visse tilfælde at returnere trackede objeker. Så bliver det heller ikke overengineered.
+
+
+* Din ide er, at facaden lige konverterer de trackede objekter, som hentes fra repoet, til nogle, der også kan bære et memento.
+  Mekanismen i EF Core er imidlertid, at man skal ændre de TRACKEDE objekter for at det gemmes til repoet, så det duer ikke at du bare smider dem væk
+  efter at have kopieret dem. Derimod bør du nok gemme selve de trackede objekter i selve det wrappede objekt.
+  Fuck, mand... det er svært det her...
+  Er det mon en mulighed at lade Find være styret af en parameter, så man ikke nødvendigvis wrapper dem?
+  Så kunne man jo sige, at man ikke bruger den almindelige Find, når man henter rækker blot for at stemple dem som færdige...
+* I Update Collection testen ændres den eksisterende række ikke
+* Hvis der er forskel mellem unit testen og wpf-applikationen kan det måske skyldes, at der er forskellige contexts i brug...
+  
 * Update.. du troede den virkede, men det gør den vist ikke.. Scenariet er således:
   1) Hent en person fra repoet med Get
   2) Ændr personens navn

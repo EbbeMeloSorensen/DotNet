@@ -138,21 +138,21 @@ namespace PR.Persistence.UnitTest
 
             var ids = new List<Guid>
             {
-                new("12345678-0000-0000-0000-000000000005"),
                 new("12345678-0000-0000-0000-000000000006")
             };
 
             // Act
-            var people = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
+            var people1 = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
 
-            people.ForEach(_ => _.FirstName = "Bamse");
-            await unitOfWork1.People.UpdateRange(people);
+            people1.ForEach(_ => _.FirstName = "Rudy");
+            await unitOfWork1.People.UpdateRange(people1);
             unitOfWork1.Complete();
 
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
-            people = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
-            people.Count.Should().Be(2);
+            var people2 = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
+            people2.Count.Should().Be(1);
+            people2.Count(p => p.FirstName == "Rudy").Should().Be(1);
         }
 
         [Fact]
