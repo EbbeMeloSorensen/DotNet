@@ -30,6 +30,7 @@ Mål: Tilbage på det spor, der hedder at lave "version 2" af pr-applikationen, so
      blot med bitemporalitet. Den kan også passende håndtere glossaries, så du kun skal deployere én applikation
 
 Todo:
+* Du skal KONSEKVENT returnere kloner fra facaden, medmindre det overrides
 * For fuck mand... Hvis det her memento baserede shit virker, så er det vel fordi facaden returnerer kopier snarere end de trackede objekter,
   og så er der ligesom ikke noget rationale for at gøre det på den måde.
   Måske er humlen snarere det, du fik lavet ved lidt af en tilfældighed med at facaden pr default returnerer kloner, men den kan vælge

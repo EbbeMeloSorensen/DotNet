@@ -122,6 +122,11 @@ namespace PR.Persistence.Versioned.Repositories
                 throw new InvalidOperationException("Person doesn't exist");
             }
 
+            if (_returnClonesInsteadOfRepositoryObjects)
+            {
+                return person.Clone();
+            }
+
             return person;
         }
 
@@ -279,7 +284,9 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Update(
             Person person)
         {
+            _returnClonesInsteadOfRepositoryObjects = false;
             var objectFromRepository = await Get(person.ID);
+            _returnClonesInsteadOfRepositoryObjects = true;
             objectFromRepository.End = CurrentTime;
             await UnitOfWork.People.Update(objectFromRepository);
 
@@ -312,9 +319,24 @@ namespace PR.Persistence.Versioned.Repositories
 
             await UnitOfWork.People.UpdateRange(objectsFromRepository);
 
-            var newRows = people.Select(_ => _.Clone()).ToList();
+            // Hvorfor er det egentlig lige at du kloner her?
+            // Det lader ikke til at være nødvendigt - det var vist fordi du oplevede, at
+            // hvis du både brugte de trackede JEG KAN IKKE TÆNKE I DEN HER LARM!!!!!!!
+            // FOR SATAN I DET HEDESTE HELVEDE MAND!!!!!!
+            //var newRows = people.Select(_ => _.Clone()).ToList();
 
-            newRows.ForEach(_ =>
+            //newRows.ForEach(_ =>
+            //{
+            //    _.ArchiveID = Guid.NewGuid();
+            //    _.Created = CurrentTime;
+            //    _.Superseded = _maxDate;
+            //    _.Start = CurrentTime;
+            //    _.End = _maxDate;
+            //});
+
+            //await UnitOfWork.People.AddRange(newRows);
+
+            people.ToList().ForEach(_ =>
             {
                 _.ArchiveID = Guid.NewGuid();
                 _.Created = CurrentTime;
@@ -323,13 +345,15 @@ namespace PR.Persistence.Versioned.Repositories
                 _.End = _maxDate;
             });
 
-            await UnitOfWork.People.AddRange(newRows);
+            await UnitOfWork.People.AddRange(people);
         }
 
         public async Task Remove(
             Person person)
         {
+            _returnClonesInsteadOfRepositoryObjects = false;
             var objectFromRepository = await Get(person.ID);
+            _returnClonesInsteadOfRepositoryObjects = true;
             objectFromRepository.Superseded = CurrentTime;
         }
 
