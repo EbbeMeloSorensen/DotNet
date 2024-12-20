@@ -199,8 +199,9 @@ namespace PR.ViewModel
 
         private async Task DeleteSelectedPeople()
         {
-            await Task.Run(async () =>
-            {
+            // Denne wrapping skal helst undgås. I øvrigt er det problematisk mht at opdatere brugergrænsefladen
+            //await Task.Run(async () =>
+            //{
                 using var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork();
                 var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ID).ToList();
 
@@ -212,7 +213,7 @@ namespace PR.ViewModel
                 unitOfWork.Complete();
 
                 PersonListViewModel.RemovePeople(peopleForDeletion);
-            });
+            //});
         }
 
         private bool CanDeleteSelectedPeople()

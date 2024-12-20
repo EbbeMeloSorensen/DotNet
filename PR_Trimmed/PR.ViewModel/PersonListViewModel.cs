@@ -126,8 +126,15 @@ namespace PR.ViewModel
                 .Where(_ => !idsOfDeletedPeople.Contains(_.ID))
                 .ToList();
 
-            SelectedPersonViewModels.Clear();
-            UpdatePersonViewModels();
+            try
+            {
+                SelectedPersonViewModels.Clear();
+                UpdatePersonViewModels();
+            }
+            catch (Exception e)
+            {
+                var message = e.Message;
+            }
         }
 
         private async Task RetrievePeopleMatchingFilterFromRepository()
