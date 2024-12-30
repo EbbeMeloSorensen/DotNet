@@ -30,6 +30,8 @@ namespace PR.Domain.Entities
 
         public string? Description { get; set; }
 
+        public bool? Dead { get; set; }
+
         public double? Latitude { get; set; }
 
         public double? Longitude { get; set; }

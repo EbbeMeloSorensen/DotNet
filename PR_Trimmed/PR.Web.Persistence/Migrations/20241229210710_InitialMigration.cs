@@ -70,6 +70,7 @@ namespace PR.Web.Persistence.Migrations
                     Birthday = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Category = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Dead = table.Column<bool>(type: "INTEGER", nullable: true),
                     Latitude = table.Column<double>(type: "REAL", nullable: true),
                     Longitude = table.Column<double>(type: "REAL", nullable: true)
                 },
