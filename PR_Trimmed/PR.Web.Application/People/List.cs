@@ -8,6 +8,8 @@ using PR.Web.Persistence;
 using PR.Web.Application.Core;
 using PR.Web.Application.Interfaces;
 using System.Data;
+using System.Linq.Expressions;
+using PR.Domain.Entities;
 
 namespace PR.Web.Application.People;
 
@@ -76,16 +78,27 @@ public class List
                 }
             }
 
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-            {
-                var people = await unitOfWork.People.GetAll();
-                var result = _mapper.Map<IEnumerable<PersonDto>>(people);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
-                return Result<PagedList<PersonDto>>.Success(
-                    await PagedList<PersonDto>.Create(result, request.Params.PageNumber,
-                        request.Params.PageSize)
-                );
+            var predicates = new List<Expression<Func<Person, bool>>>();
+            if (!string.IsNullOrEmpty(request.Params.Name))
+            {
+                var filter = request.Params.Name.ToLower();
+
+                predicates.Add(x =>
+                    x.FirstName.ToLower().Contains(filter) ||
+                    (!string.IsNullOrEmpty(x.Surname) && x.Surname.ToLower().Contains(filter)));
             }
+
+            //var people = await unitOfWork.People.GetAll();
+            var people = await unitOfWork.People.Find(predicates);
+
+            var result = _mapper.Map<IEnumerable<PersonDto>>(people);
+
+            return Result<PagedList<PersonDto>>.Success(
+                await PagedList<PersonDto>.Create(result, request.Params.PageNumber,
+                    request.Params.PageSize)
+            );
 
             /*
             // Old
@@ -112,10 +125,6 @@ public class List
                 default:
                     throw new InvalidOperationException();
             }
-
-            // Dette har vi lige skudt ind for at få den til at opføre sig bitemporalt - i første omgang med en hardcoded parameter
-            var databaseTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            query = query.Where(x => x.Created < databaseTime && x.Superseded >= databaseTime);
 
             if (!string.IsNullOrEmpty(request.Params.Dead))
             {
