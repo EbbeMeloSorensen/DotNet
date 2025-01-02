@@ -83,12 +83,13 @@ var vertexLabels = new HashSet<string>();
 var edgeData = new List<Tuple<string, string>>();
 
 // Windows
-var useLinux = true;
+var useLinux = false;
 
 var rootDirectory = useLinux
     //? "/home/ebs/Git/enterprise-architecture/catalogs_generated/aci_dot_files"
     ? "/home/ebs/Git/enterprise-architecture/catalogs_generated/dot_files_from_marc"
-    : "C:\\Users\\B053687\\Git\\DMI_Gitlab\\enterprise-architecture\\catalogs_generated\\aci_dot_files";
+    //: "C:\\Users\\B053687\\Git\\DMI_Gitlab\\enterprise-architecture\\catalogs_generated\\aci_dot_files";
+    : "C:\\Users\\B053687\\Git\\DMI_Gitlab\\enterprise-architecture\\catalogs\\external";
 
 var outputFile = useLinux
     ? "aci_topoplogy_marc.graphml"
@@ -100,6 +101,11 @@ Console.WriteLine($"Parsing yml files:");
 
 foreach (var file in directory.GetFiles())
 {
+    if (file.Extension != ".dot")
+    {
+        continue;
+    }
+
     Console.WriteLine($"  {file.Name}");
     CollectGraphDataFromDotFile(file.FullName, vertexLabels, edgeData);
 }
