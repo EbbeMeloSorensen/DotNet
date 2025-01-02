@@ -11,7 +11,7 @@ using PR.Web.Persistence;
 namespace PR.Web.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241031100605_InitialMigration")]
+    [Migration("20241229210710_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -168,6 +168,9 @@ namespace PR.Web.Persistence.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool?>("Dead")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
