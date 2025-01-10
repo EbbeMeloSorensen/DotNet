@@ -7,6 +7,7 @@ namespace PR.Persistence.APIClient
     public class UnitOfWork : IUnitOfWork
     {
         public IPersonRepository People { get; }
+        public IPersonCommentRepository PersonComments { get; }
 
         public UnitOfWork(
             string baseURL,

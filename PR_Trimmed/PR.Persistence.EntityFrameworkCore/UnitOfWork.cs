@@ -8,6 +8,7 @@ namespace PR.Persistence.EntityFrameworkCore
         private readonly PRDbContextBase _context;
 
         public IPersonRepository People { get; }
+        public IPersonCommentRepository PersonComments { get; }
 
         public UnitOfWork(
             PRDbContextBase context)

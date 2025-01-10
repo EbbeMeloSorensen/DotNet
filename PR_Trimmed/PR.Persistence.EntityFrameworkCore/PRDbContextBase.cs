@@ -9,6 +9,7 @@ namespace PR.Persistence.EntityFrameworkCore
         public static bool Versioned { get; set; }
 
         public DbSet<Person> People { get; set; }
+        public DbSet<PersonComment> PersonComments { get; set; }
 
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
@@ -20,6 +21,7 @@ namespace PR.Persistence.EntityFrameworkCore
             ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new PersonConfiguration(Versioned));
+            modelBuilder.ApplyConfiguration(new PersonCommentConfiguration(Versioned));
         }
     }
 }

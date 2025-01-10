@@ -8,6 +8,8 @@ namespace PR.Persistence.APIClient.DFOS
     public class UnitOfWork : IUnitOfWork
     {
         public IPersonRepository People { get; }
+        public IPersonCommentRepository PersonComments { get; }
+
 
         public UnitOfWork(
             ILogger logger,

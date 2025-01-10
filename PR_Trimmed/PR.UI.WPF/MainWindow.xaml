@@ -28,6 +28,11 @@
                 <Separator />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
             </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Clear repository" 
+                          Command="{Binding ClearRepositoryCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </MenuItem>
         </Menu>
 
         <Grid>

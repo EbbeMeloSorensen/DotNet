@@ -52,6 +52,7 @@ namespace PR.ViewModel
         private AsyncCommand<object> _createPersonCommand;
         private RelayCommand<object> _showOptionsDialogCommand;
         private AsyncCommand _deleteSelectedPeopleCommand;
+        private AsyncCommand<object> _clearRepositoryCommand;
         private AsyncCommand _exportPeopleCommand;
         private RelayCommand _exportSelectionToGraphmlCommand;
         private AsyncCommand _importPeopleCommand;
@@ -60,6 +61,15 @@ namespace PR.ViewModel
         public AsyncCommand DeleteSelectedPeopleCommand
         {
             get { return _deleteSelectedPeopleCommand ?? (_deleteSelectedPeopleCommand = new AsyncCommand(DeleteSelectedPeople, CanDeleteSelectedPeople)); }
+        }
+
+        public AsyncCommand<object> ClearRepositoryCommand
+        {
+            get
+            {
+                return _clearRepositoryCommand ?? (_clearRepositoryCommand =
+                    new AsyncCommand<object>(ClearRepository, CanClearRepository));
+            }
         }
 
         public AsyncCommand<object> CreatePersonCommand
@@ -142,7 +152,6 @@ namespace PR.ViewModel
             }
         }
 
-
         private void PeoplePropertiesViewModel_PeopleUpdated(
             object? sender, 
             PeopleEventArgs e)
@@ -220,6 +229,41 @@ namespace PR.ViewModel
         {
             return PersonListViewModel.SelectedPeople.Objects != null &&
                    PersonListViewModel.SelectedPeople.Objects.Any();
+        }
+
+        private async Task ClearRepository(
+            object owner)
+        {
+            var dialogViewModel1 = new MessageBoxDialogViewModel("Clear repository?", true);
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel1, owner as Window) == DialogResult.Cancel)
+            {
+                return;
+            }
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                await unitOfWork.People.Clear();
+                unitOfWork.Complete();
+            }
+
+            //_historicalChangeTimes.Clear();
+            //UpdateHistoricalTimeSeriesView(false);
+
+            //_databaseWriteTimes.Clear();
+            //UpdateDatabaseTimeSeriesView();
+
+            //await AutoFindIfEnabled();
+
+            var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was cleared", false);
+
+            _applicationDialogService.ShowDialog(dialogViewModel2, owner as Window);
+        }
+
+        private bool CanClearRepository(
+            object owner)
+        {
+            return true;
         }
 
         private async Task ExportPeople()

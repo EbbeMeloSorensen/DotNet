@@ -1,61 +1,52 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Craft.Logging;
+﻿using Craft.Logging;
 using Craft.Persistence.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PR.Domain.Entities;
 using PR.Persistence.Repositories;
 
 namespace PR.Persistence.EntityFrameworkCore.Repositories
 {
-    public class PersonRepository : Repository<Person>, IPersonRepository
+    public class PersonCommentRepository : Repository<PersonComment>, IPersonCommentRepository
     {
         private PRDbContextBase PrDbContext => Context as PRDbContextBase;
 
-        public PersonRepository(
+        public PersonCommentRepository(
             DbContext context) : base(context)
         {
         }
 
         public ILogger Logger { get; }
 
-        public async Task<Person> Get(
+        public async Task<PersonComment> Get(
             Guid id)
         {
             return await Task.Run(() =>
             {
-                var person = PrDbContext.People.SingleOrDefault(p => p.ID == id);
+                var person = PrDbContext.PersonComments.SingleOrDefault(p => p.ID == id);
 
                 if (person == null)
                 {
-                    throw new InvalidOperationException("Person does not exist");
+                    throw new InvalidOperationException("Person Comment does not exist");
                 }
 
                 return person;
             });
         }
 
-        public Task<IEnumerable<Person>> GetAllVariants(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes()
+        public Task<IEnumerable<PersonComment>> GetAllVariants(
+            Guid id)
         {
             throw new NotImplementedException();
         }
 
         public override async Task Update(
-            Person person)
+            PersonComment personComment)
         {
-            await Task.Run(() => {});
+            await Task.Run(() => { });
         }
 
         public override async Task UpdateRange(
-            IEnumerable<Person> people)
+            IEnumerable<PersonComment> people)
         {
             await Task.Run(() => { });
         }

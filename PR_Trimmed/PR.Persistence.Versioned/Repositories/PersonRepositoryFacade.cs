@@ -319,23 +319,6 @@ namespace PR.Persistence.Versioned.Repositories
 
             await UnitOfWork.People.UpdateRange(objectsFromRepository);
 
-            // Hvorfor er det egentlig lige at du kloner her?
-            // Det lader ikke til at være nødvendigt - det var vist fordi du oplevede, at
-            // hvis du både brugte de trackede JEG KAN IKKE TÆNKE I DEN HER LARM!!!!!!!
-            // FOR SATAN I DET HEDESTE HELVEDE MAND!!!!!!
-            //var newRows = people.Select(_ => _.Clone()).ToList();
-
-            //newRows.ForEach(_ =>
-            //{
-            //    _.ArchiveID = Guid.NewGuid();
-            //    _.Created = CurrentTime;
-            //    _.Superseded = _maxDate;
-            //    _.Start = CurrentTime;
-            //    _.End = _maxDate;
-            //});
-
-            //await UnitOfWork.People.AddRange(newRows);
-
             people.ToList().ForEach(_ =>
             {
                 _.ArchiveID = Guid.NewGuid();

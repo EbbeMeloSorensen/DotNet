@@ -1,0 +1,13 @@
+Historien for denne solution går lang tid tilbage..
+
+En af de grundlæggende ideer med den er, at den skal være et skoleeksempel på en løsning, der er lavet efter kunstens regler mht:
+* Passende arkitektur
+* Dokumentation
+* Test
+
+Derudover skal den gerne være behovsdrevet, og du har jo nu engang et behov for at holde styr på mennesker, som du kender, og termer, du støder på
+
+
+
+
+Du integrerede den med DFOS API'et, hvor du lavede et "APIClient.DFOS-plugin", som læste fra DFOS API'et og så omdannede til personer

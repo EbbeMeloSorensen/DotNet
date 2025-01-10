@@ -18,6 +18,7 @@ namespace PR.Persistence.Versioned
         internal DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;
 
         public IPersonRepository People { get; }
+        public IPersonCommentRepository PersonComments { get; }
 
         public UnitOfWorkFacade(
             ILogger logger,
