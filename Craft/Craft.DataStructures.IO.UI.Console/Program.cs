@@ -79,6 +79,49 @@ void CollectGraphDataFromDotFile(
     }
 }
 
+string StripFromEnd(
+    string text,
+    string end)
+{
+    if (text.EndsWith(end))
+    {
+        return text.Substring(0, text.Length - end.Length);
+    }
+
+    return text;
+}
+
+string ExtractACIName(
+    string epgName)
+{
+    if (epgName.StartsWith("AVINT"))
+    {
+        var a = 0;
+    }
+
+    epgName = StripFromEnd(epgName, "DEV");
+    epgName = StripFromEnd(epgName, "-dev");
+    epgName = StripFromEnd(epgName, "dev");
+
+    epgName = StripFromEnd(epgName, "TEST");
+    epgName = StripFromEnd(epgName, "-test");
+    epgName = StripFromEnd(epgName, "test");
+    epgName = StripFromEnd(epgName, "tst");
+
+    epgName = StripFromEnd(epgName, "PROD");
+    epgName = StripFromEnd(epgName, "-prod");
+    epgName = StripFromEnd(epgName, "prod");
+
+    epgName = StripFromEnd(epgName, "-staging");
+
+    epgName = StripFromEnd(epgName, "INT");
+    epgName = StripFromEnd(epgName, "INTDB");
+    epgName = StripFromEnd(epgName, "APPS");
+    //epgName = StripFromEnd(epgName, "DB");
+
+    return epgName;
+}
+
 var vertexLabels = new HashSet<string>();
 var edgeData = new List<Tuple<string, string>>();
 
@@ -133,6 +176,35 @@ foreach (var item in edgeData)
     graph.AddEdge(vertexId1, vertexId2);
 }
 
+// Kollaps grafen i en mindre graf, hvor man bare ser relationer mellem ACI-navne
+
+// Identificer ACI-navne og lav en mapping fra EPG-navn til ACI-navn
+var aciNames = new HashSet<string>();
+
+graph.Vertices.ForEach(v =>
+{
+    var epgName = v.Label.Replace("\"", "");
+
+    if (epgName.StartsWith("ARNE"))
+    {
+        var a = 0;
+    }
+
+    var aciName = ExtractACIName(epgName);
+
+    if (!aciNames.Contains(aciName))
+    {
+        aciNames.Add(aciName);
+    }
+});
+
+Console.WriteLine("ACI Names:");
+aciNames.OrderBy(_ => _).ToList().ForEach(_ =>
+{
+    Console.WriteLine(_);
+});
+
+File.WriteAllLines(@"C:\Temp\ACINames.txt", aciNames);
 
 Console.WriteLine($"Wrinting {outputFile}..");
 graph.WriteToFile(outputFile, Format.GraphML);
