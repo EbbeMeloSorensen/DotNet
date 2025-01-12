@@ -17,19 +17,22 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "7.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("PR.Domain.Entities.Person", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
                         .HasColumnType("text");
+
+                    b.Property<Guid>("ArchiveID")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("timestamp with time zone");
@@ -49,12 +52,27 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("End")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("Nickname")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Superseded")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Surname")
                         .HasColumnType("text");
@@ -62,62 +80,58 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.Property<string>("ZipCode")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.ToTable("People");
                 });
 
-            modelBuilder.Entity("PR.Domain.Entities.PersonAssociation", b =>
+            modelBuilder.Entity("PR.Domain.Entities.PersonComment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ArchiveID")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
+                    b.Property<DateTime>("End")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("PersonArchiveID")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PersonID")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Superseded")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ObjectPersonId")
-                        .HasColumnType("uuid");
+                    b.HasKey("ID");
 
-                    b.Property<Guid>("SubjectPersonId")
-                        .HasColumnType("uuid");
+                    b.HasIndex("PersonID");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ObjectPersonId");
-
-                    b.HasIndex("SubjectPersonId");
-
-                    b.ToTable("PersonAssociations");
+                    b.ToTable("PersonComments");
                 });
 
-            modelBuilder.Entity("PR.Domain.Entities.PersonAssociation", b =>
+            modelBuilder.Entity("PR.Domain.Entities.PersonComment", b =>
                 {
-                    b.HasOne("PR.Domain.Entities.Person", "ObjectPerson")
-                        .WithMany("SubjectPeople")
-                        .HasForeignKey("ObjectPersonId")
+                    b.HasOne("PR.Domain.Entities.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PR.Domain.Entities.Person", "SubjectPerson")
-                        .WithMany("ObjectPeople")
-                        .HasForeignKey("SubjectPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ObjectPerson");
-
-                    b.Navigation("SubjectPerson");
-                });
-
-            modelBuilder.Entity("PR.Domain.Entities.Person", b =>
-                {
-                    b.Navigation("ObjectPeople");
-
-                    b.Navigation("SubjectPeople");
+                    b.Navigation("Person");
                 });
 #pragma warning restore 612, 618
         }
