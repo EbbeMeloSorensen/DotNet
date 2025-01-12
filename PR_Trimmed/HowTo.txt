@@ -3,14 +3,19 @@ HOWTO
 
 How to make a migration after having changed the code for the domain model (using the code first approach)
 
-1) Åbn Package Manager Console (som er et view i Visual Studio)
-2) Sæt et relevant Default Project, f.eks. PR.Persistence.EntityFrameworkCore.PotgreSQL
-3) Eksekver Add-Migration efterfulgt af et navn på pågældende migration, f.eks. InitialMigration
-   (Hvis der ikke er en "Migrations" folder under det projekt, der blev anført som default, så laves der en)
+1) Sæt projektet PR.Persistence.EntityFrameworkCore.Helper til startup project (det skal være et projekt, der refererer nuget pakken Microsoft.EntityFrameworkCore.Design)
+2) Åbn Package Manager Console (som er et window i Visual Studio)
+3) Sæt et relevant Default Project i Package Manager Console, f.eks. PR.Persistence.EntityFrameworkCore.SqlServer
+4) Eksekver Add-Migration efterfulgt af et navn på pågældende migration, f.eks. InitialMigration
+   (Hvis der ikke er en "Migrations" folder under det projekt, der blev anført som default, så laves der en). Hvis der er en, 
+   så bygges videre på den sidste
 
 Det forklares bl.a. af Mosh Hamedani i lektion 8 ("Demo: Code-First Workflow") af Udemy kurset "Entity Framework in Depth: The Complete Guide".
-Jeg stødte et eller andet sted på at man passende kunne operere med at have et Console Application projekt, som afhang af det ønskede plugin
-for at lave databasen (eller var det selve migreringen?). Jeg kan dog ikke lige huske hvor, men det har nok været et Udemy kursus.
 
 
-How to generate a database for a migration
+How to generate a database after having updated a migration
+1) Sæt (igen) projektet PR.Persistence.EntityFrameworkCore.Helper til startup project (det skal være et projekt, der refererer nuget pakken Microsoft.EntityFrameworkCore.Design)
+2) Åbn Package Manager Console (som er et window i Visual Studio)
+3) Sæt et relevant Default Project i Package Manager Console, f.eks. PR.Persistence.EntityFrameworkCore.SqlServer
+4) Eksekver Update-database i Package Manager Console
+   (Så skulle den gerne lave databasen. Inspicer gerne med MS SQL Server Management Studio)

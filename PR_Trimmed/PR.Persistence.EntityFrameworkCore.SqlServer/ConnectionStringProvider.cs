@@ -36,7 +36,8 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer
                 DataSource = host,
                 InitialCatalog = initialCatalog,
                 UserID = userID,
-                Password = password
+                Password = password,
+                TrustServerCertificate = true
             };
 
             _connectionString = sqlConnectionStringBuilder.ToString();
@@ -55,8 +56,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer
                 {
                     UserID = "sa",
                     Password = "L1on8Zebra",
-                    InitialCatalog = "People",
-                    DataSource = "melo-home\\sqlexpress"
+                    InitialCatalog = "PR_Trimmed",
+                    DataSource = "melo-home\\sqlexpress",
+                    TrustServerCertificate = true
                 };
 
                 return defaultConnStringBuilder.ToString();
