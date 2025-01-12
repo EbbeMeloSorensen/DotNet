@@ -12,7 +12,7 @@ using PR.Persistence.EntityFrameworkCore.SqlServer;
 namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
 {
     [DbContext(typeof(PRDbContext))]
-    [Migration("20250112173807_InitialMigration")]
+    [Migration("20250112184011_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -27,15 +27,12 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
 
             modelBuilder.Entity("PR.Domain.Entities.Person", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("ArchiveID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ArchiveID")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime2");
@@ -62,6 +59,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<double?>("Latitude")
                         .HasColumnType("float");
 
@@ -83,18 +83,15 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                     b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("ArchiveID");
 
                     b.ToTable("People");
                 });
 
             modelBuilder.Entity("PR.Domain.Entities.PersonComment", b =>
                 {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("ArchiveID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
@@ -102,6 +99,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
 
                     b.Property<DateTime>("End")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PersonArchiveID")
                         .HasColumnType("uniqueidentifier");
@@ -119,9 +119,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("ArchiveID");
 
-                    b.HasIndex("PersonID");
+                    b.HasIndex("PersonArchiveID");
 
                     b.ToTable("PersonComments");
                 });
@@ -130,9 +130,8 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 {
                     b.HasOne("PR.Domain.Entities.Person", "Person")
                         .WithMany()
-                        .HasForeignKey("PersonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PersonArchiveID")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Person");
                 });

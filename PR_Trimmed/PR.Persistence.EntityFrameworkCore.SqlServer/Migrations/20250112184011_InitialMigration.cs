@@ -15,12 +15,12 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "People",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ArchiveID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Superseded = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Start = table.Column<DateTime>(type: "datetime2", nullable: false),
                     End = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Nickname = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -36,38 +36,38 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_People", x => x.ID);
+                    table.PrimaryKey("PK_People", x => x.ArchiveID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PersonComments",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ArchiveID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Superseded = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Start = table.Column<DateTime>(type: "datetime2", nullable: false),
                     End = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PersonID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PersonArchiveID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PersonComments", x => x.ID);
+                    table.PrimaryKey("PK_PersonComments", x => x.ArchiveID);
                     table.ForeignKey(
-                        name: "FK_PersonComments_People_PersonID",
-                        column: x => x.PersonID,
+                        name: "FK_PersonComments_People_PersonArchiveID",
+                        column: x => x.PersonArchiveID,
                         principalTable: "People",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ArchiveID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonComments_PersonID",
+                name: "IX_PersonComments_PersonArchiveID",
                 table: "PersonComments",
-                column: "PersonID");
+                column: "PersonArchiveID");
         }
 
         /// <inheritdoc />
