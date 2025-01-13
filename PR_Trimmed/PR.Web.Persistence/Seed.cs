@@ -39,9 +39,13 @@ namespace PR.Web.Persistence
                     await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
 
-                Seeding.CreateDataForSeeding(true, out var people);
+                Seeding.CreateDataForSeeding(
+                    true, 
+                    out var people, 
+                    out var personComments);
 
                 await context.People.AddRangeAsync(people);
+                await context.PersonComments.AddRangeAsync(personComments);
                 await context.SaveChangesAsync();
             }
         }

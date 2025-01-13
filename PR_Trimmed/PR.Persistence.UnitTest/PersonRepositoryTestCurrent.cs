@@ -2,7 +2,6 @@
 using Xunit;
 using FluentAssertions;
 using PR.Domain.Entities;
-using PR.Domain;
 
 namespace PR.Persistence.UnitTest
 {

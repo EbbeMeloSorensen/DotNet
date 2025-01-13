@@ -13,6 +13,7 @@ namespace PR.Web.Persistence
         }
 
         public DbSet<Person> People { get; set; }
+        public DbSet<PersonComment> PersonComments { get; set; }
 
         protected override void OnModelCreating(
             ModelBuilder builder)

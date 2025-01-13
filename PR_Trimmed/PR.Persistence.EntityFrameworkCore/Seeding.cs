@@ -13,28 +13,34 @@ namespace PR.Persistence.EntityFrameworkCore
         {
             if (context.People.Any()) return;
 
-            CreateDataForSeeding(PRDbContextBase.Versioned, out var people);
+            CreateDataForSeeding(
+                PRDbContextBase.Versioned, 
+                out var people, 
+                out var personComments);
 
             context.People.AddRange(people);
+            context.PersonComments.AddRange(personComments);
             context.SaveChanges();
         }
 
         public static void CreateDataForSeeding(
             bool versioned,
-            out List<Person> people)
+            out List<Person> people,
+            out List<PersonComment> personComments)
         {
             if (versioned)
             {
-                CreateBitemporalDataForSeeding(out people);
+                CreateBitemporalDataForSeeding(out people, out personComments);
             }
             else
             {
-                CreateCurrentDataForSeeding(out people);
+                CreateCurrentDataForSeeding(out people, out personComments);
             }
         }
 
         private static void CreateBitemporalDataForSeeding(
-            out List<Person> people)
+            out List<Person> people,
+            out List<PersonComment> personComments)
         {
             var now = DateTime.UtcNow;
 
@@ -176,10 +182,22 @@ namespace PR.Persistence.EntityFrameworkCore
                 rey_0_0,
                 rey_1_0
             };
+
+            var rey_comment_0_0 = new PersonComment
+            {
+                PersonID = new Guid("12345678-0000-0000-0000-000000000006"),
+                Text = "She starts out as a scavenger"
+            };
+
+            personComments = new List<PersonComment>
+            {
+                rey_comment_0_0
+            };
         }
 
         private static void CreateCurrentDataForSeeding(
-            out List<Person> people)
+            out List<Person> people,
+            out List<PersonComment> personComments)
         {
             var chewbacca = new Person
             {
@@ -203,6 +221,17 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 rey,
                 //chewbacca
+            };
+
+            var rey_comment = new PersonComment
+            {
+                PersonID = new Guid("12345678-0000-0000-0000-000000000006"),
+                Text = "She starts out as a scavenger"
+            };
+
+            personComments = new List<PersonComment>
+            {
+                rey_comment
             };
         }
     }
