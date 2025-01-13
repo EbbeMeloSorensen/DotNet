@@ -3,7 +3,7 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using Xunit;
 using FluentAssertions;
-using PR.Domain.DFOS;
+using PR.Persistence.APIClient.DFOS.ModelClasses;
 
 namespace PR.Persistence.APIClient.UnitTest
 {

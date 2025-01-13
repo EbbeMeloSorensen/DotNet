@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace PR.Domain.DFOS
+namespace PR.Persistence.APIClient.DFOS.ModelClasses
 {
     public class Properties
     {

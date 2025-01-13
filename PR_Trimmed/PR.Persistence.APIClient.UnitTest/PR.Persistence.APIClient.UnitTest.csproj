@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PR.Persistence.APIClient.DFOS\PR.Persistence.APIClient.DFOS.csproj" />
     <ProjectReference Include="..\PR.Persistence.APIClient\PR.Persistence.APIClient.csproj" />
   </ItemGroup>
 

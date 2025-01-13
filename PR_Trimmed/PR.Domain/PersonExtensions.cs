@@ -1,5 +1,4 @@
-﻿using System;
-using PR.Domain.Entities;
+﻿using PR.Domain.Entities;
 
 namespace PR.Domain
 {
