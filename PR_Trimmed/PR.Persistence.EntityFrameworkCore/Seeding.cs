@@ -1,4 +1,4 @@
-﻿using PR.Domain.Entities;
+﻿using PR.Domain.Entities.PR;
 using System;
 
 namespace PR.Persistence.EntityFrameworkCore

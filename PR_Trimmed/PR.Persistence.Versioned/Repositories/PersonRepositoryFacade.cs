@@ -4,9 +4,9 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
-using PR.Domain.Entities;
 using PR.Persistence.Repositories;
 using PR.Domain;
+using PR.Domain.Entities.PR;
 
 namespace PR.Persistence.Versioned.Repositories
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using GalaSoft.MvvmLight;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 
 namespace PR.ViewModel
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using PR.Domain.Entities;
 using PR.Persistence.EntityFrameworkCore;
+using PR.Domain.Entities.PR;
 
 namespace PR.Web.Persistence
 {

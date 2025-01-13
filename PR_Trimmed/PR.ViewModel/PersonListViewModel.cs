@@ -9,8 +9,8 @@ using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using PR.Domain;
-using PR.Domain.Entities;
 using PR.Persistence;
+using PR.Domain.Entities.PR;
 
 namespace PR.ViewModel
 {

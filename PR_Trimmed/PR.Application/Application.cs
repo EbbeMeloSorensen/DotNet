@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Utils;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.IO;
 using PR.Persistence;
 

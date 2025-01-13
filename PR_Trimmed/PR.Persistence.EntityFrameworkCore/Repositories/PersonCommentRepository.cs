@@ -1,7 +1,7 @@
 ﻿using Craft.Logging;
 using Craft.Persistence.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.Persistence.Repositories;
 
 namespace PR.Persistence.EntityFrameworkCore.Repositories

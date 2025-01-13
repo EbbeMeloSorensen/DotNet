@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Persistence;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 
 namespace PR.Persistence.Repositories
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PR.Domain.Entities
+namespace PR.Domain.Entities.PR
 {
     public class Person : IObjectWithValidTime, IVersionedObject
     {

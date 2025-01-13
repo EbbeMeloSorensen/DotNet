@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.Web.Application;
 using PR.Web.Application.People;
 

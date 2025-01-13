@@ -2,7 +2,7 @@
 using FluentValidation;
 using MediatR;
 using PR.Domain;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.Persistence;
 using PR.Persistence.Versioned;
 using PR.Web.Application.Core;

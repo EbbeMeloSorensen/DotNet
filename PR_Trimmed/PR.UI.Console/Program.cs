@@ -2,11 +2,10 @@
 using StructureMap;
 using CommandLine;
 using Craft.Utils;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.Persistence;
 using PR.Persistence.Versioned;
 using PR.UI.Console.Verbs;
-using System;
 
 namespace PR.UI.Console
 {

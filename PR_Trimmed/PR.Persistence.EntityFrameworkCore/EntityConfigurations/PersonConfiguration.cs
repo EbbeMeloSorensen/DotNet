@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 
 namespace PR.Persistence.EntityFrameworkCore.EntityConfigurations
 {

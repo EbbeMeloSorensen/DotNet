@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Craft.Utils;
 using Craft.Logging;
-using PR.Domain.Entities;
 using PR.Persistence.APIClient.DFOS.ModelClasses;
 using PR.Persistence.Repositories;
+using PR.Domain.Entities.PR;
 
 namespace PR.Persistence.APIClient.DFOS.Repositories
 {

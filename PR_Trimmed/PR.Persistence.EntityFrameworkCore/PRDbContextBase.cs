@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.Persistence.EntityFrameworkCore.EntityConfigurations;
 
 namespace PR.Persistence.EntityFrameworkCore

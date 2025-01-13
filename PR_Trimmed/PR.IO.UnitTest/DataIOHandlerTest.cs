@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
-using Person = PR.Domain.Entities.Person;
+using Person = PR.Domain.Entities.PR.Person;
 
 namespace PR.IO.UnitTest
 {

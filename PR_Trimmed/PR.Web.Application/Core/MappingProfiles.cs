@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.Web.Application.People;
 
 namespace PR.Web.Application.Core;

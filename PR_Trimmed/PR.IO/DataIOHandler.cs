@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Craft.IO.Utils;
 using Craft.DataStructures.Graph;
 using Craft.DataStructures.IO;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 
 namespace PR.IO
 {

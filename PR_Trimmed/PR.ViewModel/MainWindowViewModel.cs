@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 using PR.Application;
 using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.IO;
 using PR.Persistence;
 

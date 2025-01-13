@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.Persistence;
 using PR.Persistence.Versioned;
 using PR.Web.Application.Core;

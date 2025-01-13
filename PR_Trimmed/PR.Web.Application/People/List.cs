@@ -9,7 +9,7 @@ using PR.Web.Application.Core;
 using PR.Web.Application.Interfaces;
 using System.Data;
 using System.Linq.Expressions;
-using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 
 namespace PR.Web.Application.People;
 

@@ -14,6 +14,7 @@ using Craft.ViewModels.Geometry2D.ScrollFree;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using PR.Domain.Entities;
+using PR.Domain.Entities.PR;
 using PR.Persistence;
 using PR.IO;
  
