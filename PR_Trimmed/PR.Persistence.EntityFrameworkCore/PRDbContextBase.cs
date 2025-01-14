@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Domain.Entities.PR;
+using PR.Domain.Entities.Smurfs;
 using PR.Persistence.EntityFrameworkCore.EntityConfigurations;
 
 namespace PR.Persistence.EntityFrameworkCore
@@ -14,6 +15,8 @@ namespace PR.Persistence.EntityFrameworkCore
         {
             Versioned = true;
         }
+
+        public DbSet<Smurf> Smurfs { get; set; }
 
         public DbSet<Person> People { get; set; }
         public DbSet<PersonComment> PersonComments { get; set; }

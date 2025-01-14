@@ -145,7 +145,7 @@ namespace PR.Web.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PR.Domain.Entities.Person", b =>
+            modelBuilder.Entity("PR.Domain.Entities.PR.Person", b =>
                 {
                     b.Property<Guid>("ArchiveID")
                         .ValueGeneratedOnAdd()
@@ -206,6 +206,44 @@ namespace PR.Web.Persistence.Migrations
                     b.HasKey("ArchiveID");
 
                     b.ToTable("People");
+                });
+
+            modelBuilder.Entity("PR.Domain.Entities.PR.PersonComment", b =>
+                {
+                    b.Property<Guid>("ArchiveID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PersonArchiveID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PersonID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Superseded")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ArchiveID");
+
+                    b.HasIndex("PersonArchiveID");
+
+                    b.ToTable("PersonComments");
                 });
 
             modelBuilder.Entity("PR.Web.Persistence.AppUser", b =>
@@ -325,6 +363,16 @@ namespace PR.Web.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PR.Domain.Entities.PR.PersonComment", b =>
+                {
+                    b.HasOne("PR.Domain.Entities.PR.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonArchiveID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Person");
                 });
 #pragma warning restore 612, 618
         }

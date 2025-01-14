@@ -5,6 +5,8 @@ namespace PR.Persistence
 {
     public interface IUnitOfWork : IDisposable
     {
+        ISmurfRepository Smurfs { get; }
+
         IPersonRepository People { get; }
         IPersonCommentRepository PersonComments { get; }
 

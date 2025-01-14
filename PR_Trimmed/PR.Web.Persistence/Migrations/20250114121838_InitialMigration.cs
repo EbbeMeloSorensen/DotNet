@@ -185,6 +185,31 @@ namespace PR.Web.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PersonComments",
+                columns: table => new
+                {
+                    ArchiveID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Start = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    End = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    PersonID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    PersonArchiveID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Text = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonComments", x => x.ArchiveID);
+                    table.ForeignKey(
+                        name: "FK_PersonComments_People_PersonArchiveID",
+                        column: x => x.PersonArchiveID,
+                        principalTable: "People",
+                        principalColumn: "ArchiveID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -221,6 +246,11 @@ namespace PR.Web.Persistence.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonComments_PersonArchiveID",
+                table: "PersonComments",
+                column: "PersonArchiveID");
         }
 
         /// <inheritdoc />
@@ -242,13 +272,16 @@ namespace PR.Web.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "People");
+                name: "PersonComments");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "People");
         }
     }
 }
