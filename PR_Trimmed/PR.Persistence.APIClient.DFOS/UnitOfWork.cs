@@ -7,6 +7,8 @@ namespace PR.Persistence.APIClient.DFOS
 {
     public class UnitOfWork : IUnitOfWork
     {
+        public ISmurfRepository Smurfs { get; }
+
         public IPersonRepository People { get; }
         public IPersonCommentRepository PersonComments { get; }
 

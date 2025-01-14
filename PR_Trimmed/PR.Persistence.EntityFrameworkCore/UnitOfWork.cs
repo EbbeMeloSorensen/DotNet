@@ -7,6 +7,8 @@ namespace PR.Persistence.EntityFrameworkCore
     {
         private readonly PRDbContextBase _context;
 
+        public ISmurfRepository Smurfs { get; }
+
         public IPersonRepository People { get; }
         public IPersonCommentRepository PersonComments { get; }
 

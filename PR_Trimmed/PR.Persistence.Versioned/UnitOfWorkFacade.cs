@@ -17,6 +17,8 @@ namespace PR.Persistence.Versioned
 
         internal DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;
 
+        public ISmurfRepository Smurfs { get; }
+
         public IPersonRepository People { get; }
         public IPersonCommentRepository PersonComments { get; }
 

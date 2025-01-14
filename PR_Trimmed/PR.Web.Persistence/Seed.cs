@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using PR.Domain.Entities;
 using PR.Persistence.EntityFrameworkCore;
 
 namespace PR.Web.Persistence
