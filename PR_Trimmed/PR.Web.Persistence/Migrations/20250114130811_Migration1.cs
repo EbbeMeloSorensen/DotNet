@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PR.Web.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Migration1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -77,6 +77,18 @@ namespace PR.Web.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_People", x => x.ArchiveID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Smurfs",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Smurfs", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -273,6 +285,9 @@ namespace PR.Web.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "PersonComments");
+
+            migrationBuilder.DropTable(
+                name: "Smurfs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

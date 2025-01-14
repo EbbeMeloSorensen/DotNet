@@ -8,6 +8,11 @@ namespace PR.Domain.Entities.Smurfs
 
         public string Name { get; set; }
 
+        public Smurf()
+        {
+            Name = "";
+        }
+
         public override string ToString()
         {
             return $"{Name}";

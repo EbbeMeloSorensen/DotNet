@@ -1,92 +1,99 @@
 Done:
-* Skræl solutionen ned, så den ikke beskæftiger sig med person associations
-* Skræl Person ned, så den kun har first name og surname
+* Skrï¿½l solutionen ned, sï¿½ den ikke beskï¿½ftiger sig med person associations
+* Skrï¿½l Person ned, sï¿½ den kun har first name og surname
 * Man skal kune cleare historical time feltet for at komme tilbage til now..
-* Hvis tidspunktet er midnat skal den ikke vise klokkeslæt i headeren, hverken for titlen eller parantesen nedenunder
-* Lav det lige om med seeding, så du bare skriver det fulde navn i FirstName i stedet for at bruge Surname
-* Navn skal tilføjes til detalje viewet
-* Du har en fejl, når du kører med dette scenarie:
+* Hvis tidspunktet er midnat skal den ikke vise klokkeslï¿½t i headeren, hverken for titlen eller parantesen nedenunder
+* Lav det lige om med seeding, sï¿½ du bare skriver det fulde navn i FirstName i stedet for at bruge Surname
+* Navn skal tilfï¿½jes til detalje viewet
+* Du har en fejl, nï¿½r du kï¿½rer med dette scenarie:
   1) Start med en tom database
   2) Lav en ny "person"
-  3) Sæt databasetid til et tidspunkt før personen blev lavet
+  3) Sï¿½t databasetid til et tidspunkt fï¿½r personen blev lavet
   => Den forsvinder ikke fra listen
-  Find kaldes hurtigere end du lige tror. Det skyldes, at den historiske tid justeres, da den jo ikke må være nyere end database-tiden
-  Måske burde man operere med, at man IKKE skal kalde Find, hvis et tidspunkt justeres pga det andet tidspunkt.
-  Måske skulle man lade selve PARRET af tidspunkter være det, der ændrede sig, og som der kan abonneres på...
-* Gør det sådan at man kan gå tilbage i historisk tid og databasetid for dit eget plugin, som repræsenterer den lokale database
-* Gør det sådan at man kan gå tilbage i historisk tid og databasetid for dit eget plugin, som repræsenterer dit eget lokale API
-* Gør det sådan at man kan gå tilbage i historisk tid og databasetid for dfos pluginet
-* Bug: Der er noget galt med tidsaksen, når der kun vises år..
+  Find kaldes hurtigere end du lige tror. Det skyldes, at den historiske tid justeres, da den jo ikke mï¿½ vï¿½re nyere end database-tiden
+  Mï¿½ske burde man operere med, at man IKKE skal kalde Find, hvis et tidspunkt justeres pga det andet tidspunkt.
+  Mï¿½ske skulle man lade selve PARRET af tidspunkter vï¿½re det, der ï¿½ndrede sig, og som der kan abonneres pï¿½...
+* Gï¿½r det sï¿½dan at man kan gï¿½ tilbage i historisk tid og databasetid for dit eget plugin, som reprï¿½senterer den lokale database
+* Gï¿½r det sï¿½dan at man kan gï¿½ tilbage i historisk tid og databasetid for dit eget plugin, som reprï¿½senterer dit eget lokale API
+* Gï¿½r det sï¿½dan at man kan gï¿½ tilbage i historisk tid og databasetid for dfos pluginet
+* Bug: Der er noget galt med tidsaksen, nï¿½r der kun vises ï¿½r..
 * Genaktiver AutoRefresh, hvor det giver mening
-  - Når man ændrer på historical time
-  - Når man ændrer på database time
-* Der er lidt rod med mht hvordan statusfilteret virker - man skal f.eks. gerne kunne nøjes med de nedlagte
-  - der er f.eks. en bug deri at Rey (altså ikke Rey Skywalker) kommer med, når man beder om de døde. Rey er jo altså ikke død -
-    hun har blot ændret navn til Rey Skywalker.. Hvorfor sker det?
-    -> Du siger, at du KUN vil have historiske objekter med, og det gør så, at du som de "historiske" predicates anfører,
-       at du kun vil have varianter (bjælker), hvor End ligger før historisk tid. Det gælder for Rey, men jo altså ikke for Rey Skywalker.
+  - Nï¿½r man ï¿½ndrer pï¿½ historical time
+  - Nï¿½r man ï¿½ndrer pï¿½ database time
+* Der er lidt rod med mht hvordan statusfilteret virker - man skal f.eks. gerne kunne nï¿½jes med de nedlagte
+  - der er f.eks. en bug deri at Rey (altsï¿½ ikke Rey Skywalker) kommer med, nï¿½r man beder om de dï¿½de. Rey er jo altsï¿½ ikke dï¿½d -
+    hun har blot ï¿½ndret navn til Rey Skywalker.. Hvorfor sker det?
+    -> Du siger, at du KUN vil have historiske objekter med, og det gï¿½r sï¿½, at du som de "historiske" predicates anfï¿½rer,
+       at du kun vil have varianter (bjï¿½lker), hvor End ligger fï¿½r historisk tid. Det gï¿½lder for Rey, men jo altsï¿½ ikke for Rey Skywalker.
 
-Mål: Tilbage på det spor, der hedder at lave "version 2" af pr-applikationen, som skal kunne det samme som den gamle pr, 
-     blot med bitemporalitet. Den kan også passende håndtere glossaries, så du kun skal deployere én applikation
+Mï¿½l: Tilbage pï¿½ det spor, der hedder at lave "version 2" af pr-applikationen, som skal kunne det samme som den gamle pr, 
+     blot med bitemporalitet. Den kan ogsï¿½ passende hï¿½ndtere glossaries, sï¿½ du kun skal deployere ï¿½n applikation
 
 Todo:
+* Hvad er det lige at du har gang i... du har en opgave om at dokumentere datamodellen. Meget konkret kan det passende foregÃ¥ 
+  ved at kÃ¸re reverse engineering pÃ¥ databasen med datagrip. SÃ¥ har du en ide om at du gerne vil beefe up pÃ¥ dine eksisterende
+  vÃ¦rktÃ¸jer til det og i Ã¸vrigt brushe op pÃ¥ dine eksisterende datamodeller, f.eks. gode gamle C2IEDM.
+  Din ide er generelt at beefe up pÃ¥ det her projekt, sÃ¥ det favner en hel masse forskellige datamodeller, hvoraf nogle er 
+  bitemporale mens andre ikke er.
+
+
 * Du skal KONSEKVENT returnere kloner fra facaden, medmindre det overrides
-* For fuck mand... Hvis det her memento baserede shit virker, så er det vel fordi facaden returnerer kopier snarere end de trackede objekter,
-  og så er der ligesom ikke noget rationale for at gøre det på den måde.
-  Måske er humlen snarere det, du fik lavet ved lidt af en tilfældighed med at facaden pr default returnerer kloner, men den kan vælge
-  i visse tilfælde at returnere trackede objeker. Så bliver det heller ikke overengineered.
+* For fuck mand... Hvis det her memento baserede shit virker, sï¿½ er det vel fordi facaden returnerer kopier snarere end de trackede objekter,
+  og sï¿½ er der ligesom ikke noget rationale for at gï¿½re det pï¿½ den mï¿½de.
+  Mï¿½ske er humlen snarere det, du fik lavet ved lidt af en tilfï¿½ldighed med at facaden pr default returnerer kloner, men den kan vï¿½lge
+  i visse tilfï¿½lde at returnere trackede objeker. Sï¿½ bliver det heller ikke overengineered.
 
 
-* Din ide er, at facaden lige konverterer de trackede objekter, som hentes fra repoet, til nogle, der også kan bære et memento.
-  Mekanismen i EF Core er imidlertid, at man skal ændre de TRACKEDE objekter for at det gemmes til repoet, så det duer ikke at du bare smider dem væk
-  efter at have kopieret dem. Derimod bør du nok gemme selve de trackede objekter i selve det wrappede objekt.
-  Fuck, mand... det er svært det her...
-  Er det mon en mulighed at lade Find være styret af en parameter, så man ikke nødvendigvis wrapper dem?
-  Så kunne man jo sige, at man ikke bruger den almindelige Find, når man henter rækker blot for at stemple dem som færdige...
-* I Update Collection testen ændres den eksisterende række ikke
-* Hvis der er forskel mellem unit testen og wpf-applikationen kan det måske skyldes, at der er forskellige contexts i brug...
+* Din ide er, at facaden lige konverterer de trackede objekter, som hentes fra repoet, til nogle, der ogsï¿½ kan bï¿½re et memento.
+  Mekanismen i EF Core er imidlertid, at man skal ï¿½ndre de TRACKEDE objekter for at det gemmes til repoet, sï¿½ det duer ikke at du bare smider dem vï¿½k
+  efter at have kopieret dem. Derimod bï¿½r du nok gemme selve de trackede objekter i selve det wrappede objekt.
+  Fuck, mand... det er svï¿½rt det her...
+  Er det mon en mulighed at lade Find vï¿½re styret af en parameter, sï¿½ man ikke nï¿½dvendigvis wrapper dem?
+  Sï¿½ kunne man jo sige, at man ikke bruger den almindelige Find, nï¿½r man henter rï¿½kker blot for at stemple dem som fï¿½rdige...
+* I Update Collection testen ï¿½ndres den eksisterende rï¿½kke ikke
+* Hvis der er forskel mellem unit testen og wpf-applikationen kan det mï¿½ske skyldes, at der er forskellige contexts i brug...
   
-* Update.. du troede den virkede, men det gør den vist ikke.. Scenariet er således:
+* Update.. du troede den virkede, men det gï¿½r den vist ikke.. Scenariet er sï¿½ledes:
   1) Hent en person fra repoet med Get
-  2) Ændr personens navn
+  2) ï¿½ndr personens navn
   3) Fodr den til repoet som en update
-  -> Så starter den med at hente den eksisterende for at ændre den, men den ER så allerede ændret.
-  -> Så må det vel være sådan, at det, den skal returnere, skal være en KLON af den fra repoet... 
+  -> Sï¿½ starter den med at hente den eksisterende for at ï¿½ndre den, men den ER sï¿½ allerede ï¿½ndret.
+  -> Sï¿½ mï¿½ det vel vï¿½re sï¿½dan, at det, den skal returnere, skal vï¿½re en KLON af den fra repoet... 
 * Sikr, at use cases virker fra PR.UI.WPF
-  - Create og update virker tilsyneladende, men når man så starter applikationen op igen, er det der ikke.. reseeder den?
-* Lav PR.UI.WPF som PR.UI.Console - så plugin afhænger af en konfigurationsfil
+  - Create og update virker tilsyneladende, men nï¿½r man sï¿½ starter applikationen op igen, er det der ikke.. reseeder den?
+* Lav PR.UI.WPF som PR.UI.Console - sï¿½ plugin afhï¿½nger af en konfigurationsfil
 * KAN DU FOR HELVEDE IKKE INSPICERE EN DATABASE FRA SIA-MASKINEN??!!!
-* Få dine unit tests op i sving
-* Du er nødt til at dokumentere PR_Trimmed - ellers blive det et vedligeholdelsesmareridt
+* Fï¿½ dine unit tests op i sving
+* Du er nï¿½dt til at dokumentere PR_Trimmed - ellers blive det et vedligeholdelsesmareridt
 
 
 In progress:
-* Få lige de historieks linier på plads igen. Knap så mange denne gang måske.
-* I DFOS API'et skal der være mulighed for at ignorere dem, hvor status er "nedlagt"
-* Lidt flere karakterer på banen
+* Fï¿½ lige de historieks linier pï¿½ plads igen. Knap sï¿½ mange denne gang mï¿½ske.
+* I DFOS API'et skal der vï¿½re mulighed for at ignorere dem, hvor status er "nedlagt"
+* Lidt flere karakterer pï¿½ banen
   - Leia Organa
   - Luke Skywalker
   - Han Solo
 * For alle 3 plugins skal man kunne se detaljer i detaljeviewet
-  - Man skal kunne se de 2 lokationer for Darth Vader, når man trykker på detalje
+  - Man skal kunne se de 2 lokationer for Darth Vader, nï¿½r man trykker pï¿½ detalje
 
 Todo:
 * Det skal highlights i kortet, hvilke observing facilities, der er selected
-* Man skal også kunne selecte observing facilities i kortet
+* Man skal ogsï¿½ kunne selecte observing facilities i kortet
 * Man skal kunne se linier i historical view over hvor der er sket noget
 
-Løst of fast:
+Lï¿½st of fast:
 Hold lige fast i, at det, du har gjort indtil videre, det er at lave et specielt plugin for dit PERSON repo,
-så det altså bare er "personer", som man henter op. I den GUI, som du har pløffet on top, der opereres godt nok
-med observing facilities, men det er sådan set bare fordi du transformerer det til det for at kunne genbruge nogle
+sï¿½ det altsï¿½ bare er "personer", som man henter op. I den GUI, som du har plï¿½ffet on top, der opereres godt nok
+med observing facilities, men det er sï¿½dan set bare fordi du transformerer det til det for at kunne genbruge nogle
 af de gamle user controls.
-Det er stadig meningsfyldt, fordi du har haft lejlighed til at massere de dele af DFOS APIet, som vedrører retrospektion,
-men hvad er vejen frem? Det bør vel i vidt omfang være at lave version 2 af din prebsi-applikation. Det andet er i vidt 
-omfang mission accomplished... men det kunne altså være fint, hvis du havde mulighed for at inspicere de ændringer,
+Det er stadig meningsfyldt, fordi du har haft lejlighed til at massere de dele af DFOS APIet, som vedrï¿½rer retrospektion,
+men hvad er vejen frem? Det bï¿½r vel i vidt omfang vï¿½re at lave version 2 af din prebsi-applikation. Det andet er i vidt 
+omfang mission accomplished... men det kunne altsï¿½ vï¿½re fint, hvis du havde mulighed for at inspicere de ï¿½ndringer,
 der foretages pt...
 
-Løst of fast:
-* Find skal virke for disse cases (der skal være ækvivalens mellem repo og API):
+Lï¿½st of fast:
+* Find skal virke for disse cases (der skal vï¿½re ï¿½kvivalens mellem repo og API):
   A) Arguments:
      - historical time: null 
      - include historical objects: no
@@ -100,95 +107,95 @@ Løst of fast:
   C) Arguments:
      - historical time: null
      - include historical objects: yes
-     Expected: Chewbacca og Darth Vader vises. Darth vader vises på kortet som rød
+     Expected: Chewbacca og Darth Vader vises. Darth vader vises pï¿½ kortet som rï¿½d
   
 Kan du sige til dit eget API, at du vil have historiske personer med op?
 
 
-Todo: Få det helt på plads med VIEWING af historik. Editering kan vente
-* Når man indtaster tidspunkt i DatePicker-feltet så går den i uendelig løkke. Det må skyldes, at den både ændres ved bruger
-  input og når man klikker nede på linealen. Løs det gerne i samme stil som dengang du havde problemet med DMI.Data.Studio,
-  hvor du kun laver en opdatering, hvis den faktisk er forskellig. Måske er det nok med en guard i selve propertyen..
-  Du bør jo nok få repareret SjovMedWigos, og i den forbindelse skal du have refaktoreret den, så der tages højde for det med
+Todo: Fï¿½ det helt pï¿½ plads med VIEWING af historik. Editering kan vente
+* Nï¿½r man indtaster tidspunkt i DatePicker-feltet sï¿½ gï¿½r den i uendelig lï¿½kke. Det mï¿½ skyldes, at den bï¿½de ï¿½ndres ved bruger
+  input og nï¿½r man klikker nede pï¿½ linealen. Lï¿½s det gerne i samme stil som dengang du havde problemet med DMI.Data.Studio,
+  hvor du kun laver en opdatering, hvis den faktisk er forskellig. Mï¿½ske er det nok med en guard i selve propertyen..
+  Du bï¿½r jo nok fï¿½ repareret SjovMedWigos, og i den forbindelse skal du have refaktoreret den, sï¿½ der tages hï¿½jde for det med
   at mange af persistence-funktionerne er gjort asynkrone.....
-  Well den kompilerer, og kører.. kom du omkring det?
+  Well den kompilerer, og kï¿½rer.. kom du omkring det?
   Kan man lave objekter med den? nopes..
-  Hvad sker der, når man kalder RetrieveObjects - den kører igennem, men der er åbenbart ikke nogen. Bliver der ikke seedet?
-  Jo, der bliver seedet, men går det så galt, når du retriever dem?
-  Det er jo desvære svært at se i fucking databasen fra en sia maskine!!
+  Hvad sker der, nï¿½r man kalder RetrieveObjects - den kï¿½rer igennem, men der er ï¿½benbart ikke nogen. Bliver der ikke seedet?
+  Jo, der bliver seedet, men gï¿½r det sï¿½ galt, nï¿½r du retriever dem?
+  Det er jo desvï¿½re svï¿½rt at se i fucking databasen fra en sia maskine!!
 
-  ........Tag lige 2 steps tilbage, tag en dyb indånding, og se, hvor du er.
+  ........Tag lige 2 steps tilbage, tag en dyb indï¿½nding, og se, hvor du er.
   Du er ved at bygge frontends af forskellig art til DFOS APIet. Du har bygget en konsol-applikation, som virker fint.
-  Der var i øvrigt en del arbejde i at lave methods i Craft.Persistence asynkrone, så det både virkede, når det wrappede
-  EF Core og også et API...
-  Efterfølgende satte du dig for at lave en WPF baseret gui, der kunne gøre det samme. Først fik du den gode gamle
-  PR-ting i spil, og derefter satte du dig for at tilpasse SjovMedWigos... Det sad du så med fredag aften på arbejdet
+  Der var i ï¿½vrigt en del arbejde i at lave methods i Craft.Persistence asynkrone, sï¿½ det bï¿½de virkede, nï¿½r det wrappede
+  EF Core og ogsï¿½ et API...
+  Efterfï¿½lgende satte du dig for at lave en WPF baseret gui, der kunne gï¿½re det samme. Fï¿½rst fik du den gode gamle
+  PR-ting i spil, og derefter satte du dig for at tilpasse SjovMedWigos... Det sad du sï¿½ med fredag aften pï¿½ arbejdet
   og oplevede, at du ikke kunne lave en template for projektet
-  Så gik du hjem og brugte en del tid i weekenden på det og kom også relativt langt, men så oplever du fandengaleme,
-  at du ikke kan bygge det på din SIA-maskine, og endda, at den bare staller, når du prøver!!!
-  Du have lige en hypotese om at det var fordi det var noget DotNet7, men det er SjovMEdWigos jo altså OGSÅ!
+  Sï¿½ gik du hjem og brugte en del tid i weekenden pï¿½ det og kom ogsï¿½ relativt langt, men sï¿½ oplever du fandengaleme,
+  at du ikke kan bygge det pï¿½ din SIA-maskine, og endda, at den bare staller, nï¿½r du prï¿½ver!!!
+  Du have lige en hypotese om at det var fordi det var noget DotNet7, men det er SjovMEdWigos jo altsï¿½ OGSï¿½!
 
 
 
 
 
 Todo:
-* Hvorfor vises Anakin, endda med rød, når han jo har dateclosed i fortiden? Han vises i øvrigt også i listen, hvilket han 
+* Hvorfor vises Anakin, endda med rï¿½d, nï¿½r han jo har dateclosed i fortiden? Han vises i ï¿½vrigt ogsï¿½ i listen, hvilket han 
   heller ikke burde.
-  -> Du sender jo ikke noget historisk tidspunkt ned, så hvorfor kommer han overhovedet med op? Den går helt ned på det nederste
+  -> Du sender jo ikke noget historisk tidspunkt ned, sï¿½ hvorfor kommer han overhovedet med op? Den gï¿½r helt ned pï¿½ det nederste
      repo, dvs den er ikke wrappet af en versioned
-* Lav det sådan, at man fra konsol-applikationen kan trække for real på DFOS-APIet, så man ikke tilsyneladende hiver personer
-  men derimod observing facilities. De skal jo i øvrigt have et navn. Eller også kunne du bare lave noget mapping, der er lidt
-  mere clever - du kunne jo f.eks. trække en observing facility fra DFOS og så mappe den ind i et ANTAL Person objekter, hvor
-  der jo så gerne skulle være en pr detail...
-  Udviklingsarbejdet kan passende foregå på Linux'en for konsol-applikationen, men når det så virker, kan du passende køre det 
-  over på WPF-applikationen og installere den på DOIT-maskinen.
-  Frem for at mappe det over i Person kunne du jo altså også sætte en observing facility i søen..
-  mnjaaah du kunne altså godt til en start udvide Person med at have lat long koordinater... selv om det lidt er noget svineri
-  Til en start burde du altså lige hive din kort-applikation ind, skrælle den, og erstatte med "personer".
-  PT så dealer den jo i en hel masse, hvor der også er child entiteter med... det skal skrælles ud
-  Refaktorer den der API-plugin så det er mindre skrald-agtigt - rent faktisk bør du jo nok lave en ekstra, som ikke trækker på
-  det sædvanlige API men derimod på DFOS
+* Lav det sï¿½dan, at man fra konsol-applikationen kan trï¿½kke for real pï¿½ DFOS-APIet, sï¿½ man ikke tilsyneladende hiver personer
+  men derimod observing facilities. De skal jo i ï¿½vrigt have et navn. Eller ogsï¿½ kunne du bare lave noget mapping, der er lidt
+  mere clever - du kunne jo f.eks. trï¿½kke en observing facility fra DFOS og sï¿½ mappe den ind i et ANTAL Person objekter, hvor
+  der jo sï¿½ gerne skulle vï¿½re en pr detail...
+  Udviklingsarbejdet kan passende foregï¿½ pï¿½ Linux'en for konsol-applikationen, men nï¿½r det sï¿½ virker, kan du passende kï¿½re det 
+  over pï¿½ WPF-applikationen og installere den pï¿½ DOIT-maskinen.
+  Frem for at mappe det over i Person kunne du jo altsï¿½ ogsï¿½ sï¿½tte en observing facility i sï¿½en..
+  mnjaaah du kunne altsï¿½ godt til en start udvide Person med at have lat long koordinater... selv om det lidt er noget svineri
+  Til en start burde du altsï¿½ lige hive din kort-applikation ind, skrï¿½lle den, og erstatte med "personer".
+  PT sï¿½ dealer den jo i en hel masse, hvor der ogsï¿½ er child entiteter med... det skal skrï¿½lles ud
+  Refaktorer den der API-plugin sï¿½ det er mindre skrald-agtigt - rent faktisk bï¿½r du jo nok lave en ekstra, som ikke trï¿½kker pï¿½
+  det sï¿½dvanlige API men derimod pï¿½ DFOS
 
-* Du bør have VIRKNINGSTID med for personer, så man ikke skal spole tilbage i tid for at se, hvad de f.eks. har heddet før.
-  - Det skal nok være helt generelt, lige som det jo er for versioned object, så det hurtigt kan skrælles af, hvis man ikke
+* Du bï¿½r have VIRKNINGSTID med for personer, sï¿½ man ikke skal spole tilbage i tid for at se, hvad de f.eks. har heddet fï¿½r.
+  - Det skal nok vï¿½re helt generelt, lige som det jo er for versioned object, sï¿½ det hurtigt kan skrï¿½lles af, hvis man ikke
     er interesseret i virkningstid
-  - Bemærk, at det, du jo har indtil videre har fået lavet med star wars karaktererne det essentielt er  et current situation system
-  - Når du laver systemet om, så skal det vel være sådan, at der er flere objekter i spil, som alle er gældende, og som repræsenterer
-    samme objekt. F.eks. skal der være ét objekt, der repræsenterer Anakin i perioden før han blev Sith og et andet objekt, som 
-    repræsenterer ham i perioden efter, hvor han i øvrigt hed Darth Vader. Det er jo altså ikke sådan helt lige til, for Person er jo 
-    altså en UAFHÆNGIG entitet, så hvordan skal man som bruger afklare, om 2 objekter med forskelligt ID repræsenterer samme person?
-    Er man ikke reelt nødt til at have et parent objekt, der nærmest er tomt?.. Og er det ikke lige præcis det, der er tale om i WIGOS,
-    hvor den entitet, der hedder AbstractEnvironmentalMonitoringFacility snart sagt ingen informationer har. For Person kunne man måske
-    operere med en AbstractPerson. I DFOS gør de vel egentlig det samme, hvor de effektivt opererer med, at en Observing Facility sådan
+  - Bemï¿½rk, at det, du jo har indtil videre har fï¿½et lavet med star wars karaktererne det essentielt er  et current situation system
+  - Nï¿½r du laver systemet om, sï¿½ skal det vel vï¿½re sï¿½dan, at der er flere objekter i spil, som alle er gï¿½ldende, og som reprï¿½senterer
+    samme objekt. F.eks. skal der vï¿½re ï¿½t objekt, der reprï¿½senterer Anakin i perioden fï¿½r han blev Sith og et andet objekt, som 
+    reprï¿½senterer ham i perioden efter, hvor han i ï¿½vrigt hed Darth Vader. Det er jo altsï¿½ ikke sï¿½dan helt lige til, for Person er jo 
+    altsï¿½ en UAFHï¿½NGIG entitet, sï¿½ hvordan skal man som bruger afklare, om 2 objekter med forskelligt ID reprï¿½senterer samme person?
+    Er man ikke reelt nï¿½dt til at have et parent objekt, der nï¿½rmest er tomt?.. Og er det ikke lige prï¿½cis det, der er tale om i WIGOS,
+    hvor den entitet, der hedder AbstractEnvironmentalMonitoringFacility snart sagt ingen informationer har. For Person kunne man mï¿½ske
+    operere med en AbstractPerson. I DFOS gï¿½r de vel egentlig det samme, hvor de effektivt opererer med, at en Observing Facility sï¿½dan
     set bare er en samling af Details...
-    ....De forskellige objekter har jo altså samme objekt id, dvs det er ikke unikt, men effektivt gælder der, at det i kombination
-    med et virkningstidsinterval ikke må overlappe med andre virkningstidsintervaller for samme objekt
-* Hvorfor får vi kun en person op med konsolapplikationen men 2 med WPF'en?
+    ....De forskellige objekter har jo altsï¿½ samme objekt id, dvs det er ikke unikt, men effektivt gï¿½lder der, at det i kombination
+    med et virkningstidsinterval ikke mï¿½ overlappe med andre virkningstidsintervaller for samme objekt
+* Hvorfor fï¿½r vi kun en person op med konsolapplikationen men 2 med WPF'en?
   -> Den funktionalitet, hvor du plukker det ene objekt, der svarer til time of interest, det ligger indtil videre kun i
-     metoden PersonRepositoryFacade.GetAll. Du skal nok gøre den konstruktion generelt anvendelig, så du også kan bruge den i Find
+     metoden PersonRepositoryFacade.GetAll. Du skal nok gï¿½re den konstruktion generelt anvendelig, sï¿½ du ogsï¿½ kan bruge den i Find
 * Reparer Glossary, C2IEDM og WIGOS
-  -> Glossary er sgu lidt død i det - nok bedre at indlemme den som sit eget domæne i PR
-  -> Wigos er repareret men nok en smule vingeskudt og det samme gælder formentlig for C2IEDM for
+  -> Glossary er sgu lidt dï¿½d i det - nok bedre at indlemme den som sit eget domï¿½ne i PR
+  -> Wigos er repareret men nok en smule vingeskudt og det samme gï¿½lder formentlig for C2IEDM for
 
-Løst og fast:
- Du er nået dertil, at man som bruger af en IUnitOfWorkFactory i vidt omfang kan abstrahere fra,
+Lï¿½st og fast:
+ Du er nï¿½et dertil, at man som bruger af en IUnitOfWorkFactory i vidt omfang kan abstrahere fra,
  om det er en "almindelig" en af slagsen, eller om det er en "wrapper" af en almindelig en, der 
- opererer på en database med versionshistorik.
+ opererer pï¿½ en database med versionshistorik.
 
- MEN.. hvis man opererer med en wrapper, er man ikke desto mindre nødt til at spørge efter Object IDs
- snarere end bare Ids. Det kunne være fedt, hvis man helt og aldeles kunne spørge efter Ids, og der
- så bare gjaldt, at når man opererede med en wrapper, så spurgte den reelt efter ObjectIds.
+ MEN.. hvis man opererer med en wrapper, er man ikke desto mindre nï¿½dt til at spï¿½rge efter Object IDs
+ snarere end bare Ids. Det kunne vï¿½re fedt, hvis man helt og aldeles kunne spï¿½rge efter Ids, og der
+ sï¿½ bare gjaldt, at nï¿½r man opererede med en wrapper, sï¿½ spurgte den reelt efter ObjectIds.
 
  Du var ude i en overvejelse om, om man kunne lade et VersionedObject returnere sit object id frem for 
- sit id, når det blev spurgt, men det er svært at gennemskue implikationerne
+ sit id, nï¿½r det blev spurgt, men det er svï¿½rt at gennemskue implikationerne
 
- Hvis man lavet sådan en lidt sofistikeret property, hvordan vil databasen så komme til at se ud?
- -> Det lader til at være fint.. Den skal bare have en Property, der er rigtig
+ Hvis man lavet sï¿½dan en lidt sofistikeret property, hvordan vil databasen sï¿½ komme til at se ud?
+ -> Det lader til at vï¿½re fint.. Den skal bare have en Property, der er rigtig
 
- Hvilke komponenter skal tilgå ObjectId og hvornår?
- - PersonRepositoryFacade (Den dealer kun i versionerede dbs, så den ved godt, at der både er et Id og et ObjectId)
+ Hvilke komponenter skal tilgï¿½ ObjectId og hvornï¿½r?
+ - PersonRepositoryFacade (Den dealer kun i versionerede dbs, sï¿½ den ved godt, at der bï¿½de er et Id og et ObjectId)
  - De forskellige ViewModeller, f.eks. MainWindowViewModel, PeoplePropertiesViewModel og PersonListViewModel
 
- Kunne man så ikke sige, at viewmodellerne ALTID bare spørger efter ID, og så får de altså bare et ObjectID,
- ude at de er skarpe på det? Facaden derimod, den må altså gerne spørge både efter Id og ObjectId...
+ Kunne man sï¿½ ikke sige, at viewmodellerne ALTID bare spï¿½rger efter ID, og sï¿½ fï¿½r de altsï¿½ bare et ObjectID,
+ ude at de er skarpe pï¿½ det? Facaden derimod, den mï¿½ altsï¿½ gerne spï¿½rge bï¿½de efter Id og ObjectId...

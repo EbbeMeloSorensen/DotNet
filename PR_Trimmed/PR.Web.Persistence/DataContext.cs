@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PR.Persistence.EntityFrameworkCore;
 using PR.Domain.Entities.PR;
+using PR.Domain.Entities.Smurfs;
 
 namespace PR.Web.Persistence
 {
@@ -11,6 +12,8 @@ namespace PR.Web.Persistence
             DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<Smurf> Smurfs { get; set; }
 
         public DbSet<Person> People { get; set; }
         public DbSet<PersonComment> PersonComments { get; set; }
