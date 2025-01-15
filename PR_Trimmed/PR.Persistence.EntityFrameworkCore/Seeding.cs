@@ -200,7 +200,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             personComments = new List<PersonComment>
             {
-                rey_comment_0_0
+                //rey_comment_0_0
             };
         }
 
@@ -240,7 +240,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             personComments = new List<PersonComment>
             {
-                rey_comment
+                //rey_comment
             };
         }
     }
