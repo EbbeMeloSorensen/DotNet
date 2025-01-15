@@ -5,6 +5,7 @@ using PR.Domain.Entities.C2IEDM.ObjectItems.Organisations;
 using PR.Domain.Entities.C2IEDM.Geometry.Locations;
 using PR.Domain.Entities.C2IEDM.Geometry.Locations.Points;
 using PR.Domain.Entities.C2IEDM.Geometry.Locations.Line;
+using PR.Domain.Entities.C2IEDM.Geometry.Locations.Surfaces;
 using PR.Domain.Entities.PR;
 using PR.Persistence.EntityFrameworkCore.EntityConfigurations;
 using PR.Persistence.EntityFrameworkCore.EntityConfigurations.C2IEDM.Geometry.Locations.Line;
@@ -34,6 +35,9 @@ namespace PR.Persistence.EntityFrameworkCore
         public DbSet<AbsolutePoint> AbsolutePoints { get; set; }
         public DbSet<Line> Lines { get; set; }
         public DbSet<LinePoint> LinePoints { get; set; }
+        public DbSet<Surface> Surfaces { get; set; }
+        public DbSet<Ellipse> Ellipses { get; set; }
+        public DbSet<FanArea> FanAreas { get; set; }
         public DbSet<VerticalDistance> VerticalDistances { get; set; }
 
         // C2IEDM - ObjectItems
@@ -94,6 +98,34 @@ namespace PR.Persistence.EntityFrameworkCore
                 .HasMany(l => l.LinePoints)
                 .WithOne(lp => lp.Line)
                 .HasForeignKey(lp => lp.LineID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FanArea>()
+                .HasOne(fa => fa.VertexPoint)
+                .WithMany()
+                .HasForeignKey(fa => fa.VertexPointID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Ellipse>()
+                .HasOne(e => e.CentrePoint)
+                .WithMany()
+                .HasForeignKey(e => e.CentrePointID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Ellipse>()
+                .HasOne(e => e.FirstConjugateDiameterPoint)
+                .WithMany()
+                .HasForeignKey(e => e.FirstConjugateDiameterPointID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Ellipse>()
+                .HasOne(e => e.SecondConjugateDiameterPoint)
+                .WithMany()
+                .HasForeignKey(e => e.SecondConjugateDiameterPointID)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }
