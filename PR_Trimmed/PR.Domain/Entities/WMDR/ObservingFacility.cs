@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PR.Domain.Wigos
+namespace PR.Domain.Entities.WMDR
 {
     public class ObservingFacility : AbstractEnvironmentalMonitoringFacility
     {
