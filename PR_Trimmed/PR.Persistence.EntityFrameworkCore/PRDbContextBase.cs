@@ -12,6 +12,7 @@ using PR.Persistence.EntityFrameworkCore.EntityConfigurations.C2IEDM.Geometry.Lo
 using PR.Domain.Entities.C2IEDM.Geometry;
 using PR.Domain.Entities.C2IEDM.Geometry.CoordinateSystems;
 using PR.Domain.Entities.C2IEDM.Geometry.Locations.GeometricVolumes;
+using PR.Persistence.EntityFrameworkCore.EntityConfigurations.PR;
 
 namespace PR.Persistence.EntityFrameworkCore
 {

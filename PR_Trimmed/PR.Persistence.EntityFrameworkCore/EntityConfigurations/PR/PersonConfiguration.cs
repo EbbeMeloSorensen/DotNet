@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PR.Domain.Entities.PR;
 
-namespace PR.Persistence.EntityFrameworkCore.EntityConfigurations
+namespace PR.Persistence.EntityFrameworkCore.EntityConfigurations.PR
 {
     public class PersonConfiguration : IEntityTypeConfiguration<Person>
     {
