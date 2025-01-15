@@ -2,9 +2,9 @@
 using Craft.Persistence.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PR.Domain.Entities.PR;
-using PR.Persistence.Repositories;
+using PR.Persistence.Repositories.PR;
 
-namespace PR.Persistence.EntityFrameworkCore.Repositories
+namespace PR.Persistence.EntityFrameworkCore.Repositories.PR
 {
     public class PersonCommentRepository : Repository<PersonComment>, IPersonCommentRepository
     {

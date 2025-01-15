@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using Craft.Logging;
 using Newtonsoft.Json;
 using Craft.Utils;
-using PR.Persistence.Repositories;
 using PR.Domain.Entities.PR;
+using PR.Persistence.Repositories.PR;
 
 namespace PR.Persistence.APIClient.Repositories
 {

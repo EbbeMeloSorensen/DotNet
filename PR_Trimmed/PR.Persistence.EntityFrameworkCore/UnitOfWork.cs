@@ -1,5 +1,6 @@
-﻿using PR.Persistence.EntityFrameworkCore.Repositories;
-using PR.Persistence.Repositories;
+﻿using PR.Persistence.EntityFrameworkCore.Repositories.PR;
+using PR.Persistence.Repositories.PR;
+using PR.Persistence.Repositories.Smurfs;
 
 namespace PR.Persistence.EntityFrameworkCore
 {

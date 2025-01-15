@@ -5,7 +5,7 @@ using Craft.Logging;
 using Craft.Persistence;
 using PR.Domain.Entities.PR;
 
-namespace PR.Persistence.Repositories
+namespace PR.Persistence.Repositories.PR
 {
     public interface IPersonRepository : IRepository<Person>
     {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Craft.Logging;
 using Craft.Persistence.EntityFrameworkCore;
-using PR.Persistence.Repositories;
 using PR.Domain.Entities.PR;
+using PR.Persistence.Repositories.PR;
 
-namespace PR.Persistence.EntityFrameworkCore.Repositories
+namespace PR.Persistence.EntityFrameworkCore.Repositories.PR
 {
     public class PersonRepository : Repository<Person>, IPersonRepository
     {
@@ -51,7 +51,7 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories
         public override async Task Update(
             Person person)
         {
-            await Task.Run(() => {});
+            await Task.Run(() => { });
         }
 
         public override async Task UpdateRange(
