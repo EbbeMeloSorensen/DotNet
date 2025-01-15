@@ -1,5 +1,6 @@
 ﻿using PR.Domain.Entities.PR;
 using System;
+using PR.Domain.Entities.Smurfs;
 
 namespace PR.Persistence.EntityFrameworkCore
 {
@@ -16,7 +17,8 @@ namespace PR.Persistence.EntityFrameworkCore
             CreateDataForSeeding(
                 PRDbContextBase.Versioned, 
                 out var people, 
-                out var personComments);
+                out var personComments,
+                out var smurfs);
 
             context.People.AddRange(people);
             context.PersonComments.AddRange(personComments);
@@ -26,7 +28,8 @@ namespace PR.Persistence.EntityFrameworkCore
         public static void CreateDataForSeeding(
             bool versioned,
             out List<Person> people,
-            out List<PersonComment> personComments)
+            out List<PersonComment> personComments,
+            out List<Smurf> smurfs)
         {
             if (versioned)
             {
@@ -36,6 +39,12 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 CreateCurrentDataForSeeding(out people, out personComments);
             }
+
+            smurfs = new List<Smurf>
+            {
+                new Smurf{ Name = "Gammelsmolf"},
+                new Smurf{ Name = "Smolfine"},
+            };
         }
 
         private static void CreateBitemporalDataForSeeding(
