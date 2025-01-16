@@ -2,14 +2,14 @@
 
 namespace PR.Domain.Entities.WMDR
 {
-    public abstract class AbstractEnvironmentalMonitoringFacility : VersionedObject
+    public abstract class AbstractEnvironmentalMonitoringFacility : IObjectWithValidTime, IVersionedObject
     {
-        public Guid Id { get; set; }
+        public Guid ArchiveID { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Superseded { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
 
-        protected AbstractEnvironmentalMonitoringFacility(
-            Guid objectId,
-            DateTime created) : base(objectId, created)
-        {
-        }
+        public Guid ID { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace PR.Persistence
 
         IPersonRepository People { get; }
         IPersonCommentRepository PersonComments { get; }
+        IPersonAssociationRepository PersonAssociations { get; }
 
         void Clear();
 

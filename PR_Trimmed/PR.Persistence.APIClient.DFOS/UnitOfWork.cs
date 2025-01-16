@@ -12,6 +12,7 @@ namespace PR.Persistence.APIClient.DFOS
 
         public IPersonRepository People { get; }
         public IPersonCommentRepository PersonComments { get; }
+        public IPersonAssociationRepository PersonAssociations { get; }
 
 
         public UnitOfWork(

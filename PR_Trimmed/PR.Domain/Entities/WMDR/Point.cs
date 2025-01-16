@@ -8,12 +8,6 @@ namespace PR.Domain.Entities.WMDR
         public double Coordinate1 { get; set; }
         public double Coordinate2 { get; set; }
 
-        public Point(
-            Guid objectId,
-            DateTime created) : base(objectId, created)
-        {
-        }
-
         public override string ToString()
         {
             var result = $"({Coordinate1}, {Coordinate2}), From: {From.ToShortDateString()}";

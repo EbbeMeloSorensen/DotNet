@@ -22,6 +22,7 @@ namespace PR.Persistence.Versioned
 
         public IPersonRepository People { get; }
         public IPersonCommentRepository PersonComments { get; }
+        public IPersonAssociationRepository PersonAssociations { get; }
 
         public UnitOfWorkFacade(
             ILogger logger,

@@ -6,12 +6,11 @@ using PR.Domain.Entities.C2IEDM.Geometry.Locations;
 using PR.Domain.Entities.C2IEDM.Geometry.Locations.Points;
 using PR.Domain.Entities.C2IEDM.Geometry.Locations.Line;
 using PR.Domain.Entities.C2IEDM.Geometry.Locations.Surfaces;
-using PR.Domain.Entities.PR;
-using PR.Persistence.EntityFrameworkCore.EntityConfigurations;
-using PR.Persistence.EntityFrameworkCore.EntityConfigurations.C2IEDM.Geometry.Locations.Line;
 using PR.Domain.Entities.C2IEDM.Geometry;
 using PR.Domain.Entities.C2IEDM.Geometry.CoordinateSystems;
 using PR.Domain.Entities.C2IEDM.Geometry.Locations.GeometricVolumes;
+using PR.Domain.Entities.PR;
+using PR.Persistence.EntityFrameworkCore.EntityConfigurations.C2IEDM.Geometry.Locations.Line;
 using PR.Persistence.EntityFrameworkCore.EntityConfigurations.PR;
 
 namespace PR.Persistence.EntityFrameworkCore
@@ -31,6 +30,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
         public DbSet<Person> People { get; set; }
         public DbSet<PersonComment> PersonComments { get; set; }
+        public DbSet<PersonAssociation> PersonAssociations { get; set; }
 
         // C2IEDM - Geometry
         public DbSet<AbsolutePoint> AbsolutePoints { get; set; }
