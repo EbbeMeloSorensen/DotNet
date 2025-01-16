@@ -201,7 +201,6 @@ namespace PR.Persistence.EntityFrameworkCore
         {
             var chewbacca = new Person
             {
-                ArchiveID = new Guid("00000000-0000-0000-0000-000000000005"),
                 ID = new Guid("12345678-0000-0000-0000-000000000005"),
                 FirstName = "Chewbacca",
                 Latitude = 9,
@@ -210,7 +209,6 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var rey = new Person
             {
-                ArchiveID = new Guid("00000000-0000-0000-0000-000000000006"),
                 ID = new Guid("12345678-0000-0000-0000-000000000006"),
                 FirstName = "Rey Skywalker",
                 Latitude = 10.2,
@@ -225,6 +223,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var rey_comment = new PersonComment
             {
+                ID = new Guid("12345678-1234-0000-0000-000000000006"),
                 PersonID = new Guid("12345678-0000-0000-0000-000000000006"),
                 Text = "She starts out as a scavenger"
             };

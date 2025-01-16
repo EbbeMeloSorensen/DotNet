@@ -26,7 +26,7 @@ namespace PR.Persistence.UnitTest
             var personComment = new PersonComment
             {
                 PersonID = new Guid("12345678-0000-0000-0000-000000000006"),
-                Text = "She is initially a scavenger"
+                Text = "Later she becomes a jedi"
             };
 
             // Act
@@ -34,12 +34,12 @@ namespace PR.Persistence.UnitTest
             await unitOfWork1.PersonComments.Add(personComment);
             unitOfWork1.Complete();
 
-            //// Assert
-            //using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
-            //var people = await unitOfWork2.People.GetAll();
-            //people.Count().Should().Be(2);
-            //people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
-            //people.Count(p => p.FirstName == "Wicket").Should().Be(1);
+            // Assert
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var personComments = await unitOfWork2.PersonComments.GetAll();
+            personComments.Count().Should().Be(2);
+            personComments.Count(pc => pc.Text == "She starts out as a scavenger").Should().Be(1);
+            personComments.Count(pc => pc.Text == "Later she becomes a jedi").Should().Be(1);
         }
     }
 }

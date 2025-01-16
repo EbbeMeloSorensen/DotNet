@@ -23,6 +23,7 @@ namespace PR.Persistence.EntityFrameworkCore
         public void Clear()
         {
             //PersonAssociations.Clear();
+            PersonComments.Clear();
             People.Clear();
         }
 
