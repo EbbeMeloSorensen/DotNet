@@ -41,10 +41,12 @@ namespace PR.Web.Persistence
                 Seeding.CreateDataForSeeding(
                     true, 
                     out var people, 
-                    out var personComments);
+                    out var personComments,
+                    out var smurfs);
 
                 await context.People.AddRangeAsync(people);
                 await context.PersonComments.AddRangeAsync(personComments);
+                await context.Smurfs.AddRangeAsync(smurfs);
                 await context.SaveChangesAsync();
             }
         }

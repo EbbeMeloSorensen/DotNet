@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain.Entities.PR;
-using PR.Persistence.Repositories;
+using PR.Persistence.Repositories.PR;
 
 namespace PR.Persistence.Versioned.Repositories
 {

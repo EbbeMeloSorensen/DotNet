@@ -1,7 +1,8 @@
 ﻿using PR.Persistence.APIClient.DFOS.Repositories;
-using PR.Persistence.Repositories;
 using System;
 using Craft.Logging;
+using PR.Persistence.Repositories.PR;
+using PR.Persistence.Repositories.Smurfs;
 
 namespace PR.Persistence.APIClient.DFOS
 {

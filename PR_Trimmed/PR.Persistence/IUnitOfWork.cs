@@ -1,5 +1,6 @@
 ﻿using System;
-using PR.Persistence.Repositories;
+using PR.Persistence.Repositories.PR;
+using PR.Persistence.Repositories.Smurfs;
 
 namespace PR.Persistence
 {

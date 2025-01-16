@@ -13,8 +13,8 @@ using Newtonsoft.Json;
 using Craft.Utils;
 using Craft.Logging;
 using PR.Persistence.APIClient.DFOS.ModelClasses;
-using PR.Persistence.Repositories;
 using PR.Domain.Entities.PR;
+using PR.Persistence.Repositories.PR;
 
 namespace PR.Persistence.APIClient.DFOS.Repositories
 {

@@ -1,13 +1,11 @@
 ﻿using System.Globalization;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
 using PR.Persistence;
 using PR.Persistence.Versioned;
 using PR.Web.Persistence;
 using PR.Web.Application.Core;
 using PR.Web.Application.Interfaces;
-using System.Data;
 using System.Linq.Expressions;
 using PR.Domain.Entities.PR;
 
@@ -81,6 +79,7 @@ public class List
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
             var predicates = new List<Expression<Func<Person, bool>>>();
+
             if (!string.IsNullOrEmpty(request.Params.Name))
             {
                 var filter = request.Params.Name.ToLower();
@@ -90,7 +89,6 @@ public class List
                     (!string.IsNullOrEmpty(x.Surname) && x.Surname.ToLower().Contains(filter)));
             }
 
-            //var people = await unitOfWork.People.GetAll();
             var people = await unitOfWork.People.Find(predicates);
 
             var result = _mapper.Map<IEnumerable<PersonDto>>(people);

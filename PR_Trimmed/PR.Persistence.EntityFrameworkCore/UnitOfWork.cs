@@ -1,5 +1,7 @@
-﻿using PR.Persistence.EntityFrameworkCore.Repositories;
-using PR.Persistence.Repositories;
+﻿using PR.Persistence.EntityFrameworkCore.Repositories.PR;
+using PR.Persistence.EntityFrameworkCore.Repositories.Smurfs;
+using PR.Persistence.Repositories.PR;
+using PR.Persistence.Repositories.Smurfs;
 
 namespace PR.Persistence.EntityFrameworkCore
 {
@@ -16,12 +18,17 @@ namespace PR.Persistence.EntityFrameworkCore
             PRDbContextBase context)
         {
             _context = context;
+
+            Smurfs = new SmurfRepository(_context);
+
             People = new PersonRepository(_context);
             PersonComments = new PersonCommentRepository(_context);
         }
 
         public void Clear()
         {
+            Smurfs.Clear();
+
             //PersonAssociations.Clear();
             PersonComments.Clear();
             People.Clear();

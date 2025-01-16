@@ -1,6 +1,7 @@
 ﻿using System;
 using Craft.Logging;
-using PR.Persistence.Repositories;
+using PR.Persistence.Repositories.PR;
+using PR.Persistence.Repositories.Smurfs;
 using PR.Persistence.Versioned.Repositories;
 
 namespace PR.Persistence.Versioned
