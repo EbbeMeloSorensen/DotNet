@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Domain.Entities.Smurfs;
 using PR.Domain.Entities.C2IEDM.ObjectItems;
-using PR.Domain.Entities.C2IEDM.ObjectItems.Organisations;
 using PR.Domain.Entities.C2IEDM.Geometry;
 using PR.Domain.Entities.PR;
 using PR.Persistence.EntityFrameworkCore.EntityConfigurations.C2IEDM.Geometry.Locations.Line;
@@ -22,7 +21,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
         public DbSet<Smurf> Smurfs { get; set; }
 
-        public DbSet<Person> People { get; set; }
+        public DbSet<Domain.Entities.PR.Person> People { get; set; }
         public DbSet<PersonComment> PersonComments { get; set; }
         public DbSet<PersonAssociation> PersonAssociations { get; set; }
 

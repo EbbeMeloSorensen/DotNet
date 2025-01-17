@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PR.Persistence.EntityFrameworkCore;
 using PR.Domain.Entities.PR;
 using PR.Domain.Entities.Smurfs;
-using PR.Domain.Entities.C2IEDM.ObjectItems.Organisations;
 using PR.Domain.Entities.C2IEDM.ObjectItems;
 
 namespace PR.Web.Persistence
@@ -23,7 +22,7 @@ namespace PR.Web.Persistence
         public DbSet<Unit> Units { get; set; }
 
 
-        public DbSet<Person> People { get; set; }
+        public DbSet<Domain.Entities.PR.Person> People { get; set; }
         public DbSet<PersonComment> PersonComments { get; set; }
 
         protected override void OnModelCreating(
