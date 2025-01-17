@@ -3,13 +3,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PR.Persistence.EntityFrameworkCore;
 using PR.Domain.Entities.PR;
 using PR.Domain.Entities.Smurfs;
-using PR.Domain.Entities.C2IEDM.Geometry.CoordinateSystems;
-using PR.Domain.Entities.C2IEDM.Geometry.Locations.GeometricVolumes;
-using PR.Domain.Entities.C2IEDM.Geometry.Locations.Line;
-using PR.Domain.Entities.C2IEDM.Geometry.Locations.Points;
-using PR.Domain.Entities.C2IEDM.Geometry.Locations.Surfaces;
-using PR.Domain.Entities.C2IEDM.Geometry.Locations;
-using PR.Domain.Entities.C2IEDM.Geometry;
 using PR.Domain.Entities.C2IEDM.ObjectItems.Organisations;
 using PR.Domain.Entities.C2IEDM.ObjectItems;
 

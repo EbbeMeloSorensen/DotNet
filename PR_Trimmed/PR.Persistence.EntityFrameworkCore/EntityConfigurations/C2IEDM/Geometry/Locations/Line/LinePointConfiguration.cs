@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PR.Domain.Entities.C2IEDM.Geometry.Locations.Line;
+using PR.Domain.Entities.C2IEDM.Geometry;
 
 namespace PR.Persistence.EntityFrameworkCore.EntityConfigurations.C2IEDM.Geometry.Locations.Line
 {
