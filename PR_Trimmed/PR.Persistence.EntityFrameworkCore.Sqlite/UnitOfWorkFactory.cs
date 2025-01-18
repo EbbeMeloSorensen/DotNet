@@ -27,6 +27,8 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
 
             using var unitOfWork = GenerateUnitOfWork();
             unitOfWork.Clear();
+            unitOfWork.Complete();
+
             Seeding.SeedDatabase(context);
             unitOfWork.Complete();
         }

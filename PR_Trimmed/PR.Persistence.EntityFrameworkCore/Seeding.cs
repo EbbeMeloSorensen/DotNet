@@ -20,8 +20,11 @@ namespace PR.Persistence.EntityFrameworkCore
                 out var personComments,
                 out var smurfs);
 
+            context.Smurfs.AddRange(smurfs);
+
             context.People.AddRange(people);
             context.PersonComments.AddRange(personComments);
+
             context.SaveChanges();
         }
 
@@ -239,7 +242,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             personComments = new List<PersonComment>
             {
-                //rey_comment
+                rey_comment
             };
         }
     }

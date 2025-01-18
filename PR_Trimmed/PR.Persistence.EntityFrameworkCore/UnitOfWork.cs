@@ -24,6 +24,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             People = new PersonRepository(_context);
             PersonComments = new PersonCommentRepository(_context);
+            PersonAssociations = new PersonAssociationRepository(_context);
         }
 
         public void Clear()

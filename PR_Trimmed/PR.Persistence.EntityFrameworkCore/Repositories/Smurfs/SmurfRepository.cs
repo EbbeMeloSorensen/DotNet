@@ -7,13 +7,16 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories.Smurfs
 {
     public class SmurfRepository : Repository<Smurf>, ISmurfRepository
     {
+        private PRDbContextBase PrDbContext => Context as PRDbContextBase;
+
         public SmurfRepository(DbContext context) : base(context)
         {
         }
 
-        public override Task Clear()
+        public override async Task Clear()
         {
-            throw new NotImplementedException();
+            Context.RemoveRange(PrDbContext.Smurfs);
+            await Context.SaveChangesAsync();
         }
 
         public override Task Update(Smurf entity)

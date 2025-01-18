@@ -53,7 +53,7 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories.PR
 
         public override async Task Clear()
         {
-            Context.RemoveRange(PrDbContext.People);
+            Context.RemoveRange(PrDbContext.PersonComments);
             await Context.SaveChangesAsync();
         }
     }
