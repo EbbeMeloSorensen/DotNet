@@ -39,7 +39,8 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
             var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(2);
+            people.Count().Should().Be(3);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
             people.Count(p => p.FirstName == "Wicket").Should().Be(1);
         }
@@ -54,7 +55,8 @@ namespace PR.Persistence.UnitTest
             var people = await unitOfWork.People.GetAll();
 
             // Assert
-            people.Count().Should().Be(1);
+            people.Count().Should().Be(2);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
         }
 
@@ -63,7 +65,7 @@ namespace PR.Persistence.UnitTest
         {
             // Arrange
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-            var id = new Guid("12345678-0000-0000-0000-000000000006");
+            var id = new Guid("00000006-0000-0000-0000-000000000000");
 
             // Act
             var person = await unitOfWork.People.Get(id);
@@ -77,7 +79,7 @@ namespace PR.Persistence.UnitTest
         {
             // Arrange
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-            var id = new Guid("12345678-0000-0000-0000-000000000006");
+            var id = new Guid("00000006-0000-0000-0000-000000000000");
 
             // Act
             var person = await unitOfWork.People.GetIncludingComments(id);
@@ -96,7 +98,7 @@ namespace PR.Persistence.UnitTest
 
             var ids = new List<Guid>
             {
-                new("12345678-0000-0000-0000-000000000006")
+                new("00000006-0000-0000-0000-000000000000")
             };
 
             // Act
@@ -115,7 +117,7 @@ namespace PR.Persistence.UnitTest
 
             var ids = new List<Guid>
             {
-                new("12345678-0000-0000-0000-000000000006")
+                new("00000006-0000-0000-0000-000000000000")
             };
 
             // Act
@@ -130,7 +132,7 @@ namespace PR.Persistence.UnitTest
         {
             // Arrange
             using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
-            var id = new Guid("12345678-0000-0000-0000-000000000006");
+            var id = new Guid("00000006-0000-0000-0000-000000000000");
             var person1 = await unitOfWork1.People.Get(id);
 
             person1.FirstName = "Riley";
@@ -153,7 +155,7 @@ namespace PR.Persistence.UnitTest
 
             var ids = new List<Guid>
             {
-                new("12345678-0000-0000-0000-000000000006")
+                new("00000006-0000-0000-0000-000000000000")
             };
 
             // Act
@@ -191,6 +193,8 @@ namespace PR.Persistence.UnitTest
         [Fact]
         public async void DeletePeople()
         {
+            // Dette burde sådan set fejle, for man burde ikke kunne slette ting uden først at slette deres children
+
             // Arrange
             using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
 

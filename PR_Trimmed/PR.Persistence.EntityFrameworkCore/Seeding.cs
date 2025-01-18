@@ -74,45 +74,10 @@ namespace PR.Persistence.EntityFrameworkCore
             var reyIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyBecomesReySkywalker = new DateTime(2009, 10, 1, 0, 0, 0, DateTimeKind.Utc);
 
-            var padme_0_0 = new Person
+            var anakin_1_1 = new Person
             {
-                ID = new Guid("12345678-0000-0000-0000-000000000001"),
-                Created = now,
-                Superseded = maxDate,
-                Start = padmeIsIntroduced,
-                End = padmeDies,
-                FirstName = "Padme Amidala",
-                Latitude = 11,
-                Longitude = 57
-            };
-
-            var quigon_0_0 = new Person
-            {
-                ID = new Guid("12345678-0000-0000-0000-000000000002"),
-                Created = now,
-                Superseded = maxDate,
-                Start = quigonIsIntroduced,
-                End = quigonDies,
-                FirstName = "Quigon Jinn",
-                Latitude = 10,
-                Longitude = 57
-            };
-
-            var obiWan_0_0 = new Person
-            {
-                ID = new Guid("12345678-0000-0000-0000-000000000003"),
-                Created = now,
-                Superseded = maxDate,
-                Start = obiwanIsIntroduced,
-                End = obiWanDies,
-                FirstName = "Obi Wan Kenobi",
-                Latitude = 10,
-                Longitude = 58
-            };
-
-            var anakin_0_0 = new Person
-            {
-                ID = new Guid("12345678-0000-0000-0000-000000000004"),
+                ID = new Guid("00000004-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
                 Created = now,
                 Superseded = maxDate,
                 Start = anakinIsIntroduced,
@@ -122,9 +87,10 @@ namespace PR.Persistence.EntityFrameworkCore
                 Longitude = 56
             };
 
-            var anakin_1_0 = new Person
+            var anakin_2_1 = new Person
             {
-                ID = new Guid("12345678-0000-0000-0000-000000000004"),
+                ID = new Guid("00000004-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000004-0002-0001-0000-000000000000"),
                 Created = now,
                 Superseded = maxDate,
                 Start = anakinBecomesDarthVader,
@@ -134,21 +100,23 @@ namespace PR.Persistence.EntityFrameworkCore
                 Longitude = 56
             };
 
-            var chewbacca_0_0 = new Person
+            var chewbacca_1_1 = new Person
             {
-                ID = new Guid("12345678-0000-0000-0000-000000000005"),
+                ID = new Guid("00000005-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
                 Created = chewbaccaIsEnteredIncorrectly,
                 Superseded = chewbaccaIsCorrected,
                 Start = chewbaccaIsIntroduced,
                 End = maxDate,
-                FirstName = "Chewie",
+                FirstName = "Chewing Gum",
                 Latitude = 9,
                 Longitude = 56
             };
 
-            var chewbacca_0_1 = new Person
+            var chewbacca_1_2 = new Person
             {
-                ID = new Guid("12345678-0000-0000-0000-000000000005"),
+                ID = new Guid("00000005-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000005-0001-0002-0000-000000000000"),
                 Created = chewbaccaIsCorrected,
                 Superseded = maxDate,
                 Start = chewbaccaIsIntroduced,
@@ -158,9 +126,10 @@ namespace PR.Persistence.EntityFrameworkCore
                 Longitude = 56
             };
 
-            var rey_0_0 = new Person
+            var rey_1_1 = new Person
             {
-                ID = new Guid("12345678-0000-0000-0000-000000000006"),
+                ID = new Guid("00000006-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
                 Created = now,
                 Superseded = maxDate,
                 Start = reyIsIntroduced,
@@ -170,9 +139,10 @@ namespace PR.Persistence.EntityFrameworkCore
                 Longitude = 56
             };
 
-            var rey_1_0 = new Person
+            var rey_2_1 = new Person
             {
-                ID = new Guid("12345678-0000-0000-0000-000000000006"),
+                ID = new Guid("00000006-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000006-0002-0001-0000-000000000000"),
                 Created = now,
                 Superseded = maxDate,
                 Start = reyBecomesReySkywalker,
@@ -187,23 +157,46 @@ namespace PR.Persistence.EntityFrameworkCore
                 //padme_0_0,
                 //quigon_0_0,
                 //obiWan_0_0,
-                //anakin_0_0,
-                //anakin_1_0,
-                //chewbacca_0_0,
-                //chewbacca_0_1,
-                rey_0_0,
-                rey_1_0
+                anakin_1_1,
+                anakin_2_1,
+                chewbacca_1_1,
+                chewbacca_1_2,
+                rey_1_1,
+                rey_2_1
             };
 
-            var rey_comment_0_0 = new PersonComment
+            var rey_comment_1_1 = new PersonComment
             {
-                PersonID = new Guid("12345678-0000-0000-0000-000000000006"),
+                ID = new Guid("00000001-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000001-0001-0001-0000-000000000000"),
+                PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
+                Text = "She starts out as a ravager"
+            };
+
+            var rey_comment_1_2 = new PersonComment
+            {
+                ID = new Guid("00000001-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000001-0001-0002-0000-000000000000"),
+                PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
                 Text = "She starts out as a scavenger"
+            };
+
+            var chewbacca_comment_1_1 = new PersonComment
+            {
+                ID = new Guid("00000002-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000002-0001-0001-0000-000000000000"),
+                PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
+                Text = "He likes his crossbow"
             };
 
             personComments = new List<PersonComment>
             {
-                rey_comment_0_0
+                rey_comment_1_1,
+                rey_comment_1_2,
+                chewbacca_comment_1_1
             };
         }
 
