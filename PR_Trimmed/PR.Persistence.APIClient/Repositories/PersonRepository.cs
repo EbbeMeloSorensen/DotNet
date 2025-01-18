@@ -100,6 +100,11 @@ namespace PR.Persistence.APIClient.Repositories
             });
         }
 
+        public Task<Person> GetIncludingComments(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Person>> GetAll()
         {
             await Login();

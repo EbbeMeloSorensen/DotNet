@@ -200,6 +200,11 @@ namespace PR.Persistence.Versioned.Repositories
             return timeStamps;
         }
 
+        public Task<Person> GetIncludingComments(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Person>> GetAll()
         {
             var predicates = new List<Expression<Func<Person, bool>>>();

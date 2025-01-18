@@ -71,7 +71,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 modelBuilder.Entity<PersonComment>()
                     .HasOne(pc => pc.Person)
-                    .WithMany()
+                    .WithMany(p => p.Comments)
                     .HasForeignKey(pc => pc.PersonArchiveID)
                     .IsRequired(false)
                     .OnDelete(DeleteBehavior.Restrict);
@@ -80,7 +80,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 modelBuilder.Entity<PersonComment>()
                     .HasOne(pc => pc.Person)
-                    .WithMany()
+                    .WithMany(p => p.Comments)
                     .HasForeignKey(pc => pc.PersonID)
                     .IsRequired(false)
                     .OnDelete(DeleteBehavior.Restrict);

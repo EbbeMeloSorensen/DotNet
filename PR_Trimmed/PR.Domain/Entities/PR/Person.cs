@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PR.Domain.Entities.PR
 {
@@ -35,6 +36,9 @@ namespace PR.Domain.Entities.PR
         public double? Latitude { get; set; }
 
         public double? Longitude { get; set; }
+
+        public virtual ICollection<PersonComment>? Comments { get; set; }
+
 
         public override string ToString()
         {

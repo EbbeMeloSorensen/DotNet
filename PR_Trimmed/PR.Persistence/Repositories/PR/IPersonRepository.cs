@@ -20,5 +20,8 @@ namespace PR.Persistence.Repositories.PR
         Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema();
 
         Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes();
+
+        Task<Person> GetIncludingComments(
+            Guid id);
     }
 }

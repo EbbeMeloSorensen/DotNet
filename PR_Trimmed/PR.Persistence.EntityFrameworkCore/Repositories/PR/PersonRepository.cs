@@ -48,6 +48,24 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories.PR
             throw new NotImplementedException();
         }
 
+        public async Task<Person> GetIncludingComments(
+            Guid id)
+        {
+            return await Task.Run(() =>
+            {
+                var person = PrDbContext.People
+                    .Include(p => p.Comments)
+                    .SingleOrDefault(p => p.ID == id);
+
+                if (person == null)
+                {
+                    throw new InvalidOperationException("Person does not exist");
+                }
+
+                return person;
+            });
+        }
+
         public override async Task Update(
             Person person)
         {

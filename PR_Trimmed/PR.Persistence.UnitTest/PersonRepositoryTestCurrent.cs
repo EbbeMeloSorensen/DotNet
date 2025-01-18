@@ -70,6 +70,22 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
+        public async void GetPersonIncludingCommentsById()
+        {
+            // Arrange
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("12345678-0000-0000-0000-000000000006");
+
+            // Act
+            var person = await unitOfWork.People.GetIncludingComments(id);
+
+            // Assert
+            person.FirstName.Should().Be("Rey Skywalker");
+            person.Comments.Count().Should().Be(1);
+            person.Comments.Single().Text.Should().Be("She starts out as a scavenger");
+        }
+
+        [Fact]
         public async void FindPersonById()
         {
             // Arrange
