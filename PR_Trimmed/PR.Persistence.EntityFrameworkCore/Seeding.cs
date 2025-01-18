@@ -203,7 +203,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             personComments = new List<PersonComment>
             {
-                //rey_comment_0_0
+                rey_comment_0_0
             };
         }
 
