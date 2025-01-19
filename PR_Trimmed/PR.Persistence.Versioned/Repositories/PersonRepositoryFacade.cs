@@ -200,9 +200,13 @@ namespace PR.Persistence.Versioned.Repositories
             return timeStamps;
         }
 
-        public Task<Person> GetIncludingComments(Guid id)
+        public async Task<Person> GetIncludingComments(
+            Guid id)
         {
-            throw new NotImplementedException();
+            var person = await UnitOfWork.People.Get(id);
+
+
+            return person;
         }
 
         public async Task<IEnumerable<Person>> GetAll()

@@ -55,21 +55,16 @@ namespace PR.Persistence.EntityFrameworkCore
             out List<PersonComment> personComments)
         {
             var now = DateTime.UtcNow;
-
             var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 
             var chewbaccaIsEnteredIncorrectly = now.Date.AddDays(-1);
             var chewbaccaIsCorrected = chewbaccaIsEnteredIncorrectly.AddDays(1) - TimeSpan.FromHours(1);
+            var commentOnReyIsEnteredIncorrectly = now.Date.AddDays(-2);
+            var commentOnReyIsCorrected = chewbaccaIsEnteredIncorrectly.AddDays(1) - TimeSpan.FromHours(2);
 
-            var padmeIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var quigonIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var obiwanIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var quigonDies = new DateTime(2001, 10, 1, 0, 0, 0, DateTimeKind.Utc);
-            var padmeDies = new DateTime(2003, 10, 3, 0, 0, 0, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 4, 0, 0, 0, DateTimeKind.Utc);
             var chewbaccaIsIntroduced = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var obiWanDies = new DateTime(2004, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var darthVaderDies = new DateTime(2006, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyBecomesReySkywalker = new DateTime(2009, 10, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -154,9 +149,6 @@ namespace PR.Persistence.EntityFrameworkCore
 
             people = new List<Person>
             {
-                //padme_0_0,
-                //quigon_0_0,
-                //obiWan_0_0,
                 anakin_1_1,
                 anakin_2_1,
                 chewbacca_1_1,
@@ -171,6 +163,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000001-0001-0001-0000-000000000000"),
                 PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
+                Created = commentOnReyIsEnteredIncorrectly,
+                Superseded = commentOnReyIsCorrected,
                 Text = "She starts out as a ravager"
             };
 
@@ -180,6 +174,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000001-0001-0002-0000-000000000000"),
                 PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
+                Created = commentOnReyIsCorrected,
+                Superseded = maxDate,
                 Text = "She starts out as a scavenger"
             };
 
@@ -189,6 +185,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000002-0001-0001-0000-000000000000"),
                 PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
+                Created = now,
+                Superseded = maxDate,
                 Text = "He likes his crossbow"
             };
 
