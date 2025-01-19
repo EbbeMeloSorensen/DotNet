@@ -203,7 +203,9 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task<Person> GetIncludingComments(
             Guid id)
         {
-            var person = await UnitOfWork.People.Get(id);
+            var person = await Get(id);
+
+            var personCommentPredicates = new List<Expression<Func<PersonComment, bool>>>();
 
 
             return person;
@@ -386,18 +388,6 @@ namespace PR.Persistence.Versioned.Repositories
             if (IncludeHistoricalObjects)
             {
                 predicates.Add(p => p.Start <= historicalTime);
-
-                // Doesn't work
-                //if (IncludeCurrentObjects)
-                //{
-                //    // Historical AND current objects
-                //    predicates.Add(p => p.Start <= historicalTime);
-                //}
-                //else
-                //{
-                //    // ONLY historical objects
-                //    predicates.Add(p => p.End <= historicalTime);
-                //}
             }
             else if (IncludeCurrentObjects)
             {
@@ -410,9 +400,9 @@ namespace PR.Persistence.Versioned.Repositories
             }
         }
 
-        private void AddVersionPredicates(
-            ICollection<Expression<Func<Person, bool>>> predicates,
-            DateTime? databaseTime)
+        private void AddVersionPredicates<T>(
+            ICollection<Expression<Func<T, bool>>> predicates,
+            DateTime? databaseTime) where T : IVersionedObject
         {
             if (databaseTime.HasValue)
             {

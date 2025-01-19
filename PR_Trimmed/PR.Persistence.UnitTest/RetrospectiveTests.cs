@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using PR.Domain.Entities;
 using PR.Persistence.Versioned;
 using StructureMap;
 using Xunit;
@@ -8,34 +7,34 @@ namespace PR.Persistence.UnitTest
 {
     public class RetrospectiveTests
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly UnitOfWorkFactoryFacade _unitOfWorkFactory;
 
         public RetrospectiveTests()
         {
             var container = Container.For<InstanceScanner>();
 
-            _unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
-            _unitOfWorkFactory.Reseed();
+            var unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
+            unitOfWorkFactory.Initialize(true);
+            unitOfWorkFactory.Reseed();
 
-            _unitOfWorkFactory = new UnitOfWorkFactoryFacade(_unitOfWorkFactory);
-            (_unitOfWorkFactory as UnitOfWorkFactoryFacade).DatabaseTime = null;
+            _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
+            _unitOfWorkFactory.DatabaseTime = null;
         }
 
-        //[Fact]
-        //public async void GetEarlierVersionOfPerson_1()
-        //{
-        //    // Arrange
-        //    //_unitOfWorkFactory.DatabaseTime = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        //    using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+        [Fact]
+        public async void GetEarlierVersionOfPerson()
+        {
+            // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
-        //    // Act
-        //    var person = await unitOfWork.People.Get(
-        //        new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"));
+            // Act
+            var person = await unitOfWork.People.Get(
+                new Guid("00000005-0000-0000-0000-000000000000"));
 
-        //    // Assert
-        //    person.FirstName.Should().Be("Darth");
-        //    person.Surname.Should().Be("Vader");
-        //}
+            // Assert
+            person.FirstName.Should().Be("Chewing Gum");
+        }
 
         //[Fact]
         //public async void GetEarlierVersionOfPerson_2()

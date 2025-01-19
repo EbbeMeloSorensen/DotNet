@@ -54,13 +54,13 @@ namespace PR.Persistence.EntityFrameworkCore
             out List<Person> people,
             out List<PersonComment> personComments)
         {
-            var now = DateTime.UtcNow;
+            var timeOfPopulation = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 
-            var chewbaccaIsEnteredIncorrectly = now.Date.AddDays(-1);
-            var chewbaccaIsCorrected = chewbaccaIsEnteredIncorrectly.AddDays(1) - TimeSpan.FromHours(1);
-            var commentOnReyIsEnteredIncorrectly = now.Date.AddDays(-2);
-            var commentOnReyIsCorrected = chewbaccaIsEnteredIncorrectly.AddDays(1) - TimeSpan.FromHours(2);
+            var chewbaccaIsEnteredIncorrectly = timeOfPopulation;
+            var chewbaccaIsCorrected = timeOfPopulation.AddDays(1);
+            var commentOnReyIsEnteredIncorrectly = timeOfPopulation.AddDays(2);
+            var commentOnReyIsCorrected = timeOfPopulation.AddDays(3);
 
             var anakinIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 4, 0, 0, 0, DateTimeKind.Utc);
@@ -73,7 +73,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000004-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
-                Created = now,
+                Created = timeOfPopulation,
                 Superseded = maxDate,
                 Start = anakinIsIntroduced,
                 End = anakinBecomesDarthVader,
@@ -86,7 +86,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000004-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000004-0002-0001-0000-000000000000"),
-                Created = now,
+                Created = timeOfPopulation,
                 Superseded = maxDate,
                 Start = anakinBecomesDarthVader,
                 End = darthVaderDies,
@@ -125,7 +125,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000006-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
-                Created = now,
+                Created = timeOfPopulation,
                 Superseded = maxDate,
                 Start = reyIsIntroduced,
                 End = reyBecomesReySkywalker,
@@ -138,7 +138,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000006-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000006-0002-0001-0000-000000000000"),
-                Created = now,
+                Created = timeOfPopulation,
                 Superseded = maxDate,
                 Start = reyBecomesReySkywalker,
                 End = maxDate,
@@ -185,7 +185,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000002-0001-0001-0000-000000000000"),
                 PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
-                Created = now,
+                Created = timeOfPopulation,
                 Superseded = maxDate,
                 Text = "He likes his crossbow"
             };
