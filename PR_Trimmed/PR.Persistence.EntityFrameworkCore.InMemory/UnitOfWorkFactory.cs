@@ -15,6 +15,11 @@ namespace PR.Persistence.EntityFrameworkCore.InMemory
             Seeding.SeedDatabase(context);
         }
 
+        public void OverrideConnectionString(string connectionString)
+        {
+            throw new NotImplementedException();
+        }
+
         public IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(new PRDbContext());

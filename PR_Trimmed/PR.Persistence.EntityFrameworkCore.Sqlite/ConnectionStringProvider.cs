@@ -2,9 +2,6 @@
 {
     public static class ConnectionStringProvider
     {
-        public static string GetConnectionString()
-        {
-            return "Data source=people.db";
-        }
+        public static string ConnectionString { get; set; } = "Data source=people.db";
     }
 }

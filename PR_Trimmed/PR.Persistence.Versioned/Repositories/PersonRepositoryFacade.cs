@@ -205,8 +205,16 @@ namespace PR.Persistence.Versioned.Repositories
         {
             var person = await Get(id);
 
-            var personCommentPredicates = new List<Expression<Func<PersonComment, bool>>>();
+            var personCommentPredicates = new List<Expression<Func<PersonComment, bool>>>
+            {
+                _ => _.PersonID == person.ID
+            };
 
+            AddVersionPredicates(personCommentPredicates, DatabaseTime);
+
+            var personCommentRows = (await UnitOfWork.PersonComments.Find(personCommentPredicates)).ToList();
+
+            person.Comments = personCommentRows;
 
             return person;
         }

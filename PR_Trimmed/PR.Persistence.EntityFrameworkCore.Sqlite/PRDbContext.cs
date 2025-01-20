@@ -7,8 +7,7 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = ConnectionStringProvider.GetConnectionString();
-            optionsBuilder.UseSqlite(connectionString);
+            optionsBuilder.UseSqlite(ConnectionStringProvider.ConnectionString);
         }
     }
 }

@@ -1,0 +1,203 @@
+﻿using FluentAssertions;
+using PR.Domain.Entities.PR;
+
+namespace PR.Persistence.UnitTest
+{
+    public static class Common
+    {
+        public static async Task CreatePerson(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            var person = new Person
+            {
+                FirstName = "Wicket"
+            };
+
+            // Act
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+            await unitOfWork1.People.Add(person);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
+            var people = await unitOfWork2.People.GetAll();
+            people.Count().Should().Be(3);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+            people.Count(p => p.FirstName == "Wicket").Should().Be(1);
+        }
+
+        public static async Task GetAllPeople(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var people = await unitOfWork.People.GetAll();
+
+            // Assert
+            people.Count().Should().Be(2);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+        }
+
+        public static async Task GetPersonById(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("00000006-0000-0000-0000-000000000000");
+
+            // Act
+            var person = await unitOfWork.People.Get(id);
+
+            // Assert
+            person.FirstName.Should().Be("Rey Skywalker");
+        }
+
+        public static async Task GetPersonIncludingCommentsById(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("00000006-0000-0000-0000-000000000000");
+
+            // Act
+            var person = await unitOfWork.People.GetIncludingComments(id);
+
+            // Assert
+            person.FirstName.Should().Be("Rey Skywalker");
+            person.Comments.Count().Should().Be(1);
+            person.Comments.Single().Text.Should().Be("She starts out as a scavenger");
+        }
+
+        public static async Task FindPersonById(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000006-0000-0000-0000-000000000000")
+            };
+
+            // Act
+            var people = await unitOfWork.People.Find(p => ids.Contains(p.ID));
+
+            // Assert
+            people.Count().Should().Be(1);
+            people.Single().FirstName.Should().Be("Rey Skywalker");
+        }
+
+        public static async Task FindPeopleById(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000006-0000-0000-0000-000000000000")
+            };
+
+            // Act
+            var people = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
+
+            people.Count.Should().Be(1);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+
+        }
+
+        public static async Task UpdatePerson(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("00000006-0000-0000-0000-000000000000");
+            var person1 = await unitOfWork1.People.Get(id);
+
+            person1.FirstName = "Riley";
+
+            // Act
+            await unitOfWork1.People.Update(person1);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
+            var person2 = await unitOfWork2.People.Get(id);
+            person2.FirstName.Should().Be("Riley");
+        }
+
+        public static async Task UpdatePeople(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000006-0000-0000-0000-000000000000")
+            };
+
+            // Act
+            var people1 = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
+
+            people1.ForEach(_ => _.FirstName = "Rudy");
+            await unitOfWork1.People.UpdateRange(people1);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
+            var people2 = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
+            people2.Count.Should().Be(1);
+            people2.Count(p => p.FirstName == "Rudy").Should().Be(1);
+        }
+
+        public static async Task DeletePerson(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("00000006-0000-0000-0000-000000000000");
+            var person = await unitOfWork1.People.Get(id);
+
+            // Act
+            await unitOfWork1.People.Remove(person);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
+            var people = await unitOfWork2.People.GetAll();
+            people.Count().Should().Be(0);
+        }
+
+        public static async Task DeletePeople(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Dette burde sådan set fejle, for man burde ikke kunne slette ting uden først at slette deres children
+
+            // Arrange
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+                {
+                    new("00000005-0000-0000-0000-000000000000"),
+                    new("00000006-0000-0000-0000-000000000000")
+                };
+
+            // Act
+            var people = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
+
+            await unitOfWork1.People.RemoveRange(people);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
+            people = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
+            people.Count.Should().Be(0);
+        }
+    }
+}

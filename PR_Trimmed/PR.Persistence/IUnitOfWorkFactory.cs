@@ -9,6 +9,9 @@ namespace PR.Persistence
         void Initialize(
             bool versioned);
 
+        void OverrideConnectionString(
+            string connectionString);
+
         IUnitOfWork GenerateUnitOfWork();
 
         void Reseed();

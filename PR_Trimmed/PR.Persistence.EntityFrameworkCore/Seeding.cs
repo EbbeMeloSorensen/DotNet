@@ -183,8 +183,8 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000002-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000002-0001-0001-0000-000000000000"),
-                PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
-                PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
+                PersonID = new Guid("00000005-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
                 Created = timeOfPopulation,
                 Superseded = maxDate,
                 Text = "He likes his crossbow"
@@ -204,7 +204,7 @@ namespace PR.Persistence.EntityFrameworkCore
         {
             var chewbacca = new Person
             {
-                ID = new Guid("12345678-0000-0000-0000-000000000005"),
+                ID = new Guid("00000005-0000-0000-0000-000000000000"),
                 FirstName = "Chewbacca",
                 Latitude = 9,
                 Longitude = 56
@@ -212,7 +212,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var rey = new Person
             {
-                ID = new Guid("12345678-0000-0000-0000-000000000006"),
+                ID = new Guid("00000006-0000-0000-0000-000000000000"),
                 FirstName = "Rey Skywalker",
                 Latitude = 10.2,
                 Longitude = 56
@@ -221,19 +221,27 @@ namespace PR.Persistence.EntityFrameworkCore
             people = new List<Person>
             {
                 rey,
-                //chewbacca
+                chewbacca
             };
 
             var rey_comment = new PersonComment
             {
-                ID = new Guid("12345678-1234-0000-0000-000000000006"),
-                PersonID = new Guid("12345678-0000-0000-0000-000000000006"),
+                ID = new Guid("00000001-0000-0000-0000-000000000000"),
+                PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
                 Text = "She starts out as a scavenger"
+            };
+
+            var chewbacca_comment = new PersonComment
+            {
+                ID = new Guid("00000002-0000-0000-0000-000000000000"),
+                PersonID = new Guid("00000005-0000-0000-0000-000000000000"),
+                Text = "He likes his crossbow"
             };
 
             personComments = new List<PersonComment>
             {
-                rey_comment
+                rey_comment,
+                chewbacca_comment
             };
         }
     }

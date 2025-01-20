@@ -15,6 +15,12 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite
             Seeding.SeedDatabase(context);
         }
 
+        public void OverrideConnectionString(
+            string connectionString)
+        {
+            ConnectionStringProvider.ConnectionString = connectionString;
+        }
+
         public IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(new PRDbContext());

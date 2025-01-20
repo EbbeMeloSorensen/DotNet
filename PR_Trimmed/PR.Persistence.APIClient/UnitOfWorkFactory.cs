@@ -31,6 +31,11 @@ namespace PR.Persistence.APIClient
             // We might obtain the token here, though..
         }
 
+        public void OverrideConnectionString(string connectionString)
+        {
+            throw new NotImplementedException();
+        }
+
         public IUnitOfWork GenerateUnitOfWork()
         {
             return new UnitOfWork(
