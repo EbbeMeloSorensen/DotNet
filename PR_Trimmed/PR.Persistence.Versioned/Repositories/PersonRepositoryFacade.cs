@@ -407,6 +407,13 @@ namespace PR.Persistence.Versioned.Repositories
         {
             var ids = people.Select(p => p.ID).ToList();
 
+            var peopleFromRepo = await FindIncludingComments(_ => ids.Contains(_.ID));
+
+            if (peopleFromRepo.Any(_ => _.Comments != null))
+            {
+                throw new InvalidOperationException("Cant delete people with child rows (comments)");
+            }
+
             var predicates = new List<Expression<Func<Person, bool>>>
             {
                 p => ids.Contains(p.ID)
