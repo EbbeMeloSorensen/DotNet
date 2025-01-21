@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
+namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
 {
     /// <inheritdoc />
     public partial class Migration1 : Migration
@@ -15,7 +15,7 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "CoordinateSystems",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,7 +26,7 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "Locations",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,9 +37,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "ObjectItems",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AlternativeIdentificationText = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    AlternativeIdentificationText = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,24 +50,24 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "People",
                 columns: table => new
                 {
-                    ArchiveID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Superseded = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Nickname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Dead = table.Column<bool>(type: "bit", nullable: true),
-                    Latitude = table.Column<double>(type: "float", nullable: true),
-                    Longitude = table.Column<double>(type: "float", nullable: true)
+                    ArchiveID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    End = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    Surname = table.Column<string>(type: "text", nullable: true),
+                    Nickname = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    ZipCode = table.Column<string>(type: "text", nullable: true),
+                    City = table.Column<string>(type: "text", nullable: true),
+                    Birthday = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Category = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Dead = table.Column<bool>(type: "boolean", nullable: true),
+                    Latitude = table.Column<double>(type: "double precision", nullable: true),
+                    Longitude = table.Column<double>(type: "double precision", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -78,8 +78,8 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "Smurfs",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,8 +90,8 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "VerticalDistances",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Dimension = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Dimension = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -102,7 +102,7 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "Lines",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,7 +119,7 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "Points",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,7 +136,7 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "Surfaces",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -153,8 +153,8 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "Organisations",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NickName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    NickName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -168,18 +168,49 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PersonAssociations",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    ArchiveID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    End = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    SubjectPersonID = table.Column<Guid>(type: "uuid", nullable: false),
+                    SubjectPersonArchiveID = table.Column<Guid>(type: "uuid", nullable: false),
+                    ObjectPersonID = table.Column<Guid>(type: "uuid", nullable: false),
+                    ObjectPersonArchiveID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonAssociations", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_PersonAssociations_People_ObjectPersonArchiveID",
+                        column: x => x.ObjectPersonArchiveID,
+                        principalTable: "People",
+                        principalColumn: "ArchiveID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PersonAssociations_People_SubjectPersonArchiveID",
+                        column: x => x.SubjectPersonArchiveID,
+                        principalTable: "People",
+                        principalColumn: "ArchiveID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PersonComments",
                 columns: table => new
                 {
-                    ArchiveID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Superseded = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PersonID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PersonArchiveID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ArchiveID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    PersonID = table.Column<Guid>(type: "uuid", nullable: false),
+                    PersonArchiveID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -196,9 +227,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "GeometricVolumes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LowerVerticalDistanceID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UpperVerticalDistanceID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    LowerVerticalDistanceID = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpperVerticalDistanceID = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -227,10 +258,10 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "AbsolutePoints",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LatitudeCoordinate = table.Column<double>(type: "float", nullable: false),
-                    LongitudeCoordinate = table.Column<double>(type: "float", nullable: false),
-                    VerticalDistanceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    LatitudeCoordinate = table.Column<double>(type: "double precision", nullable: false),
+                    LongitudeCoordinate = table.Column<double>(type: "double precision", nullable: false),
+                    VerticalDistanceId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -253,10 +284,10 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "LinePoints",
                 columns: table => new
                 {
-                    LineID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Index = table.Column<int>(type: "int", nullable: false),
-                    PointId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SequenceQuantity = table.Column<int>(type: "int", nullable: false)
+                    LineID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Index = table.Column<int>(type: "integer", nullable: false),
+                    PointId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SequenceQuantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -279,10 +310,10 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "PointReferences",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OriginPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    XVectorPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    YVectorPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OriginPointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    XVectorPointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    YVectorPointID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -317,11 +348,11 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "RelativePoints",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CoordinateSystemID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    XCoordinateDimension = table.Column<double>(type: "float", nullable: false),
-                    YCoordinateDimension = table.Column<double>(type: "float", nullable: false),
-                    ZCoordinateDimension = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CoordinateSystemID = table.Column<Guid>(type: "uuid", nullable: false),
+                    XCoordinateDimension = table.Column<double>(type: "double precision", nullable: false),
+                    YCoordinateDimension = table.Column<double>(type: "double precision", nullable: false),
+                    ZCoordinateDimension = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -344,9 +375,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "CorridorAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CenterLineID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WidthDimension = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CenterLineID = table.Column<Guid>(type: "uuid", nullable: false),
+                    WidthDimension = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -369,10 +400,10 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "Ellipses",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CentrePointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstConjugateDiameterPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SecondConjugateDiameterPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CentrePointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstConjugateDiameterPointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    SecondConjugateDiameterPointID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -407,12 +438,12 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "FanAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VertexPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MinimumRangeDimension = table.Column<double>(type: "float", nullable: false),
-                    MaximumRangeDimension = table.Column<double>(type: "float", nullable: false),
-                    OrientationAngle = table.Column<double>(type: "float", nullable: false),
-                    SectorSizeAngle = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    VertexPointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MinimumRangeDimension = table.Column<double>(type: "double precision", nullable: false),
+                    MaximumRangeDimension = table.Column<double>(type: "double precision", nullable: false),
+                    OrientationAngle = table.Column<double>(type: "double precision", nullable: false),
+                    SectorSizeAngle = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -435,11 +466,11 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "OrbitAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SecondPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrbitAreaAlignmentCode = table.Column<int>(type: "int", nullable: false),
-                    WidthDimension = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstPointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    SecondPointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrbitAreaAlignmentCode = table.Column<int>(type: "integer", nullable: false),
+                    WidthDimension = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -468,12 +499,12 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "PolyArcAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DefiningLineID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BearingOriginPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BeginBearingAngle = table.Column<double>(type: "float", nullable: false),
-                    EndBearingAngle = table.Column<double>(type: "float", nullable: false),
-                    ArcRadiusDimension = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DefiningLineID = table.Column<Guid>(type: "uuid", nullable: false),
+                    BearingOriginPointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    BeginBearingAngle = table.Column<double>(type: "double precision", nullable: false),
+                    EndBearingAngle = table.Column<double>(type: "double precision", nullable: false),
+                    ArcRadiusDimension = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -502,8 +533,8 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "PolygonAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BoundingLineID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BoundingLineID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -526,11 +557,11 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "TrackAreas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BeginPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EndPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LeftWidthDimension = table.Column<double>(type: "float", nullable: false),
-                    RightWidthDimension = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BeginPointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    EndPointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    LeftWidthDimension = table.Column<double>(type: "double precision", nullable: false),
+                    RightWidthDimension = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -559,8 +590,8 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "Units",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FormalAbbreviatedName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    FormalAbbreviatedName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -577,9 +608,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "ConeVolumes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DefiningSurfaceID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VertexPointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DefiningSurfaceID = table.Column<Guid>(type: "uuid", nullable: false),
+                    VertexPointID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -608,9 +639,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "SphereVolumes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CentrePointID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RadiusDimension = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CentrePointID = table.Column<Guid>(type: "uuid", nullable: false),
+                    RadiusDimension = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -633,8 +664,8 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "SurfaceVolumes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DefiningSurfaceID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DefiningSurfaceID = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -717,6 +748,16 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                 name: "IX_OrbitAreas_SecondPointID",
                 table: "OrbitAreas",
                 column: "SecondPointID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonAssociations_ObjectPersonArchiveID",
+                table: "PersonAssociations",
+                column: "ObjectPersonArchiveID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonAssociations_SubjectPersonArchiveID",
+                table: "PersonAssociations",
+                column: "SubjectPersonArchiveID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersonComments_PersonArchiveID",
@@ -802,6 +843,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrbitAreas");
+
+            migrationBuilder.DropTable(
+                name: "PersonAssociations");
 
             migrationBuilder.DropTable(
                 name: "PersonComments");

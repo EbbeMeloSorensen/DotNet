@@ -38,7 +38,8 @@ namespace PR.Domain.Entities.PR
         public double? Longitude { get; set; }
 
         public virtual ICollection<PersonComment>? Comments { get; set; }
-
+        public virtual ICollection<PersonAssociation>? ObjectPeople { get; set; }
+        public virtual ICollection<PersonAssociation>? SubjectPeople { get; set; }
 
         public override string ToString()
         {

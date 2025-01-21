@@ -73,7 +73,21 @@ namespace PR.Persistence.EntityFrameworkCore
                     .HasOne(pc => pc.Person)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(pc => pc.PersonArchiveID)
-                    .IsRequired(false)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                modelBuilder.Entity<PersonAssociation>()
+                    .HasOne(pa => pa.SubjectPerson)
+                    .WithMany(p => p.ObjectPeople)
+                    .HasForeignKey(pa => pa.SubjectPersonArchiveID)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                modelBuilder.Entity<PersonAssociation>()
+                    .HasOne(pa => pa.ObjectPerson)
+                    .WithMany(p => p.SubjectPeople)
+                    .HasForeignKey(pa => pa.ObjectPersonArchiveID)
+                    .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
             }
             else
@@ -82,7 +96,21 @@ namespace PR.Persistence.EntityFrameworkCore
                     .HasOne(pc => pc.Person)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(pc => pc.PersonID)
-                    .IsRequired(false)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                modelBuilder.Entity<PersonAssociation>()
+                    .HasOne(pa => pa.SubjectPerson)
+                    .WithMany(p => p.ObjectPeople)
+                    .HasForeignKey(pa => pa.SubjectPersonID)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                modelBuilder.Entity<PersonAssociation>()
+                    .HasOne(pa => pa.ObjectPerson)
+                    .WithMany(p => p.SubjectPeople)
+                    .HasForeignKey(pa => pa.ObjectPersonID)
+                    .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
             }
         }
