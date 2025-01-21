@@ -3,14 +3,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Craft.Logging;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
 using PR.Application;
-using PR.Domain.Entities;
 using PR.Domain.Entities.PR;
 using PR.IO;
 using PR.Persistence;
@@ -43,11 +42,13 @@ namespace PR.ViewModel
                 _application.UnitOfWorkFactory = value;
                 PersonListViewModel.UnitOfWorkFactory = value;
                 PeoplePropertiesViewModel.UnitOfWorkFactory = value;
+                PersonCommentsViewModel.UnitOfWorkFactory = value;
             }
         }
 
         public PersonListViewModel PersonListViewModel { get; }
         public PeoplePropertiesViewModel PeoplePropertiesViewModel { get; }
+        public PersonCommentsViewModel PersonCommentsViewModel { get; }
         public LogViewModel LogViewModel { get; }
 
         private AsyncCommand<object> _createPersonCommand;
@@ -127,6 +128,10 @@ namespace PR.ViewModel
             PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
+                unitOfWorkFactory,
+                PersonListViewModel.SelectedPeople);
+
+            PersonCommentsViewModel = new PersonCommentsViewModel(
                 unitOfWorkFactory,
                 PersonListViewModel.SelectedPeople);
 

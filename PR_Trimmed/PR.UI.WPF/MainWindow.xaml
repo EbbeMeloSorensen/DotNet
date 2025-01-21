@@ -55,7 +55,16 @@
 
             <local:PersonListView Grid.Row="1" Grid.Column="0" DataContext="{Binding PersonListViewModel}"/>
 
-            <local:PeoplePropertiesView Grid.Row="1" Grid.Column="1" DataContext="{Binding PeoplePropertiesViewModel}"/>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <local:PeoplePropertiesView Grid.Row="0" DataContext="{Binding PeoplePropertiesViewModel}"/>
+
+                <local:PersonCommentsView Grid.Row="1" DataContext="{Binding PersonCommentsViewModel}"/>
+            </Grid>
 
             <Expander Header="Log" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ExpandDirection="Up" IsExpanded="True">
                 <logging:LogView Height="200" DataContext="{Binding LogViewModel}"/>
