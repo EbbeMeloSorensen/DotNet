@@ -1,7 +1,5 @@
 ﻿using StructureMap;
 using Xunit;
-using FluentAssertions;
-using PR.Domain.Entities.PR;
 
 namespace PR.Persistence.UnitTest
 {
@@ -51,9 +49,21 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
+        public async Task FindPersonById_PersonWasDeleted()
+        {
+            await Common.FindPersonById_PersonWasDeleted(_unitOfWorkFactory);
+        }
+
+        [Fact]
         public async Task FindPeopleById()
         {
             await Common.FindPeopleById(_unitOfWorkFactory);
+        }
+
+        [Fact]
+        public async Task FindPeopleIncludingComments()
+        {
+            await Common.FindPeopleIncludingComments(_unitOfWorkFactory);
         }
 
         [Fact]
@@ -69,15 +79,27 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async Task DeletePerson()
+        public async Task DeletePerson_WithoutAnyChildObjects()
         {
-            await Common.DeletePerson(_unitOfWorkFactory);
+            await Common.DeletePerson_WithoutAnyChildObjects(_unitOfWorkFactory);
         }
 
         [Fact]
-        public async Task DeletePeople()
+        public async Task DeletePerson_WithChildObjects_Throws()
         {
-            await Common.DeletePeople(_unitOfWorkFactory);
+            await Common.DeletePerson_WithChildObjects_Throws(_unitOfWorkFactory);
+        }
+
+        [Fact]
+        public async Task DeletePeople_WithoutAnyChildObjects()
+        {
+            await Common.DeletePeople_WithoutAnyChildObjects(_unitOfWorkFactory);
+        }
+
+        [Fact]
+        public async Task DeletePeople_WithChildObjects_Throws()
+        {
+            await Common.DeletePeople_WithChildObjects_Throws(_unitOfWorkFactory);
         }
     }
 }

@@ -62,12 +62,40 @@ namespace PR.Persistence.EntityFrameworkCore
             var commentOnReyIsEnteredIncorrectly = timeOfPopulation.AddDays(2);
             var commentOnReyIsCorrected = timeOfPopulation.AddDays(3);
 
+            var maxReboIsIntroduced = new DateTime(2006, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var poeDameronIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 4, 0, 0, 0, DateTimeKind.Utc);
             var chewbaccaIsIntroduced = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var darthVaderDies = new DateTime(2006, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyBecomesReySkywalker = new DateTime(2009, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            var maxRebo_1_1 = new Person
+            {
+                ID = new Guid("00000001-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000001-0001-0001-0000-000000000000"),
+                Created = timeOfPopulation,
+                Superseded = maxDate,
+                Start = maxReboIsIntroduced,
+                End = maxDate,
+                FirstName = "Max Rebo",
+                Latitude = 10,
+                Longitude = 56
+            };
+
+            var poeDameron_1_1 = new Person
+            {
+                ID = new Guid("00000002-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000002-0001-0001-0000-000000000000"),
+                Created = timeOfPopulation,
+                Superseded = maxDate,
+                Start = poeDameronIsIntroduced,
+                End = maxDate,
+                FirstName = "Poe Dameron",
+                Latitude = 10,
+                Longitude = 56
+            };
 
             var anakin_1_1 = new Person
             {
@@ -149,6 +177,8 @@ namespace PR.Persistence.EntityFrameworkCore
 
             people = new List<Person>
             {
+                maxRebo_1_1,
+                poeDameron_1_1,
                 anakin_1_1,
                 anakin_2_1,
                 chewbacca_1_1,
@@ -202,6 +232,22 @@ namespace PR.Persistence.EntityFrameworkCore
             out List<Person> people,
             out List<PersonComment> personComments)
         {
+            var maxRebo = new Person
+            {
+                ID = new Guid("00000001-0000-0000-0000-000000000000"),
+                FirstName = "Max Rebo",
+                Latitude = 10,
+                Longitude = 56
+            };
+
+            var poeDameron = new Person
+            {
+                ID = new Guid("00000002-0000-0000-0000-000000000000"),
+                FirstName = "Poe Dameron",
+                Latitude = 10,
+                Longitude = 56
+            };
+
             var chewbacca = new Person
             {
                 ID = new Guid("00000005-0000-0000-0000-000000000000"),
@@ -220,6 +266,8 @@ namespace PR.Persistence.EntityFrameworkCore
 
             people = new List<Person>
             {
+                maxRebo,
+                poeDameron,
                 rey,
                 chewbacca
             };

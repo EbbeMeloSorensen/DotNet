@@ -69,6 +69,11 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             throw new NotImplementedException();
         }
 
+        public Task<IEnumerable<Person>> FindIncludingComments(IList<Expression<Func<Person, bool>>> predicates)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Person>> GetAllVariants(
             Guid id)
         {
@@ -168,6 +173,11 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
         }
 
         public Task<Person> GetIncludingComments(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Person>> FindIncludingComments(Expression<Func<Person, bool>> predicate)
         {
             throw new NotImplementedException();
         }

@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using PR.Domain.Entities.PR;
+using Xunit;
 
 namespace PR.Persistence.UnitTest
 {
@@ -22,7 +23,9 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
             var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(3);
+            people.Count().Should().Be(5);
+            people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
+            people.Count(p => p.FirstName == "Poe Dameron").Should().Be(1);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
             people.Count(p => p.FirstName == "Wicket").Should().Be(1);
@@ -38,7 +41,9 @@ namespace PR.Persistence.UnitTest
             var people = await unitOfWork.People.GetAll();
 
             // Assert
-            people.Count().Should().Be(2);
+            people.Count().Should().Be(4);
+            people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
+            people.Count(p => p.FirstName == "Poe Dameron").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
         }
@@ -73,6 +78,34 @@ namespace PR.Persistence.UnitTest
             person.Comments.Single().Text.Should().Be("She starts out as a scavenger");
         }
 
+        public static async Task FindPeopleIncludingComments(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000001-0000-0000-0000-000000000000"),
+                new("00000005-0000-0000-0000-000000000000"),
+                new("00000006-0000-0000-0000-000000000000"),
+            };
+
+            // Act
+            var people = (await unitOfWork.People.FindIncludingComments(p => ids.Contains(p.ID)));
+
+            // Assert
+            people.Count().Should().Be(3);
+            people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+            people.Single(p => p.FirstName == "Chewbacca").Comments.Count.Should().Be(1);
+            people.Single(p => p.FirstName == "Chewbacca").Comments.Single().Text.Should().Be("He likes his crossbow");
+            people.Single(p => p.FirstName == "Rey Skywalker").Comments.Count.Should().Be(1);
+            people.Single(p => p.FirstName == "Rey Skywalker").Comments.Single().Text.Should().Be("She starts out as a scavenger");
+
+        }
+
         public static async Task FindPersonById(
             IUnitOfWorkFactory unitOfWorkFactory)
         {
@@ -92,6 +125,24 @@ namespace PR.Persistence.UnitTest
             people.Single().FirstName.Should().Be("Rey Skywalker");
         }
 
+        public static async Task FindPersonById_PersonWasDeleted(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork = unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000004-0000-0000-0000-000000000000")
+            };
+
+            // Act
+            var people = await unitOfWork.People.Find(p => ids.Contains(p.ID));
+
+            // Assert
+            people.Count().Should().Be(0);
+        }
+
         public static async Task FindPeopleById(
             IUnitOfWorkFactory unitOfWorkFactory)
         {
@@ -100,15 +151,16 @@ namespace PR.Persistence.UnitTest
 
             var ids = new List<Guid>
             {
-                new("00000006-0000-0000-0000-000000000000")
+                new("00000001-0000-0000-0000-000000000000"),
+                new("00000006-0000-0000-0000-000000000000"),
             };
 
             // Act
             var people = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
 
-            people.Count.Should().Be(1);
+            people.Count.Should().Be(2);
+            people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
-
         }
 
         public static async Task UpdatePerson(
@@ -156,12 +208,12 @@ namespace PR.Persistence.UnitTest
             people2.Count(p => p.FirstName == "Rudy").Should().Be(1);
         }
 
-        public static async Task DeletePerson(
+        public static async Task DeletePerson_WithoutAnyChildObjects(
             IUnitOfWorkFactory unitOfWorkFactory)
         {
             // Arrange
             using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
-            var id = new Guid("00000006-0000-0000-0000-000000000000");
+            var id = new Guid("00000001-0000-0000-0000-000000000000");
             var person = await unitOfWork1.People.Get(id);
 
             // Act
@@ -171,21 +223,40 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
             var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(0);
+            people.Count().Should().Be(3);
+            people.Count(p => p.FirstName == "Poe Dameron").Should().Be(1);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
         }
 
-        public static async Task DeletePeople(
+        public static async Task DeletePerson_WithChildObjects_Throws(
             IUnitOfWorkFactory unitOfWorkFactory)
         {
-            // Dette burde sådan set fejle, for man burde ikke kunne slette ting uden først at slette deres children
+            // Arrange
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("00000005-0000-0000-0000-000000000000");
+            var person = await unitOfWork1.People.Get(id);
 
+            // Act & Assert
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                await unitOfWork1.People.Remove(person);
+                unitOfWork1.Complete();
+            });
+
+            Assert.NotNull(exception);
+        }
+
+        public static async Task DeletePeople_WithoutAnyChildObjects(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
             // Arrange
             using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
 
             var ids = new List<Guid>
                 {
-                    new("00000005-0000-0000-0000-000000000000"),
-                    new("00000006-0000-0000-0000-000000000000")
+                    new("00000001-0000-0000-0000-000000000000"),
+                    new("00000002-0000-0000-0000-000000000000")
                 };
 
             // Act
@@ -196,8 +267,34 @@ namespace PR.Persistence.UnitTest
 
             // Assert
             using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
-            people = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
-            people.Count.Should().Be(0);
+            people = (await unitOfWork2.People.GetAll()).ToList();
+            people.Count.Should().Be(2);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+        }
+
+        public static async Task DeletePeople_WithChildObjects_Throws(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000001-0000-0000-0000-000000000000"),
+                new("00000005-0000-0000-0000-000000000000")
+            };
+
+            var people = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
+
+            // Act & Assert
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                await unitOfWork1.People.RemoveRange(people);
+                unitOfWork1.Complete();
+            });
+
+            Assert.NotNull(exception);
         }
     }
 }

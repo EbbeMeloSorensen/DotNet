@@ -77,6 +77,11 @@ namespace PR.Persistence.APIClient.Repositories
             return person;
         }
 
+        public Task<IEnumerable<Person>> FindIncludingComments(IList<Expression<Func<Person, bool>>> predicates)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<Person>> GetAllVariants(Guid id)
         {
             throw new NotImplementedException();
@@ -101,6 +106,11 @@ namespace PR.Persistence.APIClient.Repositories
         }
 
         public Task<Person> GetIncludingComments(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Person>> FindIncludingComments(Expression<Func<Person, bool>> predicate)
         {
             throw new NotImplementedException();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Persistence;
@@ -14,14 +15,20 @@ namespace PR.Persistence.Repositories.PR
         Task<Person> Get(
             Guid id);
 
+        Task<Person> GetIncludingComments(
+            Guid id);
+
+        Task<IEnumerable<Person>> FindIncludingComments(
+            Expression<Func<Person, bool>> predicate);
+
+        Task<IEnumerable<Person>> FindIncludingComments(
+            IList<Expression<Func<Person, bool>>> predicates);
+
         Task<IEnumerable<Person>> GetAllVariants(
             Guid id);
 
         Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema();
 
         Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes();
-
-        Task<Person> GetIncludingComments(
-            Guid id);
     }
 }

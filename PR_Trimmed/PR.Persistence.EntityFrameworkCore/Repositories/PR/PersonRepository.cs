@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Craft.Logging;
+using Craft.Persistence;
 using Craft.Persistence.EntityFrameworkCore;
 using PR.Domain.Entities.PR;
 using PR.Persistence.Repositories.PR;
@@ -63,6 +65,34 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories.PR
                 }
 
                 return person;
+            });
+        }
+
+        public async Task<IEnumerable<Person>> FindIncludingComments(
+            Expression<Func<Person, bool>> predicate)
+        {
+            return await Task.Run(() =>
+            {
+                var people = PrDbContext.People
+                    .Include(p => p.Comments)
+                    .Where(predicate);
+
+                return people;
+            });
+        }
+
+        public async Task<IEnumerable<Person>> FindIncludingComments(
+            IList<Expression<Func<Person, bool>>> predicates)
+        {
+            return await Task.Run(() =>
+            {
+                var predicate = predicates.Aggregate((c, n) => c.And(n));
+
+                var people = PrDbContext.People
+                    .Include(p => p.Comments)
+                    .Where(predicate);
+
+                return people;
             });
         }
 

@@ -219,6 +219,42 @@ namespace PR.Persistence.Versioned.Repositories
             return person;
         }
 
+        public async Task<IEnumerable<Person>> FindIncludingComments(
+            Expression<Func<Person, bool>> predicate)
+        {
+            var people = await Find(predicate);
+            var personIDs = people.Select(_ => _.ID);
+
+            var personCommentPredicates = new List<Expression<Func<PersonComment, bool>>>
+            {
+                _ => personIDs.Contains(_.PersonID) 
+            };
+
+            AddVersionPredicates(personCommentPredicates, DatabaseTime);
+
+            var personCommentRows = (await UnitOfWork.PersonComments.Find(personCommentPredicates)).ToList();
+
+            var personCommentGroups = personCommentRows.GroupBy(_ => _.PersonID);
+
+            people.ToList().ForEach(p =>
+            {
+                var personCommentGroup = personCommentGroups.SingleOrDefault(_ => _.Key == p.ID);
+
+                if (personCommentGroup != null)
+                {
+                    p.Comments = personCommentGroup.ToList();
+                }
+            });
+
+            return people;
+        }
+
+        public Task<IEnumerable<Person>> FindIncludingComments(
+            IList<Expression<Func<Person, bool>>> predicates)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Person>> GetAll()
         {
             var predicates = new List<Expression<Func<Person, bool>>>();
@@ -353,6 +389,13 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Remove(
             Person person)
         {
+            var personFromRepo = await GetIncludingComments(person.ID);
+
+            if (personFromRepo.Comments.Any())
+            {
+                throw new InvalidOperationException("Cant delete person with child rows (comments)");
+            }
+
             _returnClonesInsteadOfRepositoryObjects = false;
             var objectFromRepository = await Get(person.ID);
             _returnClonesInsteadOfRepositoryObjects = true;
