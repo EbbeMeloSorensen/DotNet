@@ -334,6 +334,8 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
+        // Bemærk, at denne update agerer på den måde at den afslutter virkningstiden for den nyeste variant og introducerer
+        // en ny variant. På den måde har du indtil videre ikke nogen funktion til at lave en retroaktiv ændring
         public async Task Update(
             Person person)
         {
