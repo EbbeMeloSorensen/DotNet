@@ -13,19 +13,12 @@ namespace PR.ViewModel
     {
         private bool _isVisible;
         private ObjectCollection<Person> _people;
-        private ObservableCollection<PersonCommentListViewItemViewModel> _personCommentListViewItemViewModels;
 
         public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
-        public ObservableCollection<PersonCommentListViewItemViewModel> PersonCommentListViewItemViewModels
-        {
-            get => _personCommentListViewItemViewModels;
-            set
-            {
-                _personCommentListViewItemViewModels = value;
-                RaisePropertyChanged();
-            }
-        }
+        public ObservableCollection<PersonCommentListViewItemViewModel> PersonCommentListViewItemViewModels { get; }
+
+        public ObservableCollection<PersonCommentListViewItemViewModel> SelectedPersonCommentListViewItemViewModels { get; }
 
         public bool IsVisible
         {
@@ -43,7 +36,19 @@ namespace PR.ViewModel
         {
             UnitOfWorkFactory = unitOfWorkFactory;
             _people = people;
+
+            PersonCommentListViewItemViewModels =
+                new ObservableCollection<PersonCommentListViewItemViewModel>();
+
+            SelectedPersonCommentListViewItemViewModels =
+                new ObservableCollection<PersonCommentListViewItemViewModel>();
+
             _people.PropertyChanged += async (s, e) => await Initialize(s, e);
+
+            SelectedPersonCommentListViewItemViewModels.CollectionChanged += (s, e) =>
+            {
+                var a = 0;
+            };
         }
 
         private async Task Initialize(
@@ -63,8 +68,15 @@ namespace PR.ViewModel
 
             if (person.Comments != null)
             {
-                PersonCommentListViewItemViewModels = new ObservableCollection<PersonCommentListViewItemViewModel>(
-                    person.Comments.Select(pc => new PersonCommentListViewItemViewModel {PersonComment = pc}));
+                PersonCommentListViewItemViewModels.Clear();
+
+                person.Comments.ToList().ForEach(pc =>
+                {
+                    PersonCommentListViewItemViewModels.Add(new PersonCommentListViewItemViewModel
+                    {
+                        PersonComment = pc
+                    });
+                });
             }
 
             IsVisible = true;

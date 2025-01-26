@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:PR.UI.WPF"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:viewModel="clr-namespace:PR.ViewModel;assembly=PR.ViewModel"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:utils="clr-namespace:Craft.UI.Utils;assembly=Craft.UI.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance viewModel:PersonCommentsViewModel}">
@@ -26,7 +28,28 @@
         </Binding>
     </UserControl.Visibility>
 
-    <ListBox DisplayMemberPath="DisplayText" SelectionMode="Extended"
-             ItemsSource="{Binding PersonCommentListViewItemViewModels}">
-    </ListBox>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ListBox Grid.Row="0" DisplayMemberPath="DisplayText" SelectionMode="Extended" Margin="3"
+                 ItemsSource="{Binding PersonCommentListViewItemViewModels}">
+            <b:Interaction.Behaviors>
+                <utils:MultiSelectionBehavior SelectedItems="{Binding SelectedPersonCommentListViewItemViewModels}"/>
+            </b:Interaction.Behaviors>
+        </ListBox>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Margin="3,0,3,3" Content="New.." 
+                    Command="{Binding CreatePersonCommentCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Margin="3,0,3,3" Content="Edit.." 
+                    Command="{Binding UpdatePersonCommentCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Margin="3,0,3,3" Content="Delete" 
+                    Command="{Binding DeleteSelectedPersonCommensCommand}"/>
+        </StackPanel>
+    </Grid>
 </UserControl>
