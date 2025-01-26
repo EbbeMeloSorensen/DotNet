@@ -222,7 +222,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var chewbacca_comment_2_1 = new PersonComment
             {
-                ID = new Guid("00000002-0000-0000-0000-000000000000"),
+                ID = new Guid("00000003-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000002-0002-0001-0000-000000000000"),
                 PersonID = new Guid("00000005-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
