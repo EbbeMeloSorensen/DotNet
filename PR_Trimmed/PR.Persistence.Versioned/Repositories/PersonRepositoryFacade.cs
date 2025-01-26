@@ -13,7 +13,6 @@ namespace PR.Persistence.Versioned.Repositories
     // Generelt når vi returnerer objekter herfra skal vi returnere kloner, da det ellers fucker, når man opdaterer
     public class PersonRepositoryFacade : IPersonRepository
     {
-        private bool _returnClonesInsteadOfRepositoryObjects = true;
         private static DateTime _maxDate;
 
         static PersonRepositoryFacade()
@@ -22,6 +21,7 @@ namespace PR.Persistence.Versioned.Repositories
         }
 
         private UnitOfWorkFacade _unitOfWorkFacade;
+        private bool _returnClonesInsteadOfRepositoryObjects = true;
 
         private IUnitOfWork UnitOfWork => _unitOfWorkFacade.UnitOfWork;
         private DateTime? DatabaseTime => _unitOfWorkFacade.DatabaseTime;
@@ -52,7 +52,7 @@ namespace PR.Persistence.Versioned.Repositories
                 predicate
             };
 
-            AddVersionPredicates(predicates, DatabaseTime);
+            predicates.AddVersionPredicates(DatabaseTime);
 
             return UnitOfWork.People.Count(predicates);
         }
@@ -60,7 +60,7 @@ namespace PR.Persistence.Versioned.Repositories
         public int Count(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            AddVersionPredicates(predicates, DatabaseTime);
+            predicates.AddVersionPredicates(DatabaseTime);
 
             return UnitOfWork.People.Count(predicates);
         }
@@ -73,7 +73,6 @@ namespace PR.Persistence.Versioned.Repositories
             person.Created = now;
             person.Superseded = _maxDate;
 
-            // Todo: Check for initialization på en bedre måde
             if (person.Start.Year == 1)
             {
                 person.Start = now;
@@ -103,8 +102,8 @@ namespace PR.Persistence.Versioned.Repositories
                 p => p.ID == id
             };
 
-            AddVersionPredicates(predicates, DatabaseTime);
-            AddHistoryPredicates(predicates, HistoricalTime);
+            predicates.AddVersionPredicates(DatabaseTime);
+            predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             var peopleRows = (await UnitOfWork.People.Find(predicates)).ToList();
 
@@ -138,7 +137,7 @@ namespace PR.Persistence.Versioned.Repositories
                 p => p.ID == id
             };
 
-            AddVersionPredicates(predicates, DatabaseTime);
+            predicates.AddVersionPredicates(DatabaseTime);
 
             return (await UnitOfWork.People.Find(predicates)).OrderBy(_ => _.Start);
         }
@@ -147,7 +146,7 @@ namespace PR.Persistence.Versioned.Repositories
         {
             var predicates = new List<Expression<Func<Person, bool>>>();
 
-            AddVersionPredicates(predicates, DatabaseTime);
+            predicates.AddVersionPredicates(DatabaseTime);
 
             List<DateTime> timeStamps = null;
 
@@ -210,7 +209,7 @@ namespace PR.Persistence.Versioned.Repositories
                 _ => _.PersonID == person.ID
             };
 
-            AddVersionPredicates(personCommentPredicates, DatabaseTime);
+            personCommentPredicates.AddVersionPredicates(DatabaseTime);
 
             var personCommentRows = (await UnitOfWork.PersonComments.Find(personCommentPredicates)).ToList();
 
@@ -230,7 +229,7 @@ namespace PR.Persistence.Versioned.Repositories
                 _ => personIDs.Contains(_.PersonID) 
             };
 
-            AddVersionPredicates(personCommentPredicates, DatabaseTime);
+            personCommentPredicates.AddVersionPredicates(DatabaseTime);
 
             var personCommentRows = (await UnitOfWork.PersonComments.Find(personCommentPredicates)).ToList();
 
@@ -259,8 +258,8 @@ namespace PR.Persistence.Versioned.Repositories
         {
             var predicates = new List<Expression<Func<Person, bool>>>();
 
-            AddVersionPredicates(predicates, DatabaseTime);
-            AddHistoryPredicates(predicates, HistoricalTime);
+            predicates.AddVersionPredicates(DatabaseTime);
+            predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             // Her hiver du ALLE gældende rækker op, uanset hvad deres virkningstidsinterval er.
             // Mon ikke det var smartere kun at hive dem op, der faktisk skærer time Of interest?
@@ -317,8 +316,8 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task<IEnumerable<Person>> Find(
             IList<Expression<Func<Person, bool>>> predicates)
         {
-            AddVersionPredicates(predicates, DatabaseTime);
-            AddHistoryPredicates(predicates, HistoricalTime);
+            predicates.AddVersionPredicates(DatabaseTime);
+            predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             var people = await UnitOfWork.People.Find(predicates);
 
@@ -435,44 +434,6 @@ namespace PR.Persistence.Versioned.Repositories
             IEnumerable<Person> people)
         {
             throw new NotImplementedException();
-        }
-
-        private void AddHistoryPredicates(
-            ICollection<Expression<Func<Person, bool>>> predicates,
-            DateTime? historicalTime)
-        {
-            historicalTime ??= DateTime.UtcNow;
-
-            if (IncludeHistoricalObjects)
-            {
-                predicates.Add(p => p.Start <= historicalTime);
-            }
-            else if (IncludeCurrentObjects)
-            {
-                // ONLY current objects
-                predicates.Add(p => p.Start <= historicalTime && p.End > historicalTime);
-            }
-            else
-            {
-                throw new InvalidOperationException("Either Include current or include historical should be true");
-            }
-        }
-
-        private void AddVersionPredicates<T>(
-            ICollection<Expression<Func<T, bool>>> predicates,
-            DateTime? databaseTime) where T : IVersionedObject
-        {
-            if (databaseTime.HasValue)
-            {
-                predicates.Add(pa =>
-                    pa.Created <= DatabaseTime &&
-                    pa.Superseded > DatabaseTime);
-            }
-            else
-            {
-                predicates.Add(pa =>
-                    pa.Superseded.Year == 9999);
-            }
         }
     }
 }

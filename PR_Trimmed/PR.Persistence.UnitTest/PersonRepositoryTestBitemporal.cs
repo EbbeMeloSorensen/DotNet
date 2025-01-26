@@ -109,5 +109,29 @@ namespace PR.Persistence.UnitTest
         {
             await Common.DeletePeople_WithChildObjects_Throws(_unitOfWorkFactory);
         }
+
+        [Fact]
+        public async Task CreatePersonComment()
+        {
+            await Common.CreatePersonComment(_unitOfWorkFactory);
+        }
+
+        [Fact]
+        public async Task UpdatePersonComment()
+        {
+            await Common.UpdatePersonComment(_unitOfWorkFactory);
+        }
+
+        [Fact]
+        public async Task DeletePersonComment()
+        {
+            await Common.DeletePersonComment(_unitOfWorkFactory);
+        }
+
+        [Fact]
+        public async Task DeletePersonComments()
+        {
+            await Common.DeletePersonComments(_unitOfWorkFactory);
+        }
     }
 }

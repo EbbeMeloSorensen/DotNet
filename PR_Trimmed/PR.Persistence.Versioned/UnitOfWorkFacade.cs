@@ -39,6 +39,7 @@ namespace PR.Persistence.Versioned
             IncludeHistoricalObjects = includeHistoricalObjects;
 
             People = new PersonRepositoryFacade(logger, this);
+            PersonComments = new PersonCommentRepositoryFacade(logger, this);
         }
 
         public void Clear()

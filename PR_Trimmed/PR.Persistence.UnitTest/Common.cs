@@ -304,8 +304,8 @@ namespace PR.Persistence.UnitTest
             // Arrange
             var personComment = new PersonComment
             {
-                PersonID = new Guid("00000001-0000-0000-0000-000000000000"),
-                Text = "He plays the piano"
+                PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
+                Text = "She is suspiciously adept with the force"
             };
 
             // Act
@@ -315,9 +315,10 @@ namespace PR.Persistence.UnitTest
 
             // Assert
             using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
-            var person = await unitOfWork2.People.GetIncludingComments(new Guid("00000001-0000-0000-0000-000000000000"));
+            var person = await unitOfWork2.People.GetIncludingComments(new Guid("00000006-0000-0000-0000-000000000000"));
 
-            person.Comments.Single().Text.Should().Be("He plays the piano");
+            person.Comments.Count().Should().Be(2);
+            person.Comments.Where(_ => _.Text == "She is suspiciously adept with the force").Count().Should().Be(1);
         }
 
         public static async Task UpdatePersonComment(
