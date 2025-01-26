@@ -17,6 +17,8 @@ namespace PR.Domain
             PersonComment other)
         {
             person.ArchiveID = other.ArchiveID;
+            person.PersonID = other.PersonID;
+            person.PersonArchiveID = other.PersonArchiveID;
             person.Created = other.Created;
             person.Superseded = other.Superseded;
             person.ID = other.ID;

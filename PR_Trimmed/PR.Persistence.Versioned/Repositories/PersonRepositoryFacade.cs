@@ -28,7 +28,6 @@ namespace PR.Persistence.Versioned.Repositories
         private DateTime? HistoricalTime => _unitOfWorkFacade.HistoricalTime;
         private bool IncludeCurrentObjects => _unitOfWorkFacade.IncludeCurrentObjects;
         private bool IncludeHistoricalObjects => _unitOfWorkFacade.IncludeHistoricalObjects;
-
         private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
 
         public PersonRepositoryFacade(
@@ -218,42 +217,6 @@ namespace PR.Persistence.Versioned.Repositories
             return person;
         }
 
-        public async Task<IEnumerable<Person>> FindIncludingComments(
-            Expression<Func<Person, bool>> predicate)
-        {
-            var people = await Find(predicate);
-            var personIDs = people.Select(_ => _.ID);
-
-            var personCommentPredicates = new List<Expression<Func<PersonComment, bool>>>
-            {
-                _ => personIDs.Contains(_.PersonID) 
-            };
-
-            personCommentPredicates.AddVersionPredicates(DatabaseTime);
-
-            var personCommentRows = (await UnitOfWork.PersonComments.Find(personCommentPredicates)).ToList();
-
-            var personCommentGroups = personCommentRows.GroupBy(_ => _.PersonID);
-
-            people.ToList().ForEach(p =>
-            {
-                var personCommentGroup = personCommentGroups.SingleOrDefault(_ => _.Key == p.ID);
-
-                if (personCommentGroup != null)
-                {
-                    p.Comments = personCommentGroup.ToList();
-                }
-            });
-
-            return people;
-        }
-
-        public Task<IEnumerable<Person>> FindIncludingComments(
-            IList<Expression<Func<Person, bool>>> predicates)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<Person>> GetAll()
         {
             var predicates = new List<Expression<Func<Person, bool>>>();
@@ -277,7 +240,7 @@ namespace PR.Persistence.Versioned.Repositories
                 return new List<Person>();
             }
 
-            // Med denne forsvinder Rey og Anakin, dvs tidligere varianter.
+            // Med denne forsvinder tidligere varianter.
             // Det er fint, men hvis nu vi har sat filteret til at vi kun skal have levende eller kun døde,
             // så skal vi altså filtrere det endnu en gang
             var people = peopleRows
@@ -327,6 +290,42 @@ namespace PR.Persistence.Versioned.Repositories
             }
 
             return people;
+        }
+
+        public async Task<IEnumerable<Person>> FindIncludingComments(
+            Expression<Func<Person, bool>> predicate)
+        {
+            var people = await Find(predicate);
+            var personIDs = people.Select(_ => _.ID);
+
+            var personCommentPredicates = new List<Expression<Func<PersonComment, bool>>>
+            {
+                _ => personIDs.Contains(_.PersonID)
+            };
+
+            personCommentPredicates.AddVersionPredicates(DatabaseTime);
+
+            var personCommentRows = (await UnitOfWork.PersonComments.Find(personCommentPredicates)).ToList();
+
+            var personCommentGroups = personCommentRows.GroupBy(_ => _.PersonID);
+
+            people.ToList().ForEach(p =>
+            {
+                var personCommentGroup = personCommentGroups.SingleOrDefault(_ => _.Key == p.ID);
+
+                if (personCommentGroup != null)
+                {
+                    p.Comments = personCommentGroup.ToList();
+                }
+            });
+
+            return people;
+        }
+
+        public Task<IEnumerable<Person>> FindIncludingComments(
+            IList<Expression<Func<Person, bool>>> predicates)
+        {
+            throw new NotImplementedException();
         }
 
         public Person SingleOrDefault(
@@ -392,7 +391,7 @@ namespace PR.Persistence.Versioned.Repositories
 
             if (personFromRepo.Comments.Any())
             {
-                throw new InvalidOperationException("Cant delete person with child rows (comments)");
+                throw new InvalidOperationException("Cannot delete person with child rows (comments)");
             }
 
             _returnClonesInsteadOfRepositoryObjects = false;
@@ -405,7 +404,6 @@ namespace PR.Persistence.Versioned.Repositories
             IEnumerable<Person> people)
         {
             var ids = people.Select(p => p.ID).ToList();
-
             var peopleFromRepo = await FindIncludingComments(_ => ids.Contains(_.ID));
 
             if (peopleFromRepo.Any(_ => _.Comments != null))

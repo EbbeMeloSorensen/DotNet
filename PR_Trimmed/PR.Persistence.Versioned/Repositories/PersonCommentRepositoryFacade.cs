@@ -25,7 +25,7 @@ namespace PR.Persistence.Versioned.Repositories
 
         private IUnitOfWork UnitOfWork => _unitOfWorkFacade.UnitOfWork;
         private DateTime? DatabaseTime => _unitOfWorkFacade.DatabaseTime;
-        private DateTime? HistoricalTime => _unitOfWorkFacade.HistoricalTime;
+        private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
 
         public ILogger Logger { get; }
 
@@ -54,21 +54,68 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<PersonComment>> GetAll()
+        public async Task<PersonComment> Get(
+            Guid id)
         {
-            throw new NotImplementedException();
+            var predicates = new List<Expression<Func<PersonComment, bool>>>
+            {
+                p => p.ID == id
+            };
+
+            predicates.AddVersionPredicates(DatabaseTime);
+
+            var personComment = (await UnitOfWork.PersonComments.Find(predicates)).SingleOrDefault();
+
+            if (personComment == null)
+            {
+                throw new InvalidOperationException("Person comment doesn't exist");
+            }
+
+            if (_returnClonesInsteadOfRepositoryObjects)
+            {
+                return personComment.Clone();
+            }
+
+            return personComment;
         }
 
-        public Task<IEnumerable<PersonComment>> Find(
+        public async Task<IEnumerable<PersonComment>> GetAll()
+        {
+            var predicates = new List<Expression<Func<PersonComment, bool>>>();
+
+            predicates.AddVersionPredicates(DatabaseTime);
+
+            var personCommentRows = (await UnitOfWork.PersonComments.Find(predicates)).ToList();
+
+            Logger?.WriteLine(LogMessageCategory.Information, $"PersonCommentRepositoryFacade: Retrieved {personCommentRows.Count} rows");
+
+            return personCommentRows;
+        }
+
+        public async Task<IEnumerable<PersonComment>> Find(
             Expression<Func<PersonComment, bool>> predicate)
         {
-            throw new NotImplementedException();
+            var predicates = new List<Expression<Func<PersonComment, bool>>>
+            {
+                predicate
+            };
+
+            return await Find(predicates);
         }
 
-        public Task<IEnumerable<PersonComment>> Find(
+        public async Task<IEnumerable<PersonComment>> Find(
             IList<Expression<Func<PersonComment, bool>>> predicates)
         {
-            throw new NotImplementedException();
+            predicates.AddVersionPredicates(DatabaseTime);
+
+            var personComments = await UnitOfWork.PersonComments.Find(predicates);
+
+            if (_returnClonesInsteadOfRepositoryObjects)
+            {
+                return personComments.Select(_ => _.Clone()).ToList();
+            }
+
+            return personComments;
         }
 
         public PersonComment SingleOrDefault(
@@ -101,10 +148,19 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
-        public Task Update(
-            PersonComment entity)
+        public async Task Update(
+            PersonComment personComment)
         {
-            throw new NotImplementedException();
+            _returnClonesInsteadOfRepositoryObjects = false;
+            var objectFromRepository = await Get(personComment.ID);
+            _returnClonesInsteadOfRepositoryObjects = true;
+            objectFromRepository.Superseded = CurrentTime;
+            await UnitOfWork.PersonComments.Update(objectFromRepository);
+
+            personComment.ArchiveID = Guid.NewGuid();
+            personComment.Created = CurrentTime;
+            personComment.Superseded = _maxDate;
+            await UnitOfWork.PersonComments.Add(personComment);
         }
 
         public Task UpdateRange(
@@ -113,16 +169,30 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
-        public Task Remove(
-            PersonComment entity)
+        public async Task Remove(
+            PersonComment personComment)
         {
-            throw new NotImplementedException();
+            _returnClonesInsteadOfRepositoryObjects = false;
+            var objectFromRepository = await Get(personComment.ID);
+            _returnClonesInsteadOfRepositoryObjects = true;
+            objectFromRepository.Superseded = CurrentTime;
         }
 
-        public Task RemoveRange(
-            IEnumerable<PersonComment> entities)
+        public async Task RemoveRange(
+            IEnumerable<PersonComment> personComments)
         {
-            throw new NotImplementedException();
+            var ids = personComments.Select(p => p.ID).ToList();
+
+            var predicates = new List<Expression<Func<PersonComment, bool>>>
+            {
+                p => ids.Contains(p.ID)
+            };
+
+            _returnClonesInsteadOfRepositoryObjects = false;
+            var objectsFromRepository = (await Find(predicates)).ToList();
+            _returnClonesInsteadOfRepositoryObjects = true;
+
+            objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
         }
 
         public Task Clear()
@@ -134,31 +204,6 @@ namespace PR.Persistence.Versioned.Repositories
             IEnumerable<PersonComment> entities)
         {
             throw new NotImplementedException();
-        }
-
-        public async Task<PersonComment> Get(
-            Guid id)
-        {
-            var predicates = new List<Expression<Func<PersonComment, bool>>>
-            {
-                p => p.ID == id
-            };
-
-            predicates.AddVersionPredicates(DatabaseTime);
-
-            var personComment = (await UnitOfWork.PersonComments.Find(predicates)).SingleOrDefault();
-
-            if (personComment == null)
-            {
-                throw new InvalidOperationException("Person comment doesn't exist");
-            }
-
-            if (_returnClonesInsteadOfRepositoryObjects)
-            {
-                return personComment.Clone();
-            }
-
-            return personComment;
         }
     }
 }
