@@ -99,8 +99,9 @@ namespace PR.Persistence.UnitTest
             people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
-            people.Single(p => p.FirstName == "Chewbacca").Comments.Count.Should().Be(1);
-            people.Single(p => p.FirstName == "Chewbacca").Comments.Single().Text.Should().Be("He likes his crossbow");
+            people.Single(p => p.FirstName == "Chewbacca").Comments.Count.Should().Be(2);
+            people.Single(p => p.FirstName == "Chewbacca").Comments.Count(_ => _.Text == "He likes his crossbow").Should().Be(1);
+            people.Single(p => p.FirstName == "Chewbacca").Comments.Count(_ => _.Text == "He is a furry fellow").Should().Be(1);
             people.Single(p => p.FirstName == "Rey Skywalker").Comments.Count.Should().Be(1);
             people.Single(p => p.FirstName == "Rey Skywalker").Comments.Single().Text.Should().Be("She starts out as a scavenger");
 

@@ -1,11 +1,13 @@
-﻿using System.ComponentModel;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
+using Craft.ViewModel.Utils;
 using PR.Domain.Entities.PR;
 using PR.Persistence;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace PR.ViewModel
 {
@@ -14,11 +16,17 @@ namespace PR.ViewModel
         private bool _isVisible;
         private ObjectCollection<Person> _people;
 
+        private AsyncCommand<object> _createPersonCommentCommand;
+        private AsyncCommand<object> _updatePersonCommentCommand;
+        private AsyncCommand<object> _deletePersonCommentsCommand;
+
         public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
         public ObservableCollection<PersonCommentListViewItemViewModel> PersonCommentListViewItemViewModels { get; }
 
         public ObservableCollection<PersonCommentListViewItemViewModel> SelectedPersonCommentListViewItemViewModels { get; }
+
+        public ObjectCollection<PersonComment> SelectedPersonComments { get; }
 
         public bool IsVisible
         {
@@ -27,6 +35,33 @@ namespace PR.ViewModel
             {
                 _isVisible = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public AsyncCommand<object> CreatePersonCommentCommand
+        {
+            get
+            {
+                return _createPersonCommentCommand ??
+                       (_createPersonCommentCommand = new AsyncCommand<object>(CreatePersonComment));
+            }
+        }
+
+        public AsyncCommand<object> UpdatePersonCommentCommand
+        {
+            get
+            {
+                return _updatePersonCommentCommand ??
+                       (_updatePersonCommentCommand = new AsyncCommand<object>(UpdatePersonComment, CanUpdatePersonComment));
+            }
+        }
+
+        public AsyncCommand<object> DeletePersonCommentsCommand
+        {
+            get
+            {
+                return _deletePersonCommentsCommand ??
+                       (_deletePersonCommentsCommand = new AsyncCommand<object>(DeletePersonComments, CanDeletePersonComments));
             }
         }
 
@@ -43,16 +78,24 @@ namespace PR.ViewModel
             SelectedPersonCommentListViewItemViewModels =
                 new ObservableCollection<PersonCommentListViewItemViewModel>();
 
+            SelectedPersonComments = new ObjectCollection<PersonComment>();
+
             _people.PropertyChanged += async (s, e) => await Initialize(s, e);
 
             SelectedPersonCommentListViewItemViewModels.CollectionChanged += (s, e) =>
             {
-                var a = 0;
+                SelectedPersonComments.Objects = SelectedPersonCommentListViewItemViewModels.Select(_ => _.PersonComment);
+            };
+
+            SelectedPersonComments.PropertyChanged += (s, e) =>
+            {
+                UpdatePersonCommentCommand.RaiseCanExecuteChanged();
+                DeletePersonCommentsCommand.RaiseCanExecuteChanged();
             };
         }
 
         private async Task Initialize(
-            object? sender, 
+            object? sender,
             PropertyChangedEventArgs e)
         {
             if (_people.Objects.Count() != 1)
@@ -80,6 +123,36 @@ namespace PR.ViewModel
             }
 
             IsVisible = true;
+        }
+
+        private async Task CreatePersonComment(
+            object owner)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task UpdatePersonComment(
+            object owner)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanUpdatePersonComment(
+            object owner)
+        {
+            return SelectedPersonComments.Objects != null && SelectedPersonComments.Objects.Count() == 1;
+        }
+
+        private async Task DeletePersonComments(
+            object owner)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanDeletePersonComments(
+            object owner)
+        {
+            return SelectedPersonComments.Objects != null && SelectedPersonComments.Objects.Count() > 1;
         }
     }
 }

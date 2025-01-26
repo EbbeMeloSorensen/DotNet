@@ -220,11 +220,23 @@ namespace PR.Persistence.EntityFrameworkCore
                 Text = "He likes his crossbow"
             };
 
+            var chewbacca_comment_2_1 = new PersonComment
+            {
+                ID = new Guid("00000002-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000002-0002-0001-0000-000000000000"),
+                PersonID = new Guid("00000005-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
+                Created = timeOfPopulation,
+                Superseded = maxDate,
+                Text = "He is a furry fellow"
+            };
+
             personComments = new List<PersonComment>
             {
                 rey_comment_1_1,
                 rey_comment_1_2,
-                chewbacca_comment_1_1
+                chewbacca_comment_1_1,
+                chewbacca_comment_2_1
             };
         }
 
@@ -279,17 +291,25 @@ namespace PR.Persistence.EntityFrameworkCore
                 Text = "She starts out as a scavenger"
             };
 
-            var chewbacca_comment = new PersonComment
+            var chewbacca_comment_1 = new PersonComment
             {
                 ID = new Guid("00000002-0000-0000-0000-000000000000"),
                 PersonID = new Guid("00000005-0000-0000-0000-000000000000"),
                 Text = "He likes his crossbow"
             };
 
+            var chewbacca_comment_2 = new PersonComment
+            {
+                ID = new Guid("00000003-0000-0000-0000-000000000000"),
+                PersonID = new Guid("00000005-0000-0000-0000-000000000000"),
+                Text = "He is a furry fellow"
+            };
+
             personComments = new List<PersonComment>
             {
                 rey_comment,
-                chewbacca_comment
+                chewbacca_comment_1,
+                chewbacca_comment_2,
             };
         }
     }
