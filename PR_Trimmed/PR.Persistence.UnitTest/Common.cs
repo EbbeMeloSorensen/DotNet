@@ -31,28 +31,6 @@ namespace PR.Persistence.UnitTest
             people.Count(p => p.FirstName == "Wicket").Should().Be(1);
         }
 
-        public static async Task CreatePersonComment(
-            IUnitOfWorkFactory unitOfWorkFactory)
-        {
-            // Arrange
-            var personComment = new PersonComment
-            {
-                PersonID = new Guid("00000001-0000-0000-0000-000000000000"),
-                Text = "He plays the piano"
-            };
-
-            // Act
-            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
-            await unitOfWork1.PersonComments.Add(personComment);
-            unitOfWork1.Complete();
-
-            // Assert
-            using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
-            var person = await unitOfWork2.People.GetIncludingComments(new Guid("00000001-0000-0000-0000-000000000000"));
-
-            person.Comments.Single().Text.Should().Be("He plays the piano");
-        }
-
         public static async Task GetAllPeople(
             IUnitOfWorkFactory unitOfWorkFactory)
         {
@@ -320,6 +298,50 @@ namespace PR.Persistence.UnitTest
             Assert.NotNull(exception);
         }
 
+        public static async Task CreatePersonComment(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            var personComment = new PersonComment
+            {
+                PersonID = new Guid("00000001-0000-0000-0000-000000000000"),
+                Text = "He plays the piano"
+            };
+
+            // Act
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+            await unitOfWork1.PersonComments.Add(personComment);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
+            var person = await unitOfWork2.People.GetIncludingComments(new Guid("00000001-0000-0000-0000-000000000000"));
+
+            person.Comments.Single().Text.Should().Be("He plays the piano");
+        }
+
+        public static async Task UpdatePersonComment(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("00000003-0000-0000-0000-000000000000");
+            var personComment = await unitOfWork1.PersonComments.Get(id);
+            personComment.Text = "He is a wookie";
+
+            // Act
+            await unitOfWork1.PersonComments.Update(personComment);
+            unitOfWork1.Complete();
+
+            // Assert
+            using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
+            var person = await unitOfWork2.People.GetIncludingComments(new Guid("00000005-0000-0000-0000-000000000000"));
+
+            person.FirstName.Should().Be("Chewbacca");
+            person.Comments.Count.Should().Be(2);
+            person.Comments.Where(_ => _.Text == "He is a wookie").Count().Should().Be(1);
+        }
+
         public static async Task DeletePersonComment(
             IUnitOfWorkFactory unitOfWorkFactory)
         {
@@ -339,7 +361,6 @@ namespace PR.Persistence.UnitTest
             person.FirstName.Should().Be("Chewbacca");
             person.Comments.Count.Should().Be(1);
             person.Comments.Single().Text.Should().Be("He is a furry fellow");
-
         }
 
         public static async Task DeletePersonComments(

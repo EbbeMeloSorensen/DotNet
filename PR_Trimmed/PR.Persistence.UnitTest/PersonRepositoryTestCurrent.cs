@@ -25,12 +25,6 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async Task CreatePersonComment()
-        {
-            await Common.CreatePersonComment(_unitOfWorkFactory);
-        }
-
-        [Fact]
         public async Task GetAllPeople()
         {
             await Common.GetAllPeople(_unitOfWorkFactory);
@@ -106,6 +100,18 @@ namespace PR.Persistence.UnitTest
         public async Task DeletePeople_WithChildObjects_Throws()
         {
             await Common.DeletePeople_WithChildObjects_Throws(_unitOfWorkFactory);
+        }
+
+        [Fact]
+        public async Task CreatePersonComment()
+        {
+            await Common.CreatePersonComment(_unitOfWorkFactory);
+        }
+
+        [Fact]
+        public async Task UpdatePersonComment()
+        {
+            await Common.UpdatePersonComment(_unitOfWorkFactory);
         }
 
         [Fact]
