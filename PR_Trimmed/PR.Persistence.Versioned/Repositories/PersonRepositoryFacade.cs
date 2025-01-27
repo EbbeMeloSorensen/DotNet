@@ -399,7 +399,7 @@ namespace PR.Persistence.Versioned.Repositories
             _returnClonesInsteadOfRepositoryObjects = false;
             var objectFromRepository = await Get(person.ID);
             _returnClonesInsteadOfRepositoryObjects = true;
-            objectFromRepository.Superseded = CurrentTime;
+            objectFromRepository.End = CurrentTime;
         }
 
         public async Task RemoveRange(
@@ -422,7 +422,7 @@ namespace PR.Persistence.Versioned.Repositories
             var objectsFromRepository = (await Find(predicates)).ToList();
             _returnClonesInsteadOfRepositoryObjects = true;
 
-            objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
+            objectsFromRepository.ForEach(p => p.End = CurrentTime);
         }
 
         public async Task Clear()

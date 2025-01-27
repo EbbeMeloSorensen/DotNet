@@ -4,6 +4,33 @@ using PR.Persistence.Versioned;
 
 namespace PR.Persistence.UnitTest
 {
+    // General (all use cases)
+    // An existing row may ONLY be manipulated by logical deletion, i.e. by replacing the value MAX_DATE of the
+    // "Superseded" field with the current time.
+    // This implies that a normal change in the attributes of an object causes the logical deletion of 1 row and
+    // the creation of TWO new rows
+
+    // CreatePerson
+    // Postconditions:
+    // - End and Superseded equal maxdate
+    // - Start and Created are equal and set to current time
+
+    // CreatePersonComment
+    // Postconditions:
+    // - Superseded equals maxdate
+    // - Created is set to current time
+
+    // DeletePerson_WithoutAnyChildObjects & DeletePeople_WithoutAnyChildObjects
+    // Postconditions:
+    // - Superseded is unchanged, i.e. equals maxdate
+    // - End is set to current time
+    // Comments: Notice that this is different from deleting an object without valid time, where the Superseded field is changed
+
+    // DeletePersonComment & DeletePersonComments
+    // Postconditions:
+    // - Superseded is set to current time
+    // Comments: Notice that this is different from deleting an object with valid time, where the Superseded field is unchanged
+
     [Collection("Test Collection 1")]
     public class PersonRepositoryTestBitemporal
     {
