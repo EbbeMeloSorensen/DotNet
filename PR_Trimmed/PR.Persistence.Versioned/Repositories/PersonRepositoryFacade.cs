@@ -334,23 +334,35 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
-        // Bemærk, at denne update agerer på den måde at den afslutter virkningstiden for den nyeste variant og introducerer
-        // en ny variant. På den måde har du indtil videre ikke nogen funktion til at lave en retroaktiv ændring
+        // Dette er en prospektiv ændring
         public async Task Update(
             Person person)
         {
             _returnClonesInsteadOfRepositoryObjects = false;
             var objectFromRepository = await Get(person.ID);
             _returnClonesInsteadOfRepositoryObjects = true;
-            objectFromRepository.End = CurrentTime;
+            objectFromRepository.Superseded = CurrentTime;
             await UnitOfWork.People.Update(objectFromRepository);
+
+            var personCopy = objectFromRepository.Clone();
+            personCopy.ArchiveID = new Guid();
+            personCopy.Created = CurrentTime;
+            personCopy.Superseded = _maxDate;
+            personCopy.End = CurrentTime;
 
             person.ArchiveID = Guid.NewGuid();
             person.Created = CurrentTime;
             person.Superseded = _maxDate;
             person.Start = CurrentTime;
             person.End = _maxDate;
-            await UnitOfWork.People.Add(person);
+
+            var newPersonRows = new List<Person>
+            {
+                personCopy,
+                person
+            };
+
+            await UnitOfWork.People.AddRange(newPersonRows);
         }
 
         public async Task UpdateRange(
