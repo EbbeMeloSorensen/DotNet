@@ -54,14 +54,17 @@ namespace PR.Persistence.EntityFrameworkCore
             out List<Person> people,
             out List<PersonComment> personComments)
         {
-            var timeOfPopulation = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var timeOfPopulation = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 
+            // Registration time
             var chewbaccaIsEnteredIncorrectly = timeOfPopulation;
             var chewbaccaIsCorrected = timeOfPopulation.AddDays(1);
             var commentOnReyIsEnteredIncorrectly = timeOfPopulation.AddDays(2);
             var commentOnReyIsCorrected = timeOfPopulation.AddDays(3);
+            var reyIsUpdatedProspectively = timeOfPopulation.AddDays(4);
 
+            // Valid time
             var maxReboIsIntroduced = new DateTime(2006, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var poeDameronIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -154,6 +157,19 @@ namespace PR.Persistence.EntityFrameworkCore
                 ID = new Guid("00000006-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
                 Created = timeOfPopulation,
+                Superseded = reyIsUpdatedProspectively,
+                Start = reyIsIntroduced,
+                End = maxDate,
+                FirstName = "Rey",
+                Latitude = 10,
+                Longitude = 56
+            };
+
+            var rey_1_2 = new Person
+            {
+                ID = new Guid("00000006-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000006-0001-0002-0000-000000000000"),
+                Created = reyIsUpdatedProspectively,
                 Superseded = maxDate,
                 Start = reyIsIntroduced,
                 End = reyBecomesReySkywalker,
@@ -166,7 +182,7 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000006-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000006-0002-0001-0000-000000000000"),
-                Created = timeOfPopulation,
+                Created = reyIsUpdatedProspectively,
                 Superseded = maxDate,
                 Start = reyBecomesReySkywalker,
                 End = maxDate,
@@ -184,6 +200,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 chewbacca_1_1,
                 chewbacca_1_2,
                 rey_1_1,
+                rey_1_2,
                 rey_2_1
             };
 
