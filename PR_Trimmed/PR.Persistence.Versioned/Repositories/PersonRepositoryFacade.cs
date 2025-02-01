@@ -379,6 +379,10 @@ namespace PR.Persistence.Versioned.Repositories
             var objectsFromRepository = (await Find(predicates)).ToList();
             _returnClonesInsteadOfRepositoryObjects = true;
 
+            // Todo: Do as when updating a single person
+
+
+
             objectsFromRepository.ForEach(pRepo =>
             {
                 pRepo.End = CurrentTime;
