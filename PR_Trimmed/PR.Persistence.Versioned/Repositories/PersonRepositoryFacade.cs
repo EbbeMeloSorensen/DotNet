@@ -342,7 +342,6 @@ namespace PR.Persistence.Versioned.Repositories
             var objectFromRepository = await Get(person.ID);
             _returnClonesInsteadOfRepositoryObjects = true;
             objectFromRepository.Superseded = CurrentTime;
-            //await UnitOfWork.People.Update(objectFromRepository);
 
             var personCopy = objectFromRepository.Clone();
             personCopy.ArchiveID = new Guid();
@@ -379,6 +378,11 @@ namespace PR.Persistence.Versioned.Repositories
             var objectsFromRepository = (await Find(predicates)).ToList();
             _returnClonesInsteadOfRepositoryObjects = true;
 
+            objectsFromRepository.ForEach(pRepo =>
+            {
+                pRepo.Superseded = CurrentTime;
+            });
+
             var newPersonRows = objectsFromRepository.Select(_ => _.Clone()).ToList();
             newPersonRows.ForEach(_ =>
             {
@@ -387,13 +391,6 @@ namespace PR.Persistence.Versioned.Repositories
                 _.Superseded = _maxDate;
                 _.End = CurrentTime;
             });
-
-            objectsFromRepository.ForEach(pRepo =>
-            {
-                pRepo.Superseded = CurrentTime;
-            });
-
-            await UnitOfWork.People.UpdateRange(objectsFromRepository);
 
             people.ToList().ForEach(_ =>
             {
@@ -453,7 +450,18 @@ namespace PR.Persistence.Versioned.Repositories
             var objectsFromRepository = (await Find(predicates)).ToList();
             _returnClonesInsteadOfRepositoryObjects = true;
 
-            objectsFromRepository.ForEach(p => p.End = CurrentTime);
+            objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
+
+            var newPersonRows = objectsFromRepository.Select(_ => _.Clone()).ToList();
+            newPersonRows.ForEach(_ =>
+            {
+                _.ArchiveID = new Guid();
+                _.Created = CurrentTime;
+                _.Superseded = _maxDate;
+                _.End = CurrentTime;
+            });
+
+            await UnitOfWork.People.AddRange(newPersonRows);
         }
 
         public async Task Clear()
