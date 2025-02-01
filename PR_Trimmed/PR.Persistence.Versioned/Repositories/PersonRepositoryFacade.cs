@@ -342,7 +342,7 @@ namespace PR.Persistence.Versioned.Repositories
             var objectFromRepository = await Get(person.ID);
             _returnClonesInsteadOfRepositoryObjects = true;
             objectFromRepository.Superseded = CurrentTime;
-            await UnitOfWork.People.Update(objectFromRepository);
+            //await UnitOfWork.People.Update(objectFromRepository);
 
             var personCopy = objectFromRepository.Clone();
             personCopy.ArchiveID = new Guid();
@@ -379,13 +379,18 @@ namespace PR.Persistence.Versioned.Repositories
             var objectsFromRepository = (await Find(predicates)).ToList();
             _returnClonesInsteadOfRepositoryObjects = true;
 
-            // Todo: Do as when updating a single person
-
-
+            var newPersonRows = objectsFromRepository.Select(_ => _.Clone()).ToList();
+            newPersonRows.ForEach(_ =>
+            {
+                _.ArchiveID = new Guid();
+                _.Created = CurrentTime;
+                _.Superseded = _maxDate;
+                _.End = CurrentTime;
+            });
 
             objectsFromRepository.ForEach(pRepo =>
             {
-                pRepo.End = CurrentTime;
+                pRepo.Superseded = CurrentTime;
             });
 
             await UnitOfWork.People.UpdateRange(objectsFromRepository);
@@ -399,7 +404,9 @@ namespace PR.Persistence.Versioned.Repositories
                 _.End = _maxDate;
             });
 
-            await UnitOfWork.People.AddRange(people);
+            newPersonRows.AddRange(people);
+
+            await UnitOfWork.People.AddRange(newPersonRows);
         }
 
         public async Task Remove(
@@ -415,7 +422,15 @@ namespace PR.Persistence.Versioned.Repositories
             _returnClonesInsteadOfRepositoryObjects = false;
             var objectFromRepository = await Get(person.ID);
             _returnClonesInsteadOfRepositoryObjects = true;
-            objectFromRepository.End = CurrentTime;
+            objectFromRepository.Superseded = CurrentTime;
+
+            var personCopy = objectFromRepository.Clone();
+            personCopy.ArchiveID = new Guid();
+            personCopy.Created = CurrentTime;
+            personCopy.Superseded = _maxDate;
+            personCopy.End = CurrentTime;
+
+            await UnitOfWork.People.Add(personCopy);
         }
 
         public async Task RemoveRange(
