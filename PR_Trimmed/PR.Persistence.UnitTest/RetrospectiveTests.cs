@@ -2,115 +2,127 @@
 using PR.Persistence.Versioned;
 using StructureMap;
 using Xunit;
+using PR.Persistence.Versioned;
 
 namespace PR.Persistence.UnitTest
 {
     public class RetrospectiveTests
     {
-    //    private readonly UnitOfWorkFactoryFacade _unitOfWorkFactory;
+        private readonly UnitOfWorkFactoryFacade _unitOfWorkFactory;
 
-    //    public RetrospectiveTests()
-    //    {
-    //        var container = Container.For<InstanceScanner>();
+        public RetrospectiveTests()
+        {
+            var container = Container.For<InstanceScanner>();
 
-    //        var unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
-    //        unitOfWorkFactory.Initialize(true);
-    //        unitOfWorkFactory.Reseed();
+            var unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
+            unitOfWorkFactory.OverrideConnectionString("Data source=people_bitemporal.db");
+            unitOfWorkFactory.Initialize(true);
+            unitOfWorkFactory.Reseed();
 
-    //        _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
-    //        _unitOfWorkFactory.DatabaseTime = null;
-    //    }
+            _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
+            (_unitOfWorkFactory as UnitOfWorkFactoryFacade)!.DatabaseTime = null;
+        }
 
-    //    [Fact]
-    //    public async void GetEarlierVersionOfPerson()
-    //    {
-    //        // Arrange
-    //        _unitOfWorkFactory.DatabaseTime = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
-    //        using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+        [Fact]
+        public async Task GetEarlierVersionOfPerson()
+        {
+            // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
-    //        // Act
-    //        var person = await unitOfWork.People.Get(
-    //            new Guid("00000005-0000-0000-0000-000000000000"));
+            // Act
+            var person = await unitOfWork.People.Get(
+                new Guid("00000005-0000-0000-0000-000000000000"));
 
-    //        // Assert
-    //        person.FirstName.Should().Be("Chewing Gum");
-    //    }
+            // Assert
+            person.FirstName.Should().Be("Chewing Gum");
+        }
 
+        [Fact]
+        public async Task GetEarlierStateOfPerson()
+        {
+            // Arrange
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
+            // Act
+            var person = await unitOfWork.People.Get(
+                new Guid("00000004-0000-0000-0000-000000000000"));
 
+            // Assert
+            person.FirstName.Should().Be("Anakin Skywalker");
+        }
 
+        [Fact]
+        public async Task GetEarlierVersionOfPerson_BeforePersonWasCreated_Throws()
+        {
+            // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("00000004-0000-0000-0000-000000000000");
 
+            // Act & Assert
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                var person = await unitOfWork1.People.Get(id);
+                unitOfWork1.Complete();
+            });
 
+            Assert.NotNull(exception);
+            exception.Message.Should().Be("Person doesn't exist");
+        }
 
+        [Fact]
+        public async Task GetEarlierStateOfPerson_BeforePersonExisted_Throws()
+        {
+            // Arrange
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var id = new Guid("00000005-0000-0000-0000-000000000000");
 
+            // Act & Assert
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                var person = await unitOfWork1.People.Get(id);
+                unitOfWork1.Complete();
+            });
 
+            Assert.NotNull(exception);
+            exception.Message.Should().Be("Person doesn't exist");
+        }
 
+        [Fact]
+        public async void GetEarlierVersionOfEntirePersonCollection()
+        {
+            // Arrange
+            _unitOfWorkFactory.DatabaseTime = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
+            // Act
+            var people = await unitOfWork.People.GetAll();
 
+            // Assert
+            people.Count().Should().Be(4);
+            people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
+            people.Count(p => p.FirstName == "Poe Dameron").Should().Be(1);
+            people.Count(p => p.FirstName == "Chewing Gum").Should().Be(1);
+            people.Count(p => p.FirstName == "Rey").Should().Be(1);
+        }
 
+        [Fact]
+        public async void GetEarlierVariantOfEntirePersonCollection()
+        {
+            // Arrange
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2005, 1, 1, 1, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
 
-    //    //[Fact]
-    //    //public async void GetEarlierVersionOfPerson_2()
-    //    //{
-    //    //    // Arrange
-    //    //    //_unitOfWorkFactory.DatabaseTime = new DateTime(2013, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-    //    //    using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+            // Act
+            var people = await unitOfWork.People.GetAll();
 
-    //    //    // Act
-    //    //    var person = await unitOfWork.People.Get(
-    //    //        new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"));
-
-    //    //    // Assert
-    //    //    person.FirstName.Should().Be("Anakin");
-    //    //    person.Surname.Should().Be("Skywalker");
-    //    //}
-
-    //    ////[Fact]
-    //    ////public void GetEarlierVersionOfPerson_BeforePersonWasCreated_Throws()
-    //    ////{
-    //    ////    // Arrange
-    //    ////    //_unitOfWorkFactory.DatabaseTime = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-    //    ////    using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-    //    ////    // Act
-    //    ////    var act = () => unitOfWork.People.Get(
-    //    ////        new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"));
-
-    //    ////    // Assert
-    //    ////    var exception = Assert.Throws<InvalidOperationException>(act);
-    //    ////    exception.Message.Should().Be("Person does not exist");
-    //    ////}
-
-    //    //[Fact]
-    //    //public async void GetEarlierVersionOfEntirePersonCollection_1()
-    //    //{
-    //    //    // Arrange
-    //    //    //_unitOfWorkFactory.DatabaseTime = new DateTime(2017, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-    //    //    using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-    //    //    // Act
-    //    //    var people = await unitOfWork.People.GetAll();
-
-    //    //    // Assert
-    //    //    people.Count().Should().Be(4);
-    //    //    people.Count(p => p.FirstName == "Han").Should().Be(1);
-    //    //    people.Count(p => p.FirstName == "Luke").Should().Be(1);
-    //    //    people.Count(p => p.FirstName == "Leia").Should().Be(1);
-    //    //    people.Count(p => p.FirstName == "Ben").Should().Be(1);
-    //    //}
-
-    //    //[Fact]
-    //    //public async void GetEarlierVersionOfEntirePersonCollection_2()
-    //    //{
-    //    //    // Arrange
-    //    //    //_unitOfWorkFactory.DatabaseTime = new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-    //    //    using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-    //    //    // Act
-    //    //    var people = await unitOfWork.People.GetAll();
-
-    //    //    // Assert
-    //    //    people.Count().Should().Be(0);
-    //    //}
+            // Assert
+            people.Count().Should().Be(2);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
+        }
     }
 }
