@@ -124,5 +124,21 @@ namespace PR.Persistence.UnitTest
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
         }
+
+        [Fact]
+        public async void GetAllVariantsOfAPerson()
+        {
+            // Arrange
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var people = await unitOfWork.People.GetAllVariants(new Guid("00000004-0000-0000-0000-000000000000"));
+
+            // Assert
+            people.Count().Should().Be(2);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
+        }
+
     }
 }
