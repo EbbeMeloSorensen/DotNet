@@ -334,7 +334,7 @@ namespace PR.Persistence.Versioned.Repositories
             throw new NotImplementedException();
         }
 
-        // Dette er en prospektiv ændring
+        // Dette er en PROSPEKTIV ændring
         public async Task Update(
             Person person)
         {
@@ -364,6 +364,7 @@ namespace PR.Persistence.Versioned.Repositories
             await UnitOfWork.People.AddRange(newPersonRows);
         }
 
+        // Dette er en PROSPEKTIV ændring
         public async Task UpdateRange(
             IEnumerable<Person> people)
         {
@@ -406,6 +407,56 @@ namespace PR.Persistence.Versioned.Repositories
             await UnitOfWork.People.AddRange(newPersonRows);
         }
 
+        // Dette er en RETROAKTIV ændring
+        public async Task Correct(
+            Person person)
+        {
+            // 1: Supersede den eksisterende (som ved update)
+            // 2: Lav en ny med ændringerne
+            _returnClonesInsteadOfRepositoryObjects = false;
+            var objectFromRepository = (await Find(_ => _.ArchiveID == person.ArchiveID)).SingleOrDefault();
+            _returnClonesInsteadOfRepositoryObjects = true;
+
+            if (objectFromRepository == null)
+            {
+                throw new InvalidOperationException("Person doesn't exist");
+            }
+
+            objectFromRepository.Superseded = CurrentTime;
+
+
+
+
+            // Taken from update
+            /*
+            _returnClonesInsteadOfRepositoryObjects = false;
+            var objectFromRepository = await Get(person.ID);
+            _returnClonesInsteadOfRepositoryObjects = true;
+            objectFromRepository.Superseded = CurrentTime;
+
+            var personCopy = objectFromRepository.Clone();
+            personCopy.ArchiveID = new Guid();
+            personCopy.Created = CurrentTime;
+            personCopy.Superseded = _maxDate;
+            personCopy.End = CurrentTime;
+
+            person.ArchiveID = Guid.NewGuid();
+            person.Created = CurrentTime;
+            person.Superseded = _maxDate;
+            person.Start = CurrentTime;
+            person.End = _maxDate;
+
+            var newPersonRows = new List<Person>
+            {
+                personCopy,
+                person
+            };
+
+            await UnitOfWork.People.AddRange(newPersonRows);
+            */
+        }
+
+        // Dette er en PROSPEKTIV ændring
         public async Task Remove(
             Person person)
         {
@@ -430,6 +481,7 @@ namespace PR.Persistence.Versioned.Repositories
             await UnitOfWork.People.Add(personCopy);
         }
 
+        // Dette er en PROSPEKTIV ændring
         public async Task RemoveRange(
             IEnumerable<Person> people)
         {

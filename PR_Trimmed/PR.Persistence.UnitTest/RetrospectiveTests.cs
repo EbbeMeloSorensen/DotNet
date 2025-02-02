@@ -92,7 +92,7 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async void GetEarlierVersionOfEntirePersonCollection()
+        public async Task GetEarlierVersionOfEntirePersonCollection()
         {
             // Arrange
             _unitOfWorkFactory.DatabaseTime = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc);
@@ -110,7 +110,7 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async void GetEarlierVariantOfEntirePersonCollection()
+        public async Task GetEarlierStateOfEntirePersonCollection()
         {
             // Arrange
             _unitOfWorkFactory.HistoricalTime = new DateTime(2005, 1, 1, 1, 0, 0, DateTimeKind.Utc);
@@ -126,7 +126,7 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async void GetAllVariantsOfAPerson()
+        public async Task GetAllStatesOfAPerson()
         {
             // Arrange
             using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
@@ -136,9 +136,47 @@ namespace PR.Persistence.UnitTest
 
             // Assert
             people.Count().Should().Be(2);
-            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Anakin Skywalker").Should().Be(1);
             people.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
         }
 
+        [Fact]
+        public async Task RetroactivelyCorrectAnEarlierStateOfAPerson()
+        {
+            // Arrange
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var person = await unitOfWork.People.Get(
+                new Guid("00000004-0000-0000-0000-000000000000"));
+
+            person.FirstName = "Elephant";
+
+            // Act
+            //unitOfWork.People.Up
+
+
+            // Assert
+            person.FirstName.Should().Be("Anakin Skywalker");
+        }
+
+        [Fact]
+        public async Task RetroactivelyDeleteAnEarlierStateOfAPerson()
+        {
+            // Arrange
+            // Act
+            // Assert
+            throw new NotImplementedException();
+        }
+
+        // Like when registering that John Doe lived a different place in a given time period
+        [Fact]
+        public async Task SqueezeInANewStateOfAPerson()
+        {
+            // Arrange
+            // Act
+            // Assert
+            throw new NotImplementedException();
+        }
     }
 }
