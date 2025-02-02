@@ -150,14 +150,21 @@ namespace PR.Persistence.UnitTest
             var person = await unitOfWork.People.Get(
                 new Guid("00000004-0000-0000-0000-000000000000"));
 
-            person.FirstName = "Elephant";
+            person.FirstName = "Ani";
 
             // Act
-            //unitOfWork.People.Up
-
+            await unitOfWork.People.Correct(person);
+            unitOfWork.Complete();
 
             // Assert
-            person.FirstName.Should().Be("Anakin Skywalker");
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var personVariants =
+                await unitOfWork2.People.GetAllVariants(new Guid("00000004-0000-0000-0000-000000000000"));
+
+            personVariants.Count().Should().Be(2);
+            personVariants.Count(p => p.FirstName == "Ani").Should().Be(1);
+            personVariants.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
         }
 
         [Fact]

@@ -411,8 +411,6 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Correct(
             Person person)
         {
-            // 1: Supersede den eksisterende (som ved update)
-            // 2: Lav en ny med ændringerne
             _returnClonesInsteadOfRepositoryObjects = false;
             var objectFromRepository = (await Find(_ => _.ArchiveID == person.ArchiveID)).SingleOrDefault();
             _returnClonesInsteadOfRepositoryObjects = true;
@@ -424,36 +422,11 @@ namespace PR.Persistence.Versioned.Repositories
 
             objectFromRepository.Superseded = CurrentTime;
 
-
-
-
-            // Taken from update
-            /*
-            _returnClonesInsteadOfRepositoryObjects = false;
-            var objectFromRepository = await Get(person.ID);
-            _returnClonesInsteadOfRepositoryObjects = true;
-            objectFromRepository.Superseded = CurrentTime;
-
-            var personCopy = objectFromRepository.Clone();
-            personCopy.ArchiveID = new Guid();
-            personCopy.Created = CurrentTime;
-            personCopy.Superseded = _maxDate;
-            personCopy.End = CurrentTime;
-
             person.ArchiveID = Guid.NewGuid();
             person.Created = CurrentTime;
             person.Superseded = _maxDate;
-            person.Start = CurrentTime;
-            person.End = _maxDate;
 
-            var newPersonRows = new List<Person>
-            {
-                personCopy,
-                person
-            };
-
-            await UnitOfWork.People.AddRange(newPersonRows);
-            */
+            await UnitOfWork.People.Add(person);
         }
 
         // Dette er en PROSPEKTIV ændring

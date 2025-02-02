@@ -40,6 +40,11 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories.PR
             throw new NotImplementedException();
         }
 
+        public Task Correct(Person person)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
         {
             throw new NotImplementedException();
