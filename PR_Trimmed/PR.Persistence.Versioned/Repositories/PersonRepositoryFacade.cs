@@ -141,6 +141,21 @@ namespace PR.Persistence.Versioned.Repositories
             return (await UnitOfWork.People.Find(predicates)).OrderBy(_ => _.Start);
         }
 
+        public async Task Erase(
+            Person person)
+        {
+            _returnClonesInsteadOfRepositoryObjects = false;
+            var objectFromRepository = (await Find(_ => _.ArchiveID == person.ArchiveID)).SingleOrDefault();
+            _returnClonesInsteadOfRepositoryObjects = true;
+
+            if (objectFromRepository == null)
+            {
+                throw new InvalidOperationException("Person doesn't exist");
+            }
+
+            objectFromRepository.Superseded = CurrentTime;
+        }
+
         public async Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
         {
             var predicates = new List<Expression<Func<Person, bool>>>();

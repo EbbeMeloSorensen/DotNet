@@ -171,9 +171,24 @@ namespace PR.Persistence.UnitTest
         public async Task RetroactivelyDeleteAnEarlierStateOfAPerson()
         {
             // Arrange
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var person = await unitOfWork.People.Get(
+                new Guid("00000004-0000-0000-0000-000000000000"));
+
             // Act
+            await unitOfWork.People.Erase(person);
+            unitOfWork.Complete();
+
             // Assert
-            throw new NotImplementedException();
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var personVariants =
+                await unitOfWork2.People.GetAllVariants(new Guid("00000004-0000-0000-0000-000000000000"));
+
+            personVariants.Count().Should().Be(1);
+            personVariants.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
         }
 
         // Like when registering that John Doe lived a different place in a given time period

@@ -92,6 +92,11 @@ namespace PR.Persistence.APIClient.Repositories
             throw new NotImplementedException();
         }
 
+        public Task Erase(Person person)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
         {
             return await Task.Run(() =>
