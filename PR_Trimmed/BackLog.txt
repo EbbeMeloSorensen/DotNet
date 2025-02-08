@@ -26,6 +26,14 @@ Done:
     -> Du siger, at du KUN vil have historiske objekter med, og det g�r s�, at du som de "historiske" predicates anf�rer,
        at du kun vil have varianter (bj�lker), hvor End ligger f�r historisk tid. Det g�lder for Rey, men jo alts� ikke for Rey Skywalker.
 
+Todo:
+* Lav et view, hvor man kan se de varianter, der er for en given person
+* Man skal kunne slette et antal varianter
+* Man skal kunne opdatere en (historisk) variant
+* Man skal kunne lave en ny (historisk) variant
+
+
+Skrammel med skrammel on top:
 M�l: Tilbage p� det spor, der hedder at lave "version 2" af pr-applikationen, som skal kunne det samme som den gamle pr, 
      blot med bitemporalitet. Den kan ogs� passende h�ndtere glossaries, s� du kun skal deployere �n applikation
 
