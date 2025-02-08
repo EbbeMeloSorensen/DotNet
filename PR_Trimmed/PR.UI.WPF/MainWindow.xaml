@@ -63,7 +63,7 @@
 
                 <local:PeoplePropertiesView Grid.Row="0" DataContext="{Binding PeoplePropertiesViewModel}"/>
 
-                <local:PersonCommentsView Grid.Row="1" DataContext="{Binding PersonPropertiesViewModel}"/>
+                <local:PersonPropertiesView Grid.Row="1" DataContext="{Binding PersonPropertiesViewModel}"/>
             </Grid>
 
             <Expander Header="Log" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ExpandDirection="Up" IsExpanded="True">

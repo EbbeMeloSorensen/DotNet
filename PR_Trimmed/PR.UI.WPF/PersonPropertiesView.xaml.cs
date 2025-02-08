@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace PR.UI.WPF
 {
     /// <summary>
-    /// Interaction logic for PersonCommentsView.xaml
+    /// Interaction logic for PersonPropertiesView.xaml
     /// </summary>
-    public partial class PersonCommentsView : UserControl
+    public partial class PersonPropertiesView : UserControl
     {
-        public PersonCommentsView()
+        public PersonPropertiesView()
         {
             InitializeComponent();
         }

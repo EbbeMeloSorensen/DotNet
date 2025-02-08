@@ -30,7 +30,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private string _originalSharedCity;
     private DateTime? _originalSharedBirthday;
     private string _originalSharedCategory;
-    private string _originalSharedComments;
     private double? _originalSharedLatitude;
     private double? _originalSharedLongitude;
 
@@ -42,7 +41,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private string _sharedCity;
     private DateTime? _sharedBirthday;
     private string _sharedCategory;
-    private string _sharedComments;
     private double? _sharedLatitude;
     private double? _sharedLongitude;
 
@@ -142,17 +140,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    public string SharedComments
-    {
-        get { return _sharedComments; }
-        set
-        {
-            _sharedComments = value;
-            RaisePropertyChanged();
-            ApplyChangesCommand.RaiseCanExecuteChanged();
-        }
-    }
-
     public double? SharedLatitude
     {
         get { return _sharedLatitude; }
@@ -246,10 +233,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? firstPerson.Category
             : null;
 
-        SharedComments = temp.Objects.All(p => p.Description == firstPerson.Description)
-            ? firstPerson.Description
-            : null;
-
         SharedLatitude = temp.Objects.All(p => p.Latitude == firstPerson.Latitude)
             ? firstPerson.Latitude
             : null;
@@ -266,7 +249,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         _originalSharedCity = SharedCity;
         _originalSharedBirthday = SharedBirthday;
         _originalSharedCategory = SharedCategory;
-        _originalSharedComments = SharedComments;
         _originalSharedLatitude = SharedLatitude;
         _originalSharedLongitude = SharedLongitude;
 
@@ -316,7 +298,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             SharedCity != _originalSharedCity ||
             SharedBirthday != _originalSharedBirthday ||
             SharedCategory != _originalSharedCategory ||
-            SharedComments != _originalSharedComments ||
             SharedLatitude != _originalSharedLatitude ||
             SharedLongitude != _originalSharedLongitude;
     }
@@ -337,7 +318,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
                     new ValidationError {PropertyName = "SharedCity"},
                     new ValidationError {PropertyName = "SharedBirthday"},
                     new ValidationError {PropertyName = "SharedCategory"},
-                    new ValidationError {PropertyName = "SharedComments"},
                     new ValidationError {PropertyName = "SharedLatitude"},
                     new ValidationError {PropertyName = "SharedLongitude"},
                 };
@@ -427,15 +407,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
                         break;
                     }
-                    case "SharedComments":
-                    {
-                        if (SharedComments != null && SharedComments.Length > 2047)
-                        {
-                            errorMessage = "Comments cannot exceed 2047 characters";
-                        }
-
-                        break;
-                    }
                 }
             }
 
@@ -466,7 +437,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         RaisePropertyChanged("SharedCity");
         RaisePropertyChanged("SharedBirthday");
         RaisePropertyChanged("SharedCategory");
-        RaisePropertyChanged("SharedComments");
         RaisePropertyChanged("SharedLatitude");
         RaisePropertyChanged("SharedLongitude");
     }
