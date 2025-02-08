@@ -11,7 +11,7 @@ using PR.Persistence;
 
 namespace PR.ViewModel
 {
-    public class PersonCommentsViewModel : ViewModelBase
+    public class PersonPropertiesViewModel : ViewModelBase
     {
         private bool _isVisible;
         private ObjectCollection<Person> _people;
@@ -65,7 +65,7 @@ namespace PR.ViewModel
             }
         }
 
-        public PersonCommentsViewModel(
+        public PersonPropertiesViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             ObjectCollection<Person> people)
         {

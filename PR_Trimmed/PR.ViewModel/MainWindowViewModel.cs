@@ -42,13 +42,13 @@ namespace PR.ViewModel
                 _application.UnitOfWorkFactory = value;
                 PersonListViewModel.UnitOfWorkFactory = value;
                 PeoplePropertiesViewModel.UnitOfWorkFactory = value;
-                PersonCommentsViewModel.UnitOfWorkFactory = value;
+                PersonPropertiesViewModel.UnitOfWorkFactory = value;
             }
         }
 
         public PersonListViewModel PersonListViewModel { get; }
         public PeoplePropertiesViewModel PeoplePropertiesViewModel { get; }
-        public PersonCommentsViewModel PersonCommentsViewModel { get; }
+        public PersonPropertiesViewModel PersonPropertiesViewModel { get; }
         public LogViewModel LogViewModel { get; }
 
         private AsyncCommand<object> _createPersonCommand;
@@ -131,7 +131,7 @@ namespace PR.ViewModel
                 unitOfWorkFactory,
                 PersonListViewModel.SelectedPeople);
 
-            PersonCommentsViewModel = new PersonCommentsViewModel(
+            PersonPropertiesViewModel = new PersonPropertiesViewModel(
                 unitOfWorkFactory,
                 PersonListViewModel.SelectedPeople);
 
