@@ -274,14 +274,16 @@ namespace PR.ViewModel
                 unitOfWork.Complete();
             }
 
-            var personVariants = PersonVariantListViewItemViewModels.Select(_ => _.PersonVariant);
-            personVariants.Append(personVariant);
+            var personVariants = PersonVariantListViewItemViewModels
+                .Select(_ => _.PersonVariant)
+                .Append(personVariant)
+                .OrderBy(_ => _.Start)
+                .ToList();
 
-            //PersonVariantListViewItemViewModels
+            PersonVariantListViewItemViewModels.Clear();
 
-            // Update the view
-
-            throw new NotImplementedException();
+            personVariants.ForEach(pv => PersonVariantListViewItemViewModels.Add(
+                new PersonVariantListViewItemViewModel{PersonVariant = pv}));
         }
 
         private async Task UpdatePersonVariant(
@@ -299,7 +301,22 @@ namespace PR.ViewModel
         private async Task DeletePersonVariants(
             object owner)
         {
-            throw new NotImplementedException();
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                await unitOfWork.People.EraseRange(SelectedPersonVariants.Objects);
+                unitOfWork.Complete();
+            }
+
+            var personVariants = PersonVariantListViewItemViewModels
+                .Select(_ => _.PersonVariant)
+                .Except(SelectedPersonVariants.Objects)
+                .OrderBy(_ => _.Start)
+                .ToList();
+
+            PersonVariantListViewItemViewModels.Clear();
+
+            personVariants.ForEach(pv => PersonVariantListViewItemViewModels.Add(
+                new PersonVariantListViewItemViewModel { PersonVariant = pv }));
         }
 
         private bool CanDeletePersonVariants(

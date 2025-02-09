@@ -90,6 +90,11 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             throw new NotImplementedException();
         }
 
+        public Task EraseRange(IEnumerable<Person> people)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
         {
             string responseBody = null;

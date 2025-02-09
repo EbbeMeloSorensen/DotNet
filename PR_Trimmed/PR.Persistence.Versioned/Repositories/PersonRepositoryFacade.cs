@@ -7,6 +7,8 @@ using Craft.Logging;
 using PR.Domain;
 using PR.Domain.Entities.PR;
 using PR.Persistence.Repositories.PR;
+using PR.Domain.Entities.C2IEDM.ObjectItems;
+using Person = PR.Domain.Entities.PR.Person;
 
 namespace PR.Persistence.Versioned.Repositories
 {
@@ -68,7 +70,12 @@ namespace PR.Persistence.Versioned.Repositories
             Person person)
         {
             var now = DateTime.UtcNow;
-            person.ID = Guid.NewGuid();
+
+            if (person.ID == Guid.Empty)
+            {
+                person.ID = Guid.NewGuid();
+            }
+
             person.Created = now;
             person.Superseded = _maxDate;
 
@@ -145,7 +152,10 @@ namespace PR.Persistence.Versioned.Repositories
             Person person)
         {
             _returnClonesInsteadOfRepositoryObjects = false;
-            var objectFromRepository = (await Find(_ => _.ArchiveID == person.ArchiveID)).SingleOrDefault();
+
+            var objectFromRepository = (await UnitOfWork.People.Find(
+                _ => _.ArchiveID == person.ArchiveID)).SingleOrDefault();
+
             _returnClonesInsteadOfRepositoryObjects = true;
 
             if (objectFromRepository == null)
@@ -154,6 +164,26 @@ namespace PR.Persistence.Versioned.Repositories
             }
 
             objectFromRepository.Superseded = CurrentTime;
+        }
+
+        public async Task EraseRange(
+            IEnumerable<Person> people)
+        {
+            var archiveIDs = people.Select(_ => _.ArchiveID).ToHashSet();
+
+            _returnClonesInsteadOfRepositoryObjects = false;
+
+            var objectsFromRepository = (await UnitOfWork.People.Find(
+                _ => archiveIDs.Contains(_.ArchiveID))).ToList();
+
+            _returnClonesInsteadOfRepositoryObjects = true;
+
+            if (!objectsFromRepository.Any())
+            {
+                throw new InvalidOperationException("People don't exist");
+            }
+
+            objectsFromRepository.ForEach(_ => _.Superseded = CurrentTime);
         }
 
         public async Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()

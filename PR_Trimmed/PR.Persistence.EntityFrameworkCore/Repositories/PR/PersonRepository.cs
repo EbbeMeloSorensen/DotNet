@@ -50,6 +50,11 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories.PR
             throw new NotImplementedException();
         }
 
+        public Task EraseRange(IEnumerable<Person> people)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema()
         {
             throw new NotImplementedException();

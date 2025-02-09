@@ -33,6 +33,9 @@ namespace PR.Persistence.Repositories.PR
         Task Erase(
             Person person);
 
+        Task EraseRange(
+            IEnumerable<Person> people);
+
         Task<IEnumerable<DateTime>> GetAllValidTimeIntervalExtrema();
 
         Task<IEnumerable<DateTime>> GetAllDatabaseWriteTimes();

@@ -192,13 +192,13 @@ namespace PR.Persistence.UnitTest
         }
 
         // Like when registering that John Doe lived a different place in a given time period
-        [Fact]
-        public async Task SqueezeInANewStateOfAPerson()
-        {
-            // Arrange
-            // Act
-            // Assert
-            throw new NotImplementedException();
-        }
+        //[Fact]
+        //public async Task SqueezeInANewStateOfAPerson()
+        //{
+        //    // Arrange
+        //    // Act
+        //    // Assert
+        //    throw new NotImplementedException();
+        //}
     }
 }
