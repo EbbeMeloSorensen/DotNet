@@ -4,17 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Windows;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
+using Craft.ViewModels.Dialogs;
 using PR.Domain.Entities.PR;
 using PR.Persistence;
-using GalaSoft.MvvmLight.Command;
 
 namespace PR.ViewModel
 {
     public class PersonPropertiesViewModel : ViewModelBase
     {
+        private readonly IDialogService _applicationDialogService;
         private bool _isVisible;
         private ObjectCollection<Person> _people;
 
@@ -113,9 +116,11 @@ namespace PR.ViewModel
 
         public PersonPropertiesViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
+            IDialogService applicationDialogService,
             ObjectCollection<Person> people)
         {
             UnitOfWorkFactory = unitOfWorkFactory;
+            _applicationDialogService = applicationDialogService;
             _people = people;
 
             PersonCommentListViewItemViewModels =
@@ -241,6 +246,41 @@ namespace PR.ViewModel
         private async Task CreatePersonVariant(
             object owner)
         {
+            var dialogViewModel = new CreatePersonDialogViewModel();
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            var personVariant = new Person  
+            {
+                ID = _people.Objects.Single().ID,
+                FirstName = dialogViewModel.FirstName,
+                Surname = dialogViewModel.Surname,
+                Nickname = dialogViewModel.Nickname,
+                Address = dialogViewModel.Address,
+                ZipCode = dialogViewModel.ZipCode,
+                City = dialogViewModel.City,
+                Birthday = dialogViewModel.Birthday,
+                Category = dialogViewModel.Category,
+                Start = dialogViewModel.Start.HasValue ? dialogViewModel.Start.Value : new DateTime(),
+                End = dialogViewModel.End.HasValue ? dialogViewModel.End.Value : new DateTime()
+            };
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                await unitOfWork.People.Add(personVariant);
+                unitOfWork.Complete();
+            }
+
+            var personVariants = PersonVariantListViewItemViewModels.Select(_ => _.PersonVariant);
+            personVariants.Append(personVariant);
+
+            //PersonVariantListViewItemViewModels
+
+            // Update the view
+
             throw new NotImplementedException();
         }
 

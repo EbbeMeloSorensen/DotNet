@@ -133,6 +133,7 @@ namespace PR.ViewModel
 
             PersonPropertiesViewModel = new PersonPropertiesViewModel(
                 unitOfWorkFactory,
+                applicationDialogService,
                 PersonListViewModel.SelectedPeople);
 
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
