@@ -28,6 +28,9 @@ namespace PR.ViewModel
 
         public ObjectCollection<PersonComment> SelectedPersonComments { get; }
 
+        public ObservableCollection<PersonVariantListViewItemViewModel> PersonVariantListViewItemViewModels { get; }
+
+
         public bool IsVisible
         {
             get { return _isVisible; }
@@ -80,6 +83,9 @@ namespace PR.ViewModel
 
             SelectedPersonComments = new ObjectCollection<PersonComment>();
 
+            PersonVariantListViewItemViewModels = new ObservableCollection<PersonVariantListViewItemViewModel>();
+
+
             _people.PropertyChanged += async (s, e) => await Initialize(s, e);
 
             SelectedPersonCommentListViewItemViewModels.CollectionChanged += (s, e) =>
@@ -106,8 +112,8 @@ namespace PR.ViewModel
 
             var person = _people.Objects.Single();
 
-            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-            person = await unitOfWork.People.GetIncludingComments(person.ID);
+            using var unitOfWork1 = UnitOfWorkFactory.GenerateUnitOfWork();
+            person = await unitOfWork1.People.GetIncludingComments(person.ID);
 
             if (person.Comments != null)
             {
@@ -121,6 +127,18 @@ namespace PR.ViewModel
                     });
                 });
             }
+
+            using var unitOfWork2 = UnitOfWorkFactory.GenerateUnitOfWork();
+            var personVariants = await unitOfWork2.People.GetAllVariants(person.ID);
+
+            PersonVariantListViewItemViewModels.Clear();
+            personVariants.ToList().ForEach(pv =>
+            {
+                PersonVariantListViewItemViewModels.Add(new PersonVariantListViewItemViewModel
+                {
+                    PersonVariant = pv
+                });
+            });
 
             IsVisible = true;
         }

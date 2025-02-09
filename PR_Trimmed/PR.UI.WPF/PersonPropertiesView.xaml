@@ -30,14 +30,37 @@
 
     <TabControl>
         <TabItem Header="Variants">
+
+
+
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <ListBox Grid.Row="0" DisplayMemberPath="DisplayText" SelectionMode="Extended" Margin="3">
-                </ListBox>
+                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                    <DataGrid x:Name="dataGrid" Margin="2" GridLinesVisibility="All" 
+                              AutoGenerateColumns="False" HeadersVisibility="Column" 
+                              CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                              HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                              ItemsSource="{Binding PersonVariantListViewItemViewModels}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="From" Binding="{Binding PersonVariant.Start}" Width="150"/>
+                            <DataGridTextColumn Header="To" Binding="{Binding PersonVariant.End}" Width="150"/>
+                            <DataGridTextColumn Header="First Name" Binding="{Binding PersonVariant.FirstName}" Width="150"/>
+                            <DataGridTextColumn Header="X" Binding="{Binding PersonVariant.Latitude}" Width="64"/>
+                            <DataGridTextColumn Header="Y" Binding="{Binding PersonVariant.Longitude}" Width="64"/>
+                        </DataGrid.Columns>
+                        <!--<b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction
+                                    Command="{Binding SelectionChangedCommand}"
+                                    CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>-->
+                    </DataGrid>
+                </ScrollViewer>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Button Margin="3,0,3,3" Content="New.."/>
