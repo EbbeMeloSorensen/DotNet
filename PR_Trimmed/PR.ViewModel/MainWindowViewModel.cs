@@ -193,7 +193,8 @@ namespace PR.ViewModel
                 City = dialogViewModel.City,
                 Birthday = dialogViewModel.Birthday,
                 Category = dialogViewModel.Category,
-                Created = DateTime.UtcNow
+                Start = dialogViewModel.Start.HasValue ? dialogViewModel.Start.Value : new DateTime(),
+                End = dialogViewModel.End.HasValue ? dialogViewModel.End.Value : new DateTime()
             };
 
             using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
@@ -202,7 +203,10 @@ namespace PR.ViewModel
                 unitOfWork.Complete();
             }
 
-            PersonListViewModel.AddPerson(person);
+            if (person.End > DateTime.UtcNow)
+            {
+                PersonListViewModel.AddPerson(person);
+            }
         }
 
         private bool CanCreatePerson(
