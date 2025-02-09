@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using Craft.Utils;
 using Craft.ViewModel.Utils;
 using PR.Domain.Entities.PR;
 using PR.Persistence;
+using GalaSoft.MvvmLight.Command;
 
 namespace PR.ViewModel
 {
@@ -20,6 +22,12 @@ namespace PR.ViewModel
         private AsyncCommand<object> _updatePersonCommentCommand;
         private AsyncCommand<object> _deletePersonCommentsCommand;
 
+        private RelayCommand<object> _personVariantSelectionChangedCommand;
+
+        private AsyncCommand<object> _createPersonVariantCommand;
+        private AsyncCommand<object> _updatePersonVariantCommand;
+        private AsyncCommand<object> _deletePersonVariantsCommand;
+
         public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
         public ObservableCollection<PersonCommentListViewItemViewModel> PersonCommentListViewItemViewModels { get; }
@@ -30,6 +38,9 @@ namespace PR.ViewModel
 
         public ObservableCollection<PersonVariantListViewItemViewModel> PersonVariantListViewItemViewModels { get; }
 
+        public ObservableCollection<PersonVariantListViewItemViewModel> SelectedPersonVariantListViewItemViewModels { get; }
+        
+        public ObjectCollection<Person> SelectedPersonVariants { get; }
 
         public bool IsVisible
         {
@@ -68,6 +79,38 @@ namespace PR.ViewModel
             }
         }
 
+        public RelayCommand<object> PersonVariantSelectionChangedCommand
+        {
+            get { return _personVariantSelectionChangedCommand ?? (_personVariantSelectionChangedCommand = new RelayCommand<object>(PersonVariantSelectionChanged)); }
+        }
+
+        public AsyncCommand<object> CreatePersonVariantCommand
+        {
+            get
+            {
+                return _createPersonVariantCommand ??
+                       (_createPersonVariantCommand = new AsyncCommand<object>(CreatePersonVariant));
+            }
+        }
+
+        public AsyncCommand<object> UpdatePersonVariantCommand
+        {
+            get
+            {
+                return _updatePersonVariantCommand ??
+                       (_updatePersonVariantCommand = new AsyncCommand<object>(UpdatePersonVariant, CanUpdatePersonVariant));
+            }
+        }
+
+        public AsyncCommand<object> DeletePersonVariantsCommand
+        {
+            get
+            {
+                return _deletePersonVariantsCommand ??
+                       (_deletePersonVariantsCommand = new AsyncCommand<object>(DeletePersonVariants, CanDeletePersonVariants));
+            }
+        }
+
         public PersonPropertiesViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             ObjectCollection<Person> people)
@@ -85,6 +128,10 @@ namespace PR.ViewModel
 
             PersonVariantListViewItemViewModels = new ObservableCollection<PersonVariantListViewItemViewModel>();
 
+            SelectedPersonVariantListViewItemViewModels =
+                new ObservableCollection<PersonVariantListViewItemViewModel>();
+
+            SelectedPersonVariants = new ObjectCollection<Person>();
 
             _people.PropertyChanged += async (s, e) => await Initialize(s, e);
 
@@ -97,6 +144,11 @@ namespace PR.ViewModel
             {
                 UpdatePersonCommentCommand.RaiseCanExecuteChanged();
                 DeletePersonCommentsCommand.RaiseCanExecuteChanged();
+            };
+
+            SelectedPersonVariantListViewItemViewModels.CollectionChanged += (s, e) =>
+            {
+                SelectedPersonVariants.Objects = SelectedPersonVariantListViewItemViewModels.Select(_ => _.PersonVariant);
             };
         }
 
@@ -171,6 +223,49 @@ namespace PR.ViewModel
             object owner)
         {
             return SelectedPersonComments.Objects != null && SelectedPersonComments.Objects.Count() > 1;
+        }
+
+        private void PersonVariantSelectionChanged(
+            object obj)
+        {
+            var temp = (IList)obj;
+
+            var selectedPersonVariantListViewItemViewModels = temp.Cast<PersonVariantListViewItemViewModel>();
+
+            SelectedPersonVariants.Objects = selectedPersonVariantListViewItemViewModels.Select(_ => _.PersonVariant);
+
+            UpdatePersonVariantCommand.RaiseCanExecuteChanged();
+            DeletePersonVariantsCommand.RaiseCanExecuteChanged();
+        }
+
+        private async Task CreatePersonVariant(
+            object owner)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task UpdatePersonVariant(
+            object owner)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanUpdatePersonVariant(
+            object owner)
+        {
+            return SelectedPersonVariants.Objects != null && SelectedPersonVariants.Objects.Count() == 1;
+        }
+
+        private async Task DeletePersonVariants(
+            object owner)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanDeletePersonVariants(
+            object owner)
+        {
+            return SelectedPersonVariants.Objects != null && SelectedPersonVariants.Objects.Any();
         }
     }
 }
