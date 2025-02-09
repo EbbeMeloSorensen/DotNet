@@ -193,7 +193,6 @@ namespace PR.ViewModel
                 City = dialogViewModel.City,
                 Birthday = dialogViewModel.Birthday,
                 Category = dialogViewModel.Category,
-                Description = dialogViewModel.Comments,
                 Created = DateTime.UtcNow
             };
 

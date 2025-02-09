@@ -1,10 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Net;
 using System.Windows;
-using System.Xml.Linq;
 using Craft.UI.Utils;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
@@ -26,7 +24,8 @@ namespace PR.ViewModel
         private string _city;
         private DateTime? _birthday;
         private string _category;
-        private string _comments;
+        private DateTime? _start;
+        private DateTime? _end;
 
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
@@ -101,6 +100,26 @@ namespace PR.ViewModel
             }
         }
 
+        public DateTime? Start
+        {
+            get { return _start; }
+            set
+            {
+                _start = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public DateTime? End
+        {
+            get { return _end; }
+            set
+            {
+                _end = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public string Category
         {
             get { return _category; }
@@ -110,17 +129,6 @@ namespace PR.ViewModel
                 RaisePropertyChanged();
             }
         }
-
-        public string Comments
-        {
-            get { return _comments; }
-            set
-            {
-                _comments = value;
-                RaisePropertyChanged();
-            }
-        }
-
 
         public RelayCommand<object> OKCommand
         {
@@ -151,7 +159,6 @@ namespace PR.ViewModel
             ZipCode = ZipCode.NullifyIfEmpty();
             City = City.NullifyIfEmpty();
             Category = Category.NullifyIfEmpty();
-            Comments = Comments.NullifyIfEmpty();
 
             CloseDialogWithResult(parameter as Window, DialogResult.OK);
         }
@@ -248,15 +255,6 @@ namespace PR.ViewModel
 
                                 break;
                             }
-                        case "Comments":
-                            {
-                                if (Comments != null && Comments.Length > 2047)
-                                {
-                                    errorMessage = "Comments cannot exceed 2047 characters";
-                                }
-
-                                break;
-                            }
                     }
                 }
 
@@ -282,8 +280,9 @@ namespace PR.ViewModel
                         new ValidationError {PropertyName = "ZipCode"},
                         new ValidationError {PropertyName = "City"},
                         new ValidationError {PropertyName = "Birthday"},
+                        new ValidationError {PropertyName = "Start"},
+                        new ValidationError {PropertyName = "End"},
                         new ValidationError {PropertyName = "Category"},
-                        new ValidationError {PropertyName = "Comments"}
                     };
                 }
 
@@ -311,10 +310,12 @@ namespace PR.ViewModel
             RaisePropertyChanged("City");
             RaisePropertyChanged("Birthday");
             RaisePropertyChanged("Category");
-            RaisePropertyChanged("Comments");
+            RaisePropertyChanged("Start");
+            RaisePropertyChanged("End");
         }
 
-        private void UpdateState(StateOfView state)
+        private void UpdateState(
+            StateOfView state)
         {
             _state = state;
             RaisePropertyChanges();
