@@ -12,6 +12,8 @@ namespace PR.ViewModel
         private string _categoryFilter = "";
         private string _categoryFilterInUppercase = "";
 
+        private bool _displayAttributeFilterSection;
+
         public string NameFilter
         {
             get { return _nameFilter; }
@@ -31,6 +33,16 @@ namespace PR.ViewModel
             {
                 _categoryFilter = value;
                 _categoryFilterInUppercase = _categoryFilter == null ? "" : _categoryFilter.ToUpper();
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DisplayAttributeFilterSection
+        {
+            get => _displayAttributeFilterSection;
+            set
+            {
+                _displayAttributeFilterSection = value;
                 RaisePropertyChanged();
             }
         }
