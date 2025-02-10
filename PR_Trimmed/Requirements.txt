@@ -38,3 +38,26 @@ Requirements:
 * Go back in database time and or historic time... (who was alive in a given episode?)
 * Change superseded rows PROHIBITED (de er kun synlige )
 * Clear database (Including superseded rows)
+
+
+PT (10-02-2025) er det sådan, at hvis man spørger databasen uden at angive historisk tid, så går den bare ud fra,
+at man er interesseret i latest greatest af hvert eneste objekt. I praksis betyder det, at den opererer med, at historic
+time of interest er lige med current time, og så identificerer den de objekter, hvis virkningstidsintervaller der skæres
+af dette tidspunkt.
+Alternativt har man mulighed for at sige, at man er interesseret i et historisk tidspunkt, men der gælder stadig, at det
+netop er et tidspunkt og altså ikke et tidsinterval. På den måde vil det være vanskeligt at fremsøge objekter, der har et
+kort virknigstidsinterval, da man jo vil skulle finde et tidspunkt, der skærer virkningstidsintervallet.
+
+Man kunne ændre det derved at man (i stil med dfos) siger, at hvis man er interesseret i en historisk situation frem for
+current situation, så angiver man et tids-INTERVAL. Det er ikke nok at gøre det for individuelle stationer, da det jo så
+som nævnt er svært overhovedet at identificere de stationer.
+
+.. Eller også så kunne man gøre det, som du jo sådan set allerede faciliterer, at man har mulighed for at fremsøge objekter,
+hvorom der gælder, at deres seneste virkningstidsinterval er AFSLUTTET i forhold til time of interest. Det vil nok være den
+bedste måde...
+
+Husk i øvrigt på, at du har valgt at lade det være en boolsk attribut, om en given person er død eller levende, dvs det
+at man er forbi sidste virkningstidsinterval skal her ikke tages som udtryk for at personen er død - det kan bare betyde,
+at man er i tvivl. F.eks. når du jo ikke kan huske, hvornår Mormor døde, så ville du stadig kunne gemme information om hende
+således at du vidste, at hun i hvert fald var levende i en periode og død i en senere periode.
+
