@@ -23,52 +23,64 @@
                     </Style>
                 </RowDefinition.Style>
             </RowDefinition>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="0"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=DisplayStatusFilterSection}" Value="true">
+                                <Setter Property="Height" Value="Auto"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="0"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=DisplayRetrospectiveFilterSection}" Value="true">
+                                <Setter Property="Height" Value="Auto"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <TextBlock Margin="3,10,3,1" Grid.Row="0" Grid.Column="0" Text="Name:"/>
-        <TextBox Margin="1,10,2,3" Grid.Row="0" Grid.Column="1" Text="{Binding NameFilter}"/>
-        <TextBlock Margin="3,0,3,1" Grid.Row="1" Grid.Column="0" Text="Category:"/>
-        <TextBox Margin="1,0,2,0" Grid.Row="1" Grid.Column="1" Text="{Binding CategoryFilter}"/>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Status" Margin="0, 3, 0, 0">
-            <!--<GroupBox.Visibility>
-                <Binding Path="DisplayStatusFilterSection"
-                         Converter="{StaticResource BooleanToVisibilityConverter}">
-                    <Binding.ConverterParameter>
-                        <system:Boolean>True</system:Boolean>
-                    </Binding.ConverterParameter>
-                </Binding>
-            </GroupBox.Visibility>-->
+            <TextBlock Margin="3,10,3,1" Grid.Row="0" Grid.Column="0" Text="Name:"/>
+            <TextBox Margin="1,10,2,3" Grid.Row="0" Grid.Column="1" Text="{Binding NameFilter}"/>
+            <TextBlock Margin="3,0,3,1" Grid.Row="1" Grid.Column="0" Text="Category:"/>
+            <TextBox Margin="1,0,2,0" Grid.Row="1" Grid.Column="1" Text="{Binding CategoryFilter}"/>
+        </Grid>
+
+        <GroupBox Grid.Row="1" Header="Status" Margin="0, 3, 0, 0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <CheckBox Grid.Row="0" Margin="2, 2, 2, 0" Content="Active" 
+                <CheckBox Grid.Row="0" Margin="2, 2, 2, 0" Content="Current" 
                           IsChecked="{Binding ShowActiveObservingFacilities}"
                           IsEnabled="{Binding ShowActiveObservingFacilitiesCheckboxEnabled}"/>
-                <CheckBox Grid.Row="1" Margin="2, 0, 2, 2" Content="Closed"
+                <CheckBox Grid.Row="1" Margin="2, 0, 2, 2" Content="Historical"
                           IsChecked="{Binding ShowClosedObservingFacilities}"
                           IsEnabled="{Binding ShowClosedObservingFacilitiesCheckboxEnabled}"/>
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="Retrospection" Margin="0">
-            <!--<GroupBox.Visibility>
-                <Binding Path="DisplayRetrospectionControlSection"
-                         Converter="{StaticResource BooleanToVisibilityConverter}">
-                    <Binding.ConverterParameter>
-                        <system:Boolean>True</system:Boolean>
-                    </Binding.ConverterParameter>
-                </Binding>
-            </GroupBox.Visibility>-->
+        <GroupBox Grid.Row="2" Header="Retrospection" Margin="0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition>

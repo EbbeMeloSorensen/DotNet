@@ -28,6 +28,14 @@
                 <Separator />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
             </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem IsCheckable="True" Header="Attribute Filter" 
+                          IsChecked="{Binding PersonListViewModel.FindPeopleViewModel.DisplayAttributeFilterSection}" />
+                <MenuItem IsCheckable="True" Header="Status Filter" 
+                          IsChecked="{Binding PersonListViewModel.FindPeopleViewModel.DisplayStatusFilterSection}" />
+                <MenuItem IsCheckable="True" Header="Retrospective Filter" 
+                          IsChecked="{Binding PersonListViewModel.FindPeopleViewModel.DisplayRetrospectiveFilterSection}" />
+            </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="Clear repository" 
                           Command="{Binding ClearRepositoryCommand}"

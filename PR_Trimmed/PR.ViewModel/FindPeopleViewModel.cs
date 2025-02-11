@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using Craft.Utils;
 using GalaSoft.MvvmLight;
 using PR.Domain.Entities.PR;
 
@@ -7,12 +8,43 @@ namespace PR.ViewModel
 {
     public class FindPeopleViewModel : ViewModelBase
     {
+        private bool _displayAttributeFilterSection;
+        private bool _displayStatusFilterSection;
+        private bool _displayRetrospectiveFilterSection;
         private string _nameFilter = "";
         private string _nameFilterInUppercase = "";
         private string _categoryFilter = "";
         private string _categoryFilterInUppercase = "";
 
-        private bool _displayAttributeFilterSection;
+        public bool DisplayAttributeFilterSection
+        {
+            get => _displayAttributeFilterSection;
+            set
+            {
+                _displayAttributeFilterSection = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DisplayStatusFilterSection
+        {
+            get => _displayStatusFilterSection;
+            set
+            {
+                _displayStatusFilterSection = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DisplayRetrospectiveFilterSection
+        {
+            get => _displayRetrospectiveFilterSection;
+            set
+            {
+                _displayRetrospectiveFilterSection = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public string NameFilter
         {
@@ -37,14 +69,11 @@ namespace PR.ViewModel
             }
         }
 
-        public bool DisplayAttributeFilterSection
+        public FindPeopleViewModel()
         {
-            get => _displayAttributeFilterSection;
-            set
-            {
-                _displayAttributeFilterSection = value;
-                RaisePropertyChanged();
-            }
+            DisplayAttributeFilterSection = true;
+            DisplayStatusFilterSection = true;
+            DisplayRetrospectiveFilterSection = true;
         }
 
         public Expression<Func<Person, bool>> FilterAsExpression()
