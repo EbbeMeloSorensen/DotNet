@@ -327,7 +327,13 @@ namespace PR.Persistence.Versioned.Repositories
             predicates.AddVersionPredicates(DatabaseTime);
             predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
-            var people = await UnitOfWork.People.Find(predicates);
+            var personRows = await UnitOfWork.People.Find(predicates);
+
+            var personGroups = personRows.GroupBy(_ => _.ID);
+
+            var people = personGroups
+                .Select(_ => _.OrderBy(_ => _.Start).Last())
+                .ToList();
 
             if (_returnClonesInsteadOfRepositoryObjects)
             {

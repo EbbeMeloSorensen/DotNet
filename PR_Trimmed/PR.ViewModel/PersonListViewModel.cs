@@ -185,19 +185,25 @@ namespace PR.ViewModel
             var personLimit = 10;
             var count = CountPeopleMatchingFilterFromRepository();
 
-            if (count == 0)
-            {
-                var dialogViewModel = new MessageBoxDialogViewModel("No person matches the search criteria", false);
-                _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
-            }
+            //if (count == 0)
+            //{
+            //    var dialogViewModel = new MessageBoxDialogViewModel("No person matches the search criteria", false);
+            //    _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
+            //}
 
-            if (count > personLimit)
+            //if (count > personLimit)
+            //{
+            //    var dialogViewModel = new MessageBoxDialogViewModel($"{count} people match the search criteria.\nDo you want to retrieve them all from the repository?", true);
+            //    if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
+            //    {
+            //        return;
+            //    }
+            //}
+
+            if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
             {
-                var dialogViewModel = new MessageBoxDialogViewModel($"{count} people match the search criteria.\nDo you want to retrieve them all from the repository?", true);
-                if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.Cancel)
-                {
-                    return;
-                }
+                unitOfWorkFactoryHistorical.IncludeCurrentObjects = FindPeopleViewModel.ShowCurrentPeople;
+                unitOfWorkFactoryHistorical.IncludeHistoricalObjects = FindPeopleViewModel.ShowHistoricalPeople;
             }
 
             await RetrievePeopleMatchingFilterFromRepository();

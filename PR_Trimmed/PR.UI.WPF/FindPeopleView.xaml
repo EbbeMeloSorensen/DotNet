@@ -72,11 +72,11 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <CheckBox Grid.Row="0" Margin="2, 2, 2, 0" Content="Current" 
-                          IsChecked="{Binding ShowActiveObservingFacilities}"
-                          IsEnabled="{Binding ShowActiveObservingFacilitiesCheckboxEnabled}"/>
+                          IsChecked="{Binding ShowCurrentPeople}"
+                          IsEnabled="{Binding ShowCurrentPeopleCheckboxEnabled}"/>
                 <CheckBox Grid.Row="1" Margin="2, 0, 2, 2" Content="Historical"
-                          IsChecked="{Binding ShowClosedObservingFacilities}"
-                          IsEnabled="{Binding ShowClosedObservingFacilitiesCheckboxEnabled}"/>
+                          IsChecked="{Binding ShowHistoricalPeople}"
+                          IsEnabled="{Binding ShowHistoricalPeopleCheckboxEnabled}"/>
             </Grid>
         </GroupBox>
 

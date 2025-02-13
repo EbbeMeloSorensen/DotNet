@@ -18,6 +18,11 @@ namespace PR.ViewModel
         private string _categoryFilter = "";
         private string _categoryFilterInUppercase = "";
 
+        private bool _showCurrentPeople;
+        private bool _showHistoricalPeople;
+        private bool _showCurrentPeopleCheckboxEnabled;
+        private bool _showHistoricalPeopleCheckboxEnabled;
+
         public bool DisplayAttributeFilterSection
         {
             get => _displayAttributeFilterSection;
@@ -99,10 +104,57 @@ namespace PR.ViewModel
             }
         }
 
+        public bool ShowCurrentPeople
+        {
+            get { return _showCurrentPeople; }
+            set
+            {
+                _showCurrentPeople = value;
+                RaisePropertyChanged();
+
+                ShowCurrentPeopleCheckboxEnabled = ShowHistoricalPeople;
+                ShowHistoricalPeopleCheckboxEnabled = ShowCurrentPeople;
+            }
+        }
+
+        public bool ShowHistoricalPeople
+        {
+            get { return _showHistoricalPeople; }
+            set
+            {
+                _showHistoricalPeople = value;
+                RaisePropertyChanged();
+
+                ShowCurrentPeopleCheckboxEnabled = ShowHistoricalPeople;
+                ShowHistoricalPeopleCheckboxEnabled = ShowCurrentPeople;
+            }
+        }
+
+        public bool ShowCurrentPeopleCheckboxEnabled
+        {
+            get { return _showCurrentPeopleCheckboxEnabled; }
+            set
+            {
+                _showCurrentPeopleCheckboxEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowHistoricalPeopleCheckboxEnabled
+        {
+            get { return _showHistoricalPeopleCheckboxEnabled; }
+            set
+            {
+                _showHistoricalPeopleCheckboxEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public FindPeopleViewModel()
         {
             DisplayAttributeFilterSection = true;
             DisplayStatusFilterSection = true;
+            ShowCurrentPeople = true;
             DisplayRetrospectiveFilterSection = true;
             DisplayHistoricalTimeControls = true;
             DisplayDatabaseTimeControls = true;
