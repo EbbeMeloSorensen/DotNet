@@ -84,28 +84,28 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition>
-                        <!--<RowDefinition.Style>
+                        <RowDefinition.Style>
                             <Style TargetType="{x:Type RowDefinition}">
                                 <Setter Property="Height" Value="0"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=DisplayHistoricalTimeField}" Value="true">
+                                    <DataTrigger Binding="{Binding Path=DisplayHistoricalTimeControls}" Value="true">
                                         <Setter Property="Height" Value="Auto"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </RowDefinition.Style>-->
+                        </RowDefinition.Style>
                     </RowDefinition>
                     <RowDefinition>
-                        <!--<RowDefinition.Style>
+                        <RowDefinition.Style>
                             <Style TargetType="{x:Type RowDefinition}">
                                 <Setter Property="Height" Value="0"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=DisplayDatabaseTimeField}" Value="true">
+                                    <DataTrigger Binding="{Binding Path=DisplayDatabaseTimeControls}" Value="true">
                                         <Setter Property="Height" Value="Auto"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </RowDefinition.Style>-->
+                        </RowDefinition.Style>
                     </RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>

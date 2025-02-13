@@ -11,6 +11,8 @@ namespace PR.ViewModel
         private bool _displayAttributeFilterSection;
         private bool _displayStatusFilterSection;
         private bool _displayRetrospectiveFilterSection;
+        private bool _displayHistoricalTimeControls;
+        private bool _displayDatabaseTimeControls;
         private string _nameFilter = "";
         private string _nameFilterInUppercase = "";
         private string _categoryFilter = "";
@@ -46,6 +48,34 @@ namespace PR.ViewModel
             }
         }
 
+        public bool DisplayHistoricalTimeControls
+        {
+            get => _displayHistoricalTimeControls;
+            set
+            {
+                _displayHistoricalTimeControls = value;
+                RaisePropertyChanged();
+
+                DisplayRetrospectiveFilterSection =
+                    DisplayHistoricalTimeControls ||
+                    DisplayDatabaseTimeControls;
+            }
+        }
+
+        public bool DisplayDatabaseTimeControls
+        {
+            get => _displayDatabaseTimeControls;
+            set
+            {
+                _displayDatabaseTimeControls = value;
+                RaisePropertyChanged();
+
+                DisplayRetrospectiveFilterSection =
+                    DisplayHistoricalTimeControls ||
+                    DisplayDatabaseTimeControls;
+            }
+        }
+
         public string NameFilter
         {
             get { return _nameFilter; }
@@ -74,6 +104,8 @@ namespace PR.ViewModel
             DisplayAttributeFilterSection = true;
             DisplayStatusFilterSection = true;
             DisplayRetrospectiveFilterSection = true;
+            DisplayHistoricalTimeControls = true;
+            DisplayDatabaseTimeControls = true;
         }
 
         public Expression<Func<Person, bool>> FilterAsExpression()

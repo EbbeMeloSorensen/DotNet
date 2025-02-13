@@ -33,8 +33,12 @@
                           IsChecked="{Binding PersonListViewModel.FindPeopleViewModel.DisplayAttributeFilterSection}" />
                 <MenuItem IsCheckable="True" Header="Status Filter" 
                           IsChecked="{Binding PersonListViewModel.FindPeopleViewModel.DisplayStatusFilterSection}" />
-                <MenuItem IsCheckable="True" Header="Retrospective Filter" 
-                          IsChecked="{Binding PersonListViewModel.FindPeopleViewModel.DisplayRetrospectiveFilterSection}" />
+                <Separator/>
+                <MenuItem IsCheckable="True" Header="Historical Time" 
+                          IsChecked="{Binding PersonListViewModel.FindPeopleViewModel.DisplayHistoricalTimeControls}"/>
+                <MenuItem IsCheckable="True" Header="Database Time"
+                          IsChecked="{Binding PersonListViewModel.FindPeopleViewModel.DisplayDatabaseTimeControls}"/>
+
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="Clear repository" 

@@ -25,10 +25,14 @@ Done:
     hun har blot �ndret navn til Rey Skywalker.. Hvorfor sker det?
     -> Du siger, at du KUN vil have historiske objekter med, og det g�r s�, at du som de "historiske" predicates anf�rer,
        at du kun vil have varianter (bj�lker), hvor End ligger f�r historisk tid. Det g�lder for Rey, men jo alts� ikke for Rey Skywalker.
-
-Todo:
 * Lav et view, hvor man kan se de varianter, der er for en given person
 * Man skal kunne slette et antal varianter
+
+Todo:
+* Retrospektivt filter
+  - Hvis man slår slukker den sidste, skal hele sectionen skjules
+  - Hvis begge er slukkede, og brugeren vælger at tænde for gruppen, så skal den tænde for historisk tid
+  .... Det er ikke særlig intuitivt hvis den overrider.. Egentlig bør der ikke være en master switch, som brugeren kan tilgå
 * Man skal kunne opdatere en (historisk) variant
 * Man skal kunne lave en ny (historisk) variant
 
