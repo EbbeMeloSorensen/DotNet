@@ -238,7 +238,8 @@ namespace PR.ViewModel
         private bool CanDeleteSelectedPeople()
         {
             return PersonListViewModel.SelectedPeople.Objects != null &&
-                   PersonListViewModel.SelectedPeople.Objects.Any();
+                   PersonListViewModel.SelectedPeople.Objects.Any() &&
+                   PersonListViewModel.SelectedPeople.Objects.All(_ => _.End.Year == 9999);
         }
 
         private async Task ClearRepository(
@@ -253,6 +254,7 @@ namespace PR.ViewModel
 
             using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
+                await unitOfWork.PersonComments.Clear();
                 await unitOfWork.People.Clear();
                 unitOfWork.Complete();
             }

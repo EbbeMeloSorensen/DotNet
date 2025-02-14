@@ -195,9 +195,9 @@ namespace PR.Persistence.Versioned.Repositories
             objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
         }
 
-        public Task Clear()
+        public async Task Clear()
         {
-            throw new NotImplementedException();
+            await UnitOfWork.PersonComments.Clear();
         }
 
         public void Load(

@@ -29,9 +29,21 @@ Done:
 * Man skal kunne slette et antal varianter
 * Retrospektivt filter - som bruger skal man ikke direkte kunne afgøre om selve sektionen er synlig - kun henholdsvis historisk tid og databasetid
 * Man skal kunne lave en ny (historisk) variant
+* Delete-knappen skal kun være mulig, hvis der for alle personer i ens selection gælder, at de har et åbent virkningstidsinterval.
 
 Todo:
-* Der er noget rod med din Delete use case. Det bare at slette en person, havde du lavet ved at man bare terminerede sidste virkningstidsinterval
+* Du skal have en bedre ViewModel for de historiske (archived/inaktive) entiteter i personlisten, også så det er mere intuitivt, hvorfor man ikke
+  altid kan slette dem
+* Hvis der er både aktuelle og historiske personer i ens selection, så bør man ikke hverken kunne delete eller erase 
+* Hvis der kun er historiske personer i ens selection, så bør man kunne erase dem, dvs udføre hard delete
+* Knapperne New og Delete for personer bør nok være under personlisten af hensyn til konsistens
+* Der er noget rod med din Delete use case. Det bare at slette en person, havde du lavet ved at man bare terminerede sidste virkningstidsinterval.
+  Det er det, man databaseteknisk kalder en "soft" delete. Alternativt kan man udføre en "hard" delete, hvor man faktisk superseder tingene.
+  Systemet bør facilitere begge ting.
+  Use Case wise så kan man vel sige, at det kun er meningsfyldt at lave en soft delete på en variant med et åbent virkningstidsinterval.
+  Så det vil vel give mening at når man selecter sådanne varianter i brugergrænsefladen og trykker på delete, så er det faktisk en soft delete,
+  der udføres. Den må til gengæld ikke udføres, hvis ens selection af personer omfatter historiske personer. I så fald skal der nok være en
+  erase-knap
 * Du skal have Auto Update på banen igen
   - det indebærer nok, at du skal have de der observable properties på banen igen, gerne list smart - sidst landede du jo på at have 2, dvs en,
     du bindede til fra kontrollerne og en anden, som så var observable. Det kunne være rart, hvis du kunne binde direkte til den der observable...

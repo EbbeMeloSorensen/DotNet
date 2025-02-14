@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
