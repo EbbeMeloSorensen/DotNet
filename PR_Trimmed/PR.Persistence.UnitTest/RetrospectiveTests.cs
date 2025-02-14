@@ -126,6 +126,22 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
+        public async Task FindHistoricalPeopleExclusively()
+        {
+            // Arrange
+            _unitOfWorkFactory.IncludeHistoricalObjects = true;
+            _unitOfWorkFactory.IncludeCurrentObjects = false;
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var people = await unitOfWork.People.Find(_ => _.FirstName.Contains("e"));
+
+            // Assert
+            people.Count().Should().Be(1);
+            people.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
+        }
+
+        [Fact]
         public async Task GetAllStatesOfAPerson()
         {
             // Arrange
