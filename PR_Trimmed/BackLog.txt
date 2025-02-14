@@ -27,14 +27,21 @@ Done:
        at du kun vil have varianter (bj�lker), hvor End ligger f�r historisk tid. Det g�lder for Rey, men jo alts� ikke for Rey Skywalker.
 * Lav et view, hvor man kan se de varianter, der er for en given person
 * Man skal kunne slette et antal varianter
+* Retrospektivt filter - som bruger skal man ikke direkte kunne afgøre om selve sektionen er synlig - kun henholdsvis historisk tid og databasetid
+* Man skal kunne lave en ny (historisk) variant
 
 Todo:
-* Retrospektivt filter
-  - Hvis man slår slukker den sidste, skal hele sectionen skjules
-  - Hvis begge er slukkede, og brugeren vælger at tænde for gruppen, så skal den tænde for historisk tid
-  .... Det er ikke særlig intuitivt hvis den overrider.. Egentlig bør der ikke være en master switch, som brugeren kan tilgå
+* Der er noget rod med din Delete use case. Det bare at slette en person, havde du lavet ved at man bare terminerede sidste virkningstidsinterval
+* Du skal have Auto Update på banen igen
+  - det indebærer nok, at du skal have de der observable properties på banen igen, gerne list smart - sidst landede du jo på at have 2, dvs en,
+    du bindede til fra kontrollerne og en anden, som så var observable. Det kunne være rart, hvis du kunne binde direkte til den der observable...
+* Du skal kune sætte og bruge historic time of interest
+* Du skal kune sætte og bruge database time of interest
+* Du skal have de der time controls på banen igen
+* Du skal nice time controls op, så datoen står under det første tick
+* Når man laver en ny historisk variant, skal man få en fejl fra personrepositoryet hvis den overlapper med en eksisterende
+  - der skal også laves input validering på brugergrænseflade niveau, så man undgår at gå hele vejen til databasen
 * Man skal kunne opdatere en (historisk) variant
-* Man skal kunne lave en ny (historisk) variant
 
 
 Skrammel med skrammel on top:

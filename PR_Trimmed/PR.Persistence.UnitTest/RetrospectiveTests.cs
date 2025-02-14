@@ -110,7 +110,7 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async Task GetEarlierStateOfEntirePersonCollection()
+        public async Task GetHistoricStateOfEntirePersonCollection()
         {
             // Arrange
             _unitOfWorkFactory.HistoricalTime = new DateTime(2005, 1, 1, 1, 0, 0, DateTimeKind.Utc);
@@ -123,6 +123,25 @@ namespace PR.Persistence.UnitTest
             people.Count().Should().Be(2);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
+        }
+
+        [Fact]
+        public async Task FindCurrentPeopleExclusively()
+        {
+            // Arrange
+            _unitOfWorkFactory.IncludeHistoricalObjects = false;
+            _unitOfWorkFactory.IncludeCurrentObjects = true;
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var people = await unitOfWork.People.Find(_ => _.FirstName.Contains("e"));
+
+            // Assert
+            people.Count().Should().Be(4);
+            people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
+            people.Count(p => p.FirstName == "Poe Dameron").Should().Be(1);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
         }
 
         [Fact]
@@ -139,6 +158,42 @@ namespace PR.Persistence.UnitTest
             // Assert
             people.Count().Should().Be(1);
             people.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
+        }
+
+        [Fact]
+        public async Task FindCurrentAndHistoricalPeople()
+        {
+            // Arrange
+            _unitOfWorkFactory.IncludeHistoricalObjects = true;
+            _unitOfWorkFactory.IncludeCurrentObjects = true;
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var people = await unitOfWork.People.Find(_ => _.FirstName.Contains("e"));
+
+            // Assert
+            people.Count().Should().Be(5);
+            people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
+            people.Count(p => p.FirstName == "Poe Dameron").Should().Be(1);
+            people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+            people.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
+        }
+
+        [Fact]
+        public async Task FindHistoricalPeopleForAHistoricState()
+        {
+            // Arrange
+            _unitOfWorkFactory.IncludeHistoricalObjects = true;
+            _unitOfWorkFactory.IncludeCurrentObjects = false;
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2005, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var people = await unitOfWork.People.Find(_ => _.FirstName.Contains("e"));
+
+            // Assert
+            people.Count().Should().Be(0);
         }
 
         [Fact]
