@@ -220,24 +220,28 @@ namespace PR.ViewModel
 
         private async Task SoftDeleteSelectedPeople()
         {
-            // Denne wrapping skal helst undgås. I øvrigt er det problematisk mht at opdatere brugergrænsefladen
-            //await Task.Run(async () =>
-            //{
-                using var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork();
-                var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ID).ToList();
+            using var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork();
+            var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ID).ToList();
 
-                var peopleForDeletion = (await unitOfWork.People
-                        .FindIncludingComments(pa => ids.Contains(pa.ID)))
-                    .ToList();
+            var peopleForDeletion = (await unitOfWork.People
+                    .FindIncludingComments(pa => ids.Contains(pa.ID)))
+                .ToList();
 
-                var commentsForDeletion = peopleForDeletion.SelectMany(_ => _.Comments);
+            var commentsForDeletion = peopleForDeletion
+                .SelectMany(_ => _.Comments)
+                .ToList();
 
+            if (commentsForDeletion.Any())
+            {
                 await unitOfWork.PersonComments.RemoveRange(commentsForDeletion);
-                await unitOfWork.People.RemoveRange(peopleForDeletion);
                 unitOfWork.Complete();
+            }
 
-                PersonListViewModel.RemovePeople(peopleForDeletion);
-            //});
+            using var unitOfWork2 = _application.UnitOfWorkFactory.GenerateUnitOfWork();
+            await unitOfWork2.People.RemoveRange(peopleForDeletion);
+            unitOfWork2.Complete();
+
+            PersonListViewModel.RemovePeople(peopleForDeletion);
         }
 
         private bool CanSoftDeleteSelectedPeople()

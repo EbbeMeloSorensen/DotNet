@@ -212,6 +212,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
                 Created = commentOnReyIsEnteredIncorrectly,
                 Superseded = commentOnReyIsCorrected,
+                Start = reyIsIntroduced,
+                End = maxDate,
                 Text = "She starts out as a ravager"
             };
 
@@ -223,6 +225,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
                 Created = commentOnReyIsCorrected,
                 Superseded = maxDate,
+                Start = reyIsIntroduced,
+                End = maxDate,
                 Text = "She starts out as a scavenger"
             };
 
@@ -234,6 +238,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 PersonArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
                 Created = timeOfPopulation,
                 Superseded = maxDate,
+                Start = chewbaccaIsIntroduced,
+                End = maxDate,
                 Text = "He likes his crossbow"
             };
 
@@ -245,6 +251,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 PersonArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
                 Created = timeOfPopulation,
                 Superseded = maxDate,
+                Start = chewbaccaIsIntroduced,
+                End = maxDate,
                 Text = "He is a furry fellow"
             };
 

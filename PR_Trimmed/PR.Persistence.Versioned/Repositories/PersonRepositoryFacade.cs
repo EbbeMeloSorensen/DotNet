@@ -344,19 +344,18 @@ namespace PR.Persistence.Versioned.Repositories
             };
 
             personCommentPredicates.AddVersionPredicates(DatabaseTime);
+            personCommentPredicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             var personCommentRows = (await UnitOfWork.PersonComments.Find(personCommentPredicates)).ToList();
-
             var personCommentGroups = personCommentRows.GroupBy(_ => _.PersonID);
 
             people.ToList().ForEach(p =>
             {
                 var personCommentGroup = personCommentGroups.SingleOrDefault(_ => _.Key == p.ID);
 
-                if (personCommentGroup != null)
-                {
-                    p.Comments = personCommentGroup.ToList();
-                }
+                p.Comments = personCommentGroup != null
+                    ? personCommentGroup.ToList()
+                    : new List<PersonComment>();
             });
 
             return people;
@@ -469,7 +468,7 @@ namespace PR.Persistence.Versioned.Repositories
             await UnitOfWork.People.Add(person);
         }
 
-        // Dette er en PROSPEKTIV ændring
+        // This is a socalled SOFT DELETE, where the last valid time interval is closed. A soft delete is actually a retroactive update
         public async Task Remove(
             Person person)
         {
@@ -494,15 +493,14 @@ namespace PR.Persistence.Versioned.Repositories
             await UnitOfWork.People.Add(personCopy);
         }
 
-        // Dette er en PROSPEKTIV ændring og i øvrigt en soft delete
+        // This is a socalled SOFT DELETE, where the last valid time interval is closed. A soft delete is actually a retroactive update
         public async Task RemoveRange(
             IEnumerable<Person> people)
         {
             var ids = people.Select(p => p.ID).ToList();
             var peopleFromRepo = await FindIncludingComments(_ => ids.Contains(_.ID));
 
-
-            if (peopleFromRepo.Any(_ => _.Comments != null))
+            if (peopleFromRepo.Any(_ => _.Comments != null && _.Comments.Any()))
             {
                 throw new InvalidOperationException("Cant delete people with child rows (comments)");
             }

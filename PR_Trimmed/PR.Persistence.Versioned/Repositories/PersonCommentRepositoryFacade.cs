@@ -24,6 +24,9 @@ namespace PR.Persistence.Versioned.Repositories
 
         private IUnitOfWork UnitOfWork => _unitOfWorkFacade.UnitOfWork;
         private DateTime? DatabaseTime => _unitOfWorkFacade.DatabaseTime;
+        private DateTime? HistoricalTime => _unitOfWorkFacade.HistoricalTime;
+        private bool IncludeCurrentObjects => _unitOfWorkFacade.IncludeCurrentObjects;
+        private bool IncludeHistoricalObjects => _unitOfWorkFacade.IncludeHistoricalObjects;
         private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
 
         public ILogger Logger { get; }
@@ -62,6 +65,7 @@ namespace PR.Persistence.Versioned.Repositories
             };
 
             predicates.AddVersionPredicates(DatabaseTime);
+            predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             var personComment = (await UnitOfWork.PersonComments.Find(predicates)).SingleOrDefault();
 
@@ -83,6 +87,7 @@ namespace PR.Persistence.Versioned.Repositories
             var predicates = new List<Expression<Func<PersonComment, bool>>>();
 
             predicates.AddVersionPredicates(DatabaseTime);
+            predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             var personCommentRows = (await UnitOfWork.PersonComments.Find(predicates)).ToList();
 
@@ -106,6 +111,7 @@ namespace PR.Persistence.Versioned.Repositories
             IList<Expression<Func<PersonComment, bool>>> predicates)
         {
             predicates.AddVersionPredicates(DatabaseTime);
+            predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             var personComments = await UnitOfWork.PersonComments.Find(predicates);
 
@@ -192,6 +198,18 @@ namespace PR.Persistence.Versioned.Repositories
             _returnClonesInsteadOfRepositoryObjects = true;
 
             objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
+
+            var newPersonCommentRows = objectsFromRepository.Select(_ => _.Clone()).ToList();
+            
+            newPersonCommentRows.ForEach(_ =>
+            {
+                _.ArchiveID = new Guid();
+                _.Created = CurrentTime;
+                _.Superseded = _maxDate;
+                _.End = CurrentTime;
+            });
+
+            await UnitOfWork.PersonComments.AddRange(newPersonCommentRows);
         }
 
         public async Task Clear()

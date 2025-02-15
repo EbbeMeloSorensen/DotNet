@@ -21,6 +21,8 @@ namespace PR.Domain
             person.PersonArchiveID = other.PersonArchiveID;
             person.Created = other.Created;
             person.Superseded = other.Superseded;
+            person.Start = other.Start;
+            person.End = other.End;
             person.ID = other.ID;
             person.Text = other.Text;
         }
