@@ -495,12 +495,13 @@ namespace PR.Persistence.Versioned.Repositories
             await UnitOfWork.People.Add(personCopy);
         }
 
-        // Dette er en PROSPEKTIV ændring
+        // Dette er en PROSPEKTIV ændring og i øvrigt en soft delete
         public async Task RemoveRange(
             IEnumerable<Person> people)
         {
             var ids = people.Select(p => p.ID).ToList();
             var peopleFromRepo = await FindIncludingComments(_ => ids.Contains(_.ID));
+
 
             if (peopleFromRepo.Any(_ => _.Comments != null))
             {

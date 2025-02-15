@@ -30,12 +30,12 @@ Done:
 * Retrospektivt filter - som bruger skal man ikke direkte kunne afgøre om selve sektionen er synlig - kun henholdsvis historisk tid og databasetid
 * Man skal kunne lave en ny (historisk) variant
 * Delete-knappen skal kun være mulig, hvis der for alle personer i ens selection gælder, at de har et åbent virkningstidsinterval.
-
-Todo:
 * Du skal have en bedre ViewModel for de historiske (archived/inaktive) entiteter i personlisten, også så det er mere intuitivt, hvorfor man ikke
   altid kan slette dem
-* Hvis der er både aktuelle og historiske personer i ens selection, så bør man ikke hverken kunne delete eller erase 
+
+Todo:
 * Hvis der kun er historiske personer i ens selection, så bør man kunne erase dem, dvs udføre hard delete
+* Hvis der er både aktuelle og historiske personer i ens selection, så bør man ikke hverken kunne delete eller erase 
 * Knapperne New og Delete for personer bør nok være under personlisten af hensyn til konsistens
 * Der er noget rod med din Delete use case. Det bare at slette en person, havde du lavet ved at man bare terminerede sidste virkningstidsinterval.
   Det er det, man databaseteknisk kalder en "soft" delete. Alternativt kan man udføre en "hard" delete, hvor man faktisk superseder tingene.

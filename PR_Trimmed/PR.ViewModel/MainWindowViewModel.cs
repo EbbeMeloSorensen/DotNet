@@ -53,17 +53,19 @@ namespace PR.ViewModel
 
         private AsyncCommand<object> _createPersonCommand;
         private RelayCommand<object> _showOptionsDialogCommand;
-        private AsyncCommand _deleteSelectedPeopleCommand;
+        private AsyncCommand _softDeleteSelectedPeopleCommand;
+        private AsyncCommand _hardDeleteSelectedPeopleCommand;
         private AsyncCommand<object> _clearRepositoryCommand;
         private AsyncCommand _exportPeopleCommand;
         private RelayCommand _exportSelectionToGraphmlCommand;
         private AsyncCommand _importPeopleCommand;
         private RelayCommand _exitCommand;
 
-        public AsyncCommand DeleteSelectedPeopleCommand
+        public AsyncCommand SoftDeleteSelectedPeopleCommand
         {
-            get { return _deleteSelectedPeopleCommand ?? (_deleteSelectedPeopleCommand = new AsyncCommand(DeleteSelectedPeople, CanDeleteSelectedPeople)); }
+            get { return _softDeleteSelectedPeopleCommand ?? (_softDeleteSelectedPeopleCommand = new AsyncCommand(SoftDeleteSelectedPeople, CanSoftDeleteSelectedPeople)); }
         }
+
 
         public AsyncCommand<object> ClearRepositoryCommand
         {
@@ -170,7 +172,7 @@ namespace PR.ViewModel
             object sender, 
             PropertyChangedEventArgs e)
         {
-            DeleteSelectedPeopleCommand.RaiseCanExecuteChanged();
+            SoftDeleteSelectedPeopleCommand.RaiseCanExecuteChanged();
             ExportSelectionToGraphmlCommand.RaiseCanExecuteChanged();
         }
 
@@ -216,7 +218,7 @@ namespace PR.ViewModel
             return true;
         }
 
-        private async Task DeleteSelectedPeople()
+        private async Task SoftDeleteSelectedPeople()
         {
             // Denne wrapping skal helst undgås. I øvrigt er det problematisk mht at opdatere brugergrænsefladen
             //await Task.Run(async () =>
@@ -225,9 +227,12 @@ namespace PR.ViewModel
                 var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ID).ToList();
 
                 var peopleForDeletion = (await unitOfWork.People
-                        .Find(pa => ids.Contains(pa.ID)))
+                        .FindIncludingComments(pa => ids.Contains(pa.ID)))
                     .ToList();
 
+                var commentsForDeletion = peopleForDeletion.SelectMany(_ => _.Comments);
+
+                await unitOfWork.PersonComments.RemoveRange(commentsForDeletion);
                 await unitOfWork.People.RemoveRange(peopleForDeletion);
                 unitOfWork.Complete();
 
@@ -235,7 +240,7 @@ namespace PR.ViewModel
             //});
         }
 
-        private bool CanDeleteSelectedPeople()
+        private bool CanSoftDeleteSelectedPeople()
         {
             return PersonListViewModel.SelectedPeople.Objects != null &&
                    PersonListViewModel.SelectedPeople.Objects.Any() &&

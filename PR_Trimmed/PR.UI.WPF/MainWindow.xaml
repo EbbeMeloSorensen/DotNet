@@ -62,7 +62,7 @@
             <StackPanel Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <Button Content="New.." Command="{Binding CreatePersonCommand}" 
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-                <Button Content="Delete" Command="{Binding DeleteSelectedPeopleCommand}"/>
+                <Button Content="Delete" Command="{Binding SoftDeleteSelectedPeopleCommand}"/>
             </StackPanel>
 
             <local:PersonListView Grid.Row="1" Grid.Column="0" DataContext="{Binding PersonListViewModel}"/>
