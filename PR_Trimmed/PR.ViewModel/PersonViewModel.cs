@@ -6,6 +6,7 @@ namespace PR.ViewModel;
 public class PersonViewModel : ViewModelBase
 {
     private Person _person;
+    private bool _isHistorical;
 
     public Person Person
     {
@@ -13,6 +14,16 @@ public class PersonViewModel : ViewModelBase
         set
         {
             _person = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool IsHistorical
+    {
+        get { return _isHistorical; }
+        set
+        {
+            _isHistorical = value;
             RaisePropertyChanged();
         }
     }

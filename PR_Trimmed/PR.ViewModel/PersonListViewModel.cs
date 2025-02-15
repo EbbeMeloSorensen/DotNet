@@ -39,7 +39,14 @@ namespace PR.ViewModel
                 _sorting = value;
                 RaisePropertyChanged();
                 UpdateSorting();
-                UpdatePersonViewModels();
+
+                var historicalTimeOfInterest =
+                    (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical &&
+                     unitOfWorkFactoryHistorical.HistoricalTime.HasValue)
+                        ? unitOfWorkFactoryHistorical.HistoricalTime.Value
+                        : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+                UpdatePersonViewModels(historicalTimeOfInterest);
             }
         }
 
@@ -77,7 +84,14 @@ namespace PR.ViewModel
             Person person)
         {
             _people.Add(person);
-            UpdatePersonViewModels();
+
+            var historicalTimeOfInterest =
+                (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical &&
+                 unitOfWorkFactoryHistorical.HistoricalTime.HasValue)
+                    ? unitOfWorkFactoryHistorical.HistoricalTime.Value
+                    : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+            UpdatePersonViewModels(historicalTimeOfInterest);
 
             SelectedPersonViewModels.Clear();
 
@@ -103,7 +117,13 @@ namespace PR.ViewModel
                 }
             }
 
-            UpdatePersonViewModels();
+            var historicalTimeOfInterest =
+                (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical &&
+                 unitOfWorkFactoryHistorical.HistoricalTime.HasValue)
+                    ? unitOfWorkFactoryHistorical.HistoricalTime.Value
+                    : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+            UpdatePersonViewModels(historicalTimeOfInterest);
 
             SelectedPersonViewModels.Clear();
 
@@ -128,7 +148,14 @@ namespace PR.ViewModel
             try
             {
                 SelectedPersonViewModels.Clear();
-                UpdatePersonViewModels();
+
+                var historicalTimeOfInterest =
+                    (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical &&
+                     unitOfWorkFactoryHistorical.HistoricalTime.HasValue)
+                        ? unitOfWorkFactoryHistorical.HistoricalTime.Value
+                        : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+                UpdatePersonViewModels(historicalTimeOfInterest);
             }
             catch (Exception e)
             {
@@ -167,7 +194,8 @@ namespace PR.ViewModel
             }
         }
 
-        private void UpdatePersonViewModels()
+        private void UpdatePersonViewModels(
+            DateTime historicalTimeOfInterest)
         {
             UpdateSorting();
 
@@ -175,7 +203,11 @@ namespace PR.ViewModel
 
             _people.ToList().ForEach(person =>
             {
-                PersonViewModels.Add(new PersonViewModel { Person = person });
+                PersonViewModels.Add(new PersonViewModel
+                {
+                    Person = person,
+                    IsHistorical = person.End < historicalTimeOfInterest
+                });
             });
         }
 
@@ -206,7 +238,14 @@ namespace PR.ViewModel
             }
 
             await RetrievePeopleMatchingFilterFromRepository();
-            UpdatePersonViewModels();
+
+            var historicalTimeOfInterest =
+                (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical2 &&
+                 unitOfWorkFactoryHistorical2.HistoricalTime.HasValue)
+                    ? unitOfWorkFactoryHistorical2.HistoricalTime.Value
+                    : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+            UpdatePersonViewModels(historicalTimeOfInterest);
         }
     }
 }

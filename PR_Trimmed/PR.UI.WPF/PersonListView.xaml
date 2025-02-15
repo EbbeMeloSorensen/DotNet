@@ -43,8 +43,26 @@
         </GroupBox>
 
         <ListBox Grid.Row="3" Margin="1, 5, 1, 1" x:Name="PeopleListBox" SelectionMode="Extended"
-                 DisplayMemberPath="DisplayText"
-                 ItemsSource="{Binding PersonViewModels}">
+                 ItemsSource="{Binding PersonViewModels}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Gray" >
+                        <Grid>
+                            <TextBlock Text="{Binding DisplayText}"
+                                       FontFamily="Segoe UI"
+                                       FontSize="12.3"
+                                       TextAlignment="Left"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Center"/>
+                            <Canvas>
+                                <Rectangle Canvas.Right="2" Canvas.Top="2" Width="11" Height="11"
+                                           Stroke="Black" StrokeThickness="1" Fill="IndianRed"
+                                           Visibility="{Binding IsHistorical, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            </Canvas>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
             <b:Interaction.Behaviors>
                 <utils:MultiSelectionBehavior SelectedItems="{Binding SelectedPersonViewModels}"/>
             </b:Interaction.Behaviors>
