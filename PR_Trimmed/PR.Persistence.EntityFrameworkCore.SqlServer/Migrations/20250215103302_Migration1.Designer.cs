@@ -2,17 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using PR.Persistence.EntityFrameworkCore.PostgreSQL;
+using PR.Persistence.EntityFrameworkCore.SqlServer;
 
 #nullable disable
 
-namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
+namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
 {
     [DbContext(typeof(PRDbContext))]
-    [Migration("20250121160056_Migration1")]
+    [Migration("20250215103302_Migration1")]
     partial class Migration1
     {
         /// <inheritdoc />
@@ -21,15 +21,15 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.20")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("PR.Domain.Entities.C2IEDM.Geometry.CoordinateSystem", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
@@ -41,16 +41,16 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
             modelBuilder.Entity("PR.Domain.Entities.C2IEDM.Geometry.LinePoint", b =>
                 {
                     b.Property<Guid>("LineID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Index")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("PointId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SequenceQuantity")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("LineID", "Index");
 
@@ -63,7 +63,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -76,10 +76,10 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Dimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -90,14 +90,14 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AlternativeIdentificationText")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -110,59 +110,59 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("ArchiveID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Birthday")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Category")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool?>("Dead")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("End")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double?>("Latitude")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<double?>("Longitude")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<string>("Nickname")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Start")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Superseded")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Surname")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ZipCode")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ArchiveID");
 
@@ -173,38 +173,38 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ArchiveID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("End")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("ObjectPersonArchiveID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ObjectPersonID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Start")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("SubjectPersonArchiveID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SubjectPersonID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Superseded")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -219,26 +219,32 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("ArchiveID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("ID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PersonArchiveID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PersonID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Superseded")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ArchiveID");
 
@@ -251,11 +257,11 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -267,13 +273,13 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.CoordinateSystem");
 
                     b.Property<Guid>("OriginPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("XVectorPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("YVectorPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("OriginPointID");
 
@@ -289,10 +295,10 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Location");
 
                     b.Property<Guid?>("LowerVerticalDistanceID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("UpperVerticalDistanceID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("LowerVerticalDistanceID");
 
@@ -327,7 +333,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.ObjectItems.ObjectItem");
 
                     b.Property<string>("NickName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Organisations");
                 });
@@ -337,10 +343,10 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.GeometricVolume");
 
                     b.Property<Guid>("DefiningSurfaceID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("VertexPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("DefiningSurfaceID");
 
@@ -354,10 +360,10 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.GeometricVolume");
 
                     b.Property<Guid>("CentrePointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("RadiusDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.HasIndex("CentrePointID");
 
@@ -369,7 +375,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.GeometricVolume");
 
                     b.Property<Guid>("DefiningSurfaceID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("DefiningSurfaceID");
 
@@ -381,13 +387,13 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Point");
 
                     b.Property<double>("LatitudeCoordinate")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<double>("LongitudeCoordinate")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<Guid?>("VerticalDistanceId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("VerticalDistanceId");
 
@@ -399,16 +405,16 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Point");
 
                     b.Property<Guid>("CoordinateSystemID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("XCoordinateDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<double>("YCoordinateDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<double>("ZCoordinateDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.HasIndex("CoordinateSystemID");
 
@@ -420,10 +426,10 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Surface");
 
                     b.Property<Guid>("CenterLineID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("WidthDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.HasIndex("CenterLineID");
 
@@ -435,13 +441,13 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Surface");
 
                     b.Property<Guid>("CentrePointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FirstConjugateDiameterPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SecondConjugateDiameterPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("CentrePointID");
 
@@ -457,19 +463,19 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Surface");
 
                     b.Property<double>("MaximumRangeDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<double>("MinimumRangeDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<double>("OrientationAngle")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<double>("SectorSizeAngle")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<Guid>("VertexPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("VertexPointID");
 
@@ -481,16 +487,16 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Surface");
 
                     b.Property<Guid>("FirstPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("OrbitAreaAlignmentCode")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("SecondPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("WidthDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.HasIndex("FirstPointID");
 
@@ -504,19 +510,19 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Surface");
 
                     b.Property<double>("ArcRadiusDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<Guid>("BearingOriginPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("BeginBearingAngle")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<Guid>("DefiningLineID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("EndBearingAngle")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.HasIndex("BearingOriginPointID");
 
@@ -530,7 +536,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Surface");
 
                     b.Property<Guid>("BoundingLineID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("BoundingLineID");
 
@@ -542,16 +548,16 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.HasBaseType("PR.Domain.Entities.C2IEDM.Geometry.Surface");
 
                     b.Property<Guid>("BeginPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("EndPointID")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("LeftWidthDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<double>("RightWidthDimension")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.HasIndex("BeginPointID");
 
@@ -566,7 +572,7 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
 
                     b.Property<string>("FormalAbbreviatedName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Units");
                 });

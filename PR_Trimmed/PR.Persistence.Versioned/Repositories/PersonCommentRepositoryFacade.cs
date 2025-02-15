@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Craft.Logging;
 using PR.Domain;
-using PR.Domain.Entities.C2IEDM.ObjectItems;
 using PR.Domain.Entities.PR;
 using PR.Persistence.Repositories.PR;
 

@@ -216,6 +216,9 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("End")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("ID")
                         .HasColumnType("TEXT");
 
@@ -223,6 +226,9 @@ namespace PR.Persistence.EntityFrameworkCore.Sqlite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("PersonID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Start")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Superseded")

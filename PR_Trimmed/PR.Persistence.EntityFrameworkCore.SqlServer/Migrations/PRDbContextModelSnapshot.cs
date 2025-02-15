@@ -221,6 +221,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("ID")
                         .HasColumnType("uniqueidentifier");
 
@@ -229,6 +232,9 @@ namespace PR.Persistence.EntityFrameworkCore.SqlServer.Migrations
 
                     b.Property<Guid>("PersonID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Superseded")
                         .HasColumnType("datetime2");

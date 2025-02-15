@@ -207,6 +207,8 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     ArchiveID = table.Column<Guid>(type: "uuid", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Superseded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    End = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
                     PersonID = table.Column<Guid>(type: "uuid", nullable: false),
                     PersonArchiveID = table.Column<Guid>(type: "uuid", nullable: false),

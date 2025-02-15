@@ -221,6 +221,9 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime>("End")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("ID")
                         .HasColumnType("uuid");
 
@@ -229,6 +232,9 @@ namespace PR.Persistence.EntityFrameworkCore.PostgreSQL.Migrations
 
                     b.Property<Guid>("PersonID")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("Superseded")
                         .HasColumnType("timestamp with time zone");

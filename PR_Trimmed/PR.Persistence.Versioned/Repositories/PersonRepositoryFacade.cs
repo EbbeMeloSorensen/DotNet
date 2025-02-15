@@ -7,7 +7,6 @@ using Craft.Logging;
 using PR.Domain;
 using PR.Domain.Entities.PR;
 using PR.Persistence.Repositories.PR;
-using Person = PR.Domain.Entities.PR.Person;
 
 namespace PR.Persistence.Versioned.Repositories
 {

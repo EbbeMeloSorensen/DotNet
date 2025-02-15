@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PR.Domain.Entities.PR
 {
-    public class Person : IObjectWithValidTime, IVersionedObject
+    public class Person : IObjectWithValidTime
     {
         public Guid ArchiveID { get; set; }
         public DateTime Created { get; set; }
