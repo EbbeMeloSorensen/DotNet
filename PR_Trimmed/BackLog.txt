@@ -35,6 +35,7 @@ Done:
 
 Todo:
 * Hvis der kun er historiske personer i ens selection, så bør man kunne erase dem, dvs udføre hard delete
+  - Erase person skal indebære, at alle varianter af pågældende person slettes
 * Hvis der er både aktuelle og historiske personer i ens selection, så bør man ikke hverken kunne delete eller erase 
 * Knapperne New og Delete for personer bør nok være under personlisten af hensyn til konsistens
 * Der er noget rod med din Delete use case. Det bare at slette en person, havde du lavet ved at man bare terminerede sidste virkningstidsinterval.
