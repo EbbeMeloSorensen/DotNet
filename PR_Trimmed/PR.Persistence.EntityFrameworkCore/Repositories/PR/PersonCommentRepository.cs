@@ -33,6 +33,16 @@ namespace PR.Persistence.EntityFrameworkCore.Repositories.PR
             });
         }
 
+        public Task Erase(PersonComment personComment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task EraseRange(IEnumerable<PersonComment> personComments)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<PersonComment>> GetAllVariants(
             Guid id)
         {

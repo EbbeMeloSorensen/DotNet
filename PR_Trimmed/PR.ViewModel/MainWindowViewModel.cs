@@ -53,19 +53,28 @@ namespace PR.ViewModel
 
         private AsyncCommand<object> _createPersonCommand;
         private RelayCommand<object> _showOptionsDialogCommand;
-        private AsyncCommand _softDeleteSelectedPeopleCommand;
-        private AsyncCommand _hardDeleteSelectedPeopleCommand;
+        private AsyncCommand<object> _softDeleteSelectedPeopleCommand;
+        private AsyncCommand<object> _hardDeleteSelectedPeopleCommand;
         private AsyncCommand<object> _clearRepositoryCommand;
         private AsyncCommand _exportPeopleCommand;
         private RelayCommand _exportSelectionToGraphmlCommand;
         private AsyncCommand _importPeopleCommand;
         private RelayCommand _exitCommand;
 
-        public AsyncCommand SoftDeleteSelectedPeopleCommand
+        public AsyncCommand<object> CreatePersonCommand
         {
-            get { return _softDeleteSelectedPeopleCommand ?? (_softDeleteSelectedPeopleCommand = new AsyncCommand(SoftDeleteSelectedPeople, CanSoftDeleteSelectedPeople)); }
+            get { return _createPersonCommand ?? (_createPersonCommand = new AsyncCommand<object>(CreatePerson, CanCreatePerson)); }
         }
 
+        public AsyncCommand<object> SoftDeleteSelectedPeopleCommand
+        {
+            get { return _softDeleteSelectedPeopleCommand ?? (_softDeleteSelectedPeopleCommand = new AsyncCommand<object>(SoftDeleteSelectedPeople, CanSoftDeleteSelectedPeople)); }
+        }
+
+        public AsyncCommand<object> HardDeleteSelectedPeopleCommand
+        {
+            get { return _hardDeleteSelectedPeopleCommand ?? (_hardDeleteSelectedPeopleCommand = new AsyncCommand<object>(HardDeleteSelectedPeople, CanHardDeleteSelectedPeople)); }
+        }
 
         public AsyncCommand<object> ClearRepositoryCommand
         {
@@ -74,11 +83,6 @@ namespace PR.ViewModel
                 return _clearRepositoryCommand ?? (_clearRepositoryCommand =
                     new AsyncCommand<object>(ClearRepository, CanClearRepository));
             }
-        }
-
-        public AsyncCommand<object> CreatePersonCommand
-        {
-            get { return _createPersonCommand ?? (_createPersonCommand = new AsyncCommand<object>(CreatePerson, CanCreatePerson)); }
         }
 
         public RelayCommand<object> ShowOptionsDialogCommand
@@ -173,6 +177,7 @@ namespace PR.ViewModel
             PropertyChangedEventArgs e)
         {
             SoftDeleteSelectedPeopleCommand.RaiseCanExecuteChanged();
+            HardDeleteSelectedPeopleCommand.RaiseCanExecuteChanged();
             ExportSelectionToGraphmlCommand.RaiseCanExecuteChanged();
         }
 
@@ -218,7 +223,8 @@ namespace PR.ViewModel
             return true;
         }
 
-        private async Task SoftDeleteSelectedPeople()
+        private async Task SoftDeleteSelectedPeople(
+            object owner)
         {
             using var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork();
             var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ID).ToList();
@@ -244,11 +250,49 @@ namespace PR.ViewModel
             PersonListViewModel.RemovePeople(peopleForDeletion);
         }
 
-        private bool CanSoftDeleteSelectedPeople()
+        private bool CanSoftDeleteSelectedPeople(
+            object owner)
         {
             return PersonListViewModel.SelectedPeople.Objects != null &&
                    PersonListViewModel.SelectedPeople.Objects.Any() &&
                    PersonListViewModel.SelectedPeople.Objects.All(_ => _.End.Year == 9999);
+        }
+
+        private async Task HardDeleteSelectedPeople(
+            object owner)
+        {
+            throw new NotImplementedException();
+
+            using var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork();
+            var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ID).ToList();
+
+            var peopleForDeletion = (await unitOfWork.People
+                    .FindIncludingComments(pa => ids.Contains(pa.ID)))
+                .ToList();
+
+            var commentsForDeletion = peopleForDeletion
+                .SelectMany(_ => _.Comments)
+                .ToList();
+
+            if (commentsForDeletion.Any())
+            {
+                await unitOfWork.PersonComments.EraseRange(commentsForDeletion);
+                unitOfWork.Complete();
+            }
+
+            using var unitOfWork2 = _application.UnitOfWorkFactory.GenerateUnitOfWork();
+            await unitOfWork2.People.EraseRange(peopleForDeletion);
+            unitOfWork2.Complete();
+
+            PersonListViewModel.RemovePeople(peopleForDeletion);
+        }
+
+        private bool CanHardDeleteSelectedPeople(
+            object owner)
+        {
+            return PersonListViewModel.SelectedPeople.Objects != null &&
+                   PersonListViewModel.SelectedPeople.Objects.Any() &&
+                   PersonListViewModel.SelectedPeople.Objects.All(_ => _.End.Year < 9999);
         }
 
         private async Task ClearRepository(

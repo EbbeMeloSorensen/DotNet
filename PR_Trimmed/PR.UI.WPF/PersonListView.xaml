@@ -55,7 +55,7 @@
                                        HorizontalAlignment="Stretch"
                                        VerticalAlignment="Center"/>
                             <Canvas>
-                                <Rectangle Canvas.Right="2" Canvas.Top="2" Width="11" Height="11"
+                                <Rectangle Canvas.Right="2" Canvas.Top="2" Width="13" Height="13"
                                            Stroke="Black" StrokeThickness="1" Fill="IndianRed"
                                            Visibility="{Binding IsHistorical, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             </Canvas>

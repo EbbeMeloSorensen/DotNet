@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
 using Craft.Persistence;
@@ -12,5 +13,11 @@ namespace PR.Persistence.Repositories.PR
 
         Task<PersonComment> Get(
             Guid id);
+
+        Task Erase(
+            PersonComment personComment);
+
+        Task EraseRange(
+            IEnumerable<PersonComment> personComments);
     }
 }

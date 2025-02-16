@@ -82,6 +82,16 @@ namespace PR.Persistence.Versioned.Repositories
             return personComment;
         }
 
+        public Task Erase(PersonComment personComment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task EraseRange(IEnumerable<PersonComment> personComments)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<PersonComment>> GetAll()
         {
             var predicates = new List<Expression<Func<PersonComment, bool>>>();

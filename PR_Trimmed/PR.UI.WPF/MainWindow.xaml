@@ -62,7 +62,12 @@
             <StackPanel Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <Button Content="New.." Command="{Binding CreatePersonCommand}" 
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-                <Button Content="Delete" Command="{Binding SoftDeleteSelectedPeopleCommand}"/>
+                <Button Content="Delete" Command="{Binding SoftDeleteSelectedPeopleCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        ToolTip="&quot;Soft delete&quot;, i.e. person turns historical and can thus still be retrieved"/>
+                <Button Content="Erase" Command="{Binding HardDeleteSelectedPeopleCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        ToolTip="&quot;Hard delete&quot;, i.e. person can only be retrieved by going back in database time"/>
             </StackPanel>
 
             <local:PersonListView Grid.Row="1" Grid.Column="0" DataContext="{Binding PersonListViewModel}"/>
