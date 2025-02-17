@@ -68,7 +68,9 @@ namespace PR.Persistence.EntityFrameworkCore
             var maxReboIsIntroduced = new DateTime(2006, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var poeDameronIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var anakinMovesToCoruscant = new DateTime(2001, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 4, 0, 0, 0, DateTimeKind.Utc);
+            var darthVaderMovesToMustafar = new DateTime(2004, 2, 1, 0, 0, 0, DateTimeKind.Utc);
             var chewbaccaIsIntroduced = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var darthVaderDies = new DateTime(2006, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -246,7 +248,7 @@ namespace PR.Persistence.EntityFrameworkCore
             var chewbacca_comment_2_1 = new PersonComment
             {
                 ID = new Guid("00000003-0000-0000-0000-000000000000"),
-                ArchiveID = new Guid("00000002-0002-0001-0000-000000000000"),
+                ArchiveID = new Guid("00000003-0002-0001-0000-000000000000"),
                 PersonID = new Guid("00000005-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
                 Created = timeOfPopulation,
@@ -256,12 +258,82 @@ namespace PR.Persistence.EntityFrameworkCore
                 Text = "He is a furry fellow"
             };
 
+            var anakin_comment_1_1_1 = new PersonComment
+            {
+                ID = new Guid("00000004-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
+                PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
+                Created = timeOfPopulation,
+                Superseded = maxDate,
+                Start = anakinIsIntroduced,
+                End = darthVaderDies,
+                Text = "he is strong with the force"
+            };
+
+            var anakin_comment_2_1_1 = new PersonComment
+            {
+                ID = new Guid("00000005-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
+                PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
+                Created = timeOfPopulation,
+                Superseded = maxDate,
+                Start = anakinIsIntroduced,
+                End = anakinMovesToCoruscant,
+                Text = "Lives on Tatooine"
+            };
+
+            var anakin_comment_2_2_1 = new PersonComment
+            {
+                ID = new Guid("00000006-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
+                PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
+                Created = timeOfPopulation,
+                Superseded = maxDate,
+                Start = anakinMovesToCoruscant,
+                End = darthVaderMovesToMustafar,
+                Text = "Lives on Coruscant"
+            };
+
+            var anakin_comment_2_3_1 = new PersonComment
+            {
+                ID = new Guid("00000007-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000007-0001-0001-0000-000000000000"),
+                PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000004-0002-0001-0000-000000000000"),
+                Created = timeOfPopulation,
+                Superseded = maxDate,
+                Start = anakinMovesToCoruscant,
+                End = darthVaderMovesToMustafar,
+                Text = "Lives on Mustafar"
+            };
+
+            var anakin_comment_3_1_1 = new PersonComment
+            {
+                ID = new Guid("00000008-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000008-0001-0001-0000-000000000000"),
+                PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000004-0002-0001-0000-000000000000"),
+                Created = timeOfPopulation,
+                Superseded = maxDate,
+                Start = anakinBecomesDarthVader,
+                End = darthVaderDies,
+                Text = "He is a cruel fellow"
+            };
+
             personComments = new List<PersonComment>
             {
                 rey_comment_1_1,
                 rey_comment_1_2,
                 chewbacca_comment_1_1,
-                chewbacca_comment_2_1
+                chewbacca_comment_2_1,
+                anakin_comment_1_1_1,
+                anakin_comment_2_1_1,
+                anakin_comment_2_2_1,
+                anakin_comment_2_3_1,
+                anakin_comment_3_1_1
             };
         }
 

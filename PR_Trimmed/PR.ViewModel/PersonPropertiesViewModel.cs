@@ -78,7 +78,7 @@ namespace PR.ViewModel
             get
             {
                 return _deletePersonCommentsCommand ??
-                       (_deletePersonCommentsCommand = new AsyncCommand<object>(DeletePersonComments, CanDeletePersonComments));
+                       (_deletePersonCommentsCommand = new AsyncCommand<object>(SoftDeleteSelectedPersonComments, CanSoftDeleteSelectedPersonComments));
             }
         }
 
@@ -218,16 +218,18 @@ namespace PR.ViewModel
             return SelectedPersonComments.Objects != null && SelectedPersonComments.Objects.Count() == 1;
         }
 
-        private async Task DeletePersonComments(
+        private async Task SoftDeleteSelectedPersonComments(
             object owner)
         {
             throw new NotImplementedException();
         }
 
-        private bool CanDeletePersonComments(
+        private bool CanSoftDeleteSelectedPersonComments(
             object owner)
         {
-            return SelectedPersonComments.Objects != null && SelectedPersonComments.Objects.Count() > 1;
+            return SelectedPersonComments.Objects != null &&
+                   SelectedPersonComments.Objects.Any() &&
+                   SelectedPersonComments.Objects.All(_ => _.End.Year == 9999);
         }
 
         private void PersonVariantSelectionChanged(
