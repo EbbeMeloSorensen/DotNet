@@ -102,7 +102,6 @@ namespace PR.Persistence.UnitTest
             people.Single(p => p.FirstName == "Chewbacca").Comments.Count(_ => _.Text == "He is a furry fellow").Should().Be(1);
             people.Single(p => p.FirstName == "Rey Skywalker").Comments.Count.Should().Be(1);
             people.Single(p => p.FirstName == "Rey Skywalker").Comments.Single().Text.Should().Be("She is a jedi");
-
         }
 
         public static async Task FindPersonById(

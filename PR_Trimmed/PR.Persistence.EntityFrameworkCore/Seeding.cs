@@ -283,7 +283,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = maxDate,
                 Start = anakinIsIntroduced,
                 End = darthVaderDies,
-                Text = "he is strong with the force"
+                Text = "He is strong with the force"
             };
 
             var anakin_comment_2_1_1 = new PersonComment
