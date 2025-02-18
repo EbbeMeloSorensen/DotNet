@@ -350,14 +350,6 @@ namespace PR.Persistence.EntityFrameworkCore
                 Longitude = 56
             };
 
-            var lukeSkywalker = new Person
-            {
-                ID = new Guid("00000002-0000-0000-0000-000000000000"),
-                FirstName = "Luke Skywalker",
-                Latitude = 10,
-                Longitude = 56
-            };
-
             var chewbacca = new Person
             {
                 ID = new Guid("00000005-0000-0000-0000-000000000000"),
@@ -377,7 +369,6 @@ namespace PR.Persistence.EntityFrameworkCore
             people = new List<Person>
             {
                 maxRebo,
-                lukeSkywalker,
                 rey,
                 chewbacca
             };

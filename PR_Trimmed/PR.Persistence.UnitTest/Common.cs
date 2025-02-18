@@ -23,9 +23,8 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
             var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(5);
+            people.Count().Should().Be(4);
             people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
-            people.Count(p => p.FirstName == "Poe Dameron").Should().Be(1);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
             people.Count(p => p.FirstName == "Wicket").Should().Be(1);
@@ -41,9 +40,8 @@ namespace PR.Persistence.UnitTest
             var people = await unitOfWork.People.GetAll();
 
             // Assert
-            people.Count().Should().Be(4);
+            people.Count().Should().Be(3);
             people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
-            people.Count(p => p.FirstName == "Poe Dameron").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
         }
@@ -224,8 +222,7 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
             var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(3);
-            people.Count(p => p.FirstName == "Poe Dameron").Should().Be(1);
+            people.Count().Should().Be(2);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
         }
