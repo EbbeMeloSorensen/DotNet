@@ -65,15 +65,16 @@ namespace PR.Persistence.EntityFrameworkCore
             var reyIsUpdatedProspectively = timeOfPopulation.AddDays(4);
 
             // Valid time
-            var maxReboIsIntroduced = new DateTime(2006, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var poeDameronIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinMovesToCoruscant = new DateTime(2001, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+            var lukeSkywalkerIsIntroduced = new DateTime(2003, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var anakinBecomesDarthVader = new DateTime(2003, 10, 4, 0, 0, 0, DateTimeKind.Utc);
-            var darthVaderMovesToMustafar = new DateTime(2004, 2, 1, 0, 0, 0, DateTimeKind.Utc);
             var chewbaccaIsIntroduced = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var darthVaderMovesToMustafar = new DateTime(2004, 2, 1, 0, 0, 0, DateTimeKind.Utc);
+            var maxReboIsIntroduced = new DateTime(2006, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var darthVaderDies = new DateTime(2006, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var lukeSkywalkerDies = new DateTime(2008, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyBecomesReySkywalker = new DateTime(2009, 10, 1, 0, 0, 0, DateTimeKind.Utc);
 
             var maxRebo_1_1 = new Person
@@ -89,15 +90,15 @@ namespace PR.Persistence.EntityFrameworkCore
                 Longitude = 56
             };
 
-            var poeDameron_1_1 = new Person
+            var lukeSkywalker_1_1 = new Person
             {
                 ID = new Guid("00000002-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000002-0001-0001-0000-000000000000"),
                 Created = timeOfPopulation,
                 Superseded = maxDate,
-                Start = poeDameronIsIntroduced,
-                End = maxDate,
-                FirstName = "Poe Dameron",
+                Start = lukeSkywalkerIsIntroduced,
+                End = lukeSkywalkerDies,
+                FirstName = "Luke Skywalker",
                 Latitude = 10,
                 Longitude = 56
             };
@@ -196,7 +197,7 @@ namespace PR.Persistence.EntityFrameworkCore
             people = new List<Person>
             {
                 maxRebo_1_1,
-                poeDameron_1_1,
+                lukeSkywalker_1_1,
                 anakin_1_1,
                 anakin_2_1,
                 chewbacca_1_1,
@@ -349,10 +350,10 @@ namespace PR.Persistence.EntityFrameworkCore
                 Longitude = 56
             };
 
-            var poeDameron = new Person
+            var lukeSkywalker = new Person
             {
                 ID = new Guid("00000002-0000-0000-0000-000000000000"),
-                FirstName = "Poe Dameron",
+                FirstName = "Luke Skywalker",
                 Latitude = 10,
                 Longitude = 56
             };
@@ -376,7 +377,7 @@ namespace PR.Persistence.EntityFrameworkCore
             people = new List<Person>
             {
                 maxRebo,
-                poeDameron,
+                lukeSkywalker,
                 rey,
                 chewbacca
             };
