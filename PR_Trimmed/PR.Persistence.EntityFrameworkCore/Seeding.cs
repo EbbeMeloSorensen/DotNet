@@ -75,6 +75,7 @@ namespace PR.Persistence.EntityFrameworkCore
             var darthVaderDies = new DateTime(2006, 10, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyIsIntroduced = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var lukeSkywalkerDies = new DateTime(2008, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+            var reyBecomesAJedi = new DateTime(2008, 6, 1, 0, 0, 0, DateTimeKind.Utc);
             var reyBecomesReySkywalker = new DateTime(2009, 10, 1, 0, 0, 0, DateTimeKind.Utc);
 
             var maxRebo_1_1 = new Person
@@ -207,7 +208,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 rey_2_1
             };
 
-            var rey_comment_1_1 = new PersonComment
+            var rey_comment_1_1_1 = new PersonComment
             {
                 ID = new Guid("00000001-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000001-0001-0001-0000-000000000000"),
@@ -217,10 +218,10 @@ namespace PR.Persistence.EntityFrameworkCore
                 Superseded = commentOnReyIsCorrected,
                 Start = reyIsIntroduced,
                 End = maxDate,
-                Text = "She starts out as a ravager"
+                Text = "She is a ravager"
             };
 
-            var rey_comment_1_2 = new PersonComment
+            var rey_comment_1_1_2 = new PersonComment
             {
                 ID = new Guid("00000001-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000001-0001-0002-0000-000000000000"),
@@ -229,8 +230,21 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = commentOnReyIsCorrected,
                 Superseded = maxDate,
                 Start = reyIsIntroduced,
+                End = reyBecomesAJedi,
+                Text = "She is a scavenger"
+            };
+
+            var rey_comment_1_2_1 = new PersonComment
+            {
+                ID = new Guid("00000009-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000009-0001-0002-0000-000000000000"),
+                PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
+                PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
+                Created = commentOnReyIsCorrected,
+                Superseded = maxDate,
+                Start = reyBecomesAJedi,
                 End = maxDate,
-                Text = "She starts out as a scavenger"
+                Text = "She is a jedi"
             };
 
             var chewbacca_comment_1_1 = new PersonComment
@@ -326,8 +340,9 @@ namespace PR.Persistence.EntityFrameworkCore
 
             personComments = new List<PersonComment>
             {
-                rey_comment_1_1,
-                rey_comment_1_2,
+                rey_comment_1_1_1,
+                rey_comment_1_1_2,
+                rey_comment_1_2_1,
                 chewbacca_comment_1_1,
                 chewbacca_comment_2_1,
                 anakin_comment_1_1_1,
@@ -375,9 +390,9 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var rey_comment = new PersonComment
             {
-                ID = new Guid("00000001-0000-0000-0000-000000000000"),
+                ID = new Guid("00000009-0000-0000-0000-000000000000"),
                 PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
-                Text = "She starts out as a scavenger"
+                Text = "She is a jedi"
             };
 
             var chewbacca_comment_1 = new PersonComment

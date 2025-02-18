@@ -52,6 +52,7 @@ namespace PR.Persistence.Versioned.Repositories
             };
 
             predicates.AddVersionPredicates(DatabaseTime);
+            predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             return UnitOfWork.People.Count(predicates);
         }
@@ -60,6 +61,7 @@ namespace PR.Persistence.Versioned.Repositories
             IList<Expression<Func<Person, bool>>> predicates)
         {
             predicates.AddVersionPredicates(DatabaseTime);
+            predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             return UnitOfWork.People.Count(predicates);
         }
@@ -252,6 +254,7 @@ namespace PR.Persistence.Versioned.Repositories
             };
 
             personCommentPredicates.AddVersionPredicates(DatabaseTime);
+            personCommentPredicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             var personCommentRows = (await UnitOfWork.PersonComments.Find(personCommentPredicates)).ToList();
 

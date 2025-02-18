@@ -154,6 +154,16 @@ namespace PR.Persistence.Versioned.Repositories
             personComment.Created = now;
             personComment.Superseded = _maxDate;
 
+            if (personComment.Start.Year == 1)
+            {
+                personComment.Start = now;
+            }
+
+            if (personComment.End.Year == 1)
+            {
+                personComment.End = _maxDate;
+            }
+
             await UnitOfWork.PersonComments.Add(personComment);
         }
 

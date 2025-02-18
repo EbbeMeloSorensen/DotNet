@@ -73,7 +73,7 @@ namespace PR.Persistence.UnitTest
             // Assert
             person.FirstName.Should().Be("Rey Skywalker");
             person.Comments.Count().Should().Be(1);
-            person.Comments.Single().Text.Should().Be("She starts out as a scavenger");
+            person.Comments.Single().Text.Should().Be("She is a jedi");
         }
 
         public static async Task FindPeopleIncludingComments(
@@ -101,7 +101,7 @@ namespace PR.Persistence.UnitTest
             people.Single(p => p.FirstName == "Chewbacca").Comments.Count(_ => _.Text == "He likes his crossbow").Should().Be(1);
             people.Single(p => p.FirstName == "Chewbacca").Comments.Count(_ => _.Text == "He is a furry fellow").Should().Be(1);
             people.Single(p => p.FirstName == "Rey Skywalker").Comments.Count.Should().Be(1);
-            people.Single(p => p.FirstName == "Rey Skywalker").Comments.Single().Text.Should().Be("She starts out as a scavenger");
+            people.Single(p => p.FirstName == "Rey Skywalker").Comments.Single().Text.Should().Be("She is a jedi");
 
         }
 
@@ -368,8 +368,8 @@ namespace PR.Persistence.UnitTest
             using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
             var ids = new List<Guid>
             {
-                new Guid("00000001-0000-0000-0000-000000000000"),
-                new Guid("00000002-0000-0000-0000-000000000000")
+                new Guid("00000002-0000-0000-0000-000000000000"),
+                new Guid("00000009-0000-0000-0000-000000000000")
             };
 
             var personComments = await unitOfWork1.PersonComments.Find(_ => ids.Contains(_.ID));
