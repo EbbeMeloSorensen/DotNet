@@ -236,8 +236,8 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var rey_comment_1_2_1 = new PersonComment
             {
-                ID = new Guid("00000009-0000-0000-0000-000000000000"),
-                ArchiveID = new Guid("00000009-0001-0002-0000-000000000000"),
+                ID = new Guid("00000001-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000001-0002-0001-0000-000000000000"),
                 PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
                 Created = commentOnReyIsCorrected,
@@ -301,8 +301,8 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var anakin_comment_2_2_1 = new PersonComment
             {
-                ID = new Guid("00000006-0000-0000-0000-000000000000"),
-                ArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
+                ID = new Guid("00000005-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000005-0002-0001-0000-000000000000"),
                 PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
                 Created = timeOfPopulation,
@@ -314,8 +314,8 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var anakin_comment_2_3_1 = new PersonComment
             {
-                ID = new Guid("00000007-0000-0000-0000-000000000000"),
-                ArchiveID = new Guid("00000007-0001-0001-0000-000000000000"),
+                ID = new Guid("00000005-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid("00000005-0003-0001-0000-000000000000"),
                 PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000004-0002-0001-0000-000000000000"),
                 Created = timeOfPopulation,
@@ -390,7 +390,7 @@ namespace PR.Persistence.EntityFrameworkCore
 
             var rey_comment = new PersonComment
             {
-                ID = new Guid("00000009-0000-0000-0000-000000000000"),
+                ID = new Guid("00000001-0000-0000-0000-000000000000"),
                 PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
                 Text = "She is a jedi"
             };

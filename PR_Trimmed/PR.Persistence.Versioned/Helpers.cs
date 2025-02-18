@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System;
+using System.Linq;
 
 namespace PR.Persistence.Versioned
 {
@@ -46,5 +47,28 @@ namespace PR.Persistence.Versioned
                 throw new InvalidOperationException("Either Include current or include historical should be true");
             }
         }
+
+        internal static IEnumerable<T> RemoveAllButLatestVariants<T>(
+            this IEnumerable<T> entities) where T : IObjectWithGuidID, IObjectWithValidTime
+        {
+            return entities
+                .GroupBy(p => p.ID)
+                .Select(g => g
+                    .OrderBy(p => p.Start)
+                    .LastOrDefault())
+                .Where(p => p != null);
+        }
+
+        internal static IEnumerable<T> RemoveCurrentVariants<T>(
+            this IEnumerable<T> entities,
+            DateTime? historicalTime) where T : IObjectWithGuidID, IObjectWithValidTime
+        {
+            var time = historicalTime.HasValue
+                ? historicalTime.Value
+                : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+            return entities.Where(_ => _.End < time);
+        }
+
     }
 }

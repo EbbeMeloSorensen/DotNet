@@ -2,7 +2,6 @@
 using PR.Persistence.Versioned;
 using StructureMap;
 using Xunit;
-using PR.Persistence.Versioned;
 
 namespace PR.Persistence.UnitTest
 {
@@ -39,7 +38,7 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async Task GetEarlierStateOfPerson()
+        public async Task GetHistoricalStateOfPerson()
         {
             // Arrange
             _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -51,6 +50,42 @@ namespace PR.Persistence.UnitTest
 
             // Assert
             person.FirstName.Should().Be("Anakin Skywalker");
+        }
+
+        [Fact]
+        public async Task GetCurrentPersonIncludingHistoricalComments()
+        {
+            // Arrange
+            _unitOfWorkFactory.IncludeCurrentObjects = true;
+            _unitOfWorkFactory.IncludeHistoricalObjects = true;
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var person = await unitOfWork.People.GetIncludingComments(
+                new Guid("00000006-0000-0000-0000-000000000000"));
+
+            // Assert
+            person.FirstName.Should().Be("Rey Skywalker");
+        }
+
+        [Fact]
+        public async Task GetHistoricalPersonIncludingHistoricalComments()
+        {
+            // Arrange
+            _unitOfWorkFactory.IncludeCurrentObjects = true;
+            _unitOfWorkFactory.IncludeHistoricalObjects = true;
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act
+            var person = await unitOfWork.People.GetIncludingComments(
+                new Guid("00000004-0000-0000-0000-000000000000"));
+
+            // Assert
+            person.FirstName.Should().Be("Darth Vader");
+            person.Comments.Count.Should().Be(3);
+            person.Comments.Count(c => c.Text == "He is strong with the force").Should().Be(1);
+            person.Comments.Count(c => c.Text == "Lives on Mustafar").Should().Be(1);
+            person.Comments.Count(c => c.Text == "He is a cruel fellow").Should().Be(1);
         }
 
         [Fact]
@@ -73,7 +108,7 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async Task GetEarlierStateOfPerson_BeforePersonExisted_Throws()
+        public async Task GetHistoricalStateOfPerson_BeforePersonExisted_Throws()
         {
             // Arrange
             _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);

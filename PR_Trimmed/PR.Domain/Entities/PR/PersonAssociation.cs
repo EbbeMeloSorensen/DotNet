@@ -2,7 +2,7 @@
 
 namespace PR.Domain.Entities.PR
 {
-    public class PersonAssociation : IObjectWithValidTime
+    public class PersonAssociation : IObjectWithGuidID, IObjectWithValidTime
     {
         public Guid ArchiveID { get; set; }
         public DateTime Created { get; set; }

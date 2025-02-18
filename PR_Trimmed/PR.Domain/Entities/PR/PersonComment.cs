@@ -2,7 +2,7 @@
 
 namespace PR.Domain.Entities.PR
 {
-    public class PersonComment : IObjectWithValidTime
+    public class PersonComment : IObjectWithGuidID, IObjectWithValidTime
     {
         public Guid ArchiveID { get; set; }
         public DateTime Created { get; set; }
@@ -17,5 +17,10 @@ namespace PR.Domain.Entities.PR
         public Person Person { get; set; }
 
         public string Text { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Text}";
+        }
     }
 }

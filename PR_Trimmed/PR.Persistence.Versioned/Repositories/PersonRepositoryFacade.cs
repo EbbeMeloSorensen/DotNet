@@ -257,8 +257,14 @@ namespace PR.Persistence.Versioned.Repositories
             personCommentPredicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             var personCommentRows = (await UnitOfWork.PersonComments.Find(personCommentPredicates)).ToList();
+            var personComments = personCommentRows.RemoveAllButLatestVariants();
 
-            person.Comments = personCommentRows;
+            if (!IncludeCurrentObjects)
+            {
+                personComments = personComments.RemoveCurrentVariants(HistoricalTime);
+            }
+
+            person.Comments = personComments.ToList();
 
             return person;
         }
@@ -290,11 +296,11 @@ namespace PR.Persistence.Versioned.Repositories
             // Det er fint, men hvis nu vi har sat filteret til at vi kun skal have levende eller kun døde,
             // så skal vi altså filtrere det endnu en gang
 
-            var people = RemoveAllButLatestVariants(peopleRows);
+            var people = peopleRows.RemoveAllButLatestVariants();
 
             if (!IncludeCurrentObjects)
             {
-                people = RemoveCurrentVariants(people);
+                people = people.RemoveCurrentVariants(HistoricalTime);
             }
 
             //Logger?.WriteLine(LogMessageCategory.Information, $"PersonRepositoryFacade: Retrieved {people.Count()} objects");
@@ -320,11 +326,11 @@ namespace PR.Persistence.Versioned.Repositories
             predicates.AddHistoryPredicates(HistoricalTime, IncludeHistoricalObjects, IncludeCurrentObjects);
 
             var personRows = await UnitOfWork.People.Find(predicates);
-            var people = RemoveAllButLatestVariants(personRows);
+            var people = personRows.RemoveAllButLatestVariants();
 
             if (!IncludeCurrentObjects)
             {
-                people = RemoveCurrentVariants(people);
+                people = people.RemoveCurrentVariants(HistoricalTime);
             }
 
             if (_returnClonesInsteadOfRepositoryObjects)
@@ -540,27 +546,6 @@ namespace PR.Persistence.Versioned.Repositories
             IEnumerable<Person> people)
         {
             throw new NotImplementedException();
-        }
-
-        private IEnumerable<Person> RemoveAllButLatestVariants(
-            IEnumerable<Person> peopleRows)
-        {
-            return peopleRows
-                .GroupBy(p => p.ID)
-                .Select(g => g
-                    .OrderBy(p => p.Start)
-                    .LastOrDefault())
-                .Where(p => p != null);
-        }
-
-        private IEnumerable<Person> RemoveCurrentVariants(
-            IEnumerable<Person> people)
-        {
-            var historicalTime = HistoricalTime.HasValue
-                ? HistoricalTime.Value
-                : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
-
-            return people.Where(_ => _.End < historicalTime);
         }
     }
 }

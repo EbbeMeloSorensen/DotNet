@@ -213,8 +213,8 @@ namespace PR.ViewModel
 
         private async Task FindPeople(object owner)
         {
-            var personLimit = 10;
-            var count = CountPeopleMatchingFilterFromRepository();
+            //var personLimit = 10;
+            //var count = CountPeopleMatchingFilterFromRepository();
 
             //if (count == 0)
             //{

@@ -367,8 +367,8 @@ namespace PR.Persistence.UnitTest
             using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
             var ids = new List<Guid>
             {
-                new Guid("00000002-0000-0000-0000-000000000000"),
-                new Guid("00000009-0000-0000-0000-000000000000")
+                new Guid("00000001-0000-0000-0000-000000000000"),
+                new Guid("00000002-0000-0000-0000-000000000000")
             };
 
             var personComments = await unitOfWork1.PersonComments.Find(_ => ids.Contains(_.ID));
