@@ -34,6 +34,15 @@ Done:
   altid kan slette dem
 
 Todo:
+* Dæk alle use cases for vedligehold af comments
+  - Create new
+  - Create new variant
+  - Prospectively update variant
+  - Soft delete current comment
+  - Hard delete historical comment
+  - Lige som det gælder for historiske varianter af PERSONER, så bør det også gælde for historiske varianter af COMMENTS,
+    at de er lette at finde, f.eks. så man kan udføre hard delete på dem. Derfor bør der også være et view, hvor man kan se
+    alle varianter af en comment
 * Hvis der kun er historiske personer i ens selection, så bør man kunne erase dem, dvs udføre hard delete
   - Erase person skal indebære, at alle varianter af pågældende person slettes
   - Først skal man sikre, at alle varianter af alle comments erases
