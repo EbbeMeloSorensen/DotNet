@@ -338,7 +338,7 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task<IEnumerable<Person>> FindIncludingComments(
             Expression<Func<Person, bool>> predicate)
         {
-            var people = await Find(predicate);
+            var people = (await Find(predicate)).ToList();
             var personIDs = people.Select(_ => _.ID);
 
             var personCommentPredicates = new List<Expression<Func<PersonComment, bool>>>
