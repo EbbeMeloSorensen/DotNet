@@ -255,6 +255,15 @@ namespace PR.ViewModel
 
                                 break;
                             }
+                        case "End":
+                        {
+                            if (End != null && Start.HasValue && End.Value < Start.Value)
+                            {
+                                errorMessage = "That doesn't make sense";
+                            }
+
+                            break;
+                        }
                     }
                 }
 

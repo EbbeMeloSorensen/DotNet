@@ -102,7 +102,7 @@
                 </StackPanel>
             </Grid>
         </TabItem>
-        <TabItem Header="Relations">
+        <!--<TabItem Header="Relations">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -118,6 +118,6 @@
                     <Button Margin="3,0,3,3" Content="Delete"/>
                 </StackPanel>
             </Grid>
-        </TabItem>
+        </TabItem>-->
     </TabControl>
 </UserControl>
