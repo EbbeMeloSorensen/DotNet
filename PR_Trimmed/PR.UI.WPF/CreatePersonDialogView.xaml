@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PR.UI.WPF"
+             xmlns:viewModel="clr-namespace:PR.ViewModel;assembly=PR.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModel:CreatePersonDialogViewModel}">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -79,11 +80,13 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Padding="3" Text="Start:"/>
-                    <DatePicker Grid.Row="0" Grid.Column="1" Padding="3" 
-                                SelectedDate="{Binding Start}"/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" Padding="3"
+                                Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                                SelectedDate="{Binding Start, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Padding="3" Text="End:"/>
-                    <DatePicker Grid.Row="1" Grid.Column="1" Padding="3" 
-                                SelectedDate="{Binding End}"/>
+                    <DatePicker Grid.Row="1" Grid.Column="1" Padding="3"
+                                Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                                SelectedDate="{Binding End, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </Grid>
             </GroupBox>
         </Grid>

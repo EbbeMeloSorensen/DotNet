@@ -107,6 +107,7 @@ namespace PR.ViewModel
             {
                 _start = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(End));
             }
         }
 
@@ -116,6 +117,7 @@ namespace PR.ViewModel
             set
             {
                 _end = value;
+                RaisePropertyChanged(nameof(Start));
                 RaisePropertyChanged();
             }
         }
@@ -255,6 +257,16 @@ namespace PR.ViewModel
 
                                 break;
                             }
+                        case "Start":
+                        case "End":
+                        {
+                            if (Start != null && End != null && Start >= End)
+                            {
+                                errorMessage = "Start date must be earlier than End date";
+                            }
+
+                            break;
+                        }
                     }
                 }
 
@@ -280,9 +292,9 @@ namespace PR.ViewModel
                         new ValidationError {PropertyName = "ZipCode"},
                         new ValidationError {PropertyName = "City"},
                         new ValidationError {PropertyName = "Birthday"},
-                        new ValidationError {PropertyName = "Start"},
-                        new ValidationError {PropertyName = "End"},
                         new ValidationError {PropertyName = "Category"},
+                        new ValidationError {PropertyName = "Start"},
+                        new ValidationError {PropertyName = "End"}
                     };
                 }
 
