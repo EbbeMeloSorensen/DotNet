@@ -34,6 +34,11 @@ Done:
   altid kan slette dem
 
 Todo:
+* Lav noget input validering, når man prøver at lave en person med et invalidt virkningstidsinterval
+* Bryd person properties viewet ned i et hierarki
+* Det prospektivt at ændre en kommentar skal foregå på samme måde, som når man prospektivt ændrer en person, dvs med en Update knap
+* Det skal ikke være muligt prospektivt at ændre et historisk objekt, dvs man skal f.eks ikke kunne ændre Darth Vader
+* Når man har valgt mere end 1 person, skal der stå noget alla "shared properties of 3 selected people"
 * Dæk alle use cases for vedligehold af comments
   - Create new
   - Create new variant
