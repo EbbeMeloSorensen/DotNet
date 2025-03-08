@@ -27,8 +27,32 @@ namespace PR.ViewModel
         private DateTime? _start;
         private DateTime? _end;
 
+        private string _dateRangeError;
+        private bool _displayDateRangeError;
+
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
+
+        public string DateRangeError
+        {
+            get { return _dateRangeError; }
+            set
+            {
+                _dateRangeError = value;
+                DisplayDateRangeError = !string.IsNullOrEmpty(_dateRangeError);
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DisplayDateRangeError
+        {
+            get { return _displayDateRangeError; }
+            set
+            {
+                _displayDateRangeError = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public string FirstName
         {
@@ -188,6 +212,8 @@ namespace PR.ViewModel
 
                 if (_state == StateOfView.Updated)
                 {
+                    DateRangeError = string.Empty;
+
                     switch (columnName)
                     {
                         case "FirstName":
@@ -263,6 +289,7 @@ namespace PR.ViewModel
                             if (Start != null && End != null && Start >= End)
                             {
                                 errorMessage = "Start date must be earlier than End date";
+                                DateRangeError = "Start date must be earlier than End date";
                             }
 
                             break;
