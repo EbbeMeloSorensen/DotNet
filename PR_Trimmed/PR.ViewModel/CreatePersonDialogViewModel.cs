@@ -214,6 +214,8 @@ namespace PR.ViewModel
                 {
                     DateRangeError = string.Empty;
 
+                    var now = DateTime.UtcNow;
+
                     switch (columnName)
                     {
                         case "FirstName":
@@ -286,10 +288,21 @@ namespace PR.ViewModel
                         case "Start":
                         case "End":
                         {
-                            if (Start != null && End != null && Start >= End)
+                            if ((Start != null && Start >= now) ||
+                                (End != null && End >= now))
+                            {
+                                errorMessage = "These dates cannot be in the future";
+                                DateRangeError = errorMessage;
+                            }
+                            else if (End != null && Start == null)
+                            {
+                                errorMessage = "When entering an end date, a start date is also required";
+                                DateRangeError = errorMessage;
+                            }
+                            else if (Start != null && End != null && Start >= End)
                             {
                                 errorMessage = "Start date must be earlier than End date";
-                                DateRangeError = "Start date must be earlier than End date";
+                                DateRangeError = errorMessage;
                             }
 
                             break;
