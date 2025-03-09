@@ -32,9 +32,10 @@ Done:
 * Delete-knappen skal kun være mulig, hvis der for alle personer i ens selection gælder, at de har et åbent virkningstidsinterval.
 * Du skal have en bedre ViewModel for de historiske (archived/inaktive) entiteter i personlisten, også så det er mere intuitivt, hvorfor man ikke
   altid kan slette dem
+* Lav noget input validering, når man prøver at lave en person med et invalidt virkningstidsinterval
 
 Todo:
-* Lav noget input validering, når man prøver at lave en person med et invalidt virkningstidsinterval
+* Gør det muligt at slå business rules til og fra
 * Bryd person properties viewet ned i et hierarki
 * Det prospektivt at ændre en kommentar skal foregå på samme måde, som når man prospektivt ændrer en person, dvs med en Update knap
 * Det skal ikke være muligt prospektivt at ændre et historisk objekt, dvs man skal f.eks ikke kunne ændre Darth Vader

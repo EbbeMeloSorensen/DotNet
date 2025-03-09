@@ -10,6 +10,7 @@ using Craft.Logging;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using PR.Application;
+using PR.Domain.BusinessRules.PR;
 using PR.Domain.Entities.PR;
 using PR.IO;
 using PR.Persistence;
@@ -143,6 +144,10 @@ namespace PR.ViewModel
                 PersonListViewModel.SelectedPeople);
 
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
+
+            // Work in progress
+            var ruleCatalog = new BusinessRuleCatalog();
+            ruleCatalog.RegisterRule(new ValidTimeExtremaCannotBeInFutureRule());
 
             _logger.WriteLine(LogMessageCategory.Information, "Application started");
         }
