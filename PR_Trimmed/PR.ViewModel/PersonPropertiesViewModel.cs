@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
+using PR.Domain.BusinessRules.PR;
 using PR.Domain.Entities.PR;
 using PR.Persistence;
 
@@ -20,6 +21,7 @@ namespace PR.ViewModel
         private readonly IDialogService _applicationDialogService;
         private bool _isVisible;
         private ObjectCollection<Person> _people;
+        private BusinessRuleCatalog _businessRuleCatalog;
 
         private AsyncCommand<object> _createPersonCommentCommand;
         private AsyncCommand<object> _updatePersonCommentCommand;
@@ -117,10 +119,12 @@ namespace PR.ViewModel
         public PersonPropertiesViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
+            BusinessRuleCatalog businessRuleCatalog,
             ObjectCollection<Person> people)
         {
             UnitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
+            _businessRuleCatalog = businessRuleCatalog;
             _people = people;
 
             PersonCommentListViewItemViewModels =
@@ -248,7 +252,7 @@ namespace PR.ViewModel
         private async Task CreatePersonVariant(
             object owner)
         {
-            var dialogViewModel = new CreatePersonDialogViewModel();
+            var dialogViewModel = new CreatePersonDialogViewModel(_businessRuleCatalog);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {

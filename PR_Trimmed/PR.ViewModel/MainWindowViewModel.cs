@@ -23,6 +23,7 @@ namespace PR.ViewModel
         private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
         private readonly ILogger _logger;
+        private readonly BusinessRuleCatalog _businessRuleCatalog;
         private string _mainWindowTitle;
 
         public string MainWindowTitle
@@ -127,6 +128,11 @@ namespace PR.ViewModel
             _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
 
+            _businessRuleCatalog = new BusinessRuleCatalog();
+            _businessRuleCatalog.RegisterRule(new FirstNameIsRequiredRule());
+            _businessRuleCatalog.RegisterRule(new ValidTimeExtremaCannotBeInFutureRule());
+            //_businessRuleCatalog.RegisterRule(new NonOverlappingValidTimeIntervalsRule());
+
             LogViewModel = new LogViewModel(200);
             _logger = new ViewModelLogger(logger, LogViewModel);
 
@@ -141,13 +147,10 @@ namespace PR.ViewModel
             PersonPropertiesViewModel = new PersonPropertiesViewModel(
                 unitOfWorkFactory,
                 applicationDialogService,
+                _businessRuleCatalog,
                 PersonListViewModel.SelectedPeople);
 
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
-
-            // Work in progress
-            var ruleCatalog = new BusinessRuleCatalog();
-            ruleCatalog.RegisterRule(new ValidTimeExtremaCannotBeInFutureRule());
 
             _logger.WriteLine(LogMessageCategory.Information, "Application started");
         }
@@ -189,7 +192,7 @@ namespace PR.ViewModel
         private async Task CreatePerson(
             object owner)
         {
-            var dialogViewModel = new CreatePersonDialogViewModel();
+            var dialogViewModel = new CreatePersonDialogViewModel(_businessRuleCatalog);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {

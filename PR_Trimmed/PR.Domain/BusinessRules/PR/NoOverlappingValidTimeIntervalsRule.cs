@@ -4,9 +4,9 @@ using PR.Domain.Entities.PR;
 
 namespace PR.Domain.BusinessRules.PR
 {
-    public class NonOverlappingValidTimeIntervalsRule : IBusinessRule<IEnumerable<Person>>
+    public class NoOverlappingValidTimeIntervalsRule : IBusinessRule<IEnumerable<Person>>
     {
-        public string RuleName => "NonOverlappingValidTimeIntervals";
+        public string RuleName => "NoOverlappingValidTimeIntervals";
 
         public bool Validate(
             IEnumerable<Person> personVariants)

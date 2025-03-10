@@ -7,6 +7,8 @@ using Craft.UI.Utils;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using GalaSoft.MvvmLight.Command;
+using PR.Domain.BusinessRules.PR;
+using PR.Domain.Entities.PR;
 
 namespace PR.ViewModel
 {
@@ -32,6 +34,8 @@ namespace PR.ViewModel
 
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
+
+        private BusinessRuleCatalog _businessRuleCatalog;
 
         public string DateRangeError
         {
@@ -166,6 +170,12 @@ namespace PR.ViewModel
             get { return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(Cancel, CanCancel)); }
         }
 
+        public CreatePersonDialogViewModel(
+            BusinessRuleCatalog businessRuleCatalog)
+        {
+            _businessRuleCatalog = businessRuleCatalog;
+        }
+
         private void OK(object parameter)
         {
             UpdateState(StateOfView.Updated);
@@ -213,6 +223,25 @@ namespace PR.ViewModel
                 if (_state == StateOfView.Updated)
                 {
                     DateRangeError = string.Empty;
+
+                    // Experimental
+                    var person = new Person
+                    {
+                        FirstName = FirstName.NullifyIfEmpty(),
+                        Surname = Surname.NullifyIfEmpty(),
+                        Nickname = Nickname.NullifyIfEmpty(),
+                        Address = Address.NullifyIfEmpty(),
+                        ZipCode = ZipCode.NullifyIfEmpty(),
+                        City = City.NullifyIfEmpty(),
+                        Birthday = Birthday,
+                        Category = Category,
+                        Start = Start ?? DateTime.UtcNow,
+                        End = End ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                    };
+
+                    var temp = _businessRuleCatalog.Validate(person);
+                    // end
+
 
                     var now = DateTime.UtcNow;
 
