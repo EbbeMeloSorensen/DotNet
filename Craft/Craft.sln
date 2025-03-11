@@ -55,7 +55,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Utils.UnitTest", "Craft.Utils.UnitTest\Craft.Utils.UnitTest.csproj", "{EE7DECD5-0C2B-46A6-91E2-A73809753AFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.DataStructures.IO.UI.Console", "Craft.DataStructures.IO.UI.Console\Craft.DataStructures.IO.UI.Console.csproj", "{5F86478E-6B0F-4B28-9792-EA461004F910}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.DataStructures.IO.UI.Console", "Craft.DataStructures.IO.UI.Console\Craft.DataStructures.IO.UI.Console.csproj", "{5F86478E-6B0F-4B28-9792-EA461004F910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Domain", "Craft.Domain\Craft.Domain.csproj", "{C257A8E0-CB2F-41DA-BC02-370CE55401BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,6 +161,10 @@ Global
 		{5F86478E-6B0F-4B28-9792-EA461004F910}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F86478E-6B0F-4B28-9792-EA461004F910}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F86478E-6B0F-4B28-9792-EA461004F910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C257A8E0-CB2F-41DA-BC02-370CE55401BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C257A8E0-CB2F-41DA-BC02-370CE55401BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C257A8E0-CB2F-41DA-BC02-370CE55401BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C257A8E0-CB2F-41DA-BC02-370CE55401BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
