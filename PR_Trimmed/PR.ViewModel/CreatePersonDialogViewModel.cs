@@ -236,7 +236,7 @@ namespace PR.ViewModel
                         City = City.NullifyIfEmpty(),
                         Birthday = Birthday,
                         Category = Category,
-                        Start = Start ?? DateTime.UtcNow,
+                        Start = Start ?? default(DateTime),
                         End = End ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                     };
 

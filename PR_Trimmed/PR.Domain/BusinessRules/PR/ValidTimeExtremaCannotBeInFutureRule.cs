@@ -10,8 +10,11 @@ namespace PR.Domain.BusinessRules.PR
         public bool Validate(
             Person person)
         {
-            return person.Start <= DateTime.UtcNow && 
-                   person.End <= DateTime.UtcNow;
+            var result =
+                person.Start <= DateTime.UtcNow &&
+                (person.End.Year == 9999 || person.End <= DateTime.UtcNow);
+
+            return result;
         }
 
         public string ErrorMessage => "Valid Time extrema cannot be in the future";
