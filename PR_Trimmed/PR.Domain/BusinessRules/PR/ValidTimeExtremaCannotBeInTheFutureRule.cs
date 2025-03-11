@@ -4,9 +4,9 @@ using PR.Domain.Entities.PR;
 
 namespace PR.Domain.BusinessRules.PR
 {
-    public class ValidTimeExtremaCannotBeInFutureRule : IBusinessRule<Person>
+    public class ValidTimeExtremaCannotBeInTheFutureRule : IBusinessRule<Person>
     {
-        public string RuleName => "ValidTimeExtremaCannotBeInFuture";
+        public string RuleName => "ValidTimeExtremaCannotBeInTheFuture";
 
         public bool Validate(
             Person person)

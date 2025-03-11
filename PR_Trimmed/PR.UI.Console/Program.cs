@@ -16,9 +16,14 @@ namespace PR.UI.Console
         {
             System.Console.Write("Creating Person...\nProgress: ");
 
+            options.StartTime.TryParsingAsDateTime(out var startTime);
+            options.EndTime.TryParsingAsDateTime(out var endTime);
+
             var person = new Person()
             {
-                FirstName = options.FirstName
+                FirstName = options.FirstName,
+                Start = startTime ?? DateTime.UtcNow.Date,
+                End = endTime ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             };
 
             var errors = await GetApplication().CreatePerson(person, (progress, nameOfSubtask) =>
