@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Craft.Domain;
 using Microsoft.Win32;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -115,24 +116,21 @@ namespace PR.ViewModel
 
         public MainWindowViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
+            IBusinessRuleCatalog businessRuleCatalog,
             IDataIOHandler dataIOHandler,
             IDialogService applicationDialogService,
             ILogger logger)
         {
             _application = new Application.Application(
-                unitOfWorkFactory, 
+                unitOfWorkFactory,
+                businessRuleCatalog,
                 dataIOHandler, 
                 logger);
 
             _application.UnitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
-
             _businessRuleCatalog = new BusinessRuleCatalog();
-            _businessRuleCatalog.RegisterRule(new FirstNameIsRequiredRule());
-            _businessRuleCatalog.RegisterRule(new StartIsRequiredRule());
-            _businessRuleCatalog.RegisterRule(new ValidTimeExtremaCannotBeInFutureRule());
-            //_businessRuleCatalog.RegisterRule(new NonOverlappingValidTimeIntervalsRule());
 
             LogViewModel = new LogViewModel(200);
             _logger = new ViewModelLogger(logger, LogViewModel);

@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Craft.Domain;
 using Craft.Logging;
 using Craft.Utils;
+using PR.Domain.BusinessRules.PR;
 using PR.Domain.Entities.PR;
 using PR.IO;
 using PR.Persistence;
@@ -18,6 +20,7 @@ namespace PR.Application
 
     public class Application
     {
+        private readonly IBusinessRuleCatalog _businessRuleCatalog;
         private IDataIOHandler _dataIOHandler;
         private ILogger _logger;
 
@@ -35,10 +38,12 @@ namespace PR.Application
 
         public Application(
             IUnitOfWorkFactory unitOfWorkFactory,
+            IBusinessRuleCatalog businessRuleCatalog,
             IDataIOHandler dataIOHandler,
             ILogger logger)
         {
             UnitOfWorkFactory = unitOfWorkFactory;
+            _businessRuleCatalog = businessRuleCatalog;
             _dataIOHandler = dataIOHandler;
             _logger = logger;
             UnitOfWorkFactory.Logger = logger;
@@ -96,23 +101,33 @@ namespace PR.Application
             });
         }
 
-        public async Task CreatePerson(
+        public async Task<List<string>> CreatePerson(
             Person person,
             ProgressCallback progressCallback = null)
         {
-            await Task.Run(async () =>
+            return await Task.Run(async () =>
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
                 progressCallback?.Invoke(0.0, "Creating Person");
 
-                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                var businessRuleViolations = _businessRuleCatalog.Validate(person);
+
+                if (businessRuleViolations.Any())
                 {
+                    progressCallback?.Invoke(100, "");
+                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to business rule violations:");
+                    businessRuleViolations.ForEach(_ => Logger?.WriteLine(LogMessageCategory.Information, $"{_}"));
+                }
+                else
+                {
+                    using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
                     await unitOfWork.People.Add(person);
                     unitOfWork.Complete();
+                    Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
                 }
 
                 progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
+                return businessRuleViolations;
             });
         }
 

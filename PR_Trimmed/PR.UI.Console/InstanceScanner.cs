@@ -15,6 +15,7 @@ namespace PR.UI.Console
             {
                 _.WithDefaultConventions();
                 _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("Craft.Logging"));
+                _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("PR.Domain"));
                 _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("PR.IO"));
                 _.Assembly(repositoryPluginAssembly);
                 _.LookForRegistries();

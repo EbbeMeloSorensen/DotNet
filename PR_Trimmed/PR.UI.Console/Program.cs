@@ -6,6 +6,7 @@ using PR.Domain.Entities.PR;
 using PR.Persistence;
 using PR.Persistence.Versioned;
 using PR.UI.Console.Verbs;
+using System;
 
 namespace PR.UI.Console
 {
@@ -21,13 +22,22 @@ namespace PR.UI.Console
                 FirstName = options.FirstName
             };
 
-            await GetApplication().CreatePerson(person, (progress, nameOfSubtask) =>
+            var errors = await GetApplication().CreatePerson(person, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
                 return false;
             });
-            System.Console.WriteLine("\nDone");
+
+            if (errors.Any())
+            {
+                System.Console.WriteLine("\nErrors:");
+                errors.ForEach(_ => System.Console.WriteLine($"  {_.Substring(_.IndexOf(":") + 2)}"));
+            }
+            else
+            {
+                System.Console.WriteLine("\nDone");
+            }
         }
 
         public static async Task ListPeople(

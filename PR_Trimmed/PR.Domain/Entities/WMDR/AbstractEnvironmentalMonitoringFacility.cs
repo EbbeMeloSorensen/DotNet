@@ -1,4 +1,5 @@
 ﻿using System;
+using Craft.Domain;
 
 namespace PR.Domain.Entities.WMDR
 {

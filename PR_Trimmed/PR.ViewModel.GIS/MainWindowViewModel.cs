@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using Craft.Domain;
 using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
@@ -292,12 +293,14 @@ namespace PR.ViewModel.GIS
 
         public MainWindowViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
+            IBusinessRuleCatalog businessRuleCatalog,
             IDataIOHandler dataIOHandler,
             IDialogService applicationDialogService,
             ILogger logger)
         {
             _application = new Application.Application(
                 unitOfWorkFactory,
+                businessRuleCatalog,
                 dataIOHandler,
                 logger)
             {

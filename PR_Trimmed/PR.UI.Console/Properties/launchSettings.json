@@ -2,7 +2,7 @@
   "profiles": {
     "PR.UI.Console": {
       "commandName": "Project",
-      "commandLineArgs": "details -i 12345678-0000-0000-0000-000000000006"
+      "commandLineArgs": "create -f \"\""
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using PR.Domain.Entities.PR;
+﻿using Craft.Domain;
+using PR.Domain.Entities.PR;
 
 namespace PR.Domain.BusinessRules.PR
 {

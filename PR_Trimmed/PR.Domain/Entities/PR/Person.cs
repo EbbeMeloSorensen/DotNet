@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Craft.Domain;
 
 namespace PR.Domain.Entities.PR
 {
