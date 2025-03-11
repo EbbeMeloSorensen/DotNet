@@ -35,6 +35,8 @@ Done:
 * Lav noget input validering, når man prøver at lave en person med et invalidt virkningstidsinterval
 
 Todo:
+* Kombiner IDataErrorInfo med businessRuleCatalog som anvist af ChatGPT
+  - Lav en ny mere kompakt dialog, hvor det nye princip er bærende
 * Lad Start Date være mandatory i forbindelse med oprettelse af ny person
 * Gør det muligt at slå business rules til og fra
 * Bryd person properties viewet ned i et hierarki
