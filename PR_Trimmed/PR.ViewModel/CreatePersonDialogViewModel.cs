@@ -174,6 +174,7 @@ namespace PR.ViewModel
             BusinessRuleCatalog businessRuleCatalog)
         {
             _businessRuleCatalog = businessRuleCatalog;
+            Start = DateTime.UtcNow.Date;
         }
 
         private void OK(object parameter)
@@ -239,9 +240,8 @@ namespace PR.ViewModel
                         End = End ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                     };
 
+                    // Den bliver åbenbart kaldt en del gange den her - det er ikke ubetinget fedt
                     var temp = _businessRuleCatalog.Validate(person);
-                    // end
-
 
                     var now = DateTime.UtcNow;
 

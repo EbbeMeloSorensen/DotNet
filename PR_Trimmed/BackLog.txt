@@ -35,6 +35,7 @@ Done:
 * Lav noget input validering, når man prøver at lave en person med et invalidt virkningstidsinterval
 
 Todo:
+* Lad Start Date være mandatory i forbindelse med oprettelse af ny person
 * Gør det muligt at slå business rules til og fra
 * Bryd person properties viewet ned i et hierarki
 * Det prospektivt at ændre en kommentar skal foregå på samme måde, som når man prospektivt ændrer en person, dvs med en Update knap

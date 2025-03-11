@@ -130,6 +130,7 @@ namespace PR.ViewModel
 
             _businessRuleCatalog = new BusinessRuleCatalog();
             _businessRuleCatalog.RegisterRule(new FirstNameIsRequiredRule());
+            _businessRuleCatalog.RegisterRule(new StartIsRequiredRule());
             _businessRuleCatalog.RegisterRule(new ValidTimeExtremaCannotBeInFutureRule());
             //_businessRuleCatalog.RegisterRule(new NonOverlappingValidTimeIntervalsRule());
 
