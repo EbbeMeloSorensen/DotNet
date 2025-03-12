@@ -19,6 +19,9 @@
             <DataTemplate DataType="{x:Type viewModel:CreatePersonDialogViewModel}">
                 <local:CreatePersonDialogView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:CreatePersonDialogViewModelNew}">
+                <local:CreatePersonDialogViewNew/>
+            </DataTemplate>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />

@@ -191,7 +191,8 @@ namespace PR.ViewModel
         private async Task CreatePerson(
             object owner)
         {
-            var dialogViewModel = new CreatePersonDialogViewModel(_businessRuleCatalog);
+            //var dialogViewModel = new CreatePersonDialogViewModel(_businessRuleCatalog);
+            var dialogViewModel = new CreatePersonDialogViewModelNew();
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
@@ -202,14 +203,14 @@ namespace PR.ViewModel
             {
                 FirstName = dialogViewModel.FirstName,
                 Surname = dialogViewModel.Surname,
-                Nickname = dialogViewModel.Nickname,
-                Address = dialogViewModel.Address,
-                ZipCode = dialogViewModel.ZipCode,
-                City = dialogViewModel.City,
-                Birthday = dialogViewModel.Birthday,
-                Category = dialogViewModel.Category,
-                Start = dialogViewModel.Start.HasValue ? dialogViewModel.Start.Value : new DateTime(),
-                End = dialogViewModel.End.HasValue ? dialogViewModel.End.Value : new DateTime()
+                //Nickname = dialogViewModel.Nickname,
+                //Address = dialogViewModel.Address,
+                //ZipCode = dialogViewModel.ZipCode,
+                //City = dialogViewModel.City,
+                //Birthday = dialogViewModel.Birthday,
+                //Category = dialogViewModel.Category,
+                //Start = dialogViewModel.Start.HasValue ? dialogViewModel.Start.Value : new DateTime(),
+                //End = dialogViewModel.End.HasValue ? dialogViewModel.End.Value : new DateTime()
             };
 
             using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
