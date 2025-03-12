@@ -6,6 +6,6 @@ namespace Craft.Domain
     {
         void RegisterRule<T>(IBusinessRule<T> rule);
 
-        List<string> Validate<T>(T entity);
+        Dictionary<string, string> Validate<T>(T entity);
     }
 }

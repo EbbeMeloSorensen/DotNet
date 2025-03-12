@@ -192,7 +192,7 @@ namespace PR.ViewModel
             object owner)
         {
             //var dialogViewModel = new CreatePersonDialogViewModel(_businessRuleCatalog);
-            var dialogViewModel = new CreatePersonDialogViewModelNew();
+            var dialogViewModel = new CreatePersonDialogViewModelNew(_businessRuleCatalog);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {

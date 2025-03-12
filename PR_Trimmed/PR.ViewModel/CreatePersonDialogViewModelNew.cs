@@ -6,6 +6,8 @@ using Craft.UI.Utils;
 using Craft.Utils;
 using Craft.ViewModels.Dialogs;
 using GalaSoft.MvvmLight.Command;
+using PR.Domain.BusinessRules.PR;
+using PR.Domain.Entities.PR;
 
 namespace PR.ViewModel
 {
@@ -15,28 +17,30 @@ namespace PR.ViewModel
         private ObservableCollection<ValidationError> _validationMessages;
         private string _error = string.Empty;
 
-        private string _firstName;
-        private string _surname;
+        private BusinessRuleCatalog _businessRuleCatalog;
+        private Person _person;
 
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
         public string FirstName
         {
-            get { return _firstName; }
+            get => _person.FirstName;
             set
             {
-                _firstName = value;
+                _person.FirstName = value;
+                Validate();
                 RaisePropertyChanged();
             }
         }
 
         public string Surname
         {
-            get { return _surname; }
+            get => _person.Surname;
             set
             {
-                _surname = value;
+                _person.Surname = value;
+                Validate();
                 RaisePropertyChanged();
             }
         }
@@ -49,6 +53,13 @@ namespace PR.ViewModel
         public RelayCommand<object> CancelCommand
         {
             get { return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(Cancel, CanCancel)); }
+        }
+
+        public CreatePersonDialogViewModelNew(
+            BusinessRuleCatalog businessRuleCatalog)
+        {
+            _businessRuleCatalog = businessRuleCatalog;
+            _person = new Person();
         }
 
         private void OK(object parameter)
@@ -83,7 +94,7 @@ namespace PR.ViewModel
             return true;
         }
 
-        public ObservableCollection<ValidationError> ValidationMessages
+        private ObservableCollection<ValidationError> ValidationMessages
         {
             get
             {
@@ -149,7 +160,20 @@ namespace PR.ViewModel
             StateOfView state)
         {
             _state = state;
+            Validate();
             RaisePropertyChanges();
+        }
+
+        private void Validate()
+        {
+            if (_state != StateOfView.Updated) return;
+
+            var errors = _businessRuleCatalog.Validate(_person);
+
+            //_errors = BusinessRuleCatalog.Validate(_person);
+            //OnPropertyChanged(nameof(Name));
+            //OnPropertyChanged(nameof(Age));
+            //OnPropertyChanged(nameof(Email));
         }
     }
 }

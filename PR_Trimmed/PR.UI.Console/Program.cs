@@ -6,6 +6,7 @@ using PR.Domain.Entities.PR;
 using PR.Persistence;
 using PR.Persistence.Versioned;
 using PR.UI.Console.Verbs;
+using Craft.Logging;
 
 namespace PR.UI.Console
 {
@@ -26,17 +27,23 @@ namespace PR.UI.Console
                 End = endTime ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             };
 
-            var errors = await GetApplication().CreatePerson(person, (progress, nameOfSubtask) =>
+            var businessRuleViolations = await GetApplication().CreatePerson(person, (progress, nameOfSubtask) =>
             {
                 System.Console.SetCursorPosition(10, System.Console.CursorTop);
                 System.Console.Write($"{progress:F2} %");
                 return false;
             });
 
-            if (errors.Any())
+            if (businessRuleViolations.Any())
             {
                 System.Console.WriteLine("\nErrors:");
-                errors.ForEach(_ => System.Console.WriteLine($"  {_.Substring(_.IndexOf(":") + 2)}"));
+
+                foreach (var kvp in businessRuleViolations)
+                {
+                    System.Console.WriteLine($"  {kvp.Value}");
+                }
+
+                //errors.ForEach(_ => System.Console.WriteLine($"  {_.Substring(_.IndexOf(":") + 2)}"));
             }
             else
             {

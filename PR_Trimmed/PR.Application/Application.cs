@@ -101,7 +101,7 @@ namespace PR.Application
             });
         }
 
-        public async Task<List<string>> CreatePerson(
+        public async Task<Dictionary<string, string>> CreatePerson(
             Person person,
             ProgressCallback progressCallback = null)
         {
@@ -116,7 +116,11 @@ namespace PR.Application
                 {
                     progressCallback?.Invoke(100, "");
                     Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to business rule violations:");
-                    businessRuleViolations.ForEach(_ => Logger?.WriteLine(LogMessageCategory.Information, $"{_}"));
+
+                    foreach (var kvp in businessRuleViolations)
+                    {
+                        Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
+                    }
                 }
                 else
                 {
