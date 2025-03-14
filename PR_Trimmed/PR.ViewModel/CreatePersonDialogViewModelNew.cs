@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -14,8 +14,7 @@ namespace PR.ViewModel
     public class CreatePersonDialogViewModelNew : DialogViewModelBase, IDataErrorInfo
     {
         private StateOfView _state;
-        private ObservableCollection<ValidationError> _validationMessages;
-        private string _error = string.Empty;
+        private Dictionary<string, string> _errors;
 
         private BusinessRuleCatalog _businessRuleCatalog;
         private Person _person;
@@ -59,6 +58,7 @@ namespace PR.ViewModel
             BusinessRuleCatalog businessRuleCatalog)
         {
             _businessRuleCatalog = businessRuleCatalog;
+            _errors = new Dictionary<string, string>();
             _person = new Person();
         }
 
@@ -66,15 +66,13 @@ namespace PR.ViewModel
         {
             UpdateState(StateOfView.Updated);
 
-            Error = string.Join("",
-                ValidationMessages.Select(e => e.ErrorMessage).ToArray());
-
-            if (!string.IsNullOrEmpty(Error))
+            if (_errors.Values.Any(_ => !string.IsNullOrEmpty(_)))
             {
                 return;
             }
 
             FirstName = FirstName.NullifyIfEmpty();
+            Surname = Surname.NullifyIfEmpty();
 
             CloseDialogWithResult(parameter as Window, DialogResult.OK);
         }
@@ -94,61 +92,16 @@ namespace PR.ViewModel
             return true;
         }
 
-        private ObservableCollection<ValidationError> ValidationMessages
-        {
-            get
-            {
-                if (_validationMessages == null)
-                {
-                    _validationMessages = new ObservableCollection<ValidationError>
-                    {
-                        new ValidationError {PropertyName = "FirstName"},
-                        new ValidationError {PropertyName = "Surname"},
-                    };
-                }
-
-                return _validationMessages;
-            }
-        }
-
         public string this[string columnName]
         {
             get
             {
-                var errorMessage = string.Empty;
-
-                if (_state == StateOfView.Updated)
-                {
-                    switch (columnName)
-                    {
-                        case "FirstName":
-                            {
-                                if (string.IsNullOrEmpty(FirstName))
-                                {
-                                    errorMessage = "First name is required";
-                                }
-
-                                break;
-                            }
-                    }
-                }
-
-                ValidationMessages
-                    .First(e => e.PropertyName == columnName).ErrorMessage = errorMessage;
-
-                return errorMessage;
+                _errors.TryGetValue(columnName, out string error);
+                return error;
             }
         }
 
-        public string Error
-        {
-            get { return _error; }
-            set
-            {
-                _error = value;
-                RaisePropertyChanged();
-            }
-        }
+        public string Error => null; // Not used
 
         private void RaisePropertyChanges()
         {
@@ -168,12 +121,9 @@ namespace PR.ViewModel
         {
             if (_state != StateOfView.Updated) return;
 
-            var errors = _businessRuleCatalog.Validate(_person);
+            _errors = _businessRuleCatalog.Validate(_person);
 
-            //_errors = BusinessRuleCatalog.Validate(_person);
-            //OnPropertyChanged(nameof(Name));
-            //OnPropertyChanged(nameof(Age));
-            //OnPropertyChanged(nameof(Email));
+            RaisePropertyChanges();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace PR.Domain.BusinessRules.PR
     {
         public BusinessRuleCatalog()
         {
-            RegisterRule(new FirstNameIsRequiredRule());
+            RegisterRule(new FirstNameIsValidRule());
             //RegisterRule(new StartIsRequiredRule());
             //RegisterRule(new EndMustBeLaterThanStartRule());
             //RegisterRule(new ValidTimeExtremaCannotBeInTheFutureRule());
