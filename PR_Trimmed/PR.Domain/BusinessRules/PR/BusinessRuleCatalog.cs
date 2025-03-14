@@ -7,8 +7,8 @@ namespace PR.Domain.BusinessRules.PR
         public BusinessRuleCatalog()
         {
             RegisterRule(new FirstNameIsValidRule());
+            RegisterRule(new DateRangeIsValidRule());
             //RegisterRule(new StartIsRequiredRule());
-            //RegisterRule(new EndMustBeLaterThanStartRule());
             //RegisterRule(new ValidTimeExtremaCannotBeInTheFutureRule());
             //_businessRuleCatalog.RegisterRule(new NonOverlappingValidTimeIntervalsRule());
         }

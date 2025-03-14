@@ -3,9 +3,9 @@ using PR.Domain.Entities.PR;
 
 namespace PR.Domain.BusinessRules.PR
 {
-    public class EndMustBeLaterThanStartRule : IBusinessRule<Person>
+    public class DateRangeIsValidRule : IBusinessRule<Person>
     {
-        public string RuleName => "EndMustBeLaterThanStart";
+        public string RuleName => "DateRange";
 
         public bool Validate(
             Person person)

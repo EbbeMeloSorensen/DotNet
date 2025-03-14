@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -18,6 +19,9 @@ namespace PR.ViewModel
 
         private BusinessRuleCatalog _businessRuleCatalog;
         private Person _person;
+
+        private string _dateRangeError;
+        private bool _displayDateRangeError;
 
         private RelayCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
@@ -44,6 +48,51 @@ namespace PR.ViewModel
             }
         }
 
+        public DateTime Start
+        {
+            get => _person.Start;
+            set
+            {
+                _person.Start = value;
+                Validate();
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(End));
+            }
+        }
+
+        public DateTime? End
+        {
+            get => _person.End;
+            set
+            {
+                _person.End = value ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+                Validate();
+                RaisePropertyChanged(nameof(Start));
+                RaisePropertyChanged();
+            }
+        }
+
+        public string DateRangeError
+        {
+            get { return _dateRangeError; }
+            set
+            {
+                _dateRangeError = value;
+                DisplayDateRangeError = !string.IsNullOrEmpty(_dateRangeError);
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DisplayDateRangeError
+        {
+            get { return _displayDateRangeError; }
+            set
+            {
+                _displayDateRangeError = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public RelayCommand<object> OKCommand
         {
             get { return _okCommand ?? (_okCommand = new RelayCommand<object>(OK, CanOK)); }
@@ -59,7 +108,12 @@ namespace PR.ViewModel
         {
             _businessRuleCatalog = businessRuleCatalog;
             _errors = new Dictionary<string, string>();
-            _person = new Person();
+
+            _person = new Person
+            {
+                Start = DateTime.UtcNow.Date,
+                End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+            };
         }
 
         private void OK(object parameter)
@@ -122,6 +176,8 @@ namespace PR.ViewModel
             if (_state != StateOfView.Updated) return;
 
             _errors = _businessRuleCatalog.Validate(_person);
+
+            // Todo: Check if the DateRange is valid and if not then set the DateRangeError
 
             RaisePropertyChanges();
         }
