@@ -50,12 +50,95 @@ namespace PR.ViewModel
             }
         }
 
-        public DateTime Start
+        public string Nickname
         {
-            get => _person.Start;
+            get => _person.Nickname;
             set
             {
-                _person.Start = value;
+                _person.Nickname = value;
+                Validate();
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Address
+        {
+            get => _person.Address;
+            set
+            {
+                _person.Address = value;
+                Validate();
+                RaisePropertyChanged();
+            }
+        }
+
+        public string ZipCode
+        {
+            get => _person.ZipCode;
+            set
+            {
+                _person.ZipCode = value;
+                Validate();
+                RaisePropertyChanged();
+            }
+        }
+
+        public string City
+        {
+            get => _person.City;
+            set
+            {
+                _person.City = value;
+                Validate();
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Category
+        {
+            get => _person.Category;
+            set
+            {
+                _person.Category = value;
+                Validate();
+                RaisePropertyChanged();
+            }
+        }
+
+        public DateTime? Birthday
+        {
+            get
+            {
+                if (_person.Birthday == default)
+                {
+                    return null;
+                }
+
+                return _person.Birthday;
+            }
+            set
+            {
+                _person.Birthday = value ?? default;
+                Validate();
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(End));
+            }
+        }
+
+        public DateTime? Start
+        {
+            get
+            {
+                if (_person.Start == default)
+                {
+                    return null;
+                }
+
+                return _person.Start;
+            }
+            set
+            {
+                _person.Start = value ?? default;
                 Validate();
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(End));
@@ -137,6 +220,11 @@ namespace PR.ViewModel
 
             FirstName = FirstName.NullifyIfEmpty();
             Surname = Surname.NullifyIfEmpty();
+            Nickname = Nickname.NullifyIfEmpty();
+            Address = Address.NullifyIfEmpty();
+            ZipCode = ZipCode.NullifyIfEmpty();
+            City = City.NullifyIfEmpty();
+            Category = Category.NullifyIfEmpty();
 
             CloseDialogWithResult(parameter as Window, DialogResult.OK);
         }
@@ -160,7 +248,18 @@ namespace PR.ViewModel
         {
             get
             {
-                _errors.TryGetValue(columnName, out string error);
+                string error = null;
+
+                if (columnName == "Start" ||
+                    columnName == "End")
+                {
+                    _errors.TryGetValue("DateRange", out error);
+                }
+                else
+                {
+                    _errors.TryGetValue(columnName, out error);
+                }
+
                 return error;
             }
         }
@@ -171,6 +270,14 @@ namespace PR.ViewModel
         {
             RaisePropertyChanged("FirstName");
             RaisePropertyChanged("Surname");
+            RaisePropertyChanged("Nickname");
+            RaisePropertyChanged("Address");
+            RaisePropertyChanged("ZipCode");
+            RaisePropertyChanged("City");
+            RaisePropertyChanged("Birthday");
+            RaisePropertyChanged("Category");
+            RaisePropertyChanged("Start");
+            RaisePropertyChanged("End");
         }
 
         private void UpdateState(
@@ -187,7 +294,10 @@ namespace PR.ViewModel
 
             _errors = _businessRuleCatalog.Validate(_person);
 
-            // Todo: Check if the DateRange is valid and if not then set the DateRangeError
+            if (_errors.ContainsKey("DateRange"))
+            {
+                DateRangeError = _errors["DateRange"];
+            }
 
             RaisePropertyChanges();
         }
