@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PR.UI.WPF"
+             xmlns:viewModel="clr-namespace:PR.ViewModel;assembly=PR.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModel:CreatePersonDialogViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,6 +27,11 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -38,7 +45,27 @@
             <TextBox Grid.Row="1" Grid.Column="1" Margin="2" 
                      Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding Surname, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Valid Time" Padding="0, 3, 0, 0">
+            <TextBlock Grid.Row="2" Grid.Column="0" Padding="3" Text="Nickname:"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="2" 
+                     Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                     Text="{Binding Nickname, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Padding="3" Text="Address:"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="2" 
+                     Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                     Text="{Binding Address, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Padding="3" Text="Zip Code:"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="2" 
+                     Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                     Text="{Binding ZipCode, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Padding="3" Text="City:"/>
+            <TextBox Grid.Row="5" Grid.Column="1" Margin="2" 
+                     Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                     Text="{Binding City, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Padding="3" Text="Birthday:"/>
+            <DatePicker Grid.Row="6" Grid.Column="1" Padding="3"
+                        Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                        SelectedDate="{Binding Birthday, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <GroupBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Header="Valid Time" Padding="0, 3, 0, 0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>

@@ -14,13 +14,13 @@ namespace PR.Domain.BusinessRules.PR
         {
             if (string.IsNullOrEmpty(person.FirstName))
             {
-                ErrorMessage = "Required";
+                ErrorMessage = "First name required";
                 return false;
             }
             
             if (person.FirstName.Length > 10)
             {
-                ErrorMessage = "Too long (max 10 characters)";
+                ErrorMessage = "First name too long (max 10 characters)";
                 return false;
             }
 

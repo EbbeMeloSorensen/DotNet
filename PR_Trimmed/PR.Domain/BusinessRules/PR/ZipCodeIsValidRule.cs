@@ -14,7 +14,7 @@ namespace PR.Domain.BusinessRules.PR
         {
             if (!string.IsNullOrEmpty(person.ZipCode) && person.ZipCode.Length > 10)
             {
-                ErrorMessage = "Too long (max 10 characters)";
+                ErrorMessage = "Zip code too long (max 10 characters)";
                 return false;
             }
 

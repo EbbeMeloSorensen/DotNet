@@ -107,21 +107,12 @@ namespace PR.ViewModel
 
         public DateTime? Birthday
         {
-            get
-            {
-                if (_person.Birthday == default)
-                {
-                    return null;
-                }
-
-                return _person.Birthday;
-            }
+            get => _person.Birthday;
             set
             {
-                _person.Birthday = value ?? default;
+                _person.Birthday = value;
                 Validate();
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(End));
             }
         }
 

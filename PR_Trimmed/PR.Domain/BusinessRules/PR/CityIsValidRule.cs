@@ -14,7 +14,7 @@ namespace PR.Domain.BusinessRules.PR
         {
             if (!string.IsNullOrEmpty(person.City) && person.City.Length > 10)
             {
-                ErrorMessage = "Too long (max 10 characters)";
+                ErrorMessage = "City too long (max 10 characters)";
                 return false;
             }
 

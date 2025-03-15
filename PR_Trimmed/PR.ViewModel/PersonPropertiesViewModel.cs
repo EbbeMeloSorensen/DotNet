@@ -252,7 +252,8 @@ namespace PR.ViewModel
         private async Task CreatePersonVariant(
             object owner)
         {
-            var dialogViewModel = new CreatePersonDialogViewModel(_businessRuleCatalog);
+            throw new NotImplementedException();
+            var dialogViewModel = new CreatePersonDialogViewModelNew(_businessRuleCatalog);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {

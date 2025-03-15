@@ -14,7 +14,7 @@ namespace PR.Domain.BusinessRules.PR
         {
             if (!string.IsNullOrEmpty(person.Nickname) && person.Nickname.Length > 10)
             {
-                ErrorMessage = "Too long (max 10 characters)";
+                ErrorMessage = "Nicjname too long (max 10 characters)";
                 return false;
             }
 
