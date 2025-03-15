@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace PR.UI.WPF
 {
     /// <summary>
-    /// Interaction logic for CreatePersonDialogViewNew.xaml
+    /// Interaction logic for CreatePersonDialogView.xaml
     /// </summary>
-    public partial class CreatePersonDialogViewNew : UserControl
+    public partial class CreatePersonDialogView : UserControl
     {
-        public CreatePersonDialogViewNew()
+        public CreatePersonDialogView()
         {
             InitializeComponent();
         }

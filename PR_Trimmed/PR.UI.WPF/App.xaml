@@ -16,8 +16,8 @@
             <DataTemplate DataType="{x:Type viewModel1:MessageBoxDialogViewModel}">
                 <dialogs:MessageBoxDialogView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModel:CreatePersonDialogViewModelNew}">
-                <local:CreatePersonDialogViewNew/>
+            <DataTemplate DataType="{x:Type viewModel:CreatePersonDialogViewModel}">
+                <local:CreatePersonDialogView/>
             </DataTemplate>
 
             <ResourceDictionary.MergedDictionaries>

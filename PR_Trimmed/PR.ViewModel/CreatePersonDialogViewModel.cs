@@ -12,7 +12,7 @@ using PR.Domain.Entities.PR;
 
 namespace PR.ViewModel
 {
-    public class CreatePersonDialogViewModelNew : DialogViewModelBase, IDataErrorInfo
+    public class CreatePersonDialogViewModel : DialogViewModelBase, IDataErrorInfo
     {
         private static readonly DateTime _maxDateTime = new(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 
@@ -187,7 +187,7 @@ namespace PR.ViewModel
             get { return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(Cancel, CanCancel)); }
         }
 
-        public CreatePersonDialogViewModelNew(
+        public CreatePersonDialogViewModel(
             BusinessRuleCatalog businessRuleCatalog)
         {
             _businessRuleCatalog = businessRuleCatalog;
@@ -239,7 +239,8 @@ namespace PR.ViewModel
         {
             get
             {
-                string error = null;
+                string? error;
+                DateRangeError = "";
 
                 if (columnName == "Start" ||
                     columnName == "End")
@@ -251,7 +252,7 @@ namespace PR.ViewModel
                     _errors.TryGetValue(columnName, out error);
                 }
 
-                return error;
+                return error ?? "";
             }
         }
 
