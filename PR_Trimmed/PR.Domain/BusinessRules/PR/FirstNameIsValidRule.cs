@@ -18,9 +18,9 @@ namespace PR.Domain.BusinessRules.PR
                 return false;
             }
             
-            if (person.FirstName.Length > 20)
+            if (person.FirstName.Length > 10)
             {
-                ErrorMessage = "Too long";
+                ErrorMessage = "Too long (max 10 characters)";
                 return false;
             }
 

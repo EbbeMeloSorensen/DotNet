@@ -14,6 +14,8 @@ namespace PR.ViewModel
 {
     public class CreatePersonDialogViewModelNew : DialogViewModelBase, IDataErrorInfo
     {
+        private static readonly DateTime _maxDateTime = new(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
         private StateOfView _state;
         private Dictionary<string, string> _errors;
 
@@ -62,7 +64,15 @@ namespace PR.ViewModel
 
         public DateTime? End
         {
-            get => _person.End;
+            get
+            {
+                if (_person.End == _maxDateTime)
+                {
+                    return null;
+                }
+
+                return _person.End;
+            }
             set
             {
                 _person.End = value ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
