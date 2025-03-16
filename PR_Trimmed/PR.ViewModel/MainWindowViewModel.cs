@@ -191,36 +191,38 @@ namespace PR.ViewModel
         private async Task CreatePerson(
             object owner)
         {
-            var dialogViewModel = new CreatePersonDialogViewModel(_businessRuleCatalog);
+            var dialogViewModel = new CreatePersonDialogViewModel(
+                _application.UnitOfWorkFactory,
+                _businessRuleCatalog);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
                 return;
             }
 
-            var person = new Person
-            {
-                FirstName = dialogViewModel.FirstName,
-                Surname = dialogViewModel.Surname,
-                //Nickname = dialogViewModel.Nickname,
-                //Address = dialogViewModel.Address,
-                //ZipCode = dialogViewModel.ZipCode,
-                //City = dialogViewModel.City,
-                //Birthday = dialogViewModel.Birthday,
-                //Category = dialogViewModel.Category,
-                //Start = dialogViewModel.Start.HasValue ? dialogViewModel.Start.Value : new DateTime(),
-                //End = dialogViewModel.End.HasValue ? dialogViewModel.End.Value : new DateTime()
-            };
+            //var person = new Person
+            //{
+            //    FirstName = dialogViewModel.FirstName,
+            //    Surname = dialogViewModel.Surname,
+            //    //Nickname = dialogViewModel.Nickname,
+            //    //Address = dialogViewModel.Address,
+            //    //ZipCode = dialogViewModel.ZipCode,
+            //    //City = dialogViewModel.City,
+            //    //Birthday = dialogViewModel.Birthday,
+            //    //Category = dialogViewModel.Category,
+            //    //Start = dialogViewModel.Start.HasValue ? dialogViewModel.Start.Value : new DateTime(),
+            //    //End = dialogViewModel.End.HasValue ? dialogViewModel.End.Value : new DateTime()
+            //};
 
-            using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                await unitOfWork.People.Add(person);
-                unitOfWork.Complete();
-            }
+            //using (var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork())
+            //{
+            //    await unitOfWork.People.Add(person);
+            //    unitOfWork.Complete();
+            //}
 
-            if (person.End > DateTime.UtcNow)
+            if (dialogViewModel.Person.End > DateTime.UtcNow)
             {
-                PersonListViewModel.AddPerson(person);
+                PersonListViewModel.AddPerson(dialogViewModel.Person);
             }
         }
 

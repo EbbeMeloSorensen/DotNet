@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
-using Craft.UI.Utils;
-using Craft.Utils;
-using Craft.ViewModels.Dialogs;
 using GalaSoft.MvvmLight.Command;
+using Craft.UI.Utils;
+using Craft.ViewModel.Utils;
+using Craft.ViewModels.Dialogs;
 using PR.Domain.BusinessRules.PR;
 using PR.Domain.Entities.PR;
+using PR.Persistence;
 
 namespace PR.ViewModel
 {
@@ -19,21 +21,22 @@ namespace PR.ViewModel
         private StateOfView _state;
         private Dictionary<string, string> _errors;
 
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private BusinessRuleCatalog _businessRuleCatalog;
-        private Person _person;
+        public Person Person { get; }
 
         private string _dateRangeError;
         private bool _displayDateRangeError;
 
-        private RelayCommand<object> _okCommand;
+        private AsyncCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
         public string FirstName
         {
-            get => _person.FirstName;
+            get => Person.FirstName;
             set
             {
-                _person.FirstName = value;
+                Person.FirstName = value;
                 Validate();
                 RaisePropertyChanged();
             }
@@ -41,10 +44,10 @@ namespace PR.ViewModel
 
         public string Surname
         {
-            get => _person.Surname;
+            get => Person.Surname ?? "";
             set
             {
-                _person.Surname = value;
+                Person.Surname = value;
                 Validate();
                 RaisePropertyChanged();
             }
@@ -52,10 +55,10 @@ namespace PR.ViewModel
 
         public string Nickname
         {
-            get => _person.Nickname;
+            get => Person.Nickname ?? "";
             set
             {
-                _person.Nickname = value;
+                Person.Nickname = value;
                 Validate();
                 RaisePropertyChanged();
             }
@@ -63,10 +66,10 @@ namespace PR.ViewModel
 
         public string Address
         {
-            get => _person.Address;
+            get => Person.Address ?? "";
             set
             {
-                _person.Address = value;
+                Person.Address = value;
                 Validate();
                 RaisePropertyChanged();
             }
@@ -74,10 +77,10 @@ namespace PR.ViewModel
 
         public string ZipCode
         {
-            get => _person.ZipCode;
+            get => Person.ZipCode ?? "";
             set
             {
-                _person.ZipCode = value;
+                Person.ZipCode = value;
                 Validate();
                 RaisePropertyChanged();
             }
@@ -85,10 +88,10 @@ namespace PR.ViewModel
 
         public string City
         {
-            get => _person.City;
+            get => Person.City ?? "";
             set
             {
-                _person.City = value;
+                Person.City = value;
                 Validate();
                 RaisePropertyChanged();
             }
@@ -96,10 +99,10 @@ namespace PR.ViewModel
 
         public string Category
         {
-            get => _person.Category;
+            get => Person.Category ?? "";
             set
             {
-                _person.Category = value;
+                Person.Category = value;
                 Validate();
                 RaisePropertyChanged();
             }
@@ -107,10 +110,10 @@ namespace PR.ViewModel
 
         public DateTime? Birthday
         {
-            get => _person.Birthday;
+            get => Person.Birthday;
             set
             {
-                _person.Birthday = value;
+                Person.Birthday = value;
                 Validate();
                 RaisePropertyChanged();
             }
@@ -120,16 +123,16 @@ namespace PR.ViewModel
         {
             get
             {
-                if (_person.Start == default)
+                if (Person.Start == default)
                 {
                     return null;
                 }
 
-                return _person.Start;
+                return Person.Start;
             }
             set
             {
-                _person.Start = value ?? default;
+                Person.Start = value ?? default;
                 Validate();
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(End));
@@ -140,16 +143,16 @@ namespace PR.ViewModel
         {
             get
             {
-                if (_person.End == _maxDateTime)
+                if (Person.End == _maxDateTime)
                 {
                     return null;
                 }
 
-                return _person.End;
+                return Person.End;
             }
             set
             {
-                _person.End = value ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+                Person.End = value ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
                 Validate();
                 RaisePropertyChanged(nameof(Start));
                 RaisePropertyChanged();
@@ -158,7 +161,7 @@ namespace PR.ViewModel
 
         public string DateRangeError
         {
-            get { return _dateRangeError; }
+            get => _dateRangeError;
             set
             {
                 _dateRangeError = value;
@@ -169,7 +172,7 @@ namespace PR.ViewModel
 
         public bool DisplayDateRangeError
         {
-            get { return _displayDateRangeError; }
+            get => _displayDateRangeError;
             set
             {
                 _displayDateRangeError = value;
@@ -177,9 +180,9 @@ namespace PR.ViewModel
             }
         }
 
-        public RelayCommand<object> OKCommand
+        public AsyncCommand<object> OKCommand
         {
-            get { return _okCommand ?? (_okCommand = new RelayCommand<object>(OK, CanOK)); }
+            get { return _okCommand ?? (_okCommand = new AsyncCommand<object>(OK, CanOK)); }
         }
 
         public RelayCommand<object> CancelCommand
@@ -188,19 +191,21 @@ namespace PR.ViewModel
         }
 
         public CreatePersonDialogViewModel(
+            IUnitOfWorkFactory unitOfWorkFactory,
             BusinessRuleCatalog businessRuleCatalog)
         {
+            _unitOfWorkFactory = unitOfWorkFactory;
             _businessRuleCatalog = businessRuleCatalog;
             _errors = new Dictionary<string, string>();
 
-            _person = new Person
+            Person = new Person
             {
                 Start = DateTime.UtcNow.Date,
                 End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             };
         }
 
-        private void OK(object parameter)
+        private async Task OK(object parameter)
         {
             UpdateState(StateOfView.Updated);
 
@@ -209,13 +214,19 @@ namespace PR.ViewModel
                 return;
             }
 
-            FirstName = FirstName.NullifyIfEmpty();
-            Surname = Surname.NullifyIfEmpty();
-            Nickname = Nickname.NullifyIfEmpty();
-            Address = Address.NullifyIfEmpty();
-            ZipCode = ZipCode.NullifyIfEmpty();
-            City = City.NullifyIfEmpty();
-            Category = Category.NullifyIfEmpty();
+            //FirstName = FirstName.NullifyIfEmpty();
+            //Surname = Surname.NullifyIfEmpty();
+            //Nickname = Nickname.NullifyIfEmpty();
+            //Address = Address.NullifyIfEmpty();
+            //ZipCode = ZipCode.NullifyIfEmpty();
+            //City = City.NullifyIfEmpty();
+            //Category = Category.NullifyIfEmpty();
+
+            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            {
+                await unitOfWork.People.Add(Person);
+                unitOfWork.Complete();
+            }
 
             CloseDialogWithResult(parameter as Window, DialogResult.OK);
         }
@@ -284,7 +295,7 @@ namespace PR.ViewModel
         {
             if (_state != StateOfView.Updated) return;
 
-            _errors = _businessRuleCatalog.Validate(_person);
+            _errors = _businessRuleCatalog.Validate(Person);
 
             if (_errors.ContainsKey("DateRange"))
             {
