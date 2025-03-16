@@ -7,6 +7,7 @@
              xmlns:viewModel="clr-namespace:PR.ViewModel;assembly=PR.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
+             MaxWidth="350"
              d:DataContext="{d:DesignInstance viewModel:CreatePersonDialogViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -32,6 +33,18 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="{x:Type RowDefinition}">
+                            <Setter Property="Height" Value="0"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=DisplayGeneralError}" Value="true">
+                                    <Setter Property="Height" Value="Auto"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -100,15 +113,19 @@
                                Text="{Binding DateRangeError}"/>
                 </Grid>
             </GroupBox>
+            <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Red" BorderThickness="2" VerticalAlignment="Stretch" >
+                <TextBlock TextWrapping="WrapWithOverflow" Foreground="Red" VerticalAlignment="Stretch"
+                           Text="{Binding GeneralError}"/>
+            </Border>
 
         </Grid>
 
         <Grid Grid.Row="1" Margin="4">
-            <Button Content="OK" HorizontalAlignment="Left" Margin="135,70,0,0" VerticalAlignment="Top" Width="75"
+            <Button Content="OK" HorizontalAlignment="Left" Margin="135,5,0,0" VerticalAlignment="Top" Width="75"
                     IsDefault="True"
                     Command="{Binding OKCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Content="Cancel" HorizontalAlignment="Left" Margin="215,70,0,0" VerticalAlignment="Top" Width="75"
+            <Button Content="Cancel" HorizontalAlignment="Left" Margin="215,5,0,0" VerticalAlignment="Top" Width="75"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
         </Grid>

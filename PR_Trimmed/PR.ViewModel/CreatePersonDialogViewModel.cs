@@ -28,6 +28,9 @@ namespace PR.ViewModel
         private string _dateRangeError;
         private bool _displayDateRangeError;
 
+        private string _generalError;
+        private bool _displayGeneralError;
+
         private AsyncCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
@@ -180,6 +183,27 @@ namespace PR.ViewModel
             }
         }
 
+        public string GeneralError
+        {
+            get => _generalError;
+            set
+            {
+                _generalError = value;
+                DisplayGeneralError = !string.IsNullOrEmpty(_generalError);
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DisplayGeneralError
+        {
+            get => _displayGeneralError;
+            set
+            {
+                _displayGeneralError = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public AsyncCommand<object> OKCommand
         {
             get { return _okCommand ?? (_okCommand = new AsyncCommand<object>(OK, CanOK)); }
@@ -214,21 +238,27 @@ namespace PR.ViewModel
                 return;
             }
 
-            //FirstName = FirstName.NullifyIfEmpty();
-            //Surname = Surname.NullifyIfEmpty();
-            //Nickname = Nickname.NullifyIfEmpty();
-            //Address = Address.NullifyIfEmpty();
-            //ZipCode = ZipCode.NullifyIfEmpty();
-            //City = City.NullifyIfEmpty();
-            //Category = Category.NullifyIfEmpty();
-
-            using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+            try
             {
-                await unitOfWork.People.Add(Person);
-                unitOfWork.Complete();
-            }
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    await unitOfWork.People.Add(Person);
+                    unitOfWork.Complete();
+                }
 
-            CloseDialogWithResult(parameter as Window, DialogResult.OK);
+                CloseDialogWithResult(parameter as Window, DialogResult.OK);
+            }
+            catch (Exception e)
+            {
+                if (e.InnerException != null)
+                {
+                    GeneralError = e.InnerException.Message;
+                }
+                else
+                {
+                    GeneralError = e.Message;
+                }
+            }
         }
 
         private bool CanOK(object parameter)
