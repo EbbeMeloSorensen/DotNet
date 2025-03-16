@@ -252,40 +252,44 @@ namespace PR.ViewModel
         private async Task CreatePersonVariant(
             object owner)
         {
-            throw new NotImplementedException();
+            var occupiedDateRanges = PersonVariantListViewItemViewModels
+                .Select(_ => _.PersonVariant)
+                .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End));
+
             var dialogViewModel = new CreatePersonDialogViewModel(
                 UnitOfWorkFactory,
-                _businessRuleCatalog); 
+                _businessRuleCatalog,
+                occupiedDateRanges); 
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
                 return;
             }
 
-            var personVariant = new Person  
-            {
-                ID = _people.Objects.Single().ID,
-                FirstName = dialogViewModel.FirstName,
-                Surname = dialogViewModel.Surname,
-                Nickname = dialogViewModel.Nickname,
-                Address = dialogViewModel.Address,
-                ZipCode = dialogViewModel.ZipCode,
-                City = dialogViewModel.City,
-                Birthday = dialogViewModel.Birthday,
-                Category = dialogViewModel.Category,
-                Start = dialogViewModel.Start.HasValue ? dialogViewModel.Start.Value : new DateTime(),
-                End = dialogViewModel.End.HasValue ? dialogViewModel.End.Value : new DateTime()
-            };
+            //var personVariant = new Person  
+            //{
+            //    ID = _people.Objects.Single().ID,
+            //    FirstName = dialogViewModel.FirstName,
+            //    Surname = dialogViewModel.Surname,
+            //    Nickname = dialogViewModel.Nickname,
+            //    Address = dialogViewModel.Address,
+            //    ZipCode = dialogViewModel.ZipCode,
+            //    City = dialogViewModel.City,
+            //    Birthday = dialogViewModel.Birthday,
+            //    Category = dialogViewModel.Category,
+            //    Start = dialogViewModel.Start.HasValue ? dialogViewModel.Start.Value : new DateTime(),
+            //    End = dialogViewModel.End.HasValue ? dialogViewModel.End.Value : new DateTime()
+            //};
 
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            {
-                await unitOfWork.People.Add(personVariant);
-                unitOfWork.Complete();
-            }
+            //using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            //{
+            //    await unitOfWork.People.Add(personVariant);
+            //    unitOfWork.Complete();
+            //}
 
             var personVariants = PersonVariantListViewItemViewModels
                 .Select(_ => _.PersonVariant)
-                .Append(personVariant)
+                .Append(dialogViewModel.Person)
                 .OrderBy(_ => _.Start)
                 .ToList();
 

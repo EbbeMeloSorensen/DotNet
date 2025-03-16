@@ -23,7 +23,10 @@ namespace PR.ViewModel
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private BusinessRuleCatalog _businessRuleCatalog;
+
         public Person Person { get; }
+
+        private IEnumerable<Tuple<DateTime, DateTime>> _occupiedDateRanges;
 
         private string _dateRangeError;
         private bool _displayDateRangeError;
@@ -216,10 +219,13 @@ namespace PR.ViewModel
 
         public CreatePersonDialogViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
-            BusinessRuleCatalog businessRuleCatalog)
+            BusinessRuleCatalog businessRuleCatalog,
+            IEnumerable<Tuple<DateTime, DateTime>> occupiedDateRanges = null)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _businessRuleCatalog = businessRuleCatalog;
+            _occupiedDateRanges = occupiedDateRanges;
+
             _errors = new Dictionary<string, string>();
 
             Person = new Person
@@ -324,6 +330,11 @@ namespace PR.ViewModel
         private void Validate()
         {
             if (_state != StateOfView.Updated) return;
+
+            if (_occupiedDateRanges != null)
+            {
+                throw new NotImplementedException();
+            }
 
             _errors = _businessRuleCatalog.Validate(Person);
 
