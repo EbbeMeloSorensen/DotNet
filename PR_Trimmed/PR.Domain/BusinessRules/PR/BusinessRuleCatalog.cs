@@ -6,7 +6,7 @@ namespace PR.Domain.BusinessRules.PR
     {
         public BusinessRuleCatalog()
         {
-            //RegisterRule(new FirstNameIsValidRule());
+            RegisterRule(new FirstNameIsValidRule());
             RegisterRule(new SurnameIsValidRule());
             RegisterRule(new NicknameIsValidRule());
             RegisterRule(new AddressIsValidRule());
