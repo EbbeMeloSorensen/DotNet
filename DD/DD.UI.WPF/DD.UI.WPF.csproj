@@ -72,7 +72,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Craft\Craft.Logging.Log4Net\Craft.Logging.Log4Net.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.UIElements\Craft.UIElements.csproj" />
-    <ProjectReference Include="..\DD.Persistence.Memory\DD.Persistence.Memory.csproj" />
     <ProjectReference Include="..\DD.ViewModel\DD.ViewModel.csproj" />
   </ItemGroup>
 
