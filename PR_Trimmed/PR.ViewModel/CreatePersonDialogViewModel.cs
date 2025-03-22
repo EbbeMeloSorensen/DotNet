@@ -336,7 +336,7 @@ namespace PR.ViewModel
                 throw new NotImplementedException();
             }
 
-            _errors = _businessRuleCatalog.Validate(Person);
+            _errors = _businessRuleCatalog.ValidateAtomic(Person);
 
             if (_errors.ContainsKey("DateRange"))
             {

@@ -6,27 +6,50 @@ namespace Craft.Domain
 {
     public abstract class BusinessRuleCatalogBase : IBusinessRuleCatalog
     {
-        private readonly Dictionary<Type, List<object>> _rules = new Dictionary<Type, List<object>>();
+        private readonly Dictionary<Type, List<object>> _atomicRules = new Dictionary<Type, List<object>>();
+        private readonly List<object> _crossEntityRules = new List<object>();
 
-        public void RegisterRule<T>(IBusinessRule<T> rule)
+        public void RegisterAtomicRule<T>(
+            IBusinessRule<T> rule)
         {
-            if (!_rules.ContainsKey(typeof(T)))
+            if (!_atomicRules.ContainsKey(typeof(T)))
             {
-                _rules[typeof(T)] = new List<object>();
+                _atomicRules[typeof(T)] = new List<object>();
             }
 
-            _rules[typeof(T)].Add(rule);
+            _atomicRules[typeof(T)].Add(rule);
         }
 
-        public Dictionary<string, string> Validate<T>(T entity)
+        public void RegisterCrossEntityRule<T>(
+            IBusinessRule<IEnumerable<T>> rule)
         {
-            if (!_rules.ContainsKey(typeof(T))) return new Dictionary<string, string>();
+            throw new NotImplementedException();
+        }
 
-            return _rules[typeof(T)]
+        public void RegisterCrossEntityRule<T>(
+            IBusinessRule<List<T>> rule)
+        {
+            _crossEntityRules.Add(rule);
+        }
+
+        public Dictionary<string, string> ValidateAtomic<T>(
+            T entity)
+        {
+            if (!_atomicRules.ContainsKey(typeof(T))) return new Dictionary<string, string>();
+
+            return _atomicRules[typeof(T)]
                 .Cast<IBusinessRule<T>>()
                 .Where(rule => !rule.Validate(entity))
                 .ToDictionary(rule => rule.RuleName, rule => rule.ErrorMessage);
         }
 
+        public Dictionary<string, string> ValidateCrossEntity<T>(
+            IEnumerable<T> entities)
+        {
+            return _crossEntityRules
+                .OfType<IBusinessRule<IEnumerable<T>>>()
+                .Where(rule => !rule.Validate(entities))
+                .ToDictionary(rule => rule.RuleName, rule => rule.ErrorMessage);
+        }
     }
 }

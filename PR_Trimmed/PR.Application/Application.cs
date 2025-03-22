@@ -110,7 +110,7 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
                 progressCallback?.Invoke(0.0, "Creating Person");
 
-                var businessRuleViolations = _businessRuleCatalog.Validate(person);
+                var businessRuleViolations = _businessRuleCatalog.ValidateAtomic(person);
 
                 if (businessRuleViolations.Any())
                 {

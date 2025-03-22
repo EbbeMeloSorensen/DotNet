@@ -6,16 +6,16 @@ namespace PR.Domain.BusinessRules.PR
     {
         public BusinessRuleCatalog()
         {
-            RegisterRule(new FirstNameIsValidRule());
-            RegisterRule(new SurnameIsValidRule());
-            RegisterRule(new NicknameIsValidRule());
-            RegisterRule(new AddressIsValidRule());
-            RegisterRule(new ZipCodeIsValidRule());
-            RegisterRule(new CityIsValidRule());
-            RegisterRule(new CategoryIsValidRule());
-            RegisterRule(new BirthdayIsValidRule());
-            
-            RegisterRule(new DateRangeIsValidRule());
+            RegisterAtomicRule(new FirstNameIsValidRule());
+            RegisterAtomicRule(new SurnameIsValidRule());
+            RegisterAtomicRule(new NicknameIsValidRule());
+            RegisterAtomicRule(new AddressIsValidRule());
+            RegisterAtomicRule(new ZipCodeIsValidRule());
+            RegisterAtomicRule(new CityIsValidRule());
+            RegisterAtomicRule(new CategoryIsValidRule());
+            RegisterAtomicRule(new BirthdayIsValidRule());
+
+            RegisterAtomicRule(new DateRangeIsValidRule());
 
             //_businessRuleCatalog.RegisterRule(new NonOverlappingValidTimeIntervalsRule());
         }
