@@ -1,4 +1,6 @@
 ﻿using Craft.Domain;
+using PR.Domain.BusinessRules.PR.AtomicRules;
+using PR.Domain.BusinessRules.PR.CrossEntityRules;
 
 namespace PR.Domain.BusinessRules.PR
 {
@@ -14,10 +16,9 @@ namespace PR.Domain.BusinessRules.PR
             RegisterAtomicRule(new CityIsValidRule());
             RegisterAtomicRule(new CategoryIsValidRule());
             RegisterAtomicRule(new BirthdayIsValidRule());
-
             RegisterAtomicRule(new DateRangeIsValidRule());
 
-            //_businessRuleCatalog.RegisterRule(new NonOverlappingValidTimeIntervalsRule());
+            RegisterCrossEntityRule(new DateRangeCollectionRule());
         }
     }
 }

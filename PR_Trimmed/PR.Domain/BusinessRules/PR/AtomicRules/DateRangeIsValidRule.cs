@@ -2,7 +2,7 @@
 using Craft.Domain;
 using PR.Domain.Entities.PR;
 
-namespace PR.Domain.BusinessRules.PR
+namespace PR.Domain.BusinessRules.PR.AtomicRules
 {
     public class DateRangeIsValidRule : IBusinessRule<Person>
     {
@@ -30,7 +30,7 @@ namespace PR.Domain.BusinessRules.PR
             var now = DateTime.UtcNow;
 
             if (person.Start > now ||
-                (person.End != _maxDateTime && person.End > now))
+                person.End != _maxDateTime && person.End > now)
             {
                 ErrorMessage = "These dates cannot be in the future";
                 return false;

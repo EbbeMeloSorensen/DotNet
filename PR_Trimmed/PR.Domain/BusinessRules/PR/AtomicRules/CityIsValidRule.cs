@@ -1,7 +1,7 @@
 ﻿using Craft.Domain;
 using PR.Domain.Entities.PR;
 
-namespace PR.Domain.BusinessRules.PR
+namespace PR.Domain.BusinessRules.PR.AtomicRules
 {
     public class CityIsValidRule : IBusinessRule<Person>
     {

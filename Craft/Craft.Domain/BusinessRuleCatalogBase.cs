@@ -26,12 +26,6 @@ namespace Craft.Domain
             throw new NotImplementedException();
         }
 
-        public void RegisterCrossEntityRule<T>(
-            IBusinessRule<List<T>> rule)
-        {
-            _crossEntityRules.Add(rule);
-        }
-
         public Dictionary<string, string> ValidateAtomic<T>(
             T entity)
         {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Craft.Domain;
 using PR.Domain.Entities.PR;
 
-namespace PR.Domain.BusinessRules.PR
+namespace PR.Domain.BusinessRules.PR.CrossEntityRules
 {
-    public class NoOverlappingValidTimeIntervalsRule : IBusinessRule<IEnumerable<Person>>
+    public class DateRangeCollectionRule : IBusinessRule<IEnumerable<Person>>
     {
         public string RuleName => "NoOverlappingValidTimeIntervals";
 
@@ -15,6 +15,6 @@ namespace PR.Domain.BusinessRules.PR
             throw new NotImplementedException();
         }
 
-        public string ErrorMessage => "Overlapping valid time intervals detected";
+        public string ErrorMessage => "Date ranges overlapping";
     }
 }

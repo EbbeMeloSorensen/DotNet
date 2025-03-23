@@ -87,6 +87,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.UI.WPF.GIS", "PR.UI.WPF.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Domain", "..\Craft\Craft.Domain\Craft.Domain.csproj", "{E7330627-06E8-4B52-957E-51D014193130}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Domain.UnitTest", "PR.Domain.UnitTest\PR.Domain.UnitTest.csproj", "{423FC224-FC8B-4814-AA0E-691189BED076}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -245,6 +247,10 @@ Global
 		{E7330627-06E8-4B52-957E-51D014193130}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7330627-06E8-4B52-957E-51D014193130}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7330627-06E8-4B52-957E-51D014193130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{423FC224-FC8B-4814-AA0E-691189BED076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{423FC224-FC8B-4814-AA0E-691189BED076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{423FC224-FC8B-4814-AA0E-691189BED076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{423FC224-FC8B-4814-AA0E-691189BED076}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

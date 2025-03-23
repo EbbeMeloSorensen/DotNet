@@ -1,7 +1,7 @@
 ﻿using Craft.Domain;
 using PR.Domain.Entities.PR;
 
-namespace PR.Domain.BusinessRules.PR
+namespace PR.Domain.BusinessRules.PR.AtomicRules
 {
     public class FirstNameIsValidRule : IBusinessRule<Person>
     {
@@ -17,7 +17,7 @@ namespace PR.Domain.BusinessRules.PR
                 ErrorMessage = "First name required";
                 return false;
             }
-            
+
             if (person.FirstName.Length > 10)
             {
                 ErrorMessage = "First name too long (max 10 characters)";
