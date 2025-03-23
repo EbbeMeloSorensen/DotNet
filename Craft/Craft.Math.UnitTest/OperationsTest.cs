@@ -228,5 +228,43 @@ namespace Craft.Math.UnitTest
             overlaps1.Should().BeFalse();
             overlaps2.Should().BeFalse();
         }
+
+
+        [Fact]
+        public void Overlaps_Given2IntersectingTimeIntervals_ReturnsCorrectResult()
+        {
+            // Arrange
+            var interval1_t1 = new DateTime(1972, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var interval1_t2 = new DateTime(1974, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
+            var interval2_t1 = new DateTime(1973, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
+            var interval2_t2 = new DateTime(1975, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
+
+            // Act
+            var overlaps1 = Operations.Overlaps(interval1_t1, interval1_t2, interval2_t1, interval2_t2);
+            var overlaps2 = Operations.Overlaps(interval2_t1, interval2_t2, interval1_t1, interval1_t2);
+
+            // Assert
+            overlaps1.Should().BeTrue();
+            overlaps2.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Overlaps_Given2NonIntersectingTimeIntervals_ReturnsCorrectResult()
+        {
+            // Arrange
+            var interval1_t1 = new DateTime(1972, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var interval1_t2 = new DateTime(1974, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
+            var interval2_t1 = new DateTime(1975, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
+            var interval2_t2 = new DateTime(1977, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
+
+            // Act
+            var overlaps1 = Operations.Overlaps(interval1_t1, interval1_t2, interval2_t1, interval2_t2);
+            var overlaps2 = Operations.Overlaps(interval2_t1, interval2_t2, interval1_t1, interval1_t2);
+
+            // Assert
+            overlaps1.Should().BeFalse();
+            overlaps2.Should().BeFalse();
+        }
+
     }
 }

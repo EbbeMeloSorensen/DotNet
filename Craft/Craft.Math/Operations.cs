@@ -231,6 +231,15 @@ namespace Craft.Math
             return interval1_x1 < interval2_x2 && interval2_x1 < interval1_x2;
         }
 
+        public static bool Overlaps(
+            DateTime interval1_t1,
+            DateTime interval1_t2,
+            DateTime interval2_t1,
+            DateTime interval2_t2)
+        {
+            return interval1_t1 < interval2_t2 && interval2_t1 < interval1_t2;
+        }
+
         public static double SquaredDistanceTo(
             this LineSegment2D l,
             Point2D p)
