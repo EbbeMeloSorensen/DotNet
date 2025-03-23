@@ -192,5 +192,41 @@ namespace Craft.Math.UnitTest
             // Assert
             squaredDistance.Should().BeApproximately(25, 0.00001);
         }
+
+        [Fact]
+        public void Overlaps_Given2IntersectingIntervals_ReturnsCorrectResult()
+        {
+            // Arrange
+            var interval1_x1 = 2;
+            var interval1_x2 = 4;
+            var interval2_x1 = 3;
+            var interval2_x2 = 5;
+
+            // Act
+            var overlaps1 = Operations.Overlaps(interval1_x1, interval1_x2, interval2_x1, interval2_x2);
+            var overlaps2 = Operations.Overlaps(interval2_x1, interval2_x2, interval1_x1, interval1_x2);
+
+            // Assert
+            overlaps1.Should().BeTrue();
+            overlaps2.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Overlaps_Given2NonIntersectingIntervals_ReturnsCorrectResult()
+        {
+            // Arrange
+            var interval1_x1 = 2;
+            var interval1_x2 = 3;
+            var interval2_x1 = 3;
+            var interval2_x2 = 4;
+
+            // Act
+            var overlaps1 = Operations.Overlaps(interval1_x1, interval1_x2, interval2_x1, interval2_x2);
+            var overlaps2 = Operations.Overlaps(interval2_x1, interval2_x2, interval1_x1, interval1_x2);
+
+            // Assert
+            overlaps1.Should().BeFalse();
+            overlaps2.Should().BeFalse();
+        }
     }
 }

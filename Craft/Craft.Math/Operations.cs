@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Craft.Math
@@ -219,6 +220,15 @@ namespace Craft.Math
             }
 
             return t > 1 ? LineSegmentPart.Point2 : LineSegmentPart.MiddleSection;
+        }
+
+        public static bool Overlaps(
+            double interval1_x1,
+            double interval1_x2,
+            double interval2_x1,
+            double interval2_x2)
+        {
+            return interval1_x1 < interval2_x2 && interval2_x1 < interval1_x2;
         }
 
         public static double SquaredDistanceTo(
