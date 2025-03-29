@@ -54,7 +54,8 @@ namespace PR.Domain.UnitTest
                 new Person
                 {
                     FirstName = "Darth Vader",
-                    Start = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                    Start = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 },
             };
 
@@ -62,6 +63,8 @@ namespace PR.Domain.UnitTest
             var result = businessRuleCatalog.ValidateCrossEntity(personVariants);
 
             // Assert
+            result.ContainsKey("NoOverlappingValidTimeIntervals").Should().BeTrue();
+            result["NoOverlappingValidTimeIntervals"].Should().Be("Date ranges overlapping");
         }
     }
 }

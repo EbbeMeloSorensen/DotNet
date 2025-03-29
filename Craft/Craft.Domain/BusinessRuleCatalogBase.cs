@@ -23,7 +23,7 @@ namespace Craft.Domain
         public void RegisterCrossEntityRule<T>(
             IBusinessRule<IEnumerable<T>> rule)
         {
-            throw new NotImplementedException();
+            _crossEntityRules.Add(rule);
         }
 
         public Dictionary<string, string> ValidateAtomic<T>(

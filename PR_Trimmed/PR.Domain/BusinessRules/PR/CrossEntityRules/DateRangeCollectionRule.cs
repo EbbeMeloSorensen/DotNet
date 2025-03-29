@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Craft.Domain;
+using Craft.Math;
 using PR.Domain.Entities.PR;
 
 namespace PR.Domain.BusinessRules.PR.CrossEntityRules
@@ -12,7 +14,7 @@ namespace PR.Domain.BusinessRules.PR.CrossEntityRules
         public bool Validate(
             IEnumerable<Person> personVariants)
         {
-            throw new NotImplementedException();
+            return !personVariants.Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End)).AnyOverlaps();
         }
 
         public string ErrorMessage => "Date ranges overlapping";
