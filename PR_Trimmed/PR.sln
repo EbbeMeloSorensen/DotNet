@@ -89,6 +89,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Domain", "..\Craft\Cr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Domain.UnitTest", "PR.Domain.UnitTest\PR.Domain.UnitTest.csproj", "{423FC224-FC8B-4814-AA0E-691189BED076}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Math", "..\Craft\Craft.Math\Craft.Math.csproj", "{F2FCFF95-64D8-457D-BE79-A4FC674A34AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -251,6 +253,10 @@ Global
 		{423FC224-FC8B-4814-AA0E-691189BED076}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423FC224-FC8B-4814-AA0E-691189BED076}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{423FC224-FC8B-4814-AA0E-691189BED076}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2FCFF95-64D8-457D-BE79-A4FC674A34AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2FCFF95-64D8-457D-BE79-A4FC674A34AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2FCFF95-64D8-457D-BE79-A4FC674A34AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2FCFF95-64D8-457D-BE79-A4FC674A34AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 using FluentAssertions;
 
@@ -194,17 +195,15 @@ namespace Craft.Math.UnitTest
         }
 
         [Fact]
-        public void Overlaps_Given2IntersectingIntervals_ReturnsCorrectResult()
+        public void Overlaps_Given2OverlappingIntervals_ReturnsCorrectResult()
         {
             // Arrange
-            var interval1_x1 = 2;
-            var interval1_x2 = 4;
-            var interval2_x1 = 3;
-            var interval2_x2 = 5;
+            var interval1 = new Tuple<double, double>(2, 4);
+            var interval2 = new Tuple<double, double>(3, 5);
 
             // Act
-            var overlaps1 = Operations.Overlaps(interval1_x1, interval1_x2, interval2_x1, interval2_x2);
-            var overlaps2 = Operations.Overlaps(interval2_x1, interval2_x2, interval1_x1, interval1_x2);
+            var overlaps1 = interval1.Overlaps(interval2);
+            var overlaps2 = interval2.Overlaps(interval1);
 
             // Assert
             overlaps1.Should().BeTrue();
@@ -212,59 +211,103 @@ namespace Craft.Math.UnitTest
         }
 
         [Fact]
-        public void Overlaps_Given2NonIntersectingIntervals_ReturnsCorrectResult()
+        public void Overlaps_Given2NonOverlappingIntervals_ReturnsCorrectResult()
         {
             // Arrange
-            var interval1_x1 = 2;
-            var interval1_x2 = 3;
-            var interval2_x1 = 3;
-            var interval2_x2 = 4;
+            var interval1 = new Tuple<double, double>(2, 4);
+            var interval2 = new Tuple<double, double>(4, 5);
 
             // Act
-            var overlaps1 = Operations.Overlaps(interval1_x1, interval1_x2, interval2_x1, interval2_x2);
-            var overlaps2 = Operations.Overlaps(interval2_x1, interval2_x2, interval1_x1, interval1_x2);
+            var overlaps1 = interval1.Overlaps(interval2);
+            var overlaps2 = interval2.Overlaps(interval1);
 
             // Assert
             overlaps1.Should().BeFalse();
             overlaps2.Should().BeFalse();
         }
 
-
         [Fact]
-        public void Overlaps_Given2IntersectingTimeIntervals_ReturnsCorrectResult()
+        public void Overlaps_Given2OverlappingTimeIntervals_ReturnsCorrectResult()
         {
             // Arrange
-            var interval1_t1 = new DateTime(1972, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var interval1_t2 = new DateTime(1974, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
-            var interval2_t1 = new DateTime(1973, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
-            var interval2_t2 = new DateTime(1975, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
+            var timeInterval1 = new Tuple<DateTime, DateTime>(
+                new DateTime(1972, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                new DateTime(1974, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+
+            var timeInterval2 = new Tuple<DateTime, DateTime>(
+                new DateTime(1973, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                new DateTime(1975, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 
             // Act
-            var overlaps1 = Operations.Overlaps(interval1_t1, interval1_t2, interval2_t1, interval2_t2);
-            var overlaps2 = Operations.Overlaps(interval2_t1, interval2_t2, interval1_t1, interval1_t2);
-
+            var overlaps1 = timeInterval1.Overlaps(timeInterval2);
+            var overlaps2 = timeInterval2.Overlaps(timeInterval1);
+            
             // Assert
             overlaps1.Should().BeTrue();
             overlaps2.Should().BeTrue();
         }
 
         [Fact]
-        public void Overlaps_Given2NonIntersectingTimeIntervals_ReturnsCorrectResult()
+        public void Overlaps_Given2NonOverlappingTimeIntervals_ReturnsCorrectResult()
         {
             // Arrange
-            var interval1_t1 = new DateTime(1972, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var interval1_t2 = new DateTime(1974, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
-            var interval2_t1 = new DateTime(1975, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
-            var interval2_t2 = new DateTime(1977, 1, 1, 0, 0, 0, DateTimeKind.Utc); ;
+            var timeInterval1 = new Tuple<DateTime, DateTime>(
+                new DateTime(1972, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                new DateTime(1974, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+
+            var timeInterval2 = new Tuple<DateTime, DateTime>(
+                new DateTime(1975, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                new DateTime(1977, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 
             // Act
-            var overlaps1 = Operations.Overlaps(interval1_t1, interval1_t2, interval2_t1, interval2_t2);
-            var overlaps2 = Operations.Overlaps(interval2_t1, interval2_t2, interval1_t1, interval1_t2);
+            var overlaps1 = timeInterval1.Overlaps(timeInterval2);
+            var overlaps2 = timeInterval2.Overlaps(timeInterval1);
 
             // Assert
             overlaps1.Should().BeFalse();
             overlaps2.Should().BeFalse();
         }
 
+        [Fact]
+        public void Overlaps_GivenListOfOverlappingTimeIntervals_ReturnsCorrectResult()
+        {
+            // Arrange
+            var orderedTimeIntervals = new List<Tuple<DateTime, DateTime>>
+            {
+                new (new DateTime(1972, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(1974, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
+                new (new DateTime(1975, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(1978, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
+                new (new DateTime(1977, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(1980, 1, 1, 0, 0, 0, DateTimeKind.Utc))
+            };
+
+            // Act
+            var overlaps = orderedTimeIntervals.AnyOverlaps();
+
+            // Assert
+            overlaps.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Overlaps_GivenListOfNonOverlappingTimeIntervals_ReturnsCorrectResult()
+        {
+            // Arrange
+            var orderedTimeIntervals = new List<Tuple<DateTime, DateTime>>
+            {
+                new (new DateTime(1972, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(1974, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
+                new (new DateTime(1975, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(1978, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
+                new (new DateTime(1978, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(1980, 1, 1, 0, 0, 0, DateTimeKind.Utc))
+            };
+
+            // Act
+            var overlaps = orderedTimeIntervals.AnyOverlaps();
+
+            // Assert
+            overlaps.Should().BeFalse();
+        }
     }
 }

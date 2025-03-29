@@ -32,7 +32,7 @@ namespace Craft.Utils.Linq
         // Returns a sequence of adjacent pairs, where all elements except the first and last are part of 2 pairs
         // Example: [1, 2, 3, 4] => [[1, 2], [2, 3], [3, 4]]
         // From: https://stackoverflow.com/questions/1624341/getting-pair-set-using-linq
-        public static IEnumerable<Tuple<T, T>> AdjacenPairs<T>(
+        public static IEnumerable<Tuple<T, T>> AdjacentPairs<T>(
             this IEnumerable<T> sequence)
         {
             return sequence.Zip(sequence.Skip(1), (first, second) => new Tuple<T, T>(first, second));

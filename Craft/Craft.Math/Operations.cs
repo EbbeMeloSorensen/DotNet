@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Craft.Utils.Linq;
 
 namespace Craft.Math
 {
@@ -223,21 +224,23 @@ namespace Craft.Math
         }
 
         public static bool Overlaps(
-            double interval1_x1,
-            double interval1_x2,
-            double interval2_x1,
-            double interval2_x2)
+            this Tuple<double, double> interval,
+            Tuple<double, double> other)
         {
-            return interval1_x1 < interval2_x2 && interval2_x1 < interval1_x2;
+            return interval.Item1 < other.Item2 && other.Item1 < interval.Item2;
         }
 
         public static bool Overlaps(
-            DateTime interval1_t1,
-            DateTime interval1_t2,
-            DateTime interval2_t1,
-            DateTime interval2_t2)
+            this Tuple<DateTime, DateTime> timeInterval,
+            Tuple<DateTime, DateTime> other)
         {
-            return interval1_t1 < interval2_t2 && interval2_t1 < interval1_t2;
+            return timeInterval.Item1 < other.Item2 && other.Item1 < timeInterval.Item2;
+        }
+
+        public static bool AnyOverlaps(
+            this IEnumerable<Tuple<DateTime, DateTime>> sortedDateRanges)
+        {
+            return sortedDateRanges.AdjacentPairs().Any(_ => _.Item1.Overlaps(_.Item2));
         }
 
         public static double SquaredDistanceTo(
