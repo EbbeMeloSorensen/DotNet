@@ -254,7 +254,8 @@ namespace PR.ViewModel
         {
             var occupiedDateRanges = PersonVariantListViewItemViewModels
                 .Select(_ => _.PersonVariant)
-                .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End));
+                .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
+                .OrderBy(_ => _.Item1);
 
             var dialogViewModel = new CreatePersonDialogViewModel(
                 UnitOfWorkFactory,

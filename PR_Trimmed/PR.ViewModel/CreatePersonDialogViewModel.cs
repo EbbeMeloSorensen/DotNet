@@ -287,7 +287,7 @@ namespace PR.ViewModel
             get
             {
                 string? error;
-                DateRangeError = "";
+                //DateRangeError = "";
 
                 if (columnName == "Start" ||
                     columnName == "End")
@@ -331,16 +331,28 @@ namespace PR.ViewModel
         {
             if (_state != StateOfView.Updated) return;
 
-            if (_occupiedDateRanges != null)
-            {
-                throw new NotImplementedException();
-            }
-
+            DateRangeError = "";
             _errors = _businessRuleCatalog.ValidateAtomic(Person);
 
-            if (_errors.ContainsKey("DateRange"))
+            if (_errors.Any())
             {
-                DateRangeError = _errors["DateRange"];
+                if (_errors.TryGetValue("DateRange", out var error))
+                {
+                    DateRangeError = error;
+                }
+            }
+            else if (_occupiedDateRanges != null)
+            {
+                var dateRanges = _occupiedDateRanges
+                    .Append(new Tuple<DateTime, DateTime>(Person.Start, Person.End))
+                    .OrderBy(_ => _.Item1);
+
+                _errors = _businessRuleCatalog.ValidateCrossEntity(dateRanges);
+
+                if (_errors.TryGetValue("NoOverlappingValidTimeIntervals", out var error))
+                {
+                    DateRangeError = error;
+                }
             }
 
             RaisePropertyChanges();

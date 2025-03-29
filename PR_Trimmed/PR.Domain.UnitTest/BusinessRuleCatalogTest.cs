@@ -43,24 +43,16 @@ namespace PR.Domain.UnitTest
             // Arrange
             var businessRuleCatalog = new BusinessRuleCatalog();
 
-            var personVariants = new List<Person>
+            var timeIntervals = new List<Tuple<DateTime, DateTime>>
             {
-                new Person
-                {
-                    FirstName = "Anakin Skywalker",
-                    Start = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                    End = new DateTime(2005, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-                },
-                new Person
-                {
-                    FirstName = "Darth Vader",
-                    Start = new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                    End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-                },
+                new(new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(2005, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
+                new(new DateTime(2004, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc))
             };
 
             // Act
-            var result = businessRuleCatalog.ValidateCrossEntity(personVariants);
+            var result = businessRuleCatalog.ValidateCrossEntity(timeIntervals);
 
             // Assert
             result.ContainsKey("NoOverlappingValidTimeIntervals").Should().BeTrue();
