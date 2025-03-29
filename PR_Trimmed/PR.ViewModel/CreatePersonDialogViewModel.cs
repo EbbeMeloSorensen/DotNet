@@ -287,12 +287,16 @@ namespace PR.ViewModel
             get
             {
                 string? error;
-                //DateRangeError = "";
 
                 if (columnName == "Start" ||
                     columnName == "End")
                 {
                     _errors.TryGetValue("DateRange", out error);
+
+                    if (string.IsNullOrEmpty(error))
+                    {
+                        _errors.TryGetValue("NoOverlappingValidTimeIntervals", out error);
+                    }
                 }
                 else
                 {
