@@ -260,6 +260,14 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             Superseded = p.Superseded,
             FirstName = SharedFirstName != OriginalSharedValues.FirstName ? SharedFirstName : p.FirstName,
             Surname = SharedSurname != OriginalSharedValues.Surname ? SharedSurname : p.Surname,
+            Nickname = SharedNickname != OriginalSharedValues.Nickname ? SharedNickname : p.Nickname,
+            Address = SharedAddress != OriginalSharedValues.Address ? SharedAddress : p.Address,
+            ZipCode = SharedZipCode != OriginalSharedValues.ZipCode ? SharedZipCode : p.ZipCode,
+            City = SharedCity != OriginalSharedValues.City ? SharedCity : p.City,
+            Birthday = SharedBirthday != OriginalSharedValues.Birthday ? SharedBirthday : p.Birthday,
+            Category = SharedCategory != OriginalSharedValues.Category ? SharedCategory : p.Category,
+            Latitude = SharedLatitude != OriginalSharedValues.Latitude ? SharedLatitude : p.Latitude,
+            Longitude = SharedLongitude != OriginalSharedValues.Longitude ? SharedLongitude : p.Longitude
         }).ToList();
 
         using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
