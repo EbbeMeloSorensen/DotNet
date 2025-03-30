@@ -22,27 +22,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private ObjectCollection<Person> _people;
 
-    private string _originalSharedFirstName;
-    private string _originalSharedSurname;
-    private string _originalSharedNickname;
-    private string _originalSharedAddress;
-    private string _originalSharedZipCode;
-    private string _originalSharedCity;
-    private DateTime? _originalSharedBirthday;
-    private string _originalSharedCategory;
-    private double? _originalSharedLatitude;
-    private double? _originalSharedLongitude;
-
-    private string _sharedFirstName;
-    private string _sharedSurname;
-    private string _sharedNickname;
-    private string _sharedAddress;
-    private string _sharedZipCode;
-    private string _sharedCity;
-    private DateTime? _sharedBirthday;
-    private string _sharedCategory;
-    private double? _sharedLatitude;
-    private double? _sharedLongitude;
+    public Person OriginalSharedValues { get; private set; }
+    public Person SharedValues { get; private set; }
 
     private bool _isVisible;
 
@@ -54,65 +35,65 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public string SharedFirstName
     {
-        get { return _sharedFirstName; }
+        get => SharedValues.FirstName;
         set
         {
-            _sharedFirstName = value;
+            SharedValues.FirstName = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string SharedSurname
+    public string? SharedSurname
     {
-        get { return _sharedSurname; }
+        get => SharedValues.Surname;
         set
         {
-            _sharedSurname = value;
+            SharedValues.Surname = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string SharedNickname
+    public string? SharedNickname
     {
-        get { return _sharedNickname; }
+        get => SharedValues.Nickname;
         set
         {
-            _sharedNickname = value;
+            SharedValues.Nickname = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string SharedAddress
+    public string? SharedAddress
     {
-        get { return _sharedAddress; }
+        get => SharedValues.Address;
         set
         {
-            _sharedAddress = value;
+            SharedValues.Address = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string SharedZipCode
+    public string? SharedZipCode
     {
-        get { return _sharedZipCode; }
+        get => SharedValues.ZipCode;
         set
         {
-            _sharedZipCode = value;
+            SharedValues.ZipCode = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string SharedCity
+    public string? SharedCity
     {
-        get { return _sharedCity; }
+        get => SharedValues.City;
         set
         {
-            _sharedCity = value;
+            SharedValues.City = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
@@ -120,21 +101,21 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public DateTime? SharedBirthday
     {
-        get { return _sharedBirthday; }
+        get => SharedValues.Birthday;
         set
         {
-            _sharedBirthday = value;
+            SharedValues.Birthday = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string SharedCategory
+    public string? SharedCategory
     {
-        get { return _sharedCategory; }
+        get => SharedValues.Category;
         set
         {
-            _sharedCategory = value;
+            SharedValues.Category = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
@@ -142,10 +123,10 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public double? SharedLatitude
     {
-        get { return _sharedLatitude; }
+        get => SharedValues.Latitude;
         set
         {
-            _sharedLatitude = value;
+            SharedValues.Latitude = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
@@ -153,10 +134,10 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public double? SharedLongitude
     {
-        get { return _sharedLongitude; }
+        get => SharedValues.Longitude;
         set
         {
-            _sharedLongitude = value;
+            SharedValues.Longitude = value;
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
@@ -181,17 +162,20 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         IUnitOfWorkFactory unitOfWorkFactory,
         ObjectCollection<Person> people)
     {
+        SharedValues = new Person();
         UnitOfWorkFactory = unitOfWorkFactory;
         _people = people;
         _people.PropertyChanged += Initialize;
     }
 
-    private void Initialize(object sender, PropertyChangedEventArgs e)
+    private void Initialize(
+        object sender, 
+        PropertyChangedEventArgs e)
     {
         _state = StateOfView.Initial;
-        var temp = sender as ObjectCollection<Person>;
+        var people = sender as ObjectCollection<Person>;
 
-        var firstPerson = temp?.Objects.FirstOrDefault();
+        var firstPerson = people?.Objects.FirstOrDefault();
 
         if (firstPerson == null)
         {
@@ -201,56 +185,59 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         IsVisible = true;
 
-        SharedFirstName = temp.Objects.All(p => p.FirstName == firstPerson.FirstName)
+        SharedFirstName = people.Objects.All(p => p.FirstName == firstPerson.FirstName)
             ? firstPerson.FirstName
             : null;
 
-        SharedSurname = temp.Objects.All(p => p.Surname == firstPerson.Surname)
+        SharedSurname = people.Objects.All(p => p.Surname == firstPerson.Surname)
             ? firstPerson.Surname
             : null;
 
-        SharedNickname = temp.Objects.All(p => p.Nickname == firstPerson.Nickname)
+        SharedNickname = people.Objects.All(p => p.Nickname == firstPerson.Nickname)
             ? firstPerson.Nickname
             : null;
 
-        SharedAddress = temp.Objects.All(p => p.Address == firstPerson.Address)
+        SharedAddress = people.Objects.All(p => p.Address == firstPerson.Address)
             ? firstPerson.Address
             : null;
 
-        SharedZipCode = temp.Objects.All(p => p.ZipCode == firstPerson.ZipCode)
+        SharedZipCode = people.Objects.All(p => p.ZipCode == firstPerson.ZipCode)
             ? firstPerson.ZipCode
             : null;
 
-        SharedCity = temp.Objects.All(p => p.City == firstPerson.City)
+        SharedCity = people.Objects.All(p => p.City == firstPerson.City)
             ? firstPerson.City
             : null;
 
-        SharedBirthday = temp.Objects.All(p => p.Birthday == firstPerson.Birthday)
+        SharedBirthday = people.Objects.All(p => p.Birthday == firstPerson.Birthday)
             ? firstPerson.Birthday
             : null;
 
-        SharedCategory = temp.Objects.All(p => p.Category == firstPerson.Category)
+        SharedCategory = people.Objects.All(p => p.Category == firstPerson.Category)
             ? firstPerson.Category
             : null;
 
-        SharedLatitude = temp.Objects.All(p => p.Latitude == firstPerson.Latitude)
+        SharedLatitude = people.Objects.All(p => p.Latitude == firstPerson.Latitude)
             ? firstPerson.Latitude
             : null;
 
-        SharedLongitude = temp.Objects.All(p => p.Longitude == firstPerson.Longitude)
+        SharedLongitude = people.Objects.All(p => p.Longitude == firstPerson.Longitude)
             ? firstPerson.Longitude
             : null;
 
-        _originalSharedFirstName = SharedFirstName;
-        _originalSharedSurname = SharedSurname;
-        _originalSharedNickname = SharedNickname;
-        _originalSharedAddress = SharedAddress;
-        _originalSharedZipCode = SharedZipCode;
-        _originalSharedCity = SharedCity;
-        _originalSharedBirthday = SharedBirthday;
-        _originalSharedCategory = SharedCategory;
-        _originalSharedLatitude = SharedLatitude;
-        _originalSharedLongitude = SharedLongitude;
+        OriginalSharedValues = new Person
+        {
+            FirstName = SharedFirstName,
+            Surname = SharedSurname,
+            Nickname = SharedNickname,
+            Address = SharedAddress,
+            ZipCode = SharedZipCode,
+            City = SharedCity,
+            Birthday = SharedBirthday,
+            Category = SharedCategory,
+            Latitude = SharedLatitude,
+            Longitude = SharedLongitude
+        };
 
         ApplyChangesCommand.RaiseCanExecuteChanged();
     }
@@ -270,12 +257,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         var updatedPeople = _people.Objects.Select(p => new Person
         {
             ID = p.ID,
-            //Start = p.Start,
-            //End = p.End,
-            //Created = p.Created,
             Superseded = p.Superseded,
-            FirstName = SharedFirstName != _originalSharedFirstName ? SharedFirstName : p.FirstName,
-            Surname = SharedSurname != _originalSharedSurname ? SharedSurname : p.Surname,
+            FirstName = SharedFirstName != OriginalSharedValues.FirstName ? SharedFirstName : p.FirstName,
+            Surname = SharedSurname != OriginalSharedValues.Surname ? SharedSurname : p.Surname,
         }).ToList();
 
         using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
@@ -289,17 +273,22 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private bool CanApplyChanges()
     {
+        if (OriginalSharedValues == null)
+        {
+            return false;
+        }
+
         return
-            SharedFirstName != _originalSharedFirstName ||
-            SharedSurname != _originalSharedSurname ||
-            SharedNickname != _originalSharedNickname ||
-            SharedAddress != _originalSharedAddress ||
-            SharedZipCode != _originalSharedZipCode ||
-            SharedCity != _originalSharedCity ||
-            SharedBirthday != _originalSharedBirthday ||
-            SharedCategory != _originalSharedCategory ||
-            SharedLatitude != _originalSharedLatitude ||
-            SharedLongitude != _originalSharedLongitude;
+            SharedFirstName != OriginalSharedValues.FirstName ||
+            SharedSurname != OriginalSharedValues.Surname ||
+            SharedNickname != OriginalSharedValues.Nickname ||
+            SharedAddress != OriginalSharedValues.Address ||
+            SharedZipCode != OriginalSharedValues.ZipCode ||
+            SharedCity != OriginalSharedValues.City ||
+            SharedBirthday != OriginalSharedValues.Birthday ||
+            SharedCategory != OriginalSharedValues.Category ||
+            SharedLatitude != OriginalSharedValues.Latitude ||
+            SharedLongitude != OriginalSharedValues.Longitude;
     }
 
     public ObservableCollection<ValidationError> ValidationMessages
