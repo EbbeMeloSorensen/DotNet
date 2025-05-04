@@ -286,6 +286,9 @@ namespace PR.ViewModel
         {
             get
             {
+                // In the basic pattern, validation is done here, but in this design
+                // validation is done as soon as a property is updated so that the collection
+                // of errors is ready when this indexer is called
                 string? error;
 
                 if (columnName == "Start" ||

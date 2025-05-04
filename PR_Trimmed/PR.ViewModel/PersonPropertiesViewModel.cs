@@ -267,27 +267,6 @@ namespace PR.ViewModel
                 return;
             }
 
-            //var personVariant = new Person  
-            //{
-            //    ID = _people.Objects.Single().ID,
-            //    FirstName = dialogViewModel.FirstName,
-            //    Surname = dialogViewModel.Surname,
-            //    Nickname = dialogViewModel.Nickname,
-            //    Address = dialogViewModel.Address,
-            //    ZipCode = dialogViewModel.ZipCode,
-            //    City = dialogViewModel.City,
-            //    Birthday = dialogViewModel.Birthday,
-            //    Category = dialogViewModel.Category,
-            //    Start = dialogViewModel.Start.HasValue ? dialogViewModel.Start.Value : new DateTime(),
-            //    End = dialogViewModel.End.HasValue ? dialogViewModel.End.Value : new DateTime()
-            //};
-
-            //using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            //{
-            //    await unitOfWork.People.Add(personVariant);
-            //    unitOfWork.Complete();
-            //}
-
             var personVariants = PersonVariantListViewItemViewModels
                 .Select(_ => _.PersonVariant)
                 .Append(dialogViewModel.Person)
