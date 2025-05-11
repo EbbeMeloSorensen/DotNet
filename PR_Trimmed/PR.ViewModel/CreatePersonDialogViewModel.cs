@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,6 +29,8 @@ namespace PR.ViewModel
 
         private IEnumerable<Tuple<DateTime, DateTime>> _occupiedDateRanges;
 
+        private string _latitude;
+        private string _longitude;
         private string _dateRangeError;
         private bool _displayDateRangeError;
 
@@ -109,6 +112,32 @@ namespace PR.ViewModel
             set
             {
                 Person.Category = value;
+                Validate();
+                RaisePropertyChanged();
+            }
+        }
+
+        // This property doesn't wrap the Person object, since it might not be able to convert it to a double
+        // So the view model has to check that before we involve the business rule catalog
+        public string Latitude
+        {
+            get => _latitude;
+            set
+            {
+                _latitude = value;
+                Validate();
+                RaisePropertyChanged();
+            }
+        }
+
+        // This property doesn't wrap the Person object, since it might not be able to convert it to a double
+        // So the view model has to check that before we involve the business rule catalog
+        public string Longitude
+        {
+            get => _longitude;
+            set
+            {
+                _longitude = value;
                 Validate();
                 RaisePropertyChanged();
             }
@@ -289,6 +318,12 @@ namespace PR.ViewModel
                 // In the basic pattern, validation is done here, but in this design
                 // validation is done as soon as a property is updated so that the collection
                 // of errors is ready when this indexer is called
+
+                if (_state == StateOfView.Initial)
+                {
+                    return "";
+                }
+
                 string? error;
 
                 if (columnName == "Start" ||
@@ -314,16 +349,18 @@ namespace PR.ViewModel
 
         private void RaisePropertyChanges()
         {
-            RaisePropertyChanged("FirstName");
-            RaisePropertyChanged("Surname");
-            RaisePropertyChanged("Nickname");
-            RaisePropertyChanged("Address");
-            RaisePropertyChanged("ZipCode");
-            RaisePropertyChanged("City");
-            RaisePropertyChanged("Birthday");
-            RaisePropertyChanged("Category");
-            RaisePropertyChanged("Start");
-            RaisePropertyChanged("End");
+            RaisePropertyChanged(nameof(FirstName));
+            RaisePropertyChanged(nameof(Surname));
+            RaisePropertyChanged(nameof(Nickname));
+            RaisePropertyChanged(nameof(Address));
+            RaisePropertyChanged(nameof(ZipCode));
+            RaisePropertyChanged(nameof(City));
+            RaisePropertyChanged(nameof(Birthday));
+            RaisePropertyChanged(nameof(Category));
+            RaisePropertyChanged(nameof(Latitude));
+            RaisePropertyChanged(nameof(Longitude));
+            RaisePropertyChanged(nameof(Start));
+            RaisePropertyChanged(nameof(End));
         }
 
         private void UpdateState(
@@ -338,7 +375,20 @@ namespace PR.ViewModel
         {
             if (_state != StateOfView.Updated) return;
 
+            _errors.Clear();
             DateRangeError = "";
+
+            ValidateNumericInput(nameof(Latitude), Latitude, out var latitude);
+            ValidateNumericInput(nameof(Longitude), Longitude, out var longitude);
+
+            if (_errors.Any())
+            {
+                return;
+            }
+
+            Person.Latitude = latitude;
+            Person.Longitude = longitude;
+
             _errors = _businessRuleCatalog.ValidateAtomic(Person);
 
             if (_errors.Any())
@@ -361,8 +411,30 @@ namespace PR.ViewModel
                     DateRangeError = error;
                 }
             }
+        }
 
-            RaisePropertyChanges();
+        private void ValidateNumericInput(
+            string propertyName,
+            string text,
+            out double? value)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                value = null;
+            }
+            else if(double.TryParse(
+                        text,
+                        NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
+                        CultureInfo.InvariantCulture,
+                        out var temp))
+            {
+                value = temp;
+            }
+            else
+            {
+                value = double.NaN;
+                _errors[propertyName] = "Invalid format";
+            }
         }
     }
 }

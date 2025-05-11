@@ -1,29 +1,26 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using Craft.UI.Utils;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using PR.Application;
 using PR.Persistence;
 using PR.Domain.Entities.PR;
+using PR.Domain.BusinessRules.PR;
 
 namespace PR.ViewModel;
 
 public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 {
-    private StateOfView _state;
-    private ObservableCollection<ValidationError> _validationMessages;
-    private string _error = string.Empty;
-
     private ObjectCollection<Person> _people;
+    private BusinessRuleCatalog _businessRuleCatalog;
+    private Dictionary<string, string> _errors;
 
     public Person OriginalSharedValues { get; private set; }
-    public Person SharedValues { get; private set; }
+    public Person SharedValues { get; }
 
     private bool _isVisible;
 
@@ -39,61 +36,67 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         set
         {
             SharedValues.FirstName = value;
+            Validate();
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string? SharedSurname
+    public string SharedSurname
     {
-        get => SharedValues.Surname;
+        get => SharedValues.Surname ?? "";
         set
         {
             SharedValues.Surname = value;
+            Validate();
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string? SharedNickname
+    public string SharedNickname
     {
-        get => SharedValues.Nickname;
+        get => SharedValues.Nickname ?? "";
         set
         {
             SharedValues.Nickname = value;
+            Validate();
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string? SharedAddress
+    public string SharedAddress
     {
-        get => SharedValues.Address;
+        get => SharedValues.Address ?? "";
         set
         {
             SharedValues.Address = value;
+            Validate();
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string? SharedZipCode
+    public string SharedZipCode
     {
-        get => SharedValues.ZipCode;
+        get => SharedValues.ZipCode ?? "";
         set
         {
             SharedValues.ZipCode = value;
+            Validate();
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string? SharedCity
+    public string SharedCity
     {
-        get => SharedValues.City;
+        get => SharedValues.City ?? "";
         set
         {
             SharedValues.City = value;
+            Validate();
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
@@ -105,17 +108,19 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         set
         {
             SharedValues.Birthday = value;
+            Validate();
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
     }
 
-    public string? SharedCategory
+    public string SharedCategory
     {
-        get => SharedValues.Category;
+        get => SharedValues.Category ?? "";
         set
         {
             SharedValues.Category = value;
+            Validate();
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
         }
@@ -169,10 +174,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     }
 
     private void Initialize(
-        object sender, 
+        object sender,
         PropertyChangedEventArgs e)
     {
-        _state = StateOfView.Initial;
         var people = sender as ObjectCollection<Person>;
 
         var firstPerson = people?.Objects.FirstOrDefault();
@@ -244,10 +248,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private async Task ApplyChanges()
     {
-        UpdateState(StateOfView.Updated);
-
-        Error = string.Join("",
-            ValidationMessages.Select(e => e.ErrorMessage).ToArray());
 
         if (!string.IsNullOrEmpty(Error))
         {
@@ -299,130 +299,17 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             SharedLongitude != OriginalSharedValues.Longitude;
     }
 
-    public ObservableCollection<ValidationError> ValidationMessages
-    {
-        get
-        {
-            if (_validationMessages == null)
-            {
-                _validationMessages = new ObservableCollection<ValidationError>
-                {
-                    new ValidationError {PropertyName = "SharedFirstName"},
-                    new ValidationError {PropertyName = "SharedSurname"},
-                    new ValidationError {PropertyName = "SharedNickname"},
-                    new ValidationError {PropertyName = "SharedAddress"},
-                    new ValidationError {PropertyName = "SharedZipCode"},
-                    new ValidationError {PropertyName = "SharedCity"},
-                    new ValidationError {PropertyName = "SharedBirthday"},
-                    new ValidationError {PropertyName = "SharedCategory"},
-                    new ValidationError {PropertyName = "SharedLatitude"},
-                    new ValidationError {PropertyName = "SharedLongitude"},
-                };
-            }
-
-            return _validationMessages;
-        }
-    }
-
     public string this[string columnName]
     {
         get
         {
             var errorMessage = string.Empty;
 
-            if (_state == StateOfView.Updated)
-            {
-                switch (columnName)
-                {
-                    case "SharedFirstName":
-                    {
-                        if (string.IsNullOrEmpty(SharedFirstName))
-                        {
-                            if (_people.Objects.Count() == 1)
-                            {
-                                errorMessage = "First name is required";
-                            }
-                        }
-                        else if (SharedFirstName.Length > 127)
-                        {
-                            errorMessage = "First name cannot exceed 127 characters";
-                        }
-
-                        break;
-                    }
-                    case "SharedSurname":
-                    {
-                        if (SharedSurname != null && SharedSurname.Length > 255)
-                        {
-                            errorMessage = "Surname cannot exceed 255 characters";
-                        }
-
-                        break;
-                    }
-                    case "SharedNickname":
-                    {
-                        if (SharedNickname != null && SharedNickname.Length > 127)
-                        {
-                            errorMessage = "Nickname cannot exceed 127 characters";
-                        }
-
-                        break;
-                    }
-                    case "SharedAddress":
-                    {
-                        if (SharedAddress != null && SharedAddress.Length > 511)
-                        {
-                            errorMessage = "Address cannot exceed 511 characters";
-                        }
-
-                        break;
-                    }
-                    case "SharedZipCode":
-                    {
-                        if (SharedZipCode != null && SharedZipCode.Length > 127)
-                        {
-                            errorMessage = "Zip code cannot exceed 127 characters";
-                        }
-
-                        break;
-                    }
-                    case "SharedCity":
-                    {
-                        if (SharedCity != null && SharedCity.Length > 255)
-                        {
-                            errorMessage = "City cannot exceed 255 characters";
-                        }
-
-                        break;
-                    }
-                    case "SharedCategory":
-                    {
-                        if (SharedCategory != null && SharedCategory.Length > 127)
-                        {
-                            errorMessage = "Category cannot exceed 127 characters";
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            ValidationMessages
-                .First(e => e.PropertyName == columnName).ErrorMessage = errorMessage;
-
             return errorMessage;
         }
     }
 
-    public string Error
-    {
-        get { return _error; }
-        set
-        {
-            _error = value;
-            RaisePropertyChanged();
-        }
-    }
+    public string Error => null; // Not used
 
     private void RaisePropertyChanges()
     {
@@ -438,10 +325,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         RaisePropertyChanged("SharedLongitude");
     }
 
-    private void UpdateState(StateOfView state)
+    private void Validate()
     {
-        _state = state;
-        RaisePropertyChanges();
+        //_errors = _businessRuleCatalog.ValidateAtomic(SharedValues);
     }
 
     private void OnPeopleUpdated(

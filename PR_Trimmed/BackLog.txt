@@ -33,6 +33,7 @@ Done:
 * Du skal have en bedre ViewModel for de historiske (archived/inaktive) entiteter i personlisten, også så det er mere intuitivt, hvorfor man ikke
   altid kan slette dem
 * Lav noget input validering, når man prøver at lave en person med et invalidt virkningstidsinterval
+* Tilføj Category, Latitude og Longitude til CreatePersonViewModel
 
 Todo:
 * Kombiner IDataErrorInfo med businessRuleCatalog som anvist af ChatGPT

@@ -5,6 +5,7 @@
     <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <valueConverters:EnumMatchToBooleanConverter x:Key="EnumMatchToBooleanConverter"/>
     <valueConverters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/> <!-- I got this from ChatGPT -->
+    <valueConverters:NullableDoubleConverter x:Key="NullableDoubleConverter"/> <!-- I got this from ChatGPT -->
 
     <ControlTemplate x:Key="errorTemplate">
         <Border BorderBrush="Red" BorderThickness="2">

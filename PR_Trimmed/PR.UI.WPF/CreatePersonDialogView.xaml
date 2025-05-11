@@ -33,6 +33,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition>
                     <RowDefinition.Style>
                         <Style TargetType="{x:Type RowDefinition}">
@@ -74,11 +77,23 @@
             <TextBox Grid.Row="5" Grid.Column="1" Margin="2" 
                      Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding City, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Row="6" Grid.Column="0" Padding="3" Text="Birthday:"/>
-            <DatePicker Grid.Row="6" Grid.Column="1" Padding="3"
+            <TextBlock Grid.Row="6" Grid.Column="0" Padding="2,5,0,0"  Text="Birthday:"/>
+            <DatePicker Grid.Row="6" Grid.Column="1" Padding="0,2,0,2" Margin="2"
                         Validation.ErrorTemplate="{StaticResource errorTemplate}"
                         SelectedDate="{Binding Birthday, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-            <GroupBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Header="Valid Time" Padding="0, 3, 0, 0">
+            <TextBlock Grid.Row="7" Grid.Column="0" Padding="3" Text="Category:"/>
+            <TextBox Grid.Row="7" Grid.Column="1" Margin="2" 
+                     Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                     Text="{Binding Category, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="8" Grid.Column="0" Padding="3" Text="Latitude:"/>
+            <TextBox Grid.Row="8" Grid.Column="1" Margin="2" 
+                     Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                     Text="{Binding Latitude, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <TextBlock Grid.Row="9" Grid.Column="0" Padding="3" Text="Longitude:"/>
+            <TextBox Grid.Row="9" Grid.Column="1" Margin="2" 
+                     Validation.ErrorTemplate="{StaticResource errorTemplate}"
+                     Text="{Binding Longitude, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <GroupBox Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Header="Valid Time" Padding="0, 3, 0, 0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -100,12 +115,12 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Padding="3" Text="Start:"/>
-                    <DatePicker Grid.Row="0" Grid.Column="1" Padding="3"
+                    <TextBlock Grid.Row="0" Grid.Column="0" Padding="2,5,10,0" Text="Start:"/>
+                    <DatePicker Grid.Row="0" Grid.Column="1" Padding="0,2,0,2" Margin="2"
                                 Validation.ErrorTemplate="{StaticResource errorTemplateNoText}"
                                 SelectedDate="{Binding Start, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Padding="3" Text="End:"/>
-                    <DatePicker Grid.Row="1" Grid.Column="1" Padding="3"
+                    <TextBlock Grid.Row="1" Grid.Column="0" Padding="2,5,0,0" Text="End:"/>
+                    <DatePicker Grid.Row="1" Grid.Column="1" Padding="0,2,0,2" Margin="2"
                                 Validation.ErrorTemplate="{StaticResource errorTemplateNoText}"
                                 SelectedDate="{Binding End, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                     <!--Style="{StaticResource OptionalDatePickerStyle}"-->
@@ -113,7 +128,7 @@
                                Text="{Binding DateRangeError}"/>
                 </Grid>
             </GroupBox>
-            <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Red" BorderThickness="2" VerticalAlignment="Stretch" >
+            <Border Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Red" BorderThickness="2" VerticalAlignment="Stretch" >
                 <TextBlock TextWrapping="WrapWithOverflow" Foreground="Red" VerticalAlignment="Stretch"
                            Text="{Binding GeneralError}"/>
             </Border>
