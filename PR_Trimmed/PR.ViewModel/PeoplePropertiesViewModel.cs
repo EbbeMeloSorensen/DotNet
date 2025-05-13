@@ -56,6 +56,78 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
+    public string Nickname
+    {
+        get => SharedValues.Nickname ?? "";
+        set
+        {
+            SharedValues.Nickname = string.IsNullOrEmpty(value) ? null : value;
+            Validate();
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
+    public string Address
+    {
+        get => SharedValues.Address ?? "";
+        set
+        {
+            SharedValues.Address = string.IsNullOrEmpty(value) ? null : value;
+            Validate();
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
+    public string ZipCode
+    {
+        get => SharedValues.ZipCode ?? "";
+        set
+        {
+            SharedValues.ZipCode = string.IsNullOrEmpty(value) ? null : value;
+            Validate();
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
+    public string City
+    {
+        get => SharedValues.City ?? "";
+        set
+        {
+            SharedValues.City = string.IsNullOrEmpty(value) ? null : value;
+            Validate();
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
+    public string Category
+    {
+        get => SharedValues.Category ?? "";
+        set
+        {
+            SharedValues.Category = string.IsNullOrEmpty(value) ? null : value;
+            Validate();
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
+    public DateTime? Birthday
+    {
+        get => SharedValues.Birthday;
+        set
+        {
+            SharedValues.Birthday = value;
+            Validate();
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
     public bool IsVisible
     {
         get { return _isVisible; }
@@ -110,10 +182,40 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? people.First().Surname
             : string.Empty) ?? string.Empty;
 
+        Nickname = (people.All(p => p.Nickname == people.First().Surname)
+            ? people.First().Nickname
+            : string.Empty) ?? string.Empty;
+
+        Address = (people.All(p => p.Address == people.First().Address)
+            ? people.First().Address
+            : string.Empty) ?? string.Empty;
+
+        ZipCode = (people.All(p => p.ZipCode == people.First().ZipCode)
+            ? people.First().ZipCode
+            : string.Empty) ?? string.Empty;
+
+        City = (people.All(p => p.City == people.First().City)
+            ? people.First().City
+            : string.Empty) ?? string.Empty;
+
+        Category = (people.All(p => p.Category == people.First().Category)
+            ? people.First().Category
+            : string.Empty) ?? string.Empty;
+
+        Birthday = (people.All(p => p.Birthday == people.First().Birthday)
+            ? people.First().Birthday
+            : null) ?? null;
+
         OriginalSharedValues = new Person
         {
             FirstName = FirstName,
-            Surname = Surname
+            Surname = Surname,
+            Nickname = Nickname,
+            Address = Address,
+            ZipCode = ZipCode,
+            City = City,
+            Birthday = Birthday,
+            Category = Category
         };
 
         ApplyChangesCommand.RaiseCanExecuteChanged();
@@ -134,6 +236,11 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             Superseded = p.Superseded,
             FirstName = FirstName != OriginalSharedValues.FirstName ? FirstName : p.FirstName,
             Surname = Surname != OriginalSharedValues.Surname ? Surname : p.Surname,
+            Nickname = Nickname != OriginalSharedValues.Nickname ? Nickname : p.Nickname,
+            Address = Address != OriginalSharedValues.Address ? Address : p.Address,
+            ZipCode = ZipCode != OriginalSharedValues.ZipCode ? ZipCode : p.ZipCode,
+            Birthday = Birthday != OriginalSharedValues.Birthday ? Birthday : p.Birthday,
+            Category = Category != OriginalSharedValues.Category ? Category : p.Category,
         }).ToList();
 
         using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
@@ -159,7 +266,13 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         return
             FirstName != OriginalSharedValues.FirstName ||
-            Surname != OriginalSharedValues.Surname;
+            Surname != OriginalSharedValues.Surname ||
+            Nickname != OriginalSharedValues.Nickname ||
+            Address != OriginalSharedValues.Address ||
+            ZipCode != OriginalSharedValues.ZipCode ||
+            City != OriginalSharedValues.City ||
+            Birthday != OriginalSharedValues.Birthday ||
+            Category != OriginalSharedValues.Category;
     }
 
     public string this[string columnName]
@@ -183,6 +296,12 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     {
         RaisePropertyChanged(nameof(FirstName));
         RaisePropertyChanged(nameof(Surname));
+        RaisePropertyChanged(nameof(Nickname));
+        RaisePropertyChanged(nameof(Address));
+        RaisePropertyChanged(nameof(ZipCode));
+        RaisePropertyChanged(nameof(City));
+        RaisePropertyChanged(nameof(Birthday));
+        RaisePropertyChanged(nameof(Category));
     }
 
     private void UpdateState(
