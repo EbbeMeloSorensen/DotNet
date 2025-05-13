@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows;
+using Craft.Domain;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
-using PR.Domain.BusinessRules.PR;
 using PR.Domain.Entities.PR;
 using PR.Persistence;
 
@@ -19,9 +19,9 @@ namespace PR.ViewModel
     public class PersonPropertiesViewModel : ViewModelBase
     {
         private readonly IDialogService _applicationDialogService;
+        private IBusinessRuleCatalog _businessRuleCatalog;
         private bool _isVisible;
         private ObjectCollection<Person> _people;
-        private BusinessRuleCatalog _businessRuleCatalog;
 
         private AsyncCommand<object> _createPersonCommentCommand;
         private AsyncCommand<object> _updatePersonCommentCommand;
@@ -119,7 +119,7 @@ namespace PR.ViewModel
         public PersonPropertiesViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
-            BusinessRuleCatalog businessRuleCatalog,
+            IBusinessRuleCatalog businessRuleCatalog,
             ObjectCollection<Person> people)
         {
             UnitOfWorkFactory = unitOfWorkFactory;

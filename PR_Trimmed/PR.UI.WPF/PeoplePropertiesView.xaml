@@ -56,10 +56,10 @@
             </Grid.ColumnDefinitions>
             <TextBlock Margin="3" Grid.Row="2" Grid.Column="0" Text="First Name:"/>
             <TextBox Margin="3" Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
-                     Text="{Binding SharedFirstName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding FirstName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" Grid.Row="3" Grid.Column="0" Text="Surname:"/>
             <TextBox Margin="3" Grid.Row="3" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}" 
-                     Text="{Binding SharedSurname, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding Surname, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" Grid.Row="4" Grid.Column="0" Text="Nickname:"/>
             <TextBox Margin="3" Grid.Row="4" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding SharedNickname, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>

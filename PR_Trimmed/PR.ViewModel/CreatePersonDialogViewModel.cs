@@ -5,11 +5,11 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Craft.Domain;
 using GalaSoft.MvvmLight.Command;
 using Craft.UI.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
-using PR.Domain.BusinessRules.PR;
 using PR.Domain.Entities.PR;
 using PR.Persistence;
 
@@ -23,7 +23,7 @@ namespace PR.ViewModel
         private Dictionary<string, string> _errors;
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private BusinessRuleCatalog _businessRuleCatalog;
+        private IBusinessRuleCatalog _businessRuleCatalog;
 
         public Person Person { get; }
 
@@ -248,7 +248,7 @@ namespace PR.ViewModel
 
         public CreatePersonDialogViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
-            BusinessRuleCatalog businessRuleCatalog,
+            IBusinessRuleCatalog businessRuleCatalog,
             IEnumerable<Tuple<DateTime, DateTime>> occupiedDateRanges = null)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -268,7 +268,8 @@ namespace PR.ViewModel
         {
             UpdateState(StateOfView.Updated);
 
-            if (_errors.Values.Any(_ => !string.IsNullOrEmpty(_)))
+            //if (_errors.Values.Any(_ => !string.IsNullOrEmpty(_)))
+            if (_errors.Values.Any())
             {
                 return;
             }
@@ -321,7 +322,7 @@ namespace PR.ViewModel
 
                 if (_state == StateOfView.Initial)
                 {
-                    return "";
+                    return string.Empty;
                 }
 
                 string? error;

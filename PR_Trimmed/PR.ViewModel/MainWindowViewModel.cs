@@ -12,7 +12,6 @@ using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using PR.Application;
 using PR.Domain.BusinessRules.PR;
-using PR.Domain.Entities.PR;
 using PR.IO;
 using PR.Persistence;
 
@@ -24,7 +23,7 @@ namespace PR.ViewModel
         private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
         private readonly ILogger _logger;
-        private readonly BusinessRuleCatalog _businessRuleCatalog;
+        private readonly IBusinessRuleCatalog _businessRuleCatalog;
         private string _mainWindowTitle;
 
         public string MainWindowTitle
@@ -141,6 +140,7 @@ namespace PR.ViewModel
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
                 unitOfWorkFactory,
+                businessRuleCatalog,
                 PersonListViewModel.SelectedPeople);
 
             PersonPropertiesViewModel = new PersonPropertiesViewModel(

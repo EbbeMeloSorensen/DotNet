@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Craft.Domain;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
@@ -10,15 +11,14 @@ using Craft.UI.Utils;
 using PR.Application;
 using PR.Persistence;
 using PR.Domain.Entities.PR;
-using PR.Domain.BusinessRules.PR;
 
 namespace PR.ViewModel;
 
 public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 {
     private StateOfView _state;
+    private IBusinessRuleCatalog _businessRuleCatalog;
     private ObjectCollection<Person> _people;
-    private BusinessRuleCatalog _businessRuleCatalog;
     private Dictionary<string, string> _errors;
 
     public Person OriginalSharedValues { get; private set; }
@@ -32,7 +32,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
-    public string SharedFirstName
+    public string FirstName
     {
         get => SharedValues.FirstName;
         set
@@ -44,12 +44,12 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    public string SharedSurname
+    public string Surname
     {
         get => SharedValues.Surname ?? "";
         set
         {
-            SharedValues.Surname = value;
+            SharedValues.Surname = string.IsNullOrEmpty(value) ? null : value;
             Validate();
             RaisePropertyChanged();
             ApplyChangesCommand.RaiseCanExecuteChanged();
@@ -73,10 +73,13 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public PeoplePropertiesViewModel(
         IUnitOfWorkFactory unitOfWorkFactory,
+        IBusinessRuleCatalog businessRuleCatalog,
         ObjectCollection<Person> people)
     {
-        SharedValues = new Person();
         UnitOfWorkFactory = unitOfWorkFactory;
+        _businessRuleCatalog = businessRuleCatalog;
+        SharedValues = new Person();
+        _errors = new Dictionary<string, string>();
         _people = people;
         _people.PropertyChanged += Initialize;
     }
@@ -99,18 +102,18 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         IsVisible = true;
 
-        SharedFirstName = people.All(p => p.FirstName == people.First().FirstName)
+        FirstName = people.All(p => p.FirstName == people.First().FirstName)
             ? people.First().FirstName
             : string.Empty;
 
-        SharedSurname = (people.All(p => p.Surname == people.First().Surname)
+        Surname = (people.All(p => p.Surname == people.First().Surname)
             ? people.First().Surname
             : string.Empty) ?? string.Empty;
 
         OriginalSharedValues = new Person
         {
-            FirstName = SharedFirstName,
-            Surname = SharedSurname
+            FirstName = FirstName,
+            Surname = Surname
         };
 
         ApplyChangesCommand.RaiseCanExecuteChanged();
@@ -120,7 +123,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     {
         UpdateState(StateOfView.Updated);
 
-        if (!string.IsNullOrEmpty(Error))
+        if (_errors.Any())
         {
             return;
         }
@@ -129,8 +132,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         {
             ID = p.ID,
             Superseded = p.Superseded,
-            FirstName = SharedFirstName != OriginalSharedValues.FirstName ? SharedFirstName : p.FirstName,
-            Surname = SharedSurname != OriginalSharedValues.Surname ? SharedSurname : p.Surname,
+            FirstName = FirstName != OriginalSharedValues.FirstName ? FirstName : p.FirstName,
+            Surname = Surname != OriginalSharedValues.Surname ? Surname : p.Surname,
         }).ToList();
 
         using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
@@ -149,18 +152,28 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             return false;
         }
 
+        if (_state == StateOfView.Updated && _errors.Any())
+        {
+            return false;
+        }
+
         return
-            SharedFirstName != OriginalSharedValues.FirstName ||
-            SharedSurname != OriginalSharedValues.Surname;
+            FirstName != OriginalSharedValues.FirstName ||
+            Surname != OriginalSharedValues.Surname;
     }
 
     public string this[string columnName]
     {
         get
         {
-            var errorMessage = string.Empty;
+            if (_state == StateOfView.Initial)
+            {
+                return string.Empty;
+            }
 
-            return errorMessage;
+            _errors.TryGetValue(columnName, out var error);
+
+            return error ?? "";
         }
     }
 
@@ -168,8 +181,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private void RaisePropertyChanges()
     {
-        RaisePropertyChanged(nameof(SharedFirstName));
-        RaisePropertyChanged(nameof(SharedSurname));
+        RaisePropertyChanged(nameof(FirstName));
+        RaisePropertyChanged(nameof(Surname));
     }
 
     private void UpdateState(
@@ -184,7 +197,22 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     {
         if (_state != StateOfView.Updated) return;
 
-        //_errors = _businessRuleCatalog.ValidateAtomic(SharedValues);
+        _errors.Clear();
+
+        //ValidateNumericInput(nameof(Latitude), Latitude, out var latitude);
+        //ValidateNumericInput(nameof(Longitude), Longitude, out var longitude);
+
+        if (_errors.Any())
+        {
+            return;
+        }
+
+        //SharedValues.Latitude = latitude;
+        //SharedValues.Longitude = longitude;
+        SharedValues.Start = DateTime.UtcNow;
+        SharedValues.End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+        _errors = _businessRuleCatalog.ValidateAtomic(SharedValues);
     }
 
     private void OnPeopleUpdated(
