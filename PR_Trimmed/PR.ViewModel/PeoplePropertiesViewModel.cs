@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Craft.Domain;
@@ -23,6 +24,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public Person OriginalSharedValues { get; private set; }
     public Person SharedValues { get; }
+
+    private string _latitude;
+    private string _longitude;
 
     private bool _isVisible;
 
@@ -128,6 +132,30 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
+    public string Latitude
+    {
+        get => _latitude;
+        set
+        {
+            _latitude = value;
+            Validate();
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
+    public string Longitude
+    {
+        get => _longitude;
+        set
+        {
+            _longitude = value;
+            Validate();
+            RaisePropertyChanged();
+            ApplyChangesCommand.RaiseCanExecuteChanged();
+        }
+    }
+
     public bool IsVisible
     {
         get { return _isVisible; }
@@ -206,6 +234,14 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? people.First().Birthday
             : null) ?? null;
 
+        Latitude = (AreAllEqualWithinTolerance(people.Select(p => p.Latitude), 0.0000001)
+            ? $"{people.First().Latitude!.Value.ToString(CultureInfo.InvariantCulture)}"
+            : string.Empty);
+
+        Longitude = (AreAllEqualWithinTolerance(people.Select(p => p.Longitude), 0.0000001)
+            ? $"{people.First().Longitude!.Value.ToString(CultureInfo.InvariantCulture)}"
+            : string.Empty);
+
         OriginalSharedValues = new Person
         {
             FirstName = FirstName,
@@ -215,7 +251,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ZipCode = ZipCode,
             City = City,
             Birthday = Birthday,
-            Category = Category
+            Category = Category,
+            Latitude = string.IsNullOrEmpty(Latitude) ? null : people.First().Latitude,
+            Longitude = string.IsNullOrEmpty(Longitude) ? null : people.First().Longitude
         };
 
         ApplyChangesCommand.RaiseCanExecuteChanged();
@@ -241,6 +279,12 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ZipCode = ZipCode != OriginalSharedValues.ZipCode ? ZipCode : p.ZipCode,
             Birthday = Birthday != OriginalSharedValues.Birthday ? Birthday : p.Birthday,
             Category = Category != OriginalSharedValues.Category ? Category : p.Category,
+            Latitude = Latitude != NullableDoubleAsString(OriginalSharedValues.Latitude) 
+                ? double.Parse(Latitude, CultureInfo.InvariantCulture) 
+                : p.Latitude,
+            Longitude = Longitude != NullableDoubleAsString(OriginalSharedValues.Longitude) 
+                ? double.Parse(Longitude, CultureInfo.InvariantCulture) 
+                : p.Longitude
         }).ToList();
 
         using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
@@ -272,7 +316,9 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ZipCode != OriginalSharedValues.ZipCode ||
             City != OriginalSharedValues.City ||
             Birthday != OriginalSharedValues.Birthday ||
-            Category != OriginalSharedValues.Category;
+            Category != OriginalSharedValues.Category ||
+            Latitude != NullableDoubleAsString(OriginalSharedValues.Latitude) ||
+            Longitude != NullableDoubleAsString(OriginalSharedValues.Longitude);
     }
 
     public string this[string columnName]
@@ -347,5 +393,27 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         {
             handler(this, new PeopleEventArgs(people));
         }
+    }
+
+    private bool AreAllEqualWithinTolerance(
+        IEnumerable<double?> source,
+        double tolerance)
+    {
+        if (source == null || !source.Any())
+            return false;
+
+        var values = source.ToList();
+
+        if (values.Any(v => !v.HasValue))
+            return false;
+
+        var first = values.First().Value;
+        return values.All(v => Math.Abs(v.Value - first) <= tolerance);
+    }
+
+    private string NullableDoubleAsString(
+        double? value)
+    {
+        return value.HasValue ? value.Value.ToString(CultureInfo.InvariantCulture) : "";
     }
 }
