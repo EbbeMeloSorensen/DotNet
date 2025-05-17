@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Laboratory.ViewMo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Laboratory.UI.WPF", "Simulator.Laboratory.UI.WPF\Simulator.Laboratory.UI.WPF.csproj", "{A4255F43-05AE-FE9A-FE63-1078A38734E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.TowerDefense.ViewModel", "Game.TowerDefense.ViewModel\Game.TowerDefense.ViewModel.csproj", "{8428A100-C12E-C60B-D717-0BC6BD0D7C97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,10 @@ Global
 		{A4255F43-05AE-FE9A-FE63-1078A38734E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4255F43-05AE-FE9A-FE63-1078A38734E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4255F43-05AE-FE9A-FE63-1078A38734E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8428A100-C12E-C60B-D717-0BC6BD0D7C97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8428A100-C12E-C60B-D717-0BC6BD0D7C97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8428A100-C12E-C60B-D717-0BC6BD0D7C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8428A100-C12E-C60B-D717-0BC6BD0D7C97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
