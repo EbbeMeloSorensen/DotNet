@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.IO.Utils", "..\Craft\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Engine.Complex", "DD.Engine.Complex\DD.Engine.Complex.csproj", "{D530780E-D9D1-429D-92C5-62CA9D01B109}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.UI.WPF", "DD.UI.WPF\DD.UI.WPF.csproj", "{09B7364E-9A95-3438-590E-FD1905D80BC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{D530780E-D9D1-429D-92C5-62CA9D01B109}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D530780E-D9D1-429D-92C5-62CA9D01B109}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D530780E-D9D1-429D-92C5-62CA9D01B109}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09B7364E-9A95-3438-590E-FD1905D80BC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09B7364E-9A95-3438-590E-FD1905D80BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09B7364E-9A95-3438-590E-FD1905D80BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09B7364E-9A95-3438-590E-FD1905D80BC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
