@@ -210,7 +210,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             ? people.First().Surname
             : string.Empty) ?? string.Empty;
 
-        Nickname = (people.All(p => p.Nickname == people.First().Surname)
+        Nickname = (people.All(p => p.Nickname == people.First().Nickname)
             ? people.First().Nickname
             : string.Empty) ?? string.Empty;
 
@@ -277,6 +277,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             Nickname = Nickname != OriginalSharedValues.Nickname ? Nickname : p.Nickname,
             Address = Address != OriginalSharedValues.Address ? Address : p.Address,
             ZipCode = ZipCode != OriginalSharedValues.ZipCode ? ZipCode : p.ZipCode,
+            City = City != OriginalSharedValues.City ? City : p.City,
             Birthday = Birthday != OriginalSharedValues.Birthday ? Birthday : p.Birthday,
             Category = Category != OriginalSharedValues.Category ? Category : p.Category,
             Latitude = Latitude != NullableDoubleAsString(OriginalSharedValues.Latitude) 
