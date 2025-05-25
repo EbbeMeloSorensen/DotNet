@@ -348,6 +348,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         RaisePropertyChanged(nameof(City));
         RaisePropertyChanged(nameof(Birthday));
         RaisePropertyChanged(nameof(Category));
+        RaisePropertyChanged(nameof(Latitude));
+        RaisePropertyChanged(nameof(Longitude));
     }
 
     private void UpdateState(
@@ -364,16 +366,23 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         _errors.Clear();
 
-        //ValidateNumericInput(nameof(Latitude), Latitude, out var latitude);
-        //ValidateNumericInput(nameof(Longitude), Longitude, out var longitude);
+        if (!Latitude.TryParse(out var latitude, out var error_lat))
+        {
+            _errors[nameof(Latitude)] = error_lat;
+        }
+
+        if (!Longitude.TryParse(out var longitude, out var error_long))
+        {
+            _errors[nameof(Longitude)] = error_long;
+        }
 
         if (_errors.Any())
         {
             return;
         }
 
-        //SharedValues.Latitude = latitude;
-        //SharedValues.Longitude = longitude;
+        SharedValues.Latitude = latitude;
+        SharedValues.Longitude = longitude;
         SharedValues.Start = DateTime.UtcNow;
         SharedValues.End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 

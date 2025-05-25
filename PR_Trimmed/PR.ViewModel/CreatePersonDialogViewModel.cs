@@ -379,8 +379,15 @@ namespace PR.ViewModel
             _errors.Clear();
             DateRangeError = "";
 
-            ValidateNumericInput(nameof(Latitude), Latitude, out var latitude);
-            ValidateNumericInput(nameof(Longitude), Longitude, out var longitude);
+            if (!Latitude.TryParse(out var latitude, out var error_lat))
+            {
+                _errors[nameof(Latitude)] = error_lat;
+            }
+
+            if (!Longitude.TryParse(out var longitude, out var error_long))
+            {
+                _errors[nameof(Longitude)] = error_long;
+            }
 
             if (_errors.Any())
             {
@@ -414,14 +421,16 @@ namespace PR.ViewModel
             }
         }
 
-        private void ValidateNumericInput(
-            string propertyName,
+        private bool TryParse(
             string text,
-            out double? value)
+            out double? value,
+            out string? error)
         {
             if (string.IsNullOrEmpty(text))
             {
                 value = null;
+                error = null;
+                return true;
             }
             else if(double.TryParse(
                         text,
@@ -430,11 +439,15 @@ namespace PR.ViewModel
                         out var temp))
             {
                 value = temp;
+                error = null;
+                return true;
             }
             else
             {
                 value = double.NaN;
-                _errors[propertyName] = "Invalid format";
+                error = "Invalid format";
+                //_errors[propertyName] = "Invalid format";
+                return false;
             }
         }
     }
