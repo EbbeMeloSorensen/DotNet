@@ -309,7 +309,7 @@ namespace PR.ViewModel
         {
             var dialogViewModel1 = new MessageBoxDialogViewModel("Clear repository?", true);
 
-            if (_applicationDialogService.ShowDialog(dialogViewModel1, owner as Window) == DialogResult.Cancel)
+            if (_applicationDialogService.ShowDialog(dialogViewModel1, owner as Window) != DialogResult.OK)
             {
                 return;
             }

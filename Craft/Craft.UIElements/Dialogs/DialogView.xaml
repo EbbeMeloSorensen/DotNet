@@ -6,7 +6,10 @@
              xmlns:local="clr-namespace:Craft.UIElements.Dialogs"
              mc:Ignorable="d" 
              WindowStartupLocation="CenterOwner"
-             SizeToContent="WidthAndHeight">
+             SizeToContent="WidthAndHeight"
+             WindowStyle="ToolWindow"
+             ResizeMode="NoResize"
+             ShowInTaskbar="False">
     <Grid>
         <ContentControl Content="{Binding}"/>
     </Grid>
