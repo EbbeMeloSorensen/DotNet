@@ -4,11 +4,13 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using Craft.Domain;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.UI.Utils;
+using Craft.ViewModels.Dialogs;
 using PR.Application;
 using PR.Persistence;
 using PR.Domain.Entities.PR;
@@ -17,8 +19,9 @@ namespace PR.ViewModel;
 
 public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 {
+    private readonly IDialogService _applicationDialogService;
+    private readonly IBusinessRuleCatalog _businessRuleCatalog;
     private StateOfView _state;
-    private IBusinessRuleCatalog _businessRuleCatalog;
     private ObjectCollection<Person> _people;
     private Dictionary<string, string> _errors;
 
@@ -30,7 +33,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private bool _isVisible;
 
-    private AsyncCommand _applyChangesCommand;
+    private AsyncCommand<object> _applyChangesCommand;
 
     public event EventHandler<PeopleEventArgs> PeopleUpdated;
 
@@ -166,17 +169,19 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    public AsyncCommand ApplyChangesCommand
+    public AsyncCommand<object> ApplyChangesCommand
     {
-        get { return _applyChangesCommand ?? (_applyChangesCommand = new AsyncCommand(ApplyChanges, CanApplyChanges)); }
+        get { return _applyChangesCommand ?? (_applyChangesCommand = new AsyncCommand<object>(ApplyChanges, CanApplyChanges)); }
     }
 
     public PeoplePropertiesViewModel(
         IUnitOfWorkFactory unitOfWorkFactory,
+        IDialogService applicationDialogService,
         IBusinessRuleCatalog businessRuleCatalog,
         ObjectCollection<Person> people)
     {
         UnitOfWorkFactory = unitOfWorkFactory;
+        _applicationDialogService = applicationDialogService;
         _businessRuleCatalog = businessRuleCatalog;
         SharedValues = new Person();
         _errors = new Dictionary<string, string>();
@@ -259,7 +264,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         ApplyChangesCommand.RaiseCanExecuteChanged();
     }
 
-    private async Task ApplyChanges()
+    private async Task ApplyChanges(object owner)
     {
         UpdateState(StateOfView.Updated);
 
@@ -267,6 +272,17 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         {
             return;
         }
+
+        var dialogViewModel = new ProspectiveUpdateDialogViewModel();
+
+        if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+        {
+            return;
+        }
+
+        // Todo (1): Make sure the time of change is set correctly
+        // Todo (2): Get the time of change from dialogViewModel.TimeOfChange
+        // Todo (3): Make sure that it doesn't end up as the guis responsibility to protect the repository from invalid data
 
         var updatedPeople = _people.Objects.Select(p => new Person
         {
@@ -297,7 +313,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         OnPeopleUpdated(updatedPeople);
     }
 
-    private bool CanApplyChanges()
+    private bool CanApplyChanges(object owner)
     {
         if (OriginalSharedValues == null)
         {

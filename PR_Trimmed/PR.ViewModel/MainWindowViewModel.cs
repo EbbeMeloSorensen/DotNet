@@ -140,6 +140,7 @@ namespace PR.ViewModel
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
                 unitOfWorkFactory,
+                applicationDialogService,
                 businessRuleCatalog,
                 PersonListViewModel.SelectedPeople);
 

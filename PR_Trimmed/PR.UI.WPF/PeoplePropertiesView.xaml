@@ -85,7 +85,8 @@
             <TextBox Margin="3" Grid.Row="11" Grid.Column="1" Validation.ErrorTemplate="{StaticResource errorTemplate}"
                      Text="{Binding Longitude, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Row ="13" Grid.Column="0" Margin="3,0,3,3" Content="Update" 
-                    Command="{Binding ApplyChangesCommand}" />
+                    Command="{Binding ApplyChangesCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
         </Grid>
     </Grid>
 </UserControl>

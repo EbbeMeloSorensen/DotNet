@@ -22,6 +22,9 @@
             <DataTemplate DataType="{x:Type viewModel:SelectTimeDialogViewModel}">
                 <local:SelectTimeDialogView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:ProspectiveUpdateDialogViewModel}">
+                <local:ProspectiveUpdateDialogView/>
+            </DataTemplate>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Craft.UIElements;component/Dialogs/Resources.xaml" />
