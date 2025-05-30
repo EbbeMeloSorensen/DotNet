@@ -16,7 +16,10 @@ namespace PR.Persistence.Versioned
         internal bool IncludeCurrentObjects { get; }
         internal bool IncludeHistoricalObjects { get; }
 
+        // When TransactionTime is accessed, it will be set to the current UTC time if it hasn't been set already.
         internal DateTime TransactionTime => _transactionTime ??= DateTime.UtcNow;
+
+        public DateTime? TimeOfChange { get; set; }
 
         public ISmurfRepository Smurfs { get; }
 
@@ -51,6 +54,7 @@ namespace PR.Persistence.Versioned
         {
             UnitOfWork.Complete();
             _transactionTime = null;
+            TimeOfChange = null;
         }
 
         public void Dispose()

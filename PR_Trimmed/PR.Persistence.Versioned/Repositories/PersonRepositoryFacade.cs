@@ -29,6 +29,7 @@ namespace PR.Persistence.Versioned.Repositories
         private bool IncludeCurrentObjects => _unitOfWorkFacade.IncludeCurrentObjects;
         private bool IncludeHistoricalObjects => _unitOfWorkFacade.IncludeHistoricalObjects;
         private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
+        private DateTime TimeOfChange => _unitOfWorkFacade.TimeOfChange ?? CurrentTime;
 
         public PersonRepositoryFacade(
             ILogger logger,
@@ -432,13 +433,16 @@ namespace PR.Persistence.Versioned.Repositories
                 pRepo.Superseded = CurrentTime;
             });
 
-            var newPersonRows = objectsFromRepository.Select(_ => _.Clone()).ToList();
+            var newPersonRows = objectsFromRepository
+                .Select(_ => _.Clone())
+                .ToList();
+
             newPersonRows.ForEach(_ =>
             {
                 _.ArchiveID = new Guid();
                 _.Created = CurrentTime;
                 _.Superseded = _maxDate;
-                _.End = CurrentTime;
+                _.End = TimeOfChange;
             });
 
             people.ToList().ForEach(_ =>
@@ -446,12 +450,13 @@ namespace PR.Persistence.Versioned.Repositories
                 _.ArchiveID = Guid.NewGuid();
                 _.Created = CurrentTime;
                 _.Superseded = _maxDate;
-                _.Start = CurrentTime;
+                _.Start = TimeOfChange;
                 _.End = _maxDate;
             });
 
             newPersonRows.AddRange(people);
 
+            // Notice that we have 2 rows for each person here
             await UnitOfWork.People.AddRange(newPersonRows);
         }
 

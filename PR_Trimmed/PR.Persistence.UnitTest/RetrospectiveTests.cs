@@ -297,6 +297,41 @@ namespace PR.Persistence.UnitTest
             personVariants.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
         }
 
+        [Fact]
+        public async Task UpdatePeopleProspectively()
+        {
+            // Arrange
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000006-0000-0000-0000-000000000000")
+            };
+
+            // Act
+            var people1 = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
+
+            people1.ForEach(_ => _.FirstName = "Garfield");
+            (unitOfWork1 as UnitOfWorkFacade)!.TimeOfChange = new DateTime(2017, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            await unitOfWork1.People.UpdateRange(people1);
+            unitOfWork1.Complete();
+
+            // Assert
+            // In 2018, the name of the person was Garfield
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var people2 = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
+            people2.Count.Should().Be(1);
+            people2.Count(p => p.FirstName == "Garfield").Should().Be(1);
+
+            // In 2016, the name of the person was Rey Skywalker
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2016, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork3 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var people3 = (await unitOfWork3.People.Find(p => ids.Contains(p.ID))).ToList();
+            people3.Count.Should().Be(1);
+            people3.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+        }
+
         // Like when registering that John Doe lived a different place in a given time period
         //[Fact]
         //public async Task SqueezeInANewStateOfAPerson()
