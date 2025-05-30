@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\Craft\Craft.ViewModel.Utils\Craft.ViewModel.Utils.csproj" />
     <ProjectReference Include="..\..\Craft\Craft.ViewModels\Craft.ViewModels.csproj" />
     <ProjectReference Include="..\PR.Application\PR.Application.csproj" />
+    <ProjectReference Include="..\PR.Persistence.Versioned\PR.Persistence.Versioned.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,6 +14,7 @@ using Craft.ViewModels.Dialogs;
 using PR.Application;
 using PR.Persistence;
 using PR.Domain.Entities.PR;
+using PR.Persistence.Versioned;
 
 namespace PR.ViewModel;
 
@@ -306,6 +307,13 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
         {
+            if (dialogViewModel.ProspectiveUpdateType == ProspectiveUpdateType.Earlier &&
+                dialogViewModel.TimeOfChange.TryParsingAsDateTime(out var timeOfChange) &&
+                unitOfWork is UnitOfWorkFacade unitOfWorkFacade)
+            {
+                unitOfWorkFacade.TimeOfChange = timeOfChange;
+            }
+
             await unitOfWork.People.UpdateRange(updatedPeople);
             unitOfWork.Complete();
         }
