@@ -1,19 +1,20 @@
+using Craft.Domain;
+using Craft.Logging;
+using Craft.Utils;
+using Craft.ViewModel.Utils;
+using Craft.ViewModels.Dialogs;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Microsoft.Win32;
+using PR.Application;
+using PR.Domain.BusinessRules.PR;
+using PR.IO;
+using PR.Persistence;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Craft.Domain;
-using Microsoft.Win32;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Craft.Logging;
-using Craft.ViewModel.Utils;
-using Craft.ViewModels.Dialogs;
-using PR.Application;
-using PR.Domain.BusinessRules.PR;
-using PR.IO;
-using PR.Persistence;
 
 namespace PR.ViewModel
 {
@@ -25,6 +26,8 @@ namespace PR.ViewModel
         private readonly ILogger _logger;
         private readonly IBusinessRuleCatalog _businessRuleCatalog;
         private string _mainWindowTitle;
+
+        private readonly ObservableObject<Tuple<DateTime?, DateTime?>> _bitemporalTimesOfInterest;
 
         public string MainWindowTitle
         {
@@ -131,12 +134,19 @@ namespace PR.ViewModel
             _applicationDialogService = applicationDialogService;
             _businessRuleCatalog = new BusinessRuleCatalog();
 
+            // When this is changed, one should call Find - not in connection with the two times being changed separately
+            _bitemporalTimesOfInterest = new ObservableObject<Tuple<DateTime?, DateTime?>>
+            {
+                Object = new Tuple<DateTime?, DateTime?>(null, null)
+            };
+
             LogViewModel = new LogViewModel(200);
             _logger = new ViewModelLogger(logger, LogViewModel);
 
-            PersonListViewModel = new PersonListViewModel(unitOfWorkFactory, applicationDialogService);
-
-            PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
+            PersonListViewModel = new PersonListViewModel(
+                unitOfWorkFactory, 
+                applicationDialogService,
+                _bitemporalTimesOfInterest);
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
                 unitOfWorkFactory,
@@ -150,7 +160,43 @@ namespace PR.ViewModel
                 _businessRuleCatalog,
                 PersonListViewModel.SelectedPeople);
 
+            PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
             PeoplePropertiesViewModel.PeopleUpdated += PeoplePropertiesViewModel_PeopleUpdated;
+
+            _bitemporalTimesOfInterest.PropertyChanged += async (s, e) =>
+            {
+                if (UnitOfWorkFactory is IUnitOfWorkFactoryHistorical unitOfWorkFactoryHistorical)
+                {
+                    unitOfWorkFactoryHistorical.HistoricalTime = _bitemporalTimesOfInterest.Object.Item1;
+                }
+
+                if (UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
+                {
+                    unitOfWorkFactoryVersioned.DatabaseTime = _bitemporalTimesOfInterest.Object.Item2;
+                }
+
+
+                // Diagnostics:
+                var historicalTime = _bitemporalTimesOfInterest.Object.Item1.HasValue
+                    ? _bitemporalTimesOfInterest.Object.Item1.Value.AsDateString()
+                    : "Now";
+
+                var databaseTime = _bitemporalTimesOfInterest.Object.Item2.HasValue
+                    ? _bitemporalTimesOfInterest.Object.Item2.Value.AsDateString()
+                    : "Latest";
+
+                _logger.WriteLine(
+                    LogMessageCategory.Debug, 
+                    $"Bitemporal coordinates changed:\n  Historical Time: {historicalTime}\n  Database time: {databaseTime}");
+
+                // Get it from PR.ViewModel.GIS
+                //UpdateCommands();
+                //UpdateControlStyle();
+                //UpdateStatusBar();
+                //UpdateTimeText();
+                //UpdateDatabaseTimeSeriesView();
+                //await AutoFindIfEnabled();
+            };
 
             _logger.WriteLine(LogMessageCategory.Information, "Application started");
         }

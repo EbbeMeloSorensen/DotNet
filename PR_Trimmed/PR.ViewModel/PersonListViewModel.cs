@@ -60,13 +60,15 @@ namespace PR.ViewModel
 
         public PersonListViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
-            IDialogService applicationDialogService)
+            IDialogService applicationDialogService,
+            ObservableObject<Tuple<DateTime?, DateTime?>> bitemporalTimesOfInterest)
         {
             UnitOfWorkFactory = unitOfWorkFactory;
             _applicationDialogService = applicationDialogService;
             _sorting = Sorting.Name;
 
-            FindPeopleViewModel = new FindPeopleViewModel();
+            FindPeopleViewModel = new FindPeopleViewModel(
+                bitemporalTimesOfInterest);
 
             _people = new List<Person>();
 

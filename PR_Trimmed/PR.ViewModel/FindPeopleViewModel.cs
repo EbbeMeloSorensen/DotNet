@@ -1,13 +1,20 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using Craft.DataStructures.IO.graphml;
 using Craft.Utils;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using PR.Domain.Entities.PR;
+using System;
+using System.Linq.Expressions;
 
 namespace PR.ViewModel
 {
     public class FindPeopleViewModel : ViewModelBase
     {
+        // These belong to the mainViewModel but can be modified by this view model
+        private readonly ObservableObject<Tuple<DateTime?, DateTime?>> _bitemporalTimesOfInterest;
+        private DateTime? _historicalTime;
+        private DateTime? _databaseTime;
+
         private bool _displayAttributeFilterSection;
         private bool _displayStatusFilterSection;
         private bool _displayRetrospectiveFilterSection;
@@ -22,6 +29,70 @@ namespace PR.ViewModel
         private bool _showHistoricalPeople;
         private bool _showCurrentPeopleCheckboxEnabled;
         private bool _showHistoricalPeopleCheckboxEnabled;
+
+        private RelayCommand _clearHistoricalTimeCommand;
+        private RelayCommand _clearDatabaseTimeCommand;
+
+        public DateTime? HistoricalTime
+        {
+            get => _historicalTime;
+            set
+            {
+                if (_historicalTime == value) return;
+
+                _historicalTime = value;
+                RaisePropertyChanged();
+
+                var historicalTime = _bitemporalTimesOfInterest.Object.Item1;
+                var databaseTime = _bitemporalTimesOfInterest.Object.Item2;
+
+                if (historicalTime == value) return;
+
+                historicalTime = value;
+
+                if (historicalTime.HasValue)
+                {
+                    if (databaseTime.HasValue && databaseTime.Value < historicalTime)
+                    {
+                        databaseTime = historicalTime;
+                    }
+                }
+                else
+                {
+                    databaseTime = null;
+                }
+
+                _bitemporalTimesOfInterest.Object = new Tuple<DateTime?, DateTime?>(historicalTime, databaseTime);
+            }
+        }
+
+        public DateTime? DatabaseTime
+        {
+            get => _databaseTime;
+            set
+            {
+                if (_databaseTime == value) return;
+
+                _databaseTime = value;
+                RaisePropertyChanged();
+
+                var historicalTime = _bitemporalTimesOfInterest.Object.Item1;
+                var databaseTime = _bitemporalTimesOfInterest.Object.Item2;
+
+                if (databaseTime == value) return;
+
+                databaseTime = value;
+
+                if (databaseTime.HasValue &&
+                    historicalTime.HasValue &&
+                    historicalTime.Value > databaseTime.Value)
+                {
+                    historicalTime = databaseTime;
+                }
+
+                _bitemporalTimesOfInterest.Object = new Tuple<DateTime?, DateTime?>(historicalTime, databaseTime);
+            }
+        }
 
         public bool DisplayAttributeFilterSection
         {
@@ -150,14 +221,43 @@ namespace PR.ViewModel
             }
         }
 
-        public FindPeopleViewModel()
+        public RelayCommand ClearHistoricalTimeCommand
         {
+            get
+            {
+                return _clearHistoricalTimeCommand ?? (_clearHistoricalTimeCommand =
+                    new RelayCommand(ClearHistoricalTime, CanClearHistoricalTime));
+            }
+        }
+
+        public RelayCommand ClearDatabaseTimeCommand
+        {
+            get
+            {
+                return _clearDatabaseTimeCommand ??
+                       (_clearDatabaseTimeCommand = new RelayCommand(ClearDatabaseTime, CanClearDatabaseTime));
+            }
+        }
+
+        public FindPeopleViewModel(
+            ObservableObject<Tuple<DateTime?, DateTime?>> bitemporalTimesOfInterest)
+        {
+            _bitemporalTimesOfInterest = bitemporalTimesOfInterest;
+
             DisplayAttributeFilterSection = true;
             DisplayStatusFilterSection = true;
             ShowCurrentPeople = true;
             DisplayRetrospectiveFilterSection = true;
             DisplayHistoricalTimeControls = true;
             DisplayDatabaseTimeControls = true;
+
+            _bitemporalTimesOfInterest.PropertyChanged += (s, e) =>
+            {
+                HistoricalTime = _bitemporalTimesOfInterest.Object.Item1;
+                DatabaseTime = _bitemporalTimesOfInterest.Object.Item2;
+
+                UpdateControls();
+            };
         }
 
         public Expression<Func<Person, bool>> FilterAsExpression()
@@ -173,6 +273,36 @@ namespace PR.ViewModel
                          person.Surname != null && person.Surname.ToUpper().Contains(NameFilter.ToUpper());
 
             return nameOK;
+        }
+
+        private void ClearHistoricalTime()
+        {
+            _bitemporalTimesOfInterest.Object = new Tuple<DateTime?, DateTime?>(
+                null,
+                _bitemporalTimesOfInterest.Object.Item2);
+        }
+
+        private bool CanClearHistoricalTime()
+        {
+            return _bitemporalTimesOfInterest.Object.Item1.HasValue;
+        }
+
+        private void ClearDatabaseTime()
+        {
+            _bitemporalTimesOfInterest.Object = new Tuple<DateTime?, DateTime?>(
+                _bitemporalTimesOfInterest.Object.Item1,
+                null);
+        }
+
+        private bool CanClearDatabaseTime()
+        {
+            return _bitemporalTimesOfInterest.Object.Item2.HasValue;
+        }
+
+        private void UpdateControls()
+        {
+            ClearHistoricalTimeCommand.RaiseCanExecuteChanged();
+            ClearDatabaseTimeCommand.RaiseCanExecuteChanged();
         }
     }
 }
