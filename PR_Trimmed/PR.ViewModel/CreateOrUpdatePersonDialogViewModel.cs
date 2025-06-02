@@ -15,10 +15,17 @@ using PR.Persistence;
 
 namespace PR.ViewModel
 {
+    public enum CreateOrUpdatePersonDialogViewModelMode
+    {
+        Create,
+        Update
+    }
+
     public class CreateOrUpdatePersonDialogViewModel : DialogViewModelBase, IDataErrorInfo
     {
         private static readonly DateTime _maxDateTime = new(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 
+        private CreateOrUpdatePersonDialogViewModelMode _mode;
         private StateOfView _state;
         private Dictionary<string, string> _errors;
 
@@ -249,10 +256,12 @@ namespace PR.ViewModel
         public CreateOrUpdatePersonDialogViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             IBusinessRuleCatalog businessRuleCatalog,
+            CreateOrUpdatePersonDialogViewModelMode mode,
             IEnumerable<Tuple<DateTime, DateTime>> occupiedDateRanges = null)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _businessRuleCatalog = businessRuleCatalog;
+            _mode = mode;
             _occupiedDateRanges = occupiedDateRanges;
 
             _errors = new Dictionary<string, string>();
@@ -277,7 +286,18 @@ namespace PR.ViewModel
             {
                 using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
                 {
-                    await unitOfWork.People.Add(Person);
+                    switch (_mode)
+                    {
+                        case CreateOrUpdatePersonDialogViewModelMode.Create:
+                            await unitOfWork.People.Add(Person);
+                            break;
+                        case CreateOrUpdatePersonDialogViewModelMode.Update:
+                            await unitOfWork.People.Update(Person);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
                     unitOfWork.Complete();
                 }
 
@@ -417,36 +437,6 @@ namespace PR.ViewModel
                 {
                     DateRangeError = error;
                 }
-            }
-        }
-
-        private bool TryParse(
-            string text,
-            out double? value,
-            out string? error)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                value = null;
-                error = null;
-                return true;
-            }
-            else if(double.TryParse(
-                        text,
-                        NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
-                        CultureInfo.InvariantCulture,
-                        out var temp))
-            {
-                value = temp;
-                error = null;
-                return true;
-            }
-            else
-            {
-                value = double.NaN;
-                error = "Invalid format";
-                //_errors[propertyName] = "Invalid format";
-                return false;
             }
         }
     }

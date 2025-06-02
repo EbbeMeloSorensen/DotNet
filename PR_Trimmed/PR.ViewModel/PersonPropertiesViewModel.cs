@@ -261,6 +261,7 @@ namespace PR.ViewModel
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 UnitOfWorkFactory,
                 _businessRuleCatalog,
+                CreateOrUpdatePersonDialogViewModelMode.Create,
                 occupiedDateRanges); 
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
@@ -291,6 +292,7 @@ namespace PR.ViewModel
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 UnitOfWorkFactory,
                 _businessRuleCatalog,
+                CreateOrUpdatePersonDialogViewModelMode.Update,
                 occupiedDateRanges);
 
             var person = SelectedPersonVariants.Objects.Single();
