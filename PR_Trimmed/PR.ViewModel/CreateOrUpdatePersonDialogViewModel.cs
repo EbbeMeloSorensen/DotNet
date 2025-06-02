@@ -15,7 +15,7 @@ using PR.Persistence;
 
 namespace PR.ViewModel
 {
-    public class CreatePersonDialogViewModel : DialogViewModelBase, IDataErrorInfo
+    public class CreateOrUpdatePersonDialogViewModel : DialogViewModelBase, IDataErrorInfo
     {
         private static readonly DateTime _maxDateTime = new(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 
@@ -246,7 +246,7 @@ namespace PR.ViewModel
             get { return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(Cancel, CanCancel)); }
         }
 
-        public CreatePersonDialogViewModel(
+        public CreateOrUpdatePersonDialogViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             IBusinessRuleCatalog businessRuleCatalog,
             IEnumerable<Tuple<DateTime, DateTime>> occupiedDateRanges = null)

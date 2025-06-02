@@ -238,7 +238,7 @@ namespace PR.ViewModel
         private async Task CreatePerson(
             object owner)
         {
-            var dialogViewModel = new CreatePersonDialogViewModel(
+            var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 _application.UnitOfWorkFactory,
                 _businessRuleCatalog);
 

@@ -18,9 +18,9 @@ namespace PR.UI.WPF
     /// <summary>
     /// Interaction logic for CreatePersonDialogView.xaml
     /// </summary>
-    public partial class CreatePersonDialogView : UserControl
+    public partial class CreateOrUpdatePersonDialogView : UserControl
     {
-        public CreatePersonDialogView()
+        public CreateOrUpdatePersonDialogView()
         {
             InitializeComponent();
         }

@@ -258,7 +258,7 @@ namespace PR.ViewModel
                 .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
                 .OrderBy(_ => _.Item1);
 
-            var dialogViewModel = new CreatePersonDialogViewModel(
+            var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 UnitOfWorkFactory,
                 _businessRuleCatalog,
                 occupiedDateRanges); 
@@ -288,7 +288,7 @@ namespace PR.ViewModel
                 .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
                 .OrderBy(_ => _.Item1);
 
-            var dialogViewModel = new CreatePersonDialogViewModel(
+            var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 UnitOfWorkFactory,
                 _businessRuleCatalog,
                 occupiedDateRanges);

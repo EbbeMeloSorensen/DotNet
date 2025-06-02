@@ -16,8 +16,8 @@
             <DataTemplate DataType="{x:Type viewModel1:MessageBoxDialogViewModel}">
                 <dialogs:MessageBoxDialogView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModel:CreatePersonDialogViewModel}">
-                <local:CreatePersonDialogView/>
+            <DataTemplate DataType="{x:Type viewModel:CreateOrUpdatePersonDialogViewModel}">
+                <local:CreateOrUpdatePersonDialogView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModel:SelectTimeDialogViewModel}">
                 <local:SelectTimeDialogView/>
