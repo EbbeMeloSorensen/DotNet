@@ -268,7 +268,6 @@ namespace PR.ViewModel
         {
             UpdateState(StateOfView.Updated);
 
-            //if (_errors.Values.Any(_ => !string.IsNullOrEmpty(_)))
             if (_errors.Values.Any())
             {
                 return;

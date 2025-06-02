@@ -32,11 +32,11 @@
         <TabItem Header="Variants">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
                     <DataGrid x:Name="dataGrid" Margin="2" GridLinesVisibility="All" 
                               AutoGenerateColumns="False" HeadersVisibility="Column" 
                               CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
