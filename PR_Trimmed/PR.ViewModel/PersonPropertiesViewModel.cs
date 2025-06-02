@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
 using System.Windows;
-using Craft.Domain;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Craft.Domain;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
@@ -282,7 +283,34 @@ namespace PR.ViewModel
         private async Task UpdatePersonVariant(
             object owner)
         {
-            throw new NotImplementedException();
+            var occupiedDateRanges = PersonVariantListViewItemViewModels
+                .Select(_ => _.PersonVariant)
+                .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
+                .OrderBy(_ => _.Item1);
+
+            var dialogViewModel = new CreatePersonDialogViewModel(
+                UnitOfWorkFactory,
+                _businessRuleCatalog,
+                occupiedDateRanges);
+
+            var person = SelectedPersonVariants.Objects.Single();
+
+            dialogViewModel.FirstName = person.FirstName;
+            dialogViewModel.Surname = person.Surname;
+            dialogViewModel.Nickname = person.Nickname;
+            dialogViewModel.Address = person.Address;
+            dialogViewModel.ZipCode = person.ZipCode;
+            dialogViewModel.City = person.City;
+            dialogViewModel.Birthday = person.Birthday;
+            dialogViewModel.Category = person.Category;
+            dialogViewModel.Latitude = person.Latitude == null ? "" : person.Latitude.Value.ToString(CultureInfo.InvariantCulture);
+            dialogViewModel.Longitude = person.Longitude == null ? "" : person.Longitude.Value.ToString(CultureInfo.InvariantCulture);
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.OK)
+            {
+                // Todo: Update the person properties view with the updated person variant.
+                throw new NotImplementedException("UpdatePersonVariant is not implemented yet.");
+            }
         }
 
         private bool CanUpdatePersonVariant(

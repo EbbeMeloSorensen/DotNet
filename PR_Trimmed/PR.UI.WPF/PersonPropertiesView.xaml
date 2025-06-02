@@ -30,9 +30,6 @@
 
     <TabControl>
         <TabItem Header="Variants">
-
-
-
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -49,8 +46,15 @@
                             <DataGridTextColumn Header="From" Binding="{Binding PersonVariant.Start}" Width="150"/>
                             <DataGridTextColumn Header="To" Binding="{Binding PersonVariant.End}" Width="150"/>
                             <DataGridTextColumn Header="First Name" Binding="{Binding PersonVariant.FirstName}" Width="150"/>
-                            <DataGridTextColumn Header="X" Binding="{Binding PersonVariant.Latitude}" Width="64"/>
-                            <DataGridTextColumn Header="Y" Binding="{Binding PersonVariant.Longitude}" Width="64"/>
+                            <DataGridTextColumn Header="Surname" Binding="{Binding PersonVariant.Surname}" Width="150"/>
+                            <DataGridTextColumn Header="Nickname" Binding="{Binding PersonVariant.Nickname}" Width="150"/>
+                            <DataGridTextColumn Header="Address" Binding="{Binding PersonVariant.Address}" Width="150"/>
+                            <DataGridTextColumn Header="Zip Code" Binding="{Binding PersonVariant.ZipCode}" Width="75"/>
+                            <DataGridTextColumn Header="City" Binding="{Binding PersonVariant.City}" Width="150"/>
+                            <DataGridTextColumn Header="Birthday" Binding="{Binding PersonVariant.Birthday}" Width="75"/>
+                            <DataGridTextColumn Header="Category" Binding="{Binding PersonVariant.Category}" Width="150"/>
+                            <DataGridTextColumn Header="Latitude" Binding="{Binding PersonVariant.Latitude}" Width="75"/>
+                            <DataGridTextColumn Header="Longitude" Binding="{Binding PersonVariant.Longitude}" Width="75"/>
                         </DataGrid.Columns>
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="SelectionChanged">
