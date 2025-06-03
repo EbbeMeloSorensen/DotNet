@@ -284,8 +284,13 @@ namespace PR.ViewModel
         private async Task UpdatePersonVariant(
             object owner)
         {
-            var occupiedDateRanges = PersonVariantListViewItemViewModels
+            var selectedPersonVariant = SelectedPersonVariants.Objects.Single();
+
+            var otherPersonVariants = PersonVariantListViewItemViewModels
                 .Select(_ => _.PersonVariant)
+                .Where(_ => _ != selectedPersonVariant);
+
+            var occupiedDateRanges = otherPersonVariants
                 .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
                 .OrderBy(_ => _.Item1);
 
@@ -295,18 +300,18 @@ namespace PR.ViewModel
                 CreateOrUpdatePersonDialogViewModelMode.Update,
                 occupiedDateRanges);
 
-            var person = SelectedPersonVariants.Objects.Single();
-
-            dialogViewModel.FirstName = person.FirstName;
-            dialogViewModel.Surname = person.Surname;
-            dialogViewModel.Nickname = person.Nickname;
-            dialogViewModel.Address = person.Address;
-            dialogViewModel.ZipCode = person.ZipCode;
-            dialogViewModel.City = person.City;
-            dialogViewModel.Birthday = person.Birthday;
-            dialogViewModel.Category = person.Category;
-            dialogViewModel.Latitude = person.Latitude == null ? "" : person.Latitude.Value.ToString(CultureInfo.InvariantCulture);
-            dialogViewModel.Longitude = person.Longitude == null ? "" : person.Longitude.Value.ToString(CultureInfo.InvariantCulture);
+            dialogViewModel.FirstName = selectedPersonVariant.FirstName;
+            dialogViewModel.Surname = selectedPersonVariant.Surname;
+            dialogViewModel.Nickname = selectedPersonVariant.Nickname;
+            dialogViewModel.Address = selectedPersonVariant.Address;
+            dialogViewModel.ZipCode = selectedPersonVariant.ZipCode;
+            dialogViewModel.City = selectedPersonVariant.City;
+            dialogViewModel.Birthday = selectedPersonVariant.Birthday;
+            dialogViewModel.Category = selectedPersonVariant.Category;
+            dialogViewModel.Latitude = selectedPersonVariant.Latitude == null ? "" : selectedPersonVariant.Latitude.Value.ToString(CultureInfo.InvariantCulture);
+            dialogViewModel.Longitude = selectedPersonVariant.Longitude == null ? "" : selectedPersonVariant.Longitude.Value.ToString(CultureInfo.InvariantCulture);
+            dialogViewModel.Start = selectedPersonVariant.Start;
+            dialogViewModel.End = selectedPersonVariant.End;
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.OK)
             {
