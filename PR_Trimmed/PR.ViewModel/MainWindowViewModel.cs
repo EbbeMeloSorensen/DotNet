@@ -240,8 +240,7 @@ namespace PR.ViewModel
         {
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 _application.UnitOfWorkFactory,
-                _businessRuleCatalog,
-                CreateOrUpdatePersonDialogViewModelMode.Create);
+                _businessRuleCatalog);
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {

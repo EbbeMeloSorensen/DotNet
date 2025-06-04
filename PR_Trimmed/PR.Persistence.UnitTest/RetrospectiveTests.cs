@@ -247,7 +247,7 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async Task RetroactivelyCorrectAnEarlierStateOfAPerson()
+        public async Task RetroactivelyCorrectAnEarlierStateOfAPerson_ByChangingAnOrdinaryAttribute()
         {
             // Arrange
             _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -271,6 +271,58 @@ namespace PR.Persistence.UnitTest
             personVariants.Count().Should().Be(2);
             personVariants.Count(p => p.FirstName == "Ani").Should().Be(1);
             personVariants.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
+        }
+
+        [Fact]
+        public async Task RetroactivelyCorrectAnEarlierStateOfAPerson_ByChangingTheValidTimeInterval()
+        {
+            // Arrange
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var person = await unitOfWork.People.Get(
+                new Guid("00000004-0000-0000-0000-000000000000"));
+
+            person.Start = new DateTime(1992, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            person.End = new DateTime(1997, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            // Act
+            await unitOfWork.People.Correct(person);
+            unitOfWork.Complete();
+
+            // Assert
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var personVariants =
+                await unitOfWork2.People.GetAllVariants(new Guid("00000004-0000-0000-0000-000000000000"));
+
+            personVariants.Count().Should().Be(2);
+            personVariants.Count(p => p.FirstName == "Anakin Skywalker").Should().Be(1);
+            personVariants.Count(p => p.Start.Year == 1992).Should().Be(1);
+            personVariants.Count(p => p.End.Year == 1997).Should().Be(1);
+            personVariants.Count(p => p.FirstName == "Darth Vader").Should().Be(1);
+        }
+
+        [Fact]
+        public async Task When_ChangingTheValidTimeInterval_SoThatItOverlapsWithExistingValidTimeInterval_ThenAnExceptionIsThrown()
+        {
+            // Arrange
+            _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var person = await unitOfWork.People.Get(
+                new Guid("00000004-0000-0000-0000-000000000000"));
+
+            person.End = new DateTime(2005, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            // Act & Assert
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                await unitOfWork.People.Correct(person);
+                unitOfWork.Complete();
+            });
+
+            Assert.NotNull(exception);
         }
 
         [Fact]
@@ -298,7 +350,40 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async Task UpdatePeopleProspectively()
+        public async Task UpdatePeopleProspectively_UsingCurrentTimeAsTimeOfChange()
+        {
+            // Arrange
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000006-0000-0000-0000-000000000000")
+            };
+
+            // Act
+            var people1 = (await unitOfWork1.People.Find(p => ids.Contains(p.ID))).ToList();
+
+            people1.ForEach(_ => _.FirstName = "Garfield");
+            await unitOfWork1.People.UpdateRange(people1);
+            unitOfWork1.Complete();
+
+            // Assert
+            // Now, the name of the person is Garfield
+            using var unitOfWork2 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var people2 = (await unitOfWork2.People.Find(p => ids.Contains(p.ID))).ToList();
+            people2.Count.Should().Be(1);
+            people2.Count(p => p.FirstName == "Garfield").Should().Be(1);
+
+            // A moment ago, the name of the person was Rey Skywalker
+            _unitOfWorkFactory.HistoricalTime = DateTime.UtcNow - TimeSpan.FromSeconds(20);
+            using var unitOfWork3 = _unitOfWorkFactory.GenerateUnitOfWork();
+            var people3 = (await unitOfWork3.People.Find(p => ids.Contains(p.ID))).ToList();
+            people3.Count.Should().Be(1);
+            people3.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+        }
+
+        [Fact]
+        public async Task UpdatePeopleProspectively_UsingEarlierTimeAsTimeOfChange()
         {
             // Arrange
             using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();

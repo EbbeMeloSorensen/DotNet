@@ -256,21 +256,25 @@ namespace PR.ViewModel
         public CreateOrUpdatePersonDialogViewModel(
             IUnitOfWorkFactory unitOfWorkFactory,
             IBusinessRuleCatalog businessRuleCatalog,
-            CreateOrUpdatePersonDialogViewModelMode mode,
+            Person person = null,
             IEnumerable<Tuple<DateTime, DateTime>> occupiedDateRanges = null)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _businessRuleCatalog = businessRuleCatalog;
-            _mode = mode;
+            _mode = person == null
+                ? CreateOrUpdatePersonDialogViewModelMode.Create
+                : CreateOrUpdatePersonDialogViewModelMode.Update;
             _occupiedDateRanges = occupiedDateRanges;
 
             _errors = new Dictionary<string, string>();
 
-            Person = new Person
-            {
-                Start = DateTime.UtcNow.Date,
-                End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
-            };
+            Person = person == null
+                ? new Person
+                {
+                    Start = DateTime.UtcNow.Date,
+                    End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+                }
+                : person;
         }
 
         private async Task OK(object parameter)
@@ -292,7 +296,7 @@ namespace PR.ViewModel
                             await unitOfWork.People.Add(Person);
                             break;
                         case CreateOrUpdatePersonDialogViewModelMode.Update:
-                            await unitOfWork.People.Update(Person);
+                            await unitOfWork.People.Correct(Person);
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();

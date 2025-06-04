@@ -146,7 +146,14 @@ namespace PR.Persistence.Versioned.Repositories
 
             predicates.AddVersionPredicates(DatabaseTime);
 
-            return (await UnitOfWork.People.Find(predicates)).OrderBy(_ => _.Start);
+            var people = (await UnitOfWork.People.Find(predicates)).OrderBy(_ => _.Start);
+
+            if (_returnClonesInsteadOfRepositoryObjects)
+            {
+                return people.Select(_ => _.Clone()).ToList();
+            }
+
+            return people;
         }
 
         public async Task Erase(
@@ -464,16 +471,21 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Correct(
             Person person)
         {
+            // Todo: I stedet for at finde én, som man så bare opdaterer, så skal vi finde alle varianter, så vi kan se, om en ændring vil munde ud i en konflikt
+            // Det kan også komme på tale, at man sletter eller korrigerer andre varianter, 
+            
             _returnClonesInsteadOfRepositoryObjects = false;
-            var objectFromRepository = (await Find(_ => _.ArchiveID == person.ArchiveID)).SingleOrDefault();
+            var objectsFromRepository = (await GetAllVariants(person.ID)).ToList();
             _returnClonesInsteadOfRepositoryObjects = true;
 
-            if (objectFromRepository == null)
+            var targetedObjectFromRepository = objectsFromRepository.Single(_ => _.ArchiveID == person.ArchiveID);
+
+            if (targetedObjectFromRepository == null)
             {
                 throw new InvalidOperationException("Person doesn't exist");
             }
 
-            objectFromRepository.Superseded = CurrentTime;
+            targetedObjectFromRepository.Superseded = CurrentTime;
 
             person.ArchiveID = Guid.NewGuid();
             person.Created = CurrentTime;
