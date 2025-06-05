@@ -504,25 +504,36 @@ namespace PR.ViewModel
 
             _errors = _businessRuleCatalog.ValidateAtomic(Person);
 
+            string error;
+
             if (_errors.Any())
             {
-                if (_errors.TryGetValue("DateRange", out var error))
+                if (_errors.TryGetValue("DateRange", out error))
                 {
                     DateRangeError = error;
+                    return;
                 }
             }
-            else if (_otherVariants != null)
+
+            // If we got this far, then the Person object is valid in itself, but it may conflict with other variants
+
+            var variants = new List<Person>{Person};
+
+            if (_otherVariants != null)
             {
-                var allVariants = _otherVariants
-                    .Append(Person)
-                    .OrderBy(_ => _.Start);
+                variants.AddRange(_otherVariants);
+                variants.OrderBy(_ => _.Start);
+            }
 
-                _errors = _businessRuleCatalog.ValidateCrossEntity(allVariants);
+            _errors = _businessRuleCatalog.ValidateCrossEntity(variants);
 
-                if (_errors.TryGetValue("ValidTimeIntervals", out var error))
-                {
-                    DateRangeError = error;
-                }
+            if (_errors.TryGetValue("ValidTimeIntervals", out error))
+            {
+                DateRangeError = error;
+            }
+            else if(_errors.TryGetValue("BirthdayConsistency", out error))
+            {
+                DateRangeError = error;
             }
         }
     }

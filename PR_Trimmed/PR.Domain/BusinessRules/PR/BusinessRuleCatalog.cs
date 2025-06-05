@@ -19,6 +19,7 @@ namespace PR.Domain.BusinessRules.PR
             RegisterAtomicRule(new DateRangeIsValidRule());
 
             RegisterCrossEntityRule(new DateRangeCollectionRule());
+            RegisterCrossEntityRule(new BirthdayConsistencyRule());
         }
     }
 }
