@@ -38,6 +38,8 @@ namespace PR.ViewModel
 
         private string _latitude;
         private string _longitude;
+        private string _startTime;
+        private string _endTime;
         private string _dateRangeError;
         private bool _displayDateRangeError;
 
@@ -161,7 +163,7 @@ namespace PR.ViewModel
             }
         }
 
-        public DateTime? Start
+        public DateTime? StartDate
         {
             get
             {
@@ -177,11 +179,13 @@ namespace PR.ViewModel
                 Person.Start = value ?? default;
                 Validate();
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(End));
+                RaisePropertyChanged(nameof(EndDate));
+                RaisePropertyChanged(nameof(StartTime));
+                RaisePropertyChanged(nameof(EndTime));
             }
         }
 
-        public DateTime? End
+        public DateTime? EndDate
         {
             get
             {
@@ -196,7 +200,41 @@ namespace PR.ViewModel
             {
                 Person.End = value ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
                 Validate();
-                RaisePropertyChanged(nameof(Start));
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(StartDate));
+                RaisePropertyChanged(nameof(StartTime));
+                RaisePropertyChanged(nameof(EndTime));
+            }
+        }
+
+        // This property doesn't wrap the Person object, since it might not be able to convert it to a Time
+        // So the view model has to check that before we involve the business rule catalog
+        public string StartTime
+        {
+            get => _startTime;
+            set
+            {
+                _startTime = value;
+                Validate();
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(StartDate));
+                RaisePropertyChanged(nameof(EndDate));
+                RaisePropertyChanged(nameof(EndTime));
+            }
+        }
+
+        // This property doesn't wrap the Person object, since it might not be able to convert it to a Time
+        // So the view model has to check that before we involve the business rule catalog
+        public string EndTime
+        {
+            get => _endTime;
+            set
+            {
+                _endTime = value;
+                Validate();
+                RaisePropertyChanged(nameof(StartDate));
+                RaisePropertyChanged(nameof(EndDate));
+                RaisePropertyChanged(nameof(StartTime));
                 RaisePropertyChanged();
             }
         }
@@ -267,6 +305,9 @@ namespace PR.ViewModel
             _occupiedDateRanges = occupiedDateRanges;
 
             _errors = new Dictionary<string, string>();
+
+            StartTime = "00:00:00";
+            EndTime = "";
 
             Person = person == null
                 ? new Person
@@ -350,8 +391,11 @@ namespace PR.ViewModel
 
                 string? error;
 
-                if (columnName == "Start" ||
-                    columnName == "End")
+                // For these fields, we want to highlight them all if there is a problem with the date range
+                if (columnName == nameof(StartDate) ||
+                    columnName == nameof(StartTime) ||
+                    columnName == nameof(EndDate) ||
+                    columnName == nameof(EndTime))
                 {
                     _errors.TryGetValue("DateRange", out error);
 
@@ -383,8 +427,10 @@ namespace PR.ViewModel
             RaisePropertyChanged(nameof(Category));
             RaisePropertyChanged(nameof(Latitude));
             RaisePropertyChanged(nameof(Longitude));
-            RaisePropertyChanged(nameof(Start));
-            RaisePropertyChanged(nameof(End));
+            RaisePropertyChanged(nameof(StartDate));
+            RaisePropertyChanged(nameof(StartTime));
+            RaisePropertyChanged(nameof(EndDate));
+            RaisePropertyChanged(nameof(EndTime));
         }
 
         private void UpdateState(
@@ -402,6 +448,7 @@ namespace PR.ViewModel
             _errors.Clear();
             DateRangeError = "";
 
+            // Initially, we ensure that the fields that need to be parsed can be parsed correctly
             if (!Latitude.TryParse(out var latitude, out var error_lat))
             {
                 _errors[nameof(Latitude)] = error_lat;
@@ -412,13 +459,47 @@ namespace PR.ViewModel
                 _errors[nameof(Longitude)] = error_long;
             }
 
+            DateTime startTime = default;
+            if (string.IsNullOrEmpty(_startTime))
+            {
+                DateRangeError = "Start time is required";
+                _errors["DateRange"] = DateRangeError;
+            }
+            else if (!DateTime.TryParseExact(_startTime, "HH:mm:ss", CultureInfo.InvariantCulture,
+                    DateTimeStyles.AdjustToUniversal, out startTime))
+            {
+                DateRangeError = "Time format needs to be HH:mm:ss";
+                _errors["DateRange"] = DateRangeError;
+            }
+
+            var endTime = EndDate.HasValue
+                ? new DateTime()
+                : new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
+            if (!string.IsNullOrEmpty(_endTime))
+            {
+                if (DateTime.TryParseExact(_endTime, "HH:mm:ss", CultureInfo.InvariantCulture,
+                        DateTimeStyles.AdjustToUniversal, out var temp))
+                {
+                    endTime = temp;
+                }
+                else
+                {
+                    DateRangeError = "Time format needs to be HH:mm:ss";
+                    _errors["DateRange"] = DateRangeError;
+                }
+            }
+
             if (_errors.Any())
             {
                 return;
             }
 
+            // Then, we set the properties of the Person object and validate it using the business rule catalog
             Person.Latitude = latitude;
             Person.Longitude = longitude;
+            Person.Start = Person.Start.Date + startTime.TimeOfDay;
+            Person.End = Person.End.Date + endTime.TimeOfDay;
 
             _errors = _businessRuleCatalog.ValidateAtomic(Person);
 

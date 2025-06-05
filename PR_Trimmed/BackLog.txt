@@ -34,9 +34,10 @@ Done:
   altid kan slette dem
 * Lav noget input validering, når man prøver at lave en person med et invalidt virkningstidsinterval
 * Tilføj Category, Latitude og Longitude til CreatePersonViewModel
+* Dialogen CreateOrUpdatePerson skal opføre sig anderledes, når man bruger den til at ændre en eksisterende person
 
 Todo:
-* Dialogen CreateOrUpdatePerson skal opføre sig anderledes, når man bruger den til at ændre en eksisterende person
+* I CreateOrUpdatePerson dialogen skal man kunne angive tidspunkt og ikke kun dato
 * Kombiner IDataErrorInfo med businessRuleCatalog som anvist af ChatGPT
   - Lav en ny mere kompakt dialog, hvor det nye princip er bærende (OK)
   - PeoplePropertiesViewModel, som håndterer Update, skal også bruge business rule kataloget frem for at lave sin egen validering

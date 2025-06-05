@@ -114,17 +114,24 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Padding="2,5,10,0" Text="Start:"/>
                     <DatePicker Grid.Row="0" Grid.Column="1" Padding="0,2,0,2" Margin="2"
                                 Validation.ErrorTemplate="{StaticResource errorTemplateNoText}"
-                                SelectedDate="{Binding Start, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Height="24" VerticalContentAlignment="Center"
+                             Text="{Binding StartTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                             Validation.ErrorTemplate="{StaticResource errorTemplateNoText}"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Padding="2,5,0,0" Text="End:"/>
                     <DatePicker Grid.Row="1" Grid.Column="1" Padding="0,2,0,2" Margin="2"
                                 Validation.ErrorTemplate="{StaticResource errorTemplateNoText}"
-                                SelectedDate="{Binding End, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Height="24" VerticalContentAlignment="Center"
+                             Text="{Binding EndTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                             Validation.ErrorTemplate="{StaticResource errorTemplateNoText}"/>
                     <!--Style="{StaticResource OptionalDatePickerStyle}"-->
-                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Foreground="Red" HorizontalAlignment="Right" Margin="0, 4, 0, 0"
+                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Foreground="Red" HorizontalAlignment="Right" Margin="0, 4, 0, 0"
                                Text="{Binding DateRangeError}"/>
                 </Grid>
             </GroupBox>

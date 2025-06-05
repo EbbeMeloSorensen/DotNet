@@ -196,10 +196,7 @@ namespace PR.ViewModel
             PersonVariantListViewItemViewModels.Clear();
             personVariants.ToList().ForEach(pv =>
             {
-                PersonVariantListViewItemViewModels.Add(new PersonVariantListViewItemViewModel
-                {
-                    PersonVariant = pv
-                });
+                PersonVariantListViewItemViewModels.Add(new PersonVariantListViewItemViewModel{PersonVariant = pv});
             });
 
             IsVisible = true;
@@ -253,10 +250,13 @@ namespace PR.ViewModel
         private async Task CreatePersonVariant(
             object owner)
         {
+            var a = 0;
+
             var occupiedDateRanges = PersonVariantListViewItemViewModels
                 .Select(_ => _.PersonVariant)
                 .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
-                .OrderBy(_ => _.Item1);
+                .OrderBy(_ => _.Item1)
+                .ToList();
 
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 UnitOfWorkFactory,
@@ -310,8 +310,8 @@ namespace PR.ViewModel
             dialogViewModel.Category = selectedPersonVariant.Category;
             dialogViewModel.Latitude = selectedPersonVariant.Latitude == null ? "" : selectedPersonVariant.Latitude.Value.ToString(CultureInfo.InvariantCulture);
             dialogViewModel.Longitude = selectedPersonVariant.Longitude == null ? "" : selectedPersonVariant.Longitude.Value.ToString(CultureInfo.InvariantCulture);
-            dialogViewModel.Start = selectedPersonVariant.Start;
-            dialogViewModel.End = selectedPersonVariant.End;
+            dialogViewModel.StartDate = selectedPersonVariant.Start;
+            dialogViewModel.EndDate = selectedPersonVariant.End;
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.OK)
             {
@@ -344,7 +344,7 @@ namespace PR.ViewModel
             PersonVariantListViewItemViewModels.Clear();
 
             personVariants.ForEach(pv => PersonVariantListViewItemViewModels.Add(
-                new PersonVariantListViewItemViewModel { PersonVariant = pv }));
+                new PersonVariantListViewItemViewModel{PersonVariant = pv}));
         }
 
         private bool CanDeletePersonVariants(

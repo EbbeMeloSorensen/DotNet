@@ -32,7 +32,8 @@ namespace PR.Domain.BusinessRules.PR.AtomicRules
             if (person.Start > now ||
                 person.End != _maxDateTime && person.End > now)
             {
-                ErrorMessage = "These dates cannot be in the future";
+                //ErrorMessage = "These time entries cannot be in the future";
+                ErrorMessage = "Oops! Make sure these time entries are not in the future";
                 return false;
             }
 

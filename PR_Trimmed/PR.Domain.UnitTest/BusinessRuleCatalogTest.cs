@@ -19,7 +19,7 @@ namespace PR.Domain.UnitTest
 
             // Assert
             result.ContainsKey("FirstName").Should().BeTrue();
-            result["FirstName"].Should().Be("First name required");
+            result["FirstName"].Should().Be("First name is required");
         }
 
         [Fact]

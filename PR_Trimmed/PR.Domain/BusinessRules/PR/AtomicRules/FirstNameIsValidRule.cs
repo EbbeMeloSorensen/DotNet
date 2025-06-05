@@ -14,7 +14,7 @@ namespace PR.Domain.BusinessRules.PR.AtomicRules
         {
             if (string.IsNullOrEmpty(person.FirstName))
             {
-                ErrorMessage = "First name required";
+                ErrorMessage = "First name is required";
                 return false;
             }
 
