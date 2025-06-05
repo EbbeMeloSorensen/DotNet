@@ -34,7 +34,8 @@ namespace PR.ViewModel
 
         public Person Person { get; }
 
-        private IEnumerable<Tuple<DateTime, DateTime>> _occupiedDateRanges;
+        //private IEnumerable<Tuple<DateTime, DateTime>> _occupiedDateRanges;
+        private IEnumerable<Person> _otherVariants;
 
         private string _latitude;
         private string _longitude;
@@ -295,14 +296,14 @@ namespace PR.ViewModel
             IUnitOfWorkFactory unitOfWorkFactory,
             IBusinessRuleCatalog businessRuleCatalog,
             Person person = null,
-            IEnumerable<Tuple<DateTime, DateTime>> occupiedDateRanges = null)
+            IEnumerable<Person> otherVariants = null)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _businessRuleCatalog = businessRuleCatalog;
             _mode = person == null
                 ? CreateOrUpdatePersonDialogViewModelMode.Create
                 : CreateOrUpdatePersonDialogViewModelMode.Update;
-            _occupiedDateRanges = occupiedDateRanges;
+            _otherVariants = otherVariants;
 
             _errors = new Dictionary<string, string>();
 
@@ -401,7 +402,7 @@ namespace PR.ViewModel
 
                     if (string.IsNullOrEmpty(error))
                     {
-                        _errors.TryGetValue("NoOverlappingValidTimeIntervals", out error);
+                        _errors.TryGetValue("ValidTimeIntervals", out error);
                     }
                 }
                 else
@@ -510,15 +511,15 @@ namespace PR.ViewModel
                     DateRangeError = error;
                 }
             }
-            else if (_occupiedDateRanges != null)
+            else if (_otherVariants != null)
             {
-                var dateRanges = _occupiedDateRanges
-                    .Append(new Tuple<DateTime, DateTime>(Person.Start, Person.End))
-                    .OrderBy(_ => _.Item1);
+                var allVariants = _otherVariants
+                    .Append(Person)
+                    .OrderBy(_ => _.Start);
 
-                _errors = _businessRuleCatalog.ValidateCrossEntity(dateRanges);
+                _errors = _businessRuleCatalog.ValidateCrossEntity(allVariants);
 
-                if (_errors.TryGetValue("NoOverlappingValidTimeIntervals", out var error))
+                if (_errors.TryGetValue("ValidTimeIntervals", out var error))
                 {
                     DateRangeError = error;
                 }

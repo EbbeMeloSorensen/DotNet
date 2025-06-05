@@ -243,6 +243,12 @@ namespace Craft.Math
             return sortedDateRanges.AdjacentPairs().Any(_ => _.Item1.Overlaps(_.Item2));
         }
 
+        public static bool AnyGaps(
+            this IEnumerable<Tuple<DateTime, DateTime>> sortedDateRanges)
+        {
+            return sortedDateRanges.AdjacentPairs().Any(_ => _.Item1.Item2 < _.Item2.Item1);
+        }
+
         public static double SquaredDistanceTo(
             this LineSegment2D l,
             Point2D p)

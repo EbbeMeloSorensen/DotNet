@@ -1,20 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Craft.Domain;
 using Craft.Math;
+using PR.Domain.Entities.PR;
 
 namespace PR.Domain.BusinessRules.PR.CrossEntityRules
 {
-    public class DateRangeCollectionRule : IBusinessRule<IEnumerable<Tuple<DateTime, DateTime>>>
+    public class DateRangeCollectionRule : IBusinessRule<IEnumerable<Person>>
     {
-        public string RuleName => "NoOverlappingValidTimeIntervals";
+        public string RuleName => "ValidTimeIntervals";
+
+        public string ErrorMessage { get; private set; }
 
         public bool Validate(
-            IEnumerable<Tuple<DateTime, DateTime>> timeIntervals)
+            IEnumerable<Person> variants)
         {
-            return !timeIntervals.AnyOverlaps();
-        }
+            var validTimeIntervals = variants
+                .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
+                .ToList();
 
-        public string ErrorMessage => "Date ranges overlapping";
+            if (validTimeIntervals.AnyOverlaps())
+            {
+                ErrorMessage = "Valid time intervals overlapping";
+                return false;
+            }
+
+            if (validTimeIntervals.AnyGaps())
+            {
+                ErrorMessage = "Gaps between valid time intervals";
+                return false;
+            }
+
+            return true;
+        }
     }
 }

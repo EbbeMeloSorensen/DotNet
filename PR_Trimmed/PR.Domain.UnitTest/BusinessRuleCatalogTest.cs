@@ -55,8 +55,8 @@ namespace PR.Domain.UnitTest
             var result = businessRuleCatalog.ValidateCrossEntity(timeIntervals);
 
             // Assert
-            result.ContainsKey("NoOverlappingValidTimeIntervals").Should().BeTrue();
-            result["NoOverlappingValidTimeIntervals"].Should().Be("Date ranges overlapping");
+            result.ContainsKey("ValidTimeIntervals").Should().BeTrue();
+            result["ValidTimeIntervals"].Should().Be("Valid time intervals overlapping");
         }
     }
 }

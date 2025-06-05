@@ -250,19 +250,16 @@ namespace PR.ViewModel
         private async Task CreatePersonVariant(
             object owner)
         {
-            var a = 0;
-
-            var occupiedDateRanges = PersonVariantListViewItemViewModels
+            var otherVariants = PersonVariantListViewItemViewModels
                 .Select(_ => _.PersonVariant)
-                .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
-                .OrderBy(_ => _.Item1)
+                .OrderBy(_ => _.Start)
                 .ToList();
 
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 UnitOfWorkFactory,
                 _businessRuleCatalog,
                 null,
-                occupiedDateRanges); 
+                otherVariants); 
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
@@ -290,15 +287,14 @@ namespace PR.ViewModel
                 .Select(_ => _.PersonVariant)
                 .Where(_ => _ != selectedPersonVariant);
 
-            var occupiedDateRanges = otherPersonVariants
-                .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
-                .OrderBy(_ => _.Item1);
+            var otherVariants= otherPersonVariants
+                .OrderBy(_ => _.Start);
 
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 UnitOfWorkFactory,
                 _businessRuleCatalog,
                 selectedPersonVariant,
-                occupiedDateRanges);
+                otherVariants);
 
             dialogViewModel.FirstName = selectedPersonVariant.FirstName;
             dialogViewModel.Surname = selectedPersonVariant.Surname;
