@@ -511,8 +511,9 @@ namespace PR.ViewModel
                 if (_errors.TryGetValue("DateRange", out error))
                 {
                     DateRangeError = error;
-                    return;
                 }
+
+                return;
             }
 
             // If we got this far, then the Person object is valid in itself, but it may conflict with other variants
