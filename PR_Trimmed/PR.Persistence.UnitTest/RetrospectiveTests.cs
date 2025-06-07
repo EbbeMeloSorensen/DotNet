@@ -421,6 +421,33 @@ namespace PR.Persistence.UnitTest
             Assert.NotNull(exception);
         }
 
+        [Fact]
+        public async Task UpdatePeopleProspectively_UsingFutureTimeAsTimeOfChange_Throws()
+        {
+            // Arrange
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000006-0000-0000-0000-000000000000")
+            };
+
+            // Act
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                var people = (await unitOfWork.People.Find(p => ids.Contains(p.ID))).ToList();
+                people.ForEach(_ => _.FirstName = "Garfield");
+                // Here, we try to change Rey Skywalker using a time of change that lies in the future, which is not allowed
+                (unitOfWork as UnitOfWorkFacade)!.TimeOfChange = DateTime.UtcNow + TimeSpan.FromHours(1);
+                await unitOfWork.People.UpdateRange(people);
+                unitOfWork.Complete();
+            });
+
+            // Assert
+            Assert.NotNull(exception);
+        }
+
+
         // Like when registering that John Doe lived a different place in a given time period
         //[Fact]
         //public async Task SqueezeInANewStateOfAPerson()

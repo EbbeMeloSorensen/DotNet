@@ -274,17 +274,6 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             return;
         }
 
-        var dialogViewModel = new ProspectiveUpdateDialogViewModel(UnitOfWorkFactory);
-
-        if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
-        {
-            return;
-        }
-
-        // Todo (1): Make sure the time of change is set correctly
-        // Todo (2): Get the time of change from dialogViewModel.TimeOfChange
-        // Todo (3): Make sure that it doesn't end up as the guis responsibility to protect the repository from invalid data
-
         var updatedPeople = _people.Objects.Select(p => new Person
         {
             ID = p.ID,
@@ -297,25 +286,19 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             City = City != OriginalSharedValues.City ? City : p.City,
             Birthday = Birthday != OriginalSharedValues.Birthday ? Birthday : p.Birthday,
             Category = Category != OriginalSharedValues.Category ? Category : p.Category,
-            Latitude = Latitude != NullableDoubleAsString(OriginalSharedValues.Latitude) 
-                ? double.Parse(Latitude, CultureInfo.InvariantCulture) 
+            Latitude = Latitude != NullableDoubleAsString(OriginalSharedValues.Latitude)
+                ? double.Parse(Latitude, CultureInfo.InvariantCulture)
                 : p.Latitude,
-            Longitude = Longitude != NullableDoubleAsString(OriginalSharedValues.Longitude) 
-                ? double.Parse(Longitude, CultureInfo.InvariantCulture) 
+            Longitude = Longitude != NullableDoubleAsString(OriginalSharedValues.Longitude)
+                ? double.Parse(Longitude, CultureInfo.InvariantCulture)
                 : p.Longitude
         }).ToList();
 
-        using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-        {
-            if (dialogViewModel.ProspectiveUpdateType == ProspectiveUpdateType.Earlier &&
-                dialogViewModel.TimeOfChange.TryParsingAsDateTime(out var timeOfChange) &&
-                unitOfWork is UnitOfWorkFacade unitOfWorkFacade)
-            {
-                unitOfWorkFacade.TimeOfChange = timeOfChange;
-            }
+        var dialogViewModel = new ProspectiveUpdateDialogViewModel(UnitOfWorkFactory, updatedPeople);
 
-            await unitOfWork.People.UpdateRange(updatedPeople);
-            unitOfWork.Complete();
+        if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+        {
+            return;
         }
 
         OnPeopleUpdated(updatedPeople);

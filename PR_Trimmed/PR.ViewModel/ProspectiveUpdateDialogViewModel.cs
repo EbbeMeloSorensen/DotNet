@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
+using Craft.Utils;
+using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
+using PR.Domain.Entities.PR;
 using PR.Persistence;
+using PR.Persistence.Versioned;
 
 namespace PR.ViewModel
 {
@@ -14,8 +20,11 @@ namespace PR.ViewModel
         private ProspectiveUpdateType _prospectiveUpdateType;
         private bool _timeFieldEnabled;
         private string _timeOfChange;
+        private List<Person> _people;
+        private string _generalError;
+        private bool _displayGeneralError;
 
-        private RelayCommand<object> _okCommand;
+        private AsyncCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
         public ProspectiveUpdateType ProspectiveUpdateType
@@ -55,9 +64,30 @@ namespace PR.ViewModel
             }
         }
 
-        public RelayCommand<object> OKCommand
+        public string GeneralError
         {
-            get { return _okCommand ?? (_okCommand = new RelayCommand<object>(OK)); }
+            get => _generalError;
+            set
+            {
+                _generalError = value;
+                DisplayGeneralError = !string.IsNullOrEmpty(_generalError);
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DisplayGeneralError
+        {
+            get => _displayGeneralError;
+            set
+            {
+                _displayGeneralError = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public AsyncCommand<object> OKCommand
+        {
+            get { return _okCommand ?? (_okCommand = new AsyncCommand<object>(OK)); }
         }
 
         public RelayCommand<object> CancelCommand
@@ -66,9 +96,11 @@ namespace PR.ViewModel
         }
 
         public ProspectiveUpdateDialogViewModel(
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory,
+            List<Person> people)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
+            _people = people;
 
             UpdateTime();
 
@@ -77,12 +109,34 @@ namespace PR.ViewModel
             _timer.Start();
         }
 
-        private void OK(object parameter)
+        private async Task OK(
+            object parameter)
         {
-            CloseDialogWithResult(parameter as Window, DialogResult.OK);
+            try
+            {
+                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    if (ProspectiveUpdateType == ProspectiveUpdateType.Earlier &&
+                        TimeOfChange.TryParsingAsDateTime(out var timeOfChange) &&
+                        unitOfWork is UnitOfWorkFacade unitOfWorkFacade)
+                    {
+                        unitOfWorkFacade.TimeOfChange = timeOfChange;
+                    }
+
+                    await unitOfWork.People.UpdateRange(_people);
+                    unitOfWork.Complete();
+                }
+
+                CloseDialogWithResult(parameter as Window, DialogResult.OK);
+            }
+            catch (InvalidOperationException e)
+            {
+                GeneralError = e.Message;
+            }
         }
 
-        private void Cancel(object parameter)
+        private void Cancel(
+            object parameter)
         {
             CloseDialogWithResult(parameter as Window, DialogResult.Cancel);
         }

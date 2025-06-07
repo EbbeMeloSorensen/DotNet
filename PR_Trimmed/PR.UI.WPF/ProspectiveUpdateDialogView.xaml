@@ -29,6 +29,11 @@
                 <TextBlock Margin="8,5,5,5" Text="Time of change:"/>
                 <TextBox Margin="5,5,5,5" Width="120" Text="{Binding TimeOfChange}" IsEnabled="{Binding TimeFieldEnabled}"/>
             </StackPanel>
+            <Border BorderBrush="Red" BorderThickness="2" VerticalAlignment="Stretch"
+                    Visibility="{Binding DisplayGeneralError, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                <TextBlock TextWrapping="WrapWithOverflow" Foreground="Red" VerticalAlignment="Stretch"
+                           Text="{Binding GeneralError}"/>
+            </Border>
         </StackPanel>
         <StackPanel Grid.Row="1" FlowDirection="RightToLeft" Orientation="Horizontal">
             <Button Margin="5,5,0,5" Content="Cancel" Width="75"
