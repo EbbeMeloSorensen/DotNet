@@ -37,6 +37,9 @@ Done:
 * Dialogen CreateOrUpdatePerson skal opføre sig anderledes, når man bruger den til at ændre en eksisterende person
 
 Todo:
+* Genopfrisk lige hvorfor du sadlede om fra den, du viste dfos teamet til den, du arbejder på nu. De havde i hvert fald noget at gøre med at
+  den gamle var en lidt rigelig grov integration mellem din personhåndteringsting, hvor du bare transformerede observing facilities fra dfos apiet til personer,
+
 * I CreateOrUpdatePerson dialogen skal man kunne angive tidspunkt og ikke kun dato
 * Kombiner IDataErrorInfo med businessRuleCatalog som anvist af ChatGPT
   - Lav en ny mere kompakt dialog, hvor det nye princip er bærende (OK)

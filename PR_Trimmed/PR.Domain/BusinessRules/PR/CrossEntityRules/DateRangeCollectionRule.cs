@@ -11,7 +11,7 @@ namespace PR.Domain.BusinessRules.PR.CrossEntityRules
     {
         public string RuleName => "ValidTimeIntervals";
 
-        public string ErrorMessage { get; private set; }
+        public string ErrorMessage { get; private set; } = "";
 
         public bool Validate(
             IEnumerable<Person> variants)

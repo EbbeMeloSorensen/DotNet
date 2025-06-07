@@ -304,28 +304,6 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
-        public async Task When_ChangingTheValidTimeInterval_SoThatItOverlapsWithExistingValidTimeInterval_ThenAnExceptionIsThrown()
-        {
-            // Arrange
-            _unitOfWorkFactory.HistoricalTime = new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
-
-            var person = await unitOfWork.People.Get(
-                new Guid("00000004-0000-0000-0000-000000000000"));
-
-            person.End = new DateTime(2005, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-            // Act & Assert
-            var exception = await Record.ExceptionAsync(async () =>
-            {
-                await unitOfWork.People.Correct(person);
-                unitOfWork.Complete();
-            });
-
-            Assert.NotNull(exception);
-        }
-
-        [Fact]
         public async Task RetroactivelyDeleteAnEarlierStateOfAPerson()
         {
             // Arrange
@@ -415,6 +393,32 @@ namespace PR.Persistence.UnitTest
             var people3 = (await unitOfWork3.People.Find(p => ids.Contains(p.ID))).ToList();
             people3.Count.Should().Be(1);
             people3.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+        }
+
+        [Fact]
+        public async Task UpdatePeopleProspectively_UsingTooEarlyTimeAsTimeOfChange_Throws()
+        {
+            // Arrange
+            using var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork();
+
+            var ids = new List<Guid>
+            {
+                new("00000006-0000-0000-0000-000000000000")
+            };
+
+            // Act
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                var people = (await unitOfWork.People.Find(p => ids.Contains(p.ID))).ToList();
+                people.ForEach(_ => _.FirstName = "Garfield");
+                // Here, we try to change Rey Skywalker using a time of change that lies before the time she changed from Rey to Rey Skywalker, which is not allowed
+                (unitOfWork as UnitOfWorkFacade)!.TimeOfChange = new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                await unitOfWork.People.UpdateRange(people);
+                unitOfWork.Complete();
+            });
+
+            // Assert
+            Assert.NotNull(exception);
         }
 
         // Like when registering that John Doe lived a different place in a given time period

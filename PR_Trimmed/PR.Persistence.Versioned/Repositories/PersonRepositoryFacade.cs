@@ -435,6 +435,12 @@ namespace PR.Persistence.Versioned.Repositories
             var objectsFromRepository = (await Find(predicates)).ToList();
             _returnClonesInsteadOfRepositoryObjects = true;
 
+            // Make sure we don't use a time of change that is too early
+            if (TimeOfChange < objectsFromRepository.Max(_ => _.Start))
+            {
+                throw new InvalidOperationException("Time of change cannot be earlier than the most recent time of change for a person in the collection");
+            }
+
             objectsFromRepository.ForEach(pRepo =>
             {
                 pRepo.Superseded = CurrentTime;

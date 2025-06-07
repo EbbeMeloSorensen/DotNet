@@ -20,8 +20,8 @@ namespace PR.ViewModel;
 
 public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 {
-    private readonly IDialogService _applicationDialogService;
     private readonly IBusinessRuleCatalog _businessRuleCatalog;
+    private readonly IDialogService _applicationDialogService;
     private StateOfView _state;
     private ObjectCollection<Person> _people;
     private Dictionary<string, string> _errors;
@@ -274,7 +274,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             return;
         }
 
-        var dialogViewModel = new ProspectiveUpdateDialogViewModel();
+        var dialogViewModel = new ProspectiveUpdateDialogViewModel(UnitOfWorkFactory);
 
         if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
         {

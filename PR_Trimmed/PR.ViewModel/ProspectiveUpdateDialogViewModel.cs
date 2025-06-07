@@ -1,13 +1,15 @@
-﻿using Craft.ViewModels.Dialogs;
-using GalaSoft.MvvmLight.Command;
-using System;
+﻿using System;
 using System.Timers;
 using System.Windows;
+using GalaSoft.MvvmLight.Command;
+using Craft.ViewModels.Dialogs;
+using PR.Persistence;
 
 namespace PR.ViewModel
 {
     public class ProspectiveUpdateDialogViewModel : DialogViewModelBase
     {
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly Timer _timer;
         private ProspectiveUpdateType _prospectiveUpdateType;
         private bool _timeFieldEnabled;
@@ -63,8 +65,11 @@ namespace PR.ViewModel
             get { return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(Cancel)); }
         }
 
-        public ProspectiveUpdateDialogViewModel()
+        public ProspectiveUpdateDialogViewModel(
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
+            _unitOfWorkFactory = unitOfWorkFactory;
+
             UpdateTime();
 
             _timer = new Timer(1000);

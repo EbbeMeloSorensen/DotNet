@@ -300,15 +300,21 @@ namespace PR.ViewModel
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _businessRuleCatalog = businessRuleCatalog;
+
             _mode = person == null
                 ? CreateOrUpdatePersonDialogViewModelMode.Create
                 : CreateOrUpdatePersonDialogViewModelMode.Update;
+
             _otherVariants = otherVariants;
 
-            _errors = new Dictionary<string, string>();
+            _latitude = string.Empty;
+            _longitude = string.Empty;
+            _startTime = "00:00:00";
+            _endTime = string.Empty;
 
-            StartTime = "00:00:00";
-            EndTime = "";
+            _errors = new Dictionary<string, string>();
+            _dateRangeError = string.Empty;
+            _generalError = string.Empty;
 
             Person = person == null
                 ? new Person

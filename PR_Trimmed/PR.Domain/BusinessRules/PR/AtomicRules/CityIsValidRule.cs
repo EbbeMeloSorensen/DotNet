@@ -7,14 +7,14 @@ namespace PR.Domain.BusinessRules.PR.AtomicRules
     {
         public string RuleName => "City";
 
-        public string ErrorMessage { get; private set; }
+        public string ErrorMessage { get; private set; } = "";
 
         public bool Validate(
             Person person)
         {
-            if (!string.IsNullOrEmpty(person.City) && person.City.Length > 10)
+            if (!string.IsNullOrEmpty(person.City) && person.City.Length > 20)
             {
-                ErrorMessage = "City too long (max 10 characters)";
+                ErrorMessage = "City too long (max 20 characters)";
                 return false;
             }
 

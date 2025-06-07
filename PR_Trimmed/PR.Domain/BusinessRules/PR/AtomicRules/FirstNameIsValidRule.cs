@@ -7,7 +7,7 @@ namespace PR.Domain.BusinessRules.PR.AtomicRules
     {
         public string RuleName => "FirstName";
 
-        public string ErrorMessage { get; private set; }
+        public string ErrorMessage { get; private set; } = "";
 
         public bool Validate(
             Person person)
@@ -18,9 +18,9 @@ namespace PR.Domain.BusinessRules.PR.AtomicRules
                 return false;
             }
 
-            if (person.FirstName.Length > 10)
+            if (person.FirstName.Length > 20)
             {
-                ErrorMessage = "First name too long (max 10 characters)";
+                ErrorMessage = "First name too long (max 20 characters)";
                 return false;
             }
 

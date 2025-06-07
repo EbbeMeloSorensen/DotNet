@@ -8,7 +8,7 @@ namespace PR.Domain.BusinessRules.PR.AtomicRules
     {
         public string RuleName => "Birthday";
 
-        public string ErrorMessage { get; private set; }
+        public string ErrorMessage { get; private set; } = "";
 
         public bool Validate(
             Person person)
