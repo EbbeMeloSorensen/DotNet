@@ -37,6 +37,7 @@ Done:
 * Dialogen CreateOrUpdatePerson skal opføre sig anderledes, når man bruger den til at ændre en eksisterende person
 
 Todo:
+* CreatePerson dialogen validerer ikke input når man kommer til at bytte om på måned og dag i datofeltet - den bruger så bare dags dato
 * Genopfrisk lige hvorfor du sadlede om fra den, du viste dfos teamet til den, du arbejder på nu. De havde i hvert fald noget at gøre med at
   den gamle var en lidt rigelig grov integration mellem din personhåndteringsting, hvor du bare transformerede observing facilities fra dfos apiet til personer,
 
