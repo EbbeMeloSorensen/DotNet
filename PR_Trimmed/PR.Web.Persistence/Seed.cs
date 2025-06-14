@@ -35,7 +35,15 @@ namespace PR.Web.Persistence
 
                 foreach (var user in users)
                 {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                    var result = await userManager.CreateAsync(user, "Super-long-very-secure-secret-key-that-is-at-least-64-bytes-in-length!!!!");
+
+                    if (!result.Succeeded)
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            Console.WriteLine(error.Description);
+                        }
+                    }
                 }
 
                 Seeding.CreateDataForSeeding(

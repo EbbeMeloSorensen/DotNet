@@ -313,7 +313,7 @@ namespace PR.Persistence.APIClient.Repositories
         {
             var url = "http://localhost:5000/api/account/login";
 
-            var content = new StringContent("{\"email\":\"bob@test.com\",\"password\":\"Pa$$w0rd\"}", Encoding.UTF8,
+            var content = new StringContent("{\"email\":\"bob@test.com\",\"password\":\"Super-long-very-secure-secret-key-that-is-at-least-64-bytes-in-length!!!!\"}", Encoding.UTF8,
                 "application/json");
 
             using (var response = await ApiHelper.ApiClient.PostAsync(url, content))

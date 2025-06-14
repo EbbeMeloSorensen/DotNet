@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PR.Web.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Migration1 : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -311,6 +311,39 @@ namespace PR.Web.Persistence.Migrations
                         principalTable: "ObjectItems",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonAssociation",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ArchiveID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Superseded = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Start = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    End = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    SubjectPersonID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SubjectPersonArchiveID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ObjectPersonID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ObjectPersonArchiveID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Text = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonAssociation", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_PersonAssociation_People_ObjectPersonArchiveID",
+                        column: x => x.ObjectPersonArchiveID,
+                        principalTable: "People",
+                        principalColumn: "ArchiveID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PersonAssociation_People_SubjectPersonArchiveID",
+                        column: x => x.SubjectPersonArchiveID,
+                        principalTable: "People",
+                        principalColumn: "ArchiveID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -902,6 +935,16 @@ namespace PR.Web.Persistence.Migrations
                 column: "SecondPointID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PersonAssociation_ObjectPersonArchiveID",
+                table: "PersonAssociation",
+                column: "ObjectPersonArchiveID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonAssociation_SubjectPersonArchiveID",
+                table: "PersonAssociation",
+                column: "SubjectPersonArchiveID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersonComments_PersonArchiveID",
                 table: "PersonComments",
                 column: "PersonArchiveID");
@@ -1000,6 +1043,9 @@ namespace PR.Web.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrbitArea");
+
+            migrationBuilder.DropTable(
+                name: "PersonAssociation");
 
             migrationBuilder.DropTable(
                 name: "PersonComments");
