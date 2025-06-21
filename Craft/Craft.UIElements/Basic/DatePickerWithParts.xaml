@@ -6,31 +6,25 @@
              xmlns:local="clr-namespace:Craft.UIElements.Basic"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Day:" Grid.Row="0" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Width="40"
+        <TextBox Grid.Column="0" Width="40"
                  Text="{Binding Day, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Month:" VerticalAlignment="Center"/>
-        <ComboBox Grid.Row="1" Grid.Column="1" Width="80"
+        <ComboBox Grid.Column="1" Width="80"
                   ItemsSource="{Binding MonthNames}"
                   SelectedIndex="{Binding MonthIndex}"
                   IsEditable="False"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Year:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Width="60"
+        <TextBox Grid.Column="2" Width="60"
                  Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </UserControl>
