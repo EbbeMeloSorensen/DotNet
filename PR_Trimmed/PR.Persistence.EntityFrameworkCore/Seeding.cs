@@ -1,11 +1,13 @@
 ﻿using PR.Domain.Entities.PR;
-using System;
 using PR.Domain.Entities.Smurfs;
 
 namespace PR.Persistence.EntityFrameworkCore
 {
     public static class Seeding
     {
+        private static DateTime _timeOfPopulation = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static DateTime _maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+
         // We're seeding the database with characters from the Star Wars Universe
         // https://cdn.shopify.com/s/files/1/1835/6621/files/star-wars-family-tree-episde-9.png?v=1578255836
 
@@ -54,15 +56,15 @@ namespace PR.Persistence.EntityFrameworkCore
             out List<Person> people,
             out List<PersonComment> personComments)
         {
-            var timeOfPopulation = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+            //var timeOfPopulation = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            //var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 
             // Registration time
-            var chewbaccaIsEnteredIncorrectly = timeOfPopulation;
-            var chewbaccaIsCorrected = timeOfPopulation.AddDays(1);
-            var commentOnReyIsEnteredIncorrectly = timeOfPopulation.AddDays(2);
-            var commentOnReyIsCorrected = timeOfPopulation.AddDays(3);
-            var reyIsUpdatedProspectively = timeOfPopulation.AddDays(4);
+            var chewbaccaIsEnteredIncorrectly = _timeOfPopulation;
+            var chewbaccaIsCorrected = _timeOfPopulation.AddDays(1);
+            var commentOnReyIsEnteredIncorrectly = _timeOfPopulation.AddDays(2);
+            var commentOnReyIsCorrected = _timeOfPopulation.AddDays(3);
+            var reyIsUpdatedProspectively = _timeOfPopulation.AddDays(4);
 
             // Valid time
             var anakinIsIntroduced = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -82,10 +84,10 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000001-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000001-0001-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = maxReboIsIntroduced,
-                End = maxDate,
+                End = _maxDate,
                 FirstName = "Max Rebo",
                 Latitude = 10,
                 Longitude = 56
@@ -95,8 +97,8 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000002-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000002-0001-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = lukeSkywalkerIsIntroduced,
                 End = lukeSkywalkerDies,
                 FirstName = "Luke Skywalker",
@@ -108,8 +110,8 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000004-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = anakinIsIntroduced,
                 End = anakinBecomesDarthVader,
                 FirstName = "Anakin Skywalker",
@@ -121,8 +123,8 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000004-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000004-0002-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = anakinBecomesDarthVader,
                 End = darthVaderDies,
                 FirstName = "Darth Vader",
@@ -137,7 +139,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = chewbaccaIsEnteredIncorrectly,
                 Superseded = chewbaccaIsCorrected,
                 Start = chewbaccaIsIntroduced,
-                End = maxDate,
+                End = _maxDate,
                 FirstName = "Chewing Gum",
                 Latitude = 9,
                 Longitude = 56
@@ -148,9 +150,9 @@ namespace PR.Persistence.EntityFrameworkCore
                 ID = new Guid("00000005-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000005-0001-0002-0000-000000000000"),
                 Created = chewbaccaIsCorrected,
-                Superseded = maxDate,
+                Superseded = _maxDate,
                 Start = chewbaccaIsIntroduced,
-                End = maxDate,
+                End = _maxDate,
                 FirstName = "Chewbacca",
                 Latitude = 9,
                 Longitude = 56
@@ -160,10 +162,10 @@ namespace PR.Persistence.EntityFrameworkCore
             {
                 ID = new Guid("00000006-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
-                Created = timeOfPopulation,
+                Created = _timeOfPopulation,
                 Superseded = reyIsUpdatedProspectively,
                 Start = reyIsIntroduced,
-                End = maxDate,
+                End = _maxDate,
                 FirstName = "Rey",
                 Latitude = 10,
                 Longitude = 56
@@ -174,7 +176,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 ID = new Guid("00000006-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000006-0001-0002-0000-000000000000"),
                 Created = reyIsUpdatedProspectively,
-                Superseded = maxDate,
+                Superseded = _maxDate,
                 Start = reyIsIntroduced,
                 End = reyBecomesReySkywalker,
                 FirstName = "Rey",
@@ -187,9 +189,9 @@ namespace PR.Persistence.EntityFrameworkCore
                 ID = new Guid("00000006-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid("00000006-0002-0001-0000-000000000000"),
                 Created = reyIsUpdatedProspectively,
-                Superseded = maxDate,
+                Superseded = _maxDate,
                 Start = reyBecomesReySkywalker,
-                End = maxDate,
+                End = _maxDate,
                 FirstName = "Rey Skywalker",
                 Latitude = 10.2,
                 Longitude = 56
@@ -208,6 +210,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 rey_2_1
             };
 
+            AddBitemporalSeedingDataForWicket(people);
+
             var rey_comment_1_1_1 = new PersonComment
             {
                 ID = new Guid("00000001-0000-0000-0000-000000000000"),
@@ -217,7 +221,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 Created = commentOnReyIsEnteredIncorrectly,
                 Superseded = commentOnReyIsCorrected,
                 Start = reyIsIntroduced,
-                End = maxDate,
+                End = _maxDate,
                 Text = "She is a ravager"
             };
 
@@ -228,7 +232,7 @@ namespace PR.Persistence.EntityFrameworkCore
                 PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
                 Created = commentOnReyIsCorrected,
-                Superseded = maxDate,
+                Superseded = _maxDate,
                 Start = reyIsIntroduced,
                 End = reyBecomesAJedi,
                 Text = "She is a scavenger"
@@ -241,9 +245,9 @@ namespace PR.Persistence.EntityFrameworkCore
                 PersonID = new Guid("00000006-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000006-0001-0001-0000-000000000000"),
                 Created = commentOnReyIsCorrected,
-                Superseded = maxDate,
+                Superseded = _maxDate,
                 Start = reyBecomesAJedi,
-                End = maxDate,
+                End = _maxDate,
                 Text = "She is a jedi"
             };
 
@@ -253,10 +257,10 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000002-0001-0001-0000-000000000000"),
                 PersonID = new Guid("00000005-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = chewbaccaIsIntroduced,
-                End = maxDate,
+                End = _maxDate,
                 Text = "He likes his crossbow"
             };
 
@@ -266,10 +270,10 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000003-0002-0001-0000-000000000000"),
                 PersonID = new Guid("00000005-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = chewbaccaIsIntroduced,
-                End = maxDate,
+                End = _maxDate,
                 Text = "He is a furry fellow"
             };
 
@@ -279,8 +283,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
                 PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = anakinIsIntroduced,
                 End = darthVaderDies,
                 Text = "He is strong with the force"
@@ -292,8 +296,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000005-0001-0001-0000-000000000000"),
                 PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = anakinIsIntroduced,
                 End = anakinMovesToCoruscant,
                 Text = "Lives on Tatooine"
@@ -305,8 +309,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000005-0002-0001-0000-000000000000"),
                 PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000004-0001-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = anakinMovesToCoruscant,
                 End = darthVaderMovesToMustafar,
                 Text = "Lives on Coruscant"
@@ -318,8 +322,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000005-0003-0001-0000-000000000000"),
                 PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000004-0002-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = anakinMovesToCoruscant,
                 End = darthVaderMovesToMustafar,
                 Text = "Lives on Mustafar"
@@ -331,8 +335,8 @@ namespace PR.Persistence.EntityFrameworkCore
                 ArchiveID = new Guid("00000008-0001-0001-0000-000000000000"),
                 PersonID = new Guid("00000004-0000-0000-0000-000000000000"),
                 PersonArchiveID = new Guid("00000004-0002-0001-0000-000000000000"),
-                Created = timeOfPopulation,
-                Superseded = maxDate,
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
                 Start = anakinBecomesDarthVader,
                 End = darthVaderDies,
                 Text = "He is a cruel fellow"
@@ -415,6 +419,30 @@ namespace PR.Persistence.EntityFrameworkCore
                 chewbacca_comment_1,
                 chewbacca_comment_2,
             };
+        }
+
+        private static void AddBitemporalSeedingDataForWicket(
+            List<Person> people)
+        {
+            var wicketVariants = Enumerable.Range(1, 20).Select(_ => new Person
+            {
+                ID = new Guid("00000003-0000-0000-0000-000000000000"),
+                ArchiveID = new Guid($"00000003-{_.ToString().PadLeft(4, '0')}-0001-0000-000000000000"),
+                Created = _timeOfPopulation,
+                Superseded = _maxDate,
+                Start = new DateTime(2000 + _, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                End = new DateTime(2001 + _, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                FirstName = "Wicket",
+                Latitude = 9 + _,
+                Longitude = 50
+            }).ToList();
+
+            wicketVariants.Last().End = _maxDate;
+
+            foreach (var wicketVariant in wicketVariants)
+            {
+                people.Add(wicketVariant);
+            }
         }
     }
 }
