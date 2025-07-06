@@ -1,20 +1,20 @@
-using Craft.Domain;
-using Craft.Logging;
-using Craft.Utils;
-using Craft.ViewModel.Utils;
-using Craft.ViewModels.Dialogs;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
-using PR.Application;
-using PR.Domain.BusinessRules.PR;
-using PR.IO;
-using PR.Persistence;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Craft.Domain;
+using Craft.Logging;
+using Craft.Utils;
+using Craft.ViewModel.Utils;
+using Craft.ViewModels.Dialogs;
+using PR.Application;
+using PR.Domain.BusinessRules.PR;
+using PR.IO;
+using PR.Persistence;
 
 namespace PR.ViewModel
 {

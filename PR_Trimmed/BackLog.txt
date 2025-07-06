@@ -37,6 +37,14 @@ Done:
 * Dialogen CreateOrUpdatePerson skal opføre sig anderledes, når man bruger den til at ændre en eksisterende person
 
 Todo:
+* Man skal kunne re-seede uden at lukke applikationen
+* Når man laver en ny person variant, så skal de eksisterende vige. Nogle skal slettes, og nogle skal trimmes
+* Når man ændrer virkningstidsintervallet for en eksisterende, så gælder der i samme stil, at nogen slettes og nogen trimmes...
+* Det giver ikke umiddelbart mening at slette en eksisterende person variant, hvis denne ligger mellem andre, da der så vil opstå et hul, hvilket indikerer, at personen ikke fandtes i det tidsrum.
+  ..måske skulle man så hellere vælge et antal på hinanden følgende, hvilket så kunne åbne op for muligheder af forskellig art
+  1) to på hinanden følgende valgt => mulighed for at forskyde tidspunkt for ændring
+  2) 3 eller flere på hinanden følgende valgt => mulighed for at slette de mellemliggende samt vælge ændringstidspunkt mellem de 2 yderste
+  3) Kun sammenhængende yderlige valgt - kan slettes
 * CreatePerson dialogen validerer ikke input når man kommer til at bytte om på måned og dag i datofeltet - den bruger så bare dags dato
 * Genopfrisk lige hvorfor du sadlede om fra den, du viste dfos teamet til den, du arbejder på nu. De havde i hvert fald noget at gøre med at
   den gamle var en lidt rigelig grov integration mellem din personhåndteringsting, hvor du bare transformerede observing facilities fra dfos apiet til personer,
