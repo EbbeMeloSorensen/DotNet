@@ -61,6 +61,7 @@ namespace PR.ViewModel
         private AsyncCommand<object> _softDeleteSelectedPeopleCommand;
         private AsyncCommand<object> _hardDeleteSelectedPeopleCommand;
         private AsyncCommand<object> _clearRepositoryCommand;
+        private AsyncCommand<object> _reseedRepositoryCommand;
         private AsyncCommand _exportPeopleCommand;
         private RelayCommand _exportSelectionToGraphmlCommand;
         private AsyncCommand _importPeopleCommand;
@@ -87,6 +88,15 @@ namespace PR.ViewModel
             {
                 return _clearRepositoryCommand ?? (_clearRepositoryCommand =
                     new AsyncCommand<object>(ClearRepository, CanClearRepository));
+            }
+        }
+
+        public AsyncCommand<object> ReseedRepositoryCommand
+        {
+            get
+            {
+                return _reseedRepositoryCommand ?? (_reseedRepositoryCommand =
+                    new AsyncCommand<object>(ReseedRepository, CanReseedRepository));
             }
         }
 
@@ -362,6 +372,29 @@ namespace PR.ViewModel
         }
 
         private bool CanClearRepository(
+            object owner)
+        {
+            return true;
+        }
+
+        private async Task ReseedRepository(
+            object owner)
+        {
+            var dialogViewModel1 = new MessageBoxDialogViewModel("Reseed repository?", true);
+
+            if (_applicationDialogService.ShowDialog(dialogViewModel1, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            UnitOfWorkFactory.Reseed();
+
+            var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was reseeded", false);
+
+            _applicationDialogService.ShowDialog(dialogViewModel2, owner as Window);
+        }
+
+        private bool CanReseedRepository(
             object owner)
         {
             return true;
