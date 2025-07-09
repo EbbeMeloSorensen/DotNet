@@ -237,6 +237,13 @@ namespace Craft.Math
             return timeInterval.Item1 < other.Item2 && other.Item1 < timeInterval.Item2;
         }
 
+        public static bool Covers(
+            this Tuple<DateTime, DateTime> timeInterval,
+            Tuple<DateTime, DateTime> other)
+        {
+            return timeInterval.Item1 <= other.Item1 && other.Item2 <= timeInterval.Item2;
+        }
+
         public static bool AnyOverlaps(
             this IEnumerable<Tuple<DateTime, DateTime>> sortedDateRanges)
         {

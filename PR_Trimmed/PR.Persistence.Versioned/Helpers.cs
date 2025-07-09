@@ -3,9 +3,51 @@ using System.Linq.Expressions;
 using System;
 using System.Linq;
 using Craft.Domain;
+using Craft.Math;
 
 namespace PR.Persistence.Versioned
 {
+    public static class Helpers2
+    {
+        public static void InsertNewVariant<T>(
+            this IEnumerable<T> entities,
+            T newEntity,
+            out List<T> nonConflictingEntities,
+            out List<T> coveredEntities) where T : IObjectWithValidTime
+        {
+            nonConflictingEntities = new List<T>();
+            coveredEntities = new List<T>();
+
+            var newInterval = new Tuple<DateTime, DateTime>(newEntity.Start, newEntity.End);
+
+            foreach (var entity in entities)
+            {
+                var otherInterval = new Tuple<DateTime, DateTime>(entity.Start, entity.End);
+
+                if (!newInterval.Overlaps(otherInterval))
+                {
+                    nonConflictingEntities.Add(entity);
+                    continue;
+                }
+
+                if (newInterval.Covers(otherInterval))
+                {
+                    coveredEntities.Add(entity);
+                    continue;
+                }
+
+                if (otherInterval.Item1 < newInterval.Item1)
+                {
+                    // Coming soon..
+                    //var clone = entity.Clone();
+                    //variantClone.End = dominantInterval.Item1;
+                    //variants.Add(variantClone);
+                }
+
+            }
+        }
+    }
+
     internal static class Helpers
     {
         internal static void AddVersionPredicates<T>(

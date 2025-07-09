@@ -44,7 +44,7 @@ namespace PR.Domain.Entities.PR
 
         public override string ToString()
         {
-            return $"{FirstName}";
+            return $"{FirstName} ({Start} - {End})";
         }
     }
 }

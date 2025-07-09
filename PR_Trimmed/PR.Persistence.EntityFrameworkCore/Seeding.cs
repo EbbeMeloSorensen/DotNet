@@ -56,9 +56,6 @@ namespace PR.Persistence.EntityFrameworkCore
             out List<Person> people,
             out List<PersonComment> personComments)
         {
-            //var timeOfPopulation = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            //var maxDate = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
-
             // Registration time
             var chewbaccaIsEnteredIncorrectly = _timeOfPopulation;
             var chewbaccaIsCorrected = _timeOfPopulation.AddDays(1);
@@ -424,14 +421,19 @@ namespace PR.Persistence.EntityFrameworkCore
         private static void AddBitemporalSeedingDataForWicket(
             List<Person> people)
         {
-            var wicketVariants = Enumerable.Range(1, 20).Select(_ => new Person
+            // (Wicket flytter sig hvert nytår)
+            //var firstYear = 2000;
+            var firstYear = 2021;
+            var count = DateTime.UtcNow.Year - firstYear;
+
+            var wicketVariants = Enumerable.Range(1, count).Select(_ => new Person
             {
                 ID = new Guid("00000003-0000-0000-0000-000000000000"),
                 ArchiveID = new Guid($"00000003-{_.ToString().PadLeft(4, '0')}-0001-0000-000000000000"),
                 Created = _timeOfPopulation,
                 Superseded = _maxDate,
-                Start = new DateTime(2000 + _, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                End = new DateTime(2001 + _, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Start = new DateTime(firstYear + _, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                End = new DateTime(firstYear + 1 + _, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 FirstName = "Wicket",
                 Latitude = 9 + _,
                 Longitude = 50

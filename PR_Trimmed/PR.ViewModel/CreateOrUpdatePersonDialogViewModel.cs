@@ -5,13 +5,16 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Craft.Domain;
 using GalaSoft.MvvmLight.Command;
+using Craft.Math;
+using Craft.Domain;
 using Craft.UI.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using PR.Domain.Entities.PR;
 using PR.Persistence;
+using PR.Persistence.Versioned;
+using PR.Domain;
 
 namespace PR.ViewModel
 {
@@ -34,7 +37,6 @@ namespace PR.ViewModel
 
         public Person Person { get; }
 
-        //private IEnumerable<Tuple<DateTime, DateTime>> _occupiedDateRanges;
         private IEnumerable<Person> _otherVariants;
 
         private string _latitude;
@@ -319,6 +321,7 @@ namespace PR.ViewModel
             Person = person == null
                 ? new Person
                 {
+                    FirstName = _otherVariants != null && _otherVariants.Any() ? _otherVariants.Last().FirstName : "",
                     Start = DateTime.UtcNow.Date,
                     End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
                 }
@@ -524,12 +527,54 @@ namespace PR.ViewModel
 
             // If we got this far, then the Person object is valid in itself, but it may conflict with other variants
 
+            // Vi kan ikke bare tage de andre varianter as is - nogle af dem vil måske skulle fjernes,
+            // andre af dem vil måske skulle trimmes - og det kan endda ske, at et tidsinterval vil skulle splittes op i 2 nye
+            // (hvis det dominante tidsinterval "dækkes" af et eksisterende)
+
+            // Vi skal have en method, der opererer på en collection, modtager en (ny) variant som parameter og returnerer 3 puljer:
+            // 1) varianter, der skal slettes (fordi de dækkes af den nye variant)
+            // 2) varianter, der skal opdateres (fordi de overlapper med den nye variant)
+            // 3) varianter, der skal genereres (fordi en variant deles i 2 stykker af den nye variant)
+            // 4) varianter, der skal bibeholdes (fordi de ikke konflikter med den nye variant)
+
+            _otherVariants.InsertNewVariant(
+                Person,
+                out var nonConflictingEntities,
+                out var coveredEntities);
+
             var variants = new List<Person>{Person};
 
             if (_otherVariants != null)
             {
-                variants.AddRange(_otherVariants);
-                variants.OrderBy(_ => _.Start);
+                var dominantInterval = new Tuple<DateTime, DateTime>(Person.Start, Person.End);
+
+                foreach (var variant in _otherVariants)
+                {
+                    var otherInterval = new Tuple<DateTime, DateTime>(variant.Start, variant.End);
+
+                    if (dominantInterval.Overlaps(otherInterval))
+                    {
+                        if (variant.Start < dominantInterval.Item1)
+                        {
+                            var variantClone = variant.Clone();
+                            variantClone.End = dominantInterval.Item1;
+                            variants.Add(variantClone);
+                        }
+
+                        if (dominantInterval.Item2 < variant.End)
+                        {
+                            var variantClone = variant.Clone();
+                            variantClone.Start = dominantInterval.Item2;
+                            variants.Add(variantClone);
+                        }
+                    }
+                    else
+                    {
+                        variants.Add(variant);
+                    }
+                }
+
+                variants = variants.OrderBy(_ => _.Start).ToList();
             }
 
             _errors = _businessRuleCatalog.ValidateCrossEntity(variants);

@@ -9,7 +9,7 @@ namespace PR.Domain.BusinessRules.PR
         public BusinessRuleCatalog()
         {
             // Temporarily commented out to make sure the rule is enforced by the repository
-            //RegisterAtomicRule(new FirstNameIsValidRule());
+            RegisterAtomicRule(new FirstNameIsValidRule());
             RegisterAtomicRule(new SurnameIsValidRule());
             RegisterAtomicRule(new NicknameIsValidRule());
             RegisterAtomicRule(new AddressIsValidRule());

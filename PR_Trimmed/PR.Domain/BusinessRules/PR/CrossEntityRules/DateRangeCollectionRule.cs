@@ -18,6 +18,7 @@ namespace PR.Domain.BusinessRules.PR.CrossEntityRules
         {
             var validTimeIntervals = variants
                 .Select(_ => new Tuple<DateTime, DateTime>(_.Start, _.End))
+                .OrderBy(_ => _.Item1)
                 .ToList();
 
             if (validTimeIntervals.AnyOverlaps())
