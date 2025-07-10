@@ -537,10 +537,13 @@ namespace PR.ViewModel
             // 3) varianter, der skal genereres (fordi en variant deles i 2 stykker af den nye variant)
             // 4) varianter, der skal bibeholdes (fordi de ikke konflikter med den nye variant)
 
-            _otherVariants.InsertNewVariant(
+            if (_otherVariants != null)
+            {
+                _otherVariants.InsertNewVariant(
                 Person,
                 out var nonConflictingEntities,
                 out var coveredEntities);
+            }
 
             var variants = new List<Person>{Person};
 
@@ -556,14 +559,14 @@ namespace PR.ViewModel
                     {
                         if (variant.Start < dominantInterval.Item1)
                         {
-                            var variantClone = variant.Clone();
+                            var variantClone = (Person)variant.Clone();
                             variantClone.End = dominantInterval.Item1;
                             variants.Add(variantClone);
                         }
 
                         if (dominantInterval.Item2 < variant.End)
                         {
-                            var variantClone = variant.Clone();
+                            var variantClone = (Person)variant.Clone();
                             variantClone.Start = dominantInterval.Item2;
                             variants.Add(variantClone);
                         }

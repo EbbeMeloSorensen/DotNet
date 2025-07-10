@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Craft.Domain;
+using PR.Domain.Entities.C2IEDM.ObjectItems;
 
 namespace PR.Domain.Entities.PR
 {
-    public class Person : IObjectWithGuidID, IObjectWithValidTime
+    public class Person : IObjectWithGuidID, IObjectWithValidTime, IClonableObject
     {
         public Guid ArchiveID { get; set; }
         public DateTime Created { get; set; }
@@ -42,9 +43,38 @@ namespace PR.Domain.Entities.PR
         public virtual ICollection<PersonAssociation>? ObjectPeople { get; set; }
         public virtual ICollection<PersonAssociation>? SubjectPeople { get; set; }
 
+        public IClonableObject Clone()
+        {
+            var clone = new Person();
+            clone.CopyAttributes(this);
+            return clone;
+        }
+
         public override string ToString()
         {
             return $"{FirstName} ({Start} - {End})";
+        }
+
+        public void CopyAttributes(
+            Person other)
+        {
+            ArchiveID = other.ArchiveID;
+            Created = other.Created;
+            Superseded = other.Superseded;
+            Start = other.Start;
+            End = other.End;
+            ID = other.ID;
+            FirstName = other.FirstName;
+            Surname = other.Surname;
+            Nickname = other.Nickname;
+            Address = other.Address;
+            ZipCode = other.ZipCode;
+            City = other.City;
+            Birthday = other.Birthday;
+            Category = other.Category;
+            Description = other.Description;
+            Latitude = other.Latitude;
+            Longitude = other.Longitude;
         }
     }
 }

@@ -130,7 +130,7 @@ namespace PR.Persistence.Versioned.Repositories
 
             if (_returnClonesInsteadOfRepositoryObjects)
             {
-                return person.Clone();
+                return (Person)person.Clone();
             }
 
             return person;
@@ -150,7 +150,7 @@ namespace PR.Persistence.Versioned.Repositories
 
             if (_returnClonesInsteadOfRepositoryObjects)
             {
-                return people.Select(_ => _.Clone()).ToList();
+                return people.Select(_ => (Person)_.Clone()).ToList();
             }
 
             return people;
@@ -343,7 +343,7 @@ namespace PR.Persistence.Versioned.Repositories
 
             if (_returnClonesInsteadOfRepositoryObjects)
             {
-                return people.Select(_ => _.Clone()).ToList();
+                return people.Select(_ => (Person)_.Clone()).ToList();
             }
 
             return people;
@@ -399,7 +399,7 @@ namespace PR.Persistence.Versioned.Repositories
             _returnClonesInsteadOfRepositoryObjects = true;
             objectFromRepository.Superseded = CurrentTime;
 
-            var personCopy = objectFromRepository.Clone();
+            var personCopy = (Person)objectFromRepository.Clone();
             personCopy.ArchiveID = new Guid();
             personCopy.Created = CurrentTime;
             personCopy.Superseded = _maxDate;
@@ -453,7 +453,7 @@ namespace PR.Persistence.Versioned.Repositories
             });
 
             var newPersonRows = objectsFromRepository
-                .Select(_ => _.Clone())
+                .Select(_ => (Person)_.Clone())
                 .ToList();
 
             newPersonRows.ForEach(_ =>
@@ -522,7 +522,7 @@ namespace PR.Persistence.Versioned.Repositories
             _returnClonesInsteadOfRepositoryObjects = true;
             objectFromRepository.Superseded = CurrentTime;
 
-            var personCopy = objectFromRepository.Clone();
+            var personCopy = (Person)objectFromRepository.Clone();
             personCopy.ArchiveID = new Guid();
             personCopy.Created = CurrentTime;
             personCopy.Superseded = _maxDate;
@@ -554,7 +554,8 @@ namespace PR.Persistence.Versioned.Repositories
 
             objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
 
-            var newPersonRows = objectsFromRepository.Select(_ => _.Clone()).ToList();
+            var newPersonRows = objectsFromRepository.Select(_ => (Person)_.Clone()).ToList();
+
             newPersonRows.ForEach(_ =>
             {
                 _.ArchiveID = new Guid();

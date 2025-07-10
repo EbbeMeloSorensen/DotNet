@@ -94,6 +94,10 @@ namespace Craft.ViewModel.Utils
                     _isExecuting = true;
                     await _execute(parameter);
                 }
+                catch(Exception e)
+                {
+                    var message = e.Message;
+                }
                 finally
                 {
                     _isExecuting = false;
