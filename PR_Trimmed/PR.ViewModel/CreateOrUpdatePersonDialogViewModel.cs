@@ -344,7 +344,34 @@ namespace PR.ViewModel
                     switch (_mode)
                     {
                         case CreateOrUpdatePersonDialogViewModelMode.Create:
-                            await unitOfWork.People.Add(Person);
+
+                            if (_otherVariants != null)
+                            {
+                                _otherVariants.InsertNewVariant(
+                                    Person,
+                                    out var nonConflictingEntities,
+                                    out var coveredEntities,
+                                    out var trimmedEntities,
+                                    out var newEntities);
+
+                                if (coveredEntities.Any())
+                                {
+                                    await unitOfWork.People.RemoveRange(coveredEntities);
+                                }
+
+                                if (trimmedEntities.Any())
+                                {
+                                    await unitOfWork.People.UpdateRange(trimmedEntities);
+                                }
+
+                                if (newEntities.Any())
+                                {
+                                    await unitOfWork.People.UpdateRange(trimmedEntities);
+                                }
+                            }
+
+                            //await unitOfWork.People.Add(Person);
+
                             break;
                         case CreateOrUpdatePersonDialogViewModelMode.Update:
                             await unitOfWork.People.Correct(Person);
@@ -542,45 +569,18 @@ namespace PR.ViewModel
                 _otherVariants.InsertNewVariant(
                 Person,
                 out var nonConflictingEntities,
-                out var coveredEntities);
+                out var coveredEntities,
+                out var trimmedEntities,
+                out var newEntities);
+
+                var newPotentialEntityCollection = nonConflictingEntities;
+                newPotentialEntityCollection.AddRange(trimmedEntities);
+                newPotentialEntityCollection.AddRange(newEntities);
+                newPotentialEntityCollection.Add(Person);
+
+                newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
+                _errors = _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
             }
-
-            var variants = new List<Person>{Person};
-
-            if (_otherVariants != null)
-            {
-                var dominantInterval = new Tuple<DateTime, DateTime>(Person.Start, Person.End);
-
-                foreach (var variant in _otherVariants)
-                {
-                    var otherInterval = new Tuple<DateTime, DateTime>(variant.Start, variant.End);
-
-                    if (dominantInterval.Overlaps(otherInterval))
-                    {
-                        if (variant.Start < dominantInterval.Item1)
-                        {
-                            var variantClone = (Person)variant.Clone();
-                            variantClone.End = dominantInterval.Item1;
-                            variants.Add(variantClone);
-                        }
-
-                        if (dominantInterval.Item2 < variant.End)
-                        {
-                            var variantClone = (Person)variant.Clone();
-                            variantClone.Start = dominantInterval.Item2;
-                            variants.Add(variantClone);
-                        }
-                    }
-                    else
-                    {
-                        variants.Add(variant);
-                    }
-                }
-
-                variants = variants.OrderBy(_ => _.Start).ToList();
-            }
-
-            _errors = _businessRuleCatalog.ValidateCrossEntity(variants);
 
             if (_errors.TryGetValue("ValidTimeIntervals", out error))
             {

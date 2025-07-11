@@ -13,10 +13,14 @@ namespace PR.Persistence.Versioned
             this IEnumerable<T> entities,
             T newEntity,
             out List<T> nonConflictingEntities,
-            out List<T> coveredEntities) where T : IObjectWithValidTime
+            out List<T> coveredEntities,
+            out List<T> trimmedEntities,
+            out List<T> newEntities) where T : IObjectWithValidTime, IClonableObject
         {
             nonConflictingEntities = new List<T>();
             coveredEntities = new List<T>();
+            trimmedEntities = new List<T>();
+            newEntities = new List<T>();
 
             var newInterval = new Tuple<DateTime, DateTime>(newEntity.Start, newEntity.End);
 
@@ -36,14 +40,30 @@ namespace PR.Persistence.Versioned
                     continue;
                 }
 
+                var trimmedToTheRight = false;
+
                 if (otherInterval.Item1 < newInterval.Item1)
                 {
-                    // Coming soon..
-                    //var clone = entity.Clone();
-                    //variantClone.End = dominantInterval.Item1;
-                    //variants.Add(variantClone);
+                    var clone = (T)entity.Clone();
+                    clone.End = newInterval.Item1;
+                    trimmedEntities.Add(clone);
+                    trimmedToTheRight = true;
                 }
 
+                if (newInterval.Item2 < otherInterval.Item2)
+                {
+                    var clone = (T)entity.Clone();
+                    clone.Start = newInterval.Item2;
+
+                    if (trimmedToTheRight)
+                    {
+                        newEntities.Add(clone);
+                    }
+                    else
+                    {
+                        trimmedEntities.Add(clone);
+                    }
+                }
             }
         }
     }
