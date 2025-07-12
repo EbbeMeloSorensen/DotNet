@@ -321,6 +321,7 @@ namespace PR.ViewModel
             Person = person == null
                 ? new Person
                 {
+                    ID = _otherVariants != null && _otherVariants.Any() ? _otherVariants.Last().ID : new Guid(),
                     FirstName = _otherVariants != null && _otherVariants.Any() ? _otherVariants.Last().FirstName : "",
                     Start = DateTime.UtcNow.Date,
                     End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
@@ -361,16 +362,24 @@ namespace PR.ViewModel
 
                                 if (trimmedEntities.Any())
                                 {
-                                    await unitOfWork.People.UpdateRange(trimmedEntities);
+                                    // Det her fucker op, da det jo vil blive til en prospektiv update.
+                                    //await unitOfWork.People.UpdateRange(trimmedEntities);
+
+                                    // Der er i stedet behov for at kalde CorrectRange, som vel at mærke ikke er implementeret endnu
+                                    // Bemærk, at den udtrykket nedenfor tager en enkelt, hvilket ikke virker generelt, men skulle
+                                    // kunne bruges til eksemplet, hvor Max Rebo får en ny variant, der overlapper med den eksisterende
+                                    // Sikr også at den faktisk får tildelt samme ID som den eksisterende, når der laves en ny variant
+                                    // af en eksisterende 
+                                    await unitOfWork.People.Correct(trimmedEntities.Single());
                                 }
 
                                 if (newEntities.Any())
                                 {
-                                    await unitOfWork.People.UpdateRange(trimmedEntities);
+                                    await unitOfWork.People.Add(newEntities.Single());
                                 }
                             }
 
-                            //await unitOfWork.People.Add(Person);
+                            await unitOfWork.People.Add(Person);
 
                             break;
                         case CreateOrUpdatePersonDialogViewModelMode.Update:
