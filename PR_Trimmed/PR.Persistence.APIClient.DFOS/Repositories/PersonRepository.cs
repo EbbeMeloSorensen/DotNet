@@ -85,6 +85,12 @@ namespace PR.Persistence.APIClient.DFOS.Repositories
             throw new NotImplementedException();
         }
 
+        public Task CorrectRange(
+            IEnumerable<Person> people)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task Erase(Person person)
         {
             throw new NotImplementedException();

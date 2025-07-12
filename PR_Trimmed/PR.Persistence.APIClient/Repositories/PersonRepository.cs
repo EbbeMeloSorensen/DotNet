@@ -87,17 +87,26 @@ namespace PR.Persistence.APIClient.Repositories
             throw new NotImplementedException();
         }
 
-        public Task Correct(Person person)
+        public Task Correct(
+            Person person)
         {
             throw new NotImplementedException();
         }
 
-        public Task Erase(Person person)
+        public Task CorrectRange(
+            IEnumerable<Person> people)
         {
             throw new NotImplementedException();
         }
 
-        public Task EraseRange(IEnumerable<Person> people)
+        public Task Erase(
+            Person person)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task EraseRange(
+            IEnumerable<Person> people)
         {
             throw new NotImplementedException();
         }

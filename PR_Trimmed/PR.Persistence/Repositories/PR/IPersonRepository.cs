@@ -30,6 +30,9 @@ namespace PR.Persistence.Repositories.PR
         Task Correct(
             Person person);
 
+        Task CorrectRange(
+            IEnumerable<Person> people);
+
         Task Erase(
             Person person);
 

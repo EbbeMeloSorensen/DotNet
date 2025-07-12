@@ -506,6 +506,12 @@ namespace PR.Persistence.Versioned.Repositories
             await UnitOfWork.People.Add(person);
         }
 
+        public Task CorrectRange(
+            IEnumerable<Person> people)
+        {
+            throw new NotImplementedException();
+        }
+
         // This is a socalled SOFT DELETE, where the last valid time interval is closed. A soft delete is actually a retroactive update
         public async Task Remove(
             Person person)
