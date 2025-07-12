@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
-using PR.Persistence.Versioned;
-using StructureMap;
+﻿using StructureMap;
 using Xunit;
+using FluentAssertions;
+using PR.Domain.Entities.PR;
+using PR.Persistence.Versioned;
 
 namespace PR.Persistence.UnitTest
 {
@@ -20,6 +21,26 @@ namespace PR.Persistence.UnitTest
 
             _unitOfWorkFactory = new UnitOfWorkFactoryFacade(unitOfWorkFactory);
             (_unitOfWorkFactory as UnitOfWorkFactoryFacade)!.DatabaseTime = null;
+        }
+
+        [Fact]
+        public async Task CreateNewVariantForExistingPerson_PreceedingExistingVariants()
+        {
+            // Arrange
+            var person = new Person
+            {
+                ID = new Guid("00000003-0000-0000-0000-000000000000"),
+                FirstName = "Sprocket",
+                Start = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                End = new DateTime(2022, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            };
+
+            // Act
+            using var unitOfWork1 = _unitOfWorkFactory.GenerateUnitOfWork();
+            await unitOfWork1.People.Add(person);
+            unitOfWork1.Complete();
+
+            // Assert
         }
 
         [Fact]

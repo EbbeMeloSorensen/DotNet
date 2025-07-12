@@ -72,14 +72,10 @@ namespace PR.Persistence.Versioned.Repositories
         {
             var now = DateTime.UtcNow;
 
-            if (person.ID == Guid.Empty)
-            {
-                person.ID = Guid.NewGuid();
-            }
-
             person.Created = now;
             person.Superseded = _maxDate;
 
+            // Hvis ikke Start og End
             if (person.Start.Year == 1)
             {
                 person.Start = now;
@@ -88,6 +84,37 @@ namespace PR.Persistence.Versioned.Repositories
             if (person.End.Year == 1)
             {
                 person.End = _maxDate;
+            }
+
+            if (person.ID == Guid.Empty)
+            {
+                // Vi registrerer en helt ny person
+                person.ID = Guid.NewGuid();
+            }
+            else
+            {
+                // Vi registrerer en ny variant af en EKSISTERENDE person
+                // Derfor starter vi med at trække de eksisterende varianter
+                _returnClonesInsteadOfRepositoryObjects = false;
+                var otherVariants = (await GetAllVariants(person.ID)).ToList();
+                _returnClonesInsteadOfRepositoryObjects = true;
+
+                otherVariants.InsertNewVariant(
+                    person,
+                    out var nonConflictingEntities,
+                    out var coveredEntities,
+                    out var trimmedEntities,
+                    out var newEntities);
+
+                var newPotentialEntityCollection = nonConflictingEntities;
+                newPotentialEntityCollection.AddRange(trimmedEntities);
+                newPotentialEntityCollection.AddRange(newEntities);
+                newPotentialEntityCollection.Add(person);
+
+                newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
+                //_errors = _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
+
+                throw new NotImplementedException();
             }
 
             await UnitOfWork.People.Add(person);

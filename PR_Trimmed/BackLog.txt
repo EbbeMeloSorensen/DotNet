@@ -35,9 +35,10 @@ Done:
 * Lav noget input validering, når man prøver at lave en person med et invalidt virkningstidsinterval
 * Tilføj Category, Latitude og Longitude til CreatePersonViewModel
 * Dialogen CreateOrUpdatePerson skal opføre sig anderledes, når man bruger den til at ændre en eksisterende person
+* Man skal kunne re-seede uden at lukke applikationen
 
 Todo:
-* Man skal kunne re-seede uden at lukke applikationen
+* Er der allerede en test case for at lave en ny variant?
 * Når man laver en ny person variant, så skal de eksisterende vige. Nogle skal slettes, og nogle skal trimmes
 * Når man ændrer virkningstidsintervallet for en eksisterende, så gælder der i samme stil, at nogen slettes og nogen trimmes...
 * Det giver ikke umiddelbart mening at slette en eksisterende person variant, hvis denne ligger mellem andre, da der så vil opstå et hul, hvilket indikerer, at personen ikke fandtes i det tidsrum.
