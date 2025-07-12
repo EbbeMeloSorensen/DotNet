@@ -12,7 +12,7 @@ namespace PR.Persistence.UnitTest
             // Arrange
             var person = new Person
             {
-                FirstName = "Wicket"
+                FirstName = "Han Solo"
             };
 
             // Act
@@ -23,11 +23,12 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
             var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(4);
+            people.Count().Should().Be(5);
             people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
             people.Count(p => p.FirstName == "Wicket").Should().Be(1);
+            people.Count(p => p.FirstName == "Han Solo").Should().Be(1);
         }
 
         public static async Task GetAllPeople(
@@ -40,10 +41,11 @@ namespace PR.Persistence.UnitTest
             var people = await unitOfWork.People.GetAll();
 
             // Assert
-            people.Count().Should().Be(3);
+            people.Count().Should().Be(4);
             people.Count(p => p.FirstName == "Max Rebo").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
+            people.Count(p => p.FirstName == "Wicket").Should().Be(1);
         }
 
         public static async Task GetPersonById(
@@ -221,9 +223,10 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
             var people = await unitOfWork2.People.GetAll();
-            people.Count().Should().Be(2);
+            people.Count().Should().Be(3);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+            people.Count(p => p.FirstName == "Wicket").Should().Be(1);
         }
 
         public static async Task DeletePerson_WithChildObjects_Throws(
@@ -265,9 +268,10 @@ namespace PR.Persistence.UnitTest
             // Assert
             using var unitOfWork2 = unitOfWorkFactory.GenerateUnitOfWork();
             people = (await unitOfWork2.People.GetAll()).ToList();
-            people.Count.Should().Be(2);
+            people.Count.Should().Be(3);
             people.Count(p => p.FirstName == "Chewbacca").Should().Be(1);
             people.Count(p => p.FirstName == "Rey Skywalker").Should().Be(1);
+            people.Count(p => p.FirstName == "Wicket").Should().Be(1);
         }
 
         public static async Task DeletePeople_WithChildObjects_Throws(

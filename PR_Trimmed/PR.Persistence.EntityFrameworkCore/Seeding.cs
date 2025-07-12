@@ -382,11 +382,20 @@ namespace PR.Persistence.EntityFrameworkCore
                 Longitude = 56
             };
 
+            var wicket = new Person
+            {
+                ID = new Guid("00000009-0000-0000-0000-000000000000"),
+                FirstName = "Wicket",
+                Latitude = 10.2,
+                Longitude = 56
+            };
+
             people = new List<Person>
             {
                 maxRebo,
                 rey,
-                chewbacca
+                chewbacca,
+                wicket
             };
 
             var rey_comment = new PersonComment
