@@ -31,6 +31,7 @@ namespace PR.Persistence.UnitTest
             people.Count(p => p.FirstName == "Han Solo").Should().Be(1);
         }
 
+        // Notice that this does not involve the business rule catalog, that acts in the application layer
         public static async Task CreatePersonWithoutMandatoryPropertyThrows(
             IUnitOfWorkFactory unitOfWorkFactory)
         {
