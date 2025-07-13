@@ -142,7 +142,7 @@ namespace PR.ViewModel
             _application.UnitOfWorkFactory = unitOfWorkFactory;
             _dataIOHandler = dataIOHandler;
             _applicationDialogService = applicationDialogService;
-            _businessRuleCatalog = new BusinessRuleCatalog();
+            _businessRuleCatalog = businessRuleCatalog;
 
             // When this is changed, one should call Find - not in connection with the two times being changed separately
             _bitemporalTimesOfInterest = new ObservableObject<Tuple<DateTime?, DateTime?>>
