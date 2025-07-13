@@ -31,6 +31,23 @@ namespace PR.Persistence.UnitTest
             people.Count(p => p.FirstName == "Han Solo").Should().Be(1);
         }
 
+        public static async Task CreatePersonWithoutMandatoryPropertyThrows(
+            IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            // Arrange
+            var person = new Person();
+            using var unitOfWork1 = unitOfWorkFactory.GenerateUnitOfWork();
+
+            // Act & Assert
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                await unitOfWork1.People.Add(person);
+                unitOfWork1.Complete();
+            });
+
+            Assert.NotNull(exception);
+        }
+
         public static async Task GetAllPeople(
             IUnitOfWorkFactory unitOfWorkFactory)
         {

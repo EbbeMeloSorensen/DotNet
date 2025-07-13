@@ -75,7 +75,7 @@ namespace PR.Persistence.Versioned.Repositories
             person.Created = now;
             person.Superseded = _maxDate;
 
-            // Hvis ikke Start og End
+            // Hvis ikke Start og End er sat a brugeren, så sæt det til default, dvs start nu og slut ikke
             if (person.Start.Year == 1)
             {
                 person.Start = now;

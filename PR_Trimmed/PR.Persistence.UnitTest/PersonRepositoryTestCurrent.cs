@@ -25,6 +25,12 @@ namespace PR.Persistence.UnitTest
         }
 
         [Fact]
+        public async Task CreatePersonWithoutMandatoryPropertyThrows()
+        {
+            await Common.CreatePersonWithoutMandatoryPropertyThrows(_unitOfWorkFactory);
+        }
+
+        [Fact]
         public async Task GetAllPeople()
         {
             await Common.GetAllPeople(_unitOfWorkFactory);
