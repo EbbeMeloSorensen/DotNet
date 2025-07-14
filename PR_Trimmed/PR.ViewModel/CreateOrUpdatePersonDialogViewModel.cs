@@ -30,6 +30,7 @@ namespace PR.ViewModel
         private StateOfView _state;
         private Dictionary<string, string> _errors;
 
+        private readonly Application.Application _application;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private IBusinessRuleCatalog _businessRuleCatalog;
 
@@ -45,8 +46,8 @@ namespace PR.ViewModel
         private bool _displayDateRangeError;
 
         private string _generalError;
-        private bool _displayGeneralError;
 
+        private bool _displayGeneralError;
         private AsyncCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 
@@ -299,6 +300,7 @@ namespace PR.ViewModel
             Person person = null,
             IEnumerable<Person> otherVariants = null)
         {
+            _application = application;
             _unitOfWorkFactory = unitOfWorkFactory;
             _businessRuleCatalog = businessRuleCatalog;
 
@@ -328,7 +330,8 @@ namespace PR.ViewModel
                 : person;
         }
 
-        private async Task OK(object parameter)
+        private async Task OK(
+            object parameter)
         {
             UpdateState(StateOfView.Updated);
 
@@ -339,57 +342,60 @@ namespace PR.ViewModel
 
             try
             {
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    switch (_mode)
-                    {
-                        case CreateOrUpdatePersonDialogViewModelMode.Create:
+                await _application.CreatePerson(Person);
 
-                            if (_otherVariants != null)
-                            {
-                                _otherVariants.InsertNewVariant(
-                                    Person,
-                                    out var nonConflictingEntities,
-                                    out var coveredEntities,
-                                    out var trimmedEntities,
-                                    out var newEntities);
+                // Old - her lavede vi i princippet application objektets arbejde for den
+                //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
+                //{
+                //    switch (_mode)
+                //    {
+                //        case CreateOrUpdatePersonDialogViewModelMode.Create:
 
-                                if (coveredEntities.Any())
-                                {
-                                    await unitOfWork.People.RemoveRange(coveredEntities);
-                                }
+                //            if (_otherVariants != null)
+                //            {
+                //                _otherVariants.InsertNewVariant(
+                //                    Person,
+                //                    out var nonConflictingEntities,
+                //                    out var coveredEntities,
+                //                    out var trimmedEntities,
+                //                    out var newEntities);
 
-                                if (trimmedEntities.Any())
-                                {
-                                    // Det her fucker op, da det jo vil blive til en prospektiv update.
-                                    //await unitOfWork.People.UpdateRange(trimmedEntities);
+                //                if (coveredEntities.Any())
+                //                {
+                //                    await unitOfWork.People.RemoveRange(coveredEntities);
+                //                }
 
-                                    // Der er i stedet behov for at kalde CorrectRange, som vel at mærke ikke er implementeret endnu
-                                    // Bemærk, at den udtrykket nedenfor tager en enkelt, hvilket ikke virker generelt, men skulle
-                                    // kunne bruges til eksemplet, hvor Max Rebo får en ny variant, der overlapper med den eksisterende
-                                    // Sikr også at den faktisk får tildelt samme ID som den eksisterende, når der laves en ny variant
-                                    // af en eksisterende 
-                                    await unitOfWork.People.Correct(trimmedEntities.Single());
-                                }
+                //                if (trimmedEntities.Any())
+                //                {
+                //                    // Det her fucker op, da det jo vil blive til en prospektiv update.
+                //                    //await unitOfWork.People.UpdateRange(trimmedEntities);
 
-                                if (newEntities.Any())
-                                {
-                                    await unitOfWork.People.Add(newEntities.Single());
-                                }
-                            }
+                //                    // Der er i stedet behov for at kalde CorrectRange, som vel at mærke ikke er implementeret endnu
+                //                    // Bemærk, at den udtrykket nedenfor tager en enkelt, hvilket ikke virker generelt, men skulle
+                //                    // kunne bruges til eksemplet, hvor Max Rebo får en ny variant, der overlapper med den eksisterende
+                //                    // Sikr også at den faktisk får tildelt samme ID som den eksisterende, når der laves en ny variant
+                //                    // af en eksisterende 
+                //                    await unitOfWork.People.Correct(trimmedEntities.Single());
+                //                }
 
-                            await unitOfWork.People.Add(Person);
+                //                if (newEntities.Any())
+                //                {
+                //                    await unitOfWork.People.Add(newEntities.Single());
+                //                }
+                //            }
 
-                            break;
-                        case CreateOrUpdatePersonDialogViewModelMode.Update:
-                            await unitOfWork.People.Correct(Person);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                //            await unitOfWork.People.Add(Person);
 
-                    unitOfWork.Complete();
-                }
+                //            break;
+                //        case CreateOrUpdatePersonDialogViewModelMode.Update:
+                //            await unitOfWork.People.Correct(Person);
+                //            break;
+                //        default:
+                //            throw new ArgumentOutOfRangeException();
+                //    }
+
+                //    unitOfWork.Complete();
+                //}
 
                 CloseDialogWithResult(parameter as Window, DialogResult.OK);
             }
