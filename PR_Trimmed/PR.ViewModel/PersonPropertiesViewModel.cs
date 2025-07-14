@@ -19,6 +19,7 @@ namespace PR.ViewModel
 {
     public class PersonPropertiesViewModel : ViewModelBase
     {
+        private Application.Application _application;
         private readonly IDialogService _applicationDialogService;
         private IBusinessRuleCatalog _businessRuleCatalog;
         private bool _isVisible;
@@ -118,12 +119,14 @@ namespace PR.ViewModel
         }
 
         public PersonPropertiesViewModel(
+            Application.Application application, 
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
             IBusinessRuleCatalog businessRuleCatalog,
             ObjectCollection<Person> people)
         {
             UnitOfWorkFactory = unitOfWorkFactory;
+            _application = application;
             _applicationDialogService = applicationDialogService;
             _businessRuleCatalog = businessRuleCatalog;
             _people = people;
@@ -256,6 +259,7 @@ namespace PR.ViewModel
                 .ToList();
 
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
+                _application,
                 UnitOfWorkFactory,
                 _businessRuleCatalog,
                 null,
@@ -291,6 +295,7 @@ namespace PR.ViewModel
                 .OrderBy(_ => _.Start);
 
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
+                _application,
                 UnitOfWorkFactory,
                 _businessRuleCatalog,
                 selectedPersonVariant,

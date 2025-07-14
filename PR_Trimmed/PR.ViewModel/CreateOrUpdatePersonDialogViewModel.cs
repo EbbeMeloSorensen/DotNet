@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
-using Craft.Math;
 using Craft.Domain;
 using Craft.UI.Utils;
 using Craft.ViewModel.Utils;
@@ -14,7 +13,6 @@ using Craft.ViewModels.Dialogs;
 using PR.Domain.Entities.PR;
 using PR.Persistence;
 using PR.Persistence.Versioned;
-using PR.Domain;
 
 namespace PR.ViewModel
 {
@@ -295,6 +293,7 @@ namespace PR.ViewModel
         }
 
         public CreateOrUpdatePersonDialogViewModel(
+            Application.Application application,
             IUnitOfWorkFactory unitOfWorkFactory,
             IBusinessRuleCatalog businessRuleCatalog,
             Person person = null,

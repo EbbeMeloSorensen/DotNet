@@ -165,6 +165,7 @@ namespace PR.ViewModel
                 PersonListViewModel.SelectedPeople);
 
             PersonPropertiesViewModel = new PersonPropertiesViewModel(
+                _application,
                 unitOfWorkFactory,
                 applicationDialogService,
                 _businessRuleCatalog,
@@ -249,6 +250,7 @@ namespace PR.ViewModel
             object owner)
         {
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
+                _application,
                 _application.UnitOfWorkFactory,
                 _businessRuleCatalog);
 
