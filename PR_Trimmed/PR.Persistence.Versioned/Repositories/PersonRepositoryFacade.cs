@@ -88,33 +88,7 @@ namespace PR.Persistence.Versioned.Repositories
 
             if (person.ID == Guid.Empty)
             {
-                // Vi registrerer en helt ny person
                 person.ID = Guid.NewGuid();
-            }
-            else
-            {
-                // Vi registrerer en ny variant af en EKSISTERENDE person
-                // Derfor starter vi med at trække de eksisterende varianter
-                _returnClonesInsteadOfRepositoryObjects = false;
-                var otherVariants = (await GetAllVariants(person.ID)).ToList();
-                _returnClonesInsteadOfRepositoryObjects = true;
-
-                otherVariants.InsertNewVariant(
-                    person,
-                    out var nonConflictingEntities,
-                    out var coveredEntities,
-                    out var trimmedEntities,
-                    out var newEntities);
-
-                var newPotentialEntityCollection = nonConflictingEntities;
-                newPotentialEntityCollection.AddRange(trimmedEntities);
-                newPotentialEntityCollection.AddRange(newEntities);
-                newPotentialEntityCollection.Add(person);
-
-                newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
-                //_errors = _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
-
-                throw new NotImplementedException();
             }
 
             await UnitOfWork.People.Add(person);
@@ -510,33 +484,91 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Correct(
             Person person)
         {
-            // Todo: I stedet for at finde én, som man så bare opdaterer, så skal vi finde alle varianter, så vi kan se, om en ændring vil munde ud i en konflikt
-            // Det kan også komme på tale, at man sletter eller korrigerer andre varianter, 
-            
             _returnClonesInsteadOfRepositoryObjects = false;
-            var objectsFromRepository = (await GetAllVariants(person.ID)).ToList();
+            var objectFromRepository = await Get(person.ID);
             _returnClonesInsteadOfRepositoryObjects = true;
-
-            var targetedObjectFromRepository = objectsFromRepository.Single(_ => _.ArchiveID == person.ArchiveID);
-
-            if (targetedObjectFromRepository == null)
-            {
-                throw new InvalidOperationException("Person doesn't exist");
-            }
-
-            targetedObjectFromRepository.Superseded = CurrentTime;
+            objectFromRepository.Superseded = CurrentTime;
 
             person.ArchiveID = Guid.NewGuid();
             person.Created = CurrentTime;
             person.Superseded = _maxDate;
+            person.Start = CurrentTime;
+            person.End = _maxDate;
 
             await UnitOfWork.People.Add(person);
+
+            // Old
+            // Todo: I stedet for at finde én, som man så bare opdaterer, så skal vi finde alle varianter, så vi kan se,
+            // om en ændring vil munde ud i en konflikt.
+            // Det kan også komme på tale, at man sletter eller korrigerer andre varianter, 
+
+            //_returnClonesInsteadOfRepositoryObjects = false;
+            //var objectsFromRepository = (await GetAllVariants(person.ID)).ToList();
+            //_returnClonesInsteadOfRepositoryObjects = true;
+
+            //var targetedObjectFromRepository = objectsFromRepository.Single(_ => _.ArchiveID == person.ArchiveID);
+
+            //if (targetedObjectFromRepository == null)
+            //{
+            //    throw new InvalidOperationException("Person doesn't exist");
+            //}
+
+            //targetedObjectFromRepository.Superseded = CurrentTime;
+
+            //person.ArchiveID = Guid.NewGuid();
+            //person.Created = CurrentTime;
+            //person.Superseded = _maxDate;
+
+            //await UnitOfWork.People.Add(person);
         }
 
-        public Task CorrectRange(
+        public async Task CorrectRange(
             IEnumerable<Person> people)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var ids = people.Select(p => p.ID).ToList();
+
+                var predicates = new List<Expression<Func<Person, bool>>>
+            {
+                p => ids.Contains(p.ID)
+            };
+
+                _returnClonesInsteadOfRepositoryObjects = false;
+                var objectsFromRepository = (await Find(predicates)).ToList();
+                _returnClonesInsteadOfRepositoryObjects = true;
+
+                objectsFromRepository.ForEach(pRepo =>
+                {
+                    pRepo.Superseded = CurrentTime;
+                });
+
+                //var newPersonRows = objectsFromRepository
+                //    .Select(_ => (Person)_.Clone())
+                //    .ToList();
+
+                //newPersonRows.ForEach(_ =>
+                //{
+                //    _.ArchiveID = new Guid();
+                //    _.Created = CurrentTime;
+                //    _.Superseded = _maxDate;
+                //    _.End = TimeOfChange;
+                //});
+
+                people.ToList().ForEach(_ =>
+                {
+                    _.ArchiveID = Guid.NewGuid();
+                    _.Created = CurrentTime;
+                    _.Superseded = _maxDate;
+                });
+
+                // Notice that we have 2 rows for each person here
+                await UnitOfWork.People.AddRange(people);
+            }
+            catch (Exception e)
+            {
+                var message = e.Message;
+            }
         }
 
         // This is a socalled SOFT DELETE, where the last valid time interval is closed. A soft delete is actually a retroactive update

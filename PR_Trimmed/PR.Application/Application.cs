@@ -181,6 +181,11 @@ namespace PR.Application
                         {
                             await unitOfWork.People.AddRange(newEntities);
                         }
+
+                        await unitOfWork.People.Add(person);
+
+                        unitOfWork.Complete();
+                        Logger?.WriteLine(LogMessageCategory.Information, "Completed inserting Person variant");
                     }
                 }
 
