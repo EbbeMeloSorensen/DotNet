@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Craft.Domain;
 using Craft.Logging;
 using Craft.Utils;
-using PR.Domain.BusinessRules.PR;
 using PR.Domain.Entities.PR;
 using PR.IO;
 using PR.Persistence;
+using PR.Persistence.Versioned;
 
 namespace PR.Application
 {
@@ -115,19 +115,73 @@ namespace PR.Application
                 if (businessRuleViolations.Any())
                 {
                     progressCallback?.Invoke(100, "");
-                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to business rule violations:");
+                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to atomic business rule violations:");
 
                     foreach (var kvp in businessRuleViolations)
                     {
                         Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
                     }
+
+                    return businessRuleViolations;
                 }
-                else
+
+                if (person.ID == Guid.Empty)
                 {
                     using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
                     await unitOfWork.People.Add(person);
                     unitOfWork.Complete();
                     Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
+                }
+                else
+                {
+                    using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+                    var otherVariants = (await unitOfWork.People.GetAllVariants(person.ID)).ToList();
+
+                    otherVariants.InsertNewVariant(
+                        person,
+                        out var nonConflictingEntities,
+                        out var coveredEntities,
+                        out var trimmedEntities,
+                        out var newEntities);
+
+                    var newPotentialEntityCollection = nonConflictingEntities;
+                    newPotentialEntityCollection.AddRange(trimmedEntities);
+                    newPotentialEntityCollection.AddRange(newEntities);
+                    newPotentialEntityCollection.Add(person);
+
+                    newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
+
+                    businessRuleViolations = _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
+
+                    if (businessRuleViolations.Any())
+                    {
+                        progressCallback?.Invoke(100, "");
+                        Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to cross-entity business rule violations:");
+
+                        foreach (var kvp in businessRuleViolations)
+                        {
+                            Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
+                        }
+
+                        return businessRuleViolations;
+                    }
+                    else
+                    {
+                        if (coveredEntities.Any())
+                        {
+                            await unitOfWork.People.EraseRange(coveredEntities);
+                        }
+
+                        if (trimmedEntities.Any())
+                        {
+                            await unitOfWork.People.CorrectRange(trimmedEntities);
+                        }
+
+                        if (newEntities.Any())
+                        {
+                            await unitOfWork.People.AddRange(newEntities);
+                        }
+                    }
                 }
 
                 progressCallback?.Invoke(100, "");
