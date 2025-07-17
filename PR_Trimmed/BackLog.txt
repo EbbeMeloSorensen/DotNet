@@ -38,6 +38,19 @@ Done:
 * Man skal kunne re-seede uden at lukke applikationen
 
 Todo:
+* Satan i helvede, nu sidder jeg igen i den her forpulede lejlighed i Natal ved siden af et fjernsyn, hvor Laurentino
+ har skruet ad helvede til op for lyden, hvor det er pisse varmt, hvor der snakkes, hvor der er en flue, der prøver at æde
+ en, og hvor hver eneste fucking tanke, man prøver at tænke, bliver flået i stumper og stykker! Well, i det mindste, så sad
+ han de første 2 timer på kontoret og lavede noget "revisor-arbejde", som "skulle være færdigt i dag". Han skippede endda 
+ frokost, som deres tjenestepige Jessica havde lavet. Da han så endelig kom ud og Ana sagde, at vi ville smutte videre 15 
+ minutter senere, sagde han "já?", som i "allerede?", hvor Ana også svarede noget i retning af, at han jo ffs havde været
+ på kontoret hele tiden.
+* Vejen frem:
+  - Application.Create kan passende deles op i 3 separate funktioner: Create New Person, Create New Variant og Correct 
+    Variant.
+  - Samme DialogViewModel kan fortsat passende bruges til alle 3 use cases
+  - other variants bør ikke sendes med ned
+  - application skal forsynes med et dryrun mode, som også bør bruges i forbindelse med validering
 * Lav en test case for det at lave en ny variant
   - Business rule validatoren skal bruges af PersonRepositoryFacade (nej - det er best practice at håndtere det i Application laget)
   - du er lidt tilbage ved det gamle spørgsmål, om ViewModel-laget skal bruge et application layer, og i givet fald hvordan.
