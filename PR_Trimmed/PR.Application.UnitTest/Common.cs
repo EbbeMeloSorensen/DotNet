@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using PR.Domain.Entities.PR;
+using PR.Persistence;
 using Xunit;
 
 namespace PR.Application.UnitTest

@@ -1,4 +1,5 @@
-﻿using StructureMap;
+﻿using PR.Persistence;
+using StructureMap;
 using Xunit;
 
 namespace PR.Application.UnitTest

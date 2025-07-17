@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using PR.Domain.Entities.PR;
+using PR.Persistence;
 using PR.Persistence.Versioned;
 using StructureMap;
 using Xunit;

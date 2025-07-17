@@ -1,4 +1,5 @@
-﻿using PR.Persistence.Versioned;
+﻿using PR.Persistence;
+using PR.Persistence.Versioned;
 using StructureMap;
 using Xunit;
 
