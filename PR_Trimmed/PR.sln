@@ -87,9 +87,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.UI.WPF.GIS", "PR.UI.WPF.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Domain", "..\Craft\Craft.Domain\Craft.Domain.csproj", "{E7330627-06E8-4B52-957E-51D014193130}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Domain.UnitTest", "PR.Domain.UnitTest\PR.Domain.UnitTest.csproj", "{423FC224-FC8B-4814-AA0E-691189BED076}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Domain.UnitTest", "PR.Domain.UnitTest\PR.Domain.UnitTest.csproj", "{423FC224-FC8B-4814-AA0E-691189BED076}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Math", "..\Craft\Craft.Math\Craft.Math.csproj", "{F2FCFF95-64D8-457D-BE79-A4FC674A34AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Application.UnitTest", "PR.Application.UnitTest\PR.Application.UnitTest.csproj", "{5E5CC2D7-E9B3-454B-AEC0-1EA636844C2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -257,6 +259,10 @@ Global
 		{F2FCFF95-64D8-457D-BE79-A4FC674A34AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2FCFF95-64D8-457D-BE79-A4FC674A34AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2FCFF95-64D8-457D-BE79-A4FC674A34AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E5CC2D7-E9B3-454B-AEC0-1EA636844C2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E5CC2D7-E9B3-454B-AEC0-1EA636844C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E5CC2D7-E9B3-454B-AEC0-1EA636844C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E5CC2D7-E9B3-454B-AEC0-1EA636844C2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
