@@ -57,6 +57,7 @@ namespace PR.Persistence.Versioned
 
                     if (trimmedToTheRight)
                     {
+                        clone.ArchiveID = Guid.Empty;
                         newEntities.Add(clone);
                     }
                     else

@@ -146,7 +146,7 @@ namespace PR.ViewModel
 
             SelectedPersonVariants = new ObjectCollection<Person>();
 
-            _people.PropertyChanged += async (s, e) => await Initialize(s, e);
+            _people.PropertyChanged += async (s, e) => await Initialize();
 
             SelectedPersonCommentListViewItemViewModels.CollectionChanged += (s, e) =>
             {
@@ -165,9 +165,7 @@ namespace PR.ViewModel
             };
         }
 
-        private async Task Initialize(
-            object? sender,
-            PropertyChangedEventArgs e)
+        private async Task Initialize()
         {
             if (_people.Objects.Count() != 1)
             {
@@ -270,16 +268,18 @@ namespace PR.ViewModel
                 return;
             }
 
-            var personVariants = PersonVariantListViewItemViewModels
-                .Select(_ => _.PersonVariant)
-                .Append(dialogViewModel.Person)
-                .OrderBy(_ => _.Start)
-                .ToList();
+            await Initialize();
 
-            PersonVariantListViewItemViewModels.Clear();
+            //var personVariants = PersonVariantListViewItemViewModels
+            //    .Select(_ => _.PersonVariant)
+            //    .Append(dialogViewModel.Person)
+            //    .OrderBy(_ => _.Start)
+            //    .ToList();
 
-            personVariants.ForEach(pv => PersonVariantListViewItemViewModels.Add(
-                new PersonVariantListViewItemViewModel{PersonVariant = pv}));
+            //PersonVariantListViewItemViewModels.Clear();
+
+            //personVariants.ForEach(pv => PersonVariantListViewItemViewModels.Add(
+            //    new PersonVariantListViewItemViewModel{PersonVariant = pv}));
         }
 
         private async Task UpdatePersonVariant(
