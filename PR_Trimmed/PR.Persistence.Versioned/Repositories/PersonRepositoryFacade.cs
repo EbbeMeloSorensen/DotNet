@@ -484,6 +484,8 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Correct(
             Person person)
         {
+            // Det her shit vil ikke virke - du skal finde objektet på basis af ARCHIVE ID´et
+
             _returnClonesInsteadOfRepositoryObjects = false;
             var objectFromRepository = await Get(person.ID);
             _returnClonesInsteadOfRepositoryObjects = true;
@@ -527,15 +529,16 @@ namespace PR.Persistence.Versioned.Repositories
         {
             try
             {
-                var ids = people.Select(p => p.ID).ToList();
+                var archiveIDs = people.Select(p => p.ArchiveID).ToList();
 
                 var predicates = new List<Expression<Func<Person, bool>>>
-            {
-                p => ids.Contains(p.ID)
-            };
+                {
+                    p => archiveIDs.Contains(p.ArchiveID)
+                };
 
+                // Bemærk, at du bruger den WRAPPEDE unitofwork her, for ikke at få smidt de der bitemporale predicates ind
                 _returnClonesInsteadOfRepositoryObjects = false;
-                var objectsFromRepository = (await Find(predicates)).ToList();
+                var objectsFromRepository = (await UnitOfWork.People.Find(predicates)).ToList();
                 _returnClonesInsteadOfRepositoryObjects = true;
 
                 objectsFromRepository.ForEach(pRepo =>
@@ -562,7 +565,6 @@ namespace PR.Persistence.Versioned.Repositories
                     _.Superseded = _maxDate;
                 });
 
-                // Notice that we have 2 rows for each person here
                 await UnitOfWork.People.AddRange(people);
             }
             catch (Exception e)
