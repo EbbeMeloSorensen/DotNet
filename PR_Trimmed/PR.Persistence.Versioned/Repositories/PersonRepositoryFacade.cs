@@ -95,9 +95,29 @@ namespace PR.Persistence.Versioned.Repositories
         }
 
         public async Task AddRange(
-            IEnumerable<Person> person)
+            IEnumerable<Person> people)
         {
-            throw new NotImplementedException();
+            var now = DateTime.UtcNow;
+
+            foreach (var person in people)
+            {
+                if (person.Start.Year == 1)
+                {
+                    person.Start = now;
+                }
+
+                if (person.End.Year == 1)
+                {
+                    person.End = _maxDate;
+                }
+
+                if (person.ID == Guid.Empty)
+                {
+                    person.ID = Guid.NewGuid();
+                }
+            }
+
+            await UnitOfWork.People.AddRange(people);
         }
 
         public ILogger Logger { get; }
