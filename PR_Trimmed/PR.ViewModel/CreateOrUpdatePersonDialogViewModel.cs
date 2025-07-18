@@ -361,7 +361,8 @@ namespace PR.ViewModel
                         await _application.CreatePersonVariant(Person);
                         break;
                     case CreateOrUpdatePersonDialogViewModelMode.CorrectVariant:
-                        throw new NotImplementedException();
+                        await _application.CorrectPersonVariant(Person);
+                        break;
                 }
 
                 // Old - her lavede vi i princippet application objektets arbejde for den
