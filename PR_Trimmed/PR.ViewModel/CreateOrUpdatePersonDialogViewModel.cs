@@ -18,8 +18,9 @@ namespace PR.ViewModel
 {
     public enum CreateOrUpdatePersonDialogViewModelMode
     {
-        Create,
-        Update
+        CreateVariant,
+        CreateNew,
+        CorrectVariant
     }
 
     public class CreateOrUpdatePersonDialogViewModel : DialogViewModelBase, IDataErrorInfo
@@ -304,9 +305,18 @@ namespace PR.ViewModel
             _unitOfWorkFactory = unitOfWorkFactory;
             _businessRuleCatalog = businessRuleCatalog;
 
-            _mode = person == null
-                ? CreateOrUpdatePersonDialogViewModelMode.Create
-                : CreateOrUpdatePersonDialogViewModelMode.Update;
+            if (person == null)
+            {
+                _mode = CreateOrUpdatePersonDialogViewModelMode.CreateNew;
+            }
+            else if (person.ArchiveID == Guid.Empty)
+            {
+                _mode = CreateOrUpdatePersonDialogViewModelMode.CreateVariant;
+            }
+            else
+            {
+                _mode = CreateOrUpdatePersonDialogViewModelMode.CorrectVariant;
+            }
 
             _otherVariants = otherVariants;
 
@@ -342,7 +352,17 @@ namespace PR.ViewModel
 
             try
             {
-                await _application.CreatePerson(Person);
+                switch (_mode)
+                {
+                    case CreateOrUpdatePersonDialogViewModelMode.CreateNew:
+                        await _application.CreateNewPerson(Person);
+                        break;
+                    case CreateOrUpdatePersonDialogViewModelMode.CreateVariant:
+                        await _application.CreatePersonVariant(Person);
+                        break;
+                    case CreateOrUpdatePersonDialogViewModelMode.CorrectVariant:
+                        throw new NotImplementedException();
+                }
 
                 // Old - her lavede vi i princippet application objektets arbejde for den
                 //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())

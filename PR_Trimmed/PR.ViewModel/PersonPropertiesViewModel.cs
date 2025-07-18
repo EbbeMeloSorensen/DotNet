@@ -256,11 +256,20 @@ namespace PR.ViewModel
                 .OrderBy(_ => _.Start)
                 .ToList();
 
+            var personID = PersonVariantListViewItemViewModels.Last().PersonVariant.ID;
+
+            var person = new Person
+            {
+                ID = personID,
+                Start = DateTime.UtcNow.Date,
+                End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
+            };
+
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 _application,
                 UnitOfWorkFactory,
                 _businessRuleCatalog,
-                null,
+                person,
                 otherVariants); 
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)

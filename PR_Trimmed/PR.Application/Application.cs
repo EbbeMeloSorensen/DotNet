@@ -101,7 +101,7 @@ namespace PR.Application
             });
         }
 
-        public async Task<Dictionary<string, string>> CreatePerson(
+        public async Task<Dictionary<string, string>> CreateNewPerson(
             Person person,
             ProgressCallback progressCallback = null)
         {
@@ -109,6 +109,12 @@ namespace PR.Application
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
                 progressCallback?.Invoke(0.0, "Creating Person");
+
+                if (person.ID != Guid.Empty ||
+                    person.ArchiveID != Guid.Empty)
+                {
+                    throw new InvalidOperationException("When creating a new person, the ID and ArchiveID should be empty");
+                }
 
                 var businessRuleViolations = _businessRuleCatalog.ValidateAtomic(person);
 
@@ -125,68 +131,98 @@ namespace PR.Application
                     return businessRuleViolations;
                 }
 
-                if (person.ID == Guid.Empty)
+                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+                await unitOfWork.People.Add(person);
+                unitOfWork.Complete();
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
+
+                progressCallback?.Invoke(100, "");
+                return businessRuleViolations;
+            });
+        }
+
+        public async Task<Dictionary<string, string>> CreatePersonVariant(
+            Person person,
+            ProgressCallback progressCallback = null)
+        {
+            return await Task.Run(async () =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
+                progressCallback?.Invoke(0.0, "Creating Person");
+
+                if (person.ID == Guid.Empty ||
+                    person.ArchiveID != Guid.Empty)
                 {
-                    using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-                    await unitOfWork.People.Add(person);
-                    unitOfWork.Complete();
-                    Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
+                    throw new InvalidOperationException("When creating a new person variant, the ID should be set and the ArchiveID should be empty");
+                }
+
+                var businessRuleViolations = _businessRuleCatalog.ValidateAtomic(person);
+
+                if (businessRuleViolations.Any())
+                {
+                    progressCallback?.Invoke(100, "");
+                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to atomic business rule violations:");
+
+                    foreach (var kvp in businessRuleViolations)
+                    {
+                        Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
+                    }
+
+                    return businessRuleViolations;
+                }
+
+                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+                var otherVariants = (await unitOfWork.People.GetAllVariants(person.ID)).ToList();
+
+                otherVariants.InsertNewVariant(
+                    person,
+                    out var nonConflictingEntities,
+                    out var coveredEntities,
+                    out var trimmedEntities,
+                    out var newEntities);
+
+                var newPotentialEntityCollection = nonConflictingEntities;
+                newPotentialEntityCollection.AddRange(trimmedEntities);
+                newPotentialEntityCollection.AddRange(newEntities);
+                newPotentialEntityCollection.Add(person);
+
+                newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
+
+                businessRuleViolations = _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
+
+                if (businessRuleViolations.Any())
+                {
+                    progressCallback?.Invoke(100, "");
+                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to cross-entity business rule violations:");
+
+                    foreach (var kvp in businessRuleViolations)
+                    {
+                        Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
+                    }
+
+                    return businessRuleViolations;
                 }
                 else
                 {
-                    using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-                    var otherVariants = (await unitOfWork.People.GetAllVariants(person.ID)).ToList();
-
-                    otherVariants.InsertNewVariant(
-                        person,
-                        out var nonConflictingEntities,
-                        out var coveredEntities,
-                        out var trimmedEntities,
-                        out var newEntities);
-
-                    var newPotentialEntityCollection = nonConflictingEntities;
-                    newPotentialEntityCollection.AddRange(trimmedEntities);
-                    newPotentialEntityCollection.AddRange(newEntities);
-                    newPotentialEntityCollection.Add(person);
-
-                    newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
-
-                    businessRuleViolations = _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
-
-                    if (businessRuleViolations.Any())
+                    if (coveredEntities.Any())
                     {
-                        progressCallback?.Invoke(100, "");
-                        Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to cross-entity business rule violations:");
-
-                        foreach (var kvp in businessRuleViolations)
-                        {
-                            Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
-                        }
-
-                        return businessRuleViolations;
+                        await unitOfWork.People.EraseRange(coveredEntities);
                     }
-                    else
+
+                    if (trimmedEntities.Any())
                     {
-                        if (coveredEntities.Any())
-                        {
-                            await unitOfWork.People.EraseRange(coveredEntities);
-                        }
-
-                        if (trimmedEntities.Any())
-                        {
-                            await unitOfWork.People.CorrectRange(trimmedEntities);
-                        }
-
-                        if (newEntities.Any())
-                        {
-                            await unitOfWork.People.AddRange(newEntities);
-                        }
-
-                        await unitOfWork.People.Add(person);
-
-                        unitOfWork.Complete();
-                        Logger?.WriteLine(LogMessageCategory.Information, "Completed inserting Person variant");
+                        await unitOfWork.People.CorrectRange(trimmedEntities);
                     }
+
+                    if (newEntities.Any())
+                    {
+                        await unitOfWork.People.AddRange(newEntities);
+                    }
+
+                    await unitOfWork.People.Add(person);
+
+                    unitOfWork.Complete();
+                    Logger?.WriteLine(LogMessageCategory.Information, "Completed inserting Person variant");
                 }
 
                 progressCallback?.Invoke(100, "");
