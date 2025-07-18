@@ -325,8 +325,7 @@ namespace PR.ViewModel
 
             if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) == DialogResult.OK)
             {
-                // Todo: Update the person properties view with the updated person variant.
-                throw new NotImplementedException("UpdatePersonVariant is not implemented yet.");
+                await Initialize();
             }
         }
 

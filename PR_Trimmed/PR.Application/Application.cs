@@ -314,6 +314,7 @@ namespace PR.Application
                         await unitOfWork.People.AddRange(newEntities);
                     }
 
+                    person.ArchiveID = Guid.Empty;
                     await unitOfWork.People.Add(person);
 
                     unitOfWork.Complete();
