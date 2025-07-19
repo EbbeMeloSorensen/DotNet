@@ -267,7 +267,6 @@ namespace PR.ViewModel
 
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 _application,
-                UnitOfWorkFactory,
                 _businessRuleCatalog,
                 person,
                 otherVariants); 
@@ -305,7 +304,6 @@ namespace PR.ViewModel
 
             var dialogViewModel = new CreateOrUpdatePersonDialogViewModel(
                 _application,
-                UnitOfWorkFactory,
                 _businessRuleCatalog,
                 selectedPersonVariant,
                 otherVariants);

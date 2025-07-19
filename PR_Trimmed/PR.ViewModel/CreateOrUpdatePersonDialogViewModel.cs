@@ -32,7 +32,6 @@ namespace PR.ViewModel
         private Dictionary<string, string> _errors;
 
         private readonly Application.Application _application;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private IBusinessRuleCatalog _businessRuleCatalog;
 
         public Person Person { get; }
@@ -296,13 +295,11 @@ namespace PR.ViewModel
 
         public CreateOrUpdatePersonDialogViewModel(
             Application.Application application,
-            IUnitOfWorkFactory unitOfWorkFactory,
             IBusinessRuleCatalog businessRuleCatalog,
             Person person = null,
             IEnumerable<Person> otherVariants = null)
         {
             _application = application;
-            _unitOfWorkFactory = unitOfWorkFactory;
             _businessRuleCatalog = businessRuleCatalog;
 
             if (person == null)
@@ -365,59 +362,6 @@ namespace PR.ViewModel
                         break;
                 }
 
-                // Old - her lavede vi i princippet application objektets arbejde for den
-                //using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                //{
-                //    switch (_mode)
-                //    {
-                //        case CreateOrUpdatePersonDialogViewModelMode.Create:
-
-                //            if (_otherVariants != null)
-                //            {
-                //                _otherVariants.InsertNewVariant(
-                //                    Person,
-                //                    out var nonConflictingEntities,
-                //                    out var coveredEntities,
-                //                    out var trimmedEntities,
-                //                    out var newEntities);
-
-                //                if (coveredEntities.Any())
-                //                {
-                //                    await unitOfWork.People.RemoveRange(coveredEntities);
-                //                }
-
-                //                if (trimmedEntities.Any())
-                //                {
-                //                    // Det her fucker op, da det jo vil blive til en prospektiv update.
-                //                    //await unitOfWork.People.UpdateRange(trimmedEntities);
-
-                //                    // Der er i stedet behov for at kalde CorrectRange, som vel at mærke ikke er implementeret endnu
-                //                    // Bemærk, at den udtrykket nedenfor tager en enkelt, hvilket ikke virker generelt, men skulle
-                //                    // kunne bruges til eksemplet, hvor Max Rebo får en ny variant, der overlapper med den eksisterende
-                //                    // Sikr også at den faktisk får tildelt samme ID som den eksisterende, når der laves en ny variant
-                //                    // af en eksisterende 
-                //                    await unitOfWork.People.Correct(trimmedEntities.Single());
-                //                }
-
-                //                if (newEntities.Any())
-                //                {
-                //                    await unitOfWork.People.Add(newEntities.Single());
-                //                }
-                //            }
-
-                //            await unitOfWork.People.Add(Person);
-
-                //            break;
-                //        case CreateOrUpdatePersonDialogViewModelMode.Update:
-                //            await unitOfWork.People.Correct(Person);
-                //            break;
-                //        default:
-                //            throw new ArgumentOutOfRangeException();
-                //    }
-
-                //    unitOfWork.Complete();
-                //}
-
                 CloseDialogWithResult(parameter as Window, DialogResult.OK);
             }
             catch (Exception e)
@@ -433,17 +377,20 @@ namespace PR.ViewModel
             }
         }
 
-        private bool CanOK(object parameter)
+        private bool CanOK(
+            object parameter)
         {
             return true;
         }
 
-        private void Cancel(object parameter)
+        private void Cancel(
+            object parameter)
         {
             CloseDialogWithResult(parameter as Window, DialogResult.Cancel);
         }
 
-        private bool CanCancel(object parameter)
+        private bool CanCancel(
+            object parameter)
         {
             return true;
         }
