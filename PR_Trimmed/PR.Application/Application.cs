@@ -14,6 +14,12 @@ using PR.Persistence.Versioned;
 
 namespace PR.Application
 {
+    public enum PersistenceMode
+    {
+        DryRun,
+        FullExecution
+    }
+
     public delegate bool ProgressCallback(
         double progress,
         string currentActivity);
@@ -36,6 +42,8 @@ namespace PR.Application
 
         public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
+        public PersistenceMode PersistenceMode { get; set; }
+
         public Application(
             IUnitOfWorkFactory unitOfWorkFactory,
             IBusinessRuleCatalog businessRuleCatalog,
@@ -47,6 +55,7 @@ namespace PR.Application
             _dataIOHandler = dataIOHandler;
             _logger = logger;
             UnitOfWorkFactory.Logger = logger;
+            PersistenceMode = PersistenceMode.FullExecution;
         }
 
         public async Task MakeBreakfast(
@@ -202,7 +211,7 @@ namespace PR.Application
 
                     return businessRuleViolations;
                 }
-                else
+                else if (PersistenceMode == PersistenceMode.FullExecution)
                 {
                     if (coveredEntities.Any())
                     {
@@ -295,7 +304,7 @@ namespace PR.Application
 
                     return businessRuleViolations;
                 }
-                else
+                else if (PersistenceMode == PersistenceMode.FullExecution)
                 {
                     await unitOfWork.People.Erase(variantOfInterest);
 
