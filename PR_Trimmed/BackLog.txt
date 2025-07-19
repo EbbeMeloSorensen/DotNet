@@ -38,6 +38,7 @@ Done:
 * Man skal kunne re-seede uden at lukke applikationen
 
 Todo:
+* Prøv at se hvordan det virker, hvis du fjerner forretnoingsreglen om at der ikke må være gaps mellem virkningstidsintervaller
 * Satan i helvede, nu sidder jeg igen i den her forpulede lejlighed i Natal ved siden af et fjernsyn, hvor Laurentino
  har skruet ad helvede til op for lyden, hvor det er pisse varmt, hvor der snakkes, hvor der er en flue, der prøver at æde
  en, og hvor hver eneste fucking tanke, man prøver at tænke, bliver flået i stumper og stykker! Well, i det mindste, så sad
