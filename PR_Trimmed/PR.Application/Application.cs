@@ -150,6 +150,39 @@ namespace PR.Application
             });
         }
 
+        private Dictionary<string, string> CreatePersonVariant_ValidateInput(
+             Person newPersonVariant,
+             IEnumerable<Person> existingVariants,
+             out List<Person> nonConflictingPersonVariants,
+             out List<Person> coveredPersonVariants,
+             out List<Person> trimmedPersonVariants,
+             out List<Person> newPersonVariants)
+        {
+            if (newPersonVariant.ID == Guid.Empty ||
+                newPersonVariant.ArchiveID != Guid.Empty)
+            {
+                throw new InvalidOperationException("When creating a new person variant, the ID should be set and the ArchiveID should be empty");
+            }
+
+            var businessRuleViolations = _businessRuleCatalog.ValidateAtomic(newPersonVariant);
+
+            existingVariants.InsertNewVariant(
+                newPersonVariant,
+                out nonConflictingPersonVariants,
+                out coveredPersonVariants,
+                out trimmedPersonVariants,
+                out newPersonVariants);
+
+            var newPotentialEntityCollection = nonConflictingPersonVariants;
+            newPotentialEntityCollection.AddRange(trimmedPersonVariants);
+            newPotentialEntityCollection.AddRange(newPersonVariants);
+            newPotentialEntityCollection.Add(newPersonVariant);
+
+            newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
+
+            return _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
+        }
+
         public async Task<Dictionary<string, string>> CreatePersonVariant(
             Person person,
             ProgressCallback progressCallback = null)
