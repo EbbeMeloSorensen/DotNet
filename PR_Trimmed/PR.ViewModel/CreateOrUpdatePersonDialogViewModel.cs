@@ -529,7 +529,14 @@ namespace PR.ViewModel
                         out var newPersonVariants);
                     break;
                 case CreateOrUpdatePersonDialogViewModelMode.CorrectVariant:
-                    throw new NotImplementedException();
+                    _errors = _application.CorrectPersonVariant_ValidateInput(
+                        Person,
+                        _otherVariants,
+                        out nonConflictingPersonVariants,
+                        out coveredPersonVariants,
+                        out trimmedPersonVariants,
+                        out newPersonVariants);
+                    break;
                 default:
                     throw new InvalidOperationException("Only create and correct variant are supported from this dialog");
             }
