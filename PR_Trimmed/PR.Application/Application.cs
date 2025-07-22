@@ -150,7 +150,7 @@ namespace PR.Application
             });
         }
 
-        private Dictionary<string, string> CreatePersonVariant_ValidateInput(
+        public Dictionary<string, string> CreatePersonVariant_ValidateInput(
              Person newPersonVariant,
              IEnumerable<Person> existingVariants,
              out List<Person> nonConflictingPersonVariants,
@@ -166,6 +166,16 @@ namespace PR.Application
 
             var businessRuleViolations = _businessRuleCatalog.ValidateAtomic(newPersonVariant);
 
+            if (businessRuleViolations.Any())
+            {
+                nonConflictingPersonVariants =
+                coveredPersonVariants =
+                trimmedPersonVariants =
+                newPersonVariants = new List<Person>();
+
+                return businessRuleViolations;
+            }
+
             existingVariants.InsertNewVariant(
                 newPersonVariant,
                 out nonConflictingPersonVariants,
@@ -178,7 +188,9 @@ namespace PR.Application
             newPotentialEntityCollection.AddRange(newPersonVariants);
             newPotentialEntityCollection.Add(newPersonVariant);
 
-            newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
+            newPotentialEntityCollection = newPotentialEntityCollection
+                .OrderBy(_ => _.Start)
+                .ToList();
 
             return _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
         }
@@ -189,53 +201,24 @@ namespace PR.Application
         {
             return await Task.Run(async () =>
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
-                progressCallback?.Invoke(0.0, "Creating Person");
-
-                if (person.ID == Guid.Empty ||
-                    person.ArchiveID != Guid.Empty)
-                {
-                    throw new InvalidOperationException("When creating a new person variant, the ID should be set and the ArchiveID should be empty");
-                }
-
-                var businessRuleViolations = _businessRuleCatalog.ValidateAtomic(person);
-
-                if (businessRuleViolations.Any())
-                {
-                    progressCallback?.Invoke(100, "");
-                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to atomic business rule violations:");
-
-                    foreach (var kvp in businessRuleViolations)
-                    {
-                        Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
-                    }
-
-                    return businessRuleViolations;
-                }
+                Logger?.WriteLine(LogMessageCategory.Information, "Creating Person variant..");
+                progressCallback?.Invoke(0.0, "Creating Person variant");
 
                 using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
                 var otherVariants = (await unitOfWork.People.GetAllVariants(person.ID)).ToList();
 
-                otherVariants.InsertNewVariant(
+                var businessRuleViolations = CreatePersonVariant_ValidateInput(
                     person,
-                    out var nonConflictingEntities,
+                    otherVariants,
+                    out var nonConflictingPersonVariants,
                     out var coveredEntities,
                     out var trimmedEntities,
                     out var newEntities);
 
-                var newPotentialEntityCollection = nonConflictingEntities;
-                newPotentialEntityCollection.AddRange(trimmedEntities);
-                newPotentialEntityCollection.AddRange(newEntities);
-                newPotentialEntityCollection.Add(person);
-
-                newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
-
-                businessRuleViolations = _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
-
                 if (businessRuleViolations.Any())
                 {
                     progressCallback?.Invoke(100, "");
-                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to cross-entity business rule violations:");
+                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to business rule violations:");
 
                     foreach (var kvp in businessRuleViolations)
                     {
