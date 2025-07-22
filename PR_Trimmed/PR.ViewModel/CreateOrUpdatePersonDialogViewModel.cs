@@ -32,7 +32,6 @@ namespace PR.ViewModel
         private Dictionary<string, string> _errors;
 
         private readonly Application.Application _application;
-        private IBusinessRuleCatalog _businessRuleCatalog;
 
         public Person Person { get; }
 
@@ -295,12 +294,10 @@ namespace PR.ViewModel
 
         public CreateOrUpdatePersonDialogViewModel(
             Application.Application application,
-            IBusinessRuleCatalog businessRuleCatalog,
             Person person = null,
             IEnumerable<Person> otherVariants = null)
         {
             _application = application;
-            _businessRuleCatalog = businessRuleCatalog;
 
             if (person == null)
             {
@@ -520,51 +517,24 @@ namespace PR.ViewModel
             Person.Start = Person.Start.Date + startTime.TimeOfDay;
             Person.End = Person.End.Date + endTime.TimeOfDay;
 
-            _errors = _businessRuleCatalog.ValidateAtomic(Person);
-
-            string error;
-
-            if (_errors.Any())
+            switch (_mode)
             {
-                if (_errors.TryGetValue("DateRange", out error))
-                {
-                    DateRangeError = error;
-                }
-
-                return;
+                case CreateOrUpdatePersonDialogViewModelMode.CreateVariant:
+                    _errors = _application.CreatePersonVariant_ValidateInput(
+                        Person,
+                        _otherVariants,
+                        out var nonConflictingPersonVariants,
+                        out var coveredPersonVariants,
+                        out var trimmedPersonVariants,
+                        out var newPersonVariants);
+                    break;
+                case CreateOrUpdatePersonDialogViewModelMode.CorrectVariant:
+                    throw new NotImplementedException();
+                default:
+                    throw new InvalidOperationException("Only create and correct variant are supported from this dialog");
             }
 
-            // If we got this far, then the Person object is valid in itself, but it may conflict with other variants
-
-            // Vi kan ikke bare tage de andre varianter as is - nogle af dem vil måske skulle fjernes,
-            // andre af dem vil måske skulle trimmes - og det kan endda ske, at et tidsinterval vil skulle splittes op i 2 nye
-            // (hvis det dominante tidsinterval "dækkes" af et eksisterende)
-
-            // Vi skal have en method, der opererer på en collection, modtager en (ny) variant som parameter og returnerer 3 puljer:
-            // 1) varianter, der skal slettes (fordi de dækkes af den nye variant)
-            // 2) varianter, der skal opdateres (fordi de overlapper med den nye variant)
-            // 3) varianter, der skal genereres (fordi en variant deles i 2 stykker af den nye variant)
-            // 4) varianter, der skal bibeholdes (fordi de ikke konflikter med den nye variant)
-
-            if (_otherVariants != null)
-            {
-                _otherVariants.InsertNewVariant(
-                Person,
-                out var nonConflictingEntities,
-                out var coveredEntities,
-                out var trimmedEntities,
-                out var newEntities);
-
-                var newPotentialEntityCollection = nonConflictingEntities;
-                newPotentialEntityCollection.AddRange(trimmedEntities);
-                newPotentialEntityCollection.AddRange(newEntities);
-                newPotentialEntityCollection.Add(Person);
-
-                newPotentialEntityCollection = newPotentialEntityCollection.OrderBy(_ => _.Start).ToList();
-                _errors = _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
-            }
-
-            if (_errors.TryGetValue("ValidTimeIntervals", out error))
+            if (_errors.TryGetValue("ValidTimeIntervals", out var error))
             {
                 DateRangeError = error;
             }
