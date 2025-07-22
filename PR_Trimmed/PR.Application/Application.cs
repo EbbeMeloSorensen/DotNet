@@ -246,6 +246,17 @@ namespace PR.Application
             });
         }
 
+        public Dictionary<string, string> CorrectPersonVariant_ValidateInput(
+             Person newPersonVariant,
+             IEnumerable<Person> existingVariants,
+             out List<Person> nonConflictingPersonVariants,
+             out List<Person> coveredPersonVariants,
+             out List<Person> trimmedPersonVariants,
+             out List<Person> newPersonVariants)
+        {
+            throw new NotImplementedException("Coming soon");
+        }
+
         public async Task<Dictionary<string, string>> CorrectPersonVariant(
             Person person,
             ProgressCallback progressCallback = null)
