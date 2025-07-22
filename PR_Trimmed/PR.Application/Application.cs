@@ -238,7 +238,7 @@ namespace PR.Application
                     await unitOfWork.People.Add(person);
 
                     unitOfWork.Complete();
-                    Logger?.WriteLine(LogMessageCategory.Information, "Completed inserting Person variant");
+                    Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person variant");
                 }
 
                 progressCallback?.Invoke(100, "");
@@ -334,7 +334,7 @@ namespace PR.Application
                     await unitOfWork.People.Add(person);
 
                     unitOfWork.Complete();
-                    Logger?.WriteLine(LogMessageCategory.Information, "Completed inserting Person variant");
+                    Logger?.WriteLine(LogMessageCategory.Information, "Completed correcting Person variant");
                 }
 
                 progressCallback?.Invoke(100, "");

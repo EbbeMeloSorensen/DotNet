@@ -23,21 +23,12 @@ namespace PR.ViewModel
         private readonly Application.Application _application;
         private readonly IDataIOHandler _dataIOHandler;
         private readonly IDialogService _applicationDialogService;
-        private readonly ILogger _logger;
         private readonly IBusinessRuleCatalog _businessRuleCatalog;
-        private string _mainWindowTitle;
+        private ILogger _logger;
 
         private readonly ObservableObject<Tuple<DateTime?, DateTime?>> _bitemporalTimesOfInterest;
 
-        public string MainWindowTitle
-        {
-            get { return _mainWindowTitle; }
-            set
-            {
-                _mainWindowTitle = value;
-                RaisePropertyChanged();
-            }
-        }
+        public string MainWindowTitle { get; }
 
         public IUnitOfWorkFactory UnitOfWorkFactory
         {
@@ -50,6 +41,17 @@ namespace PR.ViewModel
                 PersonPropertiesViewModel.UnitOfWorkFactory = value;
             }
         }
+
+        public ILogger Logger
+        {
+            get => _logger;
+            set
+            {
+                _logger = value;
+                _application.Logger = value;
+            }
+        }
+
 
         public PersonListViewModel PersonListViewModel { get; }
         public PeoplePropertiesViewModel PeoplePropertiesViewModel { get; }
@@ -144,6 +146,8 @@ namespace PR.ViewModel
             _applicationDialogService = applicationDialogService;
             _businessRuleCatalog = businessRuleCatalog;
 
+            MainWindowTitle = "Person Register";
+
             // When this is changed, one should call Find - not in connection with the two times being changed separately
             _bitemporalTimesOfInterest = new ObservableObject<Tuple<DateTime?, DateTime?>>
             {
@@ -151,7 +155,7 @@ namespace PR.ViewModel
             };
 
             LogViewModel = new LogViewModel(200);
-            _logger = new ViewModelLogger(logger, LogViewModel);
+            Logger = new ViewModelLogger(logger, LogViewModel);
 
             PersonListViewModel = new PersonListViewModel(
                 unitOfWorkFactory, 
@@ -196,7 +200,7 @@ namespace PR.ViewModel
                     ? _bitemporalTimesOfInterest.Object.Item2.Value.AsDateString()
                     : "Latest";
 
-                _logger.WriteLine(
+                Logger?.WriteLine(
                     LogMessageCategory.Debug, 
                     $"Bitemporal coordinates changed:\n  Historical Time: {historicalTime}\n  Database time: {databaseTime}");
 
@@ -209,7 +213,7 @@ namespace PR.ViewModel
                 //await AutoFindIfEnabled();
             };
 
-            _logger.WriteLine(LogMessageCategory.Information, "Application started");
+            Logger?.WriteLine(LogMessageCategory.Information, "Application started");
         }
 
         public void Initialize(

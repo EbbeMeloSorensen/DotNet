@@ -743,7 +743,7 @@ namespace PR.ViewModel.GIS
             //            message += $" ({obj.DateFrom.Value.Year} - {obj.DateTo.Value.Year})";
             //        }
 
-            //        _logger.WriteLine(LogMessageCategory.Information, message);
+            //        Logger?.WriteLine(LogMessageCategory.Information, message);
 
             //        count++;
 
