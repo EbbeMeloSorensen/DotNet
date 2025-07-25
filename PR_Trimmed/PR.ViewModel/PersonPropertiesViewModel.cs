@@ -21,7 +21,6 @@ namespace PR.ViewModel
     {
         private Application.Application _application;
         private readonly IDialogService _applicationDialogService;
-        private IBusinessRuleCatalog _businessRuleCatalog;
         private bool _isVisible;
         private ObjectCollection<Person> _people;
 
@@ -122,13 +121,11 @@ namespace PR.ViewModel
             Application.Application application, 
             IUnitOfWorkFactory unitOfWorkFactory,
             IDialogService applicationDialogService,
-            IBusinessRuleCatalog businessRuleCatalog,
             ObjectCollection<Person> people)
         {
             UnitOfWorkFactory = unitOfWorkFactory;
             _application = application;
             _applicationDialogService = applicationDialogService;
-            _businessRuleCatalog = businessRuleCatalog;
             _people = people;
 
             PersonCommentListViewItemViewModels =
@@ -276,17 +273,6 @@ namespace PR.ViewModel
             }
 
             await Initialize();
-
-            //var personVariants = PersonVariantListViewItemViewModels
-            //    .Select(_ => _.PersonVariant)
-            //    .Append(dialogViewModel.Person)
-            //    .OrderBy(_ => _.Start)
-            //    .ToList();
-
-            //PersonVariantListViewItemViewModels.Clear();
-
-            //personVariants.ForEach(pv => PersonVariantListViewItemViewModels.Add(
-            //    new PersonVariantListViewItemViewModel{PersonVariant = pv}));
         }
 
         private async Task UpdatePersonVariant(

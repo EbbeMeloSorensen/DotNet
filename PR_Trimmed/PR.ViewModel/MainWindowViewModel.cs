@@ -172,7 +172,6 @@ namespace PR.ViewModel
                 _application,
                 unitOfWorkFactory,
                 applicationDialogService,
-                _businessRuleCatalog,
                 PersonListViewModel.SelectedPeople);
 
             PersonListViewModel.SelectedPeople.PropertyChanged += HandlePeopleSelectionChanged;
