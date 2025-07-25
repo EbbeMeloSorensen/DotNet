@@ -58,6 +58,31 @@ namespace PR.ViewModel
             }
         }
 
+        private string _error;
+
+        private bool _displayError;
+
+        public string Error
+        {
+            get => _error;
+            set
+            {
+                _error = value;
+                DisplayError = !string.IsNullOrEmpty(_error);
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DisplayError
+        {
+            get => _displayError;
+            set
+            {
+                _displayError = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public AsyncCommand<object> CreatePersonCommentCommand
         {
             get
@@ -241,6 +266,8 @@ namespace PR.ViewModel
 
             SelectedPersonVariants.Objects = selectedPersonVariantListViewItemViewModels.Select(_ => _.PersonVariant);
 
+            Error = "";
+
             UpdatePersonVariantCommand.RaiseCanExecuteChanged();
             DeletePersonVariantsCommand.RaiseCanExecuteChanged();
         }
@@ -320,22 +347,34 @@ namespace PR.ViewModel
         private async Task DeletePersonVariants(
             object owner)
         {
-            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            var businessRuleViolations = _application.ErasePersonVariants_ValidateInput(
+                SelectedPersonVariants.Objects,
+                PersonVariantListViewItemViewModels.Select(_ => _.PersonVariant));
+
+            if (businessRuleViolations.Any())
             {
-                await unitOfWork.People.EraseRange(SelectedPersonVariants.Objects);
-                unitOfWork.Complete();
+                Error = businessRuleViolations.First().Value;
             }
+            else
+            {
+                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                {
+                    await unitOfWork.People.EraseRange(SelectedPersonVariants.Objects);
+                    unitOfWork.Complete();
+                }
 
-            var personVariants = PersonVariantListViewItemViewModels
-                .Select(_ => _.PersonVariant)
-                .Except(SelectedPersonVariants.Objects)
-                .OrderBy(_ => _.Start)
-                .ToList();
+                var personVariants = PersonVariantListViewItemViewModels
+                    .Select(_ => _.PersonVariant)
+                    .Except(SelectedPersonVariants.Objects)
+                    .OrderBy(_ => _.Start)
+                    .ToList();
 
-            PersonVariantListViewItemViewModels.Clear();
+                PersonVariantListViewItemViewModels.Clear();
 
-            personVariants.ForEach(pv => PersonVariantListViewItemViewModels.Add(
-                new PersonVariantListViewItemViewModel{PersonVariant = pv}));
+                personVariants.ForEach(pv => PersonVariantListViewItemViewModels.Add(
+                    new PersonVariantListViewItemViewModel { PersonVariant = pv }));
+
+            }
         }
 
         private bool CanDeletePersonVariants(

@@ -357,6 +357,15 @@ namespace PR.Application
             });
         }
 
+        public Dictionary<string, string> ErasePersonVariants_ValidateInput(
+             IEnumerable<Person> variantsToDelete,
+             IEnumerable<Person> existingVariants)
+        {
+            var newPotentialEntityCollection = existingVariants.Except(variantsToDelete);
+
+            return _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
+        }
+
         public async Task GetPersonDetails(
             Guid id,
             DateTime? databaseTime,

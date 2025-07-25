@@ -45,8 +45,8 @@ namespace PR.ViewModel
         private bool _displayDateRangeError;
 
         private string _generalError;
-
         private bool _displayGeneralError;
+
         private AsyncCommand<object> _okCommand;
         private RelayCommand<object> _cancelCommand;
 

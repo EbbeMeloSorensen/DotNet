@@ -66,17 +66,40 @@
                     </DataGrid>
                 </ScrollViewer>
 
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <Button Margin="3,0,3,3" Content="New.." 
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition>
+                            <RowDefinition.Style>
+                                <Style TargetType="{x:Type RowDefinition}">
+                                    <Setter Property="Height" Value="0"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=DisplayError}" Value="true">
+                                            <Setter Property="Height" Value="Auto"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RowDefinition.Style>
+                        </RowDefinition>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" BorderBrush="Red" BorderThickness="2" VerticalAlignment="Stretch" >
+                        <TextBlock TextWrapping="WrapWithOverflow" Foreground="Red" VerticalAlignment="Stretch"
+                           Text="{Binding Error}"/>
+                    </Border>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <Button Margin="3,3,3,3" Content="New.." 
                             Command="{Binding CreatePersonVariantCommand}" 
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-                    <Button Margin="3,0,3,3" Content="Edit.." 
+                        <Button Margin="3,3,3,3" Content="Edit.." 
                             Command="{Binding UpdatePersonVariantCommand}" 
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-                    <Button Margin="3,0,3,3" Content="Delete" 
+                        <Button Margin="3,3,3,3" Content="Delete" 
                             Command="{Binding DeletePersonVariantsCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-                </StackPanel>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </TabItem>
         <TabItem Header="Comments">
