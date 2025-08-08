@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Craft.Domain;
+using Craft.Logging;
+using PR.Domain.Entities.PR;
+using PR.IO;
+using PR.Persistence;
+using PR.Persistence.Versioned;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Craft.Domain;
-using Craft.Logging;
 using Craft.Utils;
-using PR.Domain.Entities.PR;
-using PR.IO;
-using PR.Persistence;
-using PR.Persistence.Versioned;
 
 namespace PR.Application
 {
@@ -101,6 +101,18 @@ namespace PR.Application
             });
         }
 
+        public Dictionary<string, string> CreateNewPerson_ValidateInput(
+            Person person)
+        {
+            if (person.ID != Guid.Empty ||
+                person.ArchiveID != Guid.Empty)
+            {
+                throw new InvalidOperationException("When creating a new person, the ID and ArchiveID should be empty");
+            }
+
+            return _businessRuleCatalog.ValidateAtomic(person);
+        }
+
         public async Task<Dictionary<string, string>> CreateNewPerson(
             Person person,
             ProgressCallback progressCallback = null)
@@ -110,18 +122,12 @@ namespace PR.Application
                 Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
                 progressCallback?.Invoke(0.0, "Creating Person");
 
-                if (person.ID != Guid.Empty ||
-                    person.ArchiveID != Guid.Empty)
-                {
-                    throw new InvalidOperationException("When creating a new person, the ID and ArchiveID should be empty");
-                }
-
-                var businessRuleViolations = _businessRuleCatalog.ValidateAtomic(person);
+                var businessRuleViolations = CreateNewPerson_ValidateInput(person);
 
                 if (businessRuleViolations.Any())
                 {
                     progressCallback?.Invoke(100, "");
-                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to atomic business rule violations:");
+                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting create new person due to business rule violations:");
 
                     foreach (var kvp in businessRuleViolations)
                     {
@@ -134,6 +140,7 @@ namespace PR.Application
                 using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
                 await unitOfWork.People.Add(person);
                 unitOfWork.Complete();
+
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
 
                 progressCallback?.Invoke(100, "");
@@ -209,7 +216,7 @@ namespace PR.Application
                 if (businessRuleViolations.Any())
                 {
                     progressCallback?.Invoke(100, "");
-                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to business rule violations:");
+                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting create person variant due to business rule violations:");
 
                     foreach (var kvp in businessRuleViolations)
                     {
@@ -218,28 +225,26 @@ namespace PR.Application
 
                     return businessRuleViolations;
                 }
-                else
+
+                if (coveredEntities.Any())
                 {
-                    if (coveredEntities.Any())
-                    {
-                        await unitOfWork.People.EraseRange(coveredEntities);
-                    }
-
-                    if (trimmedEntities.Any())
-                    {
-                        await unitOfWork.People.CorrectRange(trimmedEntities);
-                    }
-
-                    if (newEntities.Any())
-                    {
-                        await unitOfWork.People.AddRange(newEntities);
-                    }
-
-                    await unitOfWork.People.Add(person);
-
-                    unitOfWork.Complete();
-                    Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person variant");
+                    await unitOfWork.People.EraseRange(coveredEntities);
                 }
+
+                if (trimmedEntities.Any())
+                {
+                    await unitOfWork.People.CorrectRange(trimmedEntities);
+                }
+
+                if (newEntities.Any())
+                {
+                    await unitOfWork.People.AddRange(newEntities);
+                }
+
+                await unitOfWork.People.Add(person);
+
+                unitOfWork.Complete();
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person variant");
 
                 progressCallback?.Invoke(100, "");
                 return businessRuleViolations;

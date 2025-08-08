@@ -1,18 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
-using Craft.Domain;
 using Craft.UI.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using PR.Domain.Entities.PR;
-using PR.Persistence;
-using PR.Persistence.Versioned;
 
 namespace PR.ViewModel
 {
@@ -519,6 +516,10 @@ namespace PR.ViewModel
 
             switch (_mode)
             {
+                case CreateOrUpdatePersonDialogViewModelMode.CreateNew:
+                    _errors = _application.CreateNewPerson_ValidateInput(
+                        Person);
+                    break;
                 case CreateOrUpdatePersonDialogViewModelMode.CreateVariant:
                     _errors = _application.CreatePersonVariant_ValidateInput(
                         Person,
