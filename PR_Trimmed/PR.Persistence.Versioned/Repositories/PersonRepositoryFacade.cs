@@ -625,7 +625,7 @@ namespace PR.Persistence.Versioned.Repositories
             var ids = people.Select(p => p.ID).ToList();
             var peopleFromRepo = await FindIncludingComments(_ => ids.Contains(_.ID));
 
-            if (peopleFromRepo.Any(_ => _.Comments != null && _.Comments.Any()))
+            if (peopleFromRepo.Any(_ => _.Comments != null && _.Comments.Any(_ => _.End > CurrentTime)))
             {
                 throw new InvalidOperationException("Cant delete people with child rows (comments)");
             }

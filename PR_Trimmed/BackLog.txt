@@ -36,16 +36,12 @@ Done:
 * Tilføj Category, Latitude og Longitude til CreatePersonViewModel
 * Dialogen CreateOrUpdatePerson skal opføre sig anderledes, når man bruger den til at ændre en eksisterende person
 * Man skal kunne re-seede uden at lukke applikationen
+* Prøv at se hvordan det virker, hvis du fjerner forretningsreglen om at der ikke må være gaps mellem virkningstidsintervaller
 
 Todo:
-* Prøv at se hvordan det virker, hvis du fjerner forretnoingsreglen om at der ikke må være gaps mellem virkningstidsintervaller
-* Satan i helvede, nu sidder jeg igen i den her forpulede lejlighed i Natal ved siden af et fjernsyn, hvor Laurentino
- har skruet ad helvede til op for lyden, hvor det er pisse varmt, hvor der snakkes, hvor der er en flue, der prøver at æde
- en, og hvor hver eneste fucking tanke, man prøver at tænke, bliver flået i stumper og stykker! Well, i det mindste, så sad
- han de første 2 timer på kontoret og lavede noget "revisor-arbejde", som "skulle være færdigt i dag". Han skippede endda 
- frokost, som deres tjenestepige Jessica havde lavet. Da han så endelig kom ud og Ana sagde, at vi ville smutte videre 15 
- minutter senere, sagde han "já?", som i "allerede?", hvor Ana også svarede noget i retning af, at han jo ffs havde været
- på kontoret hele tiden.
+* Bug: Hvis du har sat filteret sådan at der vises historiske personer, og man så prøver at slette et antal current personer, så fejler det,
+       fordi den siger, at der er et antal kommentarer. Har det mon noget at gøre med at unitOfWorkFactoryen er konfigureret til at returnere
+       historiske entiteter og så returnerer historiske kommentarer, som så tolkes som værende blokerende for at personerne kan slettes?
 * Vejen frem:
   - Application.Create kan passende deles op i 3 separate funktioner: Create New Person, Create New Variant og Correct 
     Variant.
