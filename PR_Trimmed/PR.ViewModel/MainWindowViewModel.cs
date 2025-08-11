@@ -163,6 +163,7 @@ namespace PR.ViewModel
                 _bitemporalTimesOfInterest);
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
+                _application,
                 unitOfWorkFactory,
                 applicationDialogService,
                 businessRuleCatalog,

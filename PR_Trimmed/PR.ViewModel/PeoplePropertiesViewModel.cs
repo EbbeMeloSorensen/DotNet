@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Craft.Domain;
 using GalaSoft.MvvmLight;
 using Craft.Utils;
-using Craft.ViewModel.Utils;
 using Craft.UI.Utils;
 using Craft.ViewModels.Dialogs;
+using GalaSoft.MvvmLight.Command;
 using PR.Application;
 using PR.Persistence;
 using PR.Domain.Entities.PR;
-using PR.Persistence.Versioned;
 
 namespace PR.ViewModel;
 
@@ -26,6 +24,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
     private ObjectCollection<Person> _people;
     private Dictionary<string, string> _errors;
 
+    private readonly Application.Application _application;
+
     public Person OriginalSharedValues { get; private set; }
     public Person SharedValues { get; }
 
@@ -34,7 +34,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private bool _isVisible;
 
-    private AsyncCommand<object> _applyChangesCommand;
+    private RelayCommand<object> _applyChangesCommand;
 
     public event EventHandler<PeopleEventArgs> PeopleUpdated;
 
@@ -170,17 +170,19 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    public AsyncCommand<object> ApplyChangesCommand
+    public RelayCommand<object> ApplyChangesCommand
     {
-        get { return _applyChangesCommand ?? (_applyChangesCommand = new AsyncCommand<object>(ApplyChanges, CanApplyChanges)); }
+        get { return _applyChangesCommand ?? (_applyChangesCommand = new RelayCommand<object>(ApplyChanges, CanApplyChanges)); }
     }
 
     public PeoplePropertiesViewModel(
+        Application.Application application,
         IUnitOfWorkFactory unitOfWorkFactory,
         IDialogService applicationDialogService,
         IBusinessRuleCatalog businessRuleCatalog,
         ObjectCollection<Person> people)
     {
+        _application = application;
         UnitOfWorkFactory = unitOfWorkFactory;
         _applicationDialogService = applicationDialogService;
         _businessRuleCatalog = businessRuleCatalog;
@@ -265,7 +267,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         ApplyChangesCommand.RaiseCanExecuteChanged();
     }
 
-    private async Task ApplyChanges(object owner)
+    private void ApplyChanges(object owner)
     {
         UpdateState(StateOfView.Updated);
 
