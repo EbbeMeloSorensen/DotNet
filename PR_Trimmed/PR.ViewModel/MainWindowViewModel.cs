@@ -1,19 +1,19 @@
-using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using Microsoft.Win32;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using Craft.Domain;
 using Craft.Logging;
 using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Microsoft.Win32;
 using PR.Application;
 using PR.IO;
 using PR.Persistence;
+using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace PR.ViewModel
 {
@@ -275,28 +275,11 @@ namespace PR.ViewModel
         private async Task SoftDeleteSelectedPeople(
             object owner)
         {
-            using var unitOfWork = _application.UnitOfWorkFactory.GenerateUnitOfWork();
             var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ID).ToList();
 
-            var peopleForDeletion = (await unitOfWork.People
-                    .FindIncludingComments(pa => ids.Contains(pa.ID)))
-                .ToList();
+            await _application.DeletePeople(ids);
 
-            var commentsForDeletion = peopleForDeletion
-                .SelectMany(_ => _.Comments)
-                .ToList();
-
-            if (commentsForDeletion.Any())
-            {
-                await unitOfWork.PersonComments.RemoveRange(commentsForDeletion);
-                unitOfWork.Complete();
-            }
-
-            using var unitOfWork2 = _application.UnitOfWorkFactory.GenerateUnitOfWork();
-            await unitOfWork2.People.RemoveRange(peopleForDeletion);
-            unitOfWork2.Complete();
-
-            PersonListViewModel.RemovePeople(peopleForDeletion);
+            PersonListViewModel.RemovePeople(ids);
         }
 
         private bool CanSoftDeleteSelectedPeople(
@@ -333,7 +316,7 @@ namespace PR.ViewModel
             await unitOfWork2.People.EraseRange(peopleForDeletion);
             unitOfWork2.Complete();
 
-            PersonListViewModel.RemovePeople(peopleForDeletion);
+            PersonListViewModel.RemovePeople(ids);
         }
 
         private bool CanHardDeleteSelectedPeople(

@@ -139,12 +139,10 @@ namespace PR.ViewModel
         }
 
         public void RemovePeople(
-            IEnumerable<Person> people)
+            IEnumerable<Guid> ids)
         {
-            var idsOfDeletedPeople = people.Select(_ => _.ID);
-
             _people = _people
-                .Where(_ => !idsOfDeletedPeople.Contains(_.ID))
+                .Where(_ => !ids.Contains(_.ID))
                 .ToList();
 
             try

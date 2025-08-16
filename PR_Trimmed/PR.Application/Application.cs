@@ -11,7 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PR.Application
 {
@@ -515,13 +514,6 @@ namespace PR.Application
             {
                 Logger?.WriteLine(LogMessageCategory.Information, "Deleting people..");
                 progressCallback?.Invoke(0.0, "Deleting people");
-
-                //using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-                //{
-                //    var person = await unitOfWork.People.Get(id);
-                //    await unitOfWork.People.Remove(person);
-                //    unitOfWork.Complete();
-                //}
 
                 using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
 
