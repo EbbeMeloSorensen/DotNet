@@ -507,7 +507,7 @@ namespace PR.Application
         }
 
         public async Task DeletePeople(
-            List<Guid> ids,
+            IEnumerable<Guid> ids,
             ProgressCallback progressCallback = null)
         {
             await Task.Run(async () =>
