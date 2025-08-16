@@ -1,5 +1,6 @@
 ﻿using Craft.Domain;
 using Craft.Logging;
+using Craft.Utils;
 using PR.Domain.Entities.PR;
 using PR.IO;
 using PR.Persistence;
@@ -10,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Craft.Utils;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PR.Application
 {
@@ -503,6 +504,47 @@ namespace PR.Application
 
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed deleting Person");
+            });
+        }
+
+        public async Task DeletePeople(
+            List<Guid> ids,
+            ProgressCallback progressCallback = null)
+        {
+            await Task.Run(async () =>
+            {
+                Logger?.WriteLine(LogMessageCategory.Information, "Deleting people..");
+                progressCallback?.Invoke(0.0, "Deleting people");
+
+                //using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+                //{
+                //    var person = await unitOfWork.People.Get(id);
+                //    await unitOfWork.People.Remove(person);
+                //    unitOfWork.Complete();
+                //}
+
+                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+
+                var peopleForDeletion = (await unitOfWork.People
+                        .FindIncludingComments(pa => ids.Contains(pa.ID)))
+                    .ToList();
+
+                var commentsForDeletion = peopleForDeletion
+                    .SelectMany(_ => _.Comments)
+                    .ToList();
+
+                if (commentsForDeletion.Any())
+                {
+                    await unitOfWork.PersonComments.RemoveRange(commentsForDeletion);
+                    unitOfWork.Complete();
+                }
+
+                using var unitOfWork2 = UnitOfWorkFactory.GenerateUnitOfWork();
+                await unitOfWork2.People.RemoveRange(peopleForDeletion);
+                unitOfWork2.Complete();
+
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed deleting person");
             });
         }
 
