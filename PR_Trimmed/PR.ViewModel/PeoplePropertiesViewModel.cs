@@ -4,12 +4,12 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using Craft.Domain;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Craft.Domain;
 using Craft.Utils;
 using Craft.UI.Utils;
 using Craft.ViewModels.Dialogs;
-using GalaSoft.MvvmLight.Command;
 using PR.Application;
 using PR.Persistence;
 using PR.Domain.Entities.PR;
@@ -267,7 +267,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         ApplyChangesCommand.RaiseCanExecuteChanged();
     }
 
-    private void ApplyChanges(object owner)
+    private void ApplyChanges(
+        object owner)
     {
         UpdateState(StateOfView.Updated);
 
@@ -306,7 +307,8 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         OnPeopleUpdated(updatedPeople);
     }
 
-    private bool CanApplyChanges(object owner)
+    private bool CanApplyChanges(
+        object owner)
     {
         if (OriginalSharedValues == null)
         {
