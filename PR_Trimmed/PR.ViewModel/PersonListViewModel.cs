@@ -139,8 +139,10 @@ namespace PR.ViewModel
         }
 
         public void RemovePeople(
-            IEnumerable<Guid> ids)
+            IEnumerable<Person> people)
         {
+            var ids = people.Select(p => p.ID);
+
             _people = _people
                 .Where(_ => !ids.Contains(_.ID))
                 .ToList();

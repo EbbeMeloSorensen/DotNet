@@ -294,7 +294,10 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
             return;
         }
         
-        var dialogViewModel = new ProspectiveUpdateDialogViewModel(_application, _updatedPeople);
+        var dialogViewModel = new ProspectiveUpdateDialogViewModel(
+            _application, 
+            ProspectiveUpdateDialogViewModelMode.Update, 
+            _updatedPeople);
 
         if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
         {

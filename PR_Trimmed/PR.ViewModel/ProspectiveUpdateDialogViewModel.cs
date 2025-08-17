@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -11,14 +12,27 @@ using PR.Domain.Entities.PR;
 
 namespace PR.ViewModel
 {
+    public enum ProspectiveUpdateType
+    {
+        Now,
+        Earlier
+    }
+
+    public enum ProspectiveUpdateDialogViewModelMode
+    {
+        Update,
+        Delete
+    }
+
     public class ProspectiveUpdateDialogViewModel : DialogViewModelBase
     {
         private readonly Application.Application _application;
         private readonly Timer _timer;
         private ProspectiveUpdateType _prospectiveUpdateType;
+        private ProspectiveUpdateDialogViewModelMode _mode;
         private bool _timeFieldEnabled;
         private string _timeOfChange;
-        private List<Person> _people;
+        private IEnumerable<Person> _people;
         private string _generalError;
         private bool _displayGeneralError;
 
@@ -95,9 +109,11 @@ namespace PR.ViewModel
 
         public ProspectiveUpdateDialogViewModel(
             Application.Application application,
-            List<Person> people)
+            ProspectiveUpdateDialogViewModelMode mode,
+            IEnumerable<Person> people)
         {
             _application = application;
+            _mode = mode;
             _people = people;
 
             UpdateTime();
@@ -120,7 +136,17 @@ namespace PR.ViewModel
                     timeOfChange = temp;
                 }
 
-                await _application.UpdatePeople(_people, timeOfChange);
+                switch (_mode)
+                {
+                    case ProspectiveUpdateDialogViewModelMode.Update:
+                        await _application.UpdatePeople(_people, timeOfChange);
+                        break;
+                    case ProspectiveUpdateDialogViewModelMode.Delete:
+                        await _application.DeletePeople(_people.Select(_ => _.ID));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
 
                 CloseDialogWithResult(parameter as Window, DialogResult.OK);
             }

@@ -270,11 +270,19 @@ namespace PR.ViewModel
         private async Task SoftDeleteSelectedPeople(
             object owner)
         {
-            var ids = PersonListViewModel.SelectedPeople.Objects.Select(p => p.ID);
+            var people = PersonListViewModel.SelectedPeople.Objects;
 
-            await _application.DeletePeople(ids);
+            var dialogViewModel = new ProspectiveUpdateDialogViewModel(
+                _application, 
+                ProspectiveUpdateDialogViewModelMode.Delete, 
+                people);
 
-            PersonListViewModel.RemovePeople(ids);
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
+            {
+                return;
+            }
+
+            PersonListViewModel.RemovePeople(people);
         }
 
         private bool CanSoftDeleteSelectedPeople(
