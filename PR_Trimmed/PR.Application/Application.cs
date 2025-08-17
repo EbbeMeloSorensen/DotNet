@@ -7,6 +7,7 @@ using PR.Persistence;
 using PR.Persistence.Versioned;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -483,6 +484,56 @@ namespace PR.Application
                 progressCallback?.Invoke(100, "");
                 Logger?.WriteLine(LogMessageCategory.Information, "Completed updating person");
             });
+        }
+
+        public async Task UpdatePeople(
+            IEnumerable<Person> people,
+            DateTime? timeOfChange,
+            ProgressCallback progressCallback = null)
+        {
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+
+            if (unitOfWork is UnitOfWorkFacade unitOfWorkFacade)
+            {
+                unitOfWorkFacade.TimeOfChange = timeOfChange;
+            }
+
+            await unitOfWork.People.UpdateRange(people);
+            unitOfWork.Complete();
+
+            //throw new NotImplementedException("UpdatePeople is not implemented yet.");
+
+
+            //await Task.Run(async () =>
+            //{
+            //    Logger?.WriteLine(LogMessageCategory.Information, "Updating Person..");
+            //    progressCallback?.Invoke(0.0, "Updating Person");
+
+            //    using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            //    {
+            //        await unitOfWork.People.Update(person);
+            //        unitOfWork.Complete();
+            //    }
+
+            //    progressCallback?.Invoke(100, "");
+            //    Logger?.WriteLine(LogMessageCategory.Information, "Completed updating person");
+            //});
+        }
+
+        public Dictionary<string, string> UpdatePeople_ValidateInput(
+            IEnumerable<Person> updatedPeople)
+        {
+            foreach (var person in updatedPeople)
+            {
+                var errors = _businessRuleCatalog.ValidateAtomic(person);
+
+                if (errors.Any())
+                {
+                    return errors;
+                }
+            }
+
+            return new Dictionary<string, string>();
         }
 
         public async Task DeletePerson(

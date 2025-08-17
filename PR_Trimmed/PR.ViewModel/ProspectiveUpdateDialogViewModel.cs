@@ -8,14 +8,12 @@ using Craft.Utils;
 using Craft.ViewModel.Utils;
 using Craft.ViewModels.Dialogs;
 using PR.Domain.Entities.PR;
-using PR.Persistence;
-using PR.Persistence.Versioned;
 
 namespace PR.ViewModel
 {
     public class ProspectiveUpdateDialogViewModel : DialogViewModelBase
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly Application.Application _application;
         private readonly Timer _timer;
         private ProspectiveUpdateType _prospectiveUpdateType;
         private bool _timeFieldEnabled;
@@ -96,10 +94,10 @@ namespace PR.ViewModel
         }
 
         public ProspectiveUpdateDialogViewModel(
-            IUnitOfWorkFactory unitOfWorkFactory,
+            Application.Application application,
             List<Person> people)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
+            _application = application;
             _people = people;
 
             UpdateTime();
@@ -114,18 +112,15 @@ namespace PR.ViewModel
         {
             try
             {
-                using (var unitOfWork = _unitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    if (ProspectiveUpdateType == ProspectiveUpdateType.Earlier &&
-                        TimeOfChange.TryParsingAsDateTime(out var timeOfChange) &&
-                        unitOfWork is UnitOfWorkFacade unitOfWorkFacade)
-                    {
-                        unitOfWorkFacade.TimeOfChange = timeOfChange;
-                    }
+                DateTime? timeOfChange = null;
 
-                    await unitOfWork.People.UpdateRange(_people);
-                    unitOfWork.Complete();
+                if (ProspectiveUpdateType == ProspectiveUpdateType.Earlier &&
+                    TimeOfChange.TryParsingAsDateTime(out var temp))
+                {
+                    timeOfChange = temp;
                 }
+
+                await _application.UpdatePeople(_people, timeOfChange);
 
                 CloseDialogWithResult(parameter as Window, DialogResult.OK);
             }

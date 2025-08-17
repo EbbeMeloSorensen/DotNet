@@ -6,25 +6,25 @@ using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Craft.Domain;
 using Craft.Utils;
 using Craft.UI.Utils;
 using Craft.ViewModels.Dialogs;
 using PR.Application;
-using PR.Persistence;
 using PR.Domain.Entities.PR;
 
 namespace PR.ViewModel;
 
 public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 {
-    private readonly IBusinessRuleCatalog _businessRuleCatalog;
+    private readonly Application.Application _application;
     private readonly IDialogService _applicationDialogService;
     private StateOfView _state;
     private ObjectCollection<Person> _people;
+    private List<Person> _updatedPeople;
     private Dictionary<string, string> _errors;
 
-    private readonly Application.Application _application;
+    private string _generalError;
+    private bool _displayGeneralError;
 
     public Person OriginalSharedValues { get; private set; }
     public Person SharedValues { get; }
@@ -34,11 +34,30 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     private bool _isVisible;
 
+    public string GeneralError
+    {
+        get => _generalError;
+        set
+        {
+            _generalError = value;
+            DisplayGeneralError = !string.IsNullOrEmpty(_generalError);
+            RaisePropertyChanged();
+        }
+    }
+
+    public bool DisplayGeneralError
+    {
+        get => _displayGeneralError;
+        set
+        {
+            _displayGeneralError = value;
+            RaisePropertyChanged();
+        }
+    }
+
     private RelayCommand<object> _applyChangesCommand;
 
     public event EventHandler<PeopleEventArgs> PeopleUpdated;
-
-    public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
     public string FirstName
     {
@@ -177,15 +196,11 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
     public PeoplePropertiesViewModel(
         Application.Application application,
-        IUnitOfWorkFactory unitOfWorkFactory,
         IDialogService applicationDialogService,
-        IBusinessRuleCatalog businessRuleCatalog,
         ObjectCollection<Person> people)
     {
         _application = application;
-        UnitOfWorkFactory = unitOfWorkFactory;
         _applicationDialogService = applicationDialogService;
-        _businessRuleCatalog = businessRuleCatalog;
         SharedValues = new Person();
         _errors = new Dictionary<string, string>();
         _people = people;
@@ -197,6 +212,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         PropertyChangedEventArgs e)
     {
         _state = StateOfView.Initial;
+        GeneralError = "";
 
         if (sender is not ObjectCollection<Person> objectCollection) return;
 
@@ -274,37 +290,18 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
 
         if (_errors.Any())
         {
+            GeneralError = _errors.First().Value;
             return;
         }
-
-        var updatedPeople = _people.Objects.Select(p => new Person
-        {
-            ID = p.ID,
-            Superseded = p.Superseded,
-            FirstName = FirstName != OriginalSharedValues.FirstName ? FirstName : p.FirstName,
-            Surname = Surname != OriginalSharedValues.Surname ? Surname : p.Surname,
-            Nickname = Nickname != OriginalSharedValues.Nickname ? Nickname : p.Nickname,
-            Address = Address != OriginalSharedValues.Address ? Address : p.Address,
-            ZipCode = ZipCode != OriginalSharedValues.ZipCode ? ZipCode : p.ZipCode,
-            City = City != OriginalSharedValues.City ? City : p.City,
-            Birthday = Birthday != OriginalSharedValues.Birthday ? Birthday : p.Birthday,
-            Category = Category != OriginalSharedValues.Category ? Category : p.Category,
-            Latitude = Latitude != NullableDoubleAsString(OriginalSharedValues.Latitude)
-                ? double.Parse(Latitude, CultureInfo.InvariantCulture)
-                : p.Latitude,
-            Longitude = Longitude != NullableDoubleAsString(OriginalSharedValues.Longitude)
-                ? double.Parse(Longitude, CultureInfo.InvariantCulture)
-                : p.Longitude
-        }).ToList();
-
-        var dialogViewModel = new ProspectiveUpdateDialogViewModel(UnitOfWorkFactory, updatedPeople);
+        
+        var dialogViewModel = new ProspectiveUpdateDialogViewModel(_application, _updatedPeople);
 
         if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
         {
             return;
         }
 
-        OnPeopleUpdated(updatedPeople);
+        OnPeopleUpdated(_updatedPeople);
     }
 
     private bool CanApplyChanges(
@@ -377,6 +374,7 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         if (_state != StateOfView.Updated) return;
 
         _errors.Clear();
+        GeneralError = String.Empty;
 
         if (!Latitude.TryParse(out var latitude, out var error_lat))
         {
@@ -398,7 +396,29 @@ public class PeoplePropertiesViewModel : ViewModelBase, IDataErrorInfo
         SharedValues.Start = DateTime.UtcNow;
         SharedValues.End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
 
-        _errors = _businessRuleCatalog.ValidateAtomic(SharedValues);
+        _updatedPeople = _people.Objects.Select(p => new Person
+        {
+            ID = p.ID,
+            Superseded = p.Superseded,
+            Start = DateTime.UtcNow.Date,
+            End = new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc),
+            FirstName = FirstName != OriginalSharedValues.FirstName ? FirstName : p.FirstName,
+            Surname = Surname != OriginalSharedValues.Surname ? Surname : p.Surname,
+            Nickname = Nickname != OriginalSharedValues.Nickname ? Nickname : p.Nickname,
+            Address = Address != OriginalSharedValues.Address ? Address : p.Address,
+            ZipCode = ZipCode != OriginalSharedValues.ZipCode ? ZipCode : p.ZipCode,
+            City = City != OriginalSharedValues.City ? City : p.City,
+            Birthday = Birthday != OriginalSharedValues.Birthday ? Birthday : p.Birthday,
+            Category = Category != OriginalSharedValues.Category ? Category : p.Category,
+            Latitude = Latitude != NullableDoubleAsString(OriginalSharedValues.Latitude)
+                ? double.Parse(Latitude, CultureInfo.InvariantCulture)
+                : p.Latitude,
+            Longitude = Longitude != NullableDoubleAsString(OriginalSharedValues.Longitude)
+                ? double.Parse(Longitude, CultureInfo.InvariantCulture)
+                : p.Longitude
+        }).ToList();
+
+        _errors = _application.UpdatePeople_ValidateInput(_updatedPeople);
     }
 
     private void OnPeopleUpdated(

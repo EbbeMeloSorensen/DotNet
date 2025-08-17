@@ -35,7 +35,6 @@ namespace PR.ViewModel
             {
                 _application.UnitOfWorkFactory = value;
                 PersonListViewModel.UnitOfWorkFactory = value;
-                PeoplePropertiesViewModel.UnitOfWorkFactory = value;
                 PersonPropertiesViewModel.UnitOfWorkFactory = value;
             }
         }
@@ -161,9 +160,7 @@ namespace PR.ViewModel
 
             PeoplePropertiesViewModel = new PeoplePropertiesViewModel(
                 _application,
-                unitOfWorkFactory,
                 applicationDialogService,
-                businessRuleCatalog,
                 PersonListViewModel.SelectedPeople);
 
             PersonPropertiesViewModel = new PersonPropertiesViewModel(
