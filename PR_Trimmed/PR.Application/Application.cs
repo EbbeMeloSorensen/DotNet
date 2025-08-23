@@ -559,36 +559,45 @@ namespace PR.Application
 
         public async Task DeletePeople(
             IEnumerable<Guid> ids,
+            DateTime? timeOfChange,
             ProgressCallback progressCallback = null)
         {
-            await Task.Run(async () =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Deleting people..");
+            progressCallback?.Invoke(0.0, "Deleting people");
+
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+
+            var peopleForDeletion = (await unitOfWork.People
+                    .FindIncludingComments(pa => ids.Contains(pa.ID)))
+                .ToList();
+
+            var commentsForDeletion = peopleForDeletion
+                .SelectMany(_ => _.Comments)
+                .ToList();
+
+            if (commentsForDeletion.Any())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Deleting people..");
-                progressCallback?.Invoke(0.0, "Deleting people");
-
-                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-
-                var peopleForDeletion = (await unitOfWork.People
-                        .FindIncludingComments(pa => ids.Contains(pa.ID)))
-                    .ToList();
-
-                var commentsForDeletion = peopleForDeletion
-                    .SelectMany(_ => _.Comments)
-                    .ToList();
-
-                if (commentsForDeletion.Any())
+                if (unitOfWork is UnitOfWorkFacade unitOfWorkFacade)
                 {
-                    await unitOfWork.PersonComments.RemoveRange(commentsForDeletion);
-                    unitOfWork.Complete();
+                    unitOfWorkFacade.TimeOfChange = timeOfChange;
                 }
 
-                using var unitOfWork2 = UnitOfWorkFactory.GenerateUnitOfWork();
-                await unitOfWork2.People.RemoveRange(peopleForDeletion);
-                unitOfWork2.Complete();
+                await unitOfWork.PersonComments.RemoveRange(commentsForDeletion);
+                unitOfWork.Complete();
+            }
 
-                progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed deleting person");
-            });
+            using var unitOfWork2 = UnitOfWorkFactory.GenerateUnitOfWork();
+
+            if (unitOfWork2 is UnitOfWorkFacade unitOfWorkFacade2)
+            {
+                unitOfWorkFacade2.TimeOfChange = timeOfChange;
+            }
+
+            await unitOfWork2.People.RemoveRange(peopleForDeletion);
+            unitOfWork2.Complete();
+
+            progressCallback?.Invoke(100, "");
+            Logger?.WriteLine(LogMessageCategory.Information, "Completed deleting person");
         }
 
         public async Task ListPeople(

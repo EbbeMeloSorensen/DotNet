@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Craft.Logging;
-using PR.Domain;
 using PR.Domain.Entities.PR;
 using PR.Persistence.Repositories.PR;
 
@@ -445,22 +444,17 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task UpdateRange(
             IEnumerable<Person> people)
         {
-            var ids = people.Select(p => p.ID).ToList();
-
-            var predicates = new List<Expression<Func<Person, bool>>>
-            {
-                p => ids.Contains(p.ID)
-            };
-
-            _returnClonesInsteadOfRepositoryObjects = false;
-            var objectsFromRepository = (await Find(predicates)).ToList();
-            _returnClonesInsteadOfRepositoryObjects = true;
-
             // Make sure we don't use a time of change that is in the future
             if (TimeOfChange > DateTime.UtcNow)
             {
                 throw new InvalidOperationException("Time of change cannot be in the future");
             }
+
+            var ids = people.Select(p => p.ID).ToList();
+            
+            _returnClonesInsteadOfRepositoryObjects = false;
+            var objectsFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
+            _returnClonesInsteadOfRepositoryObjects = true;
 
             // Make sure we don't use a time of change that is too early
             if (TimeOfChange < objectsFromRepository.Max(_ => _.Start))
@@ -566,18 +560,6 @@ namespace PR.Persistence.Versioned.Repositories
                     pRepo.Superseded = CurrentTime;
                 });
 
-                //var newPersonRows = objectsFromRepository
-                //    .Select(_ => (Person)_.Clone())
-                //    .ToList();
-
-                //newPersonRows.ForEach(_ =>
-                //{
-                //    _.ArchiveID = new Guid();
-                //    _.Created = CurrentTime;
-                //    _.Superseded = _maxDate;
-                //    _.End = TimeOfChange;
-                //});
-
                 people.ToList().ForEach(_ =>
                 {
                     _.ArchiveID = Guid.NewGuid();
@@ -622,21 +604,28 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task RemoveRange(
             IEnumerable<Person> people)
         {
+            // Make sure we don't use a time of change that is in the future
+            if (TimeOfChange > DateTime.UtcNow)
+            {
+                throw new InvalidOperationException("Time of change cannot be in the future");
+            }
+
             var ids = people.Select(p => p.ID).ToList();
             var peopleFromRepo = await FindIncludingComments(_ => ids.Contains(_.ID));
 
-            if (peopleFromRepo.Any(_ => _.Comments != null && _.Comments.Any(_ => _.End > CurrentTime)))
+            // Make sure we don't use a time of change that is too early
+            if (TimeOfChange < peopleFromRepo.Max(_ => _.Start))
             {
-                throw new InvalidOperationException("Cant delete people with child rows (comments)");
+                throw new InvalidOperationException("Time of change cannot be earlier than the most recent time of change for a person in the collection");
             }
 
-            var predicates = new List<Expression<Func<Person, bool>>>
+            if (peopleFromRepo.Any(_ => _.Comments != null && _.Comments.Any(_ => _.End > CurrentTime)))
             {
-                p => ids.Contains(p.ID)
-            };
-
+                throw new InvalidOperationException("Cant delete people with current child rows (comments)");
+            }
+            
             _returnClonesInsteadOfRepositoryObjects = false;
-            var objectsFromRepository = (await Find(predicates)).ToList();
+            var objectsFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
             _returnClonesInsteadOfRepositoryObjects = true;
 
             objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
@@ -648,7 +637,7 @@ namespace PR.Persistence.Versioned.Repositories
                 _.ArchiveID = new Guid();
                 _.Created = CurrentTime;
                 _.Superseded = _maxDate;
-                _.End = CurrentTime;
+                _.End = TimeOfChange;
             });
 
             await UnitOfWork.People.AddRange(newPersonRows);

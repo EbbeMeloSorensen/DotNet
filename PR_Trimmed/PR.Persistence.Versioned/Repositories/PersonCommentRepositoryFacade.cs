@@ -28,6 +28,7 @@ namespace PR.Persistence.Versioned.Repositories
         private bool IncludeCurrentObjects => _unitOfWorkFacade.IncludeCurrentObjects;
         private bool IncludeHistoricalObjects => _unitOfWorkFacade.IncludeHistoricalObjects;
         private DateTime CurrentTime => _unitOfWorkFacade.TransactionTime;
+        private DateTime TimeOfChange => _unitOfWorkFacade.TimeOfChange ?? CurrentTime;
 
         public ILogger Logger { get; }
 
@@ -206,16 +207,23 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task RemoveRange(
             IEnumerable<PersonComment> personComments)
         {
-            var ids = personComments.Select(p => p.ID).ToList();
-
-            var predicates = new List<Expression<Func<PersonComment, bool>>>
+            // Make sure we don't use a time of change that is in the future
+            if (TimeOfChange > DateTime.UtcNow)
             {
-                p => ids.Contains(p.ID)
-            };
+                throw new InvalidOperationException("Time of change cannot be in the future");
+            }
 
+            var ids = personComments.Select(p => p.ID).ToList();
+            
             _returnClonesInsteadOfRepositoryObjects = false;
-            var objectsFromRepository = (await Find(predicates)).ToList();
+            var objectsFromRepository = (await Find(p => ids.Contains(p.ID))).ToList();
             _returnClonesInsteadOfRepositoryObjects = true;
+
+            // Make sure we don't use a time of change that is too early
+            if (TimeOfChange < objectsFromRepository.Max(_ => _.Start))
+            {
+                throw new InvalidOperationException("Time of change cannot be earlier than the most recent time of change for a person comment in the collection");
+            }
 
             objectsFromRepository.ForEach(p => p.Superseded = CurrentTime);
 
@@ -226,7 +234,7 @@ namespace PR.Persistence.Versioned.Repositories
                 _.ArchiveID = new Guid();
                 _.Created = CurrentTime;
                 _.Superseded = _maxDate;
-                _.End = CurrentTime;
+                _.End = TimeOfChange;
             });
 
             await UnitOfWork.PersonComments.AddRange(newPersonCommentRows);

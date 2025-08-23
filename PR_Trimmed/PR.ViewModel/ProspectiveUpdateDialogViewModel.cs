@@ -142,7 +142,7 @@ namespace PR.ViewModel
                         await _application.UpdatePeople(_people, timeOfChange);
                         break;
                     case ProspectiveUpdateDialogViewModelMode.Delete:
-                        await _application.DeletePeople(_people.Select(_ => _.ID));
+                        await _application.DeletePeople(_people.Select(_ => _.ID), timeOfChange);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
