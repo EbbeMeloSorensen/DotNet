@@ -310,9 +310,9 @@ namespace PR.ViewModel
         private async Task ClearRepository(
             object owner)
         {
-            var dialogViewModel1 = new MessageBoxDialogViewModel("Clear repository?", true);
+            var dialogViewModel = new MessageBoxDialogViewModel("Clear repository?", true);
 
-            if (_applicationDialogService.ShowDialog(dialogViewModel1, owner as Window) != DialogResult.OK)
+            if (_applicationDialogService.ShowDialog(dialogViewModel, owner as Window) != DialogResult.OK)
             {
                 return;
             }
@@ -324,17 +324,9 @@ namespace PR.ViewModel
                 unitOfWork.Complete();
             }
 
-            //_historicalChangeTimes.Clear();
-            //UpdateHistoricalTimeSeriesView(false);
+            dialogViewModel = new MessageBoxDialogViewModel("Repository was cleared", false);
 
-            //_databaseWriteTimes.Clear();
-            //UpdateDatabaseTimeSeriesView();
-
-            //await AutoFindIfEnabled();
-
-            var dialogViewModel2 = new MessageBoxDialogViewModel("Repository was cleared", false);
-
-            _applicationDialogService.ShowDialog(dialogViewModel2, owner as Window);
+            _applicationDialogService.ShowDialog(dialogViewModel, owner as Window);
         }
 
         private bool CanClearRepository(

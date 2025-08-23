@@ -37,11 +37,15 @@ Done:
 * Dialogen CreateOrUpdatePerson skal opføre sig anderledes, når man bruger den til at ændre en eksisterende person
 * Man skal kunne re-seede uden at lukke applikationen
 * Prøv at se hvordan det virker, hvis du fjerner forretningsreglen om at der ikke må være gaps mellem virkningstidsintervaller
-
-Todo:
 * Bug: Hvis du har sat filteret sådan at der vises historiske personer, og man så prøver at slette et antal current personer, så fejler det,
        fordi den siger, at der er et antal kommentarer. Har det mon noget at gøre med at unitOfWorkFactoryen er konfigureret til at returnere
        historiske entiteter og så returnerer historiske kommentarer, som så tolkes som værende blokerende for at personerne kan slettes?
+
+Todo:
+* Sørg for at PersonPropertiesViewModel ikke behøver at kende til UnitOfWorkFactory
+  - Application skal supportere, at man kan kalde GetIncludingComments for et id på en person
+  - Application skal supportere, at man kan kalde GetAllVariants for et id på en person
+  - Application skal supportere, at man kan kalde EraseRange for et antal person variants
 * Vejen frem:
   - Application.Create kan passende deles op i 3 separate funktioner: Create New Person, Create New Variant og Correct 
     Variant.

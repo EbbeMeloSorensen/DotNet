@@ -42,8 +42,6 @@ namespace PR.UI.Console
                 {
                     System.Console.WriteLine($"  {kvp.Value}");
                 }
-
-                //errors.ForEach(_ => System.Console.WriteLine($"  {_.Substring(_.IndexOf(":") + 2)}"));
             }
             else
             {
