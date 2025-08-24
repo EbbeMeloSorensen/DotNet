@@ -26,13 +26,9 @@ namespace PR.UI.Console
                 End = endTime ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             };
 
-            var businessRuleViolations = await GetApplication().CreateNewPerson(person, (progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
-
+            var application = GetApplication();
+            var businessRuleViolations = application.CreateNewPerson_ValidateInput(person);
+            
             if (businessRuleViolations.Any())
             {
                 System.Console.WriteLine("\nErrors:");
@@ -44,6 +40,13 @@ namespace PR.UI.Console
             }
             else
             {
+                await application.CreateNewPerson(person, (progress, nameOfSubtask) =>
+                {
+                    System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                    System.Console.Write($"{progress:F2} %");
+                    return false;
+                });
+
                 System.Console.WriteLine("\nDone");
             }
         }
@@ -157,6 +160,7 @@ namespace PR.UI.Console
                 System.Console.Write($"{progress:F2} %");
                 return false;
             });
+
             System.Console.WriteLine("\nDone");
         }
 
