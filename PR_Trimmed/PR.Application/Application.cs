@@ -15,7 +15,8 @@ using System.Threading.Tasks;
 // Denne klasse omfatter de use cases, som applikationen skal understøtte.
 // For de use cases, som modtager input, haves 2 trin: 1, hvor input valideres, og 2, hvor selve use casen udføres.
 // Ideen med dette er, at trin 1 kan anvendes i en UI, så brugeren får hurtig feedback på evt. fejl i input, inden use casen udføres.
-// Trin 2 udfører use casen, og det antages, at input er validt.
+// Bemærk, at trin 1 ikke involverer opslag i databasen men ofte har brug for at input i form af data hentet tidligere fra databasen.
+// Trin 2 udfører use casen, og det antages, at input er validt, men der håndteres alligevel evt exceptions rejst af persistenslaget
 
 namespace PR.Application
 {
@@ -182,58 +183,55 @@ namespace PR.Application
             Person person,
             ProgressCallback progressCallback = null)
         {
-            return await Task.Run(async () =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Creating Person variant..");
+            progressCallback?.Invoke(0.0, "Creating Person variant");
+
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            var otherVariants = (await unitOfWork.People.GetAllVariants(person.ID)).ToList();
+
+            var businessRuleViolations = CreatePersonVariant_ValidateInput(
+                person,
+                otherVariants,
+                out var nonConflictingPersonVariants,
+                out var coveredEntities,
+                out var trimmedEntities,
+                out var newEntities);
+
+            if (businessRuleViolations.Any())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Creating Person variant..");
-                progressCallback?.Invoke(0.0, "Creating Person variant");
-
-                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-                var otherVariants = (await unitOfWork.People.GetAllVariants(person.ID)).ToList();
-
-                var businessRuleViolations = CreatePersonVariant_ValidateInput(
-                    person,
-                    otherVariants,
-                    out var nonConflictingPersonVariants,
-                    out var coveredEntities,
-                    out var trimmedEntities,
-                    out var newEntities);
-
-                if (businessRuleViolations.Any())
-                {
-                    progressCallback?.Invoke(100, "");
-                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting create person variant due to business rule violations:");
-
-                    foreach (var kvp in businessRuleViolations)
-                    {
-                        Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
-                    }
-
-                    return businessRuleViolations;
-                }
-
-                if (coveredEntities.Any())
-                {
-                    await unitOfWork.People.EraseRange(coveredEntities);
-                }
-
-                if (trimmedEntities.Any())
-                {
-                    await unitOfWork.People.CorrectRange(trimmedEntities);
-                }
-
-                if (newEntities.Any())
-                {
-                    await unitOfWork.People.AddRange(newEntities);
-                }
-
-                await unitOfWork.People.Add(person);
-
-                unitOfWork.Complete();
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person variant");
-
                 progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Aborting create person variant due to business rule violations:");
+
+                foreach (var kvp in businessRuleViolations)
+                {
+                    Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
+                }
+
                 return businessRuleViolations;
-            });
+            }
+
+            if (coveredEntities.Any())
+            {
+                await unitOfWork.People.EraseRange(coveredEntities);
+            }
+
+            if (trimmedEntities.Any())
+            {
+                await unitOfWork.People.CorrectRange(trimmedEntities);
+            }
+
+            if (newEntities.Any())
+            {
+                await unitOfWork.People.AddRange(newEntities);
+            }
+
+            await unitOfWork.People.Add(person);
+
+            unitOfWork.Complete();
+            Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person variant");
+
+            progressCallback?.Invoke(100, "");
+            return businessRuleViolations;
         }
 
         public Dictionary<string, string> CorrectPersonVariant_ValidateInput(
@@ -360,98 +358,80 @@ namespace PR.Application
             throw new NotImplementedException();
         }
 
+        //public async Task<Person> GetPerson(
+        //    Guid id)
+        //{
+        //    using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+        //    var person = await unitOfWork.People.Get(id);
+        //    return person;
+        //}
+
         public async Task GetPersonDetails(
             Guid id,
             DateTime? databaseTime,
             bool writeToFile,
             ProgressCallback progressCallback = null)
         {
-            await Task.Run(async () =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Getting Person details..");
+            progressCallback?.Invoke(0.0, "Getting Person details");
+
+            if (databaseTime.HasValue && UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Getting Person details..");
-                progressCallback?.Invoke(0.0, "Getting Person details");
+                unitOfWorkFactoryVersioned.DatabaseTime = databaseTime.Value;
+            }
 
-                if (databaseTime.HasValue && UnitOfWorkFactory is IUnitOfWorkFactoryVersioned unitOfWorkFactoryVersioned)
-                {
-                    unitOfWorkFactoryVersioned.DatabaseTime = databaseTime.Value;
-                }
+            List<Person> personVariants = null;
 
-                List<Person> personVariants = null;
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
+            {
+                personVariants = (await unitOfWork.People.GetAllVariants(id)).ToList();
+            }
 
-                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    //person = await unitOfWork.People.Get(id);
-                    personVariants = (await unitOfWork.People.GetAllVariants(id)).ToList();
-                }
+            progressCallback?.Invoke(100, "");
+            Logger?.WriteLine(LogMessageCategory.Information, "Completed getting Person details");
 
-                progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed getting Person details");
+            var lines = new List<string>();
 
-                var lines = new List<string>();
-
-                if (!writeToFile)
-                {
-                    lines.Add("");
-                }
-
-                if (databaseTime.HasValue)
-                {
-                    lines.Add($"   Database Time: {databaseTime}");
-                }
-
-                lines.Add($"History of person with ID={id}:");
+            if (!writeToFile)
+            {
                 lines.Add("");
+            }
 
-                lines.AddRange(personVariants.Select(_ => 
-                {
-                    var sb = new StringBuilder($"{_.Start.AsDateString()}->");
-                    sb.Append($"{_.End.AsDateString()}: ");
-                    sb.Append(_.FirstName);
-                    return sb.ToString();
-                }));
+            if (databaseTime.HasValue)
+            {
+                lines.Add($"   Database Time: {databaseTime}");
+            }
 
-                if (writeToFile)
-                {
-                    File.WriteAllLines("output.txt", lines);
-                }
-                else
-                {
-                    Console.WriteLine();
+            lines.Add($"History of person with ID={id}:");
+            lines.Add("");
 
-                    foreach (var line in lines)
-                    {
-                        Console.WriteLine(line);
-                    }
-                }
+            lines.AddRange(personVariants.Select(_ => 
+            {
+                var sb = new StringBuilder($"{_.Start.AsDateString()}->");
+                sb.Append($"{_.End.AsDateString()}: ");
+                sb.Append(_.FirstName);
+                return sb.ToString();
+            }));
 
-                /*
-                var surname = string.IsNullOrEmpty(person.Surname) ? "-" : person.Surname;
-                var nickname = string.IsNullOrEmpty(person.Nickname) ? "-" :person.Nickname;
-                var address = string.IsNullOrEmpty(person.Address) ? "-" : person.Address;
-                var zipCode = string.IsNullOrEmpty(person.ZipCode) ? "-" : person.ZipCode;
-                var city = string.IsNullOrEmpty(person.City) ? "-" : person.City;
-                var birthday = person.Birthday.HasValue ? person.Birthday.Value.AsDateTimeString(false) : "-";
-                var category = string.IsNullOrEmpty(person.Category) ? "-" : person.Category;
-                var description = string.IsNullOrEmpty(person.Description) ? "-" : person.Description;
-                var latitude = person.Latitude.HasValue ? $"{person.Latitude.Value}" : "-";
-                var longitude = person.Longitude.HasValue ? $"{person.Longitude.Value}" : "-";
-
+            if (writeToFile)
+            {
+                File.WriteAllLines("output.txt", lines);
+            }
+            else
+            {
                 Console.WriteLine();
-                Console.WriteLine("Person Details:");
-                Console.WriteLine($"  ID:          {person.ID}");
-                Console.WriteLine($"  First Name:  {person.FirstName}");
-                Console.WriteLine($"  Surname:     {surname}");
-                Console.WriteLine($"  Nickname:    {nickname}");
-                Console.WriteLine($"  Address:     {address}");
-                Console.WriteLine($"  ZipCode:     {zipCode}");
-                Console.WriteLine($"  City:        {city}");
-                Console.WriteLine($"  Birthday:    {birthday}");
-                Console.WriteLine($"  Category:    {category}");
-                Console.WriteLine($"  Description: {description}");
-                Console.WriteLine($"  Latitude:    {latitude}");
-                Console.WriteLine($"  Longitude:   {longitude}");
-                */
-            });
+
+                foreach (var line in lines)
+                {
+                    Console.WriteLine(line);
+                }
+            }
+        }
+
+        public Dictionary<string, string> UpdatePerson_ValidateInput(
+            Person updatedPerson)
+        {
+            return _businessRuleCatalog.ValidateAtomic(updatedPerson);
         }
 
         public async Task UpdatePerson(

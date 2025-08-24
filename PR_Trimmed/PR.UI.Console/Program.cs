@@ -37,18 +37,18 @@ namespace PR.UI.Console
                 {
                     System.Console.WriteLine($"  {kvp.Value}");
                 }
-            }
-            else
-            {
-                await application.CreateNewPerson(person, (progress, nameOfSubtask) =>
-                {
-                    System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                    System.Console.Write($"{progress:F2} %");
-                    return false;
-                });
 
-                System.Console.WriteLine("\nDone");
+                return;
             }
+
+            await application.CreateNewPerson(person, (progress, nameOfSubtask) =>
+            {
+                System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                System.Console.Write($"{progress:F2} %");
+                return false;
+            });
+
+            System.Console.WriteLine("\nDone");
         }
 
         public static async Task ListPeople(
@@ -154,14 +154,36 @@ namespace PR.UI.Console
                 FirstName = options.FirstName
             };
 
-            await GetApplication().UpdatePerson(person, (progress, nameOfSubtask) =>
-            {
-                System.Console.SetCursorPosition(10, System.Console.CursorTop);
-                System.Console.Write($"{progress:F2} %");
-                return false;
-            });
+            var application = GetApplication();
+            var businessRuleViolations = application.UpdatePerson_ValidateInput(person);
 
-            System.Console.WriteLine("\nDone");
+            if (businessRuleViolations.Any())
+            {
+                System.Console.WriteLine("\nErrors:");
+
+                foreach (var kvp in businessRuleViolations)
+                {
+                    System.Console.WriteLine($"  {kvp.Value}");
+                }
+
+                return;
+            }
+
+            try
+            {
+                await application.UpdatePerson(person, (progress, nameOfSubtask) =>
+                {
+                    System.Console.SetCursorPosition(10, System.Console.CursorTop);
+                    System.Console.Write($"{progress:F2} %");
+                    return false;
+                });
+
+                System.Console.WriteLine("\nDone");
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine($"\nError updating person ({e.Message})");
+            }
         }
 
         public static async Task DeletePerson(

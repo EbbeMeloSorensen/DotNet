@@ -414,9 +414,22 @@ namespace PR.Persistence.Versioned.Repositories
         public async Task Update(
             Person person)
         {
+            // Make sure we don't use a time of change that is in the future
+            if (TimeOfChange > DateTime.UtcNow)
+            {
+                throw new InvalidOperationException("Time of change cannot be in the future");
+            }
+
             _returnClonesInsteadOfRepositoryObjects = false;
             var objectFromRepository = await Get(person.ID);
             _returnClonesInsteadOfRepositoryObjects = true;
+
+            // Make sure we don't use a time of change that is too early
+            if (TimeOfChange < objectFromRepository.Start)
+            {
+                throw new InvalidOperationException("Time of change cannot be earlier than the most recent time of change for the person");
+            }
+
             objectFromRepository.Superseded = CurrentTime;
 
             var personCopy = (Person)objectFromRepository.Clone();

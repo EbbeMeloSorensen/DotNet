@@ -10,5 +10,8 @@ namespace PR.UI.Console.Verbs
 
         [Option('f', "firstname", Required = false, HelpText = "First Name")]
         public string FirstName { get; set; }
+
+        [Option('t', "timeofchange", Required = false, HelpText = "Time of change", Default = "")]
+        public string TimeOfChange { get; set; }
     }
 }
