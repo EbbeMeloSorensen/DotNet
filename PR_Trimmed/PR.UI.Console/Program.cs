@@ -6,7 +6,6 @@ using PR.Domain.Entities.PR;
 using PR.Persistence;
 using PR.Persistence.Versioned;
 using PR.UI.Console.Verbs;
-using Craft.Logging;
 
 namespace PR.UI.Console
 {

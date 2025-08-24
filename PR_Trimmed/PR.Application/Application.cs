@@ -7,11 +7,15 @@ using PR.Persistence;
 using PR.Persistence.Versioned;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+// Denne klasse omfatter de use cases, som applikationen skal understøtte.
+// For de use cases, som modtager input, haves 2 trin: 1, hvor input valideres, og 2, hvor selve use casen udføres.
+// Ideen med dette er, at trin 1 kan anvendes i en UI, så brugeren får hurtig feedback på evt. fejl i input, inden use casen udføres.
+// Trin 2 udfører use casen
 
 namespace PR.Application
 {
@@ -118,35 +122,32 @@ namespace PR.Application
             Person person,
             ProgressCallback progressCallback = null)
         {
-            return await Task.Run(async () =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
+            progressCallback?.Invoke(0.0, "Creating Person");
+
+            var businessRuleViolations = CreateNewPerson_ValidateInput(person);
+
+            if (businessRuleViolations.Any())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
-                progressCallback?.Invoke(0.0, "Creating Person");
+                progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Aborting create new person due to business rule violations:");
 
-                var businessRuleViolations = CreateNewPerson_ValidateInput(person);
-
-                if (businessRuleViolations.Any())
+                foreach (var kvp in businessRuleViolations)
                 {
-                    progressCallback?.Invoke(100, "");
-                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting create new person due to business rule violations:");
-
-                    foreach (var kvp in businessRuleViolations)
-                    {
-                        Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
-                    }
-
-                    return businessRuleViolations;
+                    Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
                 }
 
-                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-                await unitOfWork.People.Add(person);
-                unitOfWork.Complete();
-
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
-
-                progressCallback?.Invoke(100, "");
                 return businessRuleViolations;
-            });
+            }
+
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            await unitOfWork.People.Add(person);
+            unitOfWork.Complete();
+
+            Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
+
+            progressCallback?.Invoke(100, "");
+            return businessRuleViolations;
         }
 
         public Dictionary<string, string> CreatePersonVariant_ValidateInput(
@@ -253,12 +254,12 @@ namespace PR.Application
         }
 
         public Dictionary<string, string> CorrectPersonVariant_ValidateInput(
-             Person personVariant,
-             IEnumerable<Person> existingVariants,
-             out List<Person> nonConflictingPersonVariants,
-             out List<Person> coveredPersonVariants,
-             out List<Person> trimmedPersonVariants,
-             out List<Person> newPersonVariants)
+            Person personVariant,
+            IEnumerable<Person> existingVariants,
+            out List<Person> nonConflictingPersonVariants,
+            out List<Person> coveredPersonVariants,
+            out List<Person> trimmedPersonVariants,
+            out List<Person> newPersonVariants)
         {
             if (personVariant.ID == Guid.Empty ||
                 personVariant.ArchiveID == Guid.Empty)
@@ -303,64 +304,61 @@ namespace PR.Application
             Person person,
             ProgressCallback progressCallback = null)
         {
-            return await Task.Run(async () =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Correcting Person variant..");
+            progressCallback?.Invoke(0.0, "Correcting Person variant");
+
+            using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
+            var otherVariants = (await unitOfWork.People.GetAllVariants(person.ID)).ToList();
+
+            var businessRuleViolations = CorrectPersonVariant_ValidateInput(
+                person,
+                otherVariants,
+                out var nonConflictingPersonVariants,
+                out var coveredEntities,
+                out var trimmedEntities,
+                out var newEntities);
+
+            if (businessRuleViolations.Any())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Correcting Person variant..");
-                progressCallback?.Invoke(0.0, "Correcting Person variant");
-
-                using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
-                var otherVariants = (await unitOfWork.People.GetAllVariants(person.ID)).ToList();
-
-                var businessRuleViolations = CorrectPersonVariant_ValidateInput(
-                    person,
-                    otherVariants,
-                    out var nonConflictingPersonVariants,
-                    out var coveredEntities,
-                    out var trimmedEntities,
-                    out var newEntities);
-
-                if (businessRuleViolations.Any())
-                {
-                    progressCallback?.Invoke(100, "");
-                    Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to business rule violations:");
-
-                    foreach (var kvp in businessRuleViolations)
-                    {
-                        Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
-                    }
-
-                    return businessRuleViolations;
-                }
-                else
-                {
-                    var variantOfInterest = otherVariants.Single(_ => _.ArchiveID == person.ArchiveID);
-                    await unitOfWork.People.Erase(variantOfInterest);
-
-                    if (coveredEntities.Any())
-                    {
-                        await unitOfWork.People.EraseRange(coveredEntities);
-                    }
-
-                    if (trimmedEntities.Any())
-                    {
-                        await unitOfWork.People.CorrectRange(trimmedEntities);
-                    }
-
-                    if (newEntities.Any())
-                    {
-                        await unitOfWork.People.AddRange(newEntities);
-                    }
-
-                    person.ArchiveID = Guid.Empty;
-                    await unitOfWork.People.Add(person);
-
-                    unitOfWork.Complete();
-                    Logger?.WriteLine(LogMessageCategory.Information, "Completed correcting Person variant");
-                }
-
                 progressCallback?.Invoke(100, "");
+                Logger?.WriteLine(LogMessageCategory.Information, "Aborting due to business rule violations:");
+
+                foreach (var kvp in businessRuleViolations)
+                {
+                    Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
+                }
+
                 return businessRuleViolations;
-            });
+            }
+            else
+            {
+                var variantOfInterest = otherVariants.Single(_ => _.ArchiveID == person.ArchiveID);
+                await unitOfWork.People.Erase(variantOfInterest);
+
+                if (coveredEntities.Any())
+                {
+                    await unitOfWork.People.EraseRange(coveredEntities);
+                }
+
+                if (trimmedEntities.Any())
+                {
+                    await unitOfWork.People.CorrectRange(trimmedEntities);
+                }
+
+                if (newEntities.Any())
+                {
+                    await unitOfWork.People.AddRange(newEntities);
+                }
+
+                person.ArchiveID = Guid.Empty;
+                await unitOfWork.People.Add(person);
+
+                unitOfWork.Complete();
+                Logger?.WriteLine(LogMessageCategory.Information, "Completed correcting Person variant");
+            }
+
+            progressCallback?.Invoke(100, "");
+            return businessRuleViolations;
         }
 
         public Dictionary<string, string> ErasePersonVariants_ValidateInput(
