@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 // Denne klasse omfatter de use cases, som applikationen skal understøtte.
 // For de use cases, som modtager input, haves 2 trin: 1, hvor input valideres, og 2, hvor selve use casen udføres.
 // Ideen med dette er, at trin 1 kan anvendes i en UI, så brugeren får hurtig feedback på evt. fejl i input, inden use casen udføres.
-// Trin 2 udfører use casen
+// Trin 2 udfører use casen, og det antages, at input er validt.
 
 namespace PR.Application
 {
@@ -118,36 +118,19 @@ namespace PR.Application
             return _businessRuleCatalog.ValidateAtomic(person);
         }
 
-        public async Task<Dictionary<string, string>> CreateNewPerson(
+        public async Task CreateNewPerson(
             Person person,
             ProgressCallback progressCallback = null)
         {
             Logger?.WriteLine(LogMessageCategory.Information, "Creating Person..");
             progressCallback?.Invoke(0.0, "Creating Person");
 
-            var businessRuleViolations = CreateNewPerson_ValidateInput(person);
-
-            if (businessRuleViolations.Any())
-            {
-                progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Aborting create new person due to business rule violations:");
-
-                foreach (var kvp in businessRuleViolations)
-                {
-                    Logger?.WriteLine(LogMessageCategory.Information, $"{kvp.Value}");
-                }
-
-                return businessRuleViolations;
-            }
-
             using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
             await unitOfWork.People.Add(person);
             unitOfWork.Complete();
 
             Logger?.WriteLine(LogMessageCategory.Information, "Completed creating Person");
-
             progressCallback?.Invoke(100, "");
-            return businessRuleViolations;
         }
 
         public Dictionary<string, string> CreatePersonVariant_ValidateInput(
@@ -475,20 +458,17 @@ namespace PR.Application
             Person person,
             ProgressCallback progressCallback = null)
         {
-            await Task.Run(async () =>
+            Logger?.WriteLine(LogMessageCategory.Information, "Updating Person..");
+            progressCallback?.Invoke(0.0, "Updating Person");
+
+            using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
             {
-                Logger?.WriteLine(LogMessageCategory.Information, "Updating Person..");
-                progressCallback?.Invoke(0.0, "Updating Person");
+                await unitOfWork.People.Update(person);
+                unitOfWork.Complete();
+            }
 
-                using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-                {
-                    await unitOfWork.People.Update(person);
-                    unitOfWork.Complete();
-                }
-
-                progressCallback?.Invoke(100, "");
-                Logger?.WriteLine(LogMessageCategory.Information, "Completed updating person");
-            });
+            progressCallback?.Invoke(100, "");
+            Logger?.WriteLine(LogMessageCategory.Information, "Completed updating person");
         }
 
         public async Task UpdatePeople(
@@ -496,6 +476,9 @@ namespace PR.Application
             DateTime? timeOfChange,
             ProgressCallback progressCallback = null)
         {
+            Logger?.WriteLine(LogMessageCategory.Information, "Updating People..");
+            progressCallback?.Invoke(0.0, "Updating People");
+
             using var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork();
 
             if (unitOfWork is UnitOfWorkFacade unitOfWorkFacade)
@@ -505,24 +488,6 @@ namespace PR.Application
 
             await unitOfWork.People.UpdateRange(people);
             unitOfWork.Complete();
-
-            //throw new NotImplementedException("UpdatePeople is not implemented yet.");
-
-
-            //await Task.Run(async () =>
-            //{
-            //    Logger?.WriteLine(LogMessageCategory.Information, "Updating Person..");
-            //    progressCallback?.Invoke(0.0, "Updating Person");
-
-            //    using (var unitOfWork = UnitOfWorkFactory.GenerateUnitOfWork())
-            //    {
-            //        await unitOfWork.People.Update(person);
-            //        unitOfWork.Complete();
-            //    }
-
-            //    progressCallback?.Invoke(100, "");
-            //    Logger?.WriteLine(LogMessageCategory.Information, "Completed updating person");
-            //});
         }
 
         public Dictionary<string, string> UpdatePeople_ValidateInput(
