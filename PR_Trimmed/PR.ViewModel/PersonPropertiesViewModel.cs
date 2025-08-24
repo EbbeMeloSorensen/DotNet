@@ -30,7 +30,7 @@ namespace PR.ViewModel
 
         private AsyncCommand<object> _createPersonVariantCommand;
         private AsyncCommand<object> _updatePersonVariantCommand;
-        private AsyncCommand<object> _deletePersonVariantsCommand;
+        private AsyncCommand<object> _erasePersonVariantsCommand;
 
         public IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
 
@@ -131,12 +131,12 @@ namespace PR.ViewModel
             }
         }
 
-        public AsyncCommand<object> DeletePersonVariantsCommand
+        public AsyncCommand<object> ErasePersonVariantsCommand
         {
             get
             {
-                return _deletePersonVariantsCommand ??
-                       (_deletePersonVariantsCommand = new AsyncCommand<object>(DeletePersonVariants, CanDeletePersonVariants));
+                return _erasePersonVariantsCommand ??
+                       (_erasePersonVariantsCommand = new AsyncCommand<object>(ErasePersonVariants, CanErasePersonVariants));
             }
         }
 
@@ -267,7 +267,7 @@ namespace PR.ViewModel
             Error = "";
 
             UpdatePersonVariantCommand.RaiseCanExecuteChanged();
-            DeletePersonVariantsCommand.RaiseCanExecuteChanged();
+            ErasePersonVariantsCommand.RaiseCanExecuteChanged();
         }
 
         private async Task CreatePersonVariant(
@@ -342,7 +342,7 @@ namespace PR.ViewModel
             return SelectedPersonVariants.Objects != null && SelectedPersonVariants.Objects.Count() == 1;
         }
 
-        private async Task DeletePersonVariants(
+        private async Task ErasePersonVariants(
             object owner)
         {
             var businessRuleViolations = _application.ErasePersonVariants_ValidateInput(
@@ -375,7 +375,7 @@ namespace PR.ViewModel
             }
         }
 
-        private bool CanDeletePersonVariants(
+        private bool CanErasePersonVariants(
             object owner)
         {
             return SelectedPersonVariants.Objects != null && SelectedPersonVariants.Objects.Any();

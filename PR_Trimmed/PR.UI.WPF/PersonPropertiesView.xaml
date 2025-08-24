@@ -95,8 +95,8 @@
                         <Button Margin="3,3,3,3" Content="Edit.." 
                             Command="{Binding UpdatePersonVariantCommand}" 
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-                        <Button Margin="3,3,3,3" Content="Delete" 
-                            Command="{Binding DeletePersonVariantsCommand}"
+                        <Button Margin="3,3,3,3" Content="Erase" 
+                            Command="{Binding ErasePersonVariantsCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
                     </StackPanel>
                 </Grid>

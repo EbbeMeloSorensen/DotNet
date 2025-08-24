@@ -372,6 +372,13 @@ namespace PR.Application
             return _businessRuleCatalog.ValidateCrossEntity(newPotentialEntityCollection);
         }
 
+        public async Task<Dictionary<string, string>> ErasePersonVariants(
+            IEnumerable<Person> variantsToDelete,
+            IEnumerable<Person> existingVariants)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task GetPersonDetails(
             Guid id,
             DateTime? databaseTime,
