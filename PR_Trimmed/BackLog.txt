@@ -45,6 +45,7 @@ Todo:
 * Afsøg muligheder for at konsolidere applikationslaget i ét og samme projekt,
   gerne det, der pt bærer Web API'et
   - Det skal helst ikke afhænge af ASP.NET Core - hvorfor er det lige, at det gør det pt?
+  - Prøv at lave en helt ny konsolapplikation, som baserer sig på PR.Web.API
 * Sørg for at PersonPropertiesViewModel ikke behøver at kende til UnitOfWorkFactory
   - Application skal supportere, at man kan kalde GetIncludingComments for et id på en person
   - Application skal supportere, at man kan kalde GetAllVariants for et id på en person
