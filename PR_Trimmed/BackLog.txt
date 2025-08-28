@@ -42,6 +42,12 @@ Done:
        historiske entiteter og så returnerer historiske kommentarer, som så tolkes som værende blokerende for at personerne kan slettes?
 
 Todo:
+* Før du refaktorerer API'en og dens understøttende komponenter, så skal du freshe op på,
+  hvordan du deployerer det til Heroku - få evt hjælp af ChatGPT og dokumenter det.
+* Reflekter over og dokumenter, hvad princippet er i den nuværende arbejdsdeling mellem de 2 
+  Persistence projekter.
+* Snak med ChatGpt om hvordan man lader API'et afhænge af en ABSTRAKTION for DataContext
+  snarere end at være gift med Entity Framework Core
 * Afsøg muligheder for at konsolidere applikationslaget i ét og samme projekt,
   gerne det, der pt bærer Web API'et
   - Det skal helst ikke afhænge af ASP.NET Core - hvorfor er det lige, at det gør det pt?
