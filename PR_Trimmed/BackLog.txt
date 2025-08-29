@@ -42,6 +42,9 @@ Done:
        historiske entiteter og så returnerer historiske kommentarer, som så tolkes som værende blokerende for at personerne kan slettes?
 
 Todo:
+* Du bør nok lave en art proof of concept/Walking skeleton mht hvordan du laver et applikationslag,
+  der kan understøtte både API, konsolapplikation osv. Det kan måske passende gribes an ved at skrælle
+  PR-Trimmed ned, men du bør også vide, hvordan du laver det fra scratch.
 * Før du refaktorerer API'en og dens understøttende komponenter, så skal du freshe op på,
   hvordan du deployerer det til Heroku - få evt hjælp af ChatGPT og dokumenter det.
 * Reflekter over og dokumenter, hvad princippet er i den nuværende arbejdsdeling mellem de 2 
