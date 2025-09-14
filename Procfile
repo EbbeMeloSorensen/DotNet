@@ -1,0 +1,1 @@
+web: dotnet PR_Trimmed/PR.Web.API/bin/Release/net8.0/PR.Web.API.dll
