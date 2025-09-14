@@ -1,0 +1,88 @@
+14-09-2025
+Prøvede at deployere PR_Trimmed til Heroku under anvendelse af disse steps:
+1) Lav en ny Heroku app
+2) Gå til "Resources" og sæt en heroku postgres database som ressource, og vent til den er færdig med sin "provisioning" operation
+3) Gå til "Settings" og tilføj variable: TokenKey og ASPNETCORE_ENVIRONMENT
+4) Lav en frisk klon af dit DotNet repo
+5) Fra alm command prompt: Eksekver: heroku login
+6) Fra alm command prompt: Eksekver: heroku git:remote -a prubsi
+7) Fra alm command prompt: Eksekver: heroku buildpacks:set https://github.com/jincod/dotnetcore-buildpack
+8) Fra alm command prompt: Eksekver: heroku config:set PROJECT=PR_Trimmed/PR.Web.API/PR.Web.API.csproj
+9) Fra alm command prompt: Eksekver: git push heroku main
+
+men det gav følgende smøre af fejl, der tilsyneladende vidner om, at Heroku ikke fatter, at den bare skal bygge PR_Trimmed/PR.Web.API/PR.Web.API.proj,
+og i stedet scanner hele lortet og vælger den første den bedste csproj, som så tilsyneladende er DMI/DMI.SMS/DMI.SMS.UI.Console.
+Bemærk, hvordan den tæt på starten af loggen skriver Project File /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj
+
+C:\Git\GitHub\DotNet>git push heroku main
+Enumerating objects: 23884, done.
+Counting objects: 100% (23884/23884), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (5263/5263), done.
+Writing objects: 100% (23884/23884), 19.66 MiB | 12.19 MiB/s, done.
+Total 23884 (delta 18067), reused 23884 (delta 18067)
+remote: Resolving deltas: 100% (18067/18067), done.
+remote: Updated 3631 paths from 0e1a28e1
+remote: Compressing source files... done.
+remote: Building source:
+remote:
+remote: -----> Building on the Heroku-24 stack
+remote: -----> Using buildpack: https://github.com/jincod/dotnetcore-buildpack
+remote: -----> ASP.NET Core app detected
+remote: > Installing dotnet
+remote: -----> Removing old cached .NET version
+remote: -----> Fetching .NET SDK
+remote: -----> Fetching .NET Runtime
+remote: -----> Export dotnet to Path
+remote: -----> Project File
+remote: > /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj
+remote: -----> Project Name
+remote: > DMI.SMS.UI.Console
+remote: > publish /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj for Release on heroku_output
+remote:
+remote: Welcome to .NET 9.0!
+remote: ---------------------
+remote: SDK Version: 9.0.200
+remote:
+remote: ----------------
+remote: Installed an ASP.NET Core HTTPS development certificate.
+remote: To trust the certificate, run 'dotnet dev-certs https --trust'
+remote: Learn about HTTPS: https://aka.ms/dotnet-https
+remote:
+remote: ----------------
+remote: Write your first app: https://aka.ms/dotnet-hello-world
+remote: Find out what's new: https://aka.ms/dotnet-whats-new
+remote: Explore documentation: https://aka.ms/dotnet-docs
+remote: Report issues and find source on GitHub: https://github.com/dotnet/core
+remote: Use 'dotnet --help' to see available commands or visit: https://aka.ms/dotnet-cli
+remote: --------------------------------------------------------------------------------------
+remote:   Determining projects to restore...
+remote:   Restored /tmp/build_f9952f2d/Craft/Craft.Persistence/Craft.Persistence.csproj (in 135 ms).
+remote:   Restored /tmp/build_f9952f2d/Craft/Craft.Utils/Craft.Utils.csproj (in 135 ms).
+remote:   Restored /tmp/build_f9952f2d/Craft/Craft.Logging/Craft.Logging.csproj (in 6 ms).
+remote:   Restored /tmp/build_f9952f2d/Craft/Craft.IO.Utils/Craft.IO.Utils.csproj (in 689 ms).
+remote:   Restored /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.IO/DMI.SMS.IO.csproj (in 70 ms).
+remote:   Restored /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.Domain/DMI.SMS.Domain.csproj (in 5 ms).
+remote:   Restored /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.Application/DMI.SMS.Application.csproj (in 8 ms).
+remote:   Restored /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.Persistence/DMI.SMS.Persistence.csproj (in 6 ms).
+remote:   Restored /tmp/build_f9952f2d/Craft/Craft.Logging.Log4Net/Craft.Logging.Log4Net.csproj (in 1.36 sec).
+remote: /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.Persistence.EntityFrameworkCore/DMI.SMS.Persistence.EntityFrameworkCore.csproj : error NU1201: Project Craft.Persistence.EntityFrameworkCore is not compatible with net6.0 (.NETCoreApp,Version=v6.0). Project Craft.Persistence.EntityFrameworkCore supports: net8.0 (.NETCoreApp,Version=v8.0) [/tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj]
+remote: /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.Persistence.EntityFrameworkCore/DMI.SMS.Persistence.EntityFrameworkCore.csproj : error NU1201: Project Craft.Persistence.EntityFrameworkCore is not compatible with net6.0 (.NETCoreApp,Version=v6.0) / linux-x64. Project Craft.Persistence.EntityFrameworkCore supports: net8.0 (.NETCoreApp,Version=v8.0) [/tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj]
+remote:   Failed to restore /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.Persistence.EntityFrameworkCore/DMI.SMS.Persistence.EntityFrameworkCore.csproj (in 2.14 sec).
+remote: /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.Persistence.EntityFrameworkCore.Sqlite/DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.csproj : error NU1201: Project Craft.Persistence.EntityFrameworkCore is not compatible with net6.0 (.NETCoreApp,Version=v6.0). Project Craft.Persistence.EntityFrameworkCore supports: net8.0 (.NETCoreApp,Version=v8.0) [/tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj]
+remote: /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.Persistence.EntityFrameworkCore.Sqlite/DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.csproj : error NU1201: Project Craft.Persistence.EntityFrameworkCore is not compatible with net6.0 (.NETCoreApp,Version=v6.0) / linux-x64. Project Craft.Persistence.EntityFrameworkCore supports: net8.0 (.NETCoreApp,Version=v8.0) [/tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj]
+remote:   Failed to restore /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.Persistence.EntityFrameworkCore.Sqlite/DMI.SMS.Persistence.EntityFrameworkCore.Sqlite.csproj (in 1.56 sec).
+remote:   Restored /tmp/build_f9952f2d/Craft/Craft.Persistence.EntityFrameworkCore/Craft.Persistence.EntityFrameworkCore.csproj (in 3.71 sec).
+remote: /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj : error NU1201: Project Craft.Persistence.EntityFrameworkCore is not compatible with net6.0 (.NETCoreApp,Version=v6.0). Project Craft.Persistence.EntityFrameworkCore supports: net8.0 (.NETCoreApp,Version=v8.0)
+remote: /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj : error NU1201: Project Craft.Persistence.EntityFrameworkCore is not compatible with net6.0 (.NETCoreApp,Version=v6.0) / linux-x64. Project Craft.Persistence.EntityFrameworkCore supports: net8.0 (.NETCoreApp,Version=v8.0)
+remote:   Failed to restore /tmp/build_f9952f2d/DMI/DMI.SMS/DMI.SMS.UI.Console/DMI.SMS.UI.Console.csproj (in 3.76 sec).
+remote:  !     Push rejected, failed to compile ASP.NET Core app.
+remote:
+remote:  !     Push failed
+remote: Verifying deploy...
+remote:
+remote: !       Push rejected to prubsi.
+remote:
+To https://git.heroku.com/prubsi.git
+ ! [remote rejected]   main -> main (pre-receive hook declined)
+error: failed to push some refs to 'https://git.heroku.com/prubsi.git'
