@@ -16,7 +16,7 @@ namespace PR.UI.WPF.GIS
                 _.WithDefaultConventions();
                 _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("Craft.Logging"));
                 _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("Craft.UIElements"));
-                _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("PR.IO"));
+                _.AssembliesFromApplicationBaseDirectory(d => d.FullName.StartsWith("PR"));
                 _.Assembly(repositoryPluginAssembly);
                 _.LookForRegistries();
             });
